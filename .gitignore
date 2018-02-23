@@ -1,0 +1,7 @@
+node_modules
+npm-debug.log
+.DS_Store
+.vscode
+dist/
+*.swp
+results.txt
