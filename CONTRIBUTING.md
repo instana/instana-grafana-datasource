@@ -2,7 +2,7 @@
 
 ## Instana Data Source For Grafana
 
-This plugin is a so-called datasource plugin for Grafana and connects to the Instana API. End-users can create visualizations in Grafana for metrics on snapshots.
+This plugin is a datasource plugin for Grafana and connects to the Instana API. End-users can create visualizations in Grafana for metrics on snapshots.
 
 This plugin includes:
 
@@ -25,7 +25,7 @@ The following yarn run scripts are available. You can also run them via Grunt di
 ### Getting Started
 
 1. Make sure `yarn` is installed (everything should work also with npm but YMMV)
-2. Install realpath and timeout
+2. Install realpath and timeout (`brew install coreutils`)
 3. Run `yarn install`.
 4. Optionally, make sure grunt is installed globally.
 5. Run `yarn run startup`
@@ -34,16 +34,6 @@ The following yarn run scripts are available. You can also run them via Grunt di
 Changes should be made in the `src` directory. The build task transpiles the TypeScript code into JavaScript and copies it to the `dist` directory. Grafana will load the JavaScript from the `dist` directory and ignore the `src` directory. The `dist` directory is bind mounted in the Grafana container.
 
 After you made changes you should run `yarn run refresh` to see those changes reflected in your Grafana docker container. This will also trigger a build of the mountebank container which copies the imposters file from /specs/mb/importers into the container. If the container doesn't come up subscribing to docker events might reveal the error (`docker events &`).
-
-### Publishing On Grafana.com
-
-- The plugin id field in the plugin.json file should be unique and should follow the plugin naming convention: `yourorgname-pluginname-datasource`.
-- If the plugin supports annotations, then change the annotations field in the plugin.json file to `true`.
-- Image links in the plugin are relative to the plugin.json file.
-- Everywhere a class is named ChangeMyName, change it your plugin name.
-- Commit the `dist` directory to Git. Grafana cannot build plugins when loading them and will load the JavaScript in the dist directory if it exists.
-- The README.md should not contain HTML, only Markdown.
-- If the README.md file contains links to images, they should be the GitHub link to the image. For example: `https://raw.githubusercontent.com/yourorg/pluginname-datasource/master/src/img/image_name.png`
 
 ### Unit Testing with Karma and Mocha and ExpectJS
 
