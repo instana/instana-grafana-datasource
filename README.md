@@ -19,7 +19,7 @@ This datasource uses the Instana REST API to query the metric values. First of a
 
 ### Query Editor
 
-![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/new-readme/screenshots/empty-query-sml.png)
+![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/empty-query-sml.png)
 
 To start, enter the [Dynamic Focus](https://docs.instana.io/core_concepts/dynamic_focus/) query. This is exactly the same as used in the Instana dashboard; you can test your queries in Instana and then copy and paste them into Grafana. *NOTE* Saved filters are not currently supported by the Grafana datasource plugin.
 
@@ -29,4 +29,4 @@ As you select the type, the available metrics dropdown will be automatically pop
 
 If your Dynamic Focus query matches multiple instances then, the returned dataset will include metrics from all those matching instances; providing graphs with multiple plots like the example below.
 
-![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/new-readme/screenshots/complete-query-sml.png)
+![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/complete-query-sml.png)
