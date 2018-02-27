@@ -156,8 +156,6 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'shutdown',
-    'startup',
-    'shutdown'
+    'unit'
   ]);
 };
