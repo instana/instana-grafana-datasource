@@ -13,7 +13,7 @@ This is a Grafana datasource for showing metrics from Instana AI-Powered APM for
 
 This datasource uses the Instana REST API to query the metric values. First of all you will need to generate an API [token](https://docs.instana.io/quick_start/api/). Use this token along with the URL for your Instana account e.g. *https://prod-acme.instana.io*
 
-![datasource configuration](https://raw.githubusercontent.com/instana/instana-grafana-datasource/new-readme/screenshots/datasource-sml.png)
+![datasource configuration](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/datasource-sml.png)
 
 ## Usage
 
