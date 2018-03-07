@@ -14,7 +14,6 @@ System.register(['lodash'], function(exports_1) {
                     this.backendSrv = backendSrv;
                     this.templateSrv = templateSrv;
                     this.$q = $q;
-                    this.dashboardMode = false;
                     this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
                     this.CACHE_MAX_AGE = 60000;
                     this.rollupDurationThresholds = [
@@ -44,27 +43,18 @@ System.register(['lodash'], function(exports_1) {
                             label: '1h'
                         }
                     ];
-                    this.dispatchToLocalCache = function (id) {
-                        _this.setDashboardMode();
-                        if (!_this.snapshotCache)
+                    this.storeInCache = function (id, query, data) {
+                        if (!_this.snapshotCache) {
                             _this.snapshotCache = {};
-                        if (!_this.snapshotCache[id])
+                        }
+                        if (!_this.snapshotCache[id]) {
                             _this.snapshotCache[id] = {};
-                        var result = function (query, data) {
-                            _this.snapshotCache[id][query] = data;
-                        };
-                        return result;
+                        }
+                        if (!_this.snapshotCache[id][query]) {
+                            _this.snapshotCache[id][query] = {};
+                        }
+                        _this.snapshotCache[id][query] = data;
                     };
-                    this.initializeCache = function (id) {
-                        _this.dashboardMode = true;
-                        _this.registerCacheSnapshotDataCallback(id, _this.dispatchToLocalCache(id));
-                    };
-                    this.registerCacheSnapshotDataCallback = function (id, callback) {
-                        _this.cacheSnapshotData[id] = callback;
-                    };
-                    this.setDashboardMode = function () { _this.dashboardMode = true; };
-                    this.inDashboardMode = function () { return _this.dashboardMode; };
-                    this.cacheSnapshotDataCallback = function (id) { return _this.cacheSnapshotData[id]; };
                     this.getSnapshotCache = function () { return _this.snapshotCache; };
                     this.wasLastFetchedFromApi = function () { return _this.lastFetchedFromAPI; };
                     this.setLastFetchedFromApi = function (value) { _this.lastFetchedFromAPI = value; };
@@ -73,7 +63,6 @@ System.register(['lodash'], function(exports_1) {
                     this.url = instanceSettings.jsonData.url;
                     this.apiToken = instanceSettings.jsonData.apiToken;
                     this.snapshotCache = {};
-                    this.cacheSnapshotData = {};
                     this.currentTime = function () { return new Date().getTime(); };
                 }
                 InstanaDatasource.prototype.request = function (method, url, requestId) {
@@ -108,10 +97,7 @@ System.register(['lodash'], function(exports_1) {
                             // For every target with all snapshots that were returned by the lucene query...
                             // Cache the data if fresh
                             if (_this.wasLastFetchedFromApi()) {
-                                if (!_this.cacheSnapshotDataCallback(targetWithSnapshots.target.refId)) {
-                                    _this.initializeCache(targetWithSnapshots.target.refId);
-                                }
-                                _this.cacheSnapshotDataCallback(targetWithSnapshots.target.refId)(_this.buildQuery(targetWithSnapshots.target), { time: toInMs, snapshots: targetWithSnapshots.snapshots });
+                                _this.storeInCache(targetWithSnapshots.target.refId, _this.buildQuery(targetWithSnapshots.target), { time: toInMs, snapshots: targetWithSnapshots.snapshots });
                             }
                             return _this.$q.all(lodash_1.default.map(targetWithSnapshots.snapshots, function (snapshot) {
                                 // ...fetch the metric data for every snapshot in the results.
@@ -133,12 +119,9 @@ System.register(['lodash'], function(exports_1) {
                 InstanaDatasource.prototype.fetchSnapshotsForTarget = function (target, from, to) {
                     var _this = this;
                     var query = this.buildQuery(target);
-                    if ((!this.inDashboardMode() && this.globalCacheCopyAvailable(target, query)) ||
-                        (this.inDashboardMode() && this.localCacheCopyAvailable(target, query))) {
+                    if (this.localCacheCopyAvailable(target, query)) {
                         this.setLastFetchedFromApi(false);
-                        return this.inDashboardMode()
-                            ? this.$q.resolve(this.snapshotCache[target.refId][query].snapshots)
-                            : this.$q.resolve(target.snapshotCache[query].snapshots);
+                        return this.$q.resolve(this.getSnapshotCache()[target.refId][query].snapshots);
                     }
                     this.setLastFetchedFromApi(true);
                     var fetchSnapshotsUrl = '/api/snapshots?from=' + from + '&to=' + to + '&q=' + query;
@@ -154,9 +137,6 @@ System.register(['lodash'], function(exports_1) {
                             });
                         }));
                     });
-                };
-                InstanaDatasource.prototype.globalCacheCopyAvailable = function (target, query) {
-                    return target.snapshotCache && lodash_1.default.includes(Object.keys(target.snapshotCache), query) && this.currentTime() - target.snapshotCache[query].time < this.CACHE_MAX_AGE;
                 };
                 InstanaDatasource.prototype.localCacheCopyAvailable = function (target, query) {
                     return this.snapshotCache[target.refId] && lodash_1.default.includes(Object.keys(this.snapshotCache[target.refId]), query) && this.currentTime() - this.snapshotCache[target.refId][query].time < this.CACHE_MAX_AGE;

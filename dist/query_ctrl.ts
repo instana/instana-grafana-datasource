@@ -10,7 +10,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   metricsDefinition = metricsDefinition;
   uniqueEntityTypes: Array<string>;
   availableMetrics: Array<Object>
-  cacheCallbackRegistered: boolean;
   entitySelectionText: string;
   metricSelectionText: string;
 
@@ -26,13 +25,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-
-    if (!this.target.snapshotCache)
-      this.target.snapshotCache = {};
-
-    if (this.datasource && this.target.refId) {
-      this.registerCacheCallback();
-    }
 
     if (this.target.entityQuery) {
       this.onFilterChange(false);
@@ -69,9 +61,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
               this.target.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
             } else {
               if (this.target.metric && refresh) {
-                if (!this.cacheCallbackRegistered)
-                  this.registerCacheCallback();
-
                 this.panelCtrl.refresh();
               }
             }
@@ -101,27 +90,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.target.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
     } else { 
       if (this.target.metric && refresh) {
-        if (!this.cacheCallbackRegistered)
-          this.registerCacheCallback();
-
         this.panelCtrl.refresh();
       }
     }
   }
 
   onMetricSelect() {
-    if (!this.cacheCallbackRegistered)
-      this.registerCacheCallback();
-      
     this.panelCtrl.refresh();
-  }
-
-  onSnapshotRetrieval = (query, data) => {
-    this.target.snapshotCache[query] = data;
-  }
-
-  registerCacheCallback() {
-    this.datasource.registerCacheSnapshotDataCallback(this.target.refId, this.onSnapshotRetrieval);
-    this.cacheCallbackRegistered = true;
   }
 }

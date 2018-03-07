@@ -31,16 +31,8 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                     this.metricsDefinition = metrics_1.default;
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
                     this.defaults = {};
-                    this.onSnapshotRetrieval = function (query, data) {
-                        _this.target.snapshotCache[query] = data;
-                    };
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-                    if (!this.target.snapshotCache)
-                        this.target.snapshotCache = {};
-                    if (this.datasource && this.target.refId) {
-                        this.registerCacheCallback();
-                    }
                     if (this.target.entityQuery) {
                         this.onFilterChange(false);
                         this.onEntityTypeSelect(false);
@@ -75,8 +67,6 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                             }
                             else {
                                 if (_this.target.metric && refresh) {
-                                    if (!_this.cacheCallbackRegistered)
-                                        _this.registerCacheCallback();
                                     _this.panelCtrl.refresh();
                                 }
                             }
@@ -103,20 +93,12 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                     }
                     else {
                         if (this.target.metric && refresh) {
-                            if (!this.cacheCallbackRegistered)
-                                this.registerCacheCallback();
                             this.panelCtrl.refresh();
                         }
                     }
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {
-                    if (!this.cacheCallbackRegistered)
-                        this.registerCacheCallback();
                     this.panelCtrl.refresh();
-                };
-                InstanaQueryCtrl.prototype.registerCacheCallback = function () {
-                    this.datasource.registerCacheSnapshotDataCallback(this.target.refId, this.onSnapshotRetrieval);
-                    this.cacheCallbackRegistered = true;
                 };
                 InstanaQueryCtrl.templateUrl = 'partials/query.editor.html';
                 return InstanaQueryCtrl;

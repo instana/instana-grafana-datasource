@@ -1871,7 +1871,6 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     };
     uniqueEntityTypes: Array<string>;
     availableMetrics: Array<Object>;
-    cacheCallbackRegistered: boolean;
     entitySelectionText: string;
     metricSelectionText: string;
     EMPTY_DROPDOWN_TEXT: string;
@@ -1881,6 +1880,4 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     onFilterChange(refresh: any): any;
     onEntityTypeSelect(refresh: any): void;
     onMetricSelect(): void;
-    onSnapshotRetrieval: (query: any, data: any) => void;
-    registerCacheCallback(): void;
 }
