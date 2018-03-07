@@ -6,9 +6,11 @@ export default class InstanaDatasource {
   url: string;
   apiToken: string;
   currentTime: () => number;
+  snapshotCache: Object;
   cacheSnapshotData: Object;
   lastFetchedFromAPI: boolean;
-  
+  dashboardMode: boolean = false;
+
   MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
   CACHE_MAX_AGE = 60000;
 
@@ -46,13 +48,46 @@ export default class InstanaDatasource {
     this.id = instanceSettings.id;
     this.url = instanceSettings.jsonData.url;
     this.apiToken = instanceSettings.jsonData.apiToken;
+    this.snapshotCache = {};
     this.cacheSnapshotData = {};
     this.currentTime = () => { return new Date().getTime() };
   }
 
-  registerCacheSnapshotDataCallback(id, callback) {
+  dispatchToLocalCache = (id) => {
+    this.setDashboardMode();
+
+    if (!this.snapshotCache)
+      this.snapshotCache = {};
+    if (!this.snapshotCache[id])
+      this.snapshotCache[id] = {};
+
+    const result = (query, data) => {      
+      this.snapshotCache[id][query] = data;
+    }
+
+    return result;
+  }
+
+  initializeCache = (id) =>  {
+    this.dashboardMode = true;
+    this.registerCacheSnapshotDataCallback(id, this.dispatchToLocalCache(id));
+  }
+
+  registerCacheSnapshotDataCallback = (id, callback) => {
     this.cacheSnapshotData[id] = callback;
   }
+
+  setDashboardMode = () => { this.dashboardMode = true };
+
+  inDashboardMode = () => { return this.dashboardMode; }
+
+  cacheSnapshotDataCallback = (id) => { return this.cacheSnapshotData[id] };
+
+  getSnapshotCache = () => { return this.snapshotCache; };
+
+  wasLastFetchedFromApi = () => { return this.lastFetchedFromAPI; }
+
+  setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; }
 
   request(method, url, requestId?) {
     var options: any = {
@@ -93,8 +128,13 @@ export default class InstanaDatasource {
           // For every target with all snapshots that were returned by the lucene query...
 
           // Cache the data if fresh
-          if (this.lastFetchedFromAPI)
-            this.cacheSnapshotData[targetWithSnapshots.target.refId](this.buildQuery(targetWithSnapshots.target), { time: toInMs, snapshots: targetWithSnapshots.snapshots });
+          if (this.wasLastFetchedFromApi()) {
+            if (!this.cacheSnapshotDataCallback(targetWithSnapshots.target.refId)) {
+              this.initializeCache(targetWithSnapshots.target.refId);
+            }
+
+            this.cacheSnapshotDataCallback(targetWithSnapshots.target.refId)(this.buildQuery(targetWithSnapshots.target), { time: toInMs, snapshots: targetWithSnapshots.snapshots });
+          }
 
           return this.$q.all(
             _.map(targetWithSnapshots.snapshots, snapshot => {
@@ -121,12 +161,16 @@ export default class InstanaDatasource {
   fetchSnapshotsForTarget(target, from, to) {
     const query = this.buildQuery(target);
 
-    if (target.snapshotCache && _.includes(Object.keys(target.snapshotCache), query) && this.currentTime() - target.snapshotCache[query].time < this.CACHE_MAX_AGE) {
-      this.lastFetchedFromAPI = false;
-      return this.$q.resolve(target.snapshotCache[query].snapshots);
+    if ( (!this.inDashboardMode() && this.globalCacheCopyAvailable(target, query)) ||  
+         (this.inDashboardMode() && this.localCacheCopyAvailable(target, query))) {
+
+      this.setLastFetchedFromApi(false);
+      return this.inDashboardMode()
+        ? this.$q.resolve(this.snapshotCache[target.refId][query].snapshots)
+        : this.$q.resolve(target.snapshotCache[query].snapshots);
     }
 
-    this.lastFetchedFromAPI = true;
+    this.setLastFetchedFromApi(true);
     const fetchSnapshotsUrl = '/api/snapshots?from=' + from + '&to=' + to + '&q=' + query;
     const fetchSnapshotContextsUrl = '/api/snapshots/context?q=' + encodeURIComponent(target.entityQuery + ' AND entity.pluginId:' + target.entityType) + '&time=' + to;
 
@@ -144,6 +188,14 @@ export default class InstanaDatasource {
         })
       )
     });
+  }
+
+  globalCacheCopyAvailable(target, query) {
+    return target.snapshotCache && _.includes(Object.keys(target.snapshotCache), query) && this.currentTime() - target.snapshotCache[query].time < this.CACHE_MAX_AGE;
+  }
+
+  localCacheCopyAvailable(target, query) {
+    return this.snapshotCache[target.refId] && _.includes(Object.keys(this.snapshotCache[target.refId]), query) && this.currentTime() - this.snapshotCache[target.refId][query].time < this.CACHE_MAX_AGE;
   }
 
   buildQuery(target) {
