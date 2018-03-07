@@ -24,8 +24,8 @@
       {"name": "GitHub", "url": "https://instana.com" },
       {"name": "MIT License", "url": "https://instana.com" }
     ],
-    "version": "1.0.0",
-    "updated": "2018-01-05"
+    "version": "1.0.1",
+    "updated": "2018-03-07"
   },
 
   "dependencies": {
