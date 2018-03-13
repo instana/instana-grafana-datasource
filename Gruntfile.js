@@ -13,6 +13,7 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-tslint');
   grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-karma');
@@ -55,6 +56,17 @@ module.exports = function(grunt) {
         src: ['src/plugin.json', 'LICENSE', 'README.md'],
         dest: 'dist/'
       }
+    },
+
+    tslint: {
+      options: {
+        // Task-specific options go here.
+        configuration: "tslint.json"
+      },
+      files: {
+          // Target-specific file lists and/or options go here.
+          src: ['src/**/*.ts'],
+      },
     },
 
     typescript: {
@@ -130,6 +142,7 @@ module.exports = function(grunt) {
     'clean',
     'unit',
     'copy:dist_js',
+    'tslint',
     'typescript:build',
     'copy:dist_html',
     'copy:dist_css',

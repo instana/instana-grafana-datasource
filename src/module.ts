@@ -1,4 +1,4 @@
-import InstnaDatasource from './datasource';
+import InstanaDatasource from './datasource';
 import {InstanaQueryCtrl} from './query_ctrl';
 import {InstanaConfigCtrl} from './config_ctrl';
 
@@ -7,7 +7,7 @@ class InstanaAnnotationsQueryCtrl {
 }
 
 export {
-  InstnaDatasource as Datasource,
+  InstanaDatasource as Datasource,
   InstanaQueryCtrl as QueryCtrl,
   InstanaConfigCtrl as ConfigCtrl,
   InstanaAnnotationsQueryCtrl as AnnotationsQueryCtrl,

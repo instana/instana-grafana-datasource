@@ -47,7 +47,7 @@ export default class InstanaDatasource {
     this.url = instanceSettings.jsonData.url;
     this.apiToken = instanceSettings.jsonData.apiToken;
     this.snapshotCache = {};
-    this.currentTime = () => { return new Date().getTime() };
+    this.currentTime = () => { return new Date().getTime(); };
   }
 
   storeInCache = (id, query, data) => {
@@ -60,15 +60,15 @@ export default class InstanaDatasource {
     if (!this.snapshotCache[id][query]) {
       this.snapshotCache[id][query] = {};
     }
-    
+
     this.snapshotCache[id][query] = data;
   }
 
   getSnapshotCache = () => { return this.snapshotCache; };
 
-  wasLastFetchedFromApi = () => { return this.lastFetchedFromAPI; }
+  wasLastFetchedFromApi = () => { return this.lastFetchedFromAPI; };
 
-  setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; }
+  setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; };
 
   request(method, url, requestId?) {
     var options: any = {
@@ -85,8 +85,9 @@ export default class InstanaDatasource {
   }
 
   query(options) {
-    if (Object.keys(options.targets[0]).length === 0)
+    if (Object.keys(options.targets[0]).length === 0) {
       return this.$q.resolve({ data: [] });
+    }
 
     // Convert ISO 8601 timestamps to millis.
     const fromInMs = new Date(options.range.from).getTime();
@@ -97,7 +98,7 @@ export default class InstanaDatasource {
         // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
         return this.fetchSnapshotsForTarget(target, fromInMs, toInMs)
           .then(snapshots => {
-            return { 
+            return {
               'target': target,
               'snapshots': snapshots
             };
@@ -110,21 +111,28 @@ export default class InstanaDatasource {
 
           // Cache the data if fresh
           if (this.wasLastFetchedFromApi()) {
-            this.storeInCache(targetWithSnapshots.target.refId, this.buildQuery(targetWithSnapshots.target), { time: toInMs, snapshots: targetWithSnapshots.snapshots });
+            this.storeInCache(
+              targetWithSnapshots.target.refId,
+              this.buildQuery(targetWithSnapshots.target),
+              { time: toInMs, snapshots: targetWithSnapshots.snapshots });
           }
 
           return this.$q.all(
             _.map(targetWithSnapshots.snapshots, snapshot => {
 
               // ...fetch the metric data for every snapshot in the results.
-              return this.fetchMetricsForSnapshot(snapshot.snapshotId, targetWithSnapshots.target.metric.key, fromInMs, toInMs)
+              return this.fetchMetricsForSnapshot(
+                snapshot.snapshotId,
+                targetWithSnapshots.target.metric.key,
+                fromInMs,
+                toInMs)
                 .then(response => {
                   var result = {
                     'target': snapshot.label,
                     'datapoints': _.map(response.data.values, value => [value.value, value.timestamp])
                   };
                   return result;
-                })
+                });
             })
           );
         })
@@ -145,9 +153,15 @@ export default class InstanaDatasource {
 
     this.setLastFetchedFromApi(true);
     const fetchSnapshotsUrl = '/api/snapshots?from=' + from + '&to=' + to + '&q=' + query;
-    const fetchSnapshotContextsUrl = '/api/snapshots/context?q=' + encodeURIComponent(target.entityQuery + ' AND entity.pluginId:' + target.entityType) + '&time=' + to;
+    const fetchSnapshotContextsUrl =
+      '/api/snapshots/context?q=' + encodeURIComponent(target.entityQuery +
+      ' AND entity.pluginId:' + target.entityType) +
+      '&time=' + to;
 
-    return this.$q.all([this.request('GET', fetchSnapshotsUrl), this.request('GET', fetchSnapshotContextsUrl)]).then(snapshotsWithContextsResponse => {
+    return this.$q.all([
+      this.request('GET', fetchSnapshotsUrl),
+      this.request('GET', fetchSnapshotContextsUrl)
+    ]).then(snapshotsWithContextsResponse => {
       return this.$q.all(
         _.map(snapshotsWithContextsResponse[0].data, snapshotId => {
           const fetchSnapshotUrl = '/api/snapshots/' + snapshotId + '?time=' + to;
@@ -159,12 +173,14 @@ export default class InstanaDatasource {
             };
           });
         })
-      )
+      );
     });
   }
 
   localCacheCopyAvailable(target, query) {
-    return this.snapshotCache[target.refId] && _.includes(Object.keys(this.snapshotCache[target.refId]), query) && this.currentTime() - this.snapshotCache[target.refId][query].time < this.CACHE_MAX_AGE;
+    return this.snapshotCache[target.refId] &&
+           _.includes(Object.keys(this.snapshotCache[target.refId]), query) &&
+           this.currentTime() - this.snapshotCache[target.refId][query].time < this.CACHE_MAX_AGE;
   }
 
   buildQuery(target) {
@@ -172,17 +188,17 @@ export default class InstanaDatasource {
   }
 
   getHostSuffix(contexts, snapshotId) {
-    const host = _.find(contexts, context => context.snapshotId == snapshotId).host;
-    if (!host)
+    const host = _.find(contexts, context => context.snapshotId === snapshotId).host;
+    if (!host) {
       return '';
-    
+    }
     return ' (on host "' + host + '")';
   }
 
   fetchMetricsForSnapshot(snapshotId, metric, from, to) {
     const rollup = this.getDefaultMetricRollupDuration(from, to).rollup;
     const url = '/api/metrics?metric=' + metric + '&from=' + from + '&to=' + to + '&rollup=' + rollup + '&snapshotId=' + snapshotId;
-    
+
     return this.request('GET', url);
   }
 
@@ -212,25 +228,23 @@ export default class InstanaDatasource {
             message: 'Successfully connected to the Instana API.',
             title: 'Success'
           };
-        }
-        else if (error.status === 401) {
+        } else if (error.status === 401) {
           return {
             status: 'error',
             message: 'Unauthorized. Please verify the API Token.',
             title: 'Error'
           };
-        }
-        else {
+        } else {
           return {
             status: 'error',
             message: 'Error connecting to the Instana API.',
             title: 'Error'
-          }
+          };
         }
       });
   }
 
-  getDefaultMetricRollupDuration(from, to, minRollup = 1000) { 
+  getDefaultMetricRollupDuration(from, to, minRollup = 1000) {
     // Ignoring time differences for now since small time differences
     // can be accepted. This time is only used to calculate the rollup.
     const now = Date.now();
@@ -244,7 +258,7 @@ export default class InstanaDatasource {
         rollupDefinition => rollupDefinition.rollup != null && rollupDefinition.rollup >= minRollup
       );
     }
-  
+
     for (let i = 0, len = availableRollupDefinitions.length; i < len; i++) {
       // this works because the rollupDurationThresholds array is sorted by rollup
       // the first rollup matching the requirements is returned
@@ -254,7 +268,7 @@ export default class InstanaDatasource {
         return rollupDefinition;
       }
     }
-  
+
     return this.rollupDurationThresholds[this.rollupDurationThresholds.length - 1];
   }
 }

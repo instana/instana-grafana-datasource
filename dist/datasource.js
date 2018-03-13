@@ -78,8 +78,9 @@ System.register(['lodash'], function(exports_1) {
                 };
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;
-                    if (Object.keys(options.targets[0]).length === 0)
+                    if (Object.keys(options.targets[0]).length === 0) {
                         return this.$q.resolve({ data: [] });
+                    }
                     // Convert ISO 8601 timestamps to millis.
                     var fromInMs = new Date(options.range.from).getTime();
                     var toInMs = new Date(options.range.to).getTime();
@@ -125,8 +126,13 @@ System.register(['lodash'], function(exports_1) {
                     }
                     this.setLastFetchedFromApi(true);
                     var fetchSnapshotsUrl = '/api/snapshots?from=' + from + '&to=' + to + '&q=' + query;
-                    var fetchSnapshotContextsUrl = '/api/snapshots/context?q=' + encodeURIComponent(target.entityQuery + ' AND entity.pluginId:' + target.entityType) + '&time=' + to;
-                    return this.$q.all([this.request('GET', fetchSnapshotsUrl), this.request('GET', fetchSnapshotContextsUrl)]).then(function (snapshotsWithContextsResponse) {
+                    var fetchSnapshotContextsUrl = '/api/snapshots/context?q=' + encodeURIComponent(target.entityQuery +
+                        ' AND entity.pluginId:' + target.entityType) +
+                        '&time=' + to;
+                    return this.$q.all([
+                        this.request('GET', fetchSnapshotsUrl),
+                        this.request('GET', fetchSnapshotContextsUrl)
+                    ]).then(function (snapshotsWithContextsResponse) {
                         return _this.$q.all(lodash_1.default.map(snapshotsWithContextsResponse[0].data, function (snapshotId) {
                             var fetchSnapshotUrl = '/api/snapshots/' + snapshotId + '?time=' + to;
                             return _this.request('GET', fetchSnapshotUrl).then(function (snapshotResponse) {
@@ -139,15 +145,18 @@ System.register(['lodash'], function(exports_1) {
                     });
                 };
                 InstanaDatasource.prototype.localCacheCopyAvailable = function (target, query) {
-                    return this.snapshotCache[target.refId] && lodash_1.default.includes(Object.keys(this.snapshotCache[target.refId]), query) && this.currentTime() - this.snapshotCache[target.refId][query].time < this.CACHE_MAX_AGE;
+                    return this.snapshotCache[target.refId] &&
+                        lodash_1.default.includes(Object.keys(this.snapshotCache[target.refId]), query) &&
+                        this.currentTime() - this.snapshotCache[target.refId][query].time < this.CACHE_MAX_AGE;
                 };
                 InstanaDatasource.prototype.buildQuery = function (target) {
                     return encodeURIComponent(target.entityQuery + ' AND entity.pluginId:' + target.entityType);
                 };
                 InstanaDatasource.prototype.getHostSuffix = function (contexts, snapshotId) {
-                    var host = lodash_1.default.find(contexts, function (context) { return context.snapshotId == snapshotId; }).host;
-                    if (!host)
+                    var host = lodash_1.default.find(contexts, function (context) { return context.snapshotId === snapshotId; }).host;
+                    if (!host) {
                         return '';
+                    }
                     return ' (on host "' + host + '")';
                 };
                 InstanaDatasource.prototype.fetchMetricsForSnapshot = function (snapshotId, metric, from, to) {

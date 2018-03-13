@@ -38,7 +38,7 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                         this.onEntityTypeSelect(false);
                     }
                     if (this.target.metric) {
-                        this.target.metric = lodash_1.default.find(this.availableMetrics, function (m) { return m.key == _this.target.metric.key; });
+                        this.target.metric = lodash_1.default.find(this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                     }
                 }
                 InstanaQueryCtrl.prototype.onFilterChange = function (refresh) {
@@ -51,7 +51,8 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                         this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                     }
                     else {
-                        return this.datasource.request('GET', '/api/snapshots/types?q=' + encodeURIComponent(this.target.entityQuery) + '&time=' + new Date().getTime())
+                        return this.datasource.request('GET', '/api/snapshots/types?q=' + encodeURIComponent(this.target.entityQuery) +
+                            '&time=' + new Date().getTime())
                             .then(function (response) {
                             _this.target.queryIsValid = true;
                             _this.uniqueEntityTypes =

@@ -9,11 +9,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
   metricsDefinition = metricsDefinition;
   uniqueEntityTypes: Array<string>;
-  availableMetrics: Array<Object>
+  availableMetrics: Array<Object>;
   entitySelectionText: string;
   metricSelectionText: string;
 
-  EMPTY_DROPDOWN_TEXT: string = ' - ';
+  EMPTY_DROPDOWN_TEXT = ' - ';
 
   defaults = {
   };
@@ -31,11 +31,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.onEntityTypeSelect(false);
     }
     if (this.target.metric) {
-      this.target.metric =_.find(this.availableMetrics, m => m.key == this.target.metric.key);
+      this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
     }
   }
-  
-	onFilterChange(refresh) {
+
+  onFilterChange(refresh) {
     if (this.target.entityQuery === '') {
       this.uniqueEntityTypes = [];
       this.target.entityType = null;
@@ -43,13 +43,15 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
       this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
     } else {
-      return this.datasource.request('GET', '/api/snapshots/types?q=' + encodeURIComponent(this.target.entityQuery) + '&time=' + new Date().getTime())
+      return this.datasource.request(
+        'GET', '/api/snapshots/types?q=' + encodeURIComponent(this.target.entityQuery) +
+        '&time=' + new Date().getTime())
         .then(
-          response => { 
-            this.target.queryIsValid = true;            
-            this.uniqueEntityTypes = 
+          response => {
+            this.target.queryIsValid = true;
+            this.uniqueEntityTypes =
               _.filter(
-                response.data, 
+                response.data,
                 entityType => metricsDefinition[entityType] && metricsDefinition[entityType].label != null);
             this.entitySelectionText = this.uniqueEntityTypes.length > 0
               ? 'Please select (' + this.uniqueEntityTypes.length + ')'
@@ -74,21 +76,21 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onEntityTypeSelect(refresh) {
-    this.availableMetrics =     
+    this.availableMetrics =
       _.map(
-        this.metricsDefinition[this.target.entityType].metrics, 
-        (value, key) => { 
+        this.metricsDefinition[this.target.entityType].metrics,
+        (value, key) => {
           return {
-            "key": key, 
-            "label": value} 
+            "key": key,
+            "label": value};
         });
-    this.metricSelectionText = this.availableMetrics.length > 0 
+    this.metricSelectionText = this.availableMetrics.length > 0
       ? 'Please select (' + this.availableMetrics.length + ')'
       : this.EMPTY_DROPDOWN_TEXT;
     if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
       this.target.metric = null;
       this.target.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-    } else { 
+    } else {
       if (this.target.metric && refresh) {
         this.panelCtrl.refresh();
       }
