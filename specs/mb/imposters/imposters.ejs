@@ -127,8 +127,9 @@
 					"method": "GET",
 					"path": "/api/snapshots",
 					"query": {
-						"q": "filler AND entity.type:process",
-						"time": "1514826000000"
+						"q": "filler AND entity.pluginId:process",
+						"from": "1514782800000",
+						"to": "1515301200000"
 					}
 				}
 			}],
@@ -148,9 +149,32 @@
 			"predicates": [{
 				"equals": {
 					"method": "GET",
+					"path": "/api/snapshots/context",
+					"query": {
+						"q": "filler AND entity.pluginId:process",
+						"time": "1515301200000"
+					}
+				}
+			}],
+			"responses": [{
+				"is": {
+					"statusCode": 200,
+					"headers": {
+						"Content-Type": "application/json;charset=utf-8",
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+					},
+					"body": "[{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx0\",\"host\":\"host-1\"},{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx1\",\"host\":\"host-2\"}]"
+				}
+			}]
+		},
+		{
+			"predicates": [{
+				"equals": {
+					"method": "GET",
 					"path": "/api/snapshots/kBfqGyrfEXvUcwix_fL97vYegx0",
 					"query": {
-						"time": "1514826000000"
+						"time": "1515301200000"
 					}
 				}
 			}],
@@ -172,7 +196,7 @@
 					"method": "GET",
 					"path": "/api/snapshots/kBfqGyrfEXvUcwix_fL97vYegx1",
 					"query": {
-						"time": "1514826000000"
+						"time": "1515301200000"
 					}
 				}
 			}],
@@ -195,9 +219,9 @@
 					"path": "/api/metrics",
 					"query": {
 						"metric": "mem.virtual",
-						"from": "1514826000000",
-						"to": "1515344400000",
-						"rollup": "60000",
+						"from": "1514782800000",
+						"to": "1515301200000",
+						"rollup": "3600000",
 						"snapshotId": "kBfqGyrfEXvUcwix_fL97vYegx0"
 					}
 				}
@@ -221,9 +245,9 @@
 					"path": "/api/metrics",
 					"query": {
 						"metric": "mem.virtual",
-						"from": "1514826000000",
-						"to": "1515344400000",
-						"rollup": "60000",
+						"from": "1514782800000",
+						"to": "1515301200000",
+						"rollup": "3600000",
 						"snapshotId": "kBfqGyrfEXvUcwix_fL97vYegx1"
 					}
 				}
