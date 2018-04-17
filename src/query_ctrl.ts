@@ -27,8 +27,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
 
     if (this.target.entityQuery) {
-      this.onFilterChange(false);
-      this.onEntityTypeSelect(false);
+      this.onFilterChange(false).then(_ => {
+        if (this.target.entityType) {
+          this.onEntityTypeSelect(false);
+        }
+      });
     }
     if (this.target.metric) {
       this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);

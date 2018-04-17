@@ -34,8 +34,11 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                     if (this.target.entityQuery) {
-                        this.onFilterChange(false);
-                        this.onEntityTypeSelect(false);
+                        this.onFilterChange(false).then(function (_) {
+                            if (_this.target.entityType) {
+                                _this.onEntityTypeSelect(false);
+                            }
+                        });
                     }
                     if (this.target.metric) {
                         this.target.metric = lodash_1.default.find(this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
