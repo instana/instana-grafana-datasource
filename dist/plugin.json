@@ -21,8 +21,8 @@
       "large": "http://www.instana.com/media/instana_icon_square.png"
     },
     "links": [
-      {"name": "GitHub", "url": "https://instana.com" },
-      {"name": "MIT License", "url": "https://instana.com" }
+      {"name": "GitHub", "url": "https://github.com/instana/instana-grafana-datasource" },
+      {"name": "MIT License", "url": "https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/LICENSE" }
     ],
     "version": "1.0.1",
     "updated": "2018-03-07"
