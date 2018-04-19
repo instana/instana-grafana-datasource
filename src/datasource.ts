@@ -127,9 +127,12 @@ export default class InstanaDatasource {
                 fromInMs,
                 toInMs)
                 .then(response => {
+                  const timeseries = targetWithSnapshots.target.pluginId === "singlestat"
+                    ? this.correctForSingleStat(response.data.values, fromInMs, toInMs)
+                    : response.data.values;
                   var result = {
                     'target': snapshot.label,
-                    'datapoints': _.map(response.data.values, value => [value.value, value.timestamp])
+                    'datapoints': _.map(timeseries, value => [value.value, value.timestamp])
                   };
                   return result;
                 });
@@ -141,6 +144,13 @@ export default class InstanaDatasource {
       // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
       return { data: [].concat.apply([], results) };
     });
+  }
+
+  correctForSingleStat(values, fromInMs, toInMs) {
+    const rollup = this.getDefaultMetricRollupDuration(fromInMs, toInMs).rollup;
+    const aggregationToSecondMultiplier = rollup / 1000;
+
+    return _.map(values, value => { return { 'value': value.value * aggregationToSecondMultiplier, 'timestamp': value.timestamp }; } );
   }
 
   fetchSnapshotsForTarget(target, from, to) {

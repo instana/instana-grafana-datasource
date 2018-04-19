@@ -24,6 +24,7 @@ export default class InstanaDatasource {
     setLastFetchedFromApi: (value: any) => void;
     request(method: any, url: any, requestId?: any): any;
     query(options: any): any;
+    correctForSingleStat(values: any, fromInMs: any, toInMs: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;
     localCacheCopyAvailable(target: any, query: any): boolean;
     buildQuery(target: any): string;

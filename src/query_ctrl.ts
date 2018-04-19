@@ -22,7 +22,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   constructor($scope, $injector, private templateSrv, private backendSrv) {
     super($scope, $injector);
 
-
+    this.target.pluginId = this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
 

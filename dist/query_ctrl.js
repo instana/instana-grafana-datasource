@@ -31,6 +31,7 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                     this.metricsDefinition = metrics_1.default;
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
                     this.defaults = {};
+                    this.target.pluginId = this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                     if (this.target.entityQuery) {
