@@ -279,6 +279,9 @@ export default class InstanaDatasource {
       }
     }
 
+    console.log('from ' + from + ' to ' + to + ' resulting in rollup ' +
+      JSON.stringify(this.rollupDurationThresholds[this.rollupDurationThresholds.length - 1]));
+
     return this.rollupDurationThresholds[this.rollupDurationThresholds.length - 1];
   }
 }

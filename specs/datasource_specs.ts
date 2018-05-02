@@ -338,9 +338,9 @@ describe('InstanaDatasource', function() {
             return ctx.$q.resolve(snapshotA);          
           case "http://localhost:8010/api/snapshots/B?time=1516472658604":
             return ctx.$q.resolve(snapshotB);
-          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=300000&snapshotId=A":
+          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
-          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=300000&snapshotId=B":
+          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=B":
             return ctx.$q.resolve(metricsForB);
         }
       };
@@ -476,6 +476,8 @@ describe('InstanaDatasource', function() {
 
     beforeEach(function() {      
       ctx.backendSrv.datasourceRequest = function(options) {
+
+        console.log(options.url);
         switch (options.url) {
           case "http://localhost:8010/api/snapshots?from=1516472640603&to=1516645440603&q=filler%20AND%20entity.pluginId%3Aprocess":
             return ctx.$q.resolve(snapshots);
@@ -483,9 +485,10 @@ describe('InstanaDatasource', function() {
             return ctx.$q.resolve(contexts);
           case "http://localhost:8010/api/snapshots/A?time=1516645440603":
             return ctx.$q.resolve(snapshotA);          
-          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516472640603&to=1516645440603&rollup=300000&snapshotId=A":
+          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516472640603&to=1516645440603&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
         }
+        console.log('no url matched');
       };
     });
 
@@ -498,9 +501,9 @@ describe('InstanaDatasource', function() {
         expect(results.data.length).to.be(1);
       
         expect(results.data[0].datapoints).to.eql([
-          [600,1516451043603],
-          [900,1516451103603],
-          [300,1516451163603]
+          [7200,1516451043603],
+          [10800,1516451103603],
+          [3600,1516451163603]
         ]);
       });
     });
