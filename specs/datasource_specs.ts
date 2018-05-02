@@ -499,9 +499,9 @@ describe('InstanaDatasource', function() {
         expect(results.data.length).to.be(1);
       
         expect(results.data[0].datapoints).to.eql([
-          [7200,1516451043603],
-          [10800,1516451103603],
-          [3600,1516451163603]
+          [600,1516451043603],
+          [900,1516451103603],
+          [300,1516451163603]
         ]);
       });
     });
