@@ -399,8 +399,8 @@ describe('InstanaDatasource', function() {
       "timezone": "browser",
       "panelId": 1,
       "range": {
-        "from": "2018-01-20T18:24:00.603Z",
-        "to": "2018-01-22T18:24:00.603Z",
+        "from": "2018-04-20T18:24:00.603Z",
+        "to": "2018-04-22T18:24:00.603Z",
         "raw": {
           "from": "now-6h",
           "to": "now"
@@ -476,16 +476,14 @@ describe('InstanaDatasource', function() {
 
     beforeEach(function() {      
       ctx.backendSrv.datasourceRequest = function(options) {
-
-        console.log(options.url);
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1516472640603&to=1516645440603&q=filler%20AND%20entity.pluginId%3Aprocess":
+          case "http://localhost:8010/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess":
             return ctx.$q.resolve(snapshots);
-          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516645440603":
+          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1524421440603":
             return ctx.$q.resolve(contexts);
-          case "http://localhost:8010/api/snapshots/A?time=1516645440603":
+          case "http://localhost:8010/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);          
-          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516472640603&to=1516645440603&rollup=3600000&snapshotId=A":
+          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=300000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
         }
         console.log('no url matched');
