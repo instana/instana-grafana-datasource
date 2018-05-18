@@ -486,7 +486,6 @@ describe('InstanaDatasource', function() {
           case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=300000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
         }
-        console.log('no url matched');
       };
     });
 
