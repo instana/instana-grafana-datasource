@@ -127,7 +127,7 @@ export default class InstanaDatasource {
                 fromInMs,
                 toInMs)
                 .then(response => {
-                  const timeseries = targetWithSnapshots.target.pluginId === "singlestat"
+                  const timeseries = targetWithSnapshots.target.pluginId === "singlestat" || targetWithSnapshots.target.pluginId === "table"
                     ? this.correctForSingleStat(response.data.values, fromInMs, toInMs)
                     : response.data.values;
                   var result = {

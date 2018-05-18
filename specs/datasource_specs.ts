@@ -489,7 +489,120 @@ describe('InstanaDatasource', function() {
       };
     });
 
-    it("should return one targets and extrapolate the data", function() {
+    it("should return one target and extrapolate the data", function() {
+      const time = 1516472658604;
+        
+      ctx.ds.currentTime = () => { return time; };
+
+      return ctx.ds.query(options).then(function(results) {
+        expect(results.data.length).to.be(1);
+      
+        expect(results.data[0].datapoints).to.eql([
+          [600,1516451043603],
+          [900,1516451103603],
+          [300,1516451163603]
+        ]);
+      });
+    });
+  });
+
+  describe('When retrieving metrics for a table', function() {
+    // query a timerange of 2 days which should result in 5-minute rollups being fetched
+    const options = {
+      "timezone": "browser",
+      "panelId": 1,
+      "range": {
+        "from": "2018-04-20T18:24:00.603Z",
+        "to": "2018-04-22T18:24:00.603Z",
+        "raw": {
+          "from": "now-6h",
+          "to": "now"
+        }
+      },
+      "rangeRaw": {
+        "from": "now-2d",
+        "to": "now"
+      },
+      "interval": "20s",
+      "intervalMs": 20000,
+      "targets": [
+        {
+          "$$hashKey": "object:84",
+          "pluginId": "table",
+          "entityQuery": "filler",
+          "entityType": "process",
+          "metric": {
+            "key": "mem.virtual",
+            "label": "Virtual",
+            "$$hashKey": "object:121"
+          },
+          "snapshotCache": {},
+          "refId": "A"
+        }
+      ],
+      "format": "json",
+      "maxDataPoints": 1063,
+      "scopedVars": {
+        "__interval": {
+          "text": "20s",
+          "value": "20s"
+        },
+        "__interval_ms": {
+          "text": 20000,
+          "value": 20000
+        }
+      }
+    };
+
+    const snapshots = {
+      status: 200,
+      data: [ "A" ]
+    };
+
+    const contexts = {
+      status: 200,
+      data: [
+        {
+          "snapshotId": "A",
+          "host": "Stans-Macbook-Pro"
+        }
+      ]
+    }
+
+    const snapshotA = {
+      status: 200,
+      data: {
+        label: 'label for A'
+      }
+    };
+
+    const metricsForA = {
+      status: 200,
+      data: {
+        "values": [    
+          {"timestamp":1516451043603,"value":2},
+          {"timestamp":1516451103603,"value":3},
+          {"timestamp":1516451163603,"value":1}
+        ]
+      }
+    };
+
+    beforeEach(function() {      
+      ctx.backendSrv.datasourceRequest = function(options) {
+        switch (options.url) {
+          case "http://localhost:8010/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess":
+            return ctx.$q.resolve(snapshots);
+          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1524421440603":
+            return ctx.$q.resolve(contexts);
+          case "http://localhost:8010/api/snapshots/A?time=1524421440603":
+            return ctx.$q.resolve(snapshotA);          
+          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=300000&snapshotId=A":
+            return ctx.$q.resolve(metricsForA);
+        }
+      };
+    });
+
+    it("should return one target and extrapolate the data", function() {
       const time = 1516472658604;
         
       ctx.ds.currentTime = () => { return time; };

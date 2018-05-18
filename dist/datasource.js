@@ -104,7 +104,7 @@ System.register(['lodash'], function(exports_1) {
                                 // ...fetch the metric data for every snapshot in the results.
                                 return _this.fetchMetricsForSnapshot(snapshot.snapshotId, targetWithSnapshots.target.metric.key, fromInMs, toInMs)
                                     .then(function (response) {
-                                    var timeseries = targetWithSnapshots.target.pluginId === "singlestat"
+                                    var timeseries = targetWithSnapshots.target.pluginId === "singlestat" || targetWithSnapshots.target.pluginId === "table"
                                         ? _this.correctForSingleStat(response.data.values, fromInMs, toInMs)
                                         : response.data.values;
                                     var result = {
