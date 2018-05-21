@@ -1379,8 +1379,8 @@ declare var _default: {
             "waitstats.ASYNC_NETWORK_IO.wait_time_ms": string;
             "waitstats.CXPACKET.wait_time_ms": string;
             "waitstats.WRITELOG.wait_time_ms": string;
-            "perfcounters.sqlserver:general statistics\\logins/sec": string;
-            "perfcounters.sqlserver:general statistics\\user connections": string;
+            "generalstats.msdb.logins_sec": string;
+            "generalstats.msdb.user_connections": string;
         };
     };
     "mule": {
