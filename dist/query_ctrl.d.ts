@@ -1385,8 +1385,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "waitstats.ASYNC_NETWORK_IO.wait_time_ms": string;
                 "waitstats.CXPACKET.wait_time_ms": string;
                 "waitstats.WRITELOG.wait_time_ms": string;
-                "generalstats.msdb.logins_sec": string;
-                "generalstats.msdb.user_connections": string;
+                "generalstats._total.user_connections": string;
             };
         };
         "mule": {

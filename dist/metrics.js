@@ -1383,8 +1383,7 @@ System.register([], function(exports_1) {
                         "waitstats.ASYNC_NETWORK_IO.wait_time_ms": "Async Network IO",
                         "waitstats.CXPACKET.wait_time_ms": "CX-Packet",
                         "waitstats.WRITELOG.wait_time_ms": "Writelog",
-                        "generalstats.msdb.logins_sec": "Logins/sec.",
-                        "generalstats.msdb.user_connections": "Connections"
+                        "generalstats._total.user_connections": "Connections"
                     }
                 },
                 "mule": {
