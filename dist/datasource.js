@@ -133,10 +133,8 @@ System.register(['lodash'], function(exports_1) {
                         return this.$q.resolve(this.getSnapshotCache()[target.refId][query].snapshots);
                     }
                     this.setLastFetchedFromApi(true);
-                    var fetchSnapshotsUrl = '/api/snapshots?from=' + from + '&to=' + to + '&q=' + query;
-                    var fetchSnapshotContextsUrl = '/api/snapshots/context?q=' + encodeURIComponent(target.entityQuery +
-                        ' AND entity.pluginId:' + target.entityType) +
-                        '&time=' + to;
+                    var fetchSnapshotsUrl = '/api/snapshots?from=' + from + '&to=' + to + '&q=' + query + '&size=100';
+                    var fetchSnapshotContextsUrl = '/api/snapshots/context?q=' + query + '&time=' + to + '&from=' + from + '&to=' + to + '&size=100';
                     return this.$q.all([
                         this.request('GET', fetchSnapshotsUrl),
                         this.request('GET', fetchSnapshotContextsUrl)
@@ -158,7 +156,7 @@ System.register(['lodash'], function(exports_1) {
                         this.currentTime() - this.snapshotCache[target.refId][query].time < this.CACHE_MAX_AGE;
                 };
                 InstanaDatasource.prototype.buildQuery = function (target) {
-                    return encodeURIComponent(target.entityQuery + ' AND entity.pluginId:' + target.entityType);
+                    return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType);
                 };
                 InstanaDatasource.prototype.getHostSuffix = function (contexts, snapshotId) {
                     var host = lodash_1.default.find(contexts, function (context) { return context.snapshotId === snapshotId; }).host;

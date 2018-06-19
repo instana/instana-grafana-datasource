@@ -47,8 +47,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
     } else {
       return this.datasource.request(
-        'GET', '/api/snapshots/types?q=' + encodeURIComponent(this.target.entityQuery) +
-        '&time=' + new Date().getTime())
+        'GET', '/api/snapshots/types?q=' + encodeURIComponent(this.target.entityQuery))
         .then(
           response => {
             this.target.queryIsValid = true;

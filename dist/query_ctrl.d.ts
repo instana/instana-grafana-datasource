@@ -34,6 +34,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
             "label": string;
             "metrics": {
                 "totalQueuesEnqueueCount": string;
+                "totalQueuesDequeueCount": string;
                 "totalTopicsDequeueCount": string;
                 "totalTopicsEnqueueCount": string;
                 "totalConnectionsCount": string;
@@ -41,6 +42,98 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "totalProducerCount": string;
                 "memoryPercentUsage": string;
                 "storePercentUsage": string;
+            };
+        };
+        "application": {
+            "label": string;
+            "metrics": {
+                "count": string;
+                "duration.mean": string;
+                "duration.min": string;
+                "duration.max": string;
+                "duration.25th": string;
+                "duration.50th": string;
+                "duration.75th": string;
+                "duration.95th": string;
+                "duration.98th": string;
+                "duration.99th": string;
+                "error_rate": string;
+            };
+        };
+        "awsdynamodb": {
+            "label": string;
+            "metrics": {
+                "provisioned_read": string;
+                "consumed_read": string;
+                "throttled_get": string;
+                "throttled_scan": string;
+                "throttled_query": string;
+                "throttled_batch_get": string;
+                "provisioned_write": string;
+                "consumed_write": string;
+                "throttled_put": string;
+                "throttled_update": string;
+                "throttled_delete": string;
+                "throttled_batch_write": string;
+                "lat_get_max": string;
+                "lat_get_min": string;
+                "lat_get_avg": string;
+                "lat_get_sum": string;
+                "lat_get_sc": string;
+                "lat_put_max": string;
+                "lat_put_min": string;
+                "lat_put_avg": string;
+                "lat_put_sum": string;
+                "lat_put_sc": string;
+                "lat_query_max": string;
+                "lat_query_min": string;
+                "lat_query_avg": string;
+                "lat_query_sum": string;
+                "lat_query_sc": string;
+                "lat_scan_max": string;
+                "lat_scan_min": string;
+                "lat_scan_avg": string;
+                "lat_scan_sum": string;
+                "lat_scan_sc": string;
+                "lat_up_max": string;
+                "lat_up_min": string;
+                "lat_up_avg": string;
+                "lat_up_sum": string;
+                "lat_up_sc": string;
+                "lat_del_max": string;
+                "lat_del_min": string;
+                "lat_del_avg": string;
+                "lat_del_sum": string;
+                "lat_del_sc": string;
+                "lat_batch_get_max": string;
+                "lat_batch_get_min": string;
+                "lat_batch_get_avg": string;
+                "lat_batch_get_sum": string;
+                "lat_batch_get_sc": string;
+                "lat_batch_write_max": string;
+                "lat_batch_write_min": string;
+                "lat_batch_write_avg": string;
+                "lat_batch_write_sum": string;
+                "lat_batch_write_sc": string;
+                "scan_ret_item_max": string;
+                "scan_ret_item_min": string;
+                "scan_ret_item_avg": string;
+                "scan_ret_item_sum": string;
+                "query_ret_item_max": string;
+                "query_ret_item_min": string;
+                "query_ret_item_avg": string;
+                "query_ret_item_sum": string;
+                "con_check_fail": string;
+                "user_err": string;
+                "sys_err_get": string;
+                "sys_err_scan": string;
+                "sys_err_query": string;
+                "sys_err_batch_get": string;
+                "sys_err_put": string;
+                "sys_err_update": string;
+                "sys_err_delete": string;
+                "sys_err_batch_write": string;
+                "ttl": string;
             };
         };
         "awsec": {
@@ -56,6 +149,61 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "curr_items": string;
                 "evictions": string;
                 "reclaimed": string;
+            };
+        };
+        "awselb": {
+            "label": string;
+            "metrics": {
+                "processed_bytes": string;
+                "new_flow_count": string;
+                "client_reset_count": string;
+                "elb_reset_count": string;
+                "target_reset_count": string;
+                "active_connection_count": string;
+                "new_connection_count": string;
+                "rejected_connection_count": string;
+                "elb_4XX_count": string;
+                "elb_5XX_count": string;
+            };
+        };
+        "awskinesis": {
+            "label": string;
+            "metrics": {
+                "get_records_records": string;
+                "get_records_success": string;
+                "put_records_records": string;
+                "put_records_success": string;
+                "get_records_age_ms": string;
+                "get_records_latency": string;
+                "get_records_bytes": string;
+                "incoming_records": string;
+                "incoming_bytes": string;
+                "put_records_latency": string;
+                "put_records_bytes": string;
+                "read_provisioned_throughput_exceeded": string;
+                "write_provisioned_throughput_exceeded": string;
+            };
+        };
+        "awslambda": {
+            "label": string;
+            "metrics": {
+                "invocations": string;
+                "errors": string;
+                "dead_letter_error": string;
+                "duration": string;
+                "duration_maximum": string;
+                "duration_minimum": string;
+                "duration_sum": string;
+                "throttles": string;
+                "iterator_age": string;
+                "iterator_age_minimum": string;
+                "iterator_age_maximum": string;
+                "iterator_age_sum": string;
+                "concurrent_executions": string;
+                "concurrent_executions_maximum": string;
+                "concurrent_executions_minimum": string;
+                "concurrent_executions_sum": string;
+                "unreserved_concurrent_executions": string;
             };
         };
         "awsrds": {
@@ -92,19 +240,35 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "num_of_msg_sent": string;
             };
         };
+        "awss3": {
+            "label": string;
+            "metrics": {
+                "all_requests": string;
+                "get_requests": string;
+                "put_requests": string;
+                "delete_requests": string;
+                "head_requests": string;
+                "post_requests": string;
+                "list_requests": string;
+                "bytes_downloaded": string;
+                "bytes_uploaded": string;
+                "4xx_errors": string;
+                "5xx_errors": string;
+            };
+        };
         "batchserviceinstance": {
             "label": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -115,13 +279,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -131,19 +295,11 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
             "metrics": {
                 "count": string;
                 "duration.mean": string;
-                "duration.min": string;
-                "duration.25th": string;
                 "duration.50th": string;
-                "duration.75th": string;
+                "duration.90th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
-                "error_rate": string;
-                "uncaughtErrors": string;
-                "xhrCalls": string;
-                "xhrErrors": string;
-                "instances": string;
                 "unl": string;
                 "red": string;
                 "apc": string;
@@ -154,7 +310,12 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "rsp": string;
                 "dom": string;
                 "chi": string;
+                "bac": string;
+                "fro": string;
                 "fp": string;
+                "uncaughtErrors": string;
+                "xhrCalls": string;
+                "xhrErrors": string;
             };
         };
         "cassandracluster": {
@@ -181,13 +342,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -229,6 +390,68 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "bloomFilterFalse": string;
             };
         };
+        "ceph": {
+            "label": string;
+            "metrics": {
+                "num_mons": string;
+                "num_active_mons": string;
+                "num_osds": string;
+                "num_up_osds": string;
+                "num_in_osds": string;
+                "commit_latency_ms": string;
+                "apply_latency_ms": string;
+                "num_near_full_osds": string;
+                "num_full_osds": string;
+                "num_pgs": string;
+                "num_pools": string;
+                "num_objects": string;
+                "aggregate_pct_used": string;
+                "read_bytes_sec": string;
+                "write_bytes_sec": string;
+                "read_op_per_sec": string;
+                "write_op_per_sec": string;
+            };
+        };
+        "clickhousedatabase": {
+            "label": string;
+            "metrics": {
+                "Merge": string;
+                "ReplicatedFetch": string;
+                "ReplicatedSend": string;
+                "ReplicatedChecks": string;
+                "BackgroundPoolTask": string;
+                "DiskSpaceReservedForMerge": string;
+                "DistributedSend": string;
+                "QueryPreempted": string;
+                "TCPConnection": string;
+                "HTTPConnection": string;
+                "InterserverConnection": string;
+                "OpenFileForRead": string;
+                "OpenFileForWrite": string;
+                "Read": string;
+                "Write": string;
+                "SendExternalTables": string;
+                "QueryThread": string;
+                "ReadonlyReplica": string;
+                "LeaderReplica": string;
+                "MemoryTracking": string;
+                "MemoryTrackingInBackgroundProcessingPool": string;
+                "MemoryTrackingForMerges": string;
+                "LeaderElection": string;
+                "EphemeralNode": string;
+                "ZooKeeperWatch": string;
+                "DelayedInserts": string;
+                "ContextLockWait": string;
+                "StorageBufferRows": string;
+                "StorageBufferBytes": string;
+                "DictCacheRequests": string;
+                "Revision": string;
+                "RWLockWaitingReaders": string;
+                "RWLockWaitingWriters": string;
+                "RWLockActiveReaders": string;
+                "RWLockActiveWriters": string;
+            };
+        };
         "clrruntimeplatform": {
             "label": string;
             "metrics": {
@@ -248,6 +471,52 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "nodeCount": string;
             };
         };
+        "consul": {
+            "label": string;
+            "metrics": {
+                "consul.runtime.free_count": string;
+                "consul.runtime.heap_objects": string;
+                "consul.runtime.sys_bytes": string;
+                "consul.runtime.malloc_count": string;
+                "consul.session_ttl.active": string;
+                "consul.autopilot.healthy": string;
+                "consul.runtime.total_gc_runs": string;
+                "consul.runtime.num_goroutines": string;
+                "consul.runtime.alloc_bytes": string;
+                "consul.autopilot.failure_tolerance": string;
+                "consul.runtime.total_gc_pause_ns": string;
+                "raft.appliedIndex": string;
+                "raft.commitIndex": string;
+                "raft.fsmPending": string;
+                "raft.lastLogIndex": string;
+                "raft.lastLogTerm": string;
+                "raft.lastSnapshotIndex": string;
+                "raft.lastSnapshotTerm": string;
+                "raft.numPeers": string;
+                "raft.term": string;
+            };
+        };
+        "couchbasecluster": {
+            "label": string;
+            "metrics": {
+                "cluster.usedDisk": string;
+                "cluster.usedMemory": string;
+                "cluster.ops": string;
+                "cluster.cmd_get": string;
+                "cluster.cmd_set": string;
+                "cluster.curr_items": string;
+            };
+        };
+        "couchbasenode": {
+            "label": string;
+            "metrics": {
+                "node.mem_used": string;
+                "node.couch_docs_actual_disk_size": string;
+                "node.ep_diskqueue_fill": string;
+                "node.ep_diskqueue_drain": string;
+                "node.disk_write_queue": string;
+            };
+        };
         "crystalruntimeplatform": {
             "label": string;
             "metrics": {
@@ -263,15 +532,31 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
+            };
+        };
+        "defaultentity20": {
+            "label": string;
+            "metrics": {
+                "count": string;
+                "duration.mean": string;
+                "duration.min": string;
+                "duration.max": string;
+                "duration.25th": string;
+                "duration.50th": string;
+                "duration.75th": string;
+                "duration.95th": string;
+                "duration.98th": string;
+                "duration.99th": string;
+                "error_rate": string;
             };
         };
         "defaultlogicalconnection": {
@@ -280,13 +565,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -297,13 +582,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -314,13 +599,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -365,13 +650,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -382,13 +667,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -399,13 +684,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -435,13 +720,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -513,19 +798,23 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
             "label": string;
             "metrics": {};
         };
+        "f5": {
+            "label": string;
+            "metrics": {};
+        };
         "ftpserviceinstance": {
             "label": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -546,10 +835,6 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "file_cache_info_misses": string;
                 "jdbc_connection_used": string;
                 "jdbc_connection_free": string;
-                "threads_core": string;
-                "threads_executed_tasks": string;
-                "threads_current_count": string;
-                "threads_current_busy": string;
                 "connections_open": string;
                 "connections_overflows": string;
                 "connections_queued": string;
@@ -629,7 +914,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "bytes_per_req": string;
             };
         };
-        "instanasgent": {
+        "instanaagent": {
             "label": string;
             "metrics": {
                 "cpu.load": string;
@@ -643,7 +928,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "discovery.count": string;
             };
         };
-        "jnossasapplicationcontainer": {
+        "jbossasapplicationcontainer": {
             "label": string;
             "metrics": {};
         };
@@ -721,81 +1006,120 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         "kubernetescluster": {
             "label": string;
             "metrics": {
-                "count": string;
-                "duration.mean": string;
-                "duration.min": string;
-                "duration.25th": string;
-                "duration.50th": string;
-                "duration.75th": string;
-                "duration.95th": string;
-                "duration.98th": string;
-                "duration.99th": string;
-                "duration.max": string;
-                "error_rate": string;
-                "uncaughtErrors": string;
-                "xhrCalls": string;
-                "xhrErrors": string;
-                "instances": string;
-                "unl": string;
-                "red": string;
-                "apc": string;
-                "dns": string;
-                "tcp": string;
-                "ssl": string;
-                "req": string;
-                "rsp": string;
-                "pro": string;
-                "loa": string;
-                "fp": string;
+                "allocatedCapacityPodsRatio": string;
+                "requiredCapacityCPURatio": string;
+                "limitCapacityCPURatio": string;
+                "requiredCapacityMemoryRatio": string;
+                "limitCapacityMemoryRatio": string;
+                "requiredCPU": string;
+                "limitCPU": string;
+                "nodes.capacity_cpu": string;
+                "requiredMemory": string;
+                "limitMemory": string;
+                "nodes.capacity_mem": string;
+                "podsRunning": string;
+                "podsPending": string;
+                "pods.count": string;
+                "nodes.capacity_pods": string;
+                "nodes.OutOfDisk.True": string;
+                "nodes.MemoryPressure.True": string;
+                "nodes.DiskPressure.True": string;
+                "nodes.KubeletReady.False": string;
+                "availableReplicas": string;
+                "desiredReplicas": string;
+                "nodes.count": string;
             };
         };
         "kubernetespod": {
             "label": string;
             "metrics": {
                 "containers.count": string;
+                "cpuRequests": string;
+                "cpuLimits": string;
+                "memoryRequests": string;
+                "memoryLimits": string;
             };
         };
         "kubernetesnode": {
             "label": string;
             "metrics": {
-                "alloc_cpu": string;
-                "alloc_mem": string;
-                "alloc_pods": string;
-                "cap_cpu": string;
-                "cap_mem": string;
+                "allocatedPods": string;
                 "cap_pods": string;
+                "required_mem": string;
+                "limit_mem": string;
+                "cap_mem": string;
+                "required_cpu": string;
+                "limit_cpu": string;
+                "cap_cpu": string;
+                "alloc_pods_percentage": string;
+                "required_cpu_percentage": string;
+                "limit_cpu_percentage": string;
+                "required_mem_percentage": string;
+                "limit_mem_percentage": string;
             };
         };
-        "ldapLogicalconnection": {
+        "kubernetesdeployment": {
+            "label": string;
+            "metrics": {
+                "availableReplicas": string;
+                "desiredReplicas": string;
+                "phase.Pending.count": string;
+                "conditions.PodScheduled.False": string;
+                "conditions.Ready.False": string;
+                "duration": string;
+                "pods.count": string;
+                "pods.required_mem": string;
+                "pods.limit_mem": string;
+                "pods.required_cpu": string;
+                "pods.limit_cpu": string;
+            };
+        };
+        "openshiftdeploymentconfig": {
+            "label": string;
+            "metrics": {
+                "availableReplicas": string;
+                "desiredReplicas": string;
+                "phase.Pending.count": string;
+                "conditions.PodScheduled.False": string;
+                "conditions.Ready.False": string;
+                "duration": string;
+                "pods.count": string;
+                "pods.required_mem": string;
+                "pods.limit_mem": string;
+                "pods.required_cpu": string;
+                "pods.limit_cpu": string;
+            };
+        };
+        "ldaplogicalconnection": {
             "label": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
         };
-        "ldapLogicalservice": {
+        "ldaplogicalservice": {
             "label": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -806,13 +1130,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -823,13 +1147,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -840,13 +1164,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -857,13 +1181,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -874,13 +1198,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -891,13 +1215,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -908,30 +1232,30 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
         };
-        "logicalelasticsearchcnnection": {
+        "logicalelasticsearchconnection": {
             "label": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -942,13 +1266,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -959,13 +1283,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -976,13 +1300,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -993,13 +1317,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1010,13 +1334,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1027,13 +1351,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1044,13 +1368,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1061,13 +1385,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1078,13 +1402,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1095,13 +1419,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1112,13 +1436,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1129,13 +1453,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1146,13 +1470,47 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
+                "error_rate": string;
+                "instances": string;
+            };
+        };
+        "logicalmsmqconsumerconnection": {
+            "label": string;
+            "metrics": {
+                "count": string;
+                "duration.mean": string;
+                "duration.min": string;
                 "duration.max": string;
+                "duration.25th": string;
+                "duration.50th": string;
+                "duration.75th": string;
+                "duration.95th": string;
+                "duration.98th": string;
+                "duration.99th": string;
+                "error_rate": string;
+                "instances": string;
+            };
+        };
+        "logicalmsmqpublisherconnection": {
+            "label": string;
+            "metrics": {
+                "count": string;
+                "duration.mean": string;
+                "duration.min": string;
+                "duration.max": string;
+                "duration.25th": string;
+                "duration.50th": string;
+                "duration.75th": string;
+                "duration.95th": string;
+                "duration.98th": string;
+                "duration.99th": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1163,13 +1521,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1180,13 +1538,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1197,13 +1555,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1214,13 +1572,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1231,13 +1589,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1248,13 +1606,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1265,13 +1623,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1318,13 +1676,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1335,13 +1693,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1354,6 +1712,18 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "documents.returned": string;
                 "documents.updated": string;
                 "connections": string;
+                "repl.apply_ops": string;
+                "repl.apply_bathes": string;
+                "repl.apply_bathes_total_ms": string;
+                "repl.buffer_count": string;
+                "repl.buffer_size_bytes": string;
+                "repl.network_ops": string;
+                "repl.network_bytes": string;
+                "repl.preload_docs_num": string;
+                "repl.preload_docs_total_ms": string;
+                "repl.preload_idx_num": string;
+                "repl.preload_idx_total_ms": string;
+                "repl.replication_lag": string;
             };
         };
         "mongodbdatabaseserviceinstance": {
@@ -1362,13 +1732,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1380,12 +1750,18 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         "mssqldatabase": {
             "label": string;
             "metrics": {
+                "generalstats._total.user_connections": string;
                 "waitstats.PAGEIOLATCH_EX.wait_time_ms": string;
                 "waitstats.PAGEIOLATCH_SH.wait_time_ms": string;
                 "waitstats.ASYNC_NETWORK_IO.wait_time_ms": string;
                 "waitstats.CXPACKET.wait_time_ms": string;
                 "waitstats.WRITELOG.wait_time_ms": string;
-                "generalstats._total.user_connections": string;
+                "iostats._total.num_of_bytes_read": string;
+                "iostats._total.num_of_bytes_written": string;
+                "perfcounters.databases._total.write_transactions_sec": string;
+                "perfcounters.sql_errors.user_errors.errors_sec": string;
+                "perfcounters.sql_errors.db_offline_errors.errors_sec": string;
+                "perfcounters.sql_errors.kill_connection_errors.errors_sec": string;
             };
         };
         "mule": {
@@ -1415,11 +1791,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         "netcoreruntimeplatform": {
             "label": string;
             "metrics": {
-                "mem.gcCount": string;
-                "mem.heapSizeGen0": string;
-                "mem.heapSizeGen1": string;
-                "mem.heapSizeGen2": string;
-                "mem.heapSizeGen3": string;
+                "metrics.gcCount": string;
+                "metrics.exceptionThrownCount": string;
+                "metrics.contentionCount": string;
+                "metrics.heapSizeGen0": string;
+                "metrics.heapSizeGen1": string;
+                "metrics.heapSizeGen2": string;
+                "metrics.heapSizeGen3": string;
             };
         };
         "nginx": {
@@ -1451,6 +1829,45 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "libuv.lag": string;
                 "libuv.num": string;
                 "healthcheckResult": string;
+            };
+        };
+        "nomadscheduler": {
+            "label": string;
+            "metrics": {
+                "nomad.client.allocated.cpu": string;
+                "nomad.client.allocated.disk": string;
+                "nomad.client.allocated.iops": string;
+                "nomad.client.allocated.memory": string;
+                "nomad.client.allocations.blocked": string;
+                "nomad.client.allocations.migrating": string;
+                "nomad.client.allocations.pending": string;
+                "nomad.client.allocations.running": string;
+                "nomad.client.allocations.terminal": string;
+                "nomad.client.unallocated.cpu": string;
+                "nomad.client.unallocated.disk": string;
+                "nomad.client.unallocated.iops": string;
+                "nomad.client.unallocated.memory": string;
+                "nomad.nomad.blocked_evals.total_blocked": string;
+                "nomad.nomad.blocked_evals.total_escaped": string;
+                "nomad.nomad.blocked_evals.total_quota_limit": string;
+                "nomad.nomad.broker._core.ready": string;
+                "nomad.nomad.broker._core.unacked": string;
+                "nomad.nomad.broker.total_blocked": string;
+                "nomad.nomad.broker.total_ready": string;
+                "nomad.nomad.broker.total_unacked": string;
+                "nomad.nomad.broker.total_waiting": string;
+                "nomad.nomad.heartbeat.active": string;
+                "nomad.nomad.plan.queue_depth": string;
+                "nomad.nomad.vault.distributed_tokens_revoking": string;
+                "nomad.runtime.alloc_bytes": string;
+                "nomad.runtime.free_count": string;
+                "nomad.runtime.heap_objects": string;
+                "nomad.runtime.malloc_count": string;
+                "nomad.runtime.num_goroutines": string;
+                "nomad.runtime.sys_bytes": string;
+                "nomad.runtime.total_gc_pause_ns": string;
+                "nomad.runtime.total_gc_runs": string;
+                "nomad.uptime": string;
             };
         };
         "oracledb": {
@@ -1498,13 +1915,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1515,13 +1932,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1532,13 +1949,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1551,6 +1968,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
             "label": string;
             "metrics": {
                 "totalCommittedTransactions": string;
+                "max_conn_pct": string;
+                "total_active_connections": string;
             };
         };
         "process": {
@@ -1589,7 +2008,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "metrics.rgc.threshold1": string;
                 "metrics.rgc.threshold2": string;
                 "metrics.alive_threads": string;
-                "metrics.dead_threads": string;
+                "metrics.dummy_threads": string;
                 "metrics.daemon_threads": string;
             };
         };
@@ -1614,13 +2033,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1631,13 +2050,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1696,13 +2115,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1713,13 +2132,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1730,15 +2149,31 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
+            };
+        };
+        "service": {
+            "label": string;
+            "metrics": {
+                "count": string;
+                "duration.mean": string;
+                "duration.min": string;
+                "duration.max": string;
+                "duration.25th": string;
+                "duration.50th": string;
+                "duration.75th": string;
+                "duration.95th": string;
+                "duration.98th": string;
+                "duration.99th": string;
+                "error_rate": string;
             };
         };
         "solr": {
@@ -1765,6 +2200,19 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "activeReceivers": string;
             };
         };
+        "sparkstandalone": {
+            "label": string;
+            "metrics": {
+                "workers.aliveWorkers": string;
+                "workers.deadWorkers": string;
+                "workers.decommissionedWorkers": string;
+                "workers.workersInUnknownState": string;
+                "workers.memoryInUseTotal": string;
+                "workers.memoryTotal": string;
+                "workers.coresInUseTotal": string;
+                "workers.coresTotal": string;
+            };
+        };
         "springbootapplicationcontainer": {
             "label": string;
             "metrics": {
@@ -1783,13 +2231,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1827,13 +2275,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "count": string;
                 "duration.mean": string;
                 "duration.min": string;
+                "duration.max": string;
                 "duration.25th": string;
                 "duration.50th": string;
                 "duration.75th": string;
                 "duration.95th": string;
                 "duration.98th": string;
                 "duration.99th": string;
-                "duration.max": string;
                 "error_rate": string;
                 "instances": string;
             };
@@ -1853,7 +2301,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "serverLogMessages.emergencies": string;
             };
         };
-        "webaphereapplicationcontainer": {
+        "websphereapplicationcontainer": {
             "label": string;
             "metrics": {
                 "threadPools.webContainer.activeThreads": string;

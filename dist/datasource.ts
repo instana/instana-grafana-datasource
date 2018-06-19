@@ -162,11 +162,8 @@ export default class InstanaDatasource {
     }
 
     this.setLastFetchedFromApi(true);
-    const fetchSnapshotsUrl = '/api/snapshots?from=' + from + '&to=' + to + '&q=' + query;
-    const fetchSnapshotContextsUrl =
-      '/api/snapshots/context?q=' + encodeURIComponent(target.entityQuery +
-      ' AND entity.pluginId:' + target.entityType) +
-      '&time=' + to;
+    const fetchSnapshotsUrl = '/api/snapshots?from=' + from + '&to=' + to + '&q=' + query + '&size=100';
+    const fetchSnapshotContextsUrl = '/api/snapshots/context?q=' + query + '&time=' + to + '&from=' + from + '&to=' + to + '&size=100';
 
     return this.$q.all([
       this.request('GET', fetchSnapshotsUrl),
@@ -194,7 +191,7 @@ export default class InstanaDatasource {
   }
 
   buildQuery(target) {
-    return encodeURIComponent(target.entityQuery + ' AND entity.pluginId:' + target.entityType);
+    return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType}`);
   }
 
   getHostSuffix(contexts, snapshotId) {
