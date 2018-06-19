@@ -1,13 +1,20 @@
+const url = require('url');
+
 module.exports = function(grunt) {
 
   let instanaUiBackendUrl = process.env.INSTANA_UI_BACKEND_URL;
-  
-  if (!instanaUiBackendUrl) {
-    instanaUiBackendUrl = 'http://localhost:8010';
-    grunt.log.warn('Environment variable INSTANA_UI_BACKEND_URL has not been ' +
-                   'set. Assuming default: ' + instanaUiBackendUrl + '.');
+  if (instanaUiBackendUrl) {
+    grunt.log.writeln('✅ env var INSTANA_UI_BACKEND_URL set: ' + instanaUiBackendUrl);
   } else {
-    grunt.log.writeln('INSTANA_UI_BACKEND_URL is set to ' + instanaUiBackendUrl);
+    instanaUiBackendUrl = 'http://localhost:8010';
+    grunt.log.warn('⚠️ env var INSTANA_UI_BACKEND_URL not set. Will use default ' + instanaUiBackendUrl +
+      '. Remember to set it for a smooth dev experience.');
+  }
+
+  if (process.env.INSTANA_API_TOKEN) {
+    grunt.log.writeln('✅ env var INSTANA_API_TOKEN set.');
+  } else {
+    grunt.log.warn('⚠️ env var INSTANA_API_TOKEN not set. Remember to set it for a smooth dev experience.');
   }
 
   require('load-grunt-tasks')(grunt);
@@ -120,16 +127,15 @@ module.exports = function(grunt) {
       waitForMountebank: {
         cmd: './wait-for-it.sh',
         args: [
-          '-h', /^http:\/\/([A-Za-z0-9\.-]{3,}(?:\.[A-Za-z]{2,3})?)\:(\d+)$/gm.exec(instanaUiBackendUrl)[1], 
-          '-p', /^http:\/\/([A-Za-z0-9\.-]{3,}(?:\.[A-Za-z]{2,3})?)\:(\d+)$/gm.exec(instanaUiBackendUrl)[2] || '80'
+          '-h', url.parse(instanaUiBackendUrl).host,
+          '-p', url.parse(instanaUiBackendUrl).port || (url.parse(instanaUiBackendUrl).protocol === 'https:' ? '443' : '80')
         ]
       },
 
       functionalTests: {
         cmd: 'mocha',
         args: [
-          'specs/add_datasource_specs.js',
-          '--timeout 5000'
+          'specs/add_datasource_specs.js'
         ]
       }
     }

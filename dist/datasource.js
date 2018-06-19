@@ -133,8 +133,10 @@ System.register(['lodash'], function(exports_1) {
                         return this.$q.resolve(this.getSnapshotCache()[target.refId][query].snapshots);
                     }
                     this.setLastFetchedFromApi(true);
-                    var fetchSnapshotsUrl = '/api/snapshots?from=' + from + '&to=' + to + '&q=' + query + '&size=100';
-                    var fetchSnapshotContextsUrl = '/api/snapshots/context?q=' + query + '&time=' + to + '&from=' + from + '&to=' + to + '&size=100';
+                    var fetchSnapshotsUrl = ("/api/snapshots?from=" + from + "&to=" + to + "&q=" + query + "&size=100") +
+                        ("&newApplicationModelEnabled=" + (target.newApplicationModelEnabled === true));
+                    var fetchSnapshotContextsUrl = ("/api/snapshots/context?q=" + query + "&time=" + to + "&from=" + from + "&to=" + to + "&size=100") +
+                        ("&newApplicationModelEnabled=" + (target.newApplicationModelEnabled === true));
                     return this.$q.all([
                         this.request('GET', fetchSnapshotsUrl),
                         this.request('GET', fetchSnapshotContextsUrl)

@@ -162,8 +162,10 @@ export default class InstanaDatasource {
     }
 
     this.setLastFetchedFromApi(true);
-    const fetchSnapshotsUrl = '/api/snapshots?from=' + from + '&to=' + to + '&q=' + query + '&size=100';
-    const fetchSnapshotContextsUrl = '/api/snapshots/context?q=' + query + '&time=' + to + '&from=' + from + '&to=' + to + '&size=100';
+    const fetchSnapshotsUrl = `/api/snapshots?from=${from}&to=${to}&q=${query}&size=100` +
+      `&newApplicationModelEnabled=${target.newApplicationModelEnabled === true}`;
+    const fetchSnapshotContextsUrl = `/api/snapshots/context?q=${query}&time=${to}&from=${from}&to=${to}&size=100` +
+      `&newApplicationModelEnabled=${target.newApplicationModelEnabled === true}`;
 
     return this.$q.all([
       this.request('GET', fetchSnapshotsUrl),
