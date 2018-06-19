@@ -37,7 +37,7 @@ describe("InstanaQueryCtrl", function() {
       it("should populate the entity types dropdown with unique entity types", function() {
         queryCtrl.datasource.request = function(options) {
           return ctx.$q.resolve({
-            data: ["docker", "host", "webLogicApplicationContainer"]
+            data: ["docker", "host", "weblogicapplicationcontainer"]
           });
         };
 
@@ -47,7 +47,7 @@ describe("InstanaQueryCtrl", function() {
           expect(queryCtrl.uniqueEntityTypes).to.eql([
             "docker",
             "host",
-            "webLogicApplicationContainer"
+            "weblogicapplicationcontainer"
           ]);
           expect(queryCtrl.target.queryIsValid).to.be(true);
         });
@@ -88,7 +88,7 @@ describe("InstanaQueryCtrl", function() {
 
     describe("when selecting entity type", function() {
       it("should populate metric dropdown", function() {
-        queryCtrl.target.entityType = "hadoopYARNNode";
+        queryCtrl.target.entityType = "hadoopyarnnode";
         queryCtrl.onEntityTypeSelect();
 
         expect(queryCtrl.availableMetrics).to.eql([

@@ -24,7 +24,7 @@ export default {
       "tcp.retrans": "Retransmission"
     }
   },
-  "activeMQ": {
+  "activemq": {
     "label": "ActiveMQs",
     "metrics": {
       "totalQueuesEnqueueCount": "All Queues Messages Enqueue",
@@ -54,7 +54,7 @@ export default {
       "error_rate": "Error Rate"
     }
   },
-  "awsDynamoDb": {
+  "awsdynamodb": {
     "label": "AWS DynamoDB Tables",
     "metrics": {
       "provisioned_read": "Provisioned read capacity",
@@ -130,7 +130,7 @@ export default {
       "ttl": "TTL Deleted Items"
     }
   },
-  "awsEc": {
+  "awsec": {
     "label": "AWS ECs",
     "metrics": {
       "cpu_utilization": "CPU Utilization",
@@ -145,7 +145,7 @@ export default {
       "reclaimed": "Reclaimed"
     }
   },
-  "awsElb": {
+  "awselb": {
     "label": "AWS ELBs",
     "metrics": {
       "processed_bytes": "Processed Bytes",
@@ -160,7 +160,7 @@ export default {
       "elb_5XX_count": "Elb Status Code 5xx Count"
     }
   },
-  "awsKinesis": {
+  "awskinesis": {
     "label": "AWS Kinesis streams",
     "metrics": {
       "get_records_records": "Get Records records",
@@ -178,7 +178,7 @@ export default {
       "write_provisioned_throughput_exceeded": "Write Provisioned Throughput Exceeded"
     }
   },
-  "awsLambda": {
+  "awslambda": {
     "label": "AWS Lambdas",
     "metrics": {
       "invocations": "Invocations",
@@ -200,7 +200,7 @@ export default {
       "unreserved_concurrent_executions": "Unreserved Concurrent Executions"
     }
   },
-  "awsRds": {
+  "awsrds": {
     "label": "AWS RDSs",
     "metrics": {
       "cpu_utilization": "CPU Usage",
@@ -223,7 +223,7 @@ export default {
       "net_transmit_throughput": "Transmit throughput"
     }
   },
-  "awsSqs": {
+  "awssqs": {
     "label": "AWS SQSs",
     "metrics": {
       "num_of_msg_delayed": "Number of messages delayed",
@@ -234,7 +234,7 @@ export default {
       "num_of_msg_sent": "Number of messages sent"
     }
   },
-  "awsS3": {
+  "awss3": {
     "label": "AWS S3 Buckets",
     "metrics": {
       "all_requests": "All Requests",
@@ -250,7 +250,7 @@ export default {
       "5xx_errors": "Total Request Latency"
     }
   },
-  "batchServiceInstance": {
+  "batchserviceinstance": {
     "label": "Batch Job Instances",
     "metrics": {
       "count": "Calls",
@@ -267,7 +267,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "browserLogicalConnection": {
+  "browserlogicalconnection": {
     "label": "Website Connections",
     "metrics": {
       "count": "Calls",
@@ -284,7 +284,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "browserLogicalService": {
+  "browserlogicalservice": {
     "label": "Websites",
     "metrics": {
       "count": "Page Loads",
@@ -312,7 +312,7 @@ export default {
       "xhrErrors": "Errors"
     }
   },
-  "cassandraCluster": {
+  "cassandracluster": {
     "label": "Cassandra Clusters",
     "metrics": {
       "clientrequests.read.count": "Read",
@@ -330,7 +330,7 @@ export default {
       "nodeCount": "Cluster Nodes"
     }
   },
-  "cassandraKeyspaceServiceInstance": {
+  "cassandrakeyspaceserviceinstance": {
     "label": "Cassandra Keyspace Instances",
     "metrics": {
       "count": "Calls",
@@ -347,7 +347,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "cassandraNode": {
+  "cassandranode": {
     "label": "Cassandra Nodes",
     "metrics": {
       "clientrequests.read.mean": "Mean",
@@ -406,7 +406,7 @@ export default {
       "write_op_per_sec": "Write ops"
     }
   },
-  "clickHouseDatabase": {
+  "clickhousedatabase": {
     "label": "ClickHouse DBs",
     "metrics": {
       "Merge": "Merge",
@@ -446,7 +446,7 @@ export default {
       "RWLockActiveWriters": "RW Lock Active Writers"
     }
   },
-  "clrRuntimePlatform": {
+  "clrruntimeplatform": {
     "label": ".NET Apps",
     "metrics": {
       "mem.gen0GC": "Generation 0",
@@ -459,7 +459,7 @@ export default {
       "mem.loHeapBytes": "Large Objects"
     }
   },
-  "cloudFoundry": {
+  "cloudfoundry": {
     "label": "CloudFoundry",
     "metrics": {
       "nodeCount": "Nodes"
@@ -490,7 +490,7 @@ export default {
       "raft.term": "Raft: term, describes the number of new leader elections that have happened"
     }
   },
-  "couchbaseCluster": {
+  "couchbasecluster": {
     "label": "Couchbase Clusters",
     "metrics": {
       "cluster.usedDisk": "Used disk (bytes)",
@@ -501,7 +501,7 @@ export default {
       "cluster.curr_items": "Items"
     }
   },
-  "couchbaseNode": {
+  "couchbasenode": {
     "label": "Couchbase Nodes",
     "metrics": {
       "node.mem_used": "Used memory (bytes)",
@@ -511,7 +511,7 @@ export default {
       "node.disk_write_queue": "Items in disk write queue"
     }
   },
-  "crystalRuntimePlatform": {
+  "crystalruntimeplatform": {
     "label": "Crystal Apps",
     "metrics": {
       "gc.hs": "Size",
@@ -520,7 +520,7 @@ export default {
       "gc.bsgc": "Bytes Since GC"
     }
   },
-  "databaseServiceInstance": {
+  "databaseserviceinstance": {
     "label": "Database Instances",
     "metrics": {
       "count": "Calls",
@@ -537,7 +537,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "defaultEntity20": {
+  "defaultentity20": {
     "label": "defaultEntity20",
     "metrics": {
       "count": "Calls",
@@ -553,7 +553,7 @@ export default {
       "error_rate": "Error Rate"
     }
   },
-  "defaultLogicalConnection": {
+  "defaultlogicalconnection": {
     "label": "Unspecified Logical Connections",
     "metrics": {
       "count": "Calls",
@@ -570,7 +570,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "defaultLogicalService": {
+  "defaultlogicalservice": {
     "label": "Services",
     "metrics": {
       "count": "Calls",
@@ -587,7 +587,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "defaultServiceInstance": {
+  "defaultserviceinstance": {
     "label": "Service Instances",
     "metrics": {
       "count": "Calls",
@@ -630,7 +630,7 @@ export default {
       "network.tx.dropped": "TX Dropped"
     }
   },
-  "dropwizardApplicationContainer": {
+  "dropwizardapplicationcontainer": {
     "label": "Dropwizard Apps",
     "metrics": {
       "metrics.meters.com.instana.filler.topology.spans.SpansStreamInitializer.accepted-from-kafka-spans": "Accepted Spans",
@@ -638,7 +638,7 @@ export default {
       "metrics.meters.com.instana.filler.topology.RawMessagesStreamInitializer.dropped-messages": "Dropped Messages"
     }
   },
-  "ejbLogicalConnection": {
+  "ejblogicalconnection": {
     "label": "Logical EJB Connections",
     "metrics": {
       "count": "Calls",
@@ -655,7 +655,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "ejbLogicalService": {
+  "ejblogicalservice": {
     "label": "EJBs",
     "metrics": {
       "count": "Calls",
@@ -672,7 +672,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "ejbServiceInstance": {
+  "ejbserviceinstance": {
     "label": "EJB Instances",
     "metrics": {
       "count": "Calls",
@@ -689,7 +689,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "elasticsearchCluster": {
+  "elasticsearchcluster": {
     "label": "Elasticsearch Clusters",
     "metrics": {
       "query_latency": "Latency",
@@ -708,7 +708,7 @@ export default {
       "indices.store_size": "Indices size"
     }
   },
-  "elasticSearchIndexServiceInstance": {
+  "elasticsearchindexserviceinstance": {
     "label": "Elasticsearch Index Instances",
     "metrics": {
       "count": "Calls",
@@ -725,7 +725,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "elasticsearchNode": {
+  "elasticsearchnode": {
     "label": "Elasticsearch Nodes",
     "metrics": {
       "indices.query_latency": "Latency",
@@ -788,7 +788,7 @@ export default {
       "storage.update_success": "Update success"
     }
   },
-  "finagleApplicationContainer": {
+  "finagleapplicationcontainer": {
     "label": "Finagle Apps",
     "metrics": {}
   },
@@ -796,7 +796,7 @@ export default {
     "label": "F5",
     "metrics": {}
   },
-  "ftpServiceInstance": {
+  "ftpserviceinstance": {
     "label": "FTP Server Instances",
     "metrics": {
       "count": "Calls",
@@ -813,7 +813,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "glassfishApplicationContainer": {
+  "glassfishapplicationcontainer": {
     "label": "Glassfish",
     "metrics": {
       "http_request_count": "Requests",
@@ -841,7 +841,7 @@ export default {
       "file_cache_info_rate": "Info hit rate"
     }
   },
-  "golangRuntimePlatform": {
+  "golangruntimeplatform": {
     "label": "Go Apps",
     "metrics": {
       "metrics.memory.pause_ns": "GC Pause",
@@ -853,7 +853,7 @@ export default {
       "metrics.memory.sys": "Obtained From System"
     }
   },
-  "hadoopYARN": {
+  "hadoopyarn": {
     "label": "Hadoop YARNs",
     "metrics": {
       "activeNodes": "Active Nodes",
@@ -872,7 +872,7 @@ export default {
       "containersRunning": "Containers Running"
     }
   },
-  "hadoopYARNNode": {
+  "hadoopyarnnode": {
     "label": "Hadoop YARN Nodes",
     "metrics": {
       "allocatedVCores": "Allocated Virtual Cores",
@@ -881,7 +881,7 @@ export default {
       "availableMem": "Available Memory"
     }
   },
-  "hAProxy": {
+  "haproxy": {
     "label": "HAProxy",
     "metrics": {}
   },
@@ -908,7 +908,7 @@ export default {
       "bytes_per_req": "Traffic per request"
     }
   },
-  "instanaAgent": {
+  "instanaagent": {
     "label": "Instana Agents",
     "metrics": {
       "cpu.load": "Load",
@@ -922,18 +922,18 @@ export default {
       "discovery.count": "Discovery Count"
     }
   },
-  "jBossAsApplicationContainer": {
+  "jbossasapplicationcontainer": {
     "label": "JBoss",
     "metrics": {}
   },
-  "jbossDataGrid": {
+  "jbossdatagrid": {
     "label": "JBoss Data Grids",
     "metrics": {
       "hotRod.numberOfLocalConnections": "Number Of Local Connections",
       "hotRod.numberOfGlobalConnections": "Number Of Global Connections"
     }
   },
-  "jettyApplicationContainer": {
+  "jettyapplicationcontainer": {
     "label": "Jetty",
     "metrics": {
       "idleThreads": "Idle Threads",
@@ -942,7 +942,7 @@ export default {
       "threadsQueueSize": "Threads Queue Size"
     }
   },
-  "jiraApplication": {
+  "jiraapplication": {
     "label": "Atlassian JIRAs",
     "metrics": {
       "instruments.http.sessions": "Current Sessions",
@@ -950,7 +950,7 @@ export default {
       "instruments.dbcp.numIdle": "Idle Connections"
     }
   },
-  "jvmRuntimePlatform": {
+  "jvmruntimeplatform": {
     "label": "JVMs",
     "metrics": {
       "threads.new": "New",
@@ -991,13 +991,13 @@ export default {
       "logflush.inv": "Flushes"
     }
   },
-  "kafkaCluster": {
+  "kafkacluster": {
     "label": "Kafka Cluster",
     "metrics": {
       "nodeCount": "Nodes"
     }
   },
-  "kubernetesCluster": {
+  "kubernetescluster": {
     "label": "Kubernetes Clusters",
     "metrics": {
       "allocatedCapacityPodsRatio": "Pods Allocation",
@@ -1024,7 +1024,7 @@ export default {
       "nodes.count": "Number of Nodes"
     }
   },
-  "kubernetesPod": {
+  "kubernetespod": {
     "label": "Kubernetes Pods",
     "metrics": {
       "containers.count": "Containers",
@@ -1034,7 +1034,7 @@ export default {
       "memoryLimits": "Memory Limits"
     }
   },
-  "kubernetesNode": {
+  "kubernetesnode": {
     "label": "Kubernetes Nodes",
     "metrics": {
       "allocatedPods": "Allocated Pods",
@@ -1052,7 +1052,7 @@ export default {
       "limit_mem_percentage": "Memory Limits Allocation"
     }
   },
-  "kubernetesDeployment": {
+  "kubernetesdeployment": {
     "label": "Kubernetes Deployments",
     "metrics": {
       "availableReplicas": "Available",
@@ -1068,7 +1068,7 @@ export default {
       "pods.limit_cpu": "CPU Limits"
     }
   },
-  "openshiftDeploymentConfig": {
+  "openshiftdeploymentconfig": {
     "label": "Openshift Deployment Configs",
     "metrics": {
       "availableReplicas": "Available",
@@ -1084,7 +1084,7 @@ export default {
       "pods.limit_cpu": "CPU Limits"
     }
   },
-  "ldapLogicalConnection": {
+  "ldaplogicalconnection": {
     "label": "LDAP Connections",
     "metrics": {
       "count": "Calls",
@@ -1101,7 +1101,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "ldapLogicalService": {
+  "ldaplogicalservice": {
     "label": "LDAP",
     "metrics": {
       "count": "Calls",
@@ -1118,7 +1118,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "ldapServiceInstance": {
+  "ldapserviceinstance": {
     "label": "LDAP Service Instances",
     "metrics": {
       "count": "Calls",
@@ -1135,7 +1135,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalBatch": {
+  "logicalbatch": {
     "label": "Batch Jobs",
     "metrics": {
       "count": "Calls",
@@ -1152,7 +1152,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalBatchConnection": {
+  "logicalbatchconnection": {
     "label": "Batch Connections",
     "metrics": {
       "count": "Calls",
@@ -1169,7 +1169,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalCassandraConnection": {
+  "logicalcassandraconnection": {
     "label": "Cassandra Connections",
     "metrics": {
       "count": "Calls",
@@ -1186,7 +1186,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalDatabase": {
+  "logicaldatabase": {
     "label": "Databases",
     "metrics": {
       "count": "Calls",
@@ -1203,7 +1203,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalDatabaseConnection": {
+  "logicaldatabaseconnection": {
     "label": "Database Connections",
     "metrics": {
       "count": "Calls",
@@ -1220,7 +1220,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalEjbConnection": {
+  "logicalejbconnection": {
     "label": "EJB Connections",
     "metrics": {
       "count": "Calls",
@@ -1237,7 +1237,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalElasticSearchConnection": {
+  "logicalelasticsearchconnection": {
     "label": "Elasticsearch Connections",
     "metrics": {
       "count": "Calls",
@@ -1254,7 +1254,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalElasticSearchIndex": {
+  "logicalelasticsearchindex": {
     "label": "Elasticsearch Indices",
     "metrics": {
       "count": "Calls",
@@ -1271,7 +1271,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalFtpConnection": {
+  "logicalftpconnection": {
     "label": "Logical FTP Connections",
     "metrics": {
       "count": "Calls",
@@ -1288,7 +1288,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalFtpService": {
+  "logicalftpservice": {
     "label": "FTP Servers",
     "metrics": {
       "count": "Calls",
@@ -1305,7 +1305,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalHttpConnection": {
+  "logicalhttpconnection": {
     "label": "Http Connections",
     "metrics": {
       "count": "Calls",
@@ -1322,7 +1322,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalJdbcConnection": {
+  "logicaljdbcconnection": {
     "label": "JDBC Connections",
     "metrics": {
       "count": "Calls",
@@ -1339,7 +1339,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalKafkaConsumerConnection": {
+  "logicalkafkaconsumerconnection": {
     "label": "Kafka Consumer Connections",
     "metrics": {
       "count": "Calls",
@@ -1356,7 +1356,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalKafkaPublisherConnection": {
+  "logicalkafkapublisherconnection": {
     "label": "Kafka Publisher Connections",
     "metrics": {
       "count": "Calls",
@@ -1373,7 +1373,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalMessageBroker": {
+  "logicalmessagebroker": {
     "label": "Message Brokers",
     "metrics": {
       "count": "Calls",
@@ -1390,7 +1390,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalMessageConsumer": {
+  "logicalmessageconsumer": {
     "label": "Message Consumers",
     "metrics": {
       "count": "Calls",
@@ -1407,7 +1407,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalMessageConsumerConnection": {
+  "logicalmessageconsumerconnection": {
     "label": "Message Consumer Connections",
     "metrics": {
       "count": "Calls",
@@ -1424,7 +1424,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalMessagePublisherConnection": {
+  "logicalmessagepublisherconnection": {
     "label": "Message Publisher Connections",
     "metrics": {
       "count": "Calls",
@@ -1441,7 +1441,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalMongoDbConnection": {
+  "logicalmongodbconnection": {
     "label": "MongoDB Connections",
     "metrics": {
       "count": "Calls",
@@ -1458,7 +1458,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalMongoDbDatabase": {
+  "logicalmongodbdatabase": {
     "label": "MongoDB Databases",
     "metrics": {
       "count": "Calls",
@@ -1475,7 +1475,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalMsmqConsumerConnection": {
+  "logicalmsmqconsumerconnection": {
     "label": "MSMQ Consumer Connections",
     "metrics": {
       "count": "Calls",
@@ -1492,7 +1492,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalMsmqPublisherConnection": {
+  "logicalmsmqpublisherconnection": {
     "label": "MSMQ Publisher Connections",
     "metrics": {
       "count": "Calls",
@@ -1509,7 +1509,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalRabbitMqConsumerConnection": {
+  "logicalrabbitmqconsumerconnection": {
     "label": "Rabbit MQ Consumer Connections",
     "metrics": {
       "count": "Calls",
@@ -1526,7 +1526,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalRabbitMqPublisherConnection": {
+  "logicalrabbitmqpublisherconnection": {
     "label": "Rabbit MQ Publisher Connections",
     "metrics": {
       "count": "Calls",
@@ -1543,7 +1543,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalRedisConnection": {
+  "logicalredisconnection": {
     "label": "Redis Connections",
     "metrics": {
       "count": "Calls",
@@ -1560,7 +1560,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalRedisDatabase": {
+  "logicalredisdatabase": {
     "label": "Redis Databases",
     "metrics": {
       "count": "Calls",
@@ -1577,7 +1577,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalRpcConnection": {
+  "logicalrpcconnection": {
     "label": "RPC Connections",
     "metrics": {
       "count": "Calls",
@@ -1594,7 +1594,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalRpcEndpoint": {
+  "logicalrpcendpoint": {
     "label": "RPC Endpoints",
     "metrics": {
       "count": "Calls",
@@ -1611,7 +1611,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "logicalWebApp": {
+  "logicalwebapp": {
     "label": "Web Services",
     "metrics": {
       "count": "Calls",
@@ -1628,7 +1628,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "mariaDbDatabase": {
+  "mariadbdatabase": {
     "label": "MariaDBs",
     "metrics": {
       "status.THREADS_CONNECTED": "Connections",
@@ -1664,7 +1664,7 @@ export default {
       "conn_yields": "Yields"
     }
   },
-  "messageBrokerServiceInstance": {
+  "messagebrokerserviceinstance": {
     "label": "Message Broker Instances",
     "metrics": {
       "count": "Calls",
@@ -1681,7 +1681,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "messageConsumerServiceInstance": {
+  "messageconsumerserviceinstance": {
     "label": "Message Consumer Instances",
     "metrics": {
       "count": "Calls",
@@ -1698,7 +1698,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "mongoDb": {
+  "mongodb": {
     "label": "MongoDB Nodes",
     "metrics": {
       "documents.deleted": "Deleted",
@@ -1720,7 +1720,7 @@ export default {
       "repl.replication_lag": "Replication Lag"
     }
   },
-  "mongoDbDatabaseServiceInstance": {
+  "mongodbdatabaseserviceinstance": {
     "label": "MongoDB Databases",
     "metrics": {
       "count": "Calls",
@@ -1741,7 +1741,7 @@ export default {
     "label": "Internet Information Servers",
     "metrics": {}
   },
-  "msSqlDatabase": {
+  "mssqldatabase": {
     "label": "MsSQL Instances",
     "metrics": {
       "generalstats._total.user_connections": "User Connections",
@@ -1762,7 +1762,7 @@ export default {
     "label": "Mule ESB",
     "metrics": {}
   },
-  "mySqlDatabase": {
+  "mysqldatabase": {
     "label": "MySQL DBs",
     "metrics": {
       "status.COM_SELECT": "SELECTS",
@@ -1782,7 +1782,7 @@ export default {
       "status.KEY_WRITES": "Writes"
     }
   },
-  "netCoreRuntimePlatform": {
+  "netcoreruntimeplatform": {
     "label": ".NET Core Apps",
     "metrics": {
       "metrics.gcCount": "GC Count",
@@ -1807,7 +1807,7 @@ export default {
       "connections.waiting": "Waiting"
     }
   },
-  "nodeJsRuntimePlatform": {
+  "nodejsruntimeplatform": {
     "label": "Node.js Apps",
     "metrics": {
       "gc.gcPause": "GC Pause",
@@ -1825,7 +1825,7 @@ export default {
       "healthcheckResult": "Health check result"
     }
   },
-  "nomadScheduler": {
+  "nomadscheduler": {
     "label": "Nomad Clients",
     "metrics": {
       "nomad.client.allocated.cpu": "Total amount of CPU shares the scheduler has allocated to tasks",
@@ -1864,7 +1864,7 @@ export default {
       "nomad.uptime": "Uptime"
     }
   },
-  "oracleDB": {
+  "oracledb": {
     "label": "OracleDBs",
     "metrics": {
       "stats.dbTime": "DB Time",
@@ -1903,7 +1903,7 @@ export default {
       "stats.usedSessionsRatio": "Sessions/Session Limit"
     }
   },
-  "pageResourceLogicalConnection": {
+  "pageresourcelogicalconnection": {
     "label": "Page Resource Connections",
     "metrics": {
       "count": "Calls",
@@ -1920,7 +1920,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "pageResourceLogicalService": {
+  "pageresourcelogicalservice": {
     "label": "Page Resources",
     "metrics": {
       "count": "Calls",
@@ -1937,7 +1937,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "pageResourceServiceInstance": {
+  "pageresourceserviceinstance": {
     "label": "Page Resource Group Instances",
     "metrics": {
       "count": "Calls",
@@ -1954,11 +1954,11 @@ export default {
       "instances": "Instances"
     }
   },
-  "phpFpmRuntimePlatform": {
+  "phpfpmruntimeplatform": {
     "label": "PHP-FPM Runtimes",
     "metrics": {}
   },
-  "postgreSqlDatabase": {
+  "postgresqldatabase": {
     "label": "PostgreSQL DBs",
     "metrics": {
       "totalCommittedTransactions": "Committed Transactions",
@@ -1976,7 +1976,7 @@ export default {
       "cpu.sys": "System"
     }
   },
-  "pythonRuntimePlatform": {
+  "pythonruntimeplatform": {
     "label": "Python Apps",
     "metrics": {
       "metrics.ru_utime": "Time Spent In User Mode",
@@ -2006,7 +2006,7 @@ export default {
       "metrics.daemon_threads": "Daemon Threads"
     }
   },
-  "rabbitMq": {
+  "rabbitmq": {
     "label": "RabbitMQ",
     "metrics": {
       "overview.publish_rate": "Published per 5 seconds",
@@ -2021,7 +2021,7 @@ export default {
       "overview.connections": "Connections"
     }
   },
-  "redisServiceInstance": {
+  "redisserviceinstance": {
     "label": "Redis Databases",
     "metrics": {
       "count": "Calls",
@@ -2038,7 +2038,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "rpcEndpointServiceInstance": {
+  "rpcendpointserviceinstance": {
     "label": "RPC Endpoint Instances",
     "metrics": {
       "count": "Calls",
@@ -2055,7 +2055,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "rubyRuntimePlatform": {
+  "rubyruntimeplatform": {
     "label": "Ruby Apps",
     "metrics": {
       "memory.rss_size": "Resident",
@@ -2067,7 +2067,7 @@ export default {
       "thread.count": "#Thread Count"
     }
   },
-  "sapHana": {
+  "saphana": {
     "label": "SAP HANA",
     "metrics": {
       "stats.usedMemory": "Used Memory",
@@ -2103,7 +2103,7 @@ export default {
       "stats.indexServerPendingRequests": "Pending Requests"
     }
   },
-  "sdkLogicalConnection": {
+  "sdklogicalconnection": {
     "label": "Custom Logical Connections",
     "metrics": {
       "count": "Calls",
@@ -2120,7 +2120,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "sdkLogicalService": {
+  "sdklogicalservice": {
     "label": "Custom Services",
     "metrics": {
       "count": "Calls",
@@ -2137,7 +2137,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "sdkServiceInstance": {
+  "sdkserviceinstance": {
     "label": "Custom Service Instances",
     "metrics": {
       "count": "Calls",
@@ -2174,7 +2174,7 @@ export default {
     "label": "Solr",
     "metrics": {}
   },
-  "sparkApplication": {
+  "sparkapplication": {
     "label": "Spark Applications",
     "metrics": {
       "failedJobs": "All Failed Jobs",
@@ -2194,7 +2194,7 @@ export default {
       "activeReceivers": "Inactive Receivers"
     }
   },
-  "sparkStandalone": {
+  "sparkstandalone": {
     "label": "Spark Standalone",
     "metrics": {
       "workers.aliveWorkers": "Alive Workers",
@@ -2207,7 +2207,7 @@ export default {
       "workers.coresTotal": "Total Cores"
     }
   },
-  "springbootApplicationContainer": {
+  "springbootapplicationcontainer": {
     "label": "Spring Boot Apps",
     "metrics": {
       "metrics.requests": "All Requests",
@@ -2219,7 +2219,7 @@ export default {
       "metrics.httpsessions.active": "Active Sessions"
     }
   },
-  "unknownService": {
+  "unknownservice": {
     "label": "Unknown Services",
     "metrics": {
       "count": "Calls",
@@ -2263,7 +2263,7 @@ export default {
       "backend_req": "Requests"
     }
   },
-  "webAppServiceInstance": {
+  "webappserviceinstance": {
     "label": "Web Service Instances",
     "metrics": {
       "count": "Calls",
@@ -2280,7 +2280,7 @@ export default {
       "instances": "Instances"
     }
   },
-  "webLogicApplicationContainer": {
+  "weblogicapplicationcontainer": {
     "label": "WebLogic Servers",
     "metrics": {
       "threadPool.idleThreads": "Idle Threads",
@@ -2295,14 +2295,14 @@ export default {
       "serverLogMessages.emergencies": "Emergency"
     }
   },
-  "webSphereApplicationContainer": {
+  "websphereapplicationcontainer": {
     "label": "WebSpheres",
     "metrics": {
       "threadPools.webContainer.activeThreads": "Active Threads",
       "threadPools.webContainer.poolSize": "Pool Size"
     }
   },
-  "webSphereLibertyApplicationContainer": {
+  "webspherelibertyapplicationcontainer": {
     "label": "WebSphere Liberty Servers",
     "metrics": {
       "threadPool.activeThreads": "Active Threads",
