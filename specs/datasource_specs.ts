@@ -18,7 +18,7 @@ describe('InstanaDatasource', function() {
 				url: 'http://localhost:8010'
 			}
 		};
-    
+
     ctx.ds = new InstanaDatasource(ctx.instanceSettings, ctx.backendSrv, ctx.templateSrv, ctx.$q);
   });
 
@@ -84,8 +84,8 @@ describe('InstanaDatasource', function() {
           "host": ""
         }
       ]
-    }    
-    
+    }
+
     const snapshotsAfterTenSeconds = {
       status: 200,
       data: [ "A", "B", "C" ]
@@ -132,25 +132,28 @@ describe('InstanaDatasource', function() {
 
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
+        console.log(options.url);
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658604&q=filler%20AND%20entity.pluginId%3Aprocess":
-            return ctx.$q.resolve(snapshots);          
-          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658604":
+          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658604&q=filler%20AND%20entity.pluginId%3Aprocess&size=100":
+            return ctx.$q.resolve(snapshots);
+          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658604&from=1516451043603&to=1516472658604&size=100":
             return ctx.$q.resolve(contexts);
-          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658614&q=filler%20AND%20entity.pluginId%3Aprocess":
-            return ctx.$q.resolve(snapshotsAfterTenSeconds);          
-          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658614":
-            return ctx.$q.resolve(contextsAfterTenSeconds);            
+          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658614&q=filler%20AND%20entity.pluginId%3Aprocess&size=100":
+            return ctx.$q.resolve(snapshotsAfterTenSeconds);
+          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658614&size=100":
+            return ctx.$q.resolve(contextsAfterTenSeconds);
           case "http://localhost:8010/api/snapshots/A?time=1516472658604":
-            return ctx.$q.resolve(snapshotA);          
+            return ctx.$q.resolve(snapshotA);
           case "http://localhost:8010/api/snapshots/B?time=1516472658604":
             return ctx.$q.resolve(snapshotB);
           case "http://localhost:8010/api/snapshots/A?time=1516472658614":
-            return ctx.$q.resolve(snapshotA);          
+            return ctx.$q.resolve(snapshotA);
           case "http://localhost:8010/api/snapshots/B?time=1516472658614":
             return ctx.$q.resolve(snapshotB);
           case "http://localhost:8010/api/snapshots/C?time=1516472658614":
-            return ctx.$q.resolve(snapshotC);       
+            return ctx.$q.resolve(snapshotC);
+          default:
+            throw new Error('Unexpect call URL: ' + options.url);
         }
       };
     });
@@ -187,7 +190,7 @@ describe('InstanaDatasource', function() {
           "key": "mem.virtual",
           "label": "Virtual",
           "$$hashKey": "object:121"
-        },        
+        },
         "snapshotCache": {
           'filler%20AND%20entity.pluginId%3Aprocess': {
             'time': '1516472658604',
@@ -210,7 +213,7 @@ describe('InstanaDatasource', function() {
         expect(results.length).to.be(2);
         expect(results[0]).to.eql({ snapshotId: 'A', label: 'label for A (on host "Stans-Macbook-Pro")' });
         expect(results[1]).to.eql({ snapshotId: 'B', label: 'label for B' });
-      });      
+      });
     })
   });
 
@@ -309,7 +312,7 @@ describe('InstanaDatasource', function() {
     const metricsForA = {
       status: 200,
       data: {
-        "values": [    
+        "values": [
           {"timestamp":1516451043603,"value":1.3292612266666E9},
           {"timestamp":1516451103603,"value":1.3306768042666E9},
           {"timestamp":1516451163603,"value":1.3321622869333E9}
@@ -327,33 +330,35 @@ describe('InstanaDatasource', function() {
       }
     };
 
-    beforeEach(function() {      
+    beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658604&q=filler%20AND%20entity.pluginId%3Aprocess":
+          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658604&q=filler%20AND%20entity.pluginId%3Aprocess&size=100":
             return ctx.$q.resolve(snapshots);
-          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658604":
+          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658604&from=1516451043603&to=1516472658604&size=100":
             return ctx.$q.resolve(contexts);
           case "http://localhost:8010/api/snapshots/A?time=1516472658604":
-            return ctx.$q.resolve(snapshotA);          
+            return ctx.$q.resolve(snapshotA);
           case "http://localhost:8010/api/snapshots/B?time=1516472658604":
             return ctx.$q.resolve(snapshotB);
           case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=B":
             return ctx.$q.resolve(metricsForB);
+          default:
+            throw new Error('Unexpect call URL: ' + options.url);
         }
       };
     });
 
     it("should return four targets with respective datapoints and cache the snapshot data", function() {
       const time = 1516472658604;
-        
+
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
         expect(results.data.length).to.be(4);
-      
+
         expect(results.data[0].datapoints).to.eql([
           [1.3292612266666E9,1516451043603],
           [1.3306768042666E9,1516451103603],
@@ -466,7 +471,7 @@ describe('InstanaDatasource', function() {
     const metricsForA = {
       status: 200,
       data: {
-        "values": [    
+        "values": [
           {"timestamp":1516451043603,"value":2},
           {"timestamp":1516451103603,"value":3},
           {"timestamp":1516451163603,"value":1}
@@ -474,29 +479,31 @@ describe('InstanaDatasource', function() {
       }
     };
 
-    beforeEach(function() {      
+    beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess":
+          case "http://localhost:8010/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess&size=100":
             return ctx.$q.resolve(snapshots);
-          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1524421440603":
+          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1524421440603&from=1524248640603&to=1524421440603&size=100":
             return ctx.$q.resolve(contexts);
           case "http://localhost:8010/api/snapshots/A?time=1524421440603":
-            return ctx.$q.resolve(snapshotA);          
+            return ctx.$q.resolve(snapshotA);
           case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=300000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
+          default:
+            throw new Error('Unexpect call URL: ' + options.url);
         }
       };
     });
 
     it("should return one target and extrapolate the data", function() {
       const time = 1516472658604;
-        
+
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
         expect(results.data.length).to.be(1);
-      
+
         expect(results.data[0].datapoints).to.eql([
           [600,1516451043603],
           [900,1516451103603],
@@ -579,7 +586,7 @@ describe('InstanaDatasource', function() {
     const metricsForA = {
       status: 200,
       data: {
-        "values": [    
+        "values": [
           {"timestamp":1516451043603,"value":2},
           {"timestamp":1516451103603,"value":3},
           {"timestamp":1516451163603,"value":1}
@@ -587,29 +594,31 @@ describe('InstanaDatasource', function() {
       }
     };
 
-    beforeEach(function() {      
+    beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess":
+          case "http://localhost:8010/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess&size=100":
             return ctx.$q.resolve(snapshots);
-          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1524421440603":
+          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1524421440603&from=1524248640603&to=1524421440603&size=100":
             return ctx.$q.resolve(contexts);
           case "http://localhost:8010/api/snapshots/A?time=1524421440603":
-            return ctx.$q.resolve(snapshotA);          
+            return ctx.$q.resolve(snapshotA);
           case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=300000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
+          default:
+            throw new Error('Unexpect call URL: ' + options.url);
         }
       };
     });
 
     it("should return one target and extrapolate the data", function() {
       const time = 1516472658604;
-        
+
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
         expect(results.data.length).to.be(1);
-      
+
         expect(results.data[0].datapoints).to.eql([
           [600,1516451043603],
           [900,1516451103603],
