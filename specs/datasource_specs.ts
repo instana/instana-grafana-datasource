@@ -132,7 +132,6 @@ describe('InstanaDatasource', function() {
 
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
-        console.log(options.url);
         switch (options.url) {
           case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658604&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=false":
             return ctx.$q.resolve(snapshots);
