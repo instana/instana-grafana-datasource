@@ -62,19 +62,19 @@ System.register(['lodash'], function(exports_1) {
                     this.id = instanceSettings.id;
                     this.url = instanceSettings.jsonData.url;
                     this.apiToken = instanceSettings.jsonData.apiToken;
+                    this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
                     this.snapshotCache = {};
                     this.currentTime = function () { return new Date().getTime(); };
                 }
                 InstanaDatasource.prototype.request = function (method, url, requestId) {
-                    var options = {
+                    return this.backendSrv.datasourceRequest({
                         url: this.url + url,
                         method: method,
                         requestId: requestId,
-                    };
-                    options.headers = {
-                        Authorization: 'apiToken ' + this.apiToken,
-                    };
-                    return this.backendSrv.datasourceRequest(options);
+                        headers: {
+                            Authorization: 'apiToken ' + this.apiToken
+                        }
+                    });
                 };
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;
@@ -134,9 +134,9 @@ System.register(['lodash'], function(exports_1) {
                     }
                     this.setLastFetchedFromApi(true);
                     var fetchSnapshotsUrl = ("/api/snapshots?from=" + from + "&to=" + to + "&q=" + query + "&size=100") +
-                        ("&newApplicationModelEnabled=" + (target.newApplicationModelEnabled === true));
+                        ("&newApplicationModelEnabled=" + (this.newApplicationModelEnabled === true));
                     var fetchSnapshotContextsUrl = ("/api/snapshots/context?q=" + query + "&time=" + to + "&from=" + from + "&to=" + to + "&size=100") +
-                        ("&newApplicationModelEnabled=" + (target.newApplicationModelEnabled === true));
+                        ("&newApplicationModelEnabled=" + (this.newApplicationModelEnabled === true));
                     return this.$q.all([
                         this.request('GET', fetchSnapshotsUrl),
                         this.request('GET', fetchSnapshotContextsUrl)

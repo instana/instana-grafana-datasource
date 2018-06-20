@@ -152,7 +152,7 @@ describe('InstanaDatasource', function() {
           case "http://localhost:8010/api/snapshots/C?time=1516472658614":
             return ctx.$q.resolve(snapshotC);
           default:
-            throw new Error('Unexpect call URL: ' + options.url);
+            throw new Error('Unexpected call URL: ' + options.url);
         }
       };
     });
@@ -345,7 +345,7 @@ describe('InstanaDatasource', function() {
           case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=B":
             return ctx.$q.resolve(metricsForB);
           default:
-            throw new Error('Unexpect call URL: ' + options.url);
+            throw new Error('Unexpected call URL: ' + options.url);
         }
       };
     });
@@ -490,7 +490,7 @@ describe('InstanaDatasource', function() {
           case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=300000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
-            throw new Error('Unexpect call URL: ' + options.url);
+            throw new Error('Unexpected call URL: ' + options.url);
         }
       };
     });
@@ -605,7 +605,7 @@ describe('InstanaDatasource', function() {
           case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=300000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
-            throw new Error('Unexpect call URL: ' + options.url);
+            throw new Error('Unexpected call URL: ' + options.url);
         }
       };
     });

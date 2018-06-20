@@ -56,7 +56,7 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                     }
                     else {
                         var url = ("/api/snapshots/types?q=" + encodeURIComponent(this.target.entityQuery)) +
-                            ("&time=" + Date.now() + "&newApplicationModelEnabled=" + (this.target.newApplicationModelEnabled === true));
+                            ("&time=" + Date.now() + "&newApplicationModelEnabled=" + (this.datasource.newApplicationModelEnabled === true));
                         return this.datasource.request('GET', url)
                             .then(function (response) {
                             _this.target.queryIsValid = true;

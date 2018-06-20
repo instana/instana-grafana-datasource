@@ -47,7 +47,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
     } else {
       const url = `/api/snapshots/types?q=${encodeURIComponent(this.target.entityQuery)}` +
-        `&time=${Date.now()}&newApplicationModelEnabled=${this.target.newApplicationModelEnabled === true}`;
+        `&time=${Date.now()}&newApplicationModelEnabled=${this.datasource.newApplicationModelEnabled === true}`;
       return this.datasource.request('GET', url)
         .then(
           response => {

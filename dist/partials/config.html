@@ -1,20 +1,26 @@
 <h3 class="page-heading">Instana configuration</h3>
 
 <div class="gf-form-group">
-	<div class="gf-form-inline">
-		<div class="gf-form">
-			<span class="gf-form-label width-9">Url</span>
-			<input class="gf-form-input width-30" type="text" ng-model='ctrl.current.jsonData.url' placeholder="E.g. https://tools-acme.instana.io"></input>
-      <info-popover mode="right-absolute">
-				<p>Enter the URL of your Instana installation. E.g. https://tools-acme.instana.io</p>
+  <div class="gf-form">
+    <label class="gf-form-label width-14 pointer" for="in-url">
+      URL
+      <info-popover position="top center" mode="right-normal">
+        <p>Enter the URL of your Instana installation. E.g. https://tools-acme.instana.io</p>
       </info-popover>
-		</div>
-		<div class="gf-form">
-			<span class="gf-form-label width-9">API Token</span>
-			<input class="gf-form-input width-30" type="text" ng-model='ctrl.current.jsonData.apiToken' placeholder="Enter your API token."></input>
-      <info-popover mode="right-absolute">
-				<p>Enter the API Token to access the data.<br/>You can create API tokens following the instructions at <a href="https://docs.instana.io/quick_start/api/#api-tokens">https://docs.instana.io/quick_start/api/#api-tokens</a></p>
-      </info-popover>
-    </div>
+    </label>
+    <input class="gf-form-input width-30" id="in-url" type="text" ng-model='ctrl.current.jsonData.url' placeholder="E.g. https://tools-acme.instana.io"></input>
   </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-14 pointer" for="in-api-token">
+      API Token
+      <info-popover position="top center" mode="right-normal">
+        <p>Enter the API Token to access the data.<br/>You can create API tokens following the instructions at <a href="https://docs.instana.io/quick_start/api/#api-tokens">https://docs.instana.io/quick_start/api/#api-tokens</a></p>
+      </info-popover>
+    </label>
+    <input class="gf-form-input width-30" id="in-api-token" type="text" ng-model='ctrl.current.jsonData.apiToken' placeholder="Enter your API token."></input>
+  </div>
+  <gf-form-switch class="gf-form" label="New Application Model"
+    label-class="width-14"
+    checked="ctrl.current.jsonData.newApplicationModelEnabled"
+    tooltip="When enabled, the API will return data in the new application model format. Note: Once your Instana environment is fully transitioned to the new application model, this flag will be ignored."></gf-form-switch>
 </div>
