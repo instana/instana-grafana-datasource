@@ -17,8 +17,8 @@
       "url": "https://instana.com"
     },
     "logos": {
-      "small": "http://www.instana.com/media/instana_icon_square.png",
-      "large": "http://www.instana.com/media/instana_icon_square.png"
+      "small": "https://www.instana.com/media/instana_icon_square.png",
+      "large": "https://www.instana.com/media/instana_icon_square.png"
     },
     "links": [
       {"name": "GitHub", "url": "https://instana.com" },
