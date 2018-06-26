@@ -127,7 +127,7 @@ module.exports = function(grunt) {
       waitForMountebank: {
         cmd: './wait-for-it.sh',
         args: [
-          '-h', url.parse(instanaUiBackendUrl).host,
+          '-h', url.parse(instanaUiBackendUrl).hostname,
           '-p', url.parse(instanaUiBackendUrl).port || (url.parse(instanaUiBackendUrl).protocol === 'https:' ? '443' : '80')
         ]
       },
