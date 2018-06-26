@@ -14,7 +14,13 @@ describe('When adding the Instana datasource to Grafana', function() {
     await page.goto('http://localhost:3000');
     await page.type('input[name=username]', 'admin');
     await page.type('input[name=password]', 'admin');
-    await page.click('.btn'); // TODO: better selector
+    const logInButton = await page.waitForXPath('//button[contains(text(),"Log In")]');
+    logInButton.click();
+    await page.waitFor(1000); // don't ask
+    const saveNewButton = await page.waitForXPath('//button[contains(text(),"Save")]');
+    await page.type('input[name=newPassword]', 'admin');
+    await page.type('input[name=confirmNew]', 'admin');
+    saveNewButton.click();
     await page.waitForSelector('a.btn.progress-step-cta');
     await page.click('.progress-link');
     await page.goto('http://localhost:3000/datasources/new?gettingstarted');
