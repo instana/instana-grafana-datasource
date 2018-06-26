@@ -124,7 +124,7 @@ module.exports = function(grunt) {
         ]
       },
 
-      waitForMountebank: {
+      waitForUiBackend: {
         cmd: './wait-for-it.sh',
         args: [
           '-h', url.parse(instanaUiBackendUrl).hostname,
@@ -157,7 +157,7 @@ module.exports = function(grunt) {
     'copy:dist_statics',
     'dockerCompose:build',
     'dockerCompose:up',
-    'run:waitForMountebank',
+    'run:waitForUiBackend',
     'run:waitForGrafana',
     'functional'
   ]);
