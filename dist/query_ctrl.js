@@ -60,7 +60,7 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                             .then(function (response) {
                             _this.target.queryIsValid = true;
                             _this.uniqueEntityTypes =
-                                lodash_1.default.filter(response.data, function (entityType) { return metrics_1.default[entityType] && metrics_1.default[entityType].label != null; });
+                                lodash_1.default.filter(lodash_1.default.map(response.data, function (t) { return t.toLowerCase(); }), function (entityType) { return metrics_1.default[entityType] && metrics_1.default[entityType].label != null; });
                             _this.entitySelectionText = _this.uniqueEntityTypes.length > 0
                                 ? 'Please select (' + _this.uniqueEntityTypes.length + ')'
                                 : _this.EMPTY_DROPDOWN_TEXT;
