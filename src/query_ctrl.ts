@@ -55,7 +55,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
             this.uniqueEntityTypes =
               _.filter(
                 response.data,
-                entityType => metricsDefinition[entityType] && metricsDefinition[entityType].label != null);
+                entityType => metricsDefinition[entityType.toLowerCase()] && metricsDefinition[entityType.toLowerCase()].label != null);
             this.entitySelectionText = this.uniqueEntityTypes.length > 0
               ? 'Please select (' + this.uniqueEntityTypes.length + ')'
               : this.EMPTY_DROPDOWN_TEXT;

@@ -12,7 +12,7 @@
       <div class="gf-form">
         <label class="gf-form-label query-keyword width-9">Type</label>
         <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
-          <select class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.entityType" ng-change="ctrl.onEntityTypeSelect(true)" ng-options="f as ctrl.metricsDefinition[f].label for f in ctrl.uniqueEntityTypes">
+          <select class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.entityType" ng-change="ctrl.onEntityTypeSelect(true)" ng-options="f as ctrl.metricsDefinition[f.toLowerCase()].label for f in ctrl.uniqueEntityTypes">
             <option value="" disabled selected>{{ctrl.entitySelectionText}}</option>
           </select>
           <info-popover mode="right-absolute">
