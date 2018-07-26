@@ -22,7 +22,7 @@
     </label>
     <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
       <select  id="in-type-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.entityType" ng-change="ctrl.onEntityTypeSelect(true)"
-        ng-options="f as ctrl.metricsDefinition[f].label for f in ctrl.uniqueEntityTypes">
+        ng-options="f as ctrl.metricsDefinition[f.toLowerCase()].label for f in ctrl.uniqueEntityTypes">
         <option value="" disabled selected>{{ctrl.entitySelectionText}}</option>
       </select>
     </div>
