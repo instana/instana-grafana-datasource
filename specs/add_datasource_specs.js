@@ -3,7 +3,7 @@ const expect = chai.expect;
 const puppeteer = require('puppeteer');
 
 describe('When adding the Instana datasource to Grafana', function() {
-  this.timeout(5000);
+  this.timeout(10000);
 
   it('should successfully connect to the Instana API', async () => {
     const browser = await puppeteer.launch();
@@ -14,7 +14,13 @@ describe('When adding the Instana datasource to Grafana', function() {
     await page.goto('http://localhost:3000');
     await page.type('input[name=username]', 'admin');
     await page.type('input[name=password]', 'admin');
-    await page.click('.btn'); // TODO: better selector
+    const logInButton = await page.waitForXPath('//button[contains(text(),"Log In")]');
+    logInButton.click();
+    await page.waitFor(1000); // don't ask
+    const saveNewButton = await page.waitForXPath('//button[contains(text(),"Save")]');
+    await page.type('input[name=newPassword]', 'admin');
+    await page.type('input[name=confirmNew]', 'admin');
+    saveNewButton.click();
     await page.waitForSelector('a.btn.progress-step-cta');
     await page.click('.progress-link');
     await page.goto('http://localhost:3000/datasources/new?gettingstarted');
@@ -23,13 +29,13 @@ describe('When adding the Instana datasource to Grafana', function() {
 
     // Generate random datasource name to allow for multiple runs without refreshing Grafana.
     let runId = randomString(6);
-    await page.type('input[ng-model="ctrl.current.name"]', 'puppeteer-test-' + runId); 	
+    await page.type('input[ng-model="ctrl.current.name"]', 'puppeteer-test-' + runId);
     await page.type('input[ng-model="ctrl.current.jsonData.url"]', process.env.INSTANA_UI_BACKEND_URL);
     await page.type('input[ng-model="ctrl.current.jsonData.apiToken"]', process.env.INSTANA_API_TOKEN);
     await page.click('.btn'); // TODO: better selector
 
     // waitForSelector doesn't work for some reason so we'll do with a sleep for now
-    await page.waitFor(500);
+    await page.waitFor(2500);
 
     const alerts = await page.evaluate((sel) => {
       return [

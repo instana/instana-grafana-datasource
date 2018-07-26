@@ -1,38 +1,45 @@
 <query-editor-row query-ctrl="ctrl" can-collapse="false">
-  <div class="gf-form-group">
-    <div class="gf-form-inline">
-      <div class="gf-form gf-form--grow">
-        <label class="gf-form-label query-keyword width-9">Query</label>
-        <input class="gf-form-input" type="text" ng-model='ctrl.target.entityQuery' ng-class="ctrl.target.queryIsValid ? 'ng-valid' : 'ng-invalid'" ng-model-options='{ debounce: 200 }' ng-change="ctrl.onFilterChange(true)" placeholder="Please Specify">
-        </input>
-        <info-popover mode="right-absolute">
-          <p>Specify a query for the entities you wish to plot. Use the dynamic focus syntax: <a href="https://docs.instana.io/core_concepts/dynamic_focus/#syntax">https://docs.instana.io/core_concepts/dynamic_focus/#syntax</a></p>
-        </info-popover>
-      </div>
-      <div class="gf-form">
-        <label class="gf-form-label query-keyword width-9">Type</label>
-        <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
-          <select class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.entityType" ng-change="ctrl.onEntityTypeSelect(true)" ng-options="f as ctrl.metricsDefinition[f.toLowerCase()].label for f in ctrl.uniqueEntityTypes">
-            <option value="" disabled selected>{{ctrl.entitySelectionText}}</option>
-          </select>
-          <info-popover mode="right-absolute">
-            <p>Select an entity type for a list of available metrics.</p>
-          </info-popover>
-        </div>
-        <label class="gf-form-label query-keyword width-9">Metric</label>
-      </div>
-      <div class="gf-form">
-        <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
-          <select class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.metric" ng-change="ctrl.onMetricSelect()" ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics">
-              <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
-            </select>
-            <info-popover mode="right-absolute">
-              <p>Select the metric you wish to plot.</p>
-            </info-popover>
-          </div>
-				</div>
-        </div>
-      </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-13 pointer" for="in-query-{{ctrl.target.refId}}">
+      Query
+      <info-popover position="top center" mode="right-normal">
+        <p>Specify a query for the entities you wish to plot. Use the dynamic focus syntax:
+          <a href="https://docs.instana.io/core_concepts/dynamic_focus/#syntax">https://docs.instana.io/core_concepts/dynamic_focus/#syntax</a>
+        </p>
+      </info-popover>
+    </label>
+    <input id="in-query-{{ctrl.target.refId}}" class="gf-form-input" type="text" ng-model='ctrl.target.entityQuery' ng-class="ctrl.target.queryIsValid ? 'ng-valid' : 'ng-invalid'"
+      ng-model-options='{ debounce: 200 }' ng-change="ctrl.onFilterChange(true)" placeholder="Please Specify">
+    </input>
+  </div>
+
+  <div class="gf-form">
+    <label class="gf-form-label width-13 pointer" for="in-type-{{ctrl.target.refId}}">
+      Type
+      <info-popover position="top center" mode="right-normal">
+        <p>Select an entity type for a list of available metrics.</p>
+      </info-popover>
+    </label>
+    <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
+      <select  id="in-type-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.entityType" ng-change="ctrl.onEntityTypeSelect(true)"
+        ng-options="f as ctrl.metricsDefinition[f.toLowerCase()].label for f in ctrl.uniqueEntityTypes">
+        <option value="" disabled selected>{{ctrl.entitySelectionText}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="gf-form">
+    <label class="gf-form-label width-13 pointer" for="in-metric-{{ctrl.target.refId}}">
+      Metric
+      <info-popover position="top center" mode="right-normal">
+        <p>Select the metric you wish to plot.</p>
+      </info-popover>
+    </label>
+    <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
+      <select  id="in-metric-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.metric" ng-change="ctrl.onMetricSelect()"
+        ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics">
+        <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
+      </select>
     </div>
   </div>
 </query-editor-row>

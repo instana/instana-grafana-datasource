@@ -25,7 +25,7 @@ The following yarn run scripts are available. You can also run them via Grunt di
 ### Getting Started
 
 1. Make sure `yarn` is installed (everything should work also with npm but YMMV)
-2. Install realpath and timeout (`brew install coreutils`)
+2. Install realpath and timeout (`brew install coreutils`, remember to put them on the `$PATH`: `export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"`)
 3. Run `yarn install`.
 4. Optionally, make sure grunt is installed globally.
 5. Run `yarn run startup`

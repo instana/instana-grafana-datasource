@@ -55,8 +55,9 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                         this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                     }
                     else {
-                        return this.datasource.request('GET', '/api/snapshots/types?q=' + encodeURIComponent(this.target.entityQuery) +
-                            '&time=' + new Date().getTime())
+                        var url = ("/api/snapshots/types?q=" + encodeURIComponent(this.target.entityQuery)) +
+                            ("&time=" + Date.now() + "&newApplicationModelEnabled=" + (this.datasource.newApplicationModelEnabled === true));
+                        return this.datasource.request('GET', url)
                             .then(function (response) {
                             _this.target.queryIsValid = true;
                             _this.uniqueEntityTypes =

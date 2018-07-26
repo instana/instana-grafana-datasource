@@ -5,6 +5,7 @@ export default class InstanaDatasource {
   name: string;
   url: string;
   apiToken: string;
+  newApplicationModelEnabled: boolean;
   currentTime: () => number;
   snapshotCache: Object;
   lastFetchedFromAPI: boolean;
@@ -46,6 +47,7 @@ export default class InstanaDatasource {
     this.id = instanceSettings.id;
     this.url = instanceSettings.jsonData.url;
     this.apiToken = instanceSettings.jsonData.apiToken;
+    this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
     this.snapshotCache = {};
     this.currentTime = () => { return new Date().getTime(); };
   }
@@ -71,17 +73,14 @@ export default class InstanaDatasource {
   setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; };
 
   request(method, url, requestId?) {
-    var options: any = {
+    return this.backendSrv.datasourceRequest({
       url: this.url + url,
       method: method,
       requestId: requestId,
-    };
-
-    options.headers = {
-      Authorization: 'apiToken ' + this.apiToken,
-    };
-
-    return this.backendSrv.datasourceRequest(options);
+      headers: {
+        Authorization: 'apiToken ' + this.apiToken
+      }
+    });
   }
 
   query(options) {
@@ -162,11 +161,10 @@ export default class InstanaDatasource {
     }
 
     this.setLastFetchedFromApi(true);
-    const fetchSnapshotsUrl = '/api/snapshots?from=' + from + '&to=' + to + '&q=' + query;
-    const fetchSnapshotContextsUrl =
-      '/api/snapshots/context?q=' + encodeURIComponent(target.entityQuery +
-      ' AND entity.pluginId:' + target.entityType) +
-      '&time=' + to;
+    const fetchSnapshotsUrl = `/api/snapshots?from=${from}&to=${to}&q=${query}&size=100` +
+      `&newApplicationModelEnabled=${this.newApplicationModelEnabled === true}`;
+    const fetchSnapshotContextsUrl = `/api/snapshots/context?q=${query}&time=${to}&from=${from}&to=${to}&size=100` +
+      `&newApplicationModelEnabled=${this.newApplicationModelEnabled === true}`;
 
     return this.$q.all([
       this.request('GET', fetchSnapshotsUrl),
@@ -194,7 +192,7 @@ export default class InstanaDatasource {
   }
 
   buildQuery(target) {
-    return encodeURIComponent(target.entityQuery + ' AND entity.pluginId:' + target.entityType);
+    return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType}`);
   }
 
   getHostSuffix(contexts, snapshotId) {
