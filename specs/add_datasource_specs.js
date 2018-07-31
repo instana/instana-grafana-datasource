@@ -3,6 +3,11 @@ const expect = chai.expect;
 const puppeteer = require('puppeteer');
 
 describe('When adding the Instana datasource to Grafana', function() {
+
+  // Set default values for back end URL and API token. Those will only work for the mountebank server.
+  const instanaUiBackendUrl = process.env.INSTANA_UI_BACKEND_URL || 'http://localhost:8010';
+  const instanaApiToken = process.env.INSTANA_API_TOKEN || 'valid-api-token';
+
   this.timeout(10000);
 
   it('should successfully connect to the Instana API', async () => {
@@ -11,7 +16,7 @@ describe('When adding the Instana datasource to Grafana', function() {
     // For some reason even after waiting for the port to be open on the container we cannot immediately hit the page
     await page.waitFor(500);
 
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3000/login');
     await page.type('input[name=username]', 'admin');
     await page.type('input[name=password]', 'admin');
     const logInButton = await page.waitForXPath('//button[contains(text(),"Log In")]');
@@ -30,8 +35,8 @@ describe('When adding the Instana datasource to Grafana', function() {
     // Generate random datasource name to allow for multiple runs without refreshing Grafana.
     let runId = randomString(6);
     await page.type('input[ng-model="ctrl.current.name"]', 'puppeteer-test-' + runId);
-    await page.type('input[ng-model="ctrl.current.jsonData.url"]', process.env.INSTANA_UI_BACKEND_URL);
-    await page.type('input[ng-model="ctrl.current.jsonData.apiToken"]', process.env.INSTANA_API_TOKEN);
+    await page.type('input[ng-model="ctrl.current.jsonData.url"]', instanaUiBackendUrl);
+    await page.type('input[ng-model="ctrl.current.jsonData.apiToken"]', instanaApiToken);
     await page.click('.btn'); // TODO: better selector
 
     // waitForSelector doesn't work for some reason so we'll do with a sleep for now
