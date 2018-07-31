@@ -2,7 +2,7 @@
 #   Use this script to test if a given TCP host/port are available
 
 hash realpath >/dev/null 2>&1 || { echo >&2 "realpath needs to be installed but it isn't. Aborting."; exit 1; }
-hash timeout >/dev/null 2>&1 || { echo >&2 "timeout needs to be installed but it isn't. Aborting."; exit 1; }
+hash timeout >/dev/null 2>&1 || { echo >&2 "timeout needs to be installed but it isn't. On MacOS, you might need to do something like 'export PATH=\"/usr/local/opt/coreutils/libexec/gnubin:\$PATH\"'. Aborting."; exit 1; }
 
 cmdname=$(basename $0)
 

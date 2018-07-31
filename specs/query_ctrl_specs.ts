@@ -49,7 +49,7 @@ describe("InstanaQueryCtrl", function() {
             "host",
             "weblogicapplicationcontainer"
           ]);
-          expect(queryCtrl.target.queryIsValid).to.be(true);
+          expect(queryCtrl.target.queryIsValid).to.equal(true);
         });
       });
 
@@ -63,8 +63,8 @@ describe("InstanaQueryCtrl", function() {
 
           return queryCtrl.onFilterChange().then(() => {
             expect(queryCtrl.uniqueEntityTypes).to.eql([]);
-            expect(queryCtrl.target.entityType).to.be(null);
-            expect(queryCtrl.target.queryIsValid).to.be(true);
+            expect(queryCtrl.target.entityType).to.equal(null);
+            expect(queryCtrl.target.queryIsValid).to.equal(true);
           });
         });
       });
@@ -81,7 +81,7 @@ describe("InstanaQueryCtrl", function() {
         queryCtrl.target.filter = "*eu";
 
         return queryCtrl.onFilterChange().then(() => {
-          expect(queryCtrl.target.queryIsValid).to.be(false);
+          expect(queryCtrl.target.queryIsValid).to.equal(false);
         });
       });
     });

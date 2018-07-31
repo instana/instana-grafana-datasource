@@ -2,7 +2,7 @@
 
 module.exports = function(config) {
 	config.set({
-		frameworks: ['systemjs', 'mocha', 'expect', 'sinon'],
+		frameworks: ['systemjs', 'mocha', 'chai', 'chai-as-promised', 'sinon-chai'],
 
 		files: [
 			'specs/*specs.ts',

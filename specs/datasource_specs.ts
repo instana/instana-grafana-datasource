@@ -172,7 +172,7 @@ describe('InstanaDatasource', function() {
         "entityType": "process"
       }, '1516451043603', '1516472658604')
       .then(function(results) {
-        expect(results.length).to.be(2);
+        expect(results.length).to.equal(2);
         expect(results[0]).to.eql({ snapshotId: 'A', label: 'label for A (on host "Stans-Macbook-Pro")' });
         expect(results[1]).to.eql({ snapshotId: 'B', label: 'label for B' });
       });
@@ -209,7 +209,7 @@ describe('InstanaDatasource', function() {
         "entityType": "process"
       }, '1516451043603', '1516472658614')
       .then(function(results) {
-        expect(results.length).to.be(2);
+        expect(results.length).to.equal(2);
         expect(results[0]).to.eql({ snapshotId: 'A', label: 'label for A (on host "Stans-Macbook-Pro")' });
         expect(results[1]).to.eql({ snapshotId: 'B', label: 'label for B' });
       });
@@ -356,7 +356,7 @@ describe('InstanaDatasource', function() {
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
-        expect(results.data.length).to.be(4);
+        expect(results.data.length).to.equal(4);
 
         expect(results.data[0].datapoints).to.eql([
           [1.3292612266666E9,1516451043603],
@@ -387,8 +387,8 @@ describe('InstanaDatasource', function() {
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].time).to.be(time);
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots.length).to.be(2);
+        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].time).to.equal(time);
+        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots.length).to.equal(2);
         expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].snapshotId).to.eql('A');
         expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].label).to.eql('label for A (on host "Stans-Macbook-Pro")');
         expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].snapshotId).to.eql('B');
@@ -398,7 +398,7 @@ describe('InstanaDatasource', function() {
   });
 
   describe('When retrieving metrics for a singlestat panel', function() {
-    // query a timerange of 2 days which should result in 5-minute rollups being fetched
+    // query data that is older than three months should result in one hour rollups being fetched
     const options = {
       "timezone": "browser",
       "panelId": 1,
@@ -487,7 +487,7 @@ describe('InstanaDatasource', function() {
             return ctx.$q.resolve(contexts);
           case "http://localhost:8010/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
-          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=300000&snapshotId=A":
+          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -501,19 +501,18 @@ describe('InstanaDatasource', function() {
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
-        expect(results.data.length).to.be(1);
-
-        expect(results.data[0].datapoints).to.eql([
-          [600,1516451043603],
-          [900,1516451103603],
-          [300,1516451163603]
-        ]);
+        expect(results.data.length).to.equal(1);
+        const datapoints = results.data[0].datapoints;
+        expect(datapoints.length).to.equal(3);
+        expect(datapoints).to.deep.include.members([[ 3600, 1516451163603 ]]);
+        expect(datapoints).to.deep.include.members([[ 7200, 1516451043603 ]]);
+        expect(datapoints).to.deep.include.members([[ 10800, 1516451103603 ]]);
       });
     });
   });
 
   describe('When retrieving metrics for a table', function() {
-    // query a timerange of 2 days which should result in 5-minute rollups being fetched
+    // query data that is older than three months should result in one hour rollups being fetched
     const options = {
       "timezone": "browser",
       "panelId": 1,
@@ -602,7 +601,7 @@ describe('InstanaDatasource', function() {
             return ctx.$q.resolve(contexts);
           case "http://localhost:8010/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
-          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=300000&snapshotId=A":
+          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -616,13 +615,12 @@ describe('InstanaDatasource', function() {
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
-        expect(results.data.length).to.be(1);
-
-        expect(results.data[0].datapoints).to.eql([
-          [600,1516451043603],
-          [900,1516451103603],
-          [300,1516451163603]
-        ]);
+        expect(results.data.length).to.equal(1);
+        const datapoints = results.data[0].datapoints;
+        expect(datapoints.length).to.equal(3);
+        expect(datapoints).to.deep.include.members([[ 3600, 1516451163603 ]]);
+        expect(datapoints).to.deep.include.members([[ 7200, 1516451043603 ]]);
+        expect(datapoints).to.deep.include.members([[ 10800, 1516451103603 ]]);
       });
     });
   });
