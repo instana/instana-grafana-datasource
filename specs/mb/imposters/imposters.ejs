@@ -4,235 +4,235 @@
   "name": "UI backend",
   "mode": "text",
   "stubs": [
-		{
-			"predicates": [{
-				"equals": {
-					"method": "OPTIONS"
-				}
-			}],
-			"responses": [{
-				"is": {
-					"headers": {
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT",
-						"Access-Control-Allow-Headers": "*"
-					}
-				},
-				"_behaviors": {
-					"copy": [
-						{
-							"from": { "headers": "Access-Control-Allow-Origin" },
-							"into": "${ALLOW-ORIGIN}",
-							"using": { "method": "regex", "selector": ".+" }
-						},
-						{
-							"from": { "headers": "Access-Control-Allow-Headers" },
-							"into": "${ALLOW-HEADERS}"
-						}
-					]
-				}
-			}]
-		},
-		{
-			"predicates": [{
-				"equals": {
-					"method": "GET",
-					"path": "/api/snapshots/non-existing-snapshot-id",
-					"headers": {
-						"Authorization": "apiToken valid-api-token"
-					},
-					"query": {
-						"time": "0"
-					}
-				}
-			}],
-			"responses": [{
-				"is": {
-					"statusCode": 404,
-					"headers": {
-						"Content-Type": "application/json;charset=utf-8",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
-					},
-					"body": "{\n    \"error\": \"There is no snapshot for the given id or it can't be found.\"\n}"
-				}
-			}]
-		},
-		{
-			"predicates": [{
-				"equals": {
-					"method": "GET",
-					"path": "/api/snapshots/non-existing-snapshot-id",
-					"query": {
-						"time": "0"
-					}
-				}
-			}],
-			"responses": [{
-				"is": {
-					"statusCode": 401,
-					"headers": {
-						"Content-Type": "application/json;charset=utf-8",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
-					},
-					"body": "{\n    \"errors\": [\n        \"Unauthorized request\"\n    ]\n}"
-				}
-			}]
-		},
-		{
-			"predicates": [{
-				"equals": {
-					"method": "GET",
-					"path": "/api/snapshots/types",
-					"query": {
-						"q": "filler"
-					}
-				}
-			}],
-			"responses": [{
-				"is": {
-					"statusCode": 200,
-					"headers": {
-						"Content-Type": "application/json;charset=utf-8",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
-					},
-					"body": "[\"host\", \"awsEc\", \"hadoopYARN\", \"process\"]"
-				}
-			}]
-		},
-		{
-			"predicates": [{
-				"equals": {
-					"method": "GET",
-					"path": "/api/snapshots/types"
-				}
-			}],
-			"responses": [{
-				"is": {
-					"statusCode": 200,
-					"headers": {
-						"Content-Type": "application/json;charset=utf-8",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
-					},
-					"body": "[]"
-				}
-			}]
-		},
-		{
-			"predicates": [{
-				"equals": {
-					"method": "GET",
-					"path": "/api/snapshots",
-					"query": {
-						"q": "filler AND entity.pluginId:process"
-					}
-				}
-			}],
-			"responses": [{
-				"is": {
-					"statusCode": 200,
-					"headers": {
-						"Content-Type": "application/json;charset=utf-8",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
-					},
-					"body": "[\"kBfqGyrfEXvUcwix_fL97vYegx0\",\"kBfqGyrfEXvUcwix_fL97vYegx1\"]"
-				}
-			}]
-		},
-		{
-			"predicates": [{
-				"equals": {
-					"method": "GET",
-					"path": "/api/snapshots/context",
-					"query": {
-						"q": "filler AND entity.pluginId:process"
-					}
-				}
-			}],
-			"responses": [{
-				"is": {
-					"statusCode": 200,
-					"headers": {
-						"Content-Type": "application/json;charset=utf-8",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
-					},
-					"body": "[{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx0\",\"host\":\"host-1\"},{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx1\",\"host\":\"host-2\"}]"
-				}
-			}]
-		},
-		{
-			"predicates": [{
-				"equals": {
-					"method": "GET",
-					"path": "/api/snapshots/kBfqGyrfEXvUcwix_fL97vYegx0"
-				}
-			}],
-			"responses": [{
-				"is": {
-					"statusCode": 200,
-					"headers": {
-						"Content-Type": "application/json;charset=utf-8",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
-					},
-					"body": "{\"id\": \"kBfqGyrfEXvUcwix_fL97vYegx1\",\"plugin\": \"process\",\"from\": 1516294054000,\"to\": 1516610096000,\"tags\": [],\"label\": \"node\",\"entityId\": {\"host\": \"0e:36:2c:ff:fe:a1:77:25\",\"pluginId\": \"com.instana.forge.infrastructure.os.process.Process\",\"steadyId\": \"30978\"}}"
-				}
-			}]
-		},
-		{
-			"predicates": [{
-				"equals": {
-					"method": "GET",
-					"path": "/api/snapshots/kBfqGyrfEXvUcwix_fL97vYegx1"
-				}
-			}],
-			"responses": [{
-				"is": {
-					"statusCode": 200,
-					"headers": {
-						"Content-Type": "application/json;charset=utf-8",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
-					},
-					"body": "{\"id\": \"kBfqGyrfEXvUcwix_fL97vYegx1\",\"plugin\": \"process\",\"from\": 1516294054000,\"to\": 1516610096000,\"tags\": [],\"label\": \"node\",\"entityId\": {\"host\": \"0e:36:2c:ff:fe:a1:77:25\",\"pluginId\": \"com.instana.forge.infrastructure.os.process.Process\",\"steadyId\": \"30978\"}}"
-				}
-			}]
-		},
-		{
-			"predicates": [{
-				"equals": {
-					"method": "GET",
-					"path": "/api/metrics",
-					"query": {
-						"metric": "mem.virtual",
-						"snapshotId": "kBfqGyrfEXvUcwix_fL97vYegx0"
-					}
-				}
-			}],
-			"responses": [{
+    {
+      "predicates": [{
+        "equals": {
+          "method": "OPTIONS"
+        }
+      }],
+      "responses": [{
+        "is": {
+          "headers": {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT",
+            "Access-Control-Allow-Headers": "*"
+          }
+        },
+        "_behaviors": {
+          "copy": [
+            {
+              "from": { "headers": "Access-Control-Allow-Origin" },
+              "into": "${ALLOW-ORIGIN}",
+              "using": { "method": "regex", "selector": ".+" }
+            },
+            {
+              "from": { "headers": "Access-Control-Allow-Headers" },
+              "into": "${ALLOW-HEADERS}"
+            }
+          ]
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/snapshots/non-existing-snapshot-id",
+          "headers": {
+            "Authorization": "apiToken valid-api-token"
+          },
+          "query": {
+            "time": "0"
+          }
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 404,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "{\n    \"error\": \"There is no snapshot for the given id or it can't be found.\"\n}"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/snapshots/non-existing-snapshot-id",
+          "query": {
+            "time": "0"
+          }
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 401,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "{\n    \"errors\": [\n        \"Unauthorized request\"\n    ]\n}"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/snapshots/types",
+          "query": {
+            "q": "filler"
+          }
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "[\"host\", \"awsEc\", \"hadoopYARN\", \"process\"]"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/snapshots/types"
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "[]"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/snapshots",
+          "query": {
+            "q": "filler AND entity.pluginId:process"
+          }
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "[\"kBfqGyrfEXvUcwix_fL97vYegx0\",\"kBfqGyrfEXvUcwix_fL97vYegx1\"]"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/snapshots/context",
+          "query": {
+            "q": "filler AND entity.pluginId:process"
+          }
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "[{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx0\",\"host\":\"host-1\"},{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx1\",\"host\":\"host-2\"}]"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/snapshots/kBfqGyrfEXvUcwix_fL97vYegx0"
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "{\"id\": \"kBfqGyrfEXvUcwix_fL97vYegx1\",\"plugin\": \"process\",\"from\": 1516294054000,\"to\": 1516610096000,\"tags\": [],\"label\": \"node\",\"entityId\": {\"host\": \"0e:36:2c:ff:fe:a1:77:25\",\"pluginId\": \"com.instana.forge.infrastructure.os.process.Process\",\"steadyId\": \"30978\"}}"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/snapshots/kBfqGyrfEXvUcwix_fL97vYegx1"
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "{\"id\": \"kBfqGyrfEXvUcwix_fL97vYegx1\",\"plugin\": \"process\",\"from\": 1516294054000,\"to\": 1516610096000,\"tags\": [],\"label\": \"node\",\"entityId\": {\"host\": \"0e:36:2c:ff:fe:a1:77:25\",\"pluginId\": \"com.instana.forge.infrastructure.os.process.Process\",\"steadyId\": \"30978\"}}"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/metrics",
+          "query": {
+            "metric": "mem.virtual",
+            "snapshotId": "kBfqGyrfEXvUcwix_fL97vYegx0"
+          }
+        }
+      }],
+      "responses": [{
         "inject": "<%- stringify(filename, 'metrics_factory_1.ejs') %>"
-			}]
-		},
-		{
-			"predicates": [{
-				"equals": {
-					"method": "GET",
-					"path": "/api/metrics",
-					"query": {
-						"metric": "mem.virtual",
-						"snapshotId": "kBfqGyrfEXvUcwix_fL97vYegx1"
-					}
-				}
-			}],
-			"responses": [{
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/metrics",
+          "query": {
+            "metric": "mem.virtual",
+            "snapshotId": "kBfqGyrfEXvUcwix_fL97vYegx1"
+          }
+        }
+      }],
+      "responses": [{
         "inject": "<%- stringify(filename, 'metrics_factory_2.ejs') %>"
-			}]
-		},
+      }]
+    },
     {
       "predicates": [{
         "equals": {
@@ -256,16 +256,16 @@
     {
       "predicates": [],
       "responses": [{
-				"is": {
-					"statusCode": 401,
-					"headers": {
-						"Content-Type": "application/json;charset=utf-8",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
-					},
-					"body": "{\n    \"errors\": [\n        \"Unauthorized request\"\n    ]\n}"
-				}
-			}]
+        "is": {
+          "statusCode": 401,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "{\n    \"errors\": [\n        \"Unauthorized request\"\n    ]\n}"
+        }
+      }]
     }
-	]
+  ]
 }
