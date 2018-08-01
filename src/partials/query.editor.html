@@ -37,7 +37,7 @@
     </label>
     <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
       <select  id="in-metric-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.metric" ng-change="ctrl.onMetricSelect()"
-        ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics">
+        ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics track by f.key">
         <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
       </select>
     </div>

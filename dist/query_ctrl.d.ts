@@ -3,6 +3,7 @@ import { QueryCtrl } from 'app/plugins/sdk';
 export declare class InstanaQueryCtrl extends QueryCtrl {
     private templateSrv;
     private backendSrv;
+    private $q;
     static templateUrl: string;
     metricsDefinition: {
         "host": {
@@ -2323,7 +2324,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     EMPTY_DROPDOWN_TEXT: string;
     defaults: {};
     /** @ngInject **/
-    constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any);
+    constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any, $q: any);
     onFilterChange(refresh: any): any;
     onEntityTypeSelect(refresh: any): void;
     onMetricSelect(): void;

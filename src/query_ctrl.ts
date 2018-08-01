@@ -19,7 +19,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   };
 
   /** @ngInject **/
-  constructor($scope, $injector, private templateSrv, private backendSrv) {
+  constructor($scope, $injector, private templateSrv, private backendSrv, private $q) {
     super($scope, $injector);
 
     this.target.pluginId = this.panelCtrl.pluginId;
@@ -27,14 +27,15 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
 
     if (this.target.entityQuery) {
-      this.onFilterChange(false).then(_ => {
+      this.onFilterChange(false).then(() => {
         if (this.target.entityType) {
           this.onEntityTypeSelect(false);
         }
+
+        if (this.target && this.target.metric) {
+          this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+        }
       });
-    }
-    if (this.target.metric) {
-      this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
     }
   }
 
@@ -45,6 +46,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.target.metric = null;
       this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
       this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
+      return this.$q.resolve();
     } else {
       const url = `/api/snapshots/types?q=${encodeURIComponent(this.target.entityQuery)}` +
         `&time=${Date.now()}&newApplicationModelEnabled=${this.datasource.newApplicationModelEnabled === true}`;

@@ -23,11 +23,12 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
             InstanaQueryCtrl = (function (_super) {
                 __extends(InstanaQueryCtrl, _super);
                 /** @ngInject **/
-                function InstanaQueryCtrl($scope, $injector, templateSrv, backendSrv) {
+                function InstanaQueryCtrl($scope, $injector, templateSrv, backendSrv, $q) {
                     var _this = this;
                     _super.call(this, $scope, $injector);
                     this.templateSrv = templateSrv;
                     this.backendSrv = backendSrv;
+                    this.$q = $q;
                     this.metricsDefinition = metrics_1.default;
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
                     this.defaults = {};
@@ -35,14 +36,14 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                     if (this.target.entityQuery) {
-                        this.onFilterChange(false).then(function (_) {
+                        this.onFilterChange(false).then(function () {
                             if (_this.target.entityType) {
                                 _this.onEntityTypeSelect(false);
                             }
+                            if (_this.target && _this.target.metric) {
+                                _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
+                            }
                         });
-                    }
-                    if (this.target.metric) {
-                        this.target.metric = lodash_1.default.find(this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                     }
                 }
                 InstanaQueryCtrl.prototype.onFilterChange = function (refresh) {
@@ -53,6 +54,7 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                         this.target.metric = null;
                         this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                         this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
+                        return this.$q.resolve();
                     }
                     else {
                         var url = ("/api/snapshots/types?q=" + encodeURIComponent(this.target.entityQuery)) +
