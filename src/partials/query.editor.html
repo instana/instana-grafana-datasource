@@ -15,20 +15,36 @@
 
   <div class="gf-form">
     <label class="gf-form-label width-13 pointer" for="in-type-{{ctrl.target.refId}}">
+      Categorie
+      <info-popover position="top center" mode="right-normal">
+        <p>Select a metric categorie.</p>
+      </info-popover>
+    </label>
+    <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
+      <select id="in-categorie-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.metricCategorie" ng-change="ctrl.onMetricCategorieSelect()">
+        <option value="0" selected>Build-in</option>
+        <option value="1">Custom</option>
+        <option value="2">Freetext</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="gf-form" ng-hide="ctrl.target.metricCategorie === '2' || ctrl.target.metricCategorie === '1'">
+    <label class="gf-form-label width-13 pointer" for="in-type-{{ctrl.target.refId}}">
       Type
       <info-popover position="top center" mode="right-normal">
         <p>Select an entity type for a list of available metrics.</p>
       </info-popover>
     </label>
     <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
-      <select  id="in-type-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.entityType" ng-change="ctrl.onEntityTypeSelect(true)"
+      <select id="in-type-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.entityType" ng-change="ctrl.onEntityTypeSelect(true)"
         ng-options="f as ctrl.metricsDefinition[f.toLowerCase()].label for f in ctrl.uniqueEntityTypes">
         <option value="" disabled selected>{{ctrl.entitySelectionText}}</option>
       </select>
     </div>
   </div>
 
-  <div class="gf-form">
+  <div class="gf-form" ng-hide="ctrl.target.metricCategorie === '2'">
     <label class="gf-form-label width-13 pointer" for="in-metric-{{ctrl.target.refId}}">
       Metric
       <info-popover position="top center" mode="right-normal">
@@ -40,6 +56,18 @@
         ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics track by f.key">
         <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
       </select>
+    </div>
+  </div>
+
+  <div class="gf-form" ng-hide="ctrl.target.metricCategorie === '0' || ctrl.target.metricCategorie === '1'">
+    <label class="gf-form-label width-13 pointer" for="in-metric-{{ctrl.target.refId}}">
+      Metric
+      <info-popover position="top center" mode="right-normal">
+        <p>Input for free metric definition</p>
+      </info-popover>
+    </label>
+    <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
+      <input id="in-metric-input-{{ctrl.target.refId}}" ng-model-options='{ debounce: 200 }' class="gf-form-input" type="text" ng-model="ctrl.target.metricInput" placeholder="Please Specify"/>
     </div>
   </div>
 </query-editor-row>

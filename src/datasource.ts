@@ -8,8 +8,11 @@ export default class InstanaDatasource {
   newApplicationModelEnabled: boolean;
   currentTime: () => number;
   snapshotCache: Object;
+  catalogPromise: Object;
+
   lastFetchedFromAPI: boolean;
 
+  CUSTOM_METRIC_TYPES = ["dropwizardApplicationContainer"];
   MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
   CACHE_MAX_AGE = 60000;
 
@@ -49,8 +52,10 @@ export default class InstanaDatasource {
     this.apiToken = instanceSettings.jsonData.apiToken;
     this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
     this.snapshotCache = {};
+
     this.currentTime = () => { return new Date().getTime(); };
   }
+
 
   storeInCache = (id, query, data) => {
     if (!this.snapshotCache) {
@@ -83,6 +88,24 @@ export default class InstanaDatasource {
     });
   }
 
+  getCatalog = () => {
+    if (!this.catalogPromise) {
+      this.catalogPromise = this.$q.resolve(
+        this.request('GET', "/api/metricsCatalog/custom").then(catalogResponse =>
+          this.$q.all(
+            _.map(catalogResponse.data, entry => ({
+              'key' : entry.metricId,
+              'label' : entry.label,
+              'type' : entry.pluginId
+            }))
+          )
+        )
+      );
+    }
+    return this.catalogPromise;
+  }
+
+
   query(options) {
     if (Object.keys(options.targets[0]).length === 0) {
       return this.$q.resolve({ data: [] });
@@ -107,7 +130,6 @@ export default class InstanaDatasource {
       return this.$q.all(
         _.map(targetsWithSnapshots, targetWithSnapshots => {
           // For every target with all snapshots that were returned by the lucene query...
-
           // Cache the data if fresh
           if (this.wasLastFetchedFromApi()) {
             this.storeInCache(

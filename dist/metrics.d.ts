@@ -1,6 +1,7 @@
 declare var _default: {
     "host": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "memory.free": string;
             "memory.used": string;
@@ -11,6 +12,7 @@ declare var _default: {
             "cpu.nice": string;
             "cpu.steal": string;
             "cpu.used": string;
+            "topPID": string;
             "swap.pgin": string;
             "swap.pgout": string;
             "tcp.established": string;
@@ -26,6 +28,7 @@ declare var _default: {
     };
     "activemq": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "totalQueuesEnqueueCount": string;
             "totalQueuesDequeueCount": string;
@@ -40,6 +43,7 @@ declare var _default: {
     };
     "application": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -56,6 +60,7 @@ declare var _default: {
     };
     "awsdynamodb": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "provisioned_read": string;
             "consumed_read": string;
@@ -132,6 +137,7 @@ declare var _default: {
     };
     "awsec": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "cpu_utilization": string;
             "freeable_memory": string;
@@ -147,6 +153,7 @@ declare var _default: {
     };
     "awselb": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "processed_bytes": string;
             "new_flow_count": string;
@@ -162,6 +169,7 @@ declare var _default: {
     };
     "awskinesis": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "get_records_records": string;
             "get_records_success": string;
@@ -180,6 +188,7 @@ declare var _default: {
     };
     "awslambda": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "invocations": string;
             "errors": string;
@@ -202,6 +211,7 @@ declare var _default: {
     };
     "awsrds": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "cpu_utilization": string;
             "cpu_credit_usage": string;
@@ -225,6 +235,7 @@ declare var _default: {
     };
     "awssqs": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "num_of_msg_delayed": string;
             "num_of_msg_not_visible": string;
@@ -236,6 +247,7 @@ declare var _default: {
     };
     "awss3": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "all_requests": string;
             "get_requests": string;
@@ -250,25 +262,27 @@ declare var _default: {
             "5xx_errors": string;
         };
     };
-    "batchserviceinstance": {
+    "azureappservice": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
-            "count": string;
-            "duration.mean": string;
-            "duration.min": string;
-            "duration.max": string;
-            "duration.25th": string;
-            "duration.50th": string;
-            "duration.75th": string;
-            "duration.95th": string;
-            "duration.98th": string;
-            "duration.99th": string;
-            "error_rate": string;
-            "instances": string;
+            "art": string;
+            "h2x": string;
+            "h4x": string;
+            "h5x": string;
+            "trs": string;
+            "qrs": string;
+            "bts": string;
+            "btr": string;
+            "g0c": string;
+            "g1c": string;
+            "g2c": string;
         };
     };
-    "browserlogicalconnection": {
+    "batchserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -286,6 +300,7 @@ declare var _default: {
     };
     "browserlogicalservice": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -314,6 +329,7 @@ declare var _default: {
     };
     "cassandracluster": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "clientrequests.read.count": string;
             "clientrequests.write.count": string;
@@ -332,6 +348,8 @@ declare var _default: {
     };
     "cassandrakeyspaceserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -349,6 +367,7 @@ declare var _default: {
     };
     "cassandranode": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "clientrequests.read.mean": string;
             "clientrequests.read.50": string;
@@ -386,6 +405,7 @@ declare var _default: {
     };
     "ceph": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "num_mons": string;
             "num_active_mons": string;
@@ -408,6 +428,7 @@ declare var _default: {
     };
     "clickhousedatabase": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "Merge": string;
             "ReplicatedFetch": string;
@@ -444,10 +465,74 @@ declare var _default: {
             "RWLockWaitingWriters": string;
             "RWLockActiveReaders": string;
             "RWLockActiveWriters": string;
+            "Query": string;
+            "SelectQuery": string;
+            "InsertQuery": string;
+            "FileOpen": string;
+            "Seek": string;
+            "ReadBufferFromFileDescriptorRead": string;
+            "ReadBufferFromFileDescriptorReadBytes": string;
+            "WriteBufferFromFileDescriptorWrite": string;
+            "WriteBufferFromFileDescriptorWriteBytes": string;
+            "ReadCompressedBytes": string;
+            "CompressedReadBufferBlocks": string;
+            "CompressedReadBufferBytes": string;
+            "IOBufferAllocs": string;
+            "IOBufferAllocBytes": string;
+            "ArenaAllocChunks": string;
+            "ArenaAllocBytes": string;
+            "FunctionExecute": string;
+            "TableFunctionExecute": string;
+            "MarkCacheHits": string;
+            "MarkCacheMisses": string;
+            "CreatedReadBufferOrdinary": string;
+            "CreatedWriteBufferOrdinary": string;
+            "ReplicatedPartMerges": string;
+            "InsertedRows": string;
+            "InsertedBytes": string;
+            "DuplicatedInsertedBlocks": string;
+            "ZooKeeperInit": string;
+            "ZooKeeperTransactions": string;
+            "ZooKeeperList": string;
+            "ZooKeeperCreate": string;
+            "ZooKeeperRemove": string;
+            "ZooKeeperExists": string;
+            "ZooKeeperGet": string;
+            "ZooKeeperSet": string;
+            "ZooKeeperMulti": string;
+            "ZooKeeperClose": string;
+            "ZooKeeperWatchResponse": string;
+            "ZooKeeperExceptions": string;
+            "ZooKeeperWaitMicroseconds": string;
+            "ZooKeeperBytesSent": string;
+            "ZooKeeperBytesReceived": string;
+            "DistributedConnectionStaleReplica": string;
+            "SlowRead": string;
+            "ReplicaPartialShutdown": string;
+            "SelectedParts": string;
+            "SelectedRanges": string;
+            "SelectedMarks": string;
+            "MergedRows": string;
+            "MergedUncompressedBytes": string;
+            "MergesTimeMilliseconds": string;
+            "MergeTreeDataWriterRows": string;
+            "MergeTreeDataWriterUncompressedBytes": string;
+            "MergeTreeDataWriterCompressedBytes": string;
+            "MergeTreeDataWriterBlocks": string;
+            "MergeTreeDataWriterBlocksAlreadySorted": string;
+            "CannotRemoveEphemeralNode": string;
+            "LeaderElectionAcquiredLeadership": string;
+            "RegexpCreated": string;
+            "ContextLock": string;
+            "RWLockAcquiredReadLocks": string;
+            "RWLockAcquiredWriteLocks": string;
+            "RWLockReadersWaitMilliseconds": string;
+            "RWLockWritersWaitMilliseconds": string;
         };
     };
     "clrruntimeplatform": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "mem.gen0GC": string;
             "mem.gen1GC": string;
@@ -461,12 +546,14 @@ declare var _default: {
     };
     "cloudfoundry": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "nodeCount": string;
         };
     };
     "consul": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "consul.runtime.free_count": string;
             "consul.runtime.heap_objects": string;
@@ -492,6 +579,7 @@ declare var _default: {
     };
     "couchbasecluster": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "cluster.usedDisk": string;
             "cluster.usedMemory": string;
@@ -503,6 +591,7 @@ declare var _default: {
     };
     "couchbasenode": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "node.mem_used": string;
             "node.couch_docs_actual_disk_size": string;
@@ -513,6 +602,7 @@ declare var _default: {
     };
     "crystalruntimeplatform": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "gc.hs": string;
             "gc.fb": string;
@@ -522,6 +612,8 @@ declare var _default: {
     };
     "databaseserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -539,6 +631,7 @@ declare var _default: {
     };
     "defaultentity20": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -555,6 +648,8 @@ declare var _default: {
     };
     "defaultlogicalconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -572,6 +667,7 @@ declare var _default: {
     };
     "defaultlogicalservice": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -589,6 +685,8 @@ declare var _default: {
     };
     "defaultserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -606,6 +704,7 @@ declare var _default: {
     };
     "docker": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "cpu.total_usage": string;
             "cpu.system_usage": string;
@@ -632,14 +731,13 @@ declare var _default: {
     };
     "dropwizardapplicationcontainer": {
         "label": string;
-        "metrics": {
-            "metrics.meters.com.instana.filler.topology.spans.SpansStreamInitializer.accepted-from-kafka-spans": string;
-            "metrics.meters.com.instana.filler.spanbuffer.ScheduledSpanBatcher.dropped-spans": string;
-            "metrics.meters.com.instana.filler.topology.RawMessagesStreamInitializer.dropped-messages": string;
-        };
+        "deprecated": boolean;
+        "metrics": {};
     };
     "ejblogicalconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -657,6 +755,7 @@ declare var _default: {
     };
     "ejblogicalservice": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -674,6 +773,8 @@ declare var _default: {
     };
     "ejbserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -691,6 +792,7 @@ declare var _default: {
     };
     "elasticsearchcluster": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "query_latency": string;
             "query_count": string;
@@ -710,6 +812,8 @@ declare var _default: {
     };
     "elasticsearchindexserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -727,6 +831,7 @@ declare var _default: {
     };
     "elasticsearchnode": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "indices.query_latency": string;
             "indices.query_count": string;
@@ -765,6 +870,7 @@ declare var _default: {
     };
     "etcd": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "requests_received": string;
             "requests_sent": string;
@@ -790,14 +896,18 @@ declare var _default: {
     };
     "finagleapplicationcontainer": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {};
     };
     "f5": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {};
     };
     "ftpserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -815,6 +925,7 @@ declare var _default: {
     };
     "glassfishapplicationcontainer": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "http_request_count": string;
             "http_error": string;
@@ -843,6 +954,7 @@ declare var _default: {
     };
     "golangruntimeplatform": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "metrics.memory.pause_ns": string;
             "metrics.goroutine": string;
@@ -855,6 +967,7 @@ declare var _default: {
     };
     "hadoopyarn": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "activeNodes": string;
             "lostNodes": string;
@@ -874,6 +987,7 @@ declare var _default: {
     };
     "hadoopyarnnode": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "allocatedVCores": string;
             "availableVCores": string;
@@ -883,10 +997,48 @@ declare var _default: {
     };
     "haproxy": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {};
+    };
+    "hazelcastcluster": {
+        "label": string;
+        "deprecated": boolean;
+        "metrics": {
+            "isClusterSafe": string;
+            "nodeCount": string;
+        };
+    };
+    "hazelcastnode": {
+        "label": string;
+        "deprecated": boolean;
+        "metrics": {
+            "nodeMetrics.clientEndpointCount": string;
+            "nodeMetrics.eventQueueSize": string;
+            "nodeMetrics.migrationQueueSize": string;
+            "isLiteMember": string;
+            "isLocalMemberSafe": string;
+            "isClusterSafe": string;
+            "distributedObjects.cacheCount": string;
+            "distributedObjects.mapCount": string;
+            "distributedObjects.replicatedMapCount": string;
+            "distributedObjects.multiMapCount": string;
+            "distributedObjects.queueCount": string;
+            "distributedObjects.listCount": string;
+            "distributedObjects.setCount": string;
+            "distributedObjects.topicCount": string;
+            "distributedObjects.executorCount": string;
+            "distributedObjects.otherCount": string;
+            "executorServiceQueueSize.asyncExecutor": string;
+            "executorServiceQueueSize.clientExecutor": string;
+            "executorServiceQueueSize.queryExecutor": string;
+            "executorServiceQueueSize.scheduledExecutor": string;
+            "executorServiceQueueSize.systemExecutor": string;
+            "executorServiceQueueSize.ioExecutor": string;
+        };
     };
     "httpd": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "requests": string;
             "kBytes": string;
@@ -910,6 +1062,7 @@ declare var _default: {
     };
     "instanaagent": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "cpu.load": string;
             "memory.used": string;
@@ -924,10 +1077,12 @@ declare var _default: {
     };
     "jbossasapplicationcontainer": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {};
     };
     "jbossdatagrid": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "hotRod.numberOfLocalConnections": string;
             "hotRod.numberOfGlobalConnections": string;
@@ -935,6 +1090,7 @@ declare var _default: {
     };
     "jettyapplicationcontainer": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "idleThreads": string;
             "busyThreads": string;
@@ -944,6 +1100,7 @@ declare var _default: {
     };
     "jiraapplication": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "instruments.http.sessions": string;
             "instruments.concurrent.requests": string;
@@ -952,18 +1109,19 @@ declare var _default: {
     };
     "jvmruntimeplatform": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "threads.new": string;
             "threads.runnable": string;
             "threads.timed-waiting": string;
             "threads.waiting": string;
             "threads.blocked": string;
-            "threads.terminated": string;
             "memory.used": string;
         };
     };
     "kafka": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "broker.bytesIn": string;
             "broker.bytesOut": string;
@@ -993,12 +1151,14 @@ declare var _default: {
     };
     "kafkacluster": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "nodeCount": string;
         };
     };
     "kubernetescluster": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "allocatedCapacityPodsRatio": string;
             "requiredCapacityCPURatio": string;
@@ -1026,6 +1186,7 @@ declare var _default: {
     };
     "kubernetespod": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "containers.count": string;
             "cpuRequests": string;
@@ -1036,6 +1197,7 @@ declare var _default: {
     };
     "kubernetesnode": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "allocatedPods": string;
             "cap_pods": string;
@@ -1054,6 +1216,7 @@ declare var _default: {
     };
     "kubernetesdeployment": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "availableReplicas": string;
             "desiredReplicas": string;
@@ -1070,6 +1233,7 @@ declare var _default: {
     };
     "openshiftdeploymentconfig": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "availableReplicas": string;
             "desiredReplicas": string;
@@ -1086,6 +1250,8 @@ declare var _default: {
     };
     "ldaplogicalconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1103,6 +1269,7 @@ declare var _default: {
     };
     "ldaplogicalservice": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1120,6 +1287,8 @@ declare var _default: {
     };
     "ldapserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1137,6 +1306,7 @@ declare var _default: {
     };
     "logicalbatch": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1154,6 +1324,8 @@ declare var _default: {
     };
     "logicalbatchconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1171,6 +1343,8 @@ declare var _default: {
     };
     "logicalcassandraconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1188,6 +1362,7 @@ declare var _default: {
     };
     "logicaldatabase": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1205,6 +1380,8 @@ declare var _default: {
     };
     "logicaldatabaseconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1222,6 +1399,8 @@ declare var _default: {
     };
     "logicalejbconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1239,6 +1418,8 @@ declare var _default: {
     };
     "logicalelasticsearchconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1256,6 +1437,7 @@ declare var _default: {
     };
     "logicalelasticsearchindex": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1273,6 +1455,8 @@ declare var _default: {
     };
     "logicalftpconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1290,6 +1474,7 @@ declare var _default: {
     };
     "logicalftpservice": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1307,6 +1492,8 @@ declare var _default: {
     };
     "logicalhttpconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1324,6 +1511,8 @@ declare var _default: {
     };
     "logicaljdbcconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1341,6 +1530,8 @@ declare var _default: {
     };
     "logicalkafkaconsumerconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1358,6 +1549,8 @@ declare var _default: {
     };
     "logicalkafkapublisherconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1375,6 +1568,7 @@ declare var _default: {
     };
     "logicalmessagebroker": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1392,6 +1586,7 @@ declare var _default: {
     };
     "logicalmessageconsumer": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1409,6 +1604,8 @@ declare var _default: {
     };
     "logicalmessageconsumerconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1426,6 +1623,8 @@ declare var _default: {
     };
     "logicalmessagepublisherconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1443,6 +1642,8 @@ declare var _default: {
     };
     "logicalmongodbconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1460,6 +1661,7 @@ declare var _default: {
     };
     "logicalmongodbdatabase": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1477,6 +1679,8 @@ declare var _default: {
     };
     "logicalmsmqconsumerconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1494,6 +1698,45 @@ declare var _default: {
     };
     "logicalmsmqpublisherconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
+        "metrics": {
+            "count": string;
+            "duration.mean": string;
+            "duration.min": string;
+            "duration.max": string;
+            "duration.25th": string;
+            "duration.50th": string;
+            "duration.75th": string;
+            "duration.95th": string;
+            "duration.98th": string;
+            "duration.99th": string;
+            "error_rate": string;
+            "instances": string;
+        };
+    };
+    "logicalneo4jconnection": {
+        "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
+        "metrics": {
+            "count": string;
+            "duration.mean": string;
+            "duration.min": string;
+            "duration.max": string;
+            "duration.25th": string;
+            "duration.50th": string;
+            "duration.75th": string;
+            "duration.95th": string;
+            "duration.98th": string;
+            "duration.99th": string;
+            "error_rate": string;
+            "instances": string;
+        };
+    };
+    "logicalneo4jdatabase": {
+        "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1511,6 +1754,8 @@ declare var _default: {
     };
     "logicalrabbitmqconsumerconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1528,6 +1773,8 @@ declare var _default: {
     };
     "logicalrabbitmqpublisherconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1545,6 +1792,8 @@ declare var _default: {
     };
     "logicalredisconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1562,6 +1811,7 @@ declare var _default: {
     };
     "logicalredisdatabase": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1579,6 +1829,8 @@ declare var _default: {
     };
     "logicalrpcconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1596,6 +1848,8 @@ declare var _default: {
     };
     "logicalrpcendpoint": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1613,6 +1867,7 @@ declare var _default: {
     };
     "logicalwebapp": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1630,6 +1885,7 @@ declare var _default: {
     };
     "mariadbdatabase": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "status.THREADS_CONNECTED": string;
             "status.MAX_USED_CONNECTIONS": string;
@@ -1645,6 +1901,7 @@ declare var _default: {
     };
     "memcached": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "cmd_get": string;
             "cmd_set": string;
@@ -1666,6 +1923,8 @@ declare var _default: {
     };
     "messagebrokerserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1683,6 +1942,8 @@ declare var _default: {
     };
     "messageconsumerserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1700,6 +1961,7 @@ declare var _default: {
     };
     "mongodb": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "documents.deleted": string;
             "documents.inserted": string;
@@ -1722,6 +1984,8 @@ declare var _default: {
     };
     "mongodbdatabaseserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -1737,12 +2001,38 @@ declare var _default: {
             "instances": string;
         };
     };
+    "mongodbreplicaset": {
+        "label": string;
+        "deprecated": boolean;
+        "metrics": {
+            "nodeCount": string;
+            "documents.deleted": string;
+            "documents.inserted": string;
+            "documents.returned": string;
+            "documents.updated": string;
+            "connections": string;
+            "repl.apply_ops": string;
+            "repl.apply_bathes": string;
+            "repl.apply_bathes_total_ms": string;
+            "repl.buffer_count": string;
+            "repl.buffer_size_bytes": string;
+            "repl.network_ops": string;
+            "repl.network_bytes": string;
+            "repl.preload_docs_num": string;
+            "repl.preload_docs_total_ms": string;
+            "repl.preload_idx_num": string;
+            "repl.preload_idx_total_ms": string;
+            "repl.replication_lag": string;
+        };
+    };
     "msiis": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {};
     };
     "mssqldatabase": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "generalstats._total.user_connections": string;
             "waitstats.PAGEIOLATCH_EX.wait_time_ms": string;
@@ -1760,10 +2050,12 @@ declare var _default: {
     };
     "mule": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {};
     };
     "mysqldatabase": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "status.COM_SELECT": string;
             "status.COM_UPDATE": string;
@@ -1784,6 +2076,7 @@ declare var _default: {
     };
     "netcoreruntimeplatform": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "metrics.gcCount": string;
             "metrics.exceptionThrownCount": string;
@@ -1794,8 +2087,28 @@ declare var _default: {
             "metrics.heapSizeGen3": string;
         };
     };
+    "neo4jserviceinstance": {
+        "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
+        "metrics": {
+            "count": string;
+            "duration.mean": string;
+            "duration.min": string;
+            "duration.max": string;
+            "duration.25th": string;
+            "duration.50th": string;
+            "duration.75th": string;
+            "duration.95th": string;
+            "duration.98th": string;
+            "duration.99th": string;
+            "error_rate": string;
+            "instances": string;
+        };
+    };
     "nginx": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "requests": string;
             "connections.accepted": string;
@@ -1809,6 +2122,7 @@ declare var _default: {
     };
     "nodejsruntimeplatform": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "gc.gcPause": string;
             "activeHandles": string;
@@ -1827,6 +2141,7 @@ declare var _default: {
     };
     "nomadscheduler": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "nomad.client.allocated.cpu": string;
             "nomad.client.allocated.disk": string;
@@ -1866,6 +2181,7 @@ declare var _default: {
     };
     "oracledb": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "stats.dbTime": string;
             "stats.cpuTime": string;
@@ -1903,63 +2219,21 @@ declare var _default: {
             "stats.usedSessionsRatio": string;
         };
     };
-    "pageresourcelogicalconnection": {
+    "ping": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
-            "count": string;
-            "duration.mean": string;
-            "duration.min": string;
-            "duration.max": string;
-            "duration.25th": string;
-            "duration.50th": string;
-            "duration.75th": string;
-            "duration.95th": string;
-            "duration.98th": string;
-            "duration.99th": string;
-            "error_rate": string;
-            "instances": string;
-        };
-    };
-    "pageresourcelogicalservice": {
-        "label": string;
-        "metrics": {
-            "count": string;
-            "duration.mean": string;
-            "duration.min": string;
-            "duration.max": string;
-            "duration.25th": string;
-            "duration.50th": string;
-            "duration.75th": string;
-            "duration.95th": string;
-            "duration.98th": string;
-            "duration.99th": string;
-            "error_rate": string;
-            "instances": string;
-        };
-    };
-    "pageresourceserviceinstance": {
-        "label": string;
-        "metrics": {
-            "count": string;
-            "duration.mean": string;
-            "duration.min": string;
-            "duration.max": string;
-            "duration.25th": string;
-            "duration.50th": string;
-            "duration.75th": string;
-            "duration.95th": string;
-            "duration.98th": string;
-            "duration.99th": string;
-            "error_rate": string;
-            "instances": string;
+            "duration": string;
         };
     };
     "phpfpmruntimeplatform": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {};
     };
     "postgresqldatabase": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "totalCommittedTransactions": string;
             "max_conn_pct": string;
@@ -1968,16 +2242,20 @@ declare var _default: {
     };
     "process": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "mem.virtual": string;
             "mem.resident": string;
             "mem.share": string;
             "cpu.user": string;
             "cpu.sys": string;
+            "ctx_switches.voluntary": string;
+            "ctx_switches.nonvoluntary": string;
         };
     };
     "pythonruntimeplatform": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "metrics.ru_utime": string;
             "metrics.ru_stime": string;
@@ -2008,6 +2286,7 @@ declare var _default: {
     };
     "rabbitmq": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "overview.publish_rate": string;
             "overview.deliver_rate": string;
@@ -2023,6 +2302,8 @@ declare var _default: {
     };
     "redisserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -2040,6 +2321,8 @@ declare var _default: {
     };
     "rpcendpointserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -2057,6 +2340,7 @@ declare var _default: {
     };
     "rubyruntimeplatform": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "memory.rss_size": string;
             "gc.heap_live": string;
@@ -2069,6 +2353,7 @@ declare var _default: {
     };
     "saphana": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "stats.usedMemory": string;
             "stats.residentMemory": string;
@@ -2105,6 +2390,8 @@ declare var _default: {
     };
     "sdklogicalconnection": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -2122,6 +2409,7 @@ declare var _default: {
     };
     "sdklogicalservice": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -2139,6 +2427,8 @@ declare var _default: {
     };
     "sdkserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -2156,6 +2446,7 @@ declare var _default: {
     };
     "service": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -2172,10 +2463,12 @@ declare var _default: {
     };
     "solr": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {};
     };
     "sparkapplication": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "failedJobs": string;
             "completedJobs": string;
@@ -2196,6 +2489,7 @@ declare var _default: {
     };
     "sparkstandalone": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "workers.aliveWorkers": string;
             "workers.deadWorkers": string;
@@ -2209,6 +2503,7 @@ declare var _default: {
     };
     "springbootapplicationcontainer": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "metrics.requests": string;
             "metrics.statusCode.1xx": string;
@@ -2221,6 +2516,7 @@ declare var _default: {
     };
     "unknownservice": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -2238,6 +2534,7 @@ declare var _default: {
     };
     "varnish": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "sess_conn": string;
             "client_req": string;
@@ -2265,6 +2562,8 @@ declare var _default: {
     };
     "webappserviceinstance": {
         "label": string;
+        "deprecated": boolean;
+        "deprecationReason": string;
         "metrics": {
             "count": string;
             "duration.mean": string;
@@ -2282,6 +2581,7 @@ declare var _default: {
     };
     "weblogicapplicationcontainer": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "threadPool.idleThreads": string;
             "threadPool.totalThreads": string;
@@ -2297,6 +2597,7 @@ declare var _default: {
     };
     "websphereapplicationcontainer": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "threadPools.webContainer.activeThreads": string;
             "threadPools.webContainer.poolSize": string;
@@ -2304,6 +2605,7 @@ declare var _default: {
     };
     "webspherelibertyapplicationcontainer": {
         "label": string;
+        "deprecated": boolean;
         "metrics": {
             "threadPool.activeThreads": string;
             "threadPool.poolSize": string;

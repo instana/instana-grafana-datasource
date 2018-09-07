@@ -14,6 +14,7 @@ System.register(['lodash'], function(exports_1) {
                     this.backendSrv = backendSrv;
                     this.templateSrv = templateSrv;
                     this.$q = $q;
+                    this.CUSTOM_METRIC_TYPES = ["dropwizardApplicationContainer"];
                     this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
                     this.CACHE_MAX_AGE = 60000;
                     this.rollupDurationThresholds = [
@@ -58,6 +59,18 @@ System.register(['lodash'], function(exports_1) {
                     this.getSnapshotCache = function () { return _this.snapshotCache; };
                     this.wasLastFetchedFromApi = function () { return _this.lastFetchedFromAPI; };
                     this.setLastFetchedFromApi = function (value) { _this.lastFetchedFromAPI = value; };
+                    this.getCatalog = function () {
+                        if (!_this.catalogPromise) {
+                            _this.catalogPromise = _this.$q.resolve(_this.request('GET', "/api/metricsCatalog/custom").then(function (catalogResponse) {
+                                return _this.$q.all(lodash_1.default.map(catalogResponse.data, function (entry) { return ({
+                                    'key': entry.metricId,
+                                    'label': entry.label,
+                                    'type': entry.pluginId
+                                }); }));
+                            }));
+                        }
+                        return _this.catalogPromise;
+                    };
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
                     this.url = instanceSettings.jsonData.url;

@@ -5,6 +5,7 @@ System.register([], function(exports_1) {
             exports_1("default",{
                 "host": {
                     "label": "Hosts",
+                    "deprecated": false,
                     "metrics": {
                         "memory.free": "Free",
                         "memory.used": "Used",
@@ -15,6 +16,7 @@ System.register([], function(exports_1) {
                         "cpu.nice": "Nice",
                         "cpu.steal": "Steal",
                         "cpu.used": "Used",
+                        "topPID": "Top PID",
                         "swap.pgin": "Page-In",
                         "swap.pgout": "Page-Out",
                         "tcp.established": "Established",
@@ -30,6 +32,7 @@ System.register([], function(exports_1) {
                 },
                 "activemq": {
                     "label": "ActiveMQs",
+                    "deprecated": false,
                     "metrics": {
                         "totalQueuesEnqueueCount": "All Queues Messages Enqueue",
                         "totalQueuesDequeueCount": "All Queues Messages Dequeue",
@@ -44,6 +47,7 @@ System.register([], function(exports_1) {
                 },
                 "application": {
                     "label": "Applications",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -60,6 +64,7 @@ System.register([], function(exports_1) {
                 },
                 "awsdynamodb": {
                     "label": "AWS DynamoDB Tables",
+                    "deprecated": false,
                     "metrics": {
                         "provisioned_read": "Provisioned read capacity",
                         "consumed_read": "Consumed read capacity",
@@ -136,6 +141,7 @@ System.register([], function(exports_1) {
                 },
                 "awsec": {
                     "label": "AWS ECs",
+                    "deprecated": false,
                     "metrics": {
                         "cpu_utilization": "CPU Utilization",
                         "freeable_memory": "Freeable memory",
@@ -151,6 +157,7 @@ System.register([], function(exports_1) {
                 },
                 "awselb": {
                     "label": "AWS ELBs",
+                    "deprecated": false,
                     "metrics": {
                         "processed_bytes": "Processed Bytes",
                         "new_flow_count": "New Flow Count",
@@ -166,6 +173,7 @@ System.register([], function(exports_1) {
                 },
                 "awskinesis": {
                     "label": "AWS Kinesis streams",
+                    "deprecated": false,
                     "metrics": {
                         "get_records_records": "Get Records records",
                         "get_records_success": "Get Records success",
@@ -184,6 +192,7 @@ System.register([], function(exports_1) {
                 },
                 "awslambda": {
                     "label": "AWS Lambdas",
+                    "deprecated": false,
                     "metrics": {
                         "invocations": "Invocations",
                         "errors": "Errors",
@@ -206,6 +215,7 @@ System.register([], function(exports_1) {
                 },
                 "awsrds": {
                     "label": "AWS RDSs",
+                    "deprecated": false,
                     "metrics": {
                         "cpu_utilization": "CPU Usage",
                         "cpu_credit_usage": "CPU Credit Usage",
@@ -229,6 +239,7 @@ System.register([], function(exports_1) {
                 },
                 "awssqs": {
                     "label": "AWS SQSs",
+                    "deprecated": false,
                     "metrics": {
                         "num_of_msg_delayed": "Number of messages delayed",
                         "num_of_msg_not_visible": "Number of messages not visible",
@@ -240,6 +251,7 @@ System.register([], function(exports_1) {
                 },
                 "awss3": {
                     "label": "AWS S3 Buckets",
+                    "deprecated": false,
                     "metrics": {
                         "all_requests": "All Requests",
                         "get_requests": "Get Requests",
@@ -254,25 +266,27 @@ System.register([], function(exports_1) {
                         "5xx_errors": "Total Request Latency"
                     }
                 },
-                "batchserviceinstance": {
-                    "label": "Batch Job Instances",
+                "azureappservice": {
+                    "label": "Azure AppService",
+                    "deprecated": false,
                     "metrics": {
-                        "count": "Calls",
-                        "duration.mean": "Avg. Latency",
-                        "duration.min": "Min Latency",
-                        "duration.max": "Max Latency",
-                        "duration.25th": "Latency 25th",
-                        "duration.50th": "Latency 50th",
-                        "duration.75th": "Latency 75th",
-                        "duration.95th": "Latency 95th",
-                        "duration.98th": "Latency 98th",
-                        "duration.99th": "Latency 99th",
-                        "error_rate": "Error Rate",
-                        "instances": "Instances"
+                        "art": "Average Response-Time",
+                        "h2x": "Number of HTTP 2xx responses",
+                        "h4x": "Number of HTTP 2xx responses",
+                        "h5x": "Number of HTTP 5xx responses",
+                        "trs": "Number of requests",
+                        "qrs": "Number of queued requests",
+                        "bts": "Bytes Sent",
+                        "btr": "Bytes Received",
+                        "g0c": "Generation 0 Collections",
+                        "g1c": "Generation 1 Collections",
+                        "g2c": "Generation 2 Collections"
                     }
                 },
-                "browserlogicalconnection": {
-                    "label": "Website Connections",
+                "batchserviceinstance": {
+                    "label": "Batch Job Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -290,6 +304,7 @@ System.register([], function(exports_1) {
                 },
                 "browserlogicalservice": {
                     "label": "Websites",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Page Loads",
                         "duration.mean": "Mean Load Time",
@@ -318,6 +333,7 @@ System.register([], function(exports_1) {
                 },
                 "cassandracluster": {
                     "label": "Cassandra Clusters",
+                    "deprecated": false,
                     "metrics": {
                         "clientrequests.read.count": "Read",
                         "clientrequests.write.count": "Write",
@@ -336,6 +352,8 @@ System.register([], function(exports_1) {
                 },
                 "cassandrakeyspaceserviceinstance": {
                     "label": "Cassandra Keyspace Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -353,6 +371,7 @@ System.register([], function(exports_1) {
                 },
                 "cassandranode": {
                     "label": "Cassandra Nodes",
+                    "deprecated": false,
                     "metrics": {
                         "clientrequests.read.mean": "Mean",
                         "clientrequests.read.50": "50th Percentile",
@@ -390,6 +409,7 @@ System.register([], function(exports_1) {
                 },
                 "ceph": {
                     "label": "Ceph instances",
+                    "deprecated": false,
                     "metrics": {
                         "num_mons": "Number of monitors",
                         "num_active_mons": "Number of active monitors",
@@ -412,46 +432,111 @@ System.register([], function(exports_1) {
                 },
                 "clickhousedatabase": {
                     "label": "ClickHouse DBs",
+                    "deprecated": false,
                     "metrics": {
                         "Merge": "Merge",
-                        "ReplicatedFetch": "Replicated Fetch",
-                        "ReplicatedSend": "Replicated Send",
-                        "ReplicatedChecks": "Replicated Checks",
-                        "BackgroundPoolTask": "Background Pool Task",
-                        "DiskSpaceReservedForMerge": "Disk Space Reserved For Merge",
-                        "DistributedSend": "Distributed Send",
-                        "QueryPreempted": "Query Preempted",
-                        "TCPConnection": "TCP Connection",
-                        "HTTPConnection": "HTTP Connection",
-                        "InterserverConnection": "Interserver Connection",
-                        "OpenFileForRead": "Open File For Read",
-                        "OpenFileForWrite": "Open File For Write",
+                        "ReplicatedFetch": "ReplicatedFetch",
+                        "ReplicatedSend": "ReplicatedSend",
+                        "ReplicatedChecks": "ReplicatedChecks",
+                        "BackgroundPoolTask": "BackgroundPoolTask",
+                        "DiskSpaceReservedForMerge": "DiskSpaceReservedForMerge",
+                        "DistributedSend": "DistributedSend",
+                        "QueryPreempted": "QueryPreempted",
+                        "TCPConnection": "TCPConnection",
+                        "HTTPConnection": "HTTPConnection",
+                        "InterserverConnection": "InterserverConnection",
+                        "OpenFileForRead": "OpenFileForRead",
+                        "OpenFileForWrite": "OpenFileForWrite",
                         "Read": "Read",
                         "Write": "Write",
-                        "SendExternalTables": "Send External Tables",
-                        "QueryThread": "Query Thread",
-                        "ReadonlyReplica": "Readonly Replica",
-                        "LeaderReplica": "Leader Replica",
-                        "MemoryTracking": "Memory Tracking",
-                        "MemoryTrackingInBackgroundProcessingPool": "Memory Tracking In Background Processing Pool",
-                        "MemoryTrackingForMerges": "Memory Tracking For Merges",
-                        "LeaderElection": "Leader Election",
-                        "EphemeralNode": "Ephemeral Node",
-                        "ZooKeeperWatch": "Zoo Keeper Watch",
-                        "DelayedInserts": "Delayed Inserts",
-                        "ContextLockWait": "Context Lock Wait",
-                        "StorageBufferRows": "Storage Buffer Rows",
-                        "StorageBufferBytes": "Storage Buffer Bytes",
-                        "DictCacheRequests": "Dict Cache Requests",
+                        "SendExternalTables": "SendExternalTables",
+                        "QueryThread": "QueryThread",
+                        "ReadonlyReplica": "ReadonlyReplica",
+                        "LeaderReplica": "LeaderReplica",
+                        "MemoryTracking": "MemoryTracking",
+                        "MemoryTrackingInBackgroundProcessingPool": "MemoryTrackingInBackgroundProcessingPool",
+                        "MemoryTrackingForMerges": "MemoryTrackingForMerges",
+                        "LeaderElection": "LeaderElection",
+                        "EphemeralNode": "EphemeralNode",
+                        "ZooKeeperWatch": "ZooKeeperWatch",
+                        "DelayedInserts": "DelayedInserts",
+                        "ContextLockWait": "ContextLockWait",
+                        "StorageBufferRows": "StorageBufferRows",
+                        "StorageBufferBytes": "StorageBufferBytes",
+                        "DictCacheRequests": "DictCacheRequests",
                         "Revision": "Revision",
-                        "RWLockWaitingReaders": "RW Lock Waiting Readers",
-                        "RWLockWaitingWriters": "RW Lock Waiting Writers",
-                        "RWLockActiveReaders": "RW Lock Active Readers",
-                        "RWLockActiveWriters": "RW Lock Active Writers"
+                        "RWLockWaitingReaders": "RWLockWaitingReaders",
+                        "RWLockWaitingWriters": "RWLockWaitingWriters",
+                        "RWLockActiveReaders": "RWLockActiveReaders",
+                        "RWLockActiveWriters": "RWLockActiveWriters",
+                        "Query": "Query",
+                        "SelectQuery": "SelectQuery",
+                        "InsertQuery": "InsertQuery",
+                        "FileOpen": "FileOpen",
+                        "Seek": "Seek",
+                        "ReadBufferFromFileDescriptorRead": "ReadBufferFromFileDescriptorRead",
+                        "ReadBufferFromFileDescriptorReadBytes": "ReadBufferFromFileDescriptorReadBytes",
+                        "WriteBufferFromFileDescriptorWrite": "WriteBufferFromFileDescriptorWrite",
+                        "WriteBufferFromFileDescriptorWriteBytes": "WriteBufferFromFileDescriptorWriteBytes",
+                        "ReadCompressedBytes": "ReadCompressedBytes",
+                        "CompressedReadBufferBlocks": "CompressedReadBufferBlocks",
+                        "CompressedReadBufferBytes": "CompressedReadBufferBytes",
+                        "IOBufferAllocs": "IOBufferAllocs",
+                        "IOBufferAllocBytes": "IOBufferAllocBytes",
+                        "ArenaAllocChunks": "ArenaAllocChunks",
+                        "ArenaAllocBytes": "ArenaAllocBytes",
+                        "FunctionExecute": "FunctionExecute",
+                        "TableFunctionExecute": "TableFunctionExecute",
+                        "MarkCacheHits": "MarkCacheHits",
+                        "MarkCacheMisses": "MarkCacheMisses",
+                        "CreatedReadBufferOrdinary": "CreatedReadBufferOrdinary",
+                        "CreatedWriteBufferOrdinary": "CreatedWriteBufferOrdinary",
+                        "ReplicatedPartMerges": "ReplicatedPartMerges",
+                        "InsertedRows": "InsertedRows",
+                        "InsertedBytes": "InsertedBytes",
+                        "DuplicatedInsertedBlocks": "DuplicatedInsertedBlocks",
+                        "ZooKeeperInit": "ZooKeeperInit",
+                        "ZooKeeperTransactions": "ZooKeeperTransactions",
+                        "ZooKeeperList": "ZooKeeperList",
+                        "ZooKeeperCreate": "ZooKeeperCreate",
+                        "ZooKeeperRemove": "ZooKeeperRemove",
+                        "ZooKeeperExists": "ZooKeeperExists",
+                        "ZooKeeperGet": "ZooKeeperGet",
+                        "ZooKeeperSet": "ZooKeeperSet",
+                        "ZooKeeperMulti": "ZooKeeperMulti",
+                        "ZooKeeperClose": "ZooKeeperClose",
+                        "ZooKeeperWatchResponse": "ZooKeeperWatchResponse",
+                        "ZooKeeperExceptions": "ZooKeeperExceptions",
+                        "ZooKeeperWaitMicroseconds": "ZooKeeperWaitMicroseconds",
+                        "ZooKeeperBytesSent": "ZooKeeperBytesSent",
+                        "ZooKeeperBytesReceived": "ZooKeeperBytesReceived",
+                        "DistributedConnectionStaleReplica": "DistributedConnectionStaleReplica",
+                        "SlowRead": "SlowRead",
+                        "ReplicaPartialShutdown": "ReplicaPartialShutdown",
+                        "SelectedParts": "SelectedParts",
+                        "SelectedRanges": "SelectedRanges",
+                        "SelectedMarks": "SelectedMarks",
+                        "MergedRows": "MergedRows",
+                        "MergedUncompressedBytes": "MergedUncompressedBytes",
+                        "MergesTimeMilliseconds": "MergesTimeMilliseconds",
+                        "MergeTreeDataWriterRows": "MergeTreeDataWriterRows",
+                        "MergeTreeDataWriterUncompressedBytes": "MergeTreeDataWriterUncompressedBytes",
+                        "MergeTreeDataWriterCompressedBytes": "MergeTreeDataWriterCompressedBytes",
+                        "MergeTreeDataWriterBlocks": "MergeTreeDataWriterBlocks",
+                        "MergeTreeDataWriterBlocksAlreadySorted": "MergeTreeDataWriterBlocksAlreadySorted",
+                        "CannotRemoveEphemeralNode": "CannotRemoveEphemeralNode",
+                        "LeaderElectionAcquiredLeadership": "LeaderElectionAcquiredLeadership",
+                        "RegexpCreated": "RegexpCreated",
+                        "ContextLock": "ContextLock",
+                        "RWLockAcquiredReadLocks": "RWLockAcquiredReadLocks",
+                        "RWLockAcquiredWriteLocks": "RWLockAcquiredWriteLocks",
+                        "RWLockReadersWaitMilliseconds": "RWLockReadersWaitMilliseconds",
+                        "RWLockWritersWaitMilliseconds": "RWLockWritersWaitMilliseconds"
                     }
                 },
                 "clrruntimeplatform": {
                     "label": ".NET Apps",
+                    "deprecated": false,
                     "metrics": {
                         "mem.gen0GC": "Generation 0",
                         "mem.gen1GC": "Generation 1",
@@ -465,12 +550,14 @@ System.register([], function(exports_1) {
                 },
                 "cloudfoundry": {
                     "label": "CloudFoundry",
+                    "deprecated": false,
                     "metrics": {
                         "nodeCount": "Nodes"
                     }
                 },
                 "consul": {
-                    "label": "Consul Clients",
+                    "label": "Consul Nodes",
+                    "deprecated": false,
                     "metrics": {
                         "consul.runtime.free_count": "Number of freed heap objects",
                         "consul.runtime.heap_objects": "Number of objects allocated on the heap",
@@ -496,6 +583,7 @@ System.register([], function(exports_1) {
                 },
                 "couchbasecluster": {
                     "label": "Couchbase Clusters",
+                    "deprecated": false,
                     "metrics": {
                         "cluster.usedDisk": "Used disk (bytes)",
                         "cluster.usedMemory": "Used memory (bytes)",
@@ -507,6 +595,7 @@ System.register([], function(exports_1) {
                 },
                 "couchbasenode": {
                     "label": "Couchbase Nodes",
+                    "deprecated": false,
                     "metrics": {
                         "node.mem_used": "Used memory (bytes)",
                         "node.couch_docs_actual_disk_size": "Used disk (bytes)",
@@ -517,6 +606,7 @@ System.register([], function(exports_1) {
                 },
                 "crystalruntimeplatform": {
                     "label": "Crystal Apps",
+                    "deprecated": false,
                     "metrics": {
                         "gc.hs": "Size",
                         "gc.fb": "Free",
@@ -526,6 +616,8 @@ System.register([], function(exports_1) {
                 },
                 "databaseserviceinstance": {
                     "label": "Database Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -543,6 +635,7 @@ System.register([], function(exports_1) {
                 },
                 "defaultentity20": {
                     "label": "defaultEntity20",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -559,6 +652,8 @@ System.register([], function(exports_1) {
                 },
                 "defaultlogicalconnection": {
                     "label": "Unspecified Logical Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -576,6 +671,7 @@ System.register([], function(exports_1) {
                 },
                 "defaultlogicalservice": {
                     "label": "Services",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -593,6 +689,8 @@ System.register([], function(exports_1) {
                 },
                 "defaultserviceinstance": {
                     "label": "Service Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -610,6 +708,7 @@ System.register([], function(exports_1) {
                 },
                 "docker": {
                     "label": "Docker Containers",
+                    "deprecated": false,
                     "metrics": {
                         "cpu.total_usage": "Total",
                         "cpu.system_usage": "Kernel",
@@ -636,14 +735,13 @@ System.register([], function(exports_1) {
                 },
                 "dropwizardapplicationcontainer": {
                     "label": "Dropwizard Apps",
-                    "metrics": {
-                        "metrics.meters.com.instana.filler.topology.spans.SpansStreamInitializer.accepted-from-kafka-spans": "Accepted Spans",
-                        "metrics.meters.com.instana.filler.spanbuffer.ScheduledSpanBatcher.dropped-spans": "Dropped Spans",
-                        "metrics.meters.com.instana.filler.topology.RawMessagesStreamInitializer.dropped-messages": "Dropped Messages"
-                    }
+                    "deprecated": false,
+                    "metrics": {}
                 },
                 "ejblogicalconnection": {
                     "label": "Logical EJB Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -661,6 +759,7 @@ System.register([], function(exports_1) {
                 },
                 "ejblogicalservice": {
                     "label": "EJBs",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -678,6 +777,8 @@ System.register([], function(exports_1) {
                 },
                 "ejbserviceinstance": {
                     "label": "EJB Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -695,6 +796,7 @@ System.register([], function(exports_1) {
                 },
                 "elasticsearchcluster": {
                     "label": "Elasticsearch Clusters",
+                    "deprecated": false,
                     "metrics": {
                         "query_latency": "Latency",
                         "query_count": "Number Of Queries",
@@ -714,6 +816,8 @@ System.register([], function(exports_1) {
                 },
                 "elasticsearchindexserviceinstance": {
                     "label": "Elasticsearch Index Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -731,6 +835,7 @@ System.register([], function(exports_1) {
                 },
                 "elasticsearchnode": {
                     "label": "Elasticsearch Nodes",
+                    "deprecated": false,
                     "metrics": {
                         "indices.query_latency": "Latency",
                         "indices.query_count": "Number Of Queries",
@@ -769,6 +874,7 @@ System.register([], function(exports_1) {
                 },
                 "etcd": {
                     "label": "Etcd Nodes",
+                    "deprecated": false,
                     "metrics": {
                         "requests_received": "Received",
                         "requests_sent": "Sent",
@@ -794,14 +900,18 @@ System.register([], function(exports_1) {
                 },
                 "finagleapplicationcontainer": {
                     "label": "Finagle Apps",
+                    "deprecated": false,
                     "metrics": {}
                 },
                 "f5": {
                     "label": "F5",
+                    "deprecated": false,
                     "metrics": {}
                 },
                 "ftpserviceinstance": {
                     "label": "FTP Server Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -819,6 +929,7 @@ System.register([], function(exports_1) {
                 },
                 "glassfishapplicationcontainer": {
                     "label": "Glassfish",
+                    "deprecated": false,
                     "metrics": {
                         "http_request_count": "Requests",
                         "http_error": "Errors",
@@ -847,6 +958,7 @@ System.register([], function(exports_1) {
                 },
                 "golangruntimeplatform": {
                     "label": "Go Apps",
+                    "deprecated": false,
                     "metrics": {
                         "metrics.memory.pause_ns": "GC Pause",
                         "metrics.goroutine": "Executed Goroutines",
@@ -859,6 +971,7 @@ System.register([], function(exports_1) {
                 },
                 "hadoopyarn": {
                     "label": "Hadoop YARNs",
+                    "deprecated": false,
                     "metrics": {
                         "activeNodes": "Active Nodes",
                         "lostNodes": "Lost Nodes",
@@ -878,6 +991,7 @@ System.register([], function(exports_1) {
                 },
                 "hadoopyarnnode": {
                     "label": "Hadoop YARN Nodes",
+                    "deprecated": false,
                     "metrics": {
                         "allocatedVCores": "Allocated Virtual Cores",
                         "availableVCores": "Available Virtual Cores",
@@ -887,10 +1001,48 @@ System.register([], function(exports_1) {
                 },
                 "haproxy": {
                     "label": "HAProxy",
+                    "deprecated": false,
                     "metrics": {}
+                },
+                "hazelcastcluster": {
+                    "label": "HazelcastClusters",
+                    "deprecated": false,
+                    "metrics": {
+                        "isClusterSafe": "Is Cluster Safe",
+                        "nodeCount": "Node Count"
+                    }
+                },
+                "hazelcastnode": {
+                    "label": "Hazelcast Nodes",
+                    "deprecated": false,
+                    "metrics": {
+                        "nodeMetrics.clientEndpointCount": "Client Endpoint Count",
+                        "nodeMetrics.eventQueueSize": "Migration Queue Size",
+                        "nodeMetrics.migrationQueueSize": "EventQueue Size",
+                        "isLiteMember": "Client Endpoint Count",
+                        "isLocalMemberSafe": "Migration Queue Size",
+                        "isClusterSafe": "EventQueue Size",
+                        "distributedObjects.cacheCount": "ICache",
+                        "distributedObjects.mapCount": "IMap",
+                        "distributedObjects.replicatedMapCount": "ReplicatedMap",
+                        "distributedObjects.multiMapCount": "MultiMap",
+                        "distributedObjects.queueCount": "IQueue",
+                        "distributedObjects.listCount": "IList",
+                        "distributedObjects.setCount": "ISet",
+                        "distributedObjects.topicCount": "ITopic",
+                        "distributedObjects.executorCount": "IExecutorService",
+                        "distributedObjects.otherCount": "Other",
+                        "executorServiceQueueSize.asyncExecutor": "ASyncExecutor",
+                        "executorServiceQueueSize.clientExecutor": "ClientExecutor",
+                        "executorServiceQueueSize.queryExecutor": "QueryExecutor",
+                        "executorServiceQueueSize.scheduledExecutor": "ScheduledExecutor",
+                        "executorServiceQueueSize.systemExecutor": "SystemExecutor",
+                        "executorServiceQueueSize.ioExecutor": "IOExecutor"
+                    }
                 },
                 "httpd": {
                     "label": "Apache HTTPds",
+                    "deprecated": false,
                     "metrics": {
                         "requests": "Requests",
                         "kBytes": "kBytes",
@@ -914,6 +1066,7 @@ System.register([], function(exports_1) {
                 },
                 "instanaagent": {
                     "label": "Instana Agents",
+                    "deprecated": false,
                     "metrics": {
                         "cpu.load": "Load",
                         "memory.used": "Used",
@@ -928,10 +1081,12 @@ System.register([], function(exports_1) {
                 },
                 "jbossasapplicationcontainer": {
                     "label": "JBoss",
+                    "deprecated": false,
                     "metrics": {}
                 },
                 "jbossdatagrid": {
                     "label": "JBoss Data Grids",
+                    "deprecated": false,
                     "metrics": {
                         "hotRod.numberOfLocalConnections": "Number Of Local Connections",
                         "hotRod.numberOfGlobalConnections": "Number Of Global Connections"
@@ -939,6 +1094,7 @@ System.register([], function(exports_1) {
                 },
                 "jettyapplicationcontainer": {
                     "label": "Jetty",
+                    "deprecated": false,
                     "metrics": {
                         "idleThreads": "Idle Threads",
                         "busyThreads": "Busy Threads",
@@ -948,6 +1104,7 @@ System.register([], function(exports_1) {
                 },
                 "jiraapplication": {
                     "label": "Atlassian JIRAs",
+                    "deprecated": false,
                     "metrics": {
                         "instruments.http.sessions": "Current Sessions",
                         "instruments.concurrent.requests": "Concurrent Requests",
@@ -956,18 +1113,19 @@ System.register([], function(exports_1) {
                 },
                 "jvmruntimeplatform": {
                     "label": "JVMs",
+                    "deprecated": false,
                     "metrics": {
                         "threads.new": "New",
                         "threads.runnable": "Runnable",
                         "threads.timed-waiting": "Timed-Waiting",
                         "threads.waiting": "Waiting",
                         "threads.blocked": "Blocked",
-                        "threads.terminated": "Terminated",
                         "memory.used": "Used"
                     }
                 },
                 "kafka": {
                     "label": "Kafka Nodes",
+                    "deprecated": false,
                     "metrics": {
                         "broker.bytesIn": "In",
                         "broker.bytesOut": "Out",
@@ -997,12 +1155,14 @@ System.register([], function(exports_1) {
                 },
                 "kafkacluster": {
                     "label": "Kafka Cluster",
+                    "deprecated": false,
                     "metrics": {
                         "nodeCount": "Nodes"
                     }
                 },
                 "kubernetescluster": {
                     "label": "Kubernetes Clusters",
+                    "deprecated": false,
                     "metrics": {
                         "allocatedCapacityPodsRatio": "Pods Allocation",
                         "requiredCapacityCPURatio": "CPU Requests Allocation",
@@ -1030,6 +1190,7 @@ System.register([], function(exports_1) {
                 },
                 "kubernetespod": {
                     "label": "Kubernetes Pods",
+                    "deprecated": false,
                     "metrics": {
                         "containers.count": "Containers",
                         "cpuRequests": "CPU Requests",
@@ -1040,6 +1201,7 @@ System.register([], function(exports_1) {
                 },
                 "kubernetesnode": {
                     "label": "Kubernetes Nodes",
+                    "deprecated": false,
                     "metrics": {
                         "allocatedPods": "Allocated Pods",
                         "cap_pods": "Pods Capacity",
@@ -1058,6 +1220,7 @@ System.register([], function(exports_1) {
                 },
                 "kubernetesdeployment": {
                     "label": "Kubernetes Deployments",
+                    "deprecated": false,
                     "metrics": {
                         "availableReplicas": "Available",
                         "desiredReplicas": "Desired",
@@ -1074,6 +1237,7 @@ System.register([], function(exports_1) {
                 },
                 "openshiftdeploymentconfig": {
                     "label": "Openshift Deployment Configs",
+                    "deprecated": false,
                     "metrics": {
                         "availableReplicas": "Available",
                         "desiredReplicas": "Desired",
@@ -1090,6 +1254,8 @@ System.register([], function(exports_1) {
                 },
                 "ldaplogicalconnection": {
                     "label": "LDAP Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1107,6 +1273,7 @@ System.register([], function(exports_1) {
                 },
                 "ldaplogicalservice": {
                     "label": "LDAP",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1124,6 +1291,8 @@ System.register([], function(exports_1) {
                 },
                 "ldapserviceinstance": {
                     "label": "LDAP Service Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1141,6 +1310,7 @@ System.register([], function(exports_1) {
                 },
                 "logicalbatch": {
                     "label": "Batch Jobs",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1158,6 +1328,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalbatchconnection": {
                     "label": "Batch Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1175,6 +1347,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalcassandraconnection": {
                     "label": "Cassandra Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1192,6 +1366,7 @@ System.register([], function(exports_1) {
                 },
                 "logicaldatabase": {
                     "label": "Databases",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1209,6 +1384,8 @@ System.register([], function(exports_1) {
                 },
                 "logicaldatabaseconnection": {
                     "label": "Database Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1226,6 +1403,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalejbconnection": {
                     "label": "EJB Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1243,6 +1422,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalelasticsearchconnection": {
                     "label": "Elasticsearch Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1260,6 +1441,7 @@ System.register([], function(exports_1) {
                 },
                 "logicalelasticsearchindex": {
                     "label": "Elasticsearch Indices",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1277,6 +1459,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalftpconnection": {
                     "label": "Logical FTP Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1294,6 +1478,7 @@ System.register([], function(exports_1) {
                 },
                 "logicalftpservice": {
                     "label": "FTP Servers",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1311,6 +1496,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalhttpconnection": {
                     "label": "Http Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1328,6 +1515,8 @@ System.register([], function(exports_1) {
                 },
                 "logicaljdbcconnection": {
                     "label": "JDBC Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1345,6 +1534,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalkafkaconsumerconnection": {
                     "label": "Kafka Consumer Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1362,6 +1553,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalkafkapublisherconnection": {
                     "label": "Kafka Publisher Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1379,6 +1572,7 @@ System.register([], function(exports_1) {
                 },
                 "logicalmessagebroker": {
                     "label": "Message Brokers",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1396,6 +1590,7 @@ System.register([], function(exports_1) {
                 },
                 "logicalmessageconsumer": {
                     "label": "Message Consumers",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1413,6 +1608,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalmessageconsumerconnection": {
                     "label": "Message Consumer Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1430,6 +1627,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalmessagepublisherconnection": {
                     "label": "Message Publisher Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1447,6 +1646,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalmongodbconnection": {
                     "label": "MongoDB Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1464,6 +1665,7 @@ System.register([], function(exports_1) {
                 },
                 "logicalmongodbdatabase": {
                     "label": "MongoDB Databases",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1481,6 +1683,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalmsmqconsumerconnection": {
                     "label": "MSMQ Consumer Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1498,6 +1702,45 @@ System.register([], function(exports_1) {
                 },
                 "logicalmsmqpublisherconnection": {
                     "label": "MSMQ Publisher Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
+                    "metrics": {
+                        "count": "Calls",
+                        "duration.mean": "Avg. Latency",
+                        "duration.min": "Min Latency",
+                        "duration.max": "Max Latency",
+                        "duration.25th": "Latency 25th",
+                        "duration.50th": "Latency 50th",
+                        "duration.75th": "Latency 75th",
+                        "duration.95th": "Latency 95th",
+                        "duration.98th": "Latency 98th",
+                        "duration.99th": "Latency 99th",
+                        "error_rate": "Error Rate",
+                        "instances": "Instances"
+                    }
+                },
+                "logicalneo4jconnection": {
+                    "label": "Neo4j Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
+                    "metrics": {
+                        "count": "Calls",
+                        "duration.mean": "Avg. Latency",
+                        "duration.min": "Min Latency",
+                        "duration.max": "Max Latency",
+                        "duration.25th": "Latency 25th",
+                        "duration.50th": "Latency 50th",
+                        "duration.75th": "Latency 75th",
+                        "duration.95th": "Latency 95th",
+                        "duration.98th": "Latency 98th",
+                        "duration.99th": "Latency 99th",
+                        "error_rate": "Error Rate",
+                        "instances": "Instances"
+                    }
+                },
+                "logicalneo4jdatabase": {
+                    "label": "Neo4j Databases",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1515,6 +1758,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalrabbitmqconsumerconnection": {
                     "label": "Rabbit MQ Consumer Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1532,6 +1777,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalrabbitmqpublisherconnection": {
                     "label": "Rabbit MQ Publisher Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1549,6 +1796,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalredisconnection": {
                     "label": "Redis Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1566,6 +1815,7 @@ System.register([], function(exports_1) {
                 },
                 "logicalredisdatabase": {
                     "label": "Redis Databases",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1583,6 +1833,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalrpcconnection": {
                     "label": "RPC Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1600,6 +1852,8 @@ System.register([], function(exports_1) {
                 },
                 "logicalrpcendpoint": {
                     "label": "RPC Endpoints",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1617,6 +1871,7 @@ System.register([], function(exports_1) {
                 },
                 "logicalwebapp": {
                     "label": "Web Services",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1634,6 +1889,7 @@ System.register([], function(exports_1) {
                 },
                 "mariadbdatabase": {
                     "label": "MariaDBs",
+                    "deprecated": false,
                     "metrics": {
                         "status.THREADS_CONNECTED": "Connections",
                         "status.MAX_USED_CONNECTIONS": "Max used connections",
@@ -1649,6 +1905,7 @@ System.register([], function(exports_1) {
                 },
                 "memcached": {
                     "label": "Memcacheds Nodes",
+                    "deprecated": false,
                     "metrics": {
                         "cmd_get": "Gets",
                         "cmd_set": "Sets",
@@ -1670,6 +1927,8 @@ System.register([], function(exports_1) {
                 },
                 "messagebrokerserviceinstance": {
                     "label": "Message Broker Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1687,6 +1946,8 @@ System.register([], function(exports_1) {
                 },
                 "messageconsumerserviceinstance": {
                     "label": "Message Consumer Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1704,6 +1965,7 @@ System.register([], function(exports_1) {
                 },
                 "mongodb": {
                     "label": "MongoDB Nodes",
+                    "deprecated": false,
                     "metrics": {
                         "documents.deleted": "Deleted",
                         "documents.inserted": "Inserted",
@@ -1726,6 +1988,8 @@ System.register([], function(exports_1) {
                 },
                 "mongodbdatabaseserviceinstance": {
                     "label": "MongoDB Databases",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -1741,12 +2005,38 @@ System.register([], function(exports_1) {
                         "instances": "Instances"
                     }
                 },
+                "mongodbreplicaset": {
+                    "label": "MongoDB Replica Set",
+                    "deprecated": false,
+                    "metrics": {
+                        "nodeCount": "Nodes",
+                        "documents.deleted": "Deleted",
+                        "documents.inserted": "Inserted",
+                        "documents.returned": "Returned",
+                        "documents.updated": "Updated",
+                        "connections": "Connections",
+                        "repl.apply_ops": "Replication Apply Operations",
+                        "repl.apply_bathes": "Replication Apply Batches",
+                        "repl.apply_bathes_total_ms": "Replication Apply Batch Total",
+                        "repl.buffer_count": "Replication Buffer Count",
+                        "repl.buffer_size_bytes": "Replication Buffer Size",
+                        "repl.network_ops": "Replication Network Ops",
+                        "repl.network_bytes": "Replication Network Traffic",
+                        "repl.preload_docs_num": "Replication Preload Docs",
+                        "repl.preload_docs_total_ms": "Replication Preload Total",
+                        "repl.preload_idx_num": "Replication Preload Indexes",
+                        "repl.preload_idx_total_ms": "Replication Preload Indexes Total",
+                        "repl.replication_lag": "Replication Lag"
+                    }
+                },
                 "msiis": {
                     "label": "Internet Information Servers",
+                    "deprecated": false,
                     "metrics": {}
                 },
                 "mssqldatabase": {
                     "label": "MsSQL Instances",
+                    "deprecated": false,
                     "metrics": {
                         "generalstats._total.user_connections": "User Connections",
                         "waitstats.PAGEIOLATCH_EX.wait_time_ms": "Page IO-Latch EX",
@@ -1764,10 +2054,12 @@ System.register([], function(exports_1) {
                 },
                 "mule": {
                     "label": "Mule ESB",
+                    "deprecated": false,
                     "metrics": {}
                 },
                 "mysqldatabase": {
                     "label": "MySQL DBs",
+                    "deprecated": false,
                     "metrics": {
                         "status.COM_SELECT": "SELECTS",
                         "status.COM_UPDATE": "UPDATES",
@@ -1788,6 +2080,7 @@ System.register([], function(exports_1) {
                 },
                 "netcoreruntimeplatform": {
                     "label": ".NET Core Apps",
+                    "deprecated": false,
                     "metrics": {
                         "metrics.gcCount": "GC Count",
                         "metrics.exceptionThrownCount": "Exceptions Thrown",
@@ -1798,8 +2091,28 @@ System.register([], function(exports_1) {
                         "metrics.heapSizeGen3": "Generation 3"
                     }
                 },
+                "neo4jserviceinstance": {
+                    "label": "Neo4j Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
+                    "metrics": {
+                        "count": "Calls",
+                        "duration.mean": "Avg. Latency",
+                        "duration.min": "Min Latency",
+                        "duration.max": "Max Latency",
+                        "duration.25th": "Latency 25th",
+                        "duration.50th": "Latency 50th",
+                        "duration.75th": "Latency 75th",
+                        "duration.95th": "Latency 95th",
+                        "duration.98th": "Latency 98th",
+                        "duration.99th": "Latency 99th",
+                        "error_rate": "Error Rate",
+                        "instances": "Instances"
+                    }
+                },
                 "nginx": {
                     "label": "Nginx",
+                    "deprecated": false,
                     "metrics": {
                         "requests": "Requests / s",
                         "connections.accepted": "Accepted connections",
@@ -1813,6 +2126,7 @@ System.register([], function(exports_1) {
                 },
                 "nodejsruntimeplatform": {
                     "label": "Node.js Apps",
+                    "deprecated": false,
                     "metrics": {
                         "gc.gcPause": "GC Pause",
                         "activeHandles": "#Handles",
@@ -1831,6 +2145,7 @@ System.register([], function(exports_1) {
                 },
                 "nomadscheduler": {
                     "label": "Nomad Clients",
+                    "deprecated": false,
                     "metrics": {
                         "nomad.client.allocated.cpu": "Total amount of CPU shares the scheduler has allocated to tasks",
                         "nomad.client.allocated.disk": "Total amount of disk space the scheduler has allocated to tasks",
@@ -1870,6 +2185,7 @@ System.register([], function(exports_1) {
                 },
                 "oracledb": {
                     "label": "OracleDBs",
+                    "deprecated": false,
                     "metrics": {
                         "stats.dbTime": "DB Time",
                         "stats.cpuTime": "DB CPU Time",
@@ -1907,63 +2223,21 @@ System.register([], function(exports_1) {
                         "stats.usedSessionsRatio": "Sessions/Session Limit"
                     }
                 },
-                "pageresourcelogicalconnection": {
-                    "label": "Page Resource Connections",
+                "ping": {
+                    "label": "Ping",
+                    "deprecated": false,
                     "metrics": {
-                        "count": "Calls",
-                        "duration.mean": "Avg. Latency",
-                        "duration.min": "Min Latency",
-                        "duration.max": "Max Latency",
-                        "duration.25th": "Latency 25th",
-                        "duration.50th": "Latency 50th",
-                        "duration.75th": "Latency 75th",
-                        "duration.95th": "Latency 95th",
-                        "duration.98th": "Latency 98th",
-                        "duration.99th": "Latency 99th",
-                        "error_rate": "Error Rate",
-                        "instances": "Instances"
-                    }
-                },
-                "pageresourcelogicalservice": {
-                    "label": "Page Resources",
-                    "metrics": {
-                        "count": "Calls",
-                        "duration.mean": "Avg. Latency",
-                        "duration.min": "Min Latency",
-                        "duration.max": "Max Latency",
-                        "duration.25th": "Latency 25th",
-                        "duration.50th": "Latency 50th",
-                        "duration.75th": "Latency 75th",
-                        "duration.95th": "Latency 95th",
-                        "duration.98th": "Latency 98th",
-                        "duration.99th": "Latency 99th",
-                        "error_rate": "Error Rate",
-                        "instances": "Instances"
-                    }
-                },
-                "pageresourceserviceinstance": {
-                    "label": "Page Resource Group Instances",
-                    "metrics": {
-                        "count": "Calls",
-                        "duration.mean": "Avg. Latency",
-                        "duration.min": "Min Latency",
-                        "duration.max": "Max Latency",
-                        "duration.25th": "Latency 25th",
-                        "duration.50th": "Latency 50th",
-                        "duration.75th": "Latency 75th",
-                        "duration.95th": "Latency 95th",
-                        "duration.98th": "Latency 98th",
-                        "duration.99th": "Latency 99th",
-                        "error_rate": "Error Rate",
-                        "instances": "Instances"
+                        "duration": "Duration"
                     }
                 },
                 "phpfpmruntimeplatform": {
                     "label": "PHP-FPM Runtimes",
+                    "deprecated": false,
                     "metrics": {}
                 },
                 "postgresqldatabase": {
                     "label": "PostgreSQL DBs",
+                    "deprecated": false,
                     "metrics": {
                         "totalCommittedTransactions": "Committed Transactions",
                         "max_conn_pct": "Connection Usage",
@@ -1972,16 +2246,20 @@ System.register([], function(exports_1) {
                 },
                 "process": {
                     "label": "Processes",
+                    "deprecated": false,
                     "metrics": {
                         "mem.virtual": "Virtual",
                         "mem.resident": "Resident",
                         "mem.share": "Share",
                         "cpu.user": "User",
-                        "cpu.sys": "System"
+                        "cpu.sys": "System",
+                        "ctx_switches.voluntary": "Voluntary",
+                        "ctx_switches.nonvoluntary": "Nonvoluntary"
                     }
                 },
                 "pythonruntimeplatform": {
                     "label": "Python Apps",
+                    "deprecated": false,
                     "metrics": {
                         "metrics.ru_utime": "Time Spent In User Mode",
                         "metrics.ru_stime": "Time Spent In System Mode",
@@ -2012,6 +2290,7 @@ System.register([], function(exports_1) {
                 },
                 "rabbitmq": {
                     "label": "RabbitMQ",
+                    "deprecated": false,
                     "metrics": {
                         "overview.publish_rate": "Published per 5 seconds",
                         "overview.deliver_rate": "Delivered per 5 seconds",
@@ -2027,6 +2306,8 @@ System.register([], function(exports_1) {
                 },
                 "redisserviceinstance": {
                     "label": "Redis Databases",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -2044,6 +2325,8 @@ System.register([], function(exports_1) {
                 },
                 "rpcendpointserviceinstance": {
                     "label": "RPC Endpoint Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -2061,6 +2344,7 @@ System.register([], function(exports_1) {
                 },
                 "rubyruntimeplatform": {
                     "label": "Ruby Apps",
+                    "deprecated": false,
                     "metrics": {
                         "memory.rss_size": "Resident",
                         "gc.heap_live": "Live",
@@ -2073,6 +2357,7 @@ System.register([], function(exports_1) {
                 },
                 "saphana": {
                     "label": "SAP HANA",
+                    "deprecated": false,
                     "metrics": {
                         "stats.usedMemory": "Used Memory",
                         "stats.residentMemory": "Resident Memory",
@@ -2109,6 +2394,8 @@ System.register([], function(exports_1) {
                 },
                 "sdklogicalconnection": {
                     "label": "Custom Logical Connections",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -2126,6 +2413,7 @@ System.register([], function(exports_1) {
                 },
                 "sdklogicalservice": {
                     "label": "Custom Services",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -2143,6 +2431,8 @@ System.register([], function(exports_1) {
                 },
                 "sdkserviceinstance": {
                     "label": "Custom Service Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -2160,6 +2450,7 @@ System.register([], function(exports_1) {
                 },
                 "service": {
                     "label": "Services",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -2176,10 +2467,12 @@ System.register([], function(exports_1) {
                 },
                 "solr": {
                     "label": "Solr",
+                    "deprecated": false,
                     "metrics": {}
                 },
                 "sparkapplication": {
                     "label": "Spark Applications",
+                    "deprecated": false,
                     "metrics": {
                         "failedJobs": "All Failed Jobs",
                         "completedJobs": "All Completed Jobs",
@@ -2200,6 +2493,7 @@ System.register([], function(exports_1) {
                 },
                 "sparkstandalone": {
                     "label": "Spark Standalone",
+                    "deprecated": false,
                     "metrics": {
                         "workers.aliveWorkers": "Alive Workers",
                         "workers.deadWorkers": "Dead Workers",
@@ -2213,6 +2507,7 @@ System.register([], function(exports_1) {
                 },
                 "springbootapplicationcontainer": {
                     "label": "Spring Boot Apps",
+                    "deprecated": false,
                     "metrics": {
                         "metrics.requests": "All Requests",
                         "metrics.statusCode.1xx": "Requests with Status Code 1xx",
@@ -2225,6 +2520,7 @@ System.register([], function(exports_1) {
                 },
                 "unknownservice": {
                     "label": "Unknown Services",
+                    "deprecated": false,
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -2242,6 +2538,7 @@ System.register([], function(exports_1) {
                 },
                 "varnish": {
                     "label": "Varnish Nodes",
+                    "deprecated": false,
                     "metrics": {
                         "sess_conn": "Accepted client connections",
                         "client_req": "Received client requests",
@@ -2269,6 +2566,8 @@ System.register([], function(exports_1) {
                 },
                 "webappserviceinstance": {
                     "label": "Web Service Instances",
+                    "deprecated": true,
+                    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
                     "metrics": {
                         "count": "Calls",
                         "duration.mean": "Avg. Latency",
@@ -2286,6 +2585,7 @@ System.register([], function(exports_1) {
                 },
                 "weblogicapplicationcontainer": {
                     "label": "WebLogic Servers",
+                    "deprecated": false,
                     "metrics": {
                         "threadPool.idleThreads": "Idle Threads",
                         "threadPool.totalThreads": "Total Threads",
@@ -2301,6 +2601,7 @@ System.register([], function(exports_1) {
                 },
                 "websphereapplicationcontainer": {
                     "label": "WebSpheres",
+                    "deprecated": false,
                     "metrics": {
                         "threadPools.webContainer.activeThreads": "Active Threads",
                         "threadPools.webContainer.poolSize": "Pool Size"
@@ -2308,6 +2609,7 @@ System.register([], function(exports_1) {
                 },
                 "webspherelibertyapplicationcontainer": {
                     "label": "WebSphere Liberty Servers",
+                    "deprecated": false,
                     "metrics": {
                         "threadPool.activeThreads": "Active Threads",
                         "threadPool.poolSize": "Pool Size"
