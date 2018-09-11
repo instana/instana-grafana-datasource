@@ -160,7 +160,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   onMetricSelect() {
     if (this.target.metricCategorie === this.CUSTOM_METRICS) {
-      // as there was no filter before and the metric itself contains the type
+      // as there was no type selection upfront, but the metric itself contains the type
       this.target.entityType = this.target.metric.entityType;
     }
     this.panelCtrl.refresh();
