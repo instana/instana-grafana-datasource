@@ -24,6 +24,17 @@ The following yarn run scripts are available. You can also run them via Grunt di
 
 ## Getting Started
 
+Make sure that Chrome is available.
+
+The following output is an indicator that Chrome is not reachable/installed.
+```
+11 09 2018 08:53:46.300:INFO [launcher]: Launching browser ChromeHeadless with unlimited concurrency
+11 09 2018 08:53:46.340:INFO [launcher]: Starting browser ChromeHeadless
+11 09 2018 08:54:46.343:WARN [launcher]: ChromeHeadless have not captured in 60000 ms, killing.
+11 09 2018 08:54:48.348:WARN [launcher]: ChromeHeadless was not killed in 2000 ms, sending SIGKILL.
+11 09 2018 08:54:50.352:WARN [launcher]: ChromeHeadless was not killed by SIGKILL in 2000 ms, continuing.
+```
+
 1. Make sure `yarn` is installed (everything should work also with npm but YMMV)
 2. Install realpath and timeout (`brew install coreutils`, remember to put them on the `$PATH`: `export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"`)
 3. Run `yarn install`.
