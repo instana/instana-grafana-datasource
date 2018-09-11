@@ -96,7 +96,15 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['src/**/*.ts', 'src/**/*.html', 'src/**/*.css', 'src/img/*.*', 'src/plugin.json', 'README.md'],
-      tasks: ['default'],
+      tasks: ['unit',
+              'copy:dist_js',
+              'tslint',
+              'typescript:build',
+              'copy:dist_html',
+              'copy:dist_css',
+              'copy:dist_img',
+              'copy:dist_statics'
+      ],
       options: {
         debounceDelay: 250,
       },
@@ -159,7 +167,8 @@ module.exports = function(grunt) {
     'dockerCompose:up',
     'run:waitForUiBackend',
     'run:waitForGrafana',
-    'functional'
+    'functional',
+    'watch'
   ]);
 
   grunt.registerTask('shutdown', [

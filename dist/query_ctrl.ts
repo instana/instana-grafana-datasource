@@ -66,7 +66,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
             } else if (this.target.metricCategorie === this.CUSTOM_METRICS) {
               this.filterCustom(refresh);
             } else {
-              alert("FREE_METRICS not yet supported!");
+              alert("not yet supported!");
             }
           },
           error => {
@@ -75,29 +75,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
             this.uniqueEntityTypes = [];
           });
     }
-  }
-
-  filterCustom(refresh) {
-    this.datasource.getCatalog().then(customMetrics => {
-
-       this.availableMetrics =
-         _.filter(
-           customMetrics,
-           metric => _.includes(this.datasource.CUSTOM_METRIC_TYPES, metric.type));
-
-       this.metricSelectionText = this.availableMetrics.length > 0
-         ? 'Please select (' + this.availableMetrics.length + ')'
-         : this.EMPTY_DROPDOWN_TEXT;
-
-       if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
-         this.target.metric = null;
-         this.target.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-       } else {
-         if (this.target.metric && refresh) {
-           this.panelCtrl.refresh();
-         }
-       }
-    });
   }
 
   filterBuildIn(response, refresh) {
@@ -120,6 +97,27 @@ export class InstanaQueryCtrl extends QueryCtrl {
         this.panelCtrl.refresh();
       }
     }
+  }
+
+  filterCustom(refresh) {
+    this.datasource.getCatalog().then(customMetrics => {
+       this.availableMetrics =
+         _.filter(
+           customMetrics,
+           metric => _.includes(this.datasource.CUSTOM_METRIC_TYPES, metric.entityType));
+       this.metricSelectionText = this.availableMetrics.length > 0
+         ? 'Please select (' + this.availableMetrics.length + ')'
+         : this.EMPTY_DROPDOWN_TEXT;
+
+       if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
+         this.target.metric = null;
+         this.target.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
+       } else {
+         if (this.target.metric && refresh) {
+           this.panelCtrl.refresh();
+         }
+       }
+    });
   }
 
   onMetricCategorieSelect(){
@@ -161,6 +159,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onMetricSelect() {
+    if (this.target.metricCategorie === this.CUSTOM_METRICS) {
+      // as there was no filter before and the metric itself contains the type
+      this.target.entityType = this.target.metric.entityType;
+    }
     this.panelCtrl.refresh();
   }
 }

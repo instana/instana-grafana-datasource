@@ -95,8 +95,8 @@ export default class InstanaDatasource {
           this.$q.all(
             _.map(catalogResponse.data, entry => ({
               'key' : entry.metricId,
-              'label' : entry.label,
-              'type' : entry.pluginId
+              'label' : entry.description, // entry.label
+              'entityType' : entry.pluginId
             }))
           )
         )

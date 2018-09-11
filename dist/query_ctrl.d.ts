@@ -2631,8 +2631,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     /** @ngInject **/
     constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any, $q: any);
     onFilterChange(refresh: any): any;
-    filterCustom(refresh: any): void;
     filterBuildIn(response: any, refresh: any): void;
+    filterCustom(refresh: any): void;
     onMetricCategorieSelect(): void;
     selectionReset(): void;
     onEntityTypeSelect(refresh: any): void;

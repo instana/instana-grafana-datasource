@@ -64,8 +64,8 @@ System.register(['lodash'], function(exports_1) {
                             _this.catalogPromise = _this.$q.resolve(_this.request('GET', "/api/metricsCatalog/custom").then(function (catalogResponse) {
                                 return _this.$q.all(lodash_1.default.map(catalogResponse.data, function (entry) { return ({
                                     'key': entry.metricId,
-                                    'label': entry.label,
-                                    'type': entry.pluginId
+                                    'label': entry.description,
+                                    'entityType': entry.pluginId
                                 }); }));
                             }));
                         }

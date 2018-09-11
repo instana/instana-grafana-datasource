@@ -73,7 +73,7 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                                 _this.filterCustom(refresh);
                             }
                             else {
-                                alert("FREE_METRICS not yet supported!");
+                                alert("not yet supported!");
                             }
                         }, function (error) {
                             _this.target.queryIsValid = false;
@@ -81,25 +81,6 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                             _this.uniqueEntityTypes = [];
                         });
                     }
-                };
-                InstanaQueryCtrl.prototype.filterCustom = function (refresh) {
-                    var _this = this;
-                    this.datasource.getCatalog().then(function (customMetrics) {
-                        _this.availableMetrics =
-                            lodash_1.default.filter(customMetrics, function (metric) { return lodash_1.default.includes(_this.datasource.CUSTOM_METRIC_TYPES, metric.type); });
-                        _this.metricSelectionText = _this.availableMetrics.length > 0
-                            ? 'Please select (' + _this.availableMetrics.length + ')'
-                            : _this.EMPTY_DROPDOWN_TEXT;
-                        if (_this.target.metric && !lodash_1.default.includes(lodash_1.default.map(_this.availableMetrics, function (m) { return m.key; }), _this.target.metric.key)) {
-                            _this.target.metric = null;
-                            _this.target.metricSelectionText = _this.EMPTY_DROPDOWN_TEXT;
-                        }
-                        else {
-                            if (_this.target.metric && refresh) {
-                                _this.panelCtrl.refresh();
-                            }
-                        }
-                    });
                 };
                 InstanaQueryCtrl.prototype.filterBuildIn = function (response, refresh) {
                     this.uniqueEntityTypes =
@@ -118,6 +99,25 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                             this.panelCtrl.refresh();
                         }
                     }
+                };
+                InstanaQueryCtrl.prototype.filterCustom = function (refresh) {
+                    var _this = this;
+                    this.datasource.getCatalog().then(function (customMetrics) {
+                        _this.availableMetrics =
+                            lodash_1.default.filter(customMetrics, function (metric) { return lodash_1.default.includes(_this.datasource.CUSTOM_METRIC_TYPES, metric.entityType); });
+                        _this.metricSelectionText = _this.availableMetrics.length > 0
+                            ? 'Please select (' + _this.availableMetrics.length + ')'
+                            : _this.EMPTY_DROPDOWN_TEXT;
+                        if (_this.target.metric && !lodash_1.default.includes(lodash_1.default.map(_this.availableMetrics, function (m) { return m.key; }), _this.target.metric.key)) {
+                            _this.target.metric = null;
+                            _this.target.metricSelectionText = _this.EMPTY_DROPDOWN_TEXT;
+                        }
+                        else {
+                            if (_this.target.metric && refresh) {
+                                _this.panelCtrl.refresh();
+                            }
+                        }
+                    });
                 };
                 InstanaQueryCtrl.prototype.onMetricCategorieSelect = function () {
                     this.selectionReset();
@@ -152,6 +152,10 @@ System.register(['lodash', 'app/plugins/sdk', './css/query_editor.css!', './metr
                     }
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {
+                    if (this.target.metricCategorie === this.CUSTOM_METRICS) {
+                        // as there was no filter before and the metric itself contains the type
+                        this.target.entityType = this.target.metric.entityType;
+                    }
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.templateUrl = 'partials/query.editor.html';
