@@ -52,7 +52,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onFilterChange(refresh) {
-    if (this.target.entityQuery === '') { // FIXME should be (!this.target.entityQuery), but this breaks  tests?
+    if (this.target.entityQuery === '') { // FIXME should be (!this.target.entityQuery), but this breaks tests?
       this.uniqueEntityTypes = [];
       this.resetMetricSelection();
       this.resetEntityTypeSelection();
