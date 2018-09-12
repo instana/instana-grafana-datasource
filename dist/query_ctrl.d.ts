@@ -2632,9 +2632,11 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any, $q: any);
     onFilterChange(refresh: any): any;
     filterBuildIn(response: any, refresh: any): void;
-    filterCustom(refresh: any): void;
+    filterCustom(response: any, refresh: any): void;
     onMetricCategorieSelect(): void;
     selectionReset(): void;
+    resetMetricSelection(): void;
+    resetEntityTypeSelection(): void;
     onEntityTypeSelect(refresh: any): void;
     onMetricSelect(): void;
 }

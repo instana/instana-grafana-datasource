@@ -30,11 +30,17 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.pluginId = this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-    this.target.metricCategorie = '0';
+
+    // on new panel creation we default to built-in
+    if (!this.target.metricCategorie) {
+      this.target.metricCategorie = this.BUILD_IN_METRICS;
+    }
 
     if (this.target.entityQuery) {
       this.onFilterChange(false).then(() => {
-        if (this.target.entityType) {
+
+        // only build-in metrics support a selected entity type
+        if (this.target.entityType && this.target.metricCategorie === this.BUILD_IN_METRICS) {
           this.onEntityTypeSelect(false);
         }
 
@@ -46,12 +52,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onFilterChange(refresh) {
-    if (this.target.entityQuery === '') {
+    if (this.target.entityQuery === '') { // FIXME should be (!this.target.entityQuery), but this breaks  tests?
       this.uniqueEntityTypes = [];
-      this.target.entityType = null;
-      this.target.metric = null;
-      this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
-      this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
+      this.resetMetricSelection();
+      this.resetEntityTypeSelection();
       return this.$q.resolve();
     } else {
       const url = `/api/snapshots/types?q=${encodeURIComponent(this.target.entityQuery)}` +
@@ -64,15 +68,15 @@ export class InstanaQueryCtrl extends QueryCtrl {
             if (this.target.metricCategorie === this.BUILD_IN_METRICS) {
               this.filterBuildIn(response, refresh);
             } else if (this.target.metricCategorie === this.CUSTOM_METRICS) {
-              this.filterCustom(refresh);
+              this.filterCustom(response, refresh);
             } else {
               alert("not yet supported!");
             }
           },
           error => {
             this.target.queryIsValid = false;
-            this.target.entityType = null;
             this.uniqueEntityTypes = [];
+            this.resetEntityTypeSelection();
           });
     }
   }
@@ -88,74 +92,75 @@ export class InstanaQueryCtrl extends QueryCtrl {
       : this.EMPTY_DROPDOWN_TEXT;
 
     if (!_.includes(this.uniqueEntityTypes, this.target.entityType)) {
-      this.target.entityType = null;
-      this.target.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
-      this.target.metric = null;
-      this.target.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-    } else {
-      if (this.target.metric && refresh) {
-        this.panelCtrl.refresh();
-      }
+      this.resetMetricSelection();
+      this.resetEntityTypeSelection();
+    } else if (this.target.metric && refresh) {
+      this.panelCtrl.refresh();
     }
   }
 
-  filterCustom(refresh) {
+  filterCustom(response, refresh) {
     this.datasource.getCatalog().then(customMetrics => {
-       this.availableMetrics =
-         _.filter(
-           customMetrics,
-           metric => _.includes(this.datasource.CUSTOM_METRIC_TYPES, metric.entityType));
-       this.metricSelectionText = this.availableMetrics.length > 0
-         ? 'Please select (' + this.availableMetrics.length + ')'
-         : this.EMPTY_DROPDOWN_TEXT;
+      this.availableMetrics =
+        _.sortBy(
+          _.filter(
+            customMetrics,
+            metric => _.includes(this.datasource.CUSTOM_METRIC_TYPES, metric.entityType)),
+          ['key']);
 
-       if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
-         this.target.metric = null;
-         this.target.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-       } else {
-         if (this.target.metric && refresh) {
-           this.panelCtrl.refresh();
-         }
-       }
+      this.metricSelectionText = this.availableMetrics.length > 0
+        ? 'Please select (' + this.availableMetrics.length + ')'
+        : this.EMPTY_DROPDOWN_TEXT;
+
+      if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
+        this.resetMetricSelection();
+      } else if (this.target.metric && refresh) {
+        this.panelCtrl.refresh();
+      }
     });
   }
 
-  onMetricCategorieSelect(){
+  onMetricCategorieSelect() {
     this.selectionReset();
     this.onFilterChange(true);
   }
 
-  selectionReset(){
-    this.uniqueEntityTypes = null;
-    this.availableMetrics = null;
+  selectionReset() {
+    this.uniqueEntityTypes = [];
+    this.availableMetrics = [];
+    this.resetMetricSelection();
+    this.resetEntityTypeSelection();
+  }
+
+  resetMetricSelection() {
     this.target.metric = null;
+    this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
+  }
+
+  resetEntityTypeSelection() {
     this.target.entityType = null;
-    this.target.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-    this.target.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
+    this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
   }
 
   onEntityTypeSelect(refresh) {
-     this.availableMetrics =
-       _.map(
-         this.metricsDefinition[this.target.entityType.toLowerCase()].metrics,
-         (value, key) => {
-           return {
-             "key": key,
-             "label": value};
-         });
+    this.availableMetrics =
+      _.map(
+        this.metricsDefinition[this.target.entityType.toLowerCase()].metrics,
+          (value, key) => {
+            return {
+              "key": key,
+              "label": value};
+      });
 
-     this.metricSelectionText = this.availableMetrics.length > 0
-       ? 'Please select (' + this.availableMetrics.length + ')'
-       : this.EMPTY_DROPDOWN_TEXT;
+    this.metricSelectionText = this.availableMetrics.length > 0
+      ? 'Please select (' + this.availableMetrics.length + ')'
+      : this.EMPTY_DROPDOWN_TEXT;
 
-     if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
-       this.target.metric = null;
-       this.target.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-     } else {
-       if (this.target.metric && refresh) {
-         this.panelCtrl.refresh();
-       }
-     }
+    if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
+      this.resetMetricSelection();
+    } else if (this.target.metric && refresh) {
+      this.panelCtrl.refresh();
+    }
   }
 
   onMetricSelect() {
