@@ -2622,7 +2622,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     uniqueEntityTypes: Array<string>;
     allCustomMetrics: Array<Object>;
     availableMetrics: Array<Object>;
-    snapshots: Array<Object>;
+    snapshots: Array<string>;
     entitySelectionText: string;
     metricSelectionText: string;
     previousMetricCategory: string;

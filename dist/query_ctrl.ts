@@ -12,7 +12,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   uniqueEntityTypes: Array<string>;
   allCustomMetrics: Array<Object>;
   availableMetrics: Array<Object>; // subset of allCustomMetrics for display only
-  snapshots: Array<Object>;
+  snapshots: Array<string>;
   entitySelectionText: string;
   metricSelectionText: string;
   previousMetricCategory: string;
@@ -151,19 +151,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
       _.sortBy(
         _.filter(
           this.allCustomMetrics,
-          metric => metric.key.toLowerCase().includes(filter)),
+          metric => _.includes(this.snapshots, metric.entityType) && metric.key.toLowerCase().includes(filter)),
         'key');
-
-        // TODO
-        // combine filter and filter in filter or what ?
-        // _.filter(
-        // this.snapshots,
-        // entityType => metricsDefinition[entityType.toLowerCase()] && metricsDefinition[entityType.toLowerCase()].label != null);
-        //
-        //
-        // _.filter(
-        //   this.allCustomMetrics,
-        //   metric => _.includes(['dropwizardApplicationContainer'], metric.entityType))
 
     this.adjustMetricSelectionPlaceholder();
     this.checkMetricAndRefresh(refresh);

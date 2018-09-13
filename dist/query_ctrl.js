@@ -131,19 +131,10 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                     this.checkMetricAndRefresh(refresh);
                 };
                 InstanaQueryCtrl.prototype.onMetricsFilter = function (refresh) {
+                    var _this = this;
                     var filter = this.target.filter ? this.target.filter.toLowerCase() : '';
                     this.availableMetrics =
-                        lodash_1.default.sortBy(lodash_1.default.filter(this.allCustomMetrics, function (metric) { return metric.key.toLowerCase().includes(filter); }), 'key');
-                    // TODO
-                    // combine filter and filter in filter or what ?
-                    // _.filter(
-                    // this.snapshots,
-                    // entityType => metricsDefinition[entityType.toLowerCase()] && metricsDefinition[entityType.toLowerCase()].label != null);
-                    //
-                    //
-                    // _.filter(
-                    //   this.allCustomMetrics,
-                    //   metric => _.includes(['dropwizardApplicationContainer'], metric.entityType))
+                        lodash_1.default.sortBy(lodash_1.default.filter(this.allCustomMetrics, function (metric) { return lodash_1.default.includes(_this.snapshots, metric.entityType) && metric.key.toLowerCase().includes(filter); }), 'key');
                     this.adjustMetricSelectionPlaceholder();
                     this.checkMetricAndRefresh(refresh);
                 };
