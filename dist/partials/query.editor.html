@@ -22,14 +22,14 @@
     </label>
     <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
       <select id="in-categorie-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.metricCategorie" ng-change="ctrl.onMetricCategorieSelect()">
-        <option value="0" selected>Build-in</option>
-        <option value="1">Custom</option>
-        <!-- <option value="2">Metric by name</option> -->
+        <option value="0" selected>Build-in metrics</option>
+        <option value="1">Custom metrics</option>
+        <option value="2">Metric by name</option>
       </select>
     </div>
   </div>
 
-  <div class="gf-form" ng-hide="ctrl.target.metricCategorie === '2' || ctrl.target.metricCategorie === '1'">
+  <div class="gf-form" ng-hide="ctrl.target.metricCategorie === '1'">
     <label class="gf-form-label width-13 pointer" for="in-type-{{ctrl.target.refId}}">
       Type
       <info-popover position="top center" mode="right-normal">
@@ -44,6 +44,16 @@
     </div>
   </div>
 
+  <div class="gf-form" ng-hide="ctrl.target.metricCategorie === '0' || ctrl.target.metricCategorie === '2'">
+    <label class="gf-form-label width-13 pointer" for="in-filter-{{ctrl.target.refId}}">
+      Filter
+      <info-popover position="top center" mode="right-normal">
+        <p>Input a filter value to reduce amount of custom metrics.</p>
+      </info-popover>
+    </label>
+    <input id="in-filter-{{ctrl.target.refId}}" class="gf-form-input width-18" type="text" ng-model="ctrl.target.filter" ng-model-options='{ debounce: 200 }' ng-change="ctrl.onMetricsFilter(true)" placeholder="Please Specify"/>
+  </div>
+
   <div class="gf-form" ng-hide="ctrl.target.metricCategorie === '2'">
     <label class="gf-form-label width-13 pointer" for="in-metric-{{ctrl.target.refId}}">
       Metric
@@ -53,21 +63,19 @@
     </label>
     <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
       <select id="in-metric-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.metric" ng-change="ctrl.onMetricSelect()"
-        ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics track by f.key">
+        ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics track by f.key"> <!-- | filter:{key:ctrl.target.filter} | limitTo:100 -->
         <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
       </select>
     </div>
   </div>
 
   <div class="gf-form" ng-hide="ctrl.target.metricCategorie === '0' || ctrl.target.metricCategorie === '1'">
-    <label class="gf-form-label width-13 pointer" for="in-metric-{{ctrl.target.refId}}">
+    <label class="gf-form-label width-13 pointer" for="in-input-{{ctrl.target.refId}}">
       Metric
       <info-popover position="top center" mode="right-normal">
         <p>Input the metric you wish to plot.</p>
       </info-popover>
     </label>
-    <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
-      <input id="in-metric-input-{{ctrl.target.refId}}" ng-model-options='{ debounce: 200 }' class="gf-form-input" type="text" ng-model="ctrl.target.metricInput" placeholder="Please Specify"/>
-    </div>
+    <input id="in-input-{{ctrl.target.refId}}" class="gf-form-input width-18" type="text" ng-model="ctrl.target.metricInput" ng-model-options='{ debounce: 200 }' ng-change="ctrl.onMetricInput()" placeholder="Please Specify"/>
   </div>
 </query-editor-row>

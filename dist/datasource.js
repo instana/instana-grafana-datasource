@@ -14,7 +14,6 @@ System.register(['lodash'], function(exports_1) {
                     this.backendSrv = backendSrv;
                     this.templateSrv = templateSrv;
                     this.$q = $q;
-                    this.CUSTOM_METRIC_TYPES = ["dropwizardApplicationContainer"];
                     this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
                     this.CACHE_MAX_AGE = 60000;
                     this.rollupDurationThresholds = [
@@ -65,7 +64,7 @@ System.register(['lodash'], function(exports_1) {
                                 return _this.$q.all(lodash_1.default.map(catalogResponse.data, function (entry) { return ({
                                     'key': entry.metricId,
                                     'label': entry.description,
-                                    'entityType': entry.pluginId
+                                    'entityType': entry.pluginId // to match the metrics definition from build-in metrics
                                 }); }));
                             }));
                         }
@@ -186,10 +185,10 @@ System.register(['lodash'], function(exports_1) {
                     return this.request('GET', url);
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {
-                    throw new Error("Annotation Support not implemented yet.");
+                    throw new Error('Annotation Support not implemented yet.');
                 };
                 InstanaDatasource.prototype.metricFindQuery = function (query) {
-                    throw new Error("Template Variable Support not implemented yet.");
+                    throw new Error('Template Variable Support not implemented yet.');
                 };
                 InstanaDatasource.prototype.testDatasource = function () {
                     return this.request('GET', '/api/snapshots/non-existing-snapshot-id?time=0')

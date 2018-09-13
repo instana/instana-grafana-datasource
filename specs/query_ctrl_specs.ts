@@ -11,7 +11,6 @@ describe("InstanaQueryCtrl", function() {
     templateSrv: new TemplateSrvStub()
   };
 
-  beforeEach(function() {});
   let queryCtrl;
 
   beforeEach(function() {
@@ -52,20 +51,20 @@ describe("InstanaQueryCtrl", function() {
           expect(queryCtrl.target.queryIsValid).to.equal(true);
         });
       });
+    });
 
-      describe("that returns zero snapshots", function() {
-        it("should show no entity types found in the entity type drowdown", function() {
-          queryCtrl.datasource.request = function(options) {
-            return ctx.$q.resolve({
-              data: []
-            });
-          };
-
-          return queryCtrl.onFilterChange().then(() => {
-            expect(queryCtrl.uniqueEntityTypes).to.eql([]);
-            expect(queryCtrl.target.entityType).to.equal(null);
-            expect(queryCtrl.target.queryIsValid).to.equal(true);
+    describe("that returns zero snapshots", function() {
+      it("should show no entity types found in the entity type drowdown", function() {
+        queryCtrl.datasource.request = function(options) {
+          return ctx.$q.resolve({
+            data: []
           });
+        };
+
+        return queryCtrl.onFilterChange().then(() => {
+          expect(queryCtrl.uniqueEntityTypes).to.eql([]);
+          expect(queryCtrl.target.entityType).to.equal(null);
+          expect(queryCtrl.target.queryIsValid).to.equal(true);
         });
       });
     });
@@ -85,19 +84,20 @@ describe("InstanaQueryCtrl", function() {
         });
       });
     });
+  });
 
-    describe("when selecting entity type", function() {
-      it("should populate metric dropdown", function() {
-        queryCtrl.target.entityType = "hadoopyarnnode";
-        queryCtrl.onEntityTypeSelect();
+  describe("when selecting entity type", function() {
+    it("should populate metric dropdown", function() {
+      queryCtrl.target.entityType = "hadoopyarnnode";
+      queryCtrl.onEntityTypeSelect();
 
-        expect(queryCtrl.availableMetrics).to.eql([
-          { key: "allocatedVCores", label: "Allocated Virtual Cores" },
-          { key: "availableVCores", label: "Available Virtual Cores" },
-          { key: "allocatedMem", label: "Allocated Memory" },
-          { key: "availableMem", label: "Available Memory" }
-        ]);
-      });
+      expect(queryCtrl.availableMetrics).to.eql([
+        { key: "allocatedMem", label: "Allocated Memory" },
+        { key: "allocatedVCores", label: "Allocated Virtual Cores" },
+        { key: "availableMem", label: "Available Memory" },
+        { key: "availableVCores", label: "Available Virtual Cores" }
+      ]);
     });
   });
+
 });

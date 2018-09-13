@@ -12,7 +12,6 @@ export default class InstanaDatasource {
 
   lastFetchedFromAPI: boolean;
 
-  CUSTOM_METRIC_TYPES = ["dropwizardApplicationContainer"];
   MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
   CACHE_MAX_AGE = 60000;
 
@@ -95,8 +94,8 @@ export default class InstanaDatasource {
           this.$q.all(
             _.map(catalogResponse.data, entry => ({
               'key' : entry.metricId,
-              'label' : entry.description, // entry.label
-              'entityType' : entry.pluginId
+              'label' : entry.description, // shorter than entry.label
+              'entityType' : entry.pluginId // to match the metrics definition from build-in metrics
             }))
           )
         )
@@ -233,11 +232,11 @@ export default class InstanaDatasource {
   }
 
   annotationQuery(options) {
-    throw new Error("Annotation Support not implemented yet.");
+    throw new Error('Annotation Support not implemented yet.');
   }
 
   metricFindQuery(query: string) {
-    throw new Error("Template Variable Support not implemented yet.");
+    throw new Error('Template Variable Support not implemented yet.');
   }
 
   testDatasource() {

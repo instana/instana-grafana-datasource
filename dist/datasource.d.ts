@@ -11,7 +11,6 @@ export default class InstanaDatasource {
     snapshotCache: Object;
     catalogPromise: Object;
     lastFetchedFromAPI: boolean;
-    CUSTOM_METRIC_TYPES: string[];
     MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
     CACHE_MAX_AGE: number;
     rollupDurationThresholds: {
