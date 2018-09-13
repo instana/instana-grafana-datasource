@@ -120,7 +120,7 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                 };
                 InstanaQueryCtrl.prototype.filterEntityTypes = function () {
                     this.uniqueEntityTypes =
-                        lodash_1.default.filter(this.snapshots, function (entityType) { return metrics_1.default[entityType.toLowerCase()] && metrics_1.default[entityType.toLowerCase()].label != null; });
+                        lodash_1.default.sortBy(lodash_1.default.filter(this.snapshots, function (entityType) { return metrics_1.default[entityType.toLowerCase()] && metrics_1.default[entityType.toLowerCase()].label != null; }), 'label');
                 };
                 InstanaQueryCtrl.prototype.filterBuildInMetrics = function (refresh) {
                     this.availableMetrics =

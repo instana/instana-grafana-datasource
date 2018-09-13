@@ -62,7 +62,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onFilterChange(refresh) {
-    if (this.target.entityQuery === '') { // FIXME should be (!this.target.entityQuery), but this breaks tests?
+    if (this.target.entityQuery === '') {
       this.selectionReset();
       return this.$q.resolve();
     } else {
@@ -124,9 +124,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   filterEntityTypes() {
     this.uniqueEntityTypes =
-      _.filter(
-        this.snapshots,
-        entityType => metricsDefinition[entityType.toLowerCase()] && metricsDefinition[entityType.toLowerCase()].label != null);
+      _.sortBy(
+        _.filter(
+          this.snapshots,
+          entityType => metricsDefinition[entityType.toLowerCase()] && metricsDefinition[entityType.toLowerCase()].label != null),
+        'label');
   }
 
   filterBuildInMetrics(refresh) {
