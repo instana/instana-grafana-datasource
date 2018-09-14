@@ -24,7 +24,6 @@
       <select id="in-category-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.metricCategory" ng-change="ctrl.onMetricCategorySelect()">
         <option value="0" selected>Built-in metrics</option>
         <option value="1">Custom metrics</option>
-        <!-- <option value="2">Metric by name</option> -->
       </select>
     </div>
   </div>
@@ -44,7 +43,7 @@
     </div>
   </div>
 
-  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '0' || ctrl.target.metricCategory === '2'">
+  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '0'">
     <label class="gf-form-label width-13 pointer" for="in-filter-{{ctrl.target.refId}}">
       Filter metric select
       <info-popover position="top center" mode="right-normal">
@@ -54,7 +53,7 @@
     <input id="in-filter-{{ctrl.target.refId}}" class="gf-form-input width-18" type="text" ng-model="ctrl.target.filter" ng-model-options='{ debounce: 200 }' ng-change="ctrl.onMetricsFilter(true)" placeholder="(optional)"/>
   </div>
 
-  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '2'">
+  <div class="gf-form">
     <label class="gf-form-label width-13 pointer" for="in-metric-{{ctrl.target.refId}}">
       Metric
       <info-popover position="top center" mode="right-normal">
@@ -67,15 +66,5 @@
         <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
       </select>
     </div>
-  </div>
-
-  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '0' || ctrl.target.metricCategory === '1'">
-    <label class="gf-form-label width-13 pointer" for="in-input-{{ctrl.target.refId}}">
-      Metric
-      <info-popover position="top center" mode="right-normal">
-        <p>Input the metric you wish to plot.</p>
-      </info-popover>
-    </label>
-    <input id="in-input-{{ctrl.target.refId}}" class="gf-form-input width-18" type="text" ng-model="ctrl.target.metricInput" ng-model-options='{ debounce: 200 }' ng-change="ctrl.onMetricInput()" placeholder="Please Specify"/>
   </div>
 </query-editor-row>

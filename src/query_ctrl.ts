@@ -21,7 +21,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   EMPTY_DROPDOWN_TEXT = ' - ';
   BUILT_IN_METRICS = '0';
   CUSTOM_METRICS = '1';
-  INSERTED_METRIC = '2';
 
   defaults = {
   };
@@ -44,7 +43,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.onFilterChange(false).then(() => {
 
         // built-in metrics support available metrics on a selected entity type
-        if (this.target.entityType && this.hasEntityTypeSelection()) {
+        if (this.target.entityType && this.target.metricCategory === this.BUILT_IN_METRICS) {
           this.onEntityTypeSelect(false);
         }
 
@@ -53,8 +52,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
           this.onMetricsFilter(false);
         }
 
-        // ui inserted metrics will not be available in any known metric list
-        if (this.target.metric && this.target.metricCategory !== this.INSERTED_METRIC) {
+        if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
         }
       });
@@ -78,7 +76,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
             if (this.target.metricCategory === this.CUSTOM_METRICS) {
               this.filterForCustom(refresh);
-            } else if (this.hasEntityTypeSelection()) {
+            } else if (this.target.metricCategory === this.BUILT_IN_METRICS) {
               this.filterForEntityType(refresh);
             }
           },
@@ -131,7 +129,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
         'label');
   }
 
-  filterBuiltInMetrics(refresh) {
+  onEntityTypeSelect(refresh) {
     this.availableMetrics =
       _.sortBy(
         _.map(
@@ -166,11 +164,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
   }
 
-  hasEntityTypeSelection() {
-    return this.target.metricCategory === this.BUILT_IN_METRICS ||
-           this.target.metricCategory === this.INSERTED_METRIC;
-  }
-
   selectionReset() {
     this.uniqueEntityTypes = [];
     this.availableMetrics = [];
@@ -186,8 +179,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   resetMetricSelection() {
     this.target.metric = null;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-
-    this.target.metricInput = null;
   }
 
   adjustEntitySelectionPlaceholder() {
@@ -208,26 +199,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
   }
 
-  onEntityTypeSelect(refresh) {
-    if (this.target.metricCategory === this.BUILT_IN_METRICS) {
-      this.filterBuiltInMetrics(refresh);
-    } else if (this.target.metricCategory === this.INSERTED_METRIC && this.target.metric && refresh) {
-      this.panelCtrl.refresh();
-    }
-  }
-
   onMetricSelect() {
     if (this.target.metricCategory === this.CUSTOM_METRICS) {
       // as there was no type selection upfront, but the metric itself contains the type
       this.target.entityType = this.target.metric.entityType;
-    }
-    this.panelCtrl.refresh();
-  }
-
-  onMetricInput() {
-    if (this.target.metricCategory === this.INSERTED_METRIC) {
-      // convert, as inserted metrics do not match out expect metric object
-      this.target.metric = {'key' : this.target.metricInput, 'label' : 'handmade metric input'};
     }
     this.panelCtrl.refresh();
   }
