@@ -17,10 +17,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
   entitySelectionText: string;
   metricSelectionText: string;
   previousMetricCategory: string;
-  buildInMetricCount: number;
 
   EMPTY_DROPDOWN_TEXT = ' - ';
-  BUILD_IN_METRICS = '0';
+  BUILT_IN_METRICS = '0';
   CUSTOM_METRICS = '1';
   INSERTED_METRIC = '2';
 
@@ -36,26 +35,26 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
 
     // on new panel creation we default the category selection to built-in
-    if (!this.target.metricCategorie) {
-      this.target.metricCategorie = this.BUILD_IN_METRICS;
+    if (!this.target.metricCategory) {
+      this.target.metricCategory = this.BUILT_IN_METRICS;
     }
-    this.previousMetricCategory = this.target.metricCategorie;
+    this.previousMetricCategory = this.target.metricCategory;
 
     if (this.target.entityQuery) {
       this.onFilterChange(false).then(() => {
 
-        // build-in metrics support available metrics on a selected entity type
+        // built-in metrics support available metrics on a selected entity type
         if (this.target.entityType && this.hasEntityTypeSelection()) {
           this.onEntityTypeSelect(false);
         }
 
         // custom metrics include their entity type but can be filtered
-        if (this.target.metricCategorie === this.CUSTOM_METRICS) {
+        if (this.target.metricCategory === this.CUSTOM_METRICS) {
           this.onMetricsFilter(false);
         }
 
         // ui inserted metrics will not be available in any known metric list
-        if (this.target.metric && this.target.metricCategorie !== this.INSERTED_METRIC) {
+        if (this.target.metric && this.target.metricCategory !== this.INSERTED_METRIC) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
         }
       });
@@ -77,7 +76,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
             this.target.queryIsValid = true;
             this.snapshots = response.data;
 
-            if (this.target.metricCategorie === this.CUSTOM_METRICS) {
+            if (this.target.metricCategory === this.CUSTOM_METRICS) {
               this.filterForCustom(refresh);
             } else if (this.hasEntityTypeSelection()) {
               this.filterForEntityType(refresh);
@@ -90,14 +89,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
   }
 
-  onMetricCategorieSelect() {
-    if (this.previousMetricCategory === this.target.metricCategorie) {
+  onMetricCategorySelect() {
+    if (this.previousMetricCategory === this.target.metricCategory) {
       // nothing needs to be done
     } else {
       this.selectionReset();
       this.onFilterChange(true);
     }
-    this.previousMetricCategory = this.target.metricCategorie;
+    this.previousMetricCategory = this.target.metricCategory;
   }
 
   filterForEntityType(refresh) {
@@ -132,7 +131,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
         'label');
   }
 
-  filterBuildInMetrics(refresh) {
+  filterBuiltInMetrics(refresh) {
     this.availableMetrics =
       _.sortBy(
         _.map(
@@ -168,8 +167,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   hasEntityTypeSelection() {
-    return this.target.metricCategorie === this.BUILD_IN_METRICS ||
-           this.target.metricCategorie === this.INSERTED_METRIC;
+    return this.target.metricCategory === this.BUILT_IN_METRICS ||
+           this.target.metricCategory === this.INSERTED_METRIC;
   }
 
   selectionReset() {
@@ -198,7 +197,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   adjustMetricSelectionPlaceholder() {
-    if (this.target.metricCategorie === this.CUSTOM_METRICS) {
+    if (this.target.metricCategory === this.CUSTOM_METRICS) {
       this.metricSelectionText = this.allCustomMetrics.length > 0
       ? 'Please select (' + this.availableMetrics.length + '/' + this.allCustomMetrics.length + ')'
       : this.EMPTY_DROPDOWN_TEXT;
@@ -210,15 +209,15 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onEntityTypeSelect(refresh) {
-    if (this.target.metricCategorie === this.BUILD_IN_METRICS) {
-      this.filterBuildInMetrics(refresh);
-    } else if (this.target.metricCategorie === this.INSERTED_METRIC && this.target.metric && refresh) {
+    if (this.target.metricCategory === this.BUILT_IN_METRICS) {
+      this.filterBuiltInMetrics(refresh);
+    } else if (this.target.metricCategory === this.INSERTED_METRIC && this.target.metric && refresh) {
       this.panelCtrl.refresh();
     }
   }
 
   onMetricSelect() {
-    if (this.target.metricCategorie === this.CUSTOM_METRICS) {
+    if (this.target.metricCategory === this.CUSTOM_METRICS) {
       // as there was no type selection upfront, but the metric itself contains the type
       this.target.entityType = this.target.metric.entityType;
     }
@@ -226,7 +225,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onMetricInput() {
-    if (this.target.metricCategorie === this.INSERTED_METRIC) {
+    if (this.target.metricCategory === this.INSERTED_METRIC) {
       // convert, as inserted metrics do not match out expect metric object
       this.target.metric = {'key' : this.target.metricInput, 'label' : 'handmade metric input'};
     }

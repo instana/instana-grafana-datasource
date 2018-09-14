@@ -31,7 +31,7 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                     this.$q = $q;
                     this.metricsDefinition = metrics_1.default;
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
-                    this.BUILD_IN_METRICS = '0';
+                    this.BUILT_IN_METRICS = '0';
                     this.CUSTOM_METRICS = '1';
                     this.INSERTED_METRIC = '2';
                     this.defaults = {};
@@ -39,22 +39,22 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                     // on new panel creation we default the category selection to built-in
-                    if (!this.target.metricCategorie) {
-                        this.target.metricCategorie = this.BUILD_IN_METRICS;
+                    if (!this.target.metricCategory) {
+                        this.target.metricCategory = this.BUILT_IN_METRICS;
                     }
-                    this.previousMetricCategory = this.target.metricCategorie;
+                    this.previousMetricCategory = this.target.metricCategory;
                     if (this.target.entityQuery) {
                         this.onFilterChange(false).then(function () {
-                            // build-in metrics support available metrics on a selected entity type
+                            // built-in metrics support available metrics on a selected entity type
                             if (_this.target.entityType && _this.hasEntityTypeSelection()) {
                                 _this.onEntityTypeSelect(false);
                             }
                             // custom metrics include their entity type but can be filtered
-                            if (_this.target.metricCategorie === _this.CUSTOM_METRICS) {
+                            if (_this.target.metricCategory === _this.CUSTOM_METRICS) {
                                 _this.onMetricsFilter(false);
                             }
                             // ui inserted metrics will not be available in any known metric list
-                            if (_this.target.metric && _this.target.metricCategorie !== _this.INSERTED_METRIC) {
+                            if (_this.target.metric && _this.target.metricCategory !== _this.INSERTED_METRIC) {
                                 _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                             }
                         });
@@ -74,7 +74,7 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                             .then(function (response) {
                             _this.target.queryIsValid = true;
                             _this.snapshots = response.data;
-                            if (_this.target.metricCategorie === _this.CUSTOM_METRICS) {
+                            if (_this.target.metricCategory === _this.CUSTOM_METRICS) {
                                 _this.filterForCustom(refresh);
                             }
                             else if (_this.hasEntityTypeSelection()) {
@@ -86,14 +86,14 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                         });
                     }
                 };
-                InstanaQueryCtrl.prototype.onMetricCategorieSelect = function () {
-                    if (this.previousMetricCategory === this.target.metricCategorie) {
+                InstanaQueryCtrl.prototype.onMetricCategorySelect = function () {
+                    if (this.previousMetricCategory === this.target.metricCategory) {
                     }
                     else {
                         this.selectionReset();
                         this.onFilterChange(true);
                     }
-                    this.previousMetricCategory = this.target.metricCategorie;
+                    this.previousMetricCategory = this.target.metricCategory;
                 };
                 InstanaQueryCtrl.prototype.filterForEntityType = function (refresh) {
                     this.filterEntityTypes();
@@ -122,7 +122,7 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                     this.uniqueEntityTypes =
                         lodash_1.default.sortBy(lodash_1.default.filter(this.snapshots, function (entityType) { return metrics_1.default[entityType.toLowerCase()] && metrics_1.default[entityType.toLowerCase()].label != null; }), 'label');
                 };
-                InstanaQueryCtrl.prototype.filterBuildInMetrics = function (refresh) {
+                InstanaQueryCtrl.prototype.filterBuiltInMetrics = function (refresh) {
                     this.availableMetrics =
                         lodash_1.default.sortBy(lodash_1.default.map(this.metricsDefinition[this.target.entityType.toLowerCase()].metrics, function (value, key) {
                             return { 'key': key, 'label': value };
@@ -147,8 +147,8 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                     }
                 };
                 InstanaQueryCtrl.prototype.hasEntityTypeSelection = function () {
-                    return this.target.metricCategorie === this.BUILD_IN_METRICS ||
-                        this.target.metricCategorie === this.INSERTED_METRIC;
+                    return this.target.metricCategory === this.BUILT_IN_METRICS ||
+                        this.target.metricCategory === this.INSERTED_METRIC;
                 };
                 InstanaQueryCtrl.prototype.selectionReset = function () {
                     this.uniqueEntityTypes = [];
@@ -171,7 +171,7 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                         : this.EMPTY_DROPDOWN_TEXT;
                 };
                 InstanaQueryCtrl.prototype.adjustMetricSelectionPlaceholder = function () {
-                    if (this.target.metricCategorie === this.CUSTOM_METRICS) {
+                    if (this.target.metricCategory === this.CUSTOM_METRICS) {
                         this.metricSelectionText = this.allCustomMetrics.length > 0
                             ? 'Please select (' + this.availableMetrics.length + '/' + this.allCustomMetrics.length + ')'
                             : this.EMPTY_DROPDOWN_TEXT;
@@ -183,22 +183,22 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                     }
                 };
                 InstanaQueryCtrl.prototype.onEntityTypeSelect = function (refresh) {
-                    if (this.target.metricCategorie === this.BUILD_IN_METRICS) {
-                        this.filterBuildInMetrics(refresh);
+                    if (this.target.metricCategory === this.BUILT_IN_METRICS) {
+                        this.filterBuiltInMetrics(refresh);
                     }
-                    else if (this.target.metricCategorie === this.INSERTED_METRIC && this.target.metric && refresh) {
+                    else if (this.target.metricCategory === this.INSERTED_METRIC && this.target.metric && refresh) {
                         this.panelCtrl.refresh();
                     }
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {
-                    if (this.target.metricCategorie === this.CUSTOM_METRICS) {
+                    if (this.target.metricCategory === this.CUSTOM_METRICS) {
                         // as there was no type selection upfront, but the metric itself contains the type
                         this.target.entityType = this.target.metric.entityType;
                     }
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onMetricInput = function () {
-                    if (this.target.metricCategorie === this.INSERTED_METRIC) {
+                    if (this.target.metricCategory === this.INSERTED_METRIC) {
                         // convert, as inserted metrics do not match out expect metric object
                         this.target.metric = { 'key': this.target.metricInput, 'label': 'handmade metric input' };
                     }
