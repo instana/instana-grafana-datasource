@@ -96,15 +96,7 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['src/**/*.ts', 'src/**/*.html', 'src/**/*.css', 'src/img/*.*', 'src/plugin.json', 'README.md'],
-      tasks: ['unit',
-              'copy:dist_js',
-              'tslint',
-              'typescript:build',
-              'copy:dist_html',
-              'copy:dist_css',
-              'copy:dist_img',
-              'copy:dist_statics'
-      ],
+      tasks: ['default'],
       options: {
         debounceDelay: 250,
       },
@@ -154,15 +146,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('startup', [
-    'clean',
-    'unit',
-    'copy:dist_js',
-    'tslint',
-    'typescript:build',
-    'copy:dist_html',
-    'copy:dist_css',
-    'copy:dist_img',
-    'copy:dist_statics',
+    'default',
     'dockerCompose:build',
     'dockerCompose:up',
     'run:waitForUiBackend',
@@ -185,6 +169,14 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'unit'
+    'clean',
+    'unit',
+    'copy:dist_js',
+    'tslint',
+    'typescript:build',
+    'copy:dist_html',
+    'copy:dist_css',
+    'copy:dist_img',
+    'copy:dist_statics'
   ]);
 };
