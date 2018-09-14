@@ -103,7 +103,6 @@ export default class InstanaDatasource {
     return this.catalogPromise;
   }
 
-
   query(options) {
     if (Object.keys(options.targets[0]).length === 0) {
       return this.$q.resolve({ data: [] });
