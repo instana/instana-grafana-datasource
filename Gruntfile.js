@@ -159,14 +159,6 @@ module.exports = function(grunt) {
     'watch'
   ]);
 
-  grunt.registerTask('continue', [
-    'cleanTestCopy',
-    'dockerCompose:up',
-    'run:waitForUiBackend',
-    'run:waitForGrafana',
-    'watch'
-  ]);
-
   grunt.registerTask('shutdown', [
     'dockerCompose:down'
   ]);
