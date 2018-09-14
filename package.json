@@ -7,7 +7,6 @@
     "functional": "grunt functional",
     "refresh": "grunt refresh",
     "startup": "grunt startup",
-    "continue": "grunt continue",
     "shutdown": "grunt shutdown",
     "unit": "grunt unit",
     "test": "grunt unit",
