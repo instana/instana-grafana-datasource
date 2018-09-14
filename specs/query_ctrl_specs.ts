@@ -1,9 +1,9 @@
 import { describe, beforeEach, it, sinon, expect } from "./lib/common";
-import { InstanaQueryCtrl } from "../src/query_ctrl";
 import TemplateSrvStub from "./lib/template_srv_stub";
-import Q from "q";
-import moment from "moment";
+import { InstanaQueryCtrl } from "../src/query_ctrl";
 import { PanelCtrl } from "app/plugins/sdk";
+import moment from "moment";
+import Q from "q";
 
 describe("InstanaQueryCtrl", function() {
   let ctx: any = {
@@ -31,7 +31,7 @@ describe("InstanaQueryCtrl", function() {
     };
   });
 
-  describe("when entering a filter", function() {
+  describe("when entering a dynamic focus query", function() {
     describe("that returns some snapshots", function() {
       it("should populate the entity types dropdown with unique entity types", function() {
         queryCtrl.datasource.request = function(options) {
@@ -40,7 +40,7 @@ describe("InstanaQueryCtrl", function() {
           });
         };
 
-        queryCtrl.target.filter = "*eu";
+        queryCtrl.target.entityQuery = "*eu";
 
         return queryCtrl.onFilterChange().then(() => {
           expect(queryCtrl.uniqueEntityTypes).to.eql([
@@ -77,7 +77,7 @@ describe("InstanaQueryCtrl", function() {
           });
         };
 
-        queryCtrl.target.filter = "*eu";
+        queryCtrl.target.entityQuery = "*eu";
 
         return queryCtrl.onFilterChange().then(() => {
           expect(queryCtrl.target.queryIsValid).to.equal(false);

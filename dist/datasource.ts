@@ -55,7 +55,6 @@ export default class InstanaDatasource {
     this.currentTime = () => { return new Date().getTime(); };
   }
 
-
   storeInCache = (id, query, data) => {
     if (!this.snapshotCache) {
       this.snapshotCache = {};
@@ -95,7 +94,7 @@ export default class InstanaDatasource {
             _.map(catalogResponse.data, entry => ({
               'key' : entry.metricId,
               'label' : entry.description, // shorter than entry.label
-              'entityType' : entry.pluginId // to match the metrics definition from build-in metrics
+              'entityType' : entry.pluginId
             }))
           )
         )

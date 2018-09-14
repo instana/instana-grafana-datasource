@@ -3,6 +3,7 @@
 import metricsDefinition from './metrics';
 import {QueryCtrl} from 'app/plugins/sdk';
 import _ from 'lodash';
+
 import './css/query_editor.css!';
 
 export class InstanaQueryCtrl extends QueryCtrl {
