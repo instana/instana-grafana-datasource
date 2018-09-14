@@ -96,7 +96,7 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['src/**/*.ts', 'src/**/*.html', 'src/**/*.css', 'src/img/*.*', 'src/plugin.json', 'README.md'],
-      tasks: ['build'],
+      tasks: ['cleanTestCopy'],
       options: {
         debounceDelay: 250,
       },
@@ -150,7 +150,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('startup', [
-    'build',
+    'cleanTestCopy',
     'dockerCompose:build',
     'dockerCompose:up',
     'run:waitForUiBackend',
@@ -160,7 +160,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('continue', [
-    'build',
+    'cleanTestCopy',
     'dockerCompose:up',
     'run:waitForUiBackend',
     'run:waitForGrafana',
@@ -176,7 +176,7 @@ module.exports = function(grunt) {
     'startup'
   ]);
 
-  grunt.registerTask('build', [
+  grunt.registerTask('cleanTestCopy', [
     'clean',
     'unit',
     'copy:dist_js',
@@ -189,7 +189,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'build',
+    'cleanTestCopy',
     'dockerCompose:build',
     'dockerCompose:up',
     'run:waitForUiBackend',
