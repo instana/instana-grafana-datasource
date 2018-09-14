@@ -96,7 +96,7 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['src/**/*.ts', 'src/**/*.html', 'src/**/*.css', 'src/img/*.*', 'src/plugin.json', 'README.md'],
-      tasks: ['default'],
+      tasks: ['build'],
       options: {
         debounceDelay: 250,
       },
@@ -145,13 +145,25 @@ module.exports = function(grunt) {
     'karma:unit'
   ]);
 
+  grunt.registerTask('functional', [
+    'run:functionalTests'
+  ]);
+
   grunt.registerTask('startup', [
-    'default',
+    'build',
     'dockerCompose:build',
     'dockerCompose:up',
     'run:waitForUiBackend',
     'run:waitForGrafana',
     'functional',
+    'watch'
+  ]);
+
+  grunt.registerTask('continue', [
+    'build',
+    'dockerCompose:up',
+    'run:waitForUiBackend',
+    'run:waitForGrafana',
     'watch'
   ]);
 
@@ -164,11 +176,7 @@ module.exports = function(grunt) {
     'startup'
   ]);
 
-  grunt.registerTask('functional', [
-    'run:functionalTests'
-  ]);
-
-  grunt.registerTask('default', [
+  grunt.registerTask('build', [
     'clean',
     'unit',
     'copy:dist_js',
@@ -178,5 +186,14 @@ module.exports = function(grunt) {
     'copy:dist_css',
     'copy:dist_img',
     'copy:dist_statics'
+  ]);
+
+  grunt.registerTask('default', [
+    'build',
+    'dockerCompose:build',
+    'dockerCompose:up',
+    'run:waitForUiBackend',
+    'run:waitForGrafana',
+    'functional'
   ]);
 };

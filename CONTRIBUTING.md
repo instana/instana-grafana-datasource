@@ -15,9 +15,9 @@ The following yarn run scripts are available. You can also run them via Grunt di
 - `yarn run build` (runs the `grunt` default task) should run before every commit. It cleans the dist directory, executes the unit tests (building TypeScript on-the-fly), copies sources to the dist folder, transpiles TypeScript to javascript, copies static assets to the dist folder, builds the mountebank container, starts the grafana and the mountebank container, executes the functional tests and stops the containers afterwards.
 - `yarn test` (`grunt unit`) executes unit tests once.
 - `yarn run unit` alias for yarn test
-- `yarn run unit-watch` starts karma and keeps it running with file watcher enabled so that it reruns all the tests automatically when a file changes (to be used with yarn run watch, see below).
-- `yarn run watch` (`grunt watch`) will build the TypeScript files and copy everything to the dist directory automatically when a file changes. This is useful for when working on the code. To be used with `yarn run unit-watch` (see above).
-- `yarn run startup` (`grunt startup`) same as the default task but keeps the containers running.
+- `yarn run watch` (`grunt watch`) will build the TypeScript files and copy everything to the dist directory automatically when a file changes. This is useful for when working on the code.
+- `yarn run startup` (`grunt startup`) initializes the containers and adds a new datasource via the functional, then watch (see above)
+- `yarn run continue` (`grunt continue`) continues working on existing local containers, with watch (see above)
 - `yarn run shutdown` (`grunt shutdown`) stops the containers.
 - `yarn run refresh` (`grunt refresh`) same as default but stops running containers first.
 - `yarn run functional` (`grunt functional`) (also available via ) executes the functional tests. Assumes that the grafana container is running. UI backend and api token are resolved respectively by the INSTANA_UI_BACKEND_URL and the INSTANA_API_TOKEN environment variables.
@@ -57,7 +57,7 @@ The settings for Karma are in the karma.conf.js file in the root. If you add any
 ## Publishing a New Version
 
 * Run `yarn install`.
-* Run the full build.
+* Run the full build with `yarn run build`.
 * Make sure that the quick check scenario described below works locally.
 * Update `src/plugin.json` with the new version number and the version date.
 * Run the full build again, this should update `dist/plugin.json`.
@@ -84,4 +84,3 @@ This procedure is used to test the Instana Grafana data source before the versio
 * Metric: `Virtual (mem.virtual)`
 
 This should render a chart with two datasets (`node (on host "host-1")` and `node (on host "host-2)`).
-
