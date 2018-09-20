@@ -16,24 +16,13 @@ The following yarn run scripts are available. You can also run them via Grunt di
 - `yarn test` (`grunt unit`) executes unit tests once.
 - `yarn run unit` alias for yarn test
 - `yarn run unit-watch` starts karma and keeps it running with file watcher enabled so that it reruns all the tests automatically when a file changes (to be used with yarn run watch, see below).
-- `yarn run watch` (`grunt watch`) will build the TypeScript files and copy everything to the dist directory automatically when a file changes. This is useful for when working on the code.
-- `yarn run startup` (`grunt startup`) initializes the containers and adds a new datasource via the functional, then watch (see above)
+- `yarn run watch` (`grunt watch`) will build the TypeScript files and copy everything to the dist directory automatically when a file changes. This is useful for when working on the code. To be used with `yarn run unit-watch` (see above).
+- `yarn run startup` (`grunt startup`) same as the default task but keeps the containers running.
 - `yarn run shutdown` (`grunt shutdown`) stops the containers.
 - `yarn run refresh` (`grunt refresh`) same as default but stops running containers first.
 - `yarn run functional` (`grunt functional`) (also available via ) executes the functional tests. Assumes that the grafana container is running. UI backend and api token are resolved respectively by the INSTANA_UI_BACKEND_URL and the INSTANA_API_TOKEN environment variables.
 
 ## Getting Started
-
-Make sure that Chrome is available.
-
-The following output is an indicator that Chrome is not reachable/installed.
-```
-11 09 2018 08:53:46.300:INFO [launcher]: Launching browser ChromeHeadless with unlimited concurrency
-11 09 2018 08:53:46.340:INFO [launcher]: Starting browser ChromeHeadless
-11 09 2018 08:54:46.343:WARN [launcher]: ChromeHeadless have not captured in 60000 ms, killing.
-11 09 2018 08:54:48.348:WARN [launcher]: ChromeHeadless was not killed in 2000 ms, sending SIGKILL.
-11 09 2018 08:54:50.352:WARN [launcher]: ChromeHeadless was not killed by SIGKILL in 2000 ms, continuing.
-```
 
 1. Make sure `yarn` is installed (everything should work also with npm but YMMV)
 2. Install realpath and timeout (`brew install coreutils`, remember to put them on the `$PATH`: `export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"`)
@@ -57,21 +46,22 @@ The settings for Karma are in the karma.conf.js file in the root. If you add any
 ## Publishing a New Version
 
 * Run `yarn install`.
-* Run the full build with `yarn run build`.
+* Run the full build.
 * Make sure that the quick check scenario described below works locally.
 * Update `src/plugin.json` with the new version number and the version date.
 * Run the full build again, this should update `dist/plugin.json`.
-* Commit this with a matching commit message (like `Version x.y.z`) and push this commit.
-* Note the commit hash of this commit.
-* If you haven't already, `git clone github.com:instana/grafana-plugin-repository.git && git remote add grafana git@github.com:grafana/grafana-plugin-repository.git`.
-* `cd path/to/grafana-plugin-repository`
+* Commit this with a matching commit message (like `Bumped version to x.x.x`) and push this commit.
+* Note the commit hash of this commit (to extend repo.json in plugin-repository).
+* If you haven't already, `git clone github.com:instana/grafana-plugin-repository.git`
+* `cd grafana-plugin-repository`
+* `git remote add grafana git@github.com:grafana/grafana-plugin-repository.git`.
 * `git checkout master && git fetch grafana && git merge grafana/master --ff`
 * Create a branch for the new release and add the new version to `repo.json`.
-* Commit, push and create a PR at <https://github.com/grafana/grafana-plugin-repository>
+* Commit, push and create a PR `Instana datasource plugin x.x.x`at <https://github.com/grafana/grafana-plugin-repository>
 
 ### Quick Check
 
-This procedure is used to test the Instana Grafana data source before the version update PR is accepted by Grafan. That is, directory names as `instana-datasource` are valid in a Grafana workspace with this plugin installed, not in this repository. To run this scenario directly in this repository, simply omit `cd instana-datasource` and replace `docker-compose up mountebank` by `docker-compose up`.
+This procedure is used to test the Instana Grafana data source before the version update PR is accepted by Grafana. That is, directory names as `instana-datasource` are valid in a Grafana workspace with this plugin installed, not in this repository. To run this scenario directly in this repository, simply omit `cd instana-datasource` and replace `docker-compose up mountebank` by `docker-compose up`.
 
 * `cd instana-datasource`
 * `docker-compose up mountebank`
@@ -80,6 +70,7 @@ This procedure is used to test the Instana Grafana data source before the versio
     * API Token: `valid-api-token`
 * Create a new dashboard with a graph panel
 * Query: `filler`
+* Category: `Built-in Metrics`
 * Type: `Processes`
 * Metric: `Virtual (mem.virtual)`
 

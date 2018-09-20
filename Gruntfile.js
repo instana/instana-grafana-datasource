@@ -151,6 +151,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('startup', [
     'default',
+    'prepareEnvironment',
     'watch'
   ]);
 
@@ -174,13 +175,16 @@ module.exports = function(grunt) {
     'copy:dist_statics'
   ]);
 
-  grunt.registerTask('default', [
-    'clean',
-    'testAndCopy',
+  grunt.registerTask('prepareEnvironment', [
     'dockerCompose:build',
     'dockerCompose:up',
     'run:waitForUiBackend',
     'run:waitForGrafana',
     'functional'
+  ]);
+
+  grunt.registerTask('default', [
+    'clean',
+    'testAndCopy'
   ]);
 };
