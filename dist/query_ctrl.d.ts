@@ -8,6 +8,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     metricsDefinition: {
         "host": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "memory.free": string;
                 "memory.used": string;
@@ -18,6 +19,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "cpu.nice": string;
                 "cpu.steal": string;
                 "cpu.used": string;
+                "topPID": string;
                 "swap.pgin": string;
                 "swap.pgout": string;
                 "tcp.established": string;
@@ -33,6 +35,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "activemq": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "totalQueuesEnqueueCount": string;
                 "totalQueuesDequeueCount": string;
@@ -47,6 +50,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "application": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -63,6 +67,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "awsdynamodb": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "provisioned_read": string;
                 "consumed_read": string;
@@ -139,6 +144,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "awsec": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "cpu_utilization": string;
                 "freeable_memory": string;
@@ -154,6 +160,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "awselb": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "processed_bytes": string;
                 "new_flow_count": string;
@@ -169,6 +176,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "awskinesis": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "get_records_records": string;
                 "get_records_success": string;
@@ -187,6 +195,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "awslambda": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "invocations": string;
                 "errors": string;
@@ -209,6 +218,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "awsrds": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "cpu_utilization": string;
                 "cpu_credit_usage": string;
@@ -232,6 +242,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "awssqs": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "num_of_msg_delayed": string;
                 "num_of_msg_not_visible": string;
@@ -243,6 +254,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "awss3": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "all_requests": string;
                 "get_requests": string;
@@ -257,25 +269,27 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "5xx_errors": string;
             };
         };
-        "batchserviceinstance": {
+        "azureappservice": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
-                "count": string;
-                "duration.mean": string;
-                "duration.min": string;
-                "duration.max": string;
-                "duration.25th": string;
-                "duration.50th": string;
-                "duration.75th": string;
-                "duration.95th": string;
-                "duration.98th": string;
-                "duration.99th": string;
-                "error_rate": string;
-                "instances": string;
+                "art": string;
+                "h2x": string;
+                "h4x": string;
+                "h5x": string;
+                "trs": string;
+                "qrs": string;
+                "bts": string;
+                "btr": string;
+                "g0c": string;
+                "g1c": string;
+                "g2c": string;
             };
         };
-        "browserlogicalconnection": {
+        "batchserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -293,6 +307,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "browserlogicalservice": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -321,6 +336,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "cassandracluster": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "clientrequests.read.count": string;
                 "clientrequests.write.count": string;
@@ -339,6 +355,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "cassandrakeyspaceserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -356,6 +374,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "cassandranode": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "clientrequests.read.mean": string;
                 "clientrequests.read.50": string;
@@ -393,6 +412,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "ceph": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "num_mons": string;
                 "num_active_mons": string;
@@ -415,6 +435,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "clickhousedatabase": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "Merge": string;
                 "ReplicatedFetch": string;
@@ -451,10 +472,74 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "RWLockWaitingWriters": string;
                 "RWLockActiveReaders": string;
                 "RWLockActiveWriters": string;
+                "Query": string;
+                "SelectQuery": string;
+                "InsertQuery": string;
+                "FileOpen": string;
+                "Seek": string;
+                "ReadBufferFromFileDescriptorRead": string;
+                "ReadBufferFromFileDescriptorReadBytes": string;
+                "WriteBufferFromFileDescriptorWrite": string;
+                "WriteBufferFromFileDescriptorWriteBytes": string;
+                "ReadCompressedBytes": string;
+                "CompressedReadBufferBlocks": string;
+                "CompressedReadBufferBytes": string;
+                "IOBufferAllocs": string;
+                "IOBufferAllocBytes": string;
+                "ArenaAllocChunks": string;
+                "ArenaAllocBytes": string;
+                "FunctionExecute": string;
+                "TableFunctionExecute": string;
+                "MarkCacheHits": string;
+                "MarkCacheMisses": string;
+                "CreatedReadBufferOrdinary": string;
+                "CreatedWriteBufferOrdinary": string;
+                "ReplicatedPartMerges": string;
+                "InsertedRows": string;
+                "InsertedBytes": string;
+                "DuplicatedInsertedBlocks": string;
+                "ZooKeeperInit": string;
+                "ZooKeeperTransactions": string;
+                "ZooKeeperList": string;
+                "ZooKeeperCreate": string;
+                "ZooKeeperRemove": string;
+                "ZooKeeperExists": string;
+                "ZooKeeperGet": string;
+                "ZooKeeperSet": string;
+                "ZooKeeperMulti": string;
+                "ZooKeeperClose": string;
+                "ZooKeeperWatchResponse": string;
+                "ZooKeeperExceptions": string;
+                "ZooKeeperWaitMicroseconds": string;
+                "ZooKeeperBytesSent": string;
+                "ZooKeeperBytesReceived": string;
+                "DistributedConnectionStaleReplica": string;
+                "SlowRead": string;
+                "ReplicaPartialShutdown": string;
+                "SelectedParts": string;
+                "SelectedRanges": string;
+                "SelectedMarks": string;
+                "MergedRows": string;
+                "MergedUncompressedBytes": string;
+                "MergesTimeMilliseconds": string;
+                "MergeTreeDataWriterRows": string;
+                "MergeTreeDataWriterUncompressedBytes": string;
+                "MergeTreeDataWriterCompressedBytes": string;
+                "MergeTreeDataWriterBlocks": string;
+                "MergeTreeDataWriterBlocksAlreadySorted": string;
+                "CannotRemoveEphemeralNode": string;
+                "LeaderElectionAcquiredLeadership": string;
+                "RegexpCreated": string;
+                "ContextLock": string;
+                "RWLockAcquiredReadLocks": string;
+                "RWLockAcquiredWriteLocks": string;
+                "RWLockReadersWaitMilliseconds": string;
+                "RWLockWritersWaitMilliseconds": string;
             };
         };
         "clrruntimeplatform": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "mem.gen0GC": string;
                 "mem.gen1GC": string;
@@ -468,12 +553,14 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "cloudfoundry": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "nodeCount": string;
             };
         };
         "consul": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "consul.runtime.free_count": string;
                 "consul.runtime.heap_objects": string;
@@ -499,6 +586,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "couchbasecluster": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "cluster.usedDisk": string;
                 "cluster.usedMemory": string;
@@ -510,6 +598,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "couchbasenode": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "node.mem_used": string;
                 "node.couch_docs_actual_disk_size": string;
@@ -520,6 +609,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "crystalruntimeplatform": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "gc.hs": string;
                 "gc.fb": string;
@@ -529,6 +619,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "databaseserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -546,6 +638,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "defaultentity20": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -562,6 +655,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "defaultlogicalconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -579,6 +674,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "defaultlogicalservice": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -596,6 +692,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "defaultserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -613,6 +711,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "docker": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "cpu.total_usage": string;
                 "cpu.system_usage": string;
@@ -639,14 +738,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "dropwizardapplicationcontainer": {
             "label": string;
-            "metrics": {
-                "metrics.meters.com.instana.filler.topology.spans.SpansStreamInitializer.accepted-from-kafka-spans": string;
-                "metrics.meters.com.instana.filler.spanbuffer.ScheduledSpanBatcher.dropped-spans": string;
-                "metrics.meters.com.instana.filler.topology.RawMessagesStreamInitializer.dropped-messages": string;
-            };
+            "deprecated": boolean;
+            "metrics": {};
         };
         "ejblogicalconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -664,6 +762,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "ejblogicalservice": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -681,6 +780,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "ejbserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -698,6 +799,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "elasticsearchcluster": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "query_latency": string;
                 "query_count": string;
@@ -717,6 +819,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "elasticsearchindexserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -734,6 +838,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "elasticsearchnode": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "indices.query_latency": string;
                 "indices.query_count": string;
@@ -772,6 +877,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "etcd": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "requests_received": string;
                 "requests_sent": string;
@@ -797,14 +903,18 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "finagleapplicationcontainer": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {};
         };
         "f5": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {};
         };
         "ftpserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -822,6 +932,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "glassfishapplicationcontainer": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "http_request_count": string;
                 "http_error": string;
@@ -850,6 +961,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "golangruntimeplatform": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "metrics.memory.pause_ns": string;
                 "metrics.goroutine": string;
@@ -862,6 +974,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "hadoopyarn": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "activeNodes": string;
                 "lostNodes": string;
@@ -881,6 +994,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "hadoopyarnnode": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "allocatedVCores": string;
                 "availableVCores": string;
@@ -890,10 +1004,48 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "haproxy": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {};
+        };
+        "hazelcastcluster": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "isClusterSafe": string;
+                "nodeCount": string;
+            };
+        };
+        "hazelcastnode": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "nodeMetrics.clientEndpointCount": string;
+                "nodeMetrics.eventQueueSize": string;
+                "nodeMetrics.migrationQueueSize": string;
+                "isLiteMember": string;
+                "isLocalMemberSafe": string;
+                "isClusterSafe": string;
+                "distributedObjects.cacheCount": string;
+                "distributedObjects.mapCount": string;
+                "distributedObjects.replicatedMapCount": string;
+                "distributedObjects.multiMapCount": string;
+                "distributedObjects.queueCount": string;
+                "distributedObjects.listCount": string;
+                "distributedObjects.setCount": string;
+                "distributedObjects.topicCount": string;
+                "distributedObjects.executorCount": string;
+                "distributedObjects.otherCount": string;
+                "executorServiceQueueSize.asyncExecutor": string;
+                "executorServiceQueueSize.clientExecutor": string;
+                "executorServiceQueueSize.queryExecutor": string;
+                "executorServiceQueueSize.scheduledExecutor": string;
+                "executorServiceQueueSize.systemExecutor": string;
+                "executorServiceQueueSize.ioExecutor": string;
+            };
         };
         "httpd": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "requests": string;
                 "kBytes": string;
@@ -917,6 +1069,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "instanaagent": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "cpu.load": string;
                 "memory.used": string;
@@ -931,10 +1084,12 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "jbossasapplicationcontainer": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {};
         };
         "jbossdatagrid": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "hotRod.numberOfLocalConnections": string;
                 "hotRod.numberOfGlobalConnections": string;
@@ -942,6 +1097,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "jettyapplicationcontainer": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "idleThreads": string;
                 "busyThreads": string;
@@ -951,6 +1107,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "jiraapplication": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "instruments.http.sessions": string;
                 "instruments.concurrent.requests": string;
@@ -959,18 +1116,19 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "jvmruntimeplatform": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "threads.new": string;
                 "threads.runnable": string;
                 "threads.timed-waiting": string;
                 "threads.waiting": string;
                 "threads.blocked": string;
-                "threads.terminated": string;
                 "memory.used": string;
             };
         };
         "kafka": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "broker.bytesIn": string;
                 "broker.bytesOut": string;
@@ -1000,12 +1158,14 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "kafkacluster": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "nodeCount": string;
             };
         };
         "kubernetescluster": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "allocatedCapacityPodsRatio": string;
                 "requiredCapacityCPURatio": string;
@@ -1033,6 +1193,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "kubernetespod": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "containers.count": string;
                 "cpuRequests": string;
@@ -1043,6 +1204,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "kubernetesnode": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "allocatedPods": string;
                 "cap_pods": string;
@@ -1061,6 +1223,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "kubernetesdeployment": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "availableReplicas": string;
                 "desiredReplicas": string;
@@ -1077,6 +1240,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "openshiftdeploymentconfig": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "availableReplicas": string;
                 "desiredReplicas": string;
@@ -1093,6 +1257,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "ldaplogicalconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1110,6 +1276,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "ldaplogicalservice": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1127,6 +1294,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "ldapserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1144,6 +1313,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalbatch": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1161,6 +1331,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalbatchconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1178,6 +1350,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalcassandraconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1195,6 +1369,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicaldatabase": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1212,6 +1387,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicaldatabaseconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1229,6 +1406,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalejbconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1246,6 +1425,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalelasticsearchconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1263,6 +1444,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalelasticsearchindex": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1280,6 +1462,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalftpconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1297,6 +1481,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalftpservice": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1314,6 +1499,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalhttpconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1331,6 +1518,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicaljdbcconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1348,6 +1537,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalkafkaconsumerconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1365,6 +1556,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalkafkapublisherconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1382,6 +1575,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalmessagebroker": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1399,6 +1593,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalmessageconsumer": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1416,6 +1611,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalmessageconsumerconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1433,6 +1630,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalmessagepublisherconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1450,6 +1649,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalmongodbconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1467,6 +1668,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalmongodbdatabase": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1484,6 +1686,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalmsmqconsumerconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1501,6 +1705,45 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalmsmqpublisherconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
+            "metrics": {
+                "count": string;
+                "duration.mean": string;
+                "duration.min": string;
+                "duration.max": string;
+                "duration.25th": string;
+                "duration.50th": string;
+                "duration.75th": string;
+                "duration.95th": string;
+                "duration.98th": string;
+                "duration.99th": string;
+                "error_rate": string;
+                "instances": string;
+            };
+        };
+        "logicalneo4jconnection": {
+            "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
+            "metrics": {
+                "count": string;
+                "duration.mean": string;
+                "duration.min": string;
+                "duration.max": string;
+                "duration.25th": string;
+                "duration.50th": string;
+                "duration.75th": string;
+                "duration.95th": string;
+                "duration.98th": string;
+                "duration.99th": string;
+                "error_rate": string;
+                "instances": string;
+            };
+        };
+        "logicalneo4jdatabase": {
+            "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1518,6 +1761,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalrabbitmqconsumerconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1535,6 +1780,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalrabbitmqpublisherconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1552,6 +1799,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalredisconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1569,6 +1818,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalredisdatabase": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1586,6 +1836,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalrpcconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1603,6 +1855,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalrpcendpoint": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1620,6 +1874,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "logicalwebapp": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1637,6 +1892,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "mariadbdatabase": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "status.THREADS_CONNECTED": string;
                 "status.MAX_USED_CONNECTIONS": string;
@@ -1652,6 +1908,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "memcached": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "cmd_get": string;
                 "cmd_set": string;
@@ -1673,6 +1930,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "messagebrokerserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1690,6 +1949,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "messageconsumerserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1707,6 +1968,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "mongodb": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "documents.deleted": string;
                 "documents.inserted": string;
@@ -1729,6 +1991,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "mongodbdatabaseserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -1744,12 +2008,38 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "instances": string;
             };
         };
+        "mongodbreplicaset": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "nodeCount": string;
+                "documents.deleted": string;
+                "documents.inserted": string;
+                "documents.returned": string;
+                "documents.updated": string;
+                "connections": string;
+                "repl.apply_ops": string;
+                "repl.apply_bathes": string;
+                "repl.apply_bathes_total_ms": string;
+                "repl.buffer_count": string;
+                "repl.buffer_size_bytes": string;
+                "repl.network_ops": string;
+                "repl.network_bytes": string;
+                "repl.preload_docs_num": string;
+                "repl.preload_docs_total_ms": string;
+                "repl.preload_idx_num": string;
+                "repl.preload_idx_total_ms": string;
+                "repl.replication_lag": string;
+            };
+        };
         "msiis": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {};
         };
         "mssqldatabase": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "generalstats._total.user_connections": string;
                 "waitstats.PAGEIOLATCH_EX.wait_time_ms": string;
@@ -1767,10 +2057,12 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "mule": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {};
         };
         "mysqldatabase": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "status.COM_SELECT": string;
                 "status.COM_UPDATE": string;
@@ -1791,6 +2083,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "netcoreruntimeplatform": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "metrics.gcCount": string;
                 "metrics.exceptionThrownCount": string;
@@ -1801,8 +2094,28 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "metrics.heapSizeGen3": string;
             };
         };
+        "neo4jserviceinstance": {
+            "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
+            "metrics": {
+                "count": string;
+                "duration.mean": string;
+                "duration.min": string;
+                "duration.max": string;
+                "duration.25th": string;
+                "duration.50th": string;
+                "duration.75th": string;
+                "duration.95th": string;
+                "duration.98th": string;
+                "duration.99th": string;
+                "error_rate": string;
+                "instances": string;
+            };
+        };
         "nginx": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "requests": string;
                 "connections.accepted": string;
@@ -1816,6 +2129,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "nodejsruntimeplatform": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "gc.gcPause": string;
                 "activeHandles": string;
@@ -1834,6 +2148,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "nomadscheduler": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "nomad.client.allocated.cpu": string;
                 "nomad.client.allocated.disk": string;
@@ -1873,6 +2188,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "oracledb": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "stats.dbTime": string;
                 "stats.cpuTime": string;
@@ -1910,63 +2226,21 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "stats.usedSessionsRatio": string;
             };
         };
-        "pageresourcelogicalconnection": {
+        "ping": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
-                "count": string;
-                "duration.mean": string;
-                "duration.min": string;
-                "duration.max": string;
-                "duration.25th": string;
-                "duration.50th": string;
-                "duration.75th": string;
-                "duration.95th": string;
-                "duration.98th": string;
-                "duration.99th": string;
-                "error_rate": string;
-                "instances": string;
-            };
-        };
-        "pageresourcelogicalservice": {
-            "label": string;
-            "metrics": {
-                "count": string;
-                "duration.mean": string;
-                "duration.min": string;
-                "duration.max": string;
-                "duration.25th": string;
-                "duration.50th": string;
-                "duration.75th": string;
-                "duration.95th": string;
-                "duration.98th": string;
-                "duration.99th": string;
-                "error_rate": string;
-                "instances": string;
-            };
-        };
-        "pageresourceserviceinstance": {
-            "label": string;
-            "metrics": {
-                "count": string;
-                "duration.mean": string;
-                "duration.min": string;
-                "duration.max": string;
-                "duration.25th": string;
-                "duration.50th": string;
-                "duration.75th": string;
-                "duration.95th": string;
-                "duration.98th": string;
-                "duration.99th": string;
-                "error_rate": string;
-                "instances": string;
+                "duration": string;
             };
         };
         "phpfpmruntimeplatform": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {};
         };
         "postgresqldatabase": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "totalCommittedTransactions": string;
                 "max_conn_pct": string;
@@ -1975,16 +2249,20 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "process": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "mem.virtual": string;
                 "mem.resident": string;
                 "mem.share": string;
                 "cpu.user": string;
                 "cpu.sys": string;
+                "ctx_switches.voluntary": string;
+                "ctx_switches.nonvoluntary": string;
             };
         };
         "pythonruntimeplatform": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "metrics.ru_utime": string;
                 "metrics.ru_stime": string;
@@ -2015,6 +2293,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "rabbitmq": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "overview.publish_rate": string;
                 "overview.deliver_rate": string;
@@ -2030,6 +2309,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "redisserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -2047,6 +2328,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "rpcendpointserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -2064,6 +2347,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "rubyruntimeplatform": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "memory.rss_size": string;
                 "gc.heap_live": string;
@@ -2076,6 +2360,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "saphana": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "stats.usedMemory": string;
                 "stats.residentMemory": string;
@@ -2112,6 +2397,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "sdklogicalconnection": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -2129,6 +2416,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "sdklogicalservice": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -2146,6 +2434,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "sdkserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -2163,6 +2453,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "service": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -2179,10 +2470,12 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "solr": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {};
         };
         "sparkapplication": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "failedJobs": string;
                 "completedJobs": string;
@@ -2203,6 +2496,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "sparkstandalone": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "workers.aliveWorkers": string;
                 "workers.deadWorkers": string;
@@ -2216,6 +2510,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "springbootapplicationcontainer": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "metrics.requests": string;
                 "metrics.statusCode.1xx": string;
@@ -2228,6 +2523,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "unknownservice": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -2245,6 +2541,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "varnish": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "sess_conn": string;
                 "client_req": string;
@@ -2272,6 +2569,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "webappserviceinstance": {
             "label": string;
+            "deprecated": boolean;
+            "deprecationReason": string;
             "metrics": {
                 "count": string;
                 "duration.mean": string;
@@ -2289,6 +2588,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "weblogicapplicationcontainer": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "threadPool.idleThreads": string;
                 "threadPool.totalThreads": string;
@@ -2304,6 +2604,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "websphereapplicationcontainer": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "threadPools.webContainer.activeThreads": string;
                 "threadPools.webContainer.poolSize": string;
@@ -2311,6 +2612,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
         "webspherelibertyapplicationcontainer": {
             "label": string;
+            "deprecated": boolean;
             "metrics": {
                 "threadPool.activeThreads": string;
                 "threadPool.poolSize": string;
@@ -2318,14 +2620,30 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         };
     };
     uniqueEntityTypes: Array<string>;
+    allCustomMetrics: Array<Object>;
     availableMetrics: Array<Object>;
+    snapshots: Array<string>;
     entitySelectionText: string;
     metricSelectionText: string;
+    previousMetricCategory: string;
     EMPTY_DROPDOWN_TEXT: string;
+    BUILT_IN_METRICS: string;
+    CUSTOM_METRICS: string;
     defaults: {};
     /** @ngInject **/
     constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any, $q: any);
     onFilterChange(refresh: any): any;
+    onMetricCategorySelect(): void;
+    filterForEntityType(refresh: any): void;
+    filterForCustom(refresh: any): void;
+    filterEntityTypes(): void;
     onEntityTypeSelect(refresh: any): void;
+    onMetricsFilter(refresh: any): void;
+    checkMetricAndRefresh(refresh: any): void;
+    selectionReset(): void;
+    resetEntityTypeSelection(): void;
+    resetMetricSelection(): void;
+    adjustEntitySelectionPlaceholder(): void;
+    adjustMetricSelectionPlaceholder(): void;
     onMetricSelect(): void;
 }

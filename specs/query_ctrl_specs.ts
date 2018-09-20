@@ -1,9 +1,9 @@
 import { describe, beforeEach, it, sinon, expect } from "./lib/common";
-import { InstanaQueryCtrl } from "../src/query_ctrl";
 import TemplateSrvStub from "./lib/template_srv_stub";
-import Q from "q";
-import moment from "moment";
+import { InstanaQueryCtrl } from "../src/query_ctrl";
 import { PanelCtrl } from "app/plugins/sdk";
+import moment from "moment";
+import Q from "q";
 
 describe("InstanaQueryCtrl", function() {
   let ctx: any = {
@@ -11,7 +11,6 @@ describe("InstanaQueryCtrl", function() {
     templateSrv: new TemplateSrvStub()
   };
 
-  beforeEach(function() {});
   let queryCtrl;
 
   beforeEach(function() {
@@ -32,7 +31,7 @@ describe("InstanaQueryCtrl", function() {
     };
   });
 
-  describe("when entering a filter", function() {
+  describe("when entering a dynamic focus query", function() {
     describe("that returns some snapshots", function() {
       it("should populate the entity types dropdown with unique entity types", function() {
         queryCtrl.datasource.request = function(options) {
@@ -41,7 +40,7 @@ describe("InstanaQueryCtrl", function() {
           });
         };
 
-        queryCtrl.target.filter = "*eu";
+        queryCtrl.target.entityQuery = "*eu";
 
         return queryCtrl.onFilterChange().then(() => {
           expect(queryCtrl.uniqueEntityTypes).to.eql([
@@ -52,20 +51,20 @@ describe("InstanaQueryCtrl", function() {
           expect(queryCtrl.target.queryIsValid).to.equal(true);
         });
       });
+    });
 
-      describe("that returns zero snapshots", function() {
-        it("should show no entity types found in the entity type drowdown", function() {
-          queryCtrl.datasource.request = function(options) {
-            return ctx.$q.resolve({
-              data: []
-            });
-          };
-
-          return queryCtrl.onFilterChange().then(() => {
-            expect(queryCtrl.uniqueEntityTypes).to.eql([]);
-            expect(queryCtrl.target.entityType).to.equal(null);
-            expect(queryCtrl.target.queryIsValid).to.equal(true);
+    describe("that returns zero snapshots", function() {
+      it("should show no entity types found in the entity type drowdown", function() {
+        queryCtrl.datasource.request = function(options) {
+          return ctx.$q.resolve({
+            data: []
           });
+        };
+
+        return queryCtrl.onFilterChange().then(() => {
+          expect(queryCtrl.uniqueEntityTypes).to.eql([]);
+          expect(queryCtrl.target.entityType).to.equal(null);
+          expect(queryCtrl.target.queryIsValid).to.equal(true);
         });
       });
     });
@@ -78,26 +77,27 @@ describe("InstanaQueryCtrl", function() {
           });
         };
 
-        queryCtrl.target.filter = "*eu";
+        queryCtrl.target.entityQuery = "*eu";
 
         return queryCtrl.onFilterChange().then(() => {
           expect(queryCtrl.target.queryIsValid).to.equal(false);
         });
       });
     });
+  });
 
-    describe("when selecting entity type", function() {
-      it("should populate metric dropdown", function() {
-        queryCtrl.target.entityType = "hadoopyarnnode";
-        queryCtrl.onEntityTypeSelect();
+  describe("when selecting entity type", function() {
+    it("should populate metric dropdown", function() {
+      queryCtrl.target.entityType = "hadoopyarnnode";
+      queryCtrl.onEntityTypeSelect();
 
-        expect(queryCtrl.availableMetrics).to.eql([
-          { key: "allocatedVCores", label: "Allocated Virtual Cores" },
-          { key: "availableVCores", label: "Available Virtual Cores" },
-          { key: "allocatedMem", label: "Allocated Memory" },
-          { key: "availableMem", label: "Available Memory" }
-        ]);
-      });
+      expect(queryCtrl.availableMetrics).to.eql([
+        { key: "allocatedMem", label: "Allocated Memory" },
+        { key: "allocatedVCores", label: "Allocated Virtual Cores" },
+        { key: "availableMem", label: "Available Memory" },
+        { key: "availableVCores", label: "Available Virtual Cores" }
+      ]);
     });
   });
+
 });

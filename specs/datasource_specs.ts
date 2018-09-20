@@ -14,10 +14,10 @@ describe('InstanaDatasource', function() {
   beforeEach(function() {
     ctx.$q = Q;
     ctx.instanceSettings = {
-			jsonData: {
-				url: 'http://localhost:8010'
-			}
-		};
+      jsonData: {
+        url: 'http://localhost:8010'
+      }
+    };
 
     ctx.ds = new InstanaDatasource(ctx.instanceSettings, ctx.backendSrv, ctx.templateSrv, ctx.$q);
   });

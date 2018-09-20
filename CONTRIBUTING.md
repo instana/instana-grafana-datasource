@@ -16,13 +16,24 @@ The following yarn run scripts are available. You can also run them via Grunt di
 - `yarn test` (`grunt unit`) executes unit tests once.
 - `yarn run unit` alias for yarn test
 - `yarn run unit-watch` starts karma and keeps it running with file watcher enabled so that it reruns all the tests automatically when a file changes (to be used with yarn run watch, see below).
-- `yarn run watch` (`grunt watch`) will build the TypeScript files and copy everything to the dist directory automatically when a file changes. This is useful for when working on the code. To be used with `yarn run unit-watch` (see above).
-- `yarn run startup` (`grunt startup`) same as the default task but keeps the containers running.
+- `yarn run watch` (`grunt watch`) will build the TypeScript files and copy everything to the dist directory automatically when a file changes. This is useful for when working on the code.
+- `yarn run startup` (`grunt startup`) initializes the containers and adds a new datasource via the functional, then watch (see above)
 - `yarn run shutdown` (`grunt shutdown`) stops the containers.
 - `yarn run refresh` (`grunt refresh`) same as default but stops running containers first.
 - `yarn run functional` (`grunt functional`) (also available via ) executes the functional tests. Assumes that the grafana container is running. UI backend and api token are resolved respectively by the INSTANA_UI_BACKEND_URL and the INSTANA_API_TOKEN environment variables.
 
 ## Getting Started
+
+Make sure that Chrome is available.
+
+The following output is an indicator that Chrome is not reachable/installed.
+```
+11 09 2018 08:53:46.300:INFO [launcher]: Launching browser ChromeHeadless with unlimited concurrency
+11 09 2018 08:53:46.340:INFO [launcher]: Starting browser ChromeHeadless
+11 09 2018 08:54:46.343:WARN [launcher]: ChromeHeadless have not captured in 60000 ms, killing.
+11 09 2018 08:54:48.348:WARN [launcher]: ChromeHeadless was not killed in 2000 ms, sending SIGKILL.
+11 09 2018 08:54:50.352:WARN [launcher]: ChromeHeadless was not killed by SIGKILL in 2000 ms, continuing.
+```
 
 1. Make sure `yarn` is installed (everything should work also with npm but YMMV)
 2. Install realpath and timeout (`brew install coreutils`, remember to put them on the `$PATH`: `export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"`)
@@ -46,7 +57,7 @@ The settings for Karma are in the karma.conf.js file in the root. If you add any
 ## Publishing a New Version
 
 * Run `yarn install`.
-* Run the full build.
+* Run the full build with `yarn run build`.
 * Make sure that the quick check scenario described below works locally.
 * Update `src/plugin.json` with the new version number and the version date.
 * Run the full build again, this should update `dist/plugin.json`.
@@ -73,4 +84,3 @@ This procedure is used to test the Instana Grafana data source before the versio
 * Metric: `Virtual (mem.virtual)`
 
 This should render a chart with two datasets (`node (on host "host-1")` and `node (on host "host-2)`).
-

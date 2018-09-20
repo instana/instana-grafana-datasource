@@ -58,6 +58,18 @@ System.register(['lodash'], function(exports_1) {
                     this.getSnapshotCache = function () { return _this.snapshotCache; };
                     this.wasLastFetchedFromApi = function () { return _this.lastFetchedFromAPI; };
                     this.setLastFetchedFromApi = function (value) { _this.lastFetchedFromAPI = value; };
+                    this.getCatalog = function () {
+                        if (!_this.catalogPromise) {
+                            _this.catalogPromise = _this.$q.resolve(_this.request('GET', "/api/metricsCatalog/custom").then(function (catalogResponse) {
+                                return _this.$q.all(lodash_1.default.map(catalogResponse.data, function (entry) { return ({
+                                    'key': entry.metricId,
+                                    'label': entry.description,
+                                    'entityType': entry.pluginId
+                                }); }));
+                            }));
+                        }
+                        return _this.catalogPromise;
+                    };
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
                     this.url = instanceSettings.jsonData.url;
@@ -173,10 +185,10 @@ System.register(['lodash'], function(exports_1) {
                     return this.request('GET', url);
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {
-                    throw new Error("Annotation Support not implemented yet.");
+                    throw new Error('Annotation Support not implemented yet.');
                 };
                 InstanaDatasource.prototype.metricFindQuery = function (query) {
-                    throw new Error("Template Variable Support not implemented yet.");
+                    throw new Error('Template Variable Support not implemented yet.');
                 };
                 InstanaDatasource.prototype.testDatasource = function () {
                     return this.request('GET', '/api/snapshots/non-existing-snapshot-id?time=0')

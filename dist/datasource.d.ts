@@ -9,6 +9,7 @@ export default class InstanaDatasource {
     newApplicationModelEnabled: boolean;
     currentTime: () => number;
     snapshotCache: Object;
+    catalogPromise: Object;
     lastFetchedFromAPI: boolean;
     MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
     CACHE_MAX_AGE: number;
@@ -24,6 +25,7 @@ export default class InstanaDatasource {
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;
     request(method: any, url: any, requestId?: any): any;
+    getCatalog: () => Object;
     query(options: any): any;
     correctForSingleStat(values: any, fromInMs: any, toInMs: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;

@@ -1,6 +1,7 @@
 export default {
   "host": {
     "label": "Hosts",
+    "deprecated": false,
     "metrics": {
       "memory.free": "Free",
       "memory.used": "Used",
@@ -11,6 +12,7 @@ export default {
       "cpu.nice": "Nice",
       "cpu.steal": "Steal",
       "cpu.used": "Used",
+      "topPID": "Top PID",
       "swap.pgin": "Page-In",
       "swap.pgout": "Page-Out",
       "tcp.established": "Established",
@@ -26,6 +28,7 @@ export default {
   },
   "activemq": {
     "label": "ActiveMQs",
+    "deprecated": false,
     "metrics": {
       "totalQueuesEnqueueCount": "All Queues Messages Enqueue",
       "totalQueuesDequeueCount": "All Queues Messages Dequeue",
@@ -40,6 +43,7 @@ export default {
   },
   "application": {
     "label": "Applications",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -56,6 +60,7 @@ export default {
   },
   "awsdynamodb": {
     "label": "AWS DynamoDB Tables",
+    "deprecated": false,
     "metrics": {
       "provisioned_read": "Provisioned read capacity",
       "consumed_read": "Consumed read capacity",
@@ -132,6 +137,7 @@ export default {
   },
   "awsec": {
     "label": "AWS ECs",
+    "deprecated": false,
     "metrics": {
       "cpu_utilization": "CPU Utilization",
       "freeable_memory": "Freeable memory",
@@ -147,6 +153,7 @@ export default {
   },
   "awselb": {
     "label": "AWS ELBs",
+    "deprecated": false,
     "metrics": {
       "processed_bytes": "Processed Bytes",
       "new_flow_count": "New Flow Count",
@@ -162,6 +169,7 @@ export default {
   },
   "awskinesis": {
     "label": "AWS Kinesis streams",
+    "deprecated": false,
     "metrics": {
       "get_records_records": "Get Records records",
       "get_records_success": "Get Records success",
@@ -180,6 +188,7 @@ export default {
   },
   "awslambda": {
     "label": "AWS Lambdas",
+    "deprecated": false,
     "metrics": {
       "invocations": "Invocations",
       "errors": "Errors",
@@ -202,6 +211,7 @@ export default {
   },
   "awsrds": {
     "label": "AWS RDSs",
+    "deprecated": false,
     "metrics": {
       "cpu_utilization": "CPU Usage",
       "cpu_credit_usage": "CPU Credit Usage",
@@ -225,6 +235,7 @@ export default {
   },
   "awssqs": {
     "label": "AWS SQSs",
+    "deprecated": false,
     "metrics": {
       "num_of_msg_delayed": "Number of messages delayed",
       "num_of_msg_not_visible": "Number of messages not visible",
@@ -236,6 +247,7 @@ export default {
   },
   "awss3": {
     "label": "AWS S3 Buckets",
+    "deprecated": false,
     "metrics": {
       "all_requests": "All Requests",
       "get_requests": "Get Requests",
@@ -250,25 +262,27 @@ export default {
       "5xx_errors": "Total Request Latency"
     }
   },
-  "batchserviceinstance": {
-    "label": "Batch Job Instances",
+  "azureappservice": {
+    "label": "Azure AppService",
+    "deprecated": false,
     "metrics": {
-      "count": "Calls",
-      "duration.mean": "Avg. Latency",
-      "duration.min": "Min Latency",
-      "duration.max": "Max Latency",
-      "duration.25th": "Latency 25th",
-      "duration.50th": "Latency 50th",
-      "duration.75th": "Latency 75th",
-      "duration.95th": "Latency 95th",
-      "duration.98th": "Latency 98th",
-      "duration.99th": "Latency 99th",
-      "error_rate": "Error Rate",
-      "instances": "Instances"
+      "art": "Average Response-Time",
+      "h2x": "Number of HTTP 2xx responses",
+      "h4x": "Number of HTTP 2xx responses",
+      "h5x": "Number of HTTP 5xx responses",
+      "trs": "Number of requests",
+      "qrs": "Number of queued requests",
+      "bts": "Bytes Sent",
+      "btr": "Bytes Received",
+      "g0c": "Generation 0 Collections",
+      "g1c": "Generation 1 Collections",
+      "g2c": "Generation 2 Collections"
     }
   },
-  "browserlogicalconnection": {
-    "label": "Website Connections",
+  "batchserviceinstance": {
+    "label": "Batch Job Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -286,6 +300,7 @@ export default {
   },
   "browserlogicalservice": {
     "label": "Websites",
+    "deprecated": false,
     "metrics": {
       "count": "Page Loads",
       "duration.mean": "Mean Load Time",
@@ -314,6 +329,7 @@ export default {
   },
   "cassandracluster": {
     "label": "Cassandra Clusters",
+    "deprecated": false,
     "metrics": {
       "clientrequests.read.count": "Read",
       "clientrequests.write.count": "Write",
@@ -332,6 +348,8 @@ export default {
   },
   "cassandrakeyspaceserviceinstance": {
     "label": "Cassandra Keyspace Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -349,6 +367,7 @@ export default {
   },
   "cassandranode": {
     "label": "Cassandra Nodes",
+    "deprecated": false,
     "metrics": {
       "clientrequests.read.mean": "Mean",
       "clientrequests.read.50": "50th Percentile",
@@ -386,6 +405,7 @@ export default {
   },
   "ceph": {
     "label": "Ceph instances",
+    "deprecated": false,
     "metrics": {
       "num_mons": "Number of monitors",
       "num_active_mons": "Number of active monitors",
@@ -408,46 +428,111 @@ export default {
   },
   "clickhousedatabase": {
     "label": "ClickHouse DBs",
+    "deprecated": false,
     "metrics": {
       "Merge": "Merge",
-      "ReplicatedFetch": "Replicated Fetch",
-      "ReplicatedSend": "Replicated Send",
-      "ReplicatedChecks": "Replicated Checks",
-      "BackgroundPoolTask": "Background Pool Task",
-      "DiskSpaceReservedForMerge": "Disk Space Reserved For Merge",
-      "DistributedSend": "Distributed Send",
-      "QueryPreempted": "Query Preempted",
-      "TCPConnection": "TCP Connection",
-      "HTTPConnection": "HTTP Connection",
-      "InterserverConnection": "Interserver Connection",
-      "OpenFileForRead": "Open File For Read",
-      "OpenFileForWrite": "Open File For Write",
+      "ReplicatedFetch": "ReplicatedFetch",
+      "ReplicatedSend": "ReplicatedSend",
+      "ReplicatedChecks": "ReplicatedChecks",
+      "BackgroundPoolTask": "BackgroundPoolTask",
+      "DiskSpaceReservedForMerge": "DiskSpaceReservedForMerge",
+      "DistributedSend": "DistributedSend",
+      "QueryPreempted": "QueryPreempted",
+      "TCPConnection": "TCPConnection",
+      "HTTPConnection": "HTTPConnection",
+      "InterserverConnection": "InterserverConnection",
+      "OpenFileForRead": "OpenFileForRead",
+      "OpenFileForWrite": "OpenFileForWrite",
       "Read": "Read",
       "Write": "Write",
-      "SendExternalTables": "Send External Tables",
-      "QueryThread": "Query Thread",
-      "ReadonlyReplica": "Readonly Replica",
-      "LeaderReplica": "Leader Replica",
-      "MemoryTracking": "Memory Tracking",
-      "MemoryTrackingInBackgroundProcessingPool": "Memory Tracking In Background Processing Pool",
-      "MemoryTrackingForMerges": "Memory Tracking For Merges",
-      "LeaderElection": "Leader Election",
-      "EphemeralNode": "Ephemeral Node",
-      "ZooKeeperWatch": "Zoo Keeper Watch",
-      "DelayedInserts": "Delayed Inserts",
-      "ContextLockWait": "Context Lock Wait",
-      "StorageBufferRows": "Storage Buffer Rows",
-      "StorageBufferBytes": "Storage Buffer Bytes",
-      "DictCacheRequests": "Dict Cache Requests",
+      "SendExternalTables": "SendExternalTables",
+      "QueryThread": "QueryThread",
+      "ReadonlyReplica": "ReadonlyReplica",
+      "LeaderReplica": "LeaderReplica",
+      "MemoryTracking": "MemoryTracking",
+      "MemoryTrackingInBackgroundProcessingPool": "MemoryTrackingInBackgroundProcessingPool",
+      "MemoryTrackingForMerges": "MemoryTrackingForMerges",
+      "LeaderElection": "LeaderElection",
+      "EphemeralNode": "EphemeralNode",
+      "ZooKeeperWatch": "ZooKeeperWatch",
+      "DelayedInserts": "DelayedInserts",
+      "ContextLockWait": "ContextLockWait",
+      "StorageBufferRows": "StorageBufferRows",
+      "StorageBufferBytes": "StorageBufferBytes",
+      "DictCacheRequests": "DictCacheRequests",
       "Revision": "Revision",
-      "RWLockWaitingReaders": "RW Lock Waiting Readers",
-      "RWLockWaitingWriters": "RW Lock Waiting Writers",
-      "RWLockActiveReaders": "RW Lock Active Readers",
-      "RWLockActiveWriters": "RW Lock Active Writers"
+      "RWLockWaitingReaders": "RWLockWaitingReaders",
+      "RWLockWaitingWriters": "RWLockWaitingWriters",
+      "RWLockActiveReaders": "RWLockActiveReaders",
+      "RWLockActiveWriters": "RWLockActiveWriters",
+      "Query": "Query",
+      "SelectQuery": "SelectQuery",
+      "InsertQuery": "InsertQuery",
+      "FileOpen": "FileOpen",
+      "Seek": "Seek",
+      "ReadBufferFromFileDescriptorRead": "ReadBufferFromFileDescriptorRead",
+      "ReadBufferFromFileDescriptorReadBytes": "ReadBufferFromFileDescriptorReadBytes",
+      "WriteBufferFromFileDescriptorWrite": "WriteBufferFromFileDescriptorWrite",
+      "WriteBufferFromFileDescriptorWriteBytes": "WriteBufferFromFileDescriptorWriteBytes",
+      "ReadCompressedBytes": "ReadCompressedBytes",
+      "CompressedReadBufferBlocks": "CompressedReadBufferBlocks",
+      "CompressedReadBufferBytes": "CompressedReadBufferBytes",
+      "IOBufferAllocs": "IOBufferAllocs",
+      "IOBufferAllocBytes": "IOBufferAllocBytes",
+      "ArenaAllocChunks": "ArenaAllocChunks",
+      "ArenaAllocBytes": "ArenaAllocBytes",
+      "FunctionExecute": "FunctionExecute",
+      "TableFunctionExecute": "TableFunctionExecute",
+      "MarkCacheHits": "MarkCacheHits",
+      "MarkCacheMisses": "MarkCacheMisses",
+      "CreatedReadBufferOrdinary": "CreatedReadBufferOrdinary",
+      "CreatedWriteBufferOrdinary": "CreatedWriteBufferOrdinary",
+      "ReplicatedPartMerges": "ReplicatedPartMerges",
+      "InsertedRows": "InsertedRows",
+      "InsertedBytes": "InsertedBytes",
+      "DuplicatedInsertedBlocks": "DuplicatedInsertedBlocks",
+      "ZooKeeperInit": "ZooKeeperInit",
+      "ZooKeeperTransactions": "ZooKeeperTransactions",
+      "ZooKeeperList": "ZooKeeperList",
+      "ZooKeeperCreate": "ZooKeeperCreate",
+      "ZooKeeperRemove": "ZooKeeperRemove",
+      "ZooKeeperExists": "ZooKeeperExists",
+      "ZooKeeperGet": "ZooKeeperGet",
+      "ZooKeeperSet": "ZooKeeperSet",
+      "ZooKeeperMulti": "ZooKeeperMulti",
+      "ZooKeeperClose": "ZooKeeperClose",
+      "ZooKeeperWatchResponse": "ZooKeeperWatchResponse",
+      "ZooKeeperExceptions": "ZooKeeperExceptions",
+      "ZooKeeperWaitMicroseconds": "ZooKeeperWaitMicroseconds",
+      "ZooKeeperBytesSent": "ZooKeeperBytesSent",
+      "ZooKeeperBytesReceived": "ZooKeeperBytesReceived",
+      "DistributedConnectionStaleReplica": "DistributedConnectionStaleReplica",
+      "SlowRead": "SlowRead",
+      "ReplicaPartialShutdown": "ReplicaPartialShutdown",
+      "SelectedParts": "SelectedParts",
+      "SelectedRanges": "SelectedRanges",
+      "SelectedMarks": "SelectedMarks",
+      "MergedRows": "MergedRows",
+      "MergedUncompressedBytes": "MergedUncompressedBytes",
+      "MergesTimeMilliseconds": "MergesTimeMilliseconds",
+      "MergeTreeDataWriterRows": "MergeTreeDataWriterRows",
+      "MergeTreeDataWriterUncompressedBytes": "MergeTreeDataWriterUncompressedBytes",
+      "MergeTreeDataWriterCompressedBytes": "MergeTreeDataWriterCompressedBytes",
+      "MergeTreeDataWriterBlocks": "MergeTreeDataWriterBlocks",
+      "MergeTreeDataWriterBlocksAlreadySorted": "MergeTreeDataWriterBlocksAlreadySorted",
+      "CannotRemoveEphemeralNode": "CannotRemoveEphemeralNode",
+      "LeaderElectionAcquiredLeadership": "LeaderElectionAcquiredLeadership",
+      "RegexpCreated": "RegexpCreated",
+      "ContextLock": "ContextLock",
+      "RWLockAcquiredReadLocks": "RWLockAcquiredReadLocks",
+      "RWLockAcquiredWriteLocks": "RWLockAcquiredWriteLocks",
+      "RWLockReadersWaitMilliseconds": "RWLockReadersWaitMilliseconds",
+      "RWLockWritersWaitMilliseconds": "RWLockWritersWaitMilliseconds"
     }
   },
   "clrruntimeplatform": {
     "label": ".NET Apps",
+    "deprecated": false,
     "metrics": {
       "mem.gen0GC": "Generation 0",
       "mem.gen1GC": "Generation 1",
@@ -461,12 +546,14 @@ export default {
   },
   "cloudfoundry": {
     "label": "CloudFoundry",
+    "deprecated": false,
     "metrics": {
       "nodeCount": "Nodes"
     }
   },
   "consul": {
-    "label": "Consul Clients",
+    "label": "Consul Nodes",
+    "deprecated": false,
     "metrics": {
       "consul.runtime.free_count": "Number of freed heap objects",
       "consul.runtime.heap_objects": "Number of objects allocated on the heap",
@@ -492,6 +579,7 @@ export default {
   },
   "couchbasecluster": {
     "label": "Couchbase Clusters",
+    "deprecated": false,
     "metrics": {
       "cluster.usedDisk": "Used disk (bytes)",
       "cluster.usedMemory": "Used memory (bytes)",
@@ -503,6 +591,7 @@ export default {
   },
   "couchbasenode": {
     "label": "Couchbase Nodes",
+    "deprecated": false,
     "metrics": {
       "node.mem_used": "Used memory (bytes)",
       "node.couch_docs_actual_disk_size": "Used disk (bytes)",
@@ -513,6 +602,7 @@ export default {
   },
   "crystalruntimeplatform": {
     "label": "Crystal Apps",
+    "deprecated": false,
     "metrics": {
       "gc.hs": "Size",
       "gc.fb": "Free",
@@ -522,6 +612,8 @@ export default {
   },
   "databaseserviceinstance": {
     "label": "Database Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -539,6 +631,7 @@ export default {
   },
   "defaultentity20": {
     "label": "defaultEntity20",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -555,6 +648,8 @@ export default {
   },
   "defaultlogicalconnection": {
     "label": "Unspecified Logical Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -572,6 +667,7 @@ export default {
   },
   "defaultlogicalservice": {
     "label": "Services",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -589,6 +685,8 @@ export default {
   },
   "defaultserviceinstance": {
     "label": "Service Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -606,6 +704,7 @@ export default {
   },
   "docker": {
     "label": "Docker Containers",
+    "deprecated": false,
     "metrics": {
       "cpu.total_usage": "Total",
       "cpu.system_usage": "Kernel",
@@ -632,14 +731,13 @@ export default {
   },
   "dropwizardapplicationcontainer": {
     "label": "Dropwizard Apps",
-    "metrics": {
-      "metrics.meters.com.instana.filler.topology.spans.SpansStreamInitializer.accepted-from-kafka-spans": "Accepted Spans",
-      "metrics.meters.com.instana.filler.spanbuffer.ScheduledSpanBatcher.dropped-spans": "Dropped Spans",
-      "metrics.meters.com.instana.filler.topology.RawMessagesStreamInitializer.dropped-messages": "Dropped Messages"
-    }
+    "deprecated": false,
+    "metrics": {}
   },
   "ejblogicalconnection": {
     "label": "Logical EJB Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -657,6 +755,7 @@ export default {
   },
   "ejblogicalservice": {
     "label": "EJBs",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -674,6 +773,8 @@ export default {
   },
   "ejbserviceinstance": {
     "label": "EJB Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -691,6 +792,7 @@ export default {
   },
   "elasticsearchcluster": {
     "label": "Elasticsearch Clusters",
+    "deprecated": false,
     "metrics": {
       "query_latency": "Latency",
       "query_count": "Number Of Queries",
@@ -710,6 +812,8 @@ export default {
   },
   "elasticsearchindexserviceinstance": {
     "label": "Elasticsearch Index Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -727,6 +831,7 @@ export default {
   },
   "elasticsearchnode": {
     "label": "Elasticsearch Nodes",
+    "deprecated": false,
     "metrics": {
       "indices.query_latency": "Latency",
       "indices.query_count": "Number Of Queries",
@@ -765,6 +870,7 @@ export default {
   },
   "etcd": {
     "label": "Etcd Nodes",
+    "deprecated": false,
     "metrics": {
       "requests_received": "Received",
       "requests_sent": "Sent",
@@ -790,14 +896,18 @@ export default {
   },
   "finagleapplicationcontainer": {
     "label": "Finagle Apps",
+    "deprecated": false,
     "metrics": {}
   },
   "f5": {
     "label": "F5",
+    "deprecated": false,
     "metrics": {}
   },
   "ftpserviceinstance": {
     "label": "FTP Server Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -815,6 +925,7 @@ export default {
   },
   "glassfishapplicationcontainer": {
     "label": "Glassfish",
+    "deprecated": false,
     "metrics": {
       "http_request_count": "Requests",
       "http_error": "Errors",
@@ -843,6 +954,7 @@ export default {
   },
   "golangruntimeplatform": {
     "label": "Go Apps",
+    "deprecated": false,
     "metrics": {
       "metrics.memory.pause_ns": "GC Pause",
       "metrics.goroutine": "Executed Goroutines",
@@ -855,6 +967,7 @@ export default {
   },
   "hadoopyarn": {
     "label": "Hadoop YARNs",
+    "deprecated": false,
     "metrics": {
       "activeNodes": "Active Nodes",
       "lostNodes": "Lost Nodes",
@@ -874,6 +987,7 @@ export default {
   },
   "hadoopyarnnode": {
     "label": "Hadoop YARN Nodes",
+    "deprecated": false,
     "metrics": {
       "allocatedVCores": "Allocated Virtual Cores",
       "availableVCores": "Available Virtual Cores",
@@ -883,10 +997,48 @@ export default {
   },
   "haproxy": {
     "label": "HAProxy",
+    "deprecated": false,
     "metrics": {}
+  },
+  "hazelcastcluster": {
+    "label": "HazelcastClusters",
+    "deprecated": false,
+    "metrics": {
+      "isClusterSafe": "Is Cluster Safe",
+      "nodeCount": "Node Count"
+    }
+  },
+  "hazelcastnode": {
+    "label": "Hazelcast Nodes",
+    "deprecated": false,
+    "metrics": {
+      "nodeMetrics.clientEndpointCount": "Client Endpoint Count",
+      "nodeMetrics.eventQueueSize": "Migration Queue Size",
+      "nodeMetrics.migrationQueueSize": "EventQueue Size",
+      "isLiteMember": "Client Endpoint Count",
+      "isLocalMemberSafe": "Migration Queue Size",
+      "isClusterSafe": "EventQueue Size",
+      "distributedObjects.cacheCount": "ICache",
+      "distributedObjects.mapCount": "IMap",
+      "distributedObjects.replicatedMapCount": "ReplicatedMap",
+      "distributedObjects.multiMapCount": "MultiMap",
+      "distributedObjects.queueCount": "IQueue",
+      "distributedObjects.listCount": "IList",
+      "distributedObjects.setCount": "ISet",
+      "distributedObjects.topicCount": "ITopic",
+      "distributedObjects.executorCount": "IExecutorService",
+      "distributedObjects.otherCount": "Other",
+      "executorServiceQueueSize.asyncExecutor": "ASyncExecutor",
+      "executorServiceQueueSize.clientExecutor": "ClientExecutor",
+      "executorServiceQueueSize.queryExecutor": "QueryExecutor",
+      "executorServiceQueueSize.scheduledExecutor": "ScheduledExecutor",
+      "executorServiceQueueSize.systemExecutor": "SystemExecutor",
+      "executorServiceQueueSize.ioExecutor": "IOExecutor"
+    }
   },
   "httpd": {
     "label": "Apache HTTPds",
+    "deprecated": false,
     "metrics": {
       "requests": "Requests",
       "kBytes": "kBytes",
@@ -910,6 +1062,7 @@ export default {
   },
   "instanaagent": {
     "label": "Instana Agents",
+    "deprecated": false,
     "metrics": {
       "cpu.load": "Load",
       "memory.used": "Used",
@@ -924,10 +1077,12 @@ export default {
   },
   "jbossasapplicationcontainer": {
     "label": "JBoss",
+    "deprecated": false,
     "metrics": {}
   },
   "jbossdatagrid": {
     "label": "JBoss Data Grids",
+    "deprecated": false,
     "metrics": {
       "hotRod.numberOfLocalConnections": "Number Of Local Connections",
       "hotRod.numberOfGlobalConnections": "Number Of Global Connections"
@@ -935,6 +1090,7 @@ export default {
   },
   "jettyapplicationcontainer": {
     "label": "Jetty",
+    "deprecated": false,
     "metrics": {
       "idleThreads": "Idle Threads",
       "busyThreads": "Busy Threads",
@@ -944,6 +1100,7 @@ export default {
   },
   "jiraapplication": {
     "label": "Atlassian JIRAs",
+    "deprecated": false,
     "metrics": {
       "instruments.http.sessions": "Current Sessions",
       "instruments.concurrent.requests": "Concurrent Requests",
@@ -952,18 +1109,19 @@ export default {
   },
   "jvmruntimeplatform": {
     "label": "JVMs",
+    "deprecated": false,
     "metrics": {
       "threads.new": "New",
       "threads.runnable": "Runnable",
       "threads.timed-waiting": "Timed-Waiting",
       "threads.waiting": "Waiting",
       "threads.blocked": "Blocked",
-      "threads.terminated": "Terminated",
       "memory.used": "Used"
     }
   },
   "kafka": {
     "label": "Kafka Nodes",
+    "deprecated": false,
     "metrics": {
       "broker.bytesIn": "In",
       "broker.bytesOut": "Out",
@@ -993,12 +1151,14 @@ export default {
   },
   "kafkacluster": {
     "label": "Kafka Cluster",
+    "deprecated": false,
     "metrics": {
       "nodeCount": "Nodes"
     }
   },
   "kubernetescluster": {
     "label": "Kubernetes Clusters",
+    "deprecated": false,
     "metrics": {
       "allocatedCapacityPodsRatio": "Pods Allocation",
       "requiredCapacityCPURatio": "CPU Requests Allocation",
@@ -1026,6 +1186,7 @@ export default {
   },
   "kubernetespod": {
     "label": "Kubernetes Pods",
+    "deprecated": false,
     "metrics": {
       "containers.count": "Containers",
       "cpuRequests": "CPU Requests",
@@ -1036,6 +1197,7 @@ export default {
   },
   "kubernetesnode": {
     "label": "Kubernetes Nodes",
+    "deprecated": false,
     "metrics": {
       "allocatedPods": "Allocated Pods",
       "cap_pods": "Pods Capacity",
@@ -1054,6 +1216,7 @@ export default {
   },
   "kubernetesdeployment": {
     "label": "Kubernetes Deployments",
+    "deprecated": false,
     "metrics": {
       "availableReplicas": "Available",
       "desiredReplicas": "Desired",
@@ -1070,6 +1233,7 @@ export default {
   },
   "openshiftdeploymentconfig": {
     "label": "Openshift Deployment Configs",
+    "deprecated": false,
     "metrics": {
       "availableReplicas": "Available",
       "desiredReplicas": "Desired",
@@ -1086,6 +1250,8 @@ export default {
   },
   "ldaplogicalconnection": {
     "label": "LDAP Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1103,6 +1269,7 @@ export default {
   },
   "ldaplogicalservice": {
     "label": "LDAP",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1120,6 +1287,8 @@ export default {
   },
   "ldapserviceinstance": {
     "label": "LDAP Service Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1137,6 +1306,7 @@ export default {
   },
   "logicalbatch": {
     "label": "Batch Jobs",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1154,6 +1324,8 @@ export default {
   },
   "logicalbatchconnection": {
     "label": "Batch Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1171,6 +1343,8 @@ export default {
   },
   "logicalcassandraconnection": {
     "label": "Cassandra Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1188,6 +1362,7 @@ export default {
   },
   "logicaldatabase": {
     "label": "Databases",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1205,6 +1380,8 @@ export default {
   },
   "logicaldatabaseconnection": {
     "label": "Database Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1222,6 +1399,8 @@ export default {
   },
   "logicalejbconnection": {
     "label": "EJB Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1239,6 +1418,8 @@ export default {
   },
   "logicalelasticsearchconnection": {
     "label": "Elasticsearch Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1256,6 +1437,7 @@ export default {
   },
   "logicalelasticsearchindex": {
     "label": "Elasticsearch Indices",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1273,6 +1455,8 @@ export default {
   },
   "logicalftpconnection": {
     "label": "Logical FTP Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1290,6 +1474,7 @@ export default {
   },
   "logicalftpservice": {
     "label": "FTP Servers",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1307,6 +1492,8 @@ export default {
   },
   "logicalhttpconnection": {
     "label": "Http Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1324,6 +1511,8 @@ export default {
   },
   "logicaljdbcconnection": {
     "label": "JDBC Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1341,6 +1530,8 @@ export default {
   },
   "logicalkafkaconsumerconnection": {
     "label": "Kafka Consumer Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1358,6 +1549,8 @@ export default {
   },
   "logicalkafkapublisherconnection": {
     "label": "Kafka Publisher Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1375,6 +1568,7 @@ export default {
   },
   "logicalmessagebroker": {
     "label": "Message Brokers",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1392,6 +1586,7 @@ export default {
   },
   "logicalmessageconsumer": {
     "label": "Message Consumers",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1409,6 +1604,8 @@ export default {
   },
   "logicalmessageconsumerconnection": {
     "label": "Message Consumer Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1426,6 +1623,8 @@ export default {
   },
   "logicalmessagepublisherconnection": {
     "label": "Message Publisher Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1443,6 +1642,8 @@ export default {
   },
   "logicalmongodbconnection": {
     "label": "MongoDB Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1460,6 +1661,7 @@ export default {
   },
   "logicalmongodbdatabase": {
     "label": "MongoDB Databases",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1477,6 +1679,8 @@ export default {
   },
   "logicalmsmqconsumerconnection": {
     "label": "MSMQ Consumer Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1494,6 +1698,45 @@ export default {
   },
   "logicalmsmqpublisherconnection": {
     "label": "MSMQ Publisher Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
+    "metrics": {
+      "count": "Calls",
+      "duration.mean": "Avg. Latency",
+      "duration.min": "Min Latency",
+      "duration.max": "Max Latency",
+      "duration.25th": "Latency 25th",
+      "duration.50th": "Latency 50th",
+      "duration.75th": "Latency 75th",
+      "duration.95th": "Latency 95th",
+      "duration.98th": "Latency 98th",
+      "duration.99th": "Latency 99th",
+      "error_rate": "Error Rate",
+      "instances": "Instances"
+    }
+  },
+  "logicalneo4jconnection": {
+    "label": "Neo4j Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
+    "metrics": {
+      "count": "Calls",
+      "duration.mean": "Avg. Latency",
+      "duration.min": "Min Latency",
+      "duration.max": "Max Latency",
+      "duration.25th": "Latency 25th",
+      "duration.50th": "Latency 50th",
+      "duration.75th": "Latency 75th",
+      "duration.95th": "Latency 95th",
+      "duration.98th": "Latency 98th",
+      "duration.99th": "Latency 99th",
+      "error_rate": "Error Rate",
+      "instances": "Instances"
+    }
+  },
+  "logicalneo4jdatabase": {
+    "label": "Neo4j Databases",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1511,6 +1754,8 @@ export default {
   },
   "logicalrabbitmqconsumerconnection": {
     "label": "Rabbit MQ Consumer Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1528,6 +1773,8 @@ export default {
   },
   "logicalrabbitmqpublisherconnection": {
     "label": "Rabbit MQ Publisher Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1545,6 +1792,8 @@ export default {
   },
   "logicalredisconnection": {
     "label": "Redis Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1562,6 +1811,7 @@ export default {
   },
   "logicalredisdatabase": {
     "label": "Redis Databases",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1579,6 +1829,8 @@ export default {
   },
   "logicalrpcconnection": {
     "label": "RPC Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1596,6 +1848,8 @@ export default {
   },
   "logicalrpcendpoint": {
     "label": "RPC Endpoints",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1613,6 +1867,7 @@ export default {
   },
   "logicalwebapp": {
     "label": "Web Services",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1630,6 +1885,7 @@ export default {
   },
   "mariadbdatabase": {
     "label": "MariaDBs",
+    "deprecated": false,
     "metrics": {
       "status.THREADS_CONNECTED": "Connections",
       "status.MAX_USED_CONNECTIONS": "Max used connections",
@@ -1645,6 +1901,7 @@ export default {
   },
   "memcached": {
     "label": "Memcacheds Nodes",
+    "deprecated": false,
     "metrics": {
       "cmd_get": "Gets",
       "cmd_set": "Sets",
@@ -1666,6 +1923,8 @@ export default {
   },
   "messagebrokerserviceinstance": {
     "label": "Message Broker Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1683,6 +1942,8 @@ export default {
   },
   "messageconsumerserviceinstance": {
     "label": "Message Consumer Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1700,6 +1961,7 @@ export default {
   },
   "mongodb": {
     "label": "MongoDB Nodes",
+    "deprecated": false,
     "metrics": {
       "documents.deleted": "Deleted",
       "documents.inserted": "Inserted",
@@ -1722,6 +1984,8 @@ export default {
   },
   "mongodbdatabaseserviceinstance": {
     "label": "MongoDB Databases",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -1737,12 +2001,38 @@ export default {
       "instances": "Instances"
     }
   },
+  "mongodbreplicaset": {
+    "label": "MongoDB Replica Set",
+    "deprecated": false,
+    "metrics": {
+      "nodeCount": "Nodes",
+      "documents.deleted": "Deleted",
+      "documents.inserted": "Inserted",
+      "documents.returned": "Returned",
+      "documents.updated": "Updated",
+      "connections": "Connections",
+      "repl.apply_ops": "Replication Apply Operations",
+      "repl.apply_bathes": "Replication Apply Batches",
+      "repl.apply_bathes_total_ms": "Replication Apply Batch Total",
+      "repl.buffer_count": "Replication Buffer Count",
+      "repl.buffer_size_bytes": "Replication Buffer Size",
+      "repl.network_ops": "Replication Network Ops",
+      "repl.network_bytes": "Replication Network Traffic",
+      "repl.preload_docs_num": "Replication Preload Docs",
+      "repl.preload_docs_total_ms": "Replication Preload Total",
+      "repl.preload_idx_num": "Replication Preload Indexes",
+      "repl.preload_idx_total_ms": "Replication Preload Indexes Total",
+      "repl.replication_lag": "Replication Lag"
+    }
+  },
   "msiis": {
     "label": "Internet Information Servers",
+    "deprecated": false,
     "metrics": {}
   },
   "mssqldatabase": {
     "label": "MsSQL Instances",
+    "deprecated": false,
     "metrics": {
       "generalstats._total.user_connections": "User Connections",
       "waitstats.PAGEIOLATCH_EX.wait_time_ms": "Page IO-Latch EX",
@@ -1760,10 +2050,12 @@ export default {
   },
   "mule": {
     "label": "Mule ESB",
+    "deprecated": false,
     "metrics": {}
   },
   "mysqldatabase": {
     "label": "MySQL DBs",
+    "deprecated": false,
     "metrics": {
       "status.COM_SELECT": "SELECTS",
       "status.COM_UPDATE": "UPDATES",
@@ -1784,6 +2076,7 @@ export default {
   },
   "netcoreruntimeplatform": {
     "label": ".NET Core Apps",
+    "deprecated": false,
     "metrics": {
       "metrics.gcCount": "GC Count",
       "metrics.exceptionThrownCount": "Exceptions Thrown",
@@ -1794,8 +2087,28 @@ export default {
       "metrics.heapSizeGen3": "Generation 3"
     }
   },
+  "neo4jserviceinstance": {
+    "label": "Neo4j Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
+    "metrics": {
+      "count": "Calls",
+      "duration.mean": "Avg. Latency",
+      "duration.min": "Min Latency",
+      "duration.max": "Max Latency",
+      "duration.25th": "Latency 25th",
+      "duration.50th": "Latency 50th",
+      "duration.75th": "Latency 75th",
+      "duration.95th": "Latency 95th",
+      "duration.98th": "Latency 98th",
+      "duration.99th": "Latency 99th",
+      "error_rate": "Error Rate",
+      "instances": "Instances"
+    }
+  },
   "nginx": {
     "label": "Nginx",
+    "deprecated": false,
     "metrics": {
       "requests": "Requests / s",
       "connections.accepted": "Accepted connections",
@@ -1809,6 +2122,7 @@ export default {
   },
   "nodejsruntimeplatform": {
     "label": "Node.js Apps",
+    "deprecated": false,
     "metrics": {
       "gc.gcPause": "GC Pause",
       "activeHandles": "#Handles",
@@ -1827,6 +2141,7 @@ export default {
   },
   "nomadscheduler": {
     "label": "Nomad Clients",
+    "deprecated": false,
     "metrics": {
       "nomad.client.allocated.cpu": "Total amount of CPU shares the scheduler has allocated to tasks",
       "nomad.client.allocated.disk": "Total amount of disk space the scheduler has allocated to tasks",
@@ -1866,6 +2181,7 @@ export default {
   },
   "oracledb": {
     "label": "OracleDBs",
+    "deprecated": false,
     "metrics": {
       "stats.dbTime": "DB Time",
       "stats.cpuTime": "DB CPU Time",
@@ -1903,63 +2219,21 @@ export default {
       "stats.usedSessionsRatio": "Sessions/Session Limit"
     }
   },
-  "pageresourcelogicalconnection": {
-    "label": "Page Resource Connections",
+  "ping": {
+    "label": "Ping",
+    "deprecated": false,
     "metrics": {
-      "count": "Calls",
-      "duration.mean": "Avg. Latency",
-      "duration.min": "Min Latency",
-      "duration.max": "Max Latency",
-      "duration.25th": "Latency 25th",
-      "duration.50th": "Latency 50th",
-      "duration.75th": "Latency 75th",
-      "duration.95th": "Latency 95th",
-      "duration.98th": "Latency 98th",
-      "duration.99th": "Latency 99th",
-      "error_rate": "Error Rate",
-      "instances": "Instances"
-    }
-  },
-  "pageresourcelogicalservice": {
-    "label": "Page Resources",
-    "metrics": {
-      "count": "Calls",
-      "duration.mean": "Avg. Latency",
-      "duration.min": "Min Latency",
-      "duration.max": "Max Latency",
-      "duration.25th": "Latency 25th",
-      "duration.50th": "Latency 50th",
-      "duration.75th": "Latency 75th",
-      "duration.95th": "Latency 95th",
-      "duration.98th": "Latency 98th",
-      "duration.99th": "Latency 99th",
-      "error_rate": "Error Rate",
-      "instances": "Instances"
-    }
-  },
-  "pageresourceserviceinstance": {
-    "label": "Page Resource Group Instances",
-    "metrics": {
-      "count": "Calls",
-      "duration.mean": "Avg. Latency",
-      "duration.min": "Min Latency",
-      "duration.max": "Max Latency",
-      "duration.25th": "Latency 25th",
-      "duration.50th": "Latency 50th",
-      "duration.75th": "Latency 75th",
-      "duration.95th": "Latency 95th",
-      "duration.98th": "Latency 98th",
-      "duration.99th": "Latency 99th",
-      "error_rate": "Error Rate",
-      "instances": "Instances"
+      "duration": "Duration"
     }
   },
   "phpfpmruntimeplatform": {
     "label": "PHP-FPM Runtimes",
+    "deprecated": false,
     "metrics": {}
   },
   "postgresqldatabase": {
     "label": "PostgreSQL DBs",
+    "deprecated": false,
     "metrics": {
       "totalCommittedTransactions": "Committed Transactions",
       "max_conn_pct": "Connection Usage",
@@ -1968,16 +2242,20 @@ export default {
   },
   "process": {
     "label": "Processes",
+    "deprecated": false,
     "metrics": {
       "mem.virtual": "Virtual",
       "mem.resident": "Resident",
       "mem.share": "Share",
       "cpu.user": "User",
-      "cpu.sys": "System"
+      "cpu.sys": "System",
+      "ctx_switches.voluntary": "Voluntary",
+      "ctx_switches.nonvoluntary": "Nonvoluntary"
     }
   },
   "pythonruntimeplatform": {
     "label": "Python Apps",
+    "deprecated": false,
     "metrics": {
       "metrics.ru_utime": "Time Spent In User Mode",
       "metrics.ru_stime": "Time Spent In System Mode",
@@ -2008,6 +2286,7 @@ export default {
   },
   "rabbitmq": {
     "label": "RabbitMQ",
+    "deprecated": false,
     "metrics": {
       "overview.publish_rate": "Published per 5 seconds",
       "overview.deliver_rate": "Delivered per 5 seconds",
@@ -2023,6 +2302,8 @@ export default {
   },
   "redisserviceinstance": {
     "label": "Redis Databases",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -2040,6 +2321,8 @@ export default {
   },
   "rpcendpointserviceinstance": {
     "label": "RPC Endpoint Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -2057,6 +2340,7 @@ export default {
   },
   "rubyruntimeplatform": {
     "label": "Ruby Apps",
+    "deprecated": false,
     "metrics": {
       "memory.rss_size": "Resident",
       "gc.heap_live": "Live",
@@ -2069,6 +2353,7 @@ export default {
   },
   "saphana": {
     "label": "SAP HANA",
+    "deprecated": false,
     "metrics": {
       "stats.usedMemory": "Used Memory",
       "stats.residentMemory": "Resident Memory",
@@ -2105,6 +2390,8 @@ export default {
   },
   "sdklogicalconnection": {
     "label": "Custom Logical Connections",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -2122,6 +2409,7 @@ export default {
   },
   "sdklogicalservice": {
     "label": "Custom Services",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -2139,6 +2427,8 @@ export default {
   },
   "sdkserviceinstance": {
     "label": "Custom Service Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -2156,6 +2446,7 @@ export default {
   },
   "service": {
     "label": "Services",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -2172,10 +2463,12 @@ export default {
   },
   "solr": {
     "label": "Solr",
+    "deprecated": false,
     "metrics": {}
   },
   "sparkapplication": {
     "label": "Spark Applications",
+    "deprecated": false,
     "metrics": {
       "failedJobs": "All Failed Jobs",
       "completedJobs": "All Completed Jobs",
@@ -2196,6 +2489,7 @@ export default {
   },
   "sparkstandalone": {
     "label": "Spark Standalone",
+    "deprecated": false,
     "metrics": {
       "workers.aliveWorkers": "Alive Workers",
       "workers.deadWorkers": "Dead Workers",
@@ -2209,6 +2503,7 @@ export default {
   },
   "springbootapplicationcontainer": {
     "label": "Spring Boot Apps",
+    "deprecated": false,
     "metrics": {
       "metrics.requests": "All Requests",
       "metrics.statusCode.1xx": "Requests with Status Code 1xx",
@@ -2221,6 +2516,7 @@ export default {
   },
   "unknownservice": {
     "label": "Unknown Services",
+    "deprecated": false,
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -2238,6 +2534,7 @@ export default {
   },
   "varnish": {
     "label": "Varnish Nodes",
+    "deprecated": false,
     "metrics": {
       "sess_conn": "Accepted client connections",
       "client_req": "Received client requests",
@@ -2265,6 +2562,8 @@ export default {
   },
   "webappserviceinstance": {
     "label": "Web Service Instances",
+    "deprecated": true,
+    "deprecationReason": "Deprecated: Entities of this type are only available to environments still running Classic Mode.",
     "metrics": {
       "count": "Calls",
       "duration.mean": "Avg. Latency",
@@ -2282,6 +2581,7 @@ export default {
   },
   "weblogicapplicationcontainer": {
     "label": "WebLogic Servers",
+    "deprecated": false,
     "metrics": {
       "threadPool.idleThreads": "Idle Threads",
       "threadPool.totalThreads": "Total Threads",
@@ -2297,6 +2597,7 @@ export default {
   },
   "websphereapplicationcontainer": {
     "label": "WebSpheres",
+    "deprecated": false,
     "metrics": {
       "threadPools.webContainer.activeThreads": "Active Threads",
       "threadPools.webContainer.poolSize": "Pool Size"
@@ -2304,6 +2605,7 @@ export default {
   },
   "webspherelibertyapplicationcontainer": {
     "label": "WebSphere Liberty Servers",
+    "deprecated": false,
     "metrics": {
       "threadPool.activeThreads": "Active Threads",
       "threadPool.poolSize": "Pool Size"

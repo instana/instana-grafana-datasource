@@ -8,12 +8,36 @@
         </p>
       </info-popover>
     </label>
-    <input id="in-query-{{ctrl.target.refId}}" class="gf-form-input" type="text" ng-model='ctrl.target.entityQuery' ng-class="ctrl.target.queryIsValid ? 'ng-valid' : 'ng-invalid'"
-      ng-model-options='{ debounce: 200 }' ng-change="ctrl.onFilterChange(true)" placeholder="Please Specify">
+    <input id="in-query-{{ctrl.target.refId}}"
+           class="gf-form-input"
+           type="text"
+           ng-model='ctrl.target.entityQuery'
+           ng-class="ctrl.target.queryIsValid ? 'ng-valid' : 'ng-invalid'"
+           ng-model-options='{ debounce: 200 }'
+           ng-change="ctrl.onFilterChange(true)"
+           placeholder="Please Specify">
     </input>
   </div>
 
   <div class="gf-form">
+    <label class="gf-form-label width-13 pointer" for="in-category-{{ctrl.target.refId}}">
+      Category
+      <info-popover position="top center" mode="right-normal">
+        <p>Select a metric category.</p>
+      </info-popover>
+    </label>
+    <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
+      <select id="in-category-{{ctrl.target.refId}}"
+              class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+              ng-model="ctrl.target.metricCategory"
+              ng-change="ctrl.onMetricCategorySelect()">
+        <option value="0" selected>Built-in metrics</option>
+        <option value="1">Custom metrics</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '1'">
     <label class="gf-form-label width-13 pointer" for="in-type-{{ctrl.target.refId}}">
       Type
       <info-popover position="top center" mode="right-normal">
@@ -21,11 +45,30 @@
       </info-popover>
     </label>
     <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
-      <select  id="in-type-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.entityType" ng-change="ctrl.onEntityTypeSelect(true)"
-        ng-options="f as ctrl.metricsDefinition[f.toLowerCase()].label for f in ctrl.uniqueEntityTypes">
+      <select id="in-type-{{ctrl.target.refId}}"
+              class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+              ng-model="ctrl.target.entityType"
+              ng-change="ctrl.onEntityTypeSelect(true)"
+              ng-options="f as ctrl.metricsDefinition[f.toLowerCase()].label for f in ctrl.uniqueEntityTypes">
         <option value="" disabled selected>{{ctrl.entitySelectionText}}</option>
       </select>
     </div>
+  </div>
+
+  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '0'">
+    <label class="gf-form-label width-13 pointer" for="in-filter-{{ctrl.target.refId}}">
+      Filter metric select
+      <info-popover position="top center" mode="right-normal">
+        <p>Type to suggest metrics.</p>
+      </info-popover>
+    </label>
+    <input id="in-filter-{{ctrl.target.refId}}"
+           class="gf-form-input width-18"
+           type="text"
+           ng-model="ctrl.target.filter"
+           ng-model-options='{ debounce: 200 }'
+           ng-change="ctrl.onMetricsFilter(true)"
+           placeholder="(optional)"/>
   </div>
 
   <div class="gf-form">
@@ -36,8 +79,11 @@
       </info-popover>
     </label>
     <div class="gf-form-select-wrapper width-18 gf-form-select-wrapper--has-help-icon">
-      <select  id="in-metric-{{ctrl.target.refId}}" class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ctrl.target.metric" ng-change="ctrl.onMetricSelect()"
-        ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics track by f.key">
+      <select id="in-metric-{{ctrl.target.refId}}"
+              class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+              ng-model="ctrl.target.metric"
+              ng-change="ctrl.onMetricSelect()"
+              ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics track by f.key">
         <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
       </select>
     </div>
