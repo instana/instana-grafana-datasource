@@ -69,9 +69,19 @@ This procedure is used to test the Instana Grafana data source before the versio
     * URL: `http://localhost:8010`
     * API Token: `valid-api-token`
 * Create a new dashboard with a graph panel
+
+#### Built-in metrics
 * Query: `filler`
-* Category: `Built-in Metrics`
+* Category: `Built-in metrics`
 * Type: `Processes`
 * Metric: `Virtual (mem.virtual)`
 
 This should render a chart with two datasets (`node (on host "host-1")` and `node (on host "host-2)`).
+
+#### Custom metrics
+* Query: `filler`
+* Category: `Custom metrics`
+* Filter: ``
+* Metric: `Dropwizard meter (KPI.errors)`
+
+This should render a chart with one dataset (`node (on host "host-3")`).

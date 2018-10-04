@@ -98,7 +98,7 @@
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
           },
-          "body": "[\"host\", \"awsEc\", \"hadoopYARN\", \"process\"]"
+          "body": "[\"host\", \"awsEc\", \"hadoopYARN\", \"process\", \"dropwizardApplicationContainer\"]"
         }
       }]
     },
@@ -118,6 +118,25 @@
             "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
           },
           "body": "[]"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/metricsCatalog/custom"
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "[{\"formatter\": \"NUMBER\",\"label\": \"Dropwizard meter service.errors\",\"description\": \"Dropwizard meter\",\"metricId\": \"service.errors\",\"pluginId\": \"jvmRuntimePlatform\"},{\"formatter\": \"NUMBER\",\"label\": \"Dropwizard meter KPI.errors\",\"description\": \"Dropwizard meter\",\"metricId\": \"KPI.errors\",\"pluginId\": \"dropwizardApplicationContainer\"},{\"formatter\": \"MILLIS\",\"label\": \"Dropwizard timer (99th)\",\"description\":\"Dropwizard timer, 99th percentile\",\"metricId\": \"KPI.time.99th\",\"pluginId\": \"dropwizardApplicationContainer\"}]"
         }
       }]
     },
@@ -147,6 +166,28 @@
       "predicates": [{
         "equals": {
           "method": "GET",
+          "path": "/api/snapshots",
+          "query": {
+            "q": "filler AND entity.pluginId:dropwizardApplicationContainer"
+          }
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "[\"0DtgUvTuwiV_OGCK0_GGuC3fBaw\"]"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
           "path": "/api/snapshots/context",
           "query": {
             "q": "filler AND entity.pluginId:process"
@@ -162,6 +203,28 @@
             "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
           },
           "body": "[{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx0\",\"host\":\"host-1\"},{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx1\",\"host\":\"host-2\"}]"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/snapshots/context",
+          "query": {
+            "q": "filler AND entity.pluginId:dropwizardApplicationContainer"
+          }
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "[{\"snapshotId\":\"0DtgUvTuwiV_OGCK0_GGuC3fBaw\",\"host\":\"host-3\"}]"
         }
       }]
     },
@@ -207,6 +270,25 @@
       "predicates": [{
         "equals": {
           "method": "GET",
+          "path": "/api/snapshots/0DtgUvTuwiV_OGCK0_GGuC3fBaw"
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "{\"id\": \"0DtgUvTuwiV_OGCK0_GGuC3fBaw\",\"plugin\": \"dropwizardApplicationContainer\",\"from\": 1516294054000,\"to\": 1516610096000,\"tags\": [],\"label\": \"node\",\"entityId\": {\"host\": \"0e:36:2c:ff:fe:a1:77:25\",\"pluginId\": \"dropwizardApplicationContainer\",\"steadyId\": \"30978\"}}"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
           "path": "/api/metrics",
           "query": {
             "metric": "mem.virtual",
@@ -231,6 +313,21 @@
       }],
       "responses": [{
         "inject": "<%- stringify(filename, 'metrics_factory_2.ejs') %>"
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/metrics",
+          "query": {
+            "metric": "KPI.errors",
+            "snapshotId": "0DtgUvTuwiV_OGCK0_GGuC3fBaw"
+          }
+        }
+      }],
+      "responses": [{
+        "inject": "<%- stringify(filename, 'metrics_factory_3.ejs') %>"
       }]
     },
     {
