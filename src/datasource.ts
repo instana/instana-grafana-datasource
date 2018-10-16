@@ -4,7 +4,6 @@ export default class InstanaDatasource {
   id: number;
   name: string;
   url: string;
-  apiToken: string;
   newApplicationModelEnabled: boolean;
   currentTime: () => number;
   snapshotCache: Object;
@@ -48,7 +47,6 @@ export default class InstanaDatasource {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
     this.url = instanceSettings.jsonData.url;
-    this.apiToken = instanceSettings.jsonData.apiToken;
     this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
     this.snapshotCache = {};
 
@@ -77,12 +75,9 @@ export default class InstanaDatasource {
 
   request(method, url, requestId?) {
     return this.backendSrv.datasourceRequest({
-      url: this.url + url,
+      url: '/instana' + url, // for plugin.json.route matching as needed for auth extension
       method: method,
-      requestId: requestId,
-      headers: {
-        Authorization: 'apiToken ' + this.apiToken
-      }
+      requestId: requestId
     });
   }
 

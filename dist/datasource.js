@@ -73,19 +73,15 @@ System.register(['lodash'], function(exports_1) {
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
                     this.url = instanceSettings.jsonData.url;
-                    this.apiToken = instanceSettings.jsonData.apiToken;
                     this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
                     this.snapshotCache = {};
                     this.currentTime = function () { return new Date().getTime(); };
                 }
                 InstanaDatasource.prototype.request = function (method, url, requestId) {
                     return this.backendSrv.datasourceRequest({
-                        url: this.url + url,
+                        url: '/instana' + url,
                         method: method,
-                        requestId: requestId,
-                        headers: {
-                            Authorization: 'apiToken ' + this.apiToken
-                        }
+                        requestId: requestId
                     });
                 };
                 InstanaDatasource.prototype.query = function (options) {

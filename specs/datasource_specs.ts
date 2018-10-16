@@ -133,23 +133,23 @@ describe('InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658604&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=false":
+          case "/instana/api/snapshots?from=1516451043603&to=1516472658604&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=false":
             return ctx.$q.resolve(snapshots);
-          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658604&from=1516451043603&to=1516472658604&size=100&newApplicationModelEnabled=false":
+          case "/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658604&from=1516451043603&to=1516472658604&size=100&newApplicationModelEnabled=false":
             return ctx.$q.resolve(contexts);
-          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658614&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=false":
+          case "/instana/api/snapshots?from=1516451043603&to=1516472658614&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=false":
             return ctx.$q.resolve(snapshotsAfterTenSeconds);
-          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658614&size=100&newApplicationModelEnabled=false":
+          case "/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658614&size=100&newApplicationModelEnabled=false":
             return ctx.$q.resolve(contextsAfterTenSeconds);
-          case "http://localhost:8010/api/snapshots/A?time=1516472658604":
+          case "/instana/api/snapshots/A?time=1516472658604":
             return ctx.$q.resolve(snapshotA);
-          case "http://localhost:8010/api/snapshots/B?time=1516472658604":
+          case "/instana/api/snapshots/B?time=1516472658604":
             return ctx.$q.resolve(snapshotB);
-          case "http://localhost:8010/api/snapshots/A?time=1516472658614":
+          case "/instana/api/snapshots/A?time=1516472658614":
             return ctx.$q.resolve(snapshotA);
-          case "http://localhost:8010/api/snapshots/B?time=1516472658614":
+          case "/instana/api/snapshots/B?time=1516472658614":
             return ctx.$q.resolve(snapshotB);
-          case "http://localhost:8010/api/snapshots/C?time=1516472658614":
+          case "/instana/api/snapshots/C?time=1516472658614":
             return ctx.$q.resolve(snapshotC);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -332,17 +332,17 @@ describe('InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658604&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=false":
+          case "/instana/api/snapshots?from=1516451043603&to=1516472658604&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=false":
             return ctx.$q.resolve(snapshots);
-          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658604&from=1516451043603&to=1516472658604&size=100&newApplicationModelEnabled=false":
+          case "/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1516472658604&from=1516451043603&to=1516472658604&size=100&newApplicationModelEnabled=false":
             return ctx.$q.resolve(contexts);
-          case "http://localhost:8010/api/snapshots/A?time=1516472658604":
+          case "/instana/api/snapshots/A?time=1516472658604":
             return ctx.$q.resolve(snapshotA);
-          case "http://localhost:8010/api/snapshots/B?time=1516472658604":
+          case "/instana/api/snapshots/B?time=1516472658604":
             return ctx.$q.resolve(snapshotB);
-          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=A":
+          case "/instana/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
-          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=B":
+          case "/instana/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=B":
             return ctx.$q.resolve(metricsForB);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -481,13 +481,13 @@ describe('InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=false":
+          case "/instana/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=false":
             return ctx.$q.resolve(snapshots);
-          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1524421440603&from=1524248640603&to=1524421440603&size=100&newApplicationModelEnabled=false":
+          case "/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1524421440603&from=1524248640603&to=1524421440603&size=100&newApplicationModelEnabled=false":
             return ctx.$q.resolve(contexts);
-          case "http://localhost:8010/api/snapshots/A?time=1524421440603":
+          case "/instana/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
-          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
+          case "/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -595,13 +595,13 @@ describe('InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=false":
+          case "/instana/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=false":
             return ctx.$q.resolve(snapshots);
-          case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1524421440603&from=1524248640603&to=1524421440603&size=100&newApplicationModelEnabled=false":
+          case "/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&time=1524421440603&from=1524248640603&to=1524421440603&size=100&newApplicationModelEnabled=false":
             return ctx.$q.resolve(contexts);
-          case "http://localhost:8010/api/snapshots/A?time=1524421440603":
+          case "/instana/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
-          case "http://localhost:8010/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
+          case "/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
