@@ -78,7 +78,6 @@ System.register(['lodash'], function(exports_1) {
                     this.currentTime = function () { return new Date().getTime(); };
                 }
                 InstanaDatasource.prototype.request = function (method, url, requestId) {
-                    console.log(this.url + '/instana' + url);
                     return this.backendSrv.datasourceRequest({
                         url: this.url + '/instana' + url,
                         method: method,

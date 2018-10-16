@@ -74,11 +74,13 @@ export default class InstanaDatasource {
   setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; };
 
   request(method, url, requestId?) {
-    console.log(this.url + '/instana' + url);
     return this.backendSrv.datasourceRequest({
-      url: this.url + '/instana' + url, // for plugin.json.route matching as needed for auth extension
+      url: this.url + '/instana' + url, // for plugin.json.route matching
       method: method,
       requestId: requestId
+    }).catch(error => {
+      console.log(error);
+      throw error;
     });
   }
 
