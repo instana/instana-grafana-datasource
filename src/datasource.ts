@@ -46,7 +46,7 @@ export default class InstanaDatasource {
   constructor(instanceSettings, private backendSrv, private templateSrv, private $q) {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
-    this.url = instanceSettings.jsonData.url;
+    this.url = instanceSettings.url;
     this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
     this.snapshotCache = {};
 
@@ -74,8 +74,9 @@ export default class InstanaDatasource {
   setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; };
 
   request(method, url, requestId?) {
+    console.log(this.url + '/instana' + url);
     return this.backendSrv.datasourceRequest({
-      url: '/instana' + url, // for plugin.json.route matching as needed for auth extension
+      url: this.url + '/instana' + url, // for plugin.json.route matching as needed for auth extension
       method: method,
       requestId: requestId
     });

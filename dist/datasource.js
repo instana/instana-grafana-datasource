@@ -72,14 +72,15 @@ System.register(['lodash'], function(exports_1) {
                     };
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
-                    this.url = instanceSettings.jsonData.url;
+                    this.url = instanceSettings.url;
                     this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
                     this.snapshotCache = {};
                     this.currentTime = function () { return new Date().getTime(); };
                 }
                 InstanaDatasource.prototype.request = function (method, url, requestId) {
+                    console.log(this.url + '/instana' + url);
                     return this.backendSrv.datasourceRequest({
-                        url: '/instana' + url,
+                        url: this.url + '/instana' + url,
                         method: method,
                         requestId: requestId
                     });
