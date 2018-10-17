@@ -247,7 +247,7 @@ export default class InstanaDatasource {
         };
       },
       error => {
-        if (error.status === 404) {
+        if (error.status === 404 || error.status === 502) {
           return {
             status: 'success',
             message: 'Successfully connected to the Instana API.',
