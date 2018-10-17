@@ -78,6 +78,9 @@ export default class InstanaDatasource {
       url: this.url + '/instana' + url, // for plugin.json.route matching
       method: method,
       requestId: requestId
+    }).catch(error => {
+      console.log(error);
+      throw error;
     });
   }
 

@@ -82,6 +82,9 @@ System.register(['lodash'], function(exports_1) {
                         url: this.url + '/instana' + url,
                         method: method,
                         requestId: requestId
+                    }).catch(function (error) {
+                        console.log(error);
+                        throw error;
                     });
                 };
                 InstanaDatasource.prototype.query = function (options) {
