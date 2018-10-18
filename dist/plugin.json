@@ -34,13 +34,13 @@
       "method": "GET",
       "url": "{{.JsonData.url}}",
       "headers": [
-          {"name": "Authorization", "content": "{{.JsonData.apiToken}}"}
+          {"name": "Authorization", "content": "apiToken {{.JsonData.apiToken}}"}
       ]
     }
   ],
 
   "dependencies": {
-    "grafanaVersion": "3.x.x",
+    "grafanaVersion": "4.6.x",
     "plugins": [ ]
   }
 }
