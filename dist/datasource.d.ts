@@ -6,7 +6,6 @@ export default class InstanaDatasource {
     name: string;
     url: string;
     apiToken: string;
-    newApplicationModelEnabled: boolean;
     currentTime: () => number;
     snapshotCache: Object;
     catalogPromise: Object;
