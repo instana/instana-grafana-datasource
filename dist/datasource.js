@@ -74,6 +74,7 @@ System.register(['lodash'], function(exports_1) {
                     this.id = instanceSettings.id;
                     this.url = instanceSettings.jsonData.url;
                     this.apiToken = instanceSettings.jsonData.apiToken;
+                    this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
                     this.snapshotCache = {};
                     this.currentTime = function () { return new Date().getTime(); };
                 }
@@ -145,9 +146,9 @@ System.register(['lodash'], function(exports_1) {
                     }
                     this.setLastFetchedFromApi(true);
                     var fetchSnapshotsUrl = ("/api/snapshots?from=" + from + "&to=" + to + "&q=" + query + "&size=100") +
-                        "&newApplicationModelEnabled=true";
+                        ("&newApplicationModelEnabled=" + (this.newApplicationModelEnabled === true));
                     var fetchSnapshotContextsUrl = ("/api/snapshots/context?q=" + query + "&time=" + to + "&from=" + from + "&to=" + to + "&size=100") +
-                        "&newApplicationModelEnabled=true";
+                        ("&newApplicationModelEnabled=" + (this.newApplicationModelEnabled === true));
                     return this.$q.all([
                         this.request('GET', fetchSnapshotsUrl),
                         this.request('GET', fetchSnapshotContextsUrl)
