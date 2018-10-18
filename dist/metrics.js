@@ -872,6 +872,23 @@ System.register([], function(exports_1) {
                         "threads.refresh_queue": "Refresh"
                     }
                 },
+                "endpoint": {
+                    "label": "Endpoints",
+                    "deprecated": false,
+                    "metrics": {
+                        "count": "Calls",
+                        "duration.mean": "Avg. Latency",
+                        "duration.min": "Min Latency",
+                        "duration.max": "Max Latency",
+                        "duration.25th": "Latency 25th",
+                        "duration.50th": "Latency 50th",
+                        "duration.75th": "Latency 75th",
+                        "duration.95th": "Latency 95th",
+                        "duration.98th": "Latency 98th",
+                        "duration.99th": "Latency 99th",
+                        "error_rate": "Error Rate"
+                    }
+                },
                 "etcd": {
                     "label": "Etcd Nodes",
                     "deprecated": false,

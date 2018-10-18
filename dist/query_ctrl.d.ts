@@ -875,6 +875,23 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "threads.refresh_queue": string;
             };
         };
+        "endpoint": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "count": string;
+                "duration.mean": string;
+                "duration.min": string;
+                "duration.max": string;
+                "duration.25th": string;
+                "duration.50th": string;
+                "duration.75th": string;
+                "duration.95th": string;
+                "duration.98th": string;
+                "duration.99th": string;
+                "error_rate": string;
+            };
+        };
         "etcd": {
             "label": string;
             "deprecated": boolean;
