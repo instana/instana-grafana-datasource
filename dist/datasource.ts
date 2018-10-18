@@ -5,7 +5,6 @@ export default class InstanaDatasource {
   name: string;
   url: string;
   apiToken: string;
-  newApplicationModelEnabled: boolean;
   currentTime: () => number;
   snapshotCache: Object;
   catalogPromise: Object;
@@ -49,7 +48,6 @@ export default class InstanaDatasource {
     this.id = instanceSettings.id;
     this.url = instanceSettings.jsonData.url;
     this.apiToken = instanceSettings.jsonData.apiToken;
-    this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
     this.snapshotCache = {};
 
     this.currentTime = () => { return new Date().getTime(); };
@@ -181,9 +179,9 @@ export default class InstanaDatasource {
 
     this.setLastFetchedFromApi(true);
     const fetchSnapshotsUrl = `/api/snapshots?from=${from}&to=${to}&q=${query}&size=100` +
-      `&newApplicationModelEnabled=${this.newApplicationModelEnabled === true}`;
+      `&newApplicationModelEnabled=true`;
     const fetchSnapshotContextsUrl = `/api/snapshots/context?q=${query}&time=${to}&from=${from}&to=${to}&size=100` +
-      `&newApplicationModelEnabled=${this.newApplicationModelEnabled === true}`;
+      `&newApplicationModelEnabled=true`;
 
     return this.$q.all([
       this.request('GET', fetchSnapshotsUrl),
