@@ -279,6 +279,46 @@ declare var _default: {
             "g2c": string;
         };
     };
+    "azurecosmosdb": {
+        "label": string;
+        "deprecated": boolean;
+        "metrics": {
+            "h2": string;
+            "h3": string;
+            "tr": string;
+            "ds": string;
+            "is": string;
+            "dc": string;
+            "rl": string;
+            "rlc": string;
+            "wl": string;
+            "wlc": string;
+            "sc": string;
+            "as": string;
+        };
+    };
+    "azurerediscache": {
+        "label": string;
+        "deprecated": boolean;
+        "metrics": {
+            "connectedclients": string;
+            "totalcommandsprocessed": string;
+            "cachehits": string;
+            "cachemisses": string;
+            "getcommands": string;
+            "setcommands": string;
+            "operationsPerSecond": string;
+            "evictedkeys": string;
+            "totalkeys": string;
+            "expiredkeys": string;
+            "usedmemory": string;
+            "usedmemoryRss": string;
+            "serverLoad": string;
+            "cacheWrite": string;
+            "cacheRead": string;
+            "percentProcessorTime": string;
+        };
+    };
     "batchserviceinstance": {
         "label": string;
         "deprecated": boolean;
@@ -1034,7 +1074,6 @@ declare var _default: {
             "nodeMetrics.migrationQueueSize": string;
             "isLiteMember": string;
             "isLocalMemberSafe": string;
-            "isClusterSafe": string;
             "distributedObjects.cacheCount": string;
             "distributedObjects.mapCount": string;
             "distributedObjects.replicatedMapCount": string;
@@ -1246,6 +1285,27 @@ declare var _default: {
             "pods.limit_mem": string;
             "pods.required_cpu": string;
             "pods.limit_cpu": string;
+        };
+    };
+    "kubernetesnamespace": {
+        "label": string;
+        "deprecated": boolean;
+        "metrics": {
+            "cap_requests_memory": string;
+            "used_requests_memory": string;
+            "cap_limits_memory": string;
+            "used_limits_memory": string;
+            "cap_requests_cpu": string;
+            "used_requests_cpu": string;
+            "cap_limits_cpu": string;
+            "used_limits_cpu": string;
+            "used_pods": string;
+            "cap_pods": string;
+            "used_pods_percentage": string;
+            "required_cpu_percentage": string;
+            "limit_cpu_percentage": string;
+            "required_mem_percentage": string;
+            "limit_mem_percentage": string;
         };
     };
     "openshiftdeploymentconfig": {
@@ -2135,6 +2195,17 @@ declare var _default: {
             "connections.reading": string;
             "connections.writing": string;
             "connections.waiting": string;
+            "nginx_plus.processes.respawned": string;
+            "nginx_plus.http.upstreams.peers.failed": string;
+            "nginx_plus.http.server_zones.5xx_responses": string;
+            "nginx_plus.http.caches.miss.responses": string;
+            "nginx_plus.http.caches.hit.responses": string;
+            "nginx_plus.http.caches.size": string;
+            "nginx_plus.http.caches.max_size": string;
+            "nginx_plus.http.caches.cold": string;
+            "nginx_plus.ssl.handshakes": string;
+            "nginx_plus.ssl.handshakes_failed": string;
+            "nginx_plus.ssl.session_reuses": string;
         };
     };
     "nodejsruntimeplatform": {
@@ -2529,6 +2600,13 @@ declare var _default: {
             "metrics.statusCode.4xx": string;
             "metrics.statusCode.5xx": string;
             "metrics.httpsessions.active": string;
+        };
+    };
+    "tomcatapplicationcontainer": {
+        "label": string;
+        "deprecated": boolean;
+        "metrics": {
+            "totalSessionCount": string;
         };
     };
     "unknownservice": {
