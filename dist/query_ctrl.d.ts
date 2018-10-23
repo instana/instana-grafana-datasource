@@ -286,6 +286,46 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "g2c": string;
             };
         };
+        "azurecosmosdb": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "h2": string;
+                "h3": string;
+                "tr": string;
+                "ds": string;
+                "is": string;
+                "dc": string;
+                "rl": string;
+                "rlc": string;
+                "wl": string;
+                "wlc": string;
+                "sc": string;
+                "as": string;
+            };
+        };
+        "azurerediscache": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "connectedclients": string;
+                "totalcommandsprocessed": string;
+                "cachehits": string;
+                "cachemisses": string;
+                "getcommands": string;
+                "setcommands": string;
+                "operationsPerSecond": string;
+                "evictedkeys": string;
+                "totalkeys": string;
+                "expiredkeys": string;
+                "usedmemory": string;
+                "usedmemoryRss": string;
+                "serverLoad": string;
+                "cacheWrite": string;
+                "cacheRead": string;
+                "percentProcessorTime": string;
+            };
+        };
         "batchserviceinstance": {
             "label": string;
             "deprecated": boolean;
@@ -875,6 +915,23 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "threads.refresh_queue": string;
             };
         };
+        "endpoint": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "count": string;
+                "duration.mean": string;
+                "duration.min": string;
+                "duration.max": string;
+                "duration.25th": string;
+                "duration.50th": string;
+                "duration.75th": string;
+                "duration.95th": string;
+                "duration.98th": string;
+                "duration.99th": string;
+                "error_rate": string;
+            };
+        };
         "etcd": {
             "label": string;
             "deprecated": boolean;
@@ -1024,7 +1081,6 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "nodeMetrics.migrationQueueSize": string;
                 "isLiteMember": string;
                 "isLocalMemberSafe": string;
-                "isClusterSafe": string;
                 "distributedObjects.cacheCount": string;
                 "distributedObjects.mapCount": string;
                 "distributedObjects.replicatedMapCount": string;
@@ -1236,6 +1292,27 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "pods.limit_mem": string;
                 "pods.required_cpu": string;
                 "pods.limit_cpu": string;
+            };
+        };
+        "kubernetesnamespace": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "cap_requests_memory": string;
+                "used_requests_memory": string;
+                "cap_limits_memory": string;
+                "used_limits_memory": string;
+                "cap_requests_cpu": string;
+                "used_requests_cpu": string;
+                "cap_limits_cpu": string;
+                "used_limits_cpu": string;
+                "used_pods": string;
+                "cap_pods": string;
+                "used_pods_percentage": string;
+                "required_cpu_percentage": string;
+                "limit_cpu_percentage": string;
+                "required_mem_percentage": string;
+                "limit_mem_percentage": string;
             };
         };
         "openshiftdeploymentconfig": {
@@ -2125,6 +2202,17 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "connections.reading": string;
                 "connections.writing": string;
                 "connections.waiting": string;
+                "nginx_plus.processes.respawned": string;
+                "nginx_plus.http.upstreams.peers.failed": string;
+                "nginx_plus.http.server_zones.5xx_responses": string;
+                "nginx_plus.http.caches.miss.responses": string;
+                "nginx_plus.http.caches.hit.responses": string;
+                "nginx_plus.http.caches.size": string;
+                "nginx_plus.http.caches.max_size": string;
+                "nginx_plus.http.caches.cold": string;
+                "nginx_plus.ssl.handshakes": string;
+                "nginx_plus.ssl.handshakes_failed": string;
+                "nginx_plus.ssl.session_reuses": string;
             };
         };
         "nodejsruntimeplatform": {
@@ -2519,6 +2607,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "metrics.statusCode.4xx": string;
                 "metrics.statusCode.5xx": string;
                 "metrics.httpsessions.active": string;
+            };
+        };
+        "tomcatapplicationcontainer": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "totalSessionCount": string;
             };
         };
         "unknownservice": {

@@ -279,6 +279,46 @@ export default {
       "g2c": "Generation 2 Collections"
     }
   },
+  "azurecosmosdb": {
+    "label": "Azure CosmosDb",
+    "deprecated": false,
+    "metrics": {
+      "h2": "Number of HTTP 2xx responses",
+      "h3": "Number of HTTP 3xx responses",
+      "tr": "Number of requests",
+      "ds": "Data Size",
+      "is": "Index Size",
+      "dc": "Document Count",
+      "rl": "Read Latency",
+      "rlc": "Read Latency Count",
+      "wl": "Write Latency",
+      "wlc": "Write Latency Count",
+      "sc": "Storage Capacity",
+      "as": "Available Storage"
+    }
+  },
+  "azurerediscache": {
+    "label": "Azure Redis Caches",
+    "deprecated": false,
+    "metrics": {
+      "connectedclients": "Connected Clients",
+      "totalcommandsprocessed": "Total Operations",
+      "cachehits": "Cache Hits",
+      "cachemisses": "Cache Misses",
+      "getcommands": "Gets",
+      "setcommands": "Sets",
+      "operationsPerSecond": "Operations Per Second",
+      "evictedkeys": "Evicted Keys",
+      "totalkeys": "Total Keys",
+      "expiredkeys": "Expired Keys",
+      "usedmemory": "Used Memory",
+      "usedmemoryRss": "Used Memory RSS",
+      "serverLoad": "Server Load",
+      "cacheWrite": "Cache Write",
+      "cacheRead": "Cache Read",
+      "percentProcessorTime": "CPU"
+    }
+  },
   "batchserviceinstance": {
     "label": "Batch Job Instances",
     "deprecated": true,
@@ -868,6 +908,23 @@ export default {
       "threads.refresh_queue": "Refresh"
     }
   },
+  "endpoint": {
+    "label": "Endpoints",
+    "deprecated": false,
+    "metrics": {
+      "count": "Calls",
+      "duration.mean": "Avg. Latency",
+      "duration.min": "Min Latency",
+      "duration.max": "Max Latency",
+      "duration.25th": "Latency 25th",
+      "duration.50th": "Latency 50th",
+      "duration.75th": "Latency 75th",
+      "duration.95th": "Latency 95th",
+      "duration.98th": "Latency 98th",
+      "duration.99th": "Latency 99th",
+      "error_rate": "Error Rate"
+    }
+  },
   "etcd": {
     "label": "Etcd Nodes",
     "deprecated": false,
@@ -1014,10 +1071,9 @@ export default {
     "metrics": {
       "nodeMetrics.clientEndpointCount": "Client Endpoint Count",
       "nodeMetrics.eventQueueSize": "Migration Queue Size",
-      "nodeMetrics.migrationQueueSize": "EventQueue Size",
-      "isLiteMember": "Client Endpoint Count",
-      "isLocalMemberSafe": "Migration Queue Size",
-      "isClusterSafe": "EventQueue Size",
+      "nodeMetrics.migrationQueueSize": "Operation Count",
+      "isLiteMember": "Is Lite Member",
+      "isLocalMemberSafe": "Is Local Member Safe",
       "distributedObjects.cacheCount": "ICache",
       "distributedObjects.mapCount": "IMap",
       "distributedObjects.replicatedMapCount": "ReplicatedMap",
@@ -1229,6 +1285,27 @@ export default {
       "pods.limit_mem": "Memory Limits",
       "pods.required_cpu": "CPU Requests",
       "pods.limit_cpu": "CPU Limits"
+    }
+  },
+  "kubernetesnamespace": {
+    "label": "Kubernetes Namespaces",
+    "deprecated": false,
+    "metrics": {
+      "cap_requests_memory": "Capacity Requests",
+      "used_requests_memory": "Used Requests",
+      "cap_limits_memory": "Capacity Limits ",
+      "used_limits_memory": "Used Limits",
+      "cap_requests_cpu": "Capacity Requests",
+      "used_requests_cpu": "Used Requests",
+      "cap_limits_cpu": "Capacity Limits",
+      "used_limits_cpu": "Used Limits",
+      "used_pods": "Used Pods",
+      "cap_pods": "Pods Capacity",
+      "used_pods_percentage": "Pods Allocation",
+      "required_cpu_percentage": "CPU Requests Allocation",
+      "limit_cpu_percentage": "CPU Limits Allocation",
+      "required_mem_percentage": "Memory Requests Allocation",
+      "limit_mem_percentage": "Memory Limits Allocation"
     }
   },
   "openshiftdeploymentconfig": {
@@ -2117,7 +2194,18 @@ export default {
       "connections.dropped": "Dropped connections",
       "connections.reading": "Reading",
       "connections.writing": "Writing",
-      "connections.waiting": "Waiting"
+      "connections.waiting": "Waiting",
+      "nginx_plus.processes.respawned": "Processes respawned",
+      "nginx_plus.http.upstreams.peers.failed": "Upstreams failed",
+      "nginx_plus.http.server_zones.5xx_responses": "5xx responses",
+      "nginx_plus.http.caches.miss.responses": "Miss responses",
+      "nginx_plus.http.caches.hit.responses": "Hit responses",
+      "nginx_plus.http.caches.size": "Caches size",
+      "nginx_plus.http.caches.max_size": "Max caches size",
+      "nginx_plus.http.caches.cold": "# of cold caches",
+      "nginx_plus.ssl.handshakes": "Handshakes",
+      "nginx_plus.ssl.handshakes_failed": "Failed hanshakes",
+      "nginx_plus.ssl.session_reuses": "Session reuses"
     }
   },
   "nodejsruntimeplatform": {
@@ -2512,6 +2600,13 @@ export default {
       "metrics.statusCode.4xx": "Requests with Status Code 4xx",
       "metrics.statusCode.5xx": "Requests with Status Code 5xx",
       "metrics.httpsessions.active": "Active Sessions"
+    }
+  },
+  "tomcatapplicationcontainer": {
+    "label": "Tomcats",
+    "deprecated": false,
+    "metrics": {
+      "totalSessionCount": "Total Session Count"
     }
   },
   "unknownservice": {
