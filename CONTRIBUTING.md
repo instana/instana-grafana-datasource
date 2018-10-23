@@ -57,7 +57,7 @@ The settings for Karma are in the karma.conf.js file in the root. If you add any
 * `git remote add grafana git@github.com:grafana/grafana-plugin-repository.git`.
 * `git checkout master && git fetch grafana && git merge grafana/master --ff`
 * Create a branch for the new release and add the new version to `repo.json`.
-* Commit, push and create a PR `Instana datasource plugin x.x.x`at <https://github.com/grafana/grafana-plugin-repository>
+* Commit, push and create a PR `Instana datasource plugin x.x.x` at <https://github.com/grafana/grafana-plugin-repository>
 
 ### Quick Check
 
