@@ -66,7 +66,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     } else {
       const url = `/api/snapshots/types?q=${encodeURIComponent(this.target.entityQuery)}` +
         `&time=${Date.now()}` +
-        `&newApplicationModelEnabled=${this.datasource.newApplicationModelEnabled === true}`;
+        `&newApplicationModelEnabled=true`;
 
       return this.datasource.request('GET', url)
         .then(
