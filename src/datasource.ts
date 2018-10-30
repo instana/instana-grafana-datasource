@@ -171,7 +171,7 @@ export default class InstanaDatasource {
     this.setLastFetchedFromApi(true);
     const fetchSnapshotsUrl = `/api/snapshots?from=${from}&to=${to}&q=${query}&size=100` +
       `&newApplicationModelEnabled=true`;
-    const fetchSnapshotContextsUrl = `/api/snapshots/context?q=${query}&time=${to}&from=${from}&to=${to}&size=100` +
+    const fetchSnapshotContextsUrl = `/api/snapshots/context?q=${query}&from=${from}&to=${to}&size=100` +
       `&newApplicationModelEnabled=true`;
 
     return this.$q.all([
@@ -180,7 +180,7 @@ export default class InstanaDatasource {
     ]).then(snapshotsWithContextsResponse => {
       return this.$q.all(
         _.map(snapshotsWithContextsResponse[0].data, snapshotId => {
-          const fetchSnapshotUrl = '/api/snapshots/' + snapshotId + '?time=' + to;
+          const fetchSnapshotUrl = '/api/snapshots/' + snapshotId;
 
           return this.request('GET', fetchSnapshotUrl).then(snapshotResponse => {
             return {
@@ -227,7 +227,7 @@ export default class InstanaDatasource {
   }
 
   testDatasource() {
-    return this.request('GET', '/api/snapshots/non-existing-snapshot-id?time=0')
+    return this.request('GET', '/api/snapshots/non-existing-snapshot-id')
     .then(
       // We always expect an error response, either a 404 (Not Found) or a 401 (Unauthorized).
       result => {
