@@ -26,7 +26,6 @@ export default class InstanaDatasource {
     request(method: any, url: any, requestId?: any): any;
     getCatalog: () => Object;
     query(options: any): any;
-    correctForSingleStat(values: any, fromInMs: any, toInMs: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;
     localCacheCopyAvailable(target: any, query: any): boolean;
     buildQuery(target: any): string;

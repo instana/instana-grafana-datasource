@@ -115,9 +115,7 @@ System.register(['lodash'], function(exports_1) {
                                 // ...fetch the metric data for every snapshot in the results.
                                 return _this.fetchMetricsForSnapshot(snapshot.snapshotId, targetWithSnapshots.target.metric.key, fromInMs, toInMs)
                                     .then(function (response) {
-                                    var timeseries = targetWithSnapshots.target.pluginId === "singlestat" || targetWithSnapshots.target.pluginId === "table"
-                                        ? _this.correctForSingleStat(response.data.values, fromInMs, toInMs)
-                                        : response.data.values;
+                                    var timeseries = response.data.values;
                                     var result = {
                                         'target': snapshot.label,
                                         'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; })
@@ -130,11 +128,6 @@ System.register(['lodash'], function(exports_1) {
                         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
                         return { data: [].concat.apply([], results) };
                     });
-                };
-                InstanaDatasource.prototype.correctForSingleStat = function (values, fromInMs, toInMs) {
-                    var rollup = this.getDefaultMetricRollupDuration(fromInMs, toInMs).rollup;
-                    var aggregationToSecondMultiplier = rollup / 1000;
-                    return lodash_1.default.map(values, function (value) { return { 'value': value.value * aggregationToSecondMultiplier, 'timestamp': value.timestamp }; });
                 };
                 InstanaDatasource.prototype.fetchSnapshotsForTarget = function (target, from, to) {
                     var _this = this;

@@ -495,7 +495,7 @@ describe('InstanaDatasource', function() {
       };
     });
 
-    it("should return one target and extrapolate the data", function() {
+    it("should return one target without extrapolate the data", function() {
       const time = 1516472658604;
 
       ctx.ds.currentTime = () => { return time; };
@@ -504,9 +504,9 @@ describe('InstanaDatasource', function() {
         expect(results.data.length).to.equal(1);
         const datapoints = results.data[0].datapoints;
         expect(datapoints.length).to.equal(3);
-        expect(datapoints).to.deep.include.members([[ 3600, 1516451163603 ]]);
-        expect(datapoints).to.deep.include.members([[ 7200, 1516451043603 ]]);
-        expect(datapoints).to.deep.include.members([[ 10800, 1516451103603 ]]);
+        expect(datapoints).to.deep.include.members([[ 60, 1516451163603 ]]);
+        expect(datapoints).to.deep.include.members([[ 120, 1516451043603 ]]);
+        expect(datapoints).to.deep.include.members([[ 180, 1516451103603 ]]);
       });
     });
   });
@@ -609,7 +609,7 @@ describe('InstanaDatasource', function() {
       };
     });
 
-    it("should return one target and extrapolate the data", function() {
+    it("should return one target without extrapolate the data", function() {
       const time = 1516472658604;
 
       ctx.ds.currentTime = () => { return time; };
@@ -618,9 +618,9 @@ describe('InstanaDatasource', function() {
         expect(results.data.length).to.equal(1);
         const datapoints = results.data[0].datapoints;
         expect(datapoints.length).to.equal(3);
-        expect(datapoints).to.deep.include.members([[ 3600, 1516451163603 ]]);
-        expect(datapoints).to.deep.include.members([[ 7200, 1516451043603 ]]);
-        expect(datapoints).to.deep.include.members([[ 10800, 1516451103603 ]]);
+        expect(datapoints).to.deep.include.members([[ 60, 1516451163603 ]]);
+        expect(datapoints).to.deep.include.members([[ 120, 1516451043603 ]]);
+        expect(datapoints).to.deep.include.members([[ 180, 1516451103603 ]]);
       });
     });
   });
