@@ -9,6 +9,8 @@ export default class InstanaDatasource {
     currentTime: () => number;
     snapshotCache: Object;
     catalogPromise: Object;
+    fromFilter: number;
+    toFilter: number;
     lastFetchedFromAPI: boolean;
     MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
     CACHE_MAX_AGE: number;
@@ -20,6 +22,8 @@ export default class InstanaDatasource {
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     storeInCache: (id: any, query: any, data: any) => void;
+    getFromFilter: () => number;
+    getToFilter: () => number;
     getSnapshotCache: () => Object;
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;

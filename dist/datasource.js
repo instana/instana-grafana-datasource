@@ -55,6 +55,8 @@ System.register(['lodash'], function(exports_1) {
                         }
                         _this.snapshotCache[id][query] = data;
                     };
+                    this.getFromFilter = function () { return _this.fromFilter; };
+                    this.getToFilter = function () { return _this.toFilter; };
                     this.getSnapshotCache = function () { return _this.snapshotCache; };
                     this.wasLastFetchedFromApi = function () { return _this.lastFetchedFromAPI; };
                     this.setLastFetchedFromApi = function (value) { _this.lastFetchedFromAPI = value; };
@@ -93,11 +95,11 @@ System.register(['lodash'], function(exports_1) {
                         return this.$q.resolve({ data: [] });
                     }
                     // Convert ISO 8601 timestamps to millis.
-                    var fromInMs = new Date(options.range.from).getTime();
-                    var toInMs = new Date(options.range.to).getTime();
+                    this.fromFilter = new Date(options.range.from).getTime();
+                    this.toFilter = new Date(options.range.to).getTime();
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
                         // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
-                        return _this.fetchSnapshotsForTarget(target, fromInMs, toInMs)
+                        return _this.fetchSnapshotsForTarget(target, _this.fromFilter, _this.toFilter)
                             .then(function (snapshots) {
                             return {
                                 'target': target,
@@ -109,11 +111,11 @@ System.register(['lodash'], function(exports_1) {
                             // For every target with all snapshots that were returned by the lucene query...
                             // Cache the data if fresh
                             if (_this.wasLastFetchedFromApi()) {
-                                _this.storeInCache(targetWithSnapshots.target.refId, _this.buildQuery(targetWithSnapshots.target), { time: toInMs, snapshots: targetWithSnapshots.snapshots });
+                                _this.storeInCache(targetWithSnapshots.target.refId, _this.buildQuery(targetWithSnapshots.target), { time: _this.toFilter, snapshots: targetWithSnapshots.snapshots });
                             }
                             return _this.$q.all(lodash_1.default.map(targetWithSnapshots.snapshots, function (snapshot) {
                                 // ...fetch the metric data for every snapshot in the results.
-                                return _this.fetchMetricsForSnapshot(snapshot.snapshotId, targetWithSnapshots.target.metric.key, fromInMs, toInMs)
+                                return _this.fetchMetricsForSnapshot(snapshot.snapshotId, targetWithSnapshots.target.metric.key, _this.fromFilter, _this.toFilter)
                                     .then(function (response) {
                                     var timeseries = response.data.values;
                                     var result = {
