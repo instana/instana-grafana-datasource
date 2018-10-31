@@ -64,12 +64,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.selectionReset();
       return this.$q.resolve();
     } else {
-      const url = `/api/snapshots/types?q=${encodeURIComponent(this.target.entityQuery)}` +
-        `&from=${this.datasource.from}` +
-        `&to=${this.datasource.to}` +
-        `&newApplicationModelEnabled=true`;
-
-      return this.datasource.request('GET', url)
+      return this.datasource.fetchTypesForTarget(this.target)
         .then(
           response => {
             this.target.queryIsValid = true;

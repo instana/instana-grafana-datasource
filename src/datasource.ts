@@ -68,10 +68,6 @@ export default class InstanaDatasource {
     this.snapshotCache[id][query] = data;
   }
 
-  getFromFilter = () => {return this.fromFilter; };
-
-  getToFilter = () => {return this.toFilter; };
-
   getSnapshotCache = () => { return this.snapshotCache; };
 
   wasLastFetchedFromApi = () => { return this.lastFetchedFromAPI; };
@@ -161,6 +157,14 @@ export default class InstanaDatasource {
       // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
       return { data: [].concat.apply([], results) };
     });
+  }
+
+  fetchTypesForTarget(target) {
+    const url = `/api/snapshots/types?q=${encodeURIComponent(target.entityQuery)}` +
+      `&from=${this.fromFilter}` +
+      `&to=${this.toFilter}` +
+      `&newApplicationModelEnabled=true`;
+    return this.request('GET', url);
   }
 
   fetchSnapshotsForTarget(target, from, to) {
