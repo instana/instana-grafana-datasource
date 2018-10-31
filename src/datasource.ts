@@ -8,7 +8,8 @@ export default class InstanaDatasource {
   currentTime: () => number;
   snapshotCache: Object;
   catalogPromise: Object;
-
+  fromFilter: number;
+  toFilter: number;
   lastFetchedFromAPI: boolean;
 
   MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
@@ -67,6 +68,10 @@ export default class InstanaDatasource {
     this.snapshotCache[id][query] = data;
   }
 
+  getFromFilter = () => {return this.fromFilter; };
+
+  getToFilter = () => {return this.toFilter; };
+
   getSnapshotCache = () => { return this.snapshotCache; };
 
   wasLastFetchedFromApi = () => { return this.lastFetchedFromAPI; };
@@ -107,13 +112,12 @@ export default class InstanaDatasource {
     }
 
     // Convert ISO 8601 timestamps to millis.
-    const fromInMs = new Date(options.range.from).getTime();
-    const toInMs = new Date(options.range.to).getTime();
-
+    this.fromFilter  = new Date(options.range.from).getTime();
+    this.toFilter = new Date(options.range.to).getTime();
     return this.$q.all(
       _.map(options.targets, target => {
         // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
-        return this.fetchSnapshotsForTarget(target, fromInMs, toInMs)
+        return this.fetchSnapshotsForTarget(target, this.fromFilter, this.toFilter)
           .then(snapshots => {
             return {
               'target': target,
@@ -130,7 +134,7 @@ export default class InstanaDatasource {
             this.storeInCache(
               targetWithSnapshots.target.refId,
               this.buildQuery(targetWithSnapshots.target),
-              { time: toInMs, snapshots: targetWithSnapshots.snapshots });
+              { time: this.toFilter, snapshots: targetWithSnapshots.snapshots });
           }
 
           return this.$q.all(
@@ -140,8 +144,7 @@ export default class InstanaDatasource {
               return this.fetchMetricsForSnapshot(
                 snapshot.snapshotId,
                 targetWithSnapshots.target.metric.key,
-                fromInMs,
-                toInMs)
+                this.fromFilter, this.toFilter)
                 .then(response => {
                   const timeseries = response.data.values;
                   var result = {
