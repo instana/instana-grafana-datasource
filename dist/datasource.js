@@ -115,9 +115,7 @@ System.register(['lodash'], function(exports_1) {
                                 // ...fetch the metric data for every snapshot in the results.
                                 return _this.fetchMetricsForSnapshot(snapshot.snapshotId, targetWithSnapshots.target.metric.key, fromInMs, toInMs)
                                     .then(function (response) {
-                                    var timeseries = targetWithSnapshots.target.pluginId === "singlestat" || targetWithSnapshots.target.pluginId === "table"
-                                        ? _this.correctForSingleStat(response.data.values, fromInMs, toInMs)
-                                        : response.data.values;
+                                    var timeseries = response.data.values;
                                     var result = {
                                         'target': snapshot.label,
                                         'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; })
@@ -131,11 +129,6 @@ System.register(['lodash'], function(exports_1) {
                         return { data: [].concat.apply([], results) };
                     });
                 };
-                InstanaDatasource.prototype.correctForSingleStat = function (values, fromInMs, toInMs) {
-                    var rollup = this.getDefaultMetricRollupDuration(fromInMs, toInMs).rollup;
-                    var aggregationToSecondMultiplier = rollup / 1000;
-                    return lodash_1.default.map(values, function (value) { return { 'value': value.value * aggregationToSecondMultiplier, 'timestamp': value.timestamp }; });
-                };
                 InstanaDatasource.prototype.fetchSnapshotsForTarget = function (target, from, to) {
                     var _this = this;
                     var query = this.buildQuery(target);
@@ -146,14 +139,14 @@ System.register(['lodash'], function(exports_1) {
                     this.setLastFetchedFromApi(true);
                     var fetchSnapshotsUrl = ("/api/snapshots?from=" + from + "&to=" + to + "&q=" + query + "&size=100") +
                         "&newApplicationModelEnabled=true";
-                    var fetchSnapshotContextsUrl = ("/api/snapshots/context?q=" + query + "&time=" + to + "&from=" + from + "&to=" + to + "&size=100") +
+                    var fetchSnapshotContextsUrl = ("/api/snapshots/context?q=" + query + "&from=" + from + "&to=" + to + "&size=100") +
                         "&newApplicationModelEnabled=true";
                     return this.$q.all([
                         this.request('GET', fetchSnapshotsUrl),
                         this.request('GET', fetchSnapshotContextsUrl)
                     ]).then(function (snapshotsWithContextsResponse) {
                         return _this.$q.all(lodash_1.default.map(snapshotsWithContextsResponse[0].data, function (snapshotId) {
-                            var fetchSnapshotUrl = '/api/snapshots/' + snapshotId + '?time=' + to;
+                            var fetchSnapshotUrl = '/api/snapshots/' + snapshotId;
                             return _this.request('GET', fetchSnapshotUrl).then(function (snapshotResponse) {
                                 return {
                                     'snapshotId': snapshotId,
@@ -190,7 +183,7 @@ System.register(['lodash'], function(exports_1) {
                     throw new Error('Template Variable Support not implemented yet.');
                 };
                 InstanaDatasource.prototype.testDatasource = function () {
-                    return this.request('GET', '/api/snapshots/non-existing-snapshot-id?time=0')
+                    return this.request('GET', '/api/snapshots/non-existing-snapshot-id')
                         .then(
                     // We always expect an error response, either a 404 (Not Found) or a 401 (Unauthorized).
                     function (result) {

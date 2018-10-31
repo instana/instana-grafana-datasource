@@ -40,9 +40,6 @@
           "path": "/api/snapshots/non-existing-snapshot-id",
           "headers": {
             "Authorization": "apiToken valid-api-token"
-          },
-          "query": {
-            "time": "0"
           }
         }
       }],
@@ -62,10 +59,7 @@
       "predicates": [{
         "equals": {
           "method": "GET",
-          "path": "/api/snapshots/non-existing-snapshot-id",
-          "query": {
-            "time": "0"
-          }
+          "path": "/api/snapshots/non-existing-snapshot-id"
         }
       }],
       "responses": [{
