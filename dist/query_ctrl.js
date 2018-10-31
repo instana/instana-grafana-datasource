@@ -65,11 +65,7 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                         return this.$q.resolve();
                     }
                     else {
-                        var url = ("/api/snapshots/types?q=" + encodeURIComponent(this.target.entityQuery)) +
-                            ("&from=" + this.datasource.from) +
-                            ("&to=" + this.datasource.to) +
-                            "&newApplicationModelEnabled=true";
-                        return this.datasource.request('GET', url)
+                        return this.datasource.fetchTypesForTarget(this.target)
                             .then(function (response) {
                             _this.target.queryIsValid = true;
                             _this.snapshots = response.data;

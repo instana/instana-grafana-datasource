@@ -22,14 +22,13 @@ export default class InstanaDatasource {
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     storeInCache: (id: any, query: any, data: any) => void;
-    getFromFilter: () => number;
-    getToFilter: () => number;
     getSnapshotCache: () => Object;
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;
     request(method: any, url: any, requestId?: any): any;
     getCatalog: () => Object;
     query(options: any): any;
+    fetchTypesForTarget(target: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;
     localCacheCopyAvailable(target: any, query: any): boolean;
     buildQuery(target: any): string;
