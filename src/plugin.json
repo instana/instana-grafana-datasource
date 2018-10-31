@@ -11,18 +11,20 @@
   "annotations": true,
 
   "info": {
-    "description": "instana datasource",
+    "description": "Grafana datasource plugin for Instana: Automatic Infrastructure and Application Monitoring",
     "author": {
-      "name": "Instana inc",
-      "url": "https://instana.com"
+      "name": "Instana, Inc.",
+      "url": "https://www.instana.com"
     },
     "logos": {
       "small": "https://www.instana.com/media/instana_icon_square.png",
       "large": "https://www.instana.com/media/instana_icon_square.png"
     },
     "links": [
-      {"name": "GitHub", "url": "https://instana.com" },
-      {"name": "MIT License", "url": "https://instana.com" }
+      {"name": "Docs", "url": "https://docs.instana.io/ecosystem/grafana/" },
+      {"name": "Homepage", "url": "https://www.instana.com" },
+      {"name": "GitHub", "url": "https://github.com/instana/instana-grafana-datasource" },
+      {"name": "Apache License 2.0", "url": "https://github.com/instana/instana-grafana-datasource/blob/master/LICENSE" }
     ],
     "version": "1.2.1",
     "updated": "2018-10-23"
