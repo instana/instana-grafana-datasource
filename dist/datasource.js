@@ -144,20 +144,20 @@ System.register(['lodash'], function(exports_1) {
                         return this.$q.resolve(this.getSnapshotCache()[target.refId][query].snapshots);
                     }
                     this.setLastFetchedFromApi(true);
-                    var fetchSnapshotsUrl = ("/api/snapshots?from=" + from + "&to=" + to + "&q=" + query + "&size=100") +
+                    var fetchSnapshotContextsUrl = "/api/snapshots/context" +
+                        ("?q=" + query) +
+                        ("&from=" + from) +
+                        ("&to=" + to) +
+                        "&size=100" +
                         "&newApplicationModelEnabled=true";
-                    var fetchSnapshotContextsUrl = ("/api/snapshots/context?q=" + query + "&from=" + from + "&to=" + to + "&size=100") +
-                        "&newApplicationModelEnabled=true";
-                    return this.$q.all([
-                        this.request('GET', fetchSnapshotsUrl),
-                        this.request('GET', fetchSnapshotContextsUrl)
-                    ]).then(function (snapshotsWithContextsResponse) {
-                        return _this.$q.all(lodash_1.default.map(snapshotsWithContextsResponse[0].data, function (snapshotId) {
-                            var fetchSnapshotUrl = '/api/snapshots/' + snapshotId;
+                    return this.request('GET', fetchSnapshotContextsUrl).then(function (contextsResponse) {
+                        return _this.$q.all(contextsResponse.data.map(function (_a) {
+                            var snapshotId = _a.snapshotId, host = _a.host, plugin = _a.plugin;
+                            var fetchSnapshotUrl = "/api/snapshots/" + snapshotId;
                             return _this.request('GET', fetchSnapshotUrl).then(function (snapshotResponse) {
                                 return {
-                                    'snapshotId': snapshotId,
-                                    'label': snapshotResponse.data.label + _this.getHostSuffix(snapshotsWithContextsResponse[1].data, snapshotId)
+                                    snapshotId: snapshotId,
+                                    'label': snapshotResponse.data.label + _this.getHostSuffix(host)
                                 };
                             });
                         }));
@@ -171,16 +171,15 @@ System.register(['lodash'], function(exports_1) {
                 InstanaDatasource.prototype.buildQuery = function (target) {
                     return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType);
                 };
-                InstanaDatasource.prototype.getHostSuffix = function (contexts, snapshotId) {
-                    var host = lodash_1.default.find(contexts, function (context) { return context.snapshotId === snapshotId; }).host;
-                    if (!host) {
-                        return '';
+                InstanaDatasource.prototype.getHostSuffix = function (host) {
+                    if (host) {
+                        return ' (on host "' + host + '")';
                     }
-                    return ' (on host "' + host + '")';
+                    return '';
                 };
                 InstanaDatasource.prototype.fetchMetricsForSnapshot = function (snapshotId, metric, from, to) {
                     var rollup = this.getDefaultMetricRollupDuration(from, to).rollup;
-                    var url = '/api/metrics?metric=' + metric + '&from=' + from + '&to=' + to + '&rollup=' + rollup + '&snapshotId=' + snapshotId;
+                    var url = "/api/metrics?metric=" + metric + "&from=" + from + "&to=" + to + "&rollup=" + rollup + "&snapshotId=" + snapshotId;
                     return this.request('GET', url);
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {

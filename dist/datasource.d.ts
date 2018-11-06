@@ -32,7 +32,7 @@ export default class InstanaDatasource {
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;
     localCacheCopyAvailable(target: any, query: any): boolean;
     buildQuery(target: any): string;
-    getHostSuffix(contexts: any, snapshotId: any): string;
+    getHostSuffix(host: any): string;
     fetchMetricsForSnapshot(snapshotId: any, metric: any, from: any, to: any): any;
     annotationQuery(options: any): void;
     metricFindQuery(query: string): void;

@@ -176,23 +176,23 @@ export default class InstanaDatasource {
     }
 
     this.setLastFetchedFromApi(true);
-    const fetchSnapshotsUrl = `/api/snapshots?from=${from}&to=${to}&q=${query}&size=100` +
-      `&newApplicationModelEnabled=true`;
-    const fetchSnapshotContextsUrl = `/api/snapshots/context?q=${query}&from=${from}&to=${to}&size=100` +
+
+    const fetchSnapshotContextsUrl = `/api/snapshots/context`+
+      `?q=${query}` +
+      `&from=${from}` +
+      `&to=${to}` +
+      `&size=100` +
       `&newApplicationModelEnabled=true`;
 
-    return this.$q.all([
-      this.request('GET', fetchSnapshotsUrl),
-      this.request('GET', fetchSnapshotContextsUrl)
-    ]).then(snapshotsWithContextsResponse => {
+    return this.request('GET', fetchSnapshotContextsUrl).then(contextsResponse => {
       return this.$q.all(
-        _.map(snapshotsWithContextsResponse[0].data, snapshotId => {
-          const fetchSnapshotUrl = '/api/snapshots/' + snapshotId;
+        contextsResponse.data.map(({snapshotId, host, plugin}) => {
+          const fetchSnapshotUrl = `/api/snapshots/${snapshotId}`;
 
           return this.request('GET', fetchSnapshotUrl).then(snapshotResponse => {
             return {
-              'snapshotId': snapshotId,
-              'label': snapshotResponse.data.label + this.getHostSuffix(snapshotsWithContextsResponse[1].data, snapshotId)
+              snapshotId,
+              'label': snapshotResponse.data.label + this.getHostSuffix(host)
             };
           });
         })
@@ -210,17 +210,16 @@ export default class InstanaDatasource {
     return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType}`);
   }
 
-  getHostSuffix(contexts, snapshotId) {
-    const host = _.find(contexts, context => context.snapshotId === snapshotId).host;
-    if (!host) {
-      return '';
+  getHostSuffix(host) {
+    if (host) {
+      return ' (on host "' + host + '")';
     }
-    return ' (on host "' + host + '")';
+    return '';
   }
 
   fetchMetricsForSnapshot(snapshotId, metric, from, to) {
     const rollup = this.getDefaultMetricRollupDuration(from, to).rollup;
-    const url = '/api/metrics?metric=' + metric + '&from=' + from + '&to=' + to + '&rollup=' + rollup + '&snapshotId=' + snapshotId;
+    const url = `/api/metrics?metric=${metric}&from=${from}&to=${to}&rollup=${rollup}&snapshotId=${snapshotId}`;
 
     return this.request('GET', url);
   }
