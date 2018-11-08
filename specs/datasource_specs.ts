@@ -156,8 +156,8 @@ describe('InstanaDatasource', function() {
       }, '1516451043603', '1516472658604')
       .then(function(results) {
         expect(results.length).to.equal(2);
-        expect(results[0]).to.eql({ snapshotId: 'A', label: 'label for A (on host "Stans-Macbook-Pro")' });
-        expect(results[1]).to.eql({ snapshotId: 'B', label: 'label for B' });
+        expect(results[0]).to.eql({ snapshotId: 'A', host: 'Stans-Macbook-Pro', response: { status: 200, data: { label: 'label for A' }}, label: 'label for A (on host "Stans-Macbook-Pro")' });
+        expect(results[1]).to.eql({ snapshotId: 'B', host: '', response: { status: 200, data: { label: 'label for B' }}, label: 'label for B' });
       });
     });
 

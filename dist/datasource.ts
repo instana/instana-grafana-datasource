@@ -86,7 +86,7 @@ export default class InstanaDatasource {
   }
 
   getCatalog = () => {
-    if (!this.catalogPromise) {
+    if (!this.catalogPromise) { // || this.currentTime() - catalogTime < this.CACHE_MAX_AGE * 10
       this.catalogPromise = this.$q.resolve(
         this.request('GET', "/api/metricsCatalog/custom").then(catalogResponse =>
           this.$q.all(
@@ -131,6 +131,11 @@ export default class InstanaDatasource {
               targetWithSnapshots.target.refId,
               this.buildQuery(targetWithSnapshots.target),
               { time: this.toFilter, snapshots: targetWithSnapshots.snapshots });
+          }
+
+          // do not try to retrieve data without selected metric
+          if (!targetWithSnapshots.target.metric) {
+            return this.$q.resolve({ data: [] });
           }
 
           return this.$q.all(
@@ -191,13 +196,27 @@ export default class InstanaDatasource {
 
           return this.request('GET', fetchSnapshotUrl).then(snapshotResponse => {
             return {
-              snapshotId,
-              'label': snapshotResponse.data.label + this.getHostSuffix(host)
+              snapshotId, host, plugin,
+              'response': snapshotResponse, // TODO minimize snapshot size to label options
+              'label': this.buildLabel(snapshotResponse, host, target)
             };
           });
         })
       );
     });
+  }
+
+  modifyLocalCacheCopyFor(target) {
+    if (this.snapshotCache[target.refId]) {
+      const query = this.buildQuery(target);
+      if (_.includes(Object.keys(this.snapshotCache[target.refId]), query)) {
+        _.map(this.getSnapshotCache()[target.refId][query].snapshots, snapshot => {
+          snapshot.label = this.buildLabel(snapshot.response, snapshot.host, target);
+        });
+        return true;
+      }
+    }
+    return false;
   }
 
   localCacheCopyAvailable(target, query) {
@@ -208,6 +227,22 @@ export default class InstanaDatasource {
 
   buildQuery(target) {
     return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType}`);
+  }
+
+  buildLabel(snapshotResponse, host, target) {
+    if (target.labelFormat) {
+      let label = target.labelFormat;
+      label = _.replace(label, "$label", snapshotResponse.data.label);
+      label = _.replace(label, "$plugin", snapshotResponse.data.plugin);
+      label = _.replace(label, "$host", host ? host : "unknown");
+      label = _.replace(label, "$pid", _.get(snapshotResponse.data, ["data", "pid"], ""));
+      label = _.replace(label, "$type", _.get(snapshotResponse.data, ["data", "type"], ""));
+      label = _.replace(label, "$name", _.get(snapshotResponse.data, ["data", "name"], ""));
+      label = _.replace(label, "$service", _.get(snapshotResponse.data, ["data", "service_name"], ""));
+      label = _.replace(label, "$metric", _.get(target, ["metric", "key"], "n/a"));
+      return label;
+    }
+    return snapshotResponse.data.label + this.getHostSuffix(host);
   }
 
   getHostSuffix(host) {

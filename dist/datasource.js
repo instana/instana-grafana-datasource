@@ -111,6 +111,10 @@ System.register(['lodash'], function(exports_1) {
                             if (_this.wasLastFetchedFromApi()) {
                                 _this.storeInCache(targetWithSnapshots.target.refId, _this.buildQuery(targetWithSnapshots.target), { time: _this.toFilter, snapshots: targetWithSnapshots.snapshots });
                             }
+                            // do not try to retrieve data without selected metric
+                            if (!targetWithSnapshots.target.metric) {
+                                return _this.$q.resolve({ data: [] });
+                            }
                             return _this.$q.all(lodash_1.default.map(targetWithSnapshots.snapshots, function (snapshot) {
                                 // ...fetch the metric data for every snapshot in the results.
                                 return _this.fetchMetricsForSnapshot(snapshot.snapshotId, targetWithSnapshots.target.metric.key, _this.fromFilter, _this.toFilter)
@@ -156,12 +160,26 @@ System.register(['lodash'], function(exports_1) {
                             var fetchSnapshotUrl = "/api/snapshots/" + snapshotId;
                             return _this.request('GET', fetchSnapshotUrl).then(function (snapshotResponse) {
                                 return {
-                                    snapshotId: snapshotId,
-                                    'label': snapshotResponse.data.label + _this.getHostSuffix(host)
+                                    snapshotId: snapshotId, host: host, plugin: plugin,
+                                    'response': snapshotResponse,
+                                    'label': _this.buildLabel(snapshotResponse, host, target)
                                 };
                             });
                         }));
                     });
+                };
+                InstanaDatasource.prototype.modifyLocalCacheCopyFor = function (target) {
+                    var _this = this;
+                    if (this.snapshotCache[target.refId]) {
+                        var query = this.buildQuery(target);
+                        if (lodash_1.default.includes(Object.keys(this.snapshotCache[target.refId]), query)) {
+                            lodash_1.default.map(this.getSnapshotCache()[target.refId][query].snapshots, function (snapshot) {
+                                snapshot.label = _this.buildLabel(snapshot.response, snapshot.host, target);
+                            });
+                            return true;
+                        }
+                    }
+                    return false;
                 };
                 InstanaDatasource.prototype.localCacheCopyAvailable = function (target, query) {
                     return this.snapshotCache[target.refId] &&
@@ -170,6 +188,21 @@ System.register(['lodash'], function(exports_1) {
                 };
                 InstanaDatasource.prototype.buildQuery = function (target) {
                     return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType);
+                };
+                InstanaDatasource.prototype.buildLabel = function (snapshotResponse, host, target) {
+                    if (target.labelFormat) {
+                        var label = target.labelFormat;
+                        label = lodash_1.default.replace(label, "$label", snapshotResponse.data.label);
+                        label = lodash_1.default.replace(label, "$plugin", snapshotResponse.data.plugin);
+                        label = lodash_1.default.replace(label, "$host", host ? host : "unknown");
+                        label = lodash_1.default.replace(label, "$pid", lodash_1.default.get(snapshotResponse.data, ["data", "pid"], ""));
+                        label = lodash_1.default.replace(label, "$type", lodash_1.default.get(snapshotResponse.data, ["data", "type"], ""));
+                        label = lodash_1.default.replace(label, "$name", lodash_1.default.get(snapshotResponse.data, ["data", "name"], ""));
+                        label = lodash_1.default.replace(label, "$service", lodash_1.default.get(snapshotResponse.data, ["data", "service_name"], ""));
+                        label = lodash_1.default.replace(label, "$metric", lodash_1.default.get(target, ["metric", "key"], "n/a"));
+                        return label;
+                    }
+                    return snapshotResponse.data.label + this.getHostSuffix(host);
                 };
                 InstanaDatasource.prototype.getHostSuffix = function (host) {
                     if (host) {
