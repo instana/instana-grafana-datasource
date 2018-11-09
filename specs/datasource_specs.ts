@@ -363,12 +363,12 @@ describe('InstanaDatasource', function() {
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].time).to.equal(time);
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots.length).to.equal(2);
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].snapshotId).to.eql('A');
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].label).to.eql('label for A (on host "Stans-Macbook-Pro")');
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].snapshotId).to.eql('B');
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].label).to.eql('label for B');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].time).to.equal(time);
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots.length).to.equal(2);
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].snapshotId).to.eql('A');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].label).to.eql('label for A (on host "Stans-Macbook-Pro")');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].snapshotId).to.eql('B');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].label).to.eql('label for B');
       });
     });
   });

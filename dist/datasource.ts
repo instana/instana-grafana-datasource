@@ -54,21 +54,9 @@ export default class InstanaDatasource {
     this.currentTime = () => { return new Date().getTime(); };
   }
 
-  storeInCache = (id, query, data) => {
-    if (!this.snapshotCache) {
-      this.snapshotCache = {};
-    }
-    if (!this.snapshotCache[id]) {
-      this.snapshotCache[id] = {};
-    }
-    if (!this.snapshotCache[id][query]) {
-      this.snapshotCache[id][query] = {};
-    }
-
-    this.snapshotCache[id][query] = data;
+  storeInCache = (query, data) => {
+    this.snapshotCache[query] = data;
   }
-
-  getSnapshotCache = () => { return this.snapshotCache; };
 
   wasLastFetchedFromApi = () => { return this.lastFetchedFromAPI; };
 
@@ -127,10 +115,9 @@ export default class InstanaDatasource {
           // For every target with all snapshots that were returned by the lucene query...
           // Cache the data if fresh
           if (this.wasLastFetchedFromApi()) {
-            this.storeInCache(
-              targetWithSnapshots.target.refId,
-              this.buildQuery(targetWithSnapshots.target),
-              { time: this.toFilter, snapshots: targetWithSnapshots.snapshots });
+            this.storeInCache(this.buildQuery(targetWithSnapshots.target),
+              { time: this.toFilter, age: this.currentTime(), snapshots: targetWithSnapshots.snapshots }
+            );
           }
 
           // do not try to retrieve data without selected metric
@@ -165,19 +152,20 @@ export default class InstanaDatasource {
   }
 
   fetchTypesForTarget(target) {
-    const url = `/api/snapshots/types?q=${encodeURIComponent(target.entityQuery)}` +
+    const fetchSnapshotTypesUrl = `/api/snapshots/types`+
+      `?q=${encodeURIComponent(target.entityQuery)}` +
       `&from=${this.fromFilter}` +
       `&to=${this.toFilter}` +
       `&newApplicationModelEnabled=true`;
-    return this.request('GET', url);
+    return this.request('GET', fetchSnapshotTypesUrl);
   }
 
   fetchSnapshotsForTarget(target, from, to) {
     const query = this.buildQuery(target);
 
-    if (this.localCacheCopyAvailable(target, query)) {
+    if (this.localCacheCopyAvailable(query)) {
       this.setLastFetchedFromApi(false);
-      return this.$q.resolve(this.getSnapshotCache()[target.refId][query].snapshots);
+      return this.$q.resolve(this.snapshotCache[query].snapshots);
     }
 
     this.setLastFetchedFromApi(true);
@@ -196,7 +184,7 @@ export default class InstanaDatasource {
 
           return this.request('GET', fetchSnapshotUrl).then(snapshotResponse => {
             return {
-              snapshotId, host, plugin,
+              snapshotId, host,
               'response': snapshotResponse, // TODO minimize snapshot size to label options
               'label': this.buildLabel(snapshotResponse, host, target)
             };
@@ -207,22 +195,20 @@ export default class InstanaDatasource {
   }
 
   modifyLocalCacheCopyFor(target) {
-    if (this.snapshotCache[target.refId]) {
-      const query = this.buildQuery(target);
-      if (_.includes(Object.keys(this.snapshotCache[target.refId]), query)) {
-        _.map(this.getSnapshotCache()[target.refId][query].snapshots, snapshot => {
-          snapshot.label = this.buildLabel(snapshot.response, snapshot.host, target);
-        });
-        return true;
-      }
+    const query = this.buildQuery(target);
+    if (this.localCacheCopyAvailable(query)) {
+      _.map(this.snapshotCache[query].snapshots, snapshot => {
+        snapshot.label = this.buildLabel(snapshot.response, snapshot.host, target);
+      });
+      return true;
     }
     return false;
   }
 
-  localCacheCopyAvailable(target, query) {
-    return this.snapshotCache[target.refId] &&
-           _.includes(Object.keys(this.snapshotCache[target.refId]), query) &&
-           this.currentTime() - this.snapshotCache[target.refId][query].time < this.CACHE_MAX_AGE;
+  localCacheCopyAvailable(query) {
+    return this.snapshotCache[query] &&
+           this.toFilter - this.snapshotCache[query].time < this.CACHE_MAX_AGE &&
+           this.currentTime() - this.snapshotCache[query].age < this.CACHE_MAX_AGE;
   }
 
   buildQuery(target) {
