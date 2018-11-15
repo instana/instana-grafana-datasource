@@ -21,8 +21,7 @@ export default class InstanaDatasource {
     }[];
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
-    storeInCache: (id: any, query: any, data: any) => void;
-    getSnapshotCache: () => Object;
+    storeInCache: (query: any, data: any) => void;
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;
     request(method: any, url: any, requestId?: any): any;
@@ -30,9 +29,11 @@ export default class InstanaDatasource {
     query(options: any): any;
     fetchTypesForTarget(target: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;
-    localCacheCopyAvailable(target: any, query: any): boolean;
+    modifyLocalCacheCopyFor(target: any): boolean;
+    localCacheCopyAvailable(query: any): boolean;
     buildQuery(target: any): string;
-    getHostSuffix(contexts: any, snapshotId: any): string;
+    buildLabel(snapshotResponse: any, host: any, target: any): any;
+    getHostSuffix(host: any): string;
     fetchMetricsForSnapshot(snapshotId: any, metric: any, from: any, to: any): any;
     annotationQuery(options: any): void;
     metricFindQuery(query: string): void;

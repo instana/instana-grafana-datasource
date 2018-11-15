@@ -2741,4 +2741,5 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     adjustEntitySelectionPlaceholder(): void;
     adjustMetricSelectionPlaceholder(): void;
     onMetricSelect(): void;
+    onLabelChange(): void;
 }

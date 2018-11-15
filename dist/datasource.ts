@@ -54,21 +54,9 @@ export default class InstanaDatasource {
     this.currentTime = () => { return new Date().getTime(); };
   }
 
-  storeInCache = (id, query, data) => {
-    if (!this.snapshotCache) {
-      this.snapshotCache = {};
-    }
-    if (!this.snapshotCache[id]) {
-      this.snapshotCache[id] = {};
-    }
-    if (!this.snapshotCache[id][query]) {
-      this.snapshotCache[id][query] = {};
-    }
-
-    this.snapshotCache[id][query] = data;
+  storeInCache = (query, data) => {
+    this.snapshotCache[query] = data;
   }
-
-  getSnapshotCache = () => { return this.snapshotCache; };
 
   wasLastFetchedFromApi = () => { return this.lastFetchedFromAPI; };
 
@@ -86,7 +74,7 @@ export default class InstanaDatasource {
   }
 
   getCatalog = () => {
-    if (!this.catalogPromise) {
+    if (!this.catalogPromise) { // || this.currentTime() - catalogTime < this.CACHE_MAX_AGE * 10
       this.catalogPromise = this.$q.resolve(
         this.request('GET', "/api/metricsCatalog/custom").then(catalogResponse =>
           this.$q.all(
@@ -127,10 +115,14 @@ export default class InstanaDatasource {
           // For every target with all snapshots that were returned by the lucene query...
           // Cache the data if fresh
           if (this.wasLastFetchedFromApi()) {
-            this.storeInCache(
-              targetWithSnapshots.target.refId,
-              this.buildQuery(targetWithSnapshots.target),
-              { time: this.toFilter, snapshots: targetWithSnapshots.snapshots });
+            this.storeInCache(this.buildQuery(targetWithSnapshots.target),
+              { time: this.toFilter, age: this.currentTime(), snapshots: targetWithSnapshots.snapshots }
+            );
+          }
+
+          // do not try to retrieve data without selected metric
+          if (!targetWithSnapshots.target.metric) {
+            return this.$q.resolve({ data: [] });
           }
 
           return this.$q.all(
@@ -160,39 +152,44 @@ export default class InstanaDatasource {
   }
 
   fetchTypesForTarget(target) {
-    const url = `/api/snapshots/types?q=${encodeURIComponent(target.entityQuery)}` +
-      `&from=${this.fromFilter}` +
-      `&to=${this.toFilter}` +
+    // as long no timewindow was adjusted for newly created dashboards (now-6h)
+    const timeQuery = (this.fromFilter && this.toFilter) ?
+      `&from=${this.fromFilter}&to=${this.toFilter}` :
+      `&time=${Date.now()}`;
+    const fetchSnapshotTypesUrl = `/api/snapshots/types`+
+      `?q=${encodeURIComponent(target.entityQuery)}` +
+      `${timeQuery}` +
       `&newApplicationModelEnabled=true`;
-    return this.request('GET', url);
+    return this.request('GET', fetchSnapshotTypesUrl);
   }
 
   fetchSnapshotsForTarget(target, from, to) {
     const query = this.buildQuery(target);
 
-    if (this.localCacheCopyAvailable(target, query)) {
+    if (this.localCacheCopyAvailable(query)) {
       this.setLastFetchedFromApi(false);
-      return this.$q.resolve(this.getSnapshotCache()[target.refId][query].snapshots);
+      return this.$q.resolve(this.snapshotCache[query].snapshots);
     }
 
     this.setLastFetchedFromApi(true);
-    const fetchSnapshotsUrl = `/api/snapshots?from=${from}&to=${to}&q=${query}&size=100` +
-      `&newApplicationModelEnabled=true`;
-    const fetchSnapshotContextsUrl = `/api/snapshots/context?q=${query}&from=${from}&to=${to}&size=100` +
+
+    const fetchSnapshotContextsUrl = `/api/snapshots/context`+
+      `?q=${query}` +
+      `&from=${from}` +
+      `&to=${to}` +
+      `&size=100` +
       `&newApplicationModelEnabled=true`;
 
-    return this.$q.all([
-      this.request('GET', fetchSnapshotsUrl),
-      this.request('GET', fetchSnapshotContextsUrl)
-    ]).then(snapshotsWithContextsResponse => {
+    return this.request('GET', fetchSnapshotContextsUrl).then(contextsResponse => {
       return this.$q.all(
-        _.map(snapshotsWithContextsResponse[0].data, snapshotId => {
-          const fetchSnapshotUrl = '/api/snapshots/' + snapshotId;
+        contextsResponse.data.map(({snapshotId, host, plugin}) => {
+          const fetchSnapshotUrl = `/api/snapshots/${snapshotId}`;
 
           return this.request('GET', fetchSnapshotUrl).then(snapshotResponse => {
             return {
-              'snapshotId': snapshotId,
-              'label': snapshotResponse.data.label + this.getHostSuffix(snapshotsWithContextsResponse[1].data, snapshotId)
+              snapshotId, host,
+              'response': snapshotResponse, // TODO minimize snapshot size to label options
+              'label': this.buildLabel(snapshotResponse, host, target)
             };
           });
         })
@@ -200,27 +197,53 @@ export default class InstanaDatasource {
     });
   }
 
-  localCacheCopyAvailable(target, query) {
-    return this.snapshotCache[target.refId] &&
-           _.includes(Object.keys(this.snapshotCache[target.refId]), query) &&
-           this.currentTime() - this.snapshotCache[target.refId][query].time < this.CACHE_MAX_AGE;
+  modifyLocalCacheCopyFor(target) {
+    const query = this.buildQuery(target);
+    if (this.localCacheCopyAvailable(query)) {
+      _.map(this.snapshotCache[query].snapshots, snapshot => {
+        snapshot.label = this.buildLabel(snapshot.response, snapshot.host, target);
+      });
+      return true;
+    }
+    return false;
+  }
+
+  localCacheCopyAvailable(query) {
+    return this.snapshotCache[query] &&
+           this.toFilter - this.snapshotCache[query].time < this.CACHE_MAX_AGE &&
+           this.currentTime() - this.snapshotCache[query].age < this.CACHE_MAX_AGE;
   }
 
   buildQuery(target) {
     return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType}`);
   }
 
-  getHostSuffix(contexts, snapshotId) {
-    const host = _.find(contexts, context => context.snapshotId === snapshotId).host;
-    if (!host) {
-      return '';
+  buildLabel(snapshotResponse, host, target) {
+    if (target.labelFormat) {
+      let label = target.labelFormat;
+      label = _.replace(label, "$label", snapshotResponse.data.label);
+      label = _.replace(label, "$plugin", snapshotResponse.data.plugin);
+      label = _.replace(label, "$host", host ? host : "unknown");
+      label = _.replace(label, "$pid", _.get(snapshotResponse.data, ["data", "pid"], ""));
+      label = _.replace(label, "$type", _.get(snapshotResponse.data, ["data", "type"], ""));
+      label = _.replace(label, "$name", _.get(snapshotResponse.data, ["data", "name"], ""));
+      label = _.replace(label, "$service", _.get(snapshotResponse.data, ["data", "service_name"], ""));
+      label = _.replace(label, "$metric", _.get(target, ["metric", "key"], "n/a"));
+      return label;
     }
-    return ' (on host "' + host + '")';
+    return snapshotResponse.data.label + this.getHostSuffix(host);
+  }
+
+  getHostSuffix(host) {
+    if (host) {
+      return ' (on host "' + host + '")';
+    }
+    return '';
   }
 
   fetchMetricsForSnapshot(snapshotId, metric, from, to) {
     const rollup = this.getDefaultMetricRollupDuration(from, to).rollup;
-    const url = '/api/metrics?metric=' + metric + '&from=' + from + '&to=' + to + '&rollup=' + rollup + '&snapshotId=' + snapshotId;
+    const url = `/api/metrics?metric=${metric}&from=${from}&to=${to}&rollup=${rollup}&snapshotId=${snapshotId}`;
 
     return this.request('GET', url);
   }

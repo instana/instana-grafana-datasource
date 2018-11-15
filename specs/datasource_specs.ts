@@ -67,10 +67,6 @@ describe('InstanaDatasource', function() {
   });
 
   describe('When retrieving snapshots for a target', function() {
-    const snapshots = {
-      status: 200,
-      data: [ "A", "B" ]
-    };
 
     const contexts = {
       status: 200,
@@ -85,11 +81,6 @@ describe('InstanaDatasource', function() {
         }
       ]
     }
-
-    const snapshotsAfterTenSeconds = {
-      status: 200,
-      data: [ "A", "B", "C" ]
-    };
 
     const contextsAfterTenSeconds = {
       status: 200,
@@ -133,12 +124,8 @@ describe('InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658604&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=true":
-            return ctx.$q.resolve(snapshots);
           case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1516451043603&to=1516472658604&size=100&newApplicationModelEnabled=true":
             return ctx.$q.resolve(contexts);
-          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658614&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=true":
-            return ctx.$q.resolve(snapshotsAfterTenSeconds);
           case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=true":
             return ctx.$q.resolve(contextsAfterTenSeconds);
           case "http://localhost:8010/api/snapshots/A":
@@ -169,8 +156,8 @@ describe('InstanaDatasource', function() {
       }, '1516451043603', '1516472658604')
       .then(function(results) {
         expect(results.length).to.equal(2);
-        expect(results[0]).to.eql({ snapshotId: 'A', label: 'label for A (on host "Stans-Macbook-Pro")' });
-        expect(results[1]).to.eql({ snapshotId: 'B', label: 'label for B' });
+        expect(results[0]).to.eql({ snapshotId: 'A', host: 'Stans-Macbook-Pro', response: { status: 200, data: { label: 'label for A' }}, label: 'label for A (on host "Stans-Macbook-Pro")' });
+        expect(results[1]).to.eql({ snapshotId: 'B', host: '', response: { status: 200, data: { label: 'label for B' }}, label: 'label for B' });
       });
     });
 
@@ -271,11 +258,6 @@ describe('InstanaDatasource', function() {
       }
     };
 
-    const snapshots = {
-      status: 200,
-      data: [ "A", "B" ]
-    };
-
     const contexts = {
       status: 200,
       data: [
@@ -328,8 +310,6 @@ describe('InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1516451043603&to=1516472658604&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=true":
-            return ctx.$q.resolve(snapshots);
           case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1516451043603&to=1516472658604&size=100&newApplicationModelEnabled=true":
             return ctx.$q.resolve(contexts);
           case "http://localhost:8010/api/snapshots/A":
@@ -383,12 +363,12 @@ describe('InstanaDatasource', function() {
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].time).to.equal(time);
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots.length).to.equal(2);
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].snapshotId).to.eql('A');
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].label).to.eql('label for A (on host "Stans-Macbook-Pro")');
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].snapshotId).to.eql('B');
-        expect(ctx.ds.snapshotCache['A']['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].label).to.eql('label for B');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].time).to.equal(time);
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots.length).to.equal(2);
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].snapshotId).to.eql('A');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].label).to.eql('label for A (on host "Stans-Macbook-Pro")');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].snapshotId).to.eql('B');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].label).to.eql('label for B');
       });
     });
   });
@@ -441,11 +421,6 @@ describe('InstanaDatasource', function() {
       }
     };
 
-    const snapshots = {
-      status: 200,
-      data: [ "A" ]
-    };
-
     const contexts = {
       status: 200,
       data: [
@@ -477,8 +452,6 @@ describe('InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=true":
-            return ctx.$q.resolve(snapshots);
           case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&size=100&newApplicationModelEnabled=true":
             return ctx.$q.resolve(contexts);
           case "http://localhost:8010/api/snapshots/A":
@@ -555,11 +528,6 @@ describe('InstanaDatasource', function() {
       }
     };
 
-    const snapshots = {
-      status: 200,
-      data: [ "A" ]
-    };
-
     const contexts = {
       status: 200,
       data: [
@@ -591,8 +559,6 @@ describe('InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots?from=1524248640603&to=1524421440603&q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=true":
-            return ctx.$q.resolve(snapshots);
           case "http://localhost:8010/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&size=100&newApplicationModelEnabled=true":
             return ctx.$q.resolve(contexts);
           case "http://localhost:8010/api/snapshots/A":
