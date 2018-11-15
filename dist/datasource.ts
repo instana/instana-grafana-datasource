@@ -152,10 +152,13 @@ export default class InstanaDatasource {
   }
 
   fetchTypesForTarget(target) {
+    // as long no timewindow was adjusted for newly created dashboards (now-6h)
+    const timeQuery = (this.fromFilter && this.toFilter) ?
+      `&from=${this.fromFilter}&to=${this.toFilter}` :
+      `&time=${Date.now()}`;
     const fetchSnapshotTypesUrl = `/api/snapshots/types`+
       `?q=${encodeURIComponent(target.entityQuery)}` +
-      `&from=${this.fromFilter}` +
-      `&to=${this.toFilter}` +
+      `${timeQuery}` +
       `&newApplicationModelEnabled=true`;
     return this.request('GET', fetchSnapshotTypesUrl);
   }
