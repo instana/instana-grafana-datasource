@@ -262,6 +262,27 @@ export default {
       "5xx_errors": "Total Request Latency"
     }
   },
+  "azureapimanagement": {
+    "label": "Azure API Management Services",
+    "deprecated": false,
+    "metrics": {
+      "metrics.Capacity": "Capacity",
+      "metrics.TotalRequests": "Total Gateway Requests",
+      "metrics.SuccessfulRequests": "Successful Gateway Requests",
+      "metrics.UnauthorizedRequests": "Unauthorized Gateway Requests",
+      "metrics.FailedRequests": "Failed Gateway Requests",
+      "metrics.OtherRequests": "Other Gateway Requests",
+      "metrics.Duration": "Duration",
+      "EventHubTotalEvents": "Total EventHub Events",
+      "EventHubSuccessfulEvents": "Successful EventHub Events",
+      "EventHubTotalFailedEvents": "Failed EventHub Events",
+      "EventHubRejectedEvents": "Rejected EventHub Events",
+      "EventHubThrottledEvents": "Throttled EventHub Events",
+      "EventHubTimedoutEvents": "Timed Out EventHub Events",
+      "EventHubDroppedEvents": "Dropped EventHub Events",
+      "EventHubTotalBytesSent": "Size of EventHub Events"
+    }
+  },
   "azureappservice": {
     "label": "Azure AppService",
     "deprecated": false,
@@ -317,6 +338,41 @@ export default {
       "cacheWrite": "Cache Write",
       "cacheRead": "Cache Read",
       "percentProcessorTime": "CPU"
+    }
+  },
+  "azurestorage": {
+    "label": "Azure Storage Services",
+    "deprecated": false,
+    "metrics": {
+      "tr_to": "Total Transactions",
+      "in_to": "Total Ingress",
+      "in_av": "Average Ingress",
+      "in_mi": "Minimum Ingress",
+      "in_mx": "Maximum Ingress",
+      "eg_to": "Total Egress",
+      "eg_av": "Average Egress",
+      "eg_mi": "Minimum Egress",
+      "eg_mx": "Maximum Egress",
+      "sl_to": "Total Success Server Latency",
+      "sl_av": "Average Success Server Latency",
+      "sl_mi": "Minimum Success Server Latency",
+      "sl_mx": "Maximum Success Server Latency",
+      "el_to": "Total Success E2E Latency",
+      "el_av": "Average Success E2E Latency",
+      "el_mi": "Minimum Success E2E Latency",
+      "el_mx": "Maximum Success E2E Latency",
+      "av_to": "Total Availability",
+      "av_av": "Average Availability",
+      "av_mi": "Minimum Availability",
+      "av_mx": "Maximum Availability"
+    }
+  },
+  "azuresqldatabase": {
+    "label": "Azure SQL Databases",
+    "deprecated": false,
+    "metrics": {
+      "total_dtu_limit": "Total DTU Limit",
+      "total_dtu_used": "Total DTU Used"
     }
   },
   "batchserviceinstance": {
@@ -980,6 +1036,27 @@ export default {
       "instances": "Instances"
     }
   },
+  "garden": {
+    "label": "Garden Containers",
+    "deprecated": false,
+    "metrics": {
+      "cpu.total": "Total",
+      "cpu.system": "Kernel",
+      "cpu.user": "User",
+      "memory.usage": "Usage",
+      "memory.total_rss": "RSS",
+      "memory.total_cache": "Cache",
+      "memory.active_anon": "active_anon",
+      "memory.active_file": "active_file",
+      "memory.inactive_anon": "inactive_anon",
+      "memory.inactive_file": "inactive_file",
+      "disk.totalBytesUsed": "Total Bytes",
+      "disk.totalInodesUsed": "Total Inodes",
+      "exclusiveBytesUsed": "Exclusive Inodes",
+      "network.rxBytes": "Received",
+      "network.txBytes": "Transmitted"
+    }
+  },
   "glassfishapplicationcontainer": {
     "label": "Glassfish",
     "deprecated": false,
@@ -1172,6 +1249,7 @@ export default {
       "threads.timed-waiting": "Timed-Waiting",
       "threads.waiting": "Waiting",
       "threads.blocked": "Blocked",
+      "suspension.time": "Time",
       "memory.used": "Used"
     }
   },

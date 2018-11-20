@@ -269,6 +269,27 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "5xx_errors": string;
             };
         };
+        "azureapimanagement": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "metrics.Capacity": string;
+                "metrics.TotalRequests": string;
+                "metrics.SuccessfulRequests": string;
+                "metrics.UnauthorizedRequests": string;
+                "metrics.FailedRequests": string;
+                "metrics.OtherRequests": string;
+                "metrics.Duration": string;
+                "EventHubTotalEvents": string;
+                "EventHubSuccessfulEvents": string;
+                "EventHubTotalFailedEvents": string;
+                "EventHubRejectedEvents": string;
+                "EventHubThrottledEvents": string;
+                "EventHubTimedoutEvents": string;
+                "EventHubDroppedEvents": string;
+                "EventHubTotalBytesSent": string;
+            };
+        };
         "azureappservice": {
             "label": string;
             "deprecated": boolean;
@@ -324,6 +345,41 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "cacheWrite": string;
                 "cacheRead": string;
                 "percentProcessorTime": string;
+            };
+        };
+        "azurestorage": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "tr_to": string;
+                "in_to": string;
+                "in_av": string;
+                "in_mi": string;
+                "in_mx": string;
+                "eg_to": string;
+                "eg_av": string;
+                "eg_mi": string;
+                "eg_mx": string;
+                "sl_to": string;
+                "sl_av": string;
+                "sl_mi": string;
+                "sl_mx": string;
+                "el_to": string;
+                "el_av": string;
+                "el_mi": string;
+                "el_mx": string;
+                "av_to": string;
+                "av_av": string;
+                "av_mi": string;
+                "av_mx": string;
+            };
+        };
+        "azuresqldatabase": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "total_dtu_limit": string;
+                "total_dtu_used": string;
             };
         };
         "batchserviceinstance": {
@@ -987,6 +1043,27 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "instances": string;
             };
         };
+        "garden": {
+            "label": string;
+            "deprecated": boolean;
+            "metrics": {
+                "cpu.total": string;
+                "cpu.system": string;
+                "cpu.user": string;
+                "memory.usage": string;
+                "memory.total_rss": string;
+                "memory.total_cache": string;
+                "memory.active_anon": string;
+                "memory.active_file": string;
+                "memory.inactive_anon": string;
+                "memory.inactive_file": string;
+                "disk.totalBytesUsed": string;
+                "disk.totalInodesUsed": string;
+                "exclusiveBytesUsed": string;
+                "network.rxBytes": string;
+                "network.txBytes": string;
+            };
+        };
         "glassfishapplicationcontainer": {
             "label": string;
             "deprecated": boolean;
@@ -1179,6 +1256,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
                 "threads.timed-waiting": string;
                 "threads.waiting": string;
                 "threads.blocked": string;
+                "suspension.time": string;
                 "memory.used": string;
             };
         };
