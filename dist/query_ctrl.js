@@ -180,11 +180,8 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onLabelChange = function () {
-                    // modify internal chache for the inserted dynamic focus,
-                    // as also labels are cached in datasource for choosen query
-                    if (this.datasource.modifyLocalCacheCopyFor(this.target)) {
-                        this.panelCtrl.refresh();
-                    }
+                    // we just want to refresh, even this is expensive
+                    this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.templateUrl = 'partials/query.editor.html';
                 return InstanaQueryCtrl;

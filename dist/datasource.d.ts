@@ -24,12 +24,13 @@ export default class InstanaDatasource {
     storeInCache: (query: any, data: any) => void;
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;
+    resolveNoData: () => any;
     request(method: any, url: any, requestId?: any): any;
     getCatalog: () => Object;
     query(options: any): any;
     fetchTypesForTarget(target: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;
-    modifyLocalCacheCopyFor(target: any): boolean;
+    reduceSnapshot(snapshotResponse: any): any;
     localCacheCopyAvailable(query: any): boolean;
     buildQuery(target: any): string;
     buildLabel(snapshotResponse: any, host: any, target: any): any;

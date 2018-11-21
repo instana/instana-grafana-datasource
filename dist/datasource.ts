@@ -62,6 +62,8 @@ export default class InstanaDatasource {
 
   setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; };
 
+  resolveNoData = () => { return this.$q.resolve({ data: [] }); };
+
   request(method, url, requestId?) {
     return this.backendSrv.datasourceRequest({
       url: this.url + url,
@@ -92,7 +94,7 @@ export default class InstanaDatasource {
 
   query(options) {
     if (Object.keys(options.targets[0]).length === 0) {
-      return this.$q.resolve({ data: [] });
+      return this.resolveNoData();
     }
 
     // Convert ISO 8601 timestamps to millis.
@@ -122,7 +124,7 @@ export default class InstanaDatasource {
 
           // do not try to retrieve data without selected metric
           if (!targetWithSnapshots.target.metric) {
-            return this.$q.resolve({ data: [] });
+            return this.resolveNoData();
           }
 
           return this.$q.all(
@@ -136,7 +138,7 @@ export default class InstanaDatasource {
                 .then(response => {
                   const timeseries = response.data.values;
                   var result = {
-                    'target': snapshot.label,
+                    'target': this.buildLabel(snapshot.response, snapshot.host, targetWithSnapshots.target),
                     'datapoints': _.map(timeseries, value => [value.value, value.timestamp])
                   };
                   return result;
@@ -188,8 +190,7 @@ export default class InstanaDatasource {
           return this.request('GET', fetchSnapshotUrl).then(snapshotResponse => {
             return {
               snapshotId, host,
-              'response': snapshotResponse, // TODO minimize snapshot size to label options
-              'label': this.buildLabel(snapshotResponse, host, target)
+              'response': this.reduceSnapshot(snapshotResponse)
             };
           });
         })
@@ -197,15 +198,10 @@ export default class InstanaDatasource {
     });
   }
 
-  modifyLocalCacheCopyFor(target) {
-    const query = this.buildQuery(target);
-    if (this.localCacheCopyAvailable(query)) {
-      _.map(this.snapshotCache[query].snapshots, snapshot => {
-        snapshot.label = this.buildLabel(snapshot.response, snapshot.host, target);
-      });
-      return true;
-    }
-    return false;
+  reduceSnapshot(snapshotResponse) {
+    // reduce data to used label formatting values
+    snapshotResponse.data = _.pick(snapshotResponse.data, ["id", "label", "plugin", "data"]);
+    return snapshotResponse;
   }
 
   localCacheCopyAvailable(query) {
@@ -222,7 +218,8 @@ export default class InstanaDatasource {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, "$label", snapshotResponse.data.label);
-      label = _.replace(label, "$plugin", snapshotResponse.data.plugin);
+      label = _.replace(label, "$plugin", snapshotResponse.data.plugin); // not documented
+      label = _.replace(label, "$snapshot", snapshotResponse.data.id); // not documented
       label = _.replace(label, "$host", host ? host : "unknown");
       label = _.replace(label, "$pid", _.get(snapshotResponse.data, ["data", "pid"], ""));
       label = _.replace(label, "$type", _.get(snapshotResponse.data, ["data", "type"], ""));
