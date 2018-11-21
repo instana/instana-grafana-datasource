@@ -51,4 +51,5 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 - $type - the entity type
 - $service - the service label (for endpoints only)
 - $name - a label alternative
+
 If no custom format is provided the default '''$label (on host $host)''' will be shown.
