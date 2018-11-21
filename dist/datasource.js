@@ -111,7 +111,7 @@ System.register(['lodash'], function(exports_1) {
                                     .then(function (response) {
                                     var timeseries = response.data.values;
                                     var result = {
-                                        'target': snapshot.label,
+                                        'target': _this.buildLabel(snapshot.response, snapshot.host, targetWithSnapshots.target),
                                         'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; })
                                     };
                                     return result;
@@ -155,23 +155,16 @@ System.register(['lodash'], function(exports_1) {
                             return _this.request('GET', fetchSnapshotUrl).then(function (snapshotResponse) {
                                 return {
                                     snapshotId: snapshotId, host: host,
-                                    'response': snapshotResponse,
-                                    'label': _this.buildLabel(snapshotResponse, host, target)
+                                    'response': _this.reduceSnapshot(snapshotResponse)
                                 };
                             });
                         }));
                     });
                 };
-                InstanaDatasource.prototype.modifyLocalCacheCopyFor = function (target) {
-                    var _this = this;
-                    var query = this.buildQuery(target);
-                    if (this.localCacheCopyAvailable(query)) {
-                        lodash_1.default.map(this.snapshotCache[query].snapshots, function (snapshot) {
-                            snapshot.label = _this.buildLabel(snapshot.response, snapshot.host, target);
-                        });
-                        return true;
-                    }
-                    return false;
+                InstanaDatasource.prototype.reduceSnapshot = function (snapshotResponse) {
+                    // reduce data to used label formatting values
+                    snapshotResponse.data = lodash_1.default.pick(snapshotResponse.data, ["id", "label", "plugin", "data"]);
+                    return snapshotResponse;
                 };
                 InstanaDatasource.prototype.localCacheCopyAvailable = function (query) {
                     return this.snapshotCache[query] &&
@@ -185,7 +178,8 @@ System.register(['lodash'], function(exports_1) {
                     if (target.labelFormat) {
                         var label = target.labelFormat;
                         label = lodash_1.default.replace(label, "$label", snapshotResponse.data.label);
-                        label = lodash_1.default.replace(label, "$plugin", snapshotResponse.data.plugin);
+                        label = lodash_1.default.replace(label, "$plugin", snapshotResponse.data.plugin); // not documented
+                        label = lodash_1.default.replace(label, "$snapshot", snapshotResponse.data.id); // not documented
                         label = lodash_1.default.replace(label, "$host", host ? host : "unknown");
                         label = lodash_1.default.replace(label, "$pid", lodash_1.default.get(snapshotResponse.data, ["data", "pid"], ""));
                         label = lodash_1.default.replace(label, "$type", lodash_1.default.get(snapshotResponse.data, ["data", "type"], ""));

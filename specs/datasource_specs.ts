@@ -140,7 +140,7 @@ describe('InstanaDatasource', function() {
       };
     });
 
-    it('should return snapshots with labels', function() {
+    it('should return snapshots with response', function() {
       return ctx.ds.fetchSnapshotsForTarget({
         "$$hashKey": "object:84",
         "entityQuery": "filler",
@@ -156,8 +156,8 @@ describe('InstanaDatasource', function() {
       }, '1516451043603', '1516472658604')
       .then(function(results) {
         expect(results.length).to.equal(2);
-        expect(results[0]).to.eql({ snapshotId: 'A', host: 'Stans-Macbook-Pro', response: { status: 200, data: { label: 'label for A' }}, label: 'label for A (on host "Stans-Macbook-Pro")' });
-        expect(results[1]).to.eql({ snapshotId: 'B', host: '', response: { status: 200, data: { label: 'label for B' }}, label: 'label for B' });
+        expect(results[0]).to.eql({ snapshotId: 'A', host: 'Stans-Macbook-Pro', response: { status: 200, data: { label: 'label for A' }}});
+        expect(results[1]).to.eql({ snapshotId: 'B', host: '', response: { status: 200, data: { label: 'label for B' }}});
       });
     });
 
@@ -366,9 +366,11 @@ describe('InstanaDatasource', function() {
         expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].time).to.equal(time);
         expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots.length).to.equal(2);
         expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].snapshotId).to.eql('A');
-        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].label).to.eql('label for A (on host "Stans-Macbook-Pro")');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].host).to.eql('Stans-Macbook-Pro');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].response).to.eql(snapshotA);
         expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].snapshotId).to.eql('B');
-        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].label).to.eql('label for B');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].host).to.eql('');
+        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].response).to.eql(snapshotB);
       });
     });
   });

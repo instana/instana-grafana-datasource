@@ -204,10 +204,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onLabelChange() {
-    // modify internal chache for the inserted dynamic focus,
-    // as also labels are cached in datasource for choosen query
-    if (this.datasource.modifyLocalCacheCopyFor(this.target)) {
-      this.panelCtrl.refresh();
-    }
+    // we just want to refresh, even this is expensive
+    this.panelCtrl.refresh();
   }
 }
