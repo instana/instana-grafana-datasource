@@ -52,4 +52,4 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 - $service - the service label (for endpoints only)
 - $name - a label alternative
 
-If no custom format is provided the default '''$label (on host $host)''' will be shown.
+If no custom format is provided the default '_$label (on host $host)_' will be shown.
