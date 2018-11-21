@@ -40,3 +40,15 @@ To choose custom metrics matching your query you need to select "Custom metrics"
 If your Dynamic Focus query matches multiple instances then, the returned dataset will include metrics from all those matching instances; providing graphs with multiple plots like the example below.
 
 ![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/custom-metrics-sml.png)
+
+#### Change legend format
+
+To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
+- $label - the entity label
+- $host - the corresponding host
+- $pid - the corresponding PID
+- $metric - the displayed metric
+- $type - the entity type
+- $service - the service label (for endpoints only)
+- $name - a label alternative
+If no custom format is provided the default '''$label (on host $host)''' will be shown.
