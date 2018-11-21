@@ -48,7 +48,6 @@ System.register(['lodash'], function(exports_1) {
                     };
                     this.wasLastFetchedFromApi = function () { return _this.lastFetchedFromAPI; };
                     this.setLastFetchedFromApi = function (value) { _this.lastFetchedFromAPI = value; };
-                    this.resolveNoData = function () { return _this.$q.resolve({ data: [] }); };
                     this.getCatalog = function () {
                         if (!_this.catalogPromise) {
                             _this.catalogPromise = _this.$q.resolve(_this.request('GET', "/api/metricsCatalog/custom").then(function (catalogResponse) {
@@ -81,7 +80,7 @@ System.register(['lodash'], function(exports_1) {
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;
                     if (Object.keys(options.targets[0]).length === 0) {
-                        return this.resolveNoData();
+                        return this.$q.resolve({ data: [] });
                     }
                     // Convert ISO 8601 timestamps to millis.
                     this.fromFilter = new Date(options.range.from).getTime();
@@ -104,7 +103,7 @@ System.register(['lodash'], function(exports_1) {
                             }
                             // do not try to retrieve data without selected metric
                             if (!targetWithSnapshots.target.metric) {
-                                return _this.resolveNoData();
+                                return _this.$q.resolve({ data: [] });
                             }
                             return _this.$q.all(lodash_1.default.map(targetWithSnapshots.snapshots, function (snapshot) {
                                 // ...fetch the metric data for every snapshot in the results.

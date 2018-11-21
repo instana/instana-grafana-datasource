@@ -62,8 +62,6 @@ export default class InstanaDatasource {
 
   setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; };
 
-  resolveNoData = () => { return this.$q.resolve({ data: [] }); };
-
   request(method, url, requestId?) {
     return this.backendSrv.datasourceRequest({
       url: this.url + url,
@@ -94,7 +92,7 @@ export default class InstanaDatasource {
 
   query(options) {
     if (Object.keys(options.targets[0]).length === 0) {
-      return this.resolveNoData();
+      return this.$q.resolve({ data: [] });
     }
 
     // Convert ISO 8601 timestamps to millis.
@@ -124,7 +122,7 @@ export default class InstanaDatasource {
 
           // do not try to retrieve data without selected metric
           if (!targetWithSnapshots.target.metric) {
-            return this.resolveNoData();
+            return this.$q.resolve({ data: [] });
           }
 
           return this.$q.all(

@@ -24,7 +24,6 @@ export default class InstanaDatasource {
     storeInCache: (query: any, data: any) => void;
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;
-    resolveNoData: () => any;
     request(method: any, url: any, requestId?: any): any;
     getCatalog: () => Object;
     query(options: any): any;
