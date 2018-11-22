@@ -1,6 +1,5 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 
-import metricsDefinition from './metrics';
 import {QueryCtrl} from 'app/plugins/sdk';
 import _ from 'lodash';
 
@@ -9,9 +8,8 @@ import './css/query_editor.css!';
 export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
 
-  metricsDefinition = metricsDefinition;
-  uniqueEntityTypes: Array<string>;
-  allCustomMetrics: Array<Object>;
+  uniqueEntityTypes: Array<Object>; // subset of allEntityTypes filtered by DF
+  allCustomMetrics: Array<Object>; // internal reference only to speed up filtering // TODO needed ?
   availableMetrics: Array<Object>; // subset of allCustomMetrics for display only
   snapshots: Array<string>;
   entitySelectionText: string;
@@ -106,37 +104,40 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   filterForCustom(refresh) {
-    if (!this.allCustomMetrics) {
-      this.datasource.getCatalog().then(customMetrics => {
+    this.datasource.getMetricsCatalog(this.target.entityType, this.CUSTOM_METRICS).then(
+      customMetrics => {
         this.allCustomMetrics = customMetrics;
         this.onMetricsFilter(refresh);
-      });
-    } else {
-      this.onMetricsFilter(refresh);
-    }
+      }
+    );
   }
 
   filterEntityTypes() {
-    this.uniqueEntityTypes =
-      _.sortBy(
-        _.filter(
-          this.snapshots,
-          entityType => metricsDefinition[entityType.toLowerCase()] && metricsDefinition[entityType.toLowerCase()].label != null),
-        'label');
+    this.datasource.getEntityTypes().then(
+      entityTypes => {
+        this.uniqueEntityTypes =
+          _.sortBy(
+            _.filter(
+              entityTypes,
+              entityType => this.snapshots.find(type => type === entityType.key) && entityType.label != null),
+            'label');
+      }
+    );
   }
 
   onEntityTypeSelect(refresh) {
-    this.availableMetrics =
-      _.sortBy(
-        _.map(
-          this.metricsDefinition[this.target.entityType.toLowerCase()].metrics,
-            (value, key) => {
-              return { 'key' : key, 'label' : value};
-            }),
-        'key');
+    this.datasource.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(
+      metrics => {
+        this.availableMetrics =
+        _.sortBy(
+          metrics,
+          'key');
 
-    this.adjustMetricSelectionPlaceholder();
-    this.checkMetricAndRefresh(refresh);
+        this.adjustMetricSelectionPlaceholder();
+        this.checkMetricAndRefresh(refresh);
+      }
+    );
+
   }
 
   onMetricsFilter(refresh) {

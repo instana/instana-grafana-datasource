@@ -1,8 +1,11 @@
-System.register(['lodash'], function(exports_1) {
-    var lodash_1;
+System.register(['./rollups', 'lodash'], function(exports_1) {
+    var rollups_1, lodash_1;
     var InstanaDatasource;
     return {
         setters:[
+            function (rollups_1_1) {
+                rollups_1 = rollups_1_1;
+            },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
             }],
@@ -14,57 +17,54 @@ System.register(['lodash'], function(exports_1) {
                     this.backendSrv = backendSrv;
                     this.templateSrv = templateSrv;
                     this.$q = $q;
+                    this.rollupDurationThresholds = rollups_1.default;
                     this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
                     this.CACHE_MAX_AGE = 60000;
-                    this.rollupDurationThresholds = [
-                        {
-                            availableFor: 1000 * 60 * 10 + 3000,
-                            rollup: 1000,
-                            label: '1s'
-                        },
-                        {
-                            availableFor: 1000 * 60 * 60 * 24,
-                            rollup: 1000 * 5,
-                            label: '5s'
-                        },
-                        {
-                            availableFor: 1000 * 60 * 60 * 24 * 31,
-                            rollup: 1000 * 60,
-                            label: '1min'
-                        },
-                        {
-                            availableFor: 1000 * 60 * 60 * 24 * 31 * 3,
-                            rollup: 1000 * 60 * 5,
-                            label: '5min'
-                        },
-                        {
-                            availableFor: Number.MAX_VALUE,
-                            rollup: 1000 * 60 * 60,
-                            label: '1h'
-                        }
-                    ];
                     this.storeInCache = function (query, data) {
                         _this.snapshotCache[query] = data;
                     };
                     this.wasLastFetchedFromApi = function () { return _this.lastFetchedFromAPI; };
                     this.setLastFetchedFromApi = function (value) { _this.lastFetchedFromAPI = value; };
-                    this.getCatalog = function () {
-                        if (!_this.catalogPromise) {
-                            _this.catalogPromise = _this.$q.resolve(_this.request('GET', "/api/metricsCatalog/custom").then(function (catalogResponse) {
-                                return _this.$q.all(lodash_1.default.map(catalogResponse.data, function (entry) { return ({
-                                    'key': entry.metricId,
-                                    'label': entry.description,
-                                    'entityType': entry.pluginId
-                                }); }));
-                            }));
+                    this.getEntityTypes = function () {
+                        var now = _this.currentTime();
+                        if (!_this.entityTypesCache['plugins'] || now - _this.entityTypesCache['plugins'].age > _this.CACHE_MAX_AGE) {
+                            _this.entityTypesCache['plugins'] = {
+                                age: now,
+                                entityTypes: _this.$q.resolve(_this.request('GET', '/api/infrastructure/catalog/plugins/').then(function (typesResponse) {
+                                    return _this.$q.all(lodash_1.default.map(typesResponse.data, function (entry) { return ({
+                                        'key': entry,
+                                        'label': entry // .label'
+                                    }); }));
+                                }))
+                            };
                         }
-                        return _this.catalogPromise;
+                        return _this.entityTypesCache['plugins'].entityTypes;
+                    };
+                    this.getMetricsCatalog = function (plugin, metricCategory) {
+                        var id = plugin + '|' + metricCategory;
+                        var now = _this.currentTime();
+                        if (!_this.catalogCache[id] || now - _this.catalogCache[id].age > _this.CACHE_MAX_AGE) {
+                            var filter = metricCategory === 1 ? 'custom' : 'builtin';
+                            _this.catalogCache[id] = {
+                                age: now,
+                                metrics: _this.$q.resolve(_this.request('GET', "/api/infrastructure/catalog/metrics/" + plugin + "?filter=" + filter).then(function (catalogResponse) {
+                                    return _this.$q.all(lodash_1.default.map(catalogResponse.data, function (entry) { return ({
+                                        'key': entry.metricId,
+                                        'label': metricCategory === 1 ? entry.description : entry.label,
+                                        'entityType': entry.pluginId
+                                    }); }));
+                                }))
+                            };
+                        }
+                        return _this.catalogCache[id].metrics;
                     };
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
                     this.url = instanceSettings.jsonData.url;
                     this.apiToken = instanceSettings.jsonData.apiToken;
+                    this.entityTypesCache = {};
                     this.snapshotCache = {};
+                    this.catalogCache = {};
                     this.currentTime = function () { return new Date().getTime(); };
                 }
                 InstanaDatasource.prototype.request = function (method, url, requestId) {

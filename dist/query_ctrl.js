@@ -1,17 +1,14 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
-System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var metrics_1, sdk_1, lodash_1;
+    var sdk_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
-            function (metrics_1_1) {
-                metrics_1 = metrics_1_1;
-            },
             function (sdk_1_1) {
                 sdk_1 = sdk_1_1;
             },
@@ -29,7 +26,6 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                     this.templateSrv = templateSrv;
                     this.backendSrv = backendSrv;
                     this.$q = $q;
-                    this.metricsDefinition = metrics_1.default;
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
                     this.BUILT_IN_METRICS = '0';
                     this.CUSTOM_METRICS = '1';
@@ -103,27 +99,26 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                 };
                 InstanaQueryCtrl.prototype.filterForCustom = function (refresh) {
                     var _this = this;
-                    if (!this.allCustomMetrics) {
-                        this.datasource.getCatalog().then(function (customMetrics) {
-                            _this.allCustomMetrics = customMetrics;
-                            _this.onMetricsFilter(refresh);
-                        });
-                    }
-                    else {
-                        this.onMetricsFilter(refresh);
-                    }
+                    this.datasource.getMetricsCatalog(this.target.entityType, this.CUSTOM_METRICS).then(function (customMetrics) {
+                        _this.allCustomMetrics = customMetrics;
+                        _this.onMetricsFilter(refresh);
+                    });
                 };
                 InstanaQueryCtrl.prototype.filterEntityTypes = function () {
-                    this.uniqueEntityTypes =
-                        lodash_1.default.sortBy(lodash_1.default.filter(this.snapshots, function (entityType) { return metrics_1.default[entityType.toLowerCase()] && metrics_1.default[entityType.toLowerCase()].label != null; }), 'label');
+                    var _this = this;
+                    this.datasource.getEntityTypes().then(function (entityTypes) {
+                        _this.uniqueEntityTypes =
+                            lodash_1.default.sortBy(lodash_1.default.filter(entityTypes, function (entityType) { return _this.snapshots.find(function (type) { return type === entityType.key; }) && entityType.label != null; }), 'label');
+                    });
                 };
                 InstanaQueryCtrl.prototype.onEntityTypeSelect = function (refresh) {
-                    this.availableMetrics =
-                        lodash_1.default.sortBy(lodash_1.default.map(this.metricsDefinition[this.target.entityType.toLowerCase()].metrics, function (value, key) {
-                            return { 'key': key, 'label': value };
-                        }), 'key');
-                    this.adjustMetricSelectionPlaceholder();
-                    this.checkMetricAndRefresh(refresh);
+                    var _this = this;
+                    this.datasource.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(function (metrics) {
+                        _this.availableMetrics =
+                            lodash_1.default.sortBy(metrics, 'key');
+                        _this.adjustMetricSelectionPlaceholder();
+                        _this.checkMetricAndRefresh(refresh);
+                    });
                 };
                 InstanaQueryCtrl.prototype.onMetricsFilter = function (refresh) {
                     var _this = this;
