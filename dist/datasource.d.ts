@@ -1,3 +1,16 @@
+export interface SnapshotCache {
+    age: number;
+    time: number;
+    snapshots: Array<Object>;
+}
+export interface EntityTypesCache {
+    age: number;
+    entityTypes: Array<Object>;
+}
+export interface MetricCatalogCache {
+    age: number;
+    entityTypes: Array<Object>;
+}
 export default class InstanaDatasource {
     private backendSrv;
     private templateSrv;
@@ -12,7 +25,7 @@ export default class InstanaDatasource {
     url: string;
     apiToken: string;
     currentTime: () => number;
-    entityTypesCache: Object;
+    entityTypesCache: EntityTypesCache;
     snapshotCache: Object;
     catalogCache: Object;
     fromFilter: number;
@@ -26,8 +39,8 @@ export default class InstanaDatasource {
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;
     request(method: any, url: any, requestId?: any): any;
-    getEntityTypes: () => any;
-    getMetricsCatalog: (plugin: any, metricCategory: any) => any;
+    getEntityTypes(): Object[];
+    getMetricsCatalog(plugin: any, metricCategory: any): any;
     query(options: any): any;
     fetchTypesForTarget(target: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;

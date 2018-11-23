@@ -25,44 +25,10 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     };
                     this.wasLastFetchedFromApi = function () { return _this.lastFetchedFromAPI; };
                     this.setLastFetchedFromApi = function (value) { _this.lastFetchedFromAPI = value; };
-                    this.getEntityTypes = function () {
-                        var now = _this.currentTime();
-                        if (!_this.entityTypesCache['plugins'] || now - _this.entityTypesCache['plugins'].age > _this.CACHE_MAX_AGE) {
-                            _this.entityTypesCache['plugins'] = {
-                                age: now,
-                                entityTypes: _this.$q.resolve(_this.request('GET', '/api/infrastructure/catalog/plugins/').then(function (typesResponse) {
-                                    return _this.$q.all(lodash_1.default.map(typesResponse.data, function (entry) { return ({
-                                        'key': entry,
-                                        'label': entry // .label'
-                                    }); }));
-                                }))
-                            };
-                        }
-                        return _this.entityTypesCache['plugins'].entityTypes;
-                    };
-                    this.getMetricsCatalog = function (plugin, metricCategory) {
-                        var id = plugin + '|' + metricCategory;
-                        var now = _this.currentTime();
-                        if (!_this.catalogCache[id] || now - _this.catalogCache[id].age > _this.CACHE_MAX_AGE) {
-                            var filter = metricCategory === 1 ? 'custom' : 'builtin';
-                            _this.catalogCache[id] = {
-                                age: now,
-                                metrics: _this.$q.resolve(_this.request('GET', "/api/infrastructure/catalog/metrics/" + plugin + "?filter=" + filter).then(function (catalogResponse) {
-                                    return _this.$q.all(lodash_1.default.map(catalogResponse.data, function (entry) { return ({
-                                        'key': entry.metricId,
-                                        'label': metricCategory === 1 ? entry.description : entry.label,
-                                        'entityType': entry.pluginId
-                                    }); }));
-                                }))
-                            };
-                        }
-                        return _this.catalogCache[id].metrics;
-                    };
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
                     this.url = instanceSettings.jsonData.url;
                     this.apiToken = instanceSettings.jsonData.apiToken;
-                    this.entityTypesCache = {};
                     this.snapshotCache = {};
                     this.catalogCache = {};
                     this.currentTime = function () { return new Date().getTime(); };
@@ -76,6 +42,39 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                             Authorization: 'apiToken ' + this.apiToken
                         }
                     });
+                };
+                InstanaDatasource.prototype.getEntityTypes = function () {
+                    var now = this.currentTime();
+                    if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
+                        this.entityTypesCache = {
+                            age: now,
+                            entityTypes: this.request('GET', '/api/infrastructure/catalog/plugins/').then(function (typesResponse) {
+                                return typesResponse.data.map(function (entry) { return ({
+                                    'key': entry,
+                                    'label': entry // .label'
+                                }); });
+                            })
+                        };
+                    }
+                    return this.entityTypesCache.entityTypes;
+                };
+                InstanaDatasource.prototype.getMetricsCatalog = function (plugin, metricCategory) {
+                    var id = plugin + '|' + metricCategory;
+                    var now = this.currentTime();
+                    if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
+                        var filter = metricCategory === 1 ? 'custom' : 'builtin';
+                        this.catalogCache[id] = {
+                            age: now,
+                            metrics: this.request('GET', "/api/infrastructure/catalog/metrics/" + plugin + "?filter=" + filter).then(function (catalogResponse) {
+                                return catalogResponse.data.map(function (entry) { return ({
+                                    'key': entry.metricId,
+                                    'label': metricCategory === 1 ? entry.description : entry.label,
+                                    'entityType': entry.pluginId
+                                }); });
+                            })
+                        };
+                    }
+                    return this.catalogCache[id].metrics;
                 };
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;

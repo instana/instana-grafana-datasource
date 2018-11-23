@@ -87,15 +87,17 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.previousMetricCategory = this.target.metricCategory;
                 };
                 InstanaQueryCtrl.prototype.filterForEntityType = function (refresh) {
-                    this.filterEntityTypes();
-                    this.adjustEntitySelectionPlaceholder();
-                    if (!lodash_1.default.includes(this.uniqueEntityTypes, this.target.entityType)) {
-                        this.target.entityType = null; // entity selection label will be untouched
-                        this.resetMetricSelection();
-                    }
-                    else if (this.target.metric && refresh) {
-                        this.panelCtrl.refresh();
-                    }
+                    var _this = this;
+                    this.filterEntityTypes().then(function () {
+                        _this.adjustEntitySelectionPlaceholder();
+                        if (!lodash_1.default.includes(_this.uniqueEntityTypes, _this.target.entityType)) {
+                            _this.target.entityType = null; // entity selection label will be untouched
+                            _this.resetMetricSelection();
+                        }
+                        else if (_this.target.metric && refresh) {
+                            _this.panelCtrl.refresh();
+                        }
+                    });
                 };
                 InstanaQueryCtrl.prototype.filterForCustom = function (refresh) {
                     var _this = this;
@@ -106,7 +108,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                 };
                 InstanaQueryCtrl.prototype.filterEntityTypes = function () {
                     var _this = this;
-                    this.datasource.getEntityTypes().then(function (entityTypes) {
+                    return this.datasource.getEntityTypes().then(function (entityTypes) {
                         _this.uniqueEntityTypes =
                             lodash_1.default.sortBy(lodash_1.default.filter(entityTypes, function (entityType) { return _this.snapshots.find(function (type) { return type === entityType.key; }) && entityType.label != null; }), 'label');
                     });

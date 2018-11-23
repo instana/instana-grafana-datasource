@@ -92,15 +92,16 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   filterForEntityType(refresh) {
-    this.filterEntityTypes();
-    this.adjustEntitySelectionPlaceholder();
+    this.filterEntityTypes().then(() => {
+      this.adjustEntitySelectionPlaceholder();
 
-    if (!_.includes(this.uniqueEntityTypes, this.target.entityType)) {
-      this.target.entityType = null; // entity selection label will be untouched
-      this.resetMetricSelection();
-    } else if (this.target.metric && refresh) {
-      this.panelCtrl.refresh();
-    }
+      if (!_.includes(this.uniqueEntityTypes, this.target.entityType)) {
+        this.target.entityType = null; // entity selection label will be untouched
+        this.resetMetricSelection();
+      } else if (this.target.metric && refresh) {
+        this.panelCtrl.refresh();
+      }
+    });
   }
 
   filterForCustom(refresh) {
@@ -113,7 +114,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   filterEntityTypes() {
-    this.datasource.getEntityTypes().then(
+    return this.datasource.getEntityTypes().then(
       entityTypes => {
         this.uniqueEntityTypes =
           _.sortBy(

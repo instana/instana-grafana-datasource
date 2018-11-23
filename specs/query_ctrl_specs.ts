@@ -39,6 +39,23 @@ describe("InstanaQueryCtrl", function() {
             data: ["docker", "host", "weblogicapplicationcontainer"]
           });
         };
+        queryCtrl.datasource.getEntityTypes = function(options) {
+          return ctx.$q.resolve(
+            [{
+              key: "docker",
+              label: "Docker"
+            },{
+              key: "host",
+              label: "Host"
+            },{
+              key: "weblogicapplicationcontainer",
+              label: "Web Logic Application"
+            },{
+              key: "endpoint",
+              label: "Endpoint"
+            }]
+          );
+        };
 
         queryCtrl.target.entityQuery = "*eu";
 
@@ -59,6 +76,23 @@ describe("InstanaQueryCtrl", function() {
           return ctx.$q.resolve({
             data: []
           });
+        };
+        queryCtrl.datasource.getEntityTypes = function(options) {
+          return ctx.$q.resolve(
+            [{
+              key: "docker",
+              label: "Docker"
+            },{
+              key: "host",
+              label: "Host"
+            },{
+              key: "weblogicapplicationcontainer",
+              label: "Web Logic Application"
+            },{
+              key: "endpoint",
+              label: "Endpoint"
+            }]
+          );
         };
 
         return queryCtrl.onFilterChange().then(() => {
@@ -87,8 +121,31 @@ describe("InstanaQueryCtrl", function() {
   });
 
   describe("when selecting entity type", function() {
-    it("should populate metric dropdown", function() {
+    it("should populate metric dropdown with built-in metrics", function() {
       queryCtrl.target.entityType = "hadoopyarnnode";
+      queryCtrl.target.metricCategory = InstanaQueryCtrl.BUILT_IN_METRICS;
+      queryCtrl.datasource.getMetricsCatalog = function(options) {
+        return ctx.$q.resolve({
+          data: [{
+            metricId: "allocatedMem",
+            label: "Allocated Memory",
+            pluginId: "hadoopyarnnode"
+          },{
+            metricId: "allocatedVCores",
+            label: "Allocated Virtual Cores",
+            pluginId: "hadoopyarnnode"
+          },{
+            metricId: "availableMem",
+            label: "Available Memory",
+            pluginId: "hadoopyarnnode"
+          },{
+            metricId: "availableVCores",
+            label: "Available Virtual Cores",
+            pluginId: "hadoopyarnnode"
+          }]
+        });
+      };
+
       queryCtrl.onEntityTypeSelect();
 
       expect(queryCtrl.availableMetrics).to.eql([
@@ -96,6 +153,31 @@ describe("InstanaQueryCtrl", function() {
         { key: "allocatedVCores", label: "Allocated Virtual Cores" },
         { key: "availableMem", label: "Available Memory" },
         { key: "availableVCores", label: "Available Virtual Cores" }
+      ]);
+    });
+
+    it("should populate metric dropdown with custom metrics", function() {
+      queryCtrl.target.entityType = "dropwizardapplication";
+      queryCtrl.target.metricCategory = InstanaQueryCtrl.CUSTOM_METRICS;
+      queryCtrl.datasource.getMetricsCatalog = function(options) {
+        return ctx.$q.resolve({
+          data: [{
+            metricId: "dropwizardTimer",
+            description: "Dropwizrad Timer",
+            pluginId: "dropwizardapplication"
+          },{
+            metricId: "dropwizardSomething",
+            description: "Something Custom From Dropwizard",
+            pluginId: "dropwizardapplication"
+          }]
+        });
+      };
+
+      queryCtrl.onEntityTypeSelect();
+
+      expect(queryCtrl.availableMetrics).to.eql([
+        { key: "dropwizardTimer", label: "Dropwizrad Timer" },
+        { key: "dropwizardSomething", label: "Something Custom From Dropwizard" }
       ]);
     });
   });

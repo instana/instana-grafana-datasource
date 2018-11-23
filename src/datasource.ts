@@ -1,6 +1,22 @@
 import rollupDurationThresholds from './rollups';
 import _ from 'lodash';
 
+export interface SnapshotCache {
+  age: number;
+  time: number;
+  snapshots: Array<Object>;
+}
+
+export interface EntityTypesCache {
+  age: number;
+  entityTypes: Array<Object>;
+}
+
+export interface MetricCatalogCache {
+  age: number;
+  entityTypes: Array<Object>;
+}
+
 export default class InstanaDatasource {
   rollupDurationThresholds = rollupDurationThresholds;
   id: number;
@@ -8,7 +24,7 @@ export default class InstanaDatasource {
   url: string;
   apiToken: string;
   currentTime: () => number;
-  entityTypesCache: Object;
+  entityTypesCache: EntityTypesCache;
   snapshotCache: Object;
   catalogCache: Object;
   fromFilter: number;
@@ -25,7 +41,6 @@ export default class InstanaDatasource {
     this.url = instanceSettings.jsonData.url;
     this.apiToken = instanceSettings.jsonData.apiToken;
 
-    this.entityTypesCache = {};
     this.snapshotCache = {};
     this.catalogCache = {};
 
@@ -51,43 +66,35 @@ export default class InstanaDatasource {
     });
   }
 
-  getEntityTypes = () => {
+  getEntityTypes() {
     const now = this.currentTime();
-    if (!this.entityTypesCache['plugins'] || now - this.entityTypesCache['plugins'].age > this.CACHE_MAX_AGE) {
-      this.entityTypesCache['plugins'] = {
+    if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
+      this.entityTypesCache = {
         age: now,
-        entityTypes: this.$q.resolve(
-          this.request('GET', '/api/infrastructure/catalog/plugins/').then(typesResponse =>
-            this.$q.all(
-              _.map(typesResponse.data, entry => ({
-                'key' : entry, // .plugin,
-                'label' : entry // .label'
-              }))
-            )
-          )
+        entityTypes: this.request('GET', '/api/infrastructure/catalog/plugins/').then(typesResponse =>
+          typesResponse.data.map(entry => ({
+            'key' : entry, // .plugin,
+            'label' : entry // .label'
+          }))
         )
       };
     }
-    return this.entityTypesCache['plugins'].entityTypes;
+    return this.entityTypesCache.entityTypes;
   }
 
-  getMetricsCatalog = (plugin, metricCategory) => {
+  getMetricsCatalog(plugin, metricCategory) {
     const id = plugin + '|' + metricCategory;
     const now = this.currentTime();
     if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
       const filter = metricCategory === 1 ? 'custom' : 'builtin';
       this.catalogCache[id] = {
         age: now,
-        metrics: this.$q.resolve(
-          this.request('GET', `/api/infrastructure/catalog/metrics/${plugin}?filter=${filter}`).then(catalogResponse =>
-            this.$q.all(
-              _.map(catalogResponse.data, entry => ({
-                'key' : entry.metricId,
-                'label' : metricCategory === 1 ? entry.description : entry.label, // built in metric have nicer labels
-                'entityType' : entry.pluginId
-              }))
-            )
-          )
+        metrics: this.request('GET', `/api/infrastructure/catalog/metrics/${plugin}?filter=${filter}`).then(catalogResponse =>
+          catalogResponse.data.map(entry => ({
+            'key' : entry.metricId,
+            'label' : metricCategory === 1 ? entry.description : entry.label, // built in metrics have nicer labels
+            'entityType' : entry.pluginId
+          }))
         )
       };
     }
