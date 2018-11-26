@@ -1,13 +1,21 @@
+import rollupDurationThresholds from './rollups';
 import _ from 'lodash';
 
+export interface EntityTypesCache {
+  age: number;
+  entityTypes: Array<Object>;
+}
+
 export default class InstanaDatasource {
+  rollupDurationThresholds = rollupDurationThresholds;
   id: number;
   name: string;
   url: string;
   apiToken: string;
   currentTime: () => number;
+  entityTypesCache: EntityTypesCache;
   snapshotCache: Object;
-  catalogPromise: Object;
+  catalogCache: Object;
   fromFilter: number;
   toFilter: number;
   lastFetchedFromAPI: boolean;
@@ -15,41 +23,15 @@ export default class InstanaDatasource {
   MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
   CACHE_MAX_AGE = 60000;
 
-  rollupDurationThresholds = [
-    {
-      availableFor: 1000 * 60 * 10 + 3000, // 10m + 3s (to give it some slack when deactivating live mode)
-      rollup: 1000, // 1s
-      label: '1s'
-    },
-    {
-      availableFor: 1000 * 60 * 60 * 24, // 1d
-      rollup: 1000 * 5, // 5s
-      label: '5s'
-    },
-    {
-      availableFor: 1000 * 60 * 60 * 24 * 31, // 1 month
-      rollup: 1000 * 60, // 1m
-      label: '1min'
-    },
-    {
-      availableFor: 1000 * 60 * 60 * 24 * 31 * 3, // 3 months
-      rollup: 1000 * 60 * 5, // 5m
-      label: '5min'
-    },
-    {
-      availableFor: Number.MAX_VALUE, // forever
-      rollup: 1000 * 60 * 60, // 1h
-      label: '1h'
-    }
-  ];
-
   /** @ngInject */
   constructor(instanceSettings, private backendSrv, private templateSrv, private $q) {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
     this.url = instanceSettings.jsonData.url;
     this.apiToken = instanceSettings.jsonData.apiToken;
+
     this.snapshotCache = {};
+    this.catalogCache = {};
 
     this.currentTime = () => { return new Date().getTime(); };
   }
@@ -73,21 +55,39 @@ export default class InstanaDatasource {
     });
   }
 
-  getCatalog = () => {
-    if (!this.catalogPromise) { // || this.currentTime() - catalogTime < this.CACHE_MAX_AGE * 10
-      this.catalogPromise = this.$q.resolve(
-        this.request('GET', "/api/metricsCatalog/custom").then(catalogResponse =>
-          this.$q.all(
-            _.map(catalogResponse.data, entry => ({
-              'key' : entry.metricId,
-              'label' : entry.description, // shorter than entry.label
-              'entityType' : entry.pluginId
-            }))
-          )
+  getEntityTypes() {
+    const now = this.currentTime();
+    if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
+      this.entityTypesCache = {
+        age: now,
+        entityTypes: this.request('GET', '/api/infrastructure-monitoring/catalog/plugins/').then(typesResponse =>
+          typesResponse.data.map(entry => ({
+            'key' : entry.plugin,
+            'label' : entry.label
+          }))
         )
-      );
+      };
     }
-    return this.catalogPromise;
+    return this.entityTypesCache.entityTypes;
+  }
+
+  getMetricsCatalog(plugin, metricCategory) {
+    const id = plugin + '|' + metricCategory;
+    const now = this.currentTime();
+    if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
+      const filter = metricCategory === 1 ? 'custom' : 'builtin';
+      this.catalogCache[id] = {
+        age: now,
+        metrics: this.request('GET', `/api/infrastructure-monitoring/catalog/metrics/${plugin}?filter=${filter}`).then(catalogResponse =>
+          catalogResponse.data.map(entry => ({
+            'key' : entry.metricId,
+            'label' : metricCategory === 1 ? entry.description : entry.label, // built in metrics have nicer labels
+            'entityType' : entry.pluginId
+          }))
+        )
+      };
+    }
+    return this.catalogCache[id].metrics;
   }
 
   query(options) {

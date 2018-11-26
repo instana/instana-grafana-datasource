@@ -1,31 +1,37 @@
+export interface EntityTypesCache {
+    age: number;
+    entityTypes: Array<Object>;
+}
 export default class InstanaDatasource {
     private backendSrv;
     private templateSrv;
     private $q;
-    id: number;
-    name: string;
-    url: string;
-    apiToken: string;
-    currentTime: () => number;
-    snapshotCache: Object;
-    catalogPromise: Object;
-    fromFilter: number;
-    toFilter: number;
-    lastFetchedFromAPI: boolean;
-    MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
-    CACHE_MAX_AGE: number;
     rollupDurationThresholds: {
         availableFor: number;
         rollup: number;
         label: string;
     }[];
+    id: number;
+    name: string;
+    url: string;
+    apiToken: string;
+    currentTime: () => number;
+    entityTypesCache: EntityTypesCache;
+    snapshotCache: Object;
+    catalogCache: Object;
+    fromFilter: number;
+    toFilter: number;
+    lastFetchedFromAPI: boolean;
+    MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
+    CACHE_MAX_AGE: number;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     storeInCache: (query: any, data: any) => void;
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;
     request(method: any, url: any, requestId?: any): any;
-    getCatalog: () => Object;
+    getEntityTypes(): Object[];
+    getMetricsCatalog(plugin: any, metricCategory: any): any;
     query(options: any): any;
     fetchTypesForTarget(target: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;
