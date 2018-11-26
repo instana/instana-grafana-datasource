@@ -9,7 +9,7 @@ export interface EntityTypesCache {
 }
 export interface MetricCatalogCache {
     age: number;
-    entityTypes: Array<Object>;
+    metrics: Array<Object>;
 }
 export default class InstanaDatasource {
     private backendSrv;

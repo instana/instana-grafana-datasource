@@ -14,7 +14,7 @@ export interface EntityTypesCache {
 
 export interface MetricCatalogCache {
   age: number;
-  entityTypes: Array<Object>;
+  metrics: Array<Object>;
 }
 
 export default class InstanaDatasource {
@@ -73,8 +73,8 @@ export default class InstanaDatasource {
         age: now,
         entityTypes: this.request('GET', '/api/infrastructure/catalog/plugins/').then(typesResponse =>
           typesResponse.data.map(entry => ({
-            'key' : entry, // .plugin,
-            'label' : entry // .label'
+            'key' : entry.plugin,
+            'label' : entry.label
           }))
         )
       };

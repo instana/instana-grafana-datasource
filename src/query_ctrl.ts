@@ -42,16 +42,19 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
         // built-in metrics support available metrics on a selected entity type
         if (this.target.entityType && this.target.metricCategory === this.BUILT_IN_METRICS) {
-          this.onEntityTypeSelect(false);
+          this.onEntityTypeSelect(false).then(() => {
+              if (this.target.metric) {
+                this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+              }
+          });
         }
 
         // custom metrics include their entity type but can be filtered
         if (this.target.metricCategory === this.CUSTOM_METRICS) {
           this.onMetricsFilter(false);
-        }
-
-        if (this.target.metric) {
-          this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+          if (this.target.metric) {
+            this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+          }
         }
       });
     }
@@ -95,7 +98,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.filterEntityTypes().then(() => {
       this.adjustEntitySelectionPlaceholder();
 
-      if (!_.includes(this.uniqueEntityTypes, this.target.entityType)) {
+      if (!_.find(this.uniqueEntityTypes, ['key', this.target.entityType])) {
         this.target.entityType = null; // entity selection label will be untouched
         this.resetMetricSelection();
       } else if (this.target.metric && refresh) {
@@ -127,7 +130,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onEntityTypeSelect(refresh) {
-    this.datasource.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(
+    return this.datasource.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(
       metrics => {
         this.availableMetrics =
         _.sortBy(
@@ -138,7 +141,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
         this.checkMetricAndRefresh(refresh);
       }
     );
-
   }
 
   onMetricsFilter(refresh) {

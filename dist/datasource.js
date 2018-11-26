@@ -50,8 +50,8 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                             age: now,
                             entityTypes: this.request('GET', '/api/infrastructure/catalog/plugins/').then(function (typesResponse) {
                                 return typesResponse.data.map(function (entry) { return ({
-                                    'key': entry,
-                                    'label': entry // .label'
+                                    'key': entry.plugin,
+                                    'label': entry.label
                                 }); });
                             })
                         };

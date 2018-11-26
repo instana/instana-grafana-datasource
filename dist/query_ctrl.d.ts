@@ -23,7 +23,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     filterForEntityType(refresh: any): void;
     filterForCustom(refresh: any): void;
     filterEntityTypes(): any;
-    onEntityTypeSelect(refresh: any): void;
+    onEntityTypeSelect(refresh: any): any;
     onMetricsFilter(refresh: any): void;
     checkMetricAndRefresh(refresh: any): void;
     selectionReset(): void;

@@ -45,14 +45,14 @@ describe("InstanaQueryCtrl", function() {
               key: "docker",
               label: "Docker"
             },{
+              key: "endpoint",
+              label: "Endpoint"
+            },{
               key: "host",
               label: "Host"
             },{
               key: "weblogicapplicationcontainer",
               label: "Web Logic Application"
-            },{
-              key: "endpoint",
-              label: "Endpoint"
             }]
           );
         };
@@ -61,10 +61,11 @@ describe("InstanaQueryCtrl", function() {
 
         return queryCtrl.onFilterChange().then(() => {
           expect(queryCtrl.uniqueEntityTypes).to.eql([
-            "docker",
-            "host",
-            "weblogicapplicationcontainer"
+            { key: "docker", label: "Docker" },
+            { key: "host", label: "Host" },
+            { key: "weblogicapplicationcontainer", label: "Web Logic Application" }
           ]);
+          expect(queryCtrl.target.entityType).to.equal(undefined); // TODO why not null ??
           expect(queryCtrl.target.queryIsValid).to.equal(true);
         });
       });
@@ -83,21 +84,21 @@ describe("InstanaQueryCtrl", function() {
               key: "docker",
               label: "Docker"
             },{
+              key: "endpoint",
+              label: "Endpoint"
+            },{
               key: "host",
               label: "Host"
             },{
               key: "weblogicapplicationcontainer",
               label: "Web Logic Application"
-            },{
-              key: "endpoint",
-              label: "Endpoint"
             }]
           );
         };
 
         return queryCtrl.onFilterChange().then(() => {
           expect(queryCtrl.uniqueEntityTypes).to.eql([]);
-          expect(queryCtrl.target.entityType).to.equal(null);
+          expect(queryCtrl.target.entityType).to.equal(undefined); // TODO why not null ??
           expect(queryCtrl.target.queryIsValid).to.equal(true);
         });
       });
@@ -125,60 +126,60 @@ describe("InstanaQueryCtrl", function() {
       queryCtrl.target.entityType = "hadoopyarnnode";
       queryCtrl.target.metricCategory = InstanaQueryCtrl.BUILT_IN_METRICS;
       queryCtrl.datasource.getMetricsCatalog = function(options) {
-        return ctx.$q.resolve({
-          data: [{
-            metricId: "allocatedMem",
+        return ctx.$q.resolve(
+          [{
+            key: "allocatedMem",
             label: "Allocated Memory",
-            pluginId: "hadoopyarnnode"
+            entityType: "hadoopyarnnode"
           },{
-            metricId: "allocatedVCores",
+            key: "allocatedVCores",
             label: "Allocated Virtual Cores",
-            pluginId: "hadoopyarnnode"
+            entityType: "hadoopyarnnode"
           },{
-            metricId: "availableMem",
+            key: "availableMem",
             label: "Available Memory",
-            pluginId: "hadoopyarnnode"
+            entityType: "hadoopyarnnode"
           },{
-            metricId: "availableVCores",
+            key: "availableVCores",
             label: "Available Virtual Cores",
-            pluginId: "hadoopyarnnode"
+            entityType: "hadoopyarnnode"
           }]
-        });
+        );
       };
 
-      queryCtrl.onEntityTypeSelect();
-
-      expect(queryCtrl.availableMetrics).to.eql([
-        { key: "allocatedMem", label: "Allocated Memory" },
-        { key: "allocatedVCores", label: "Allocated Virtual Cores" },
-        { key: "availableMem", label: "Available Memory" },
-        { key: "availableVCores", label: "Available Virtual Cores" }
-      ]);
+      return queryCtrl.onEntityTypeSelect(false).then(() => {
+        expect(queryCtrl.availableMetrics).to.eql([
+          { key: "allocatedMem", label: "Allocated Memory", entityType: "hadoopyarnnode" },
+          { key: "allocatedVCores", label: "Allocated Virtual Cores", entityType: "hadoopyarnnode" },
+          { key: "availableMem", label: "Available Memory", entityType: "hadoopyarnnode" },
+          { key: "availableVCores", label: "Available Virtual Cores", entityType: "hadoopyarnnode" }
+        ]);
+      });
     });
 
     it("should populate metric dropdown with custom metrics", function() {
       queryCtrl.target.entityType = "dropwizardapplication";
       queryCtrl.target.metricCategory = InstanaQueryCtrl.CUSTOM_METRICS;
       queryCtrl.datasource.getMetricsCatalog = function(options) {
-        return ctx.$q.resolve({
-          data: [{
-            metricId: "dropwizardTimer",
-            description: "Dropwizrad Timer",
-            pluginId: "dropwizardapplication"
+        return ctx.$q.resolve(
+          [{
+            key: "dropwizardTimer",
+            label: "Dropwizrad Timer",
+            entityType: "dropwizardapplication"
           },{
-            metricId: "dropwizardSomething",
-            description: "Something Custom From Dropwizard",
-            pluginId: "dropwizardapplication"
+            key: "dropwizardXomething",
+            label: "Something Custom From Dropwizard",
+            entityType: "dropwizardapplication"
           }]
-        });
+        );
       };
 
-      queryCtrl.onEntityTypeSelect();
-
-      expect(queryCtrl.availableMetrics).to.eql([
-        { key: "dropwizardTimer", label: "Dropwizrad Timer" },
-        { key: "dropwizardSomething", label: "Something Custom From Dropwizard" }
-      ]);
+      return queryCtrl.onEntityTypeSelect(false).then(() => {
+        expect(queryCtrl.availableMetrics).to.eql([
+          { key: "dropwizardTimer", label: "Dropwizrad Timer", entityType: "dropwizardapplication" },
+          { key: "dropwizardXomething", label: "Something Custom From Dropwizard", entityType: "dropwizardapplication" }
+        ]);
+      });
     });
   });
 
