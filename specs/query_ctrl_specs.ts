@@ -59,13 +59,13 @@ describe("InstanaQueryCtrl", function() {
 
         queryCtrl.target.entityQuery = "*eu";
 
-        return queryCtrl.onFilterChange().then(() => {
+        return queryCtrl.onFilterChange(false).then(() => {
           expect(queryCtrl.uniqueEntityTypes).to.eql([
             { key: "docker", label: "Docker" },
             { key: "host", label: "Host" },
             { key: "weblogicapplicationcontainer", label: "Web Logic Application" }
           ]);
-          expect(queryCtrl.target.entityType).to.equal(undefined); // TODO why not null ??
+          // expect(queryCtrl.target.entityType).to.equal(null); // TODO this is async
           expect(queryCtrl.target.queryIsValid).to.equal(true);
         });
       });
@@ -96,9 +96,9 @@ describe("InstanaQueryCtrl", function() {
           );
         };
 
-        return queryCtrl.onFilterChange().then(() => {
+        return queryCtrl.onFilterChange(false).then(() => {
           expect(queryCtrl.uniqueEntityTypes).to.eql([]);
-          expect(queryCtrl.target.entityType).to.equal(undefined); // TODO why not null ??
+          // expect(queryCtrl.target.entityType).to.equal(null); // TODO this is async
           expect(queryCtrl.target.queryIsValid).to.equal(true);
         });
       });
@@ -114,7 +114,7 @@ describe("InstanaQueryCtrl", function() {
 
         queryCtrl.target.entityQuery = "*eu";
 
-        return queryCtrl.onFilterChange().then(() => {
+        return queryCtrl.onFilterChange(false).then(() => {
           expect(queryCtrl.target.queryIsValid).to.equal(false);
         });
       });
@@ -164,7 +164,7 @@ describe("InstanaQueryCtrl", function() {
         return ctx.$q.resolve(
           [{
             key: "dropwizardTimer",
-            label: "Dropwizrad Timer",
+            label: "Dropwizard Timer",
             entityType: "dropwizardapplication"
           },{
             key: "dropwizardXomething",
@@ -176,7 +176,7 @@ describe("InstanaQueryCtrl", function() {
 
       return queryCtrl.onEntityTypeSelect(false).then(() => {
         expect(queryCtrl.availableMetrics).to.eql([
-          { key: "dropwizardTimer", label: "Dropwizrad Timer", entityType: "dropwizardapplication" },
+          { key: "dropwizardTimer", label: "Dropwizard Timer", entityType: "dropwizardapplication" },
           { key: "dropwizardXomething", label: "Something Custom From Dropwizard", entityType: "dropwizardapplication" }
         ]);
       });
