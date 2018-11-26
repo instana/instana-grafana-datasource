@@ -48,7 +48,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
                         this.entityTypesCache = {
                             age: now,
-                            entityTypes: this.request('GET', '/api/infrastructure/catalog/plugins/').then(function (typesResponse) {
+                            entityTypes: this.request('GET', '/api/infrastructure-monitoring/catalog/plugins/').then(function (typesResponse) {
                                 return typesResponse.data.map(function (entry) { return ({
                                     'key': entry.plugin,
                                     'label': entry.label
@@ -65,7 +65,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         var filter = metricCategory === 1 ? 'custom' : 'builtin';
                         this.catalogCache[id] = {
                             age: now,
-                            metrics: this.request('GET', "/api/infrastructure/catalog/metrics/" + plugin + "?filter=" + filter).then(function (catalogResponse) {
+                            metrics: this.request('GET', "/api/infrastructure-monitoring/catalog/metrics/" + plugin + "?filter=" + filter).then(function (catalogResponse) {
                                 return catalogResponse.data.map(function (entry) { return ({
                                     'key': entry.metricId,
                                     'label': metricCategory === 1 ? entry.description : entry.label,

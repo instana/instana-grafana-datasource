@@ -71,7 +71,7 @@ export default class InstanaDatasource {
     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
       this.entityTypesCache = {
         age: now,
-        entityTypes: this.request('GET', '/api/infrastructure/catalog/plugins/').then(typesResponse =>
+        entityTypes: this.request('GET', '/api/infrastructure-monitoring/catalog/plugins/').then(typesResponse =>
           typesResponse.data.map(entry => ({
             'key' : entry.plugin,
             'label' : entry.label
@@ -89,7 +89,7 @@ export default class InstanaDatasource {
       const filter = metricCategory === 1 ? 'custom' : 'builtin';
       this.catalogCache[id] = {
         age: now,
-        metrics: this.request('GET', `/api/infrastructure/catalog/metrics/${plugin}?filter=${filter}`).then(catalogResponse =>
+        metrics: this.request('GET', `/api/infrastructure-monitoring/catalog/metrics/${plugin}?filter=${filter}`).then(catalogResponse =>
           catalogResponse.data.map(entry => ({
             'key' : entry.metricId,
             'label' : metricCategory === 1 ? entry.description : entry.label, // built in metrics have nicer labels
