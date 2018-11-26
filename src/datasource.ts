@@ -1,20 +1,9 @@
 import rollupDurationThresholds from './rollups';
 import _ from 'lodash';
 
-export interface SnapshotCache {
-  age: number;
-  time: number;
-  snapshots: Array<Object>;
-}
-
 export interface EntityTypesCache {
   age: number;
   entityTypes: Array<Object>;
-}
-
-export interface MetricCatalogCache {
-  age: number;
-  metrics: Array<Object>;
 }
 
 export default class InstanaDatasource {

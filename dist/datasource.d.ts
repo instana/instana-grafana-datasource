@@ -1,15 +1,6 @@
-export interface SnapshotCache {
-    age: number;
-    time: number;
-    snapshots: Array<Object>;
-}
 export interface EntityTypesCache {
     age: number;
     entityTypes: Array<Object>;
-}
-export interface MetricCatalogCache {
-    age: number;
-    metrics: Array<Object>;
 }
 export default class InstanaDatasource {
     private backendSrv;
