@@ -165,7 +165,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('testAndCopy', [
-    // 'unit',
+    'unit',
     'copy:dist_js',
     'tslint',
     'typescript:build',
