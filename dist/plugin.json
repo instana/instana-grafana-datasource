@@ -30,6 +30,17 @@
     "updated": "2018-11-21"
   },
 
+  "routes": [
+    {
+      "path": "instana",
+      "method": "GET",
+      "url": "{{.JsonData.url}}",
+      "headers": [
+          {"name": "Authorization", "content": "apiToken {{.JsonData.apiToken}}"}
+      ]
+    }
+  ],
+
   "dependencies": {
     "grafanaVersion": "3.x.x",
     "instanaVersion": "1.144.x",

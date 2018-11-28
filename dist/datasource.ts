@@ -27,11 +27,19 @@ export default class InstanaDatasource {
   constructor(instanceSettings, private backendSrv, private templateSrv, private $q) {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
-    this.url = instanceSettings.jsonData.url;
-    this.apiToken = instanceSettings.jsonData.apiToken;
-
     this.snapshotCache = {};
     this.catalogCache = {};
+
+    // 5.3+ wanted to resolve dynamic routes in proxy mode
+    const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
+    const versions = _.split(version, '.', 2);
+    if (versions[0] >= 5 && versions[1] >= 3) {
+      this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
+    } else {
+      this.url = instanceSettings.jsonData.url;
+      this.apiToken = instanceSettings.jsonData.apiToken;
+      console.log(`No proxy mode, send request to ${this.url} directly.`);
+    }
 
     this.currentTime = () => { return new Date().getTime(); };
   }
@@ -44,15 +52,22 @@ export default class InstanaDatasource {
 
   setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; };
 
-  request(method, url, requestId?) {
-    return this.backendSrv.datasourceRequest({
-      url: this.url + url,
-      method: method,
-      requestId: requestId,
-      headers: {
-        Authorization: 'apiToken ' + this.apiToken
-      }
-    });
+  doRequest(url, maxRetries = 1) {
+    const request = {
+      method: 'GET',
+      url: this.url + url
+    };
+    if (this.apiToken) {
+      request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
+    }
+    return this.backendSrv
+      .datasourceRequest(request)
+      .catch(error => {
+        if (maxRetries > 0) {
+          return this.doRequest(url, maxRetries - 1);
+        }
+        throw error;
+      });
   }
 
   getEntityTypes() {
@@ -60,7 +75,7 @@ export default class InstanaDatasource {
     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
       this.entityTypesCache = {
         age: now,
-        entityTypes: this.request('GET', '/api/infrastructure-monitoring/catalog/plugins/').then(typesResponse =>
+        entityTypes: this.doRequest('/api/infrastructure-monitoring/catalog/plugins/').then(typesResponse =>
           typesResponse.data.map(entry => ({
             'key' : entry.plugin,
             'label' : entry.label
@@ -78,7 +93,7 @@ export default class InstanaDatasource {
       const filter = metricCategory === 1 ? 'custom' : 'builtin';
       this.catalogCache[id] = {
         age: now,
-        metrics: this.request('GET', `/api/infrastructure-monitoring/catalog/metrics/${plugin}?filter=${filter}`).then(catalogResponse =>
+        metrics: this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin}?filter=${filter}`).then(catalogResponse =>
           catalogResponse.data.map(entry => ({
             'key' : entry.metricId,
             'label' : metricCategory === 1 ? entry.description : entry.label, // built in metrics have nicer labels
@@ -160,7 +175,7 @@ export default class InstanaDatasource {
       `?q=${encodeURIComponent(target.entityQuery)}` +
       `${timeQuery}` +
       `&newApplicationModelEnabled=true`;
-    return this.request('GET', fetchSnapshotTypesUrl);
+    return this.doRequest(fetchSnapshotTypesUrl);
   }
 
   fetchSnapshotsForTarget(target, from, to) {
@@ -180,12 +195,12 @@ export default class InstanaDatasource {
       `&size=100` +
       `&newApplicationModelEnabled=true`;
 
-    return this.request('GET', fetchSnapshotContextsUrl).then(contextsResponse => {
+    return this.doRequest(fetchSnapshotContextsUrl).then(contextsResponse => {
       return this.$q.all(
         contextsResponse.data.map(({snapshotId, host, plugin}) => {
           const fetchSnapshotUrl = `/api/snapshots/${snapshotId}`;
 
-          return this.request('GET', fetchSnapshotUrl).then(snapshotResponse => {
+          return this.doRequest(fetchSnapshotUrl).then(snapshotResponse => {
             return {
               snapshotId, host,
               'response': this.reduceSnapshot(snapshotResponse)
@@ -198,7 +213,7 @@ export default class InstanaDatasource {
 
   reduceSnapshot(snapshotResponse) {
     // reduce data to used label formatting values
-    snapshotResponse.data = _.pick(snapshotResponse.data, ["id", "label", "plugin", "data"]);
+    snapshotResponse.data = _.pick(snapshotResponse.data, ['id', 'label', 'plugin', 'data']);
     return snapshotResponse;
   }
 
@@ -215,15 +230,15 @@ export default class InstanaDatasource {
   buildLabel(snapshotResponse, host, target) {
     if (target.labelFormat) {
       let label = target.labelFormat;
-      label = _.replace(label, "$label", snapshotResponse.data.label);
-      label = _.replace(label, "$plugin", snapshotResponse.data.plugin); // not documented
-      label = _.replace(label, "$snapshot", snapshotResponse.data.id); // not documented
-      label = _.replace(label, "$host", host ? host : "unknown");
-      label = _.replace(label, "$pid", _.get(snapshotResponse.data, ["data", "pid"], ""));
-      label = _.replace(label, "$type", _.get(snapshotResponse.data, ["data", "type"], ""));
-      label = _.replace(label, "$name", _.get(snapshotResponse.data, ["data", "name"], ""));
-      label = _.replace(label, "$service", _.get(snapshotResponse.data, ["data", "service_name"], ""));
-      label = _.replace(label, "$metric", _.get(target, ["metric", "key"], "n/a"));
+      label = _.replace(label, '$label', snapshotResponse.data.label);
+      label = _.replace(label, '$plugin', snapshotResponse.data.plugin); // not documented
+      label = _.replace(label, '$snapshot', snapshotResponse.data.id); // not documented
+      label = _.replace(label, '$host', host ? host : 'unknown');
+      label = _.replace(label, '$pid', _.get(snapshotResponse.data, ['data', 'pid'], ''));
+      label = _.replace(label, '$type', _.get(snapshotResponse.data, ['data', 'type'], ''));
+      label = _.replace(label, '$name', _.get(snapshotResponse.data, ['data', 'name'], ''));
+      label = _.replace(label, '$service', _.get(snapshotResponse.data, ['data', 'service_name'], ''));
+      label = _.replace(label, '$metric', _.get(target, ['metric', 'key'], 'n/a'));
       return label;
     }
     return snapshotResponse.data.label + this.getHostSuffix(host);
@@ -240,7 +255,7 @@ export default class InstanaDatasource {
     const rollup = this.getDefaultMetricRollupDuration(from, to).rollup;
     const url = `/api/metrics?metric=${metric}&from=${from}&to=${to}&rollup=${rollup}&snapshotId=${snapshotId}`;
 
-    return this.request('GET', url);
+    return this.doRequest(url);
   }
 
   annotationQuery(options) {
@@ -252,7 +267,7 @@ export default class InstanaDatasource {
   }
 
   testDatasource() {
-    return this.request('GET', '/api/snapshots/non-existing-snapshot-id')
+    return this.doRequest('/api/snapshots/non-existing-snapshot-id?time=0')
     .then(
       // We always expect an error response, either a 404 (Not Found) or a 401 (Unauthorized).
       result => {

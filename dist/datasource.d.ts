@@ -29,7 +29,7 @@ export default class InstanaDatasource {
     storeInCache: (query: any, data: any) => void;
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;
-    request(method: any, url: any, requestId?: any): any;
+    doRequest(url: any, maxRetries?: number): any;
     getEntityTypes(): Object[];
     getMetricsCatalog(plugin: any, metricCategory: any): any;
     query(options: any): any;
