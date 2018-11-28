@@ -72,19 +72,19 @@ System.register(['lodash'], function(exports_1) {
                     };
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
-                    this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
                     this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
                     this.snapshotCache = {};
-                    this.backendSrv.get('/api/frontend/settings').then(function (settings) {
-                        // 5.3+ needed to resolve dynamic routes in proxy mode
-                        var version = lodash_1.default.get(settings, ["buildInfo", "version"], "3.0.0");
-                        var versions = version.split(".");
-                        if (!(versions[0] >= 5 && versions[1] >= 3)) {
-                            _this.url = instanceSettings.jsonData.url;
-                            _this.apiToken = instanceSettings.jsonData.apiToken;
-                            console.log("No proxy mode, send request to " + _this.url + " directly.");
-                        }
-                    });
+                    // 5.3+ wanted to resolve dynamic routes in proxy mode
+                    var version = lodash_1.default.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
+                    var versions = lodash_1.default.split(version, '.', 2);
+                    if (versions[0] >= 5 && versions[1] >= 3) {
+                        this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
+                    }
+                    else {
+                        this.url = instanceSettings.jsonData.url;
+                        this.apiToken = instanceSettings.jsonData.apiToken;
+                        console.log("No proxy mode, send request to " + this.url + " directly.");
+                    }
                     this.currentTime = function () { return new Date().getTime(); };
                 }
                 InstanaDatasource.prototype.doRequest = function (url, maxRetries) {

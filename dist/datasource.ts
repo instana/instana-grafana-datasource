@@ -47,20 +47,20 @@ export default class InstanaDatasource {
   constructor(instanceSettings, private backendSrv, private templateSrv, private $q) {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
-    this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
     this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
     this.snapshotCache = {};
 
-    this.backendSrv.get('/api/frontend/settings').then(settings => {
-      // 5.3+ needed to resolve dynamic routes in proxy mode
-      const version = _.get(settings, ["buildInfo", "version"], "3.0.0");
-      const versions = version.split(".");
-      if (!(versions[0] >= 5 && versions[1] >= 3)) {
-        this.url = instanceSettings.jsonData.url;
-        this.apiToken = instanceSettings.jsonData.apiToken;
-        console.log(`No proxy mode, send request to ${this.url} directly.`);
-      }
-    });
+    // 5.3+ wanted to resolve dynamic routes in proxy mode
+    const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
+    const versions = _.split(version, '.', 2);
+    if (versions[0] >= 5 && versions[1] >= 3) {
+      this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
+    } else {
+      this.url = instanceSettings.jsonData.url;
+      this.apiToken = instanceSettings.jsonData.apiToken;
+      console.log(`No proxy mode, send request to ${this.url} directly.`);
+    }
+
     this.currentTime = () => { return new Date().getTime(); };
   }
 
