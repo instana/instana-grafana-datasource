@@ -1,6 +1,5 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 
-import metricsDefinition from './metrics';
 import {QueryCtrl} from 'app/plugins/sdk';
 import _ from 'lodash';
 
@@ -9,9 +8,8 @@ import './css/query_editor.css!';
 export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
 
-  metricsDefinition = metricsDefinition;
-  uniqueEntityTypes: Array<string>;
-  allCustomMetrics: Array<Object>;
+  uniqueEntityTypes: Array<Object>; // subset of allEntityTypes filtered by DF
+  allCustomMetrics: Array<Object>; // internal reference only to speed up filtering // TODO needed ?
   availableMetrics: Array<Object>; // subset of allCustomMetrics for display only
   snapshots: Array<string>;
   entitySelectionText: string;
@@ -44,16 +42,19 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
         // built-in metrics support available metrics on a selected entity type
         if (this.target.entityType && this.target.metricCategory === this.BUILT_IN_METRICS) {
-          this.onEntityTypeSelect(false);
+          this.onEntityTypeSelect(false).then(() => {
+              if (this.target.metric) {
+                this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+              }
+          });
         }
 
         // custom metrics include their entity type but can be filtered
         if (this.target.metricCategory === this.CUSTOM_METRICS) {
           this.onMetricsFilter(false);
-        }
-
-        if (this.target.metric) {
-          this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+          if (this.target.metric) {
+            this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+          }
         }
       });
     }
@@ -64,11 +65,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.selectionReset();
       return this.$q.resolve();
     } else {
-      const url = `/api/snapshots/types?q=${encodeURIComponent(this.target.entityQuery)}` +
-        `&time=${Date.now()}` +
-        `&newApplicationModelEnabled=${this.datasource.newApplicationModelEnabled === true}`;
 
-      return this.datasource.doRequest(url)
         .then(
           response => {
             this.target.queryIsValid = true;
@@ -98,49 +95,52 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   filterForEntityType(refresh) {
-    this.filterEntityTypes();
-    this.adjustEntitySelectionPlaceholder();
+    this.filterEntityTypes().then(() => {
+      this.adjustEntitySelectionPlaceholder();
 
-    if (!_.includes(this.uniqueEntityTypes, this.target.entityType)) {
-      this.target.entityType = null; // entity selection label will be untouched
-      this.resetMetricSelection();
-    } else if (this.target.metric && refresh) {
-      this.panelCtrl.refresh();
-    }
+      if (!_.find(this.uniqueEntityTypes, ['key', this.target.entityType])) {
+        this.target.entityType = null; // entity selection label will be untouched
+        this.resetMetricSelection();
+      } else if (this.target.metric && refresh) {
+        this.panelCtrl.refresh();
+      }
+    });
   }
 
   filterForCustom(refresh) {
-    if (!this.allCustomMetrics) {
-      this.datasource.getCatalog().then(customMetrics => {
+    this.datasource.getMetricsCatalog(this.target.entityType, this.CUSTOM_METRICS).then(
+      customMetrics => {
         this.allCustomMetrics = customMetrics;
         this.onMetricsFilter(refresh);
-      });
-    } else {
-      this.onMetricsFilter(refresh);
-    }
+      }
+    );
   }
 
   filterEntityTypes() {
-    this.uniqueEntityTypes =
-      _.sortBy(
-        _.filter(
-          this.snapshots,
-          entityType => metricsDefinition[entityType.toLowerCase()] && metricsDefinition[entityType.toLowerCase()].label != null),
-        'label');
+    return this.datasource.getEntityTypes().then(
+      entityTypes => {
+        this.uniqueEntityTypes =
+          _.sortBy(
+            _.filter(
+              entityTypes,
+              entityType => this.snapshots.find(type => type === entityType.key) && entityType.label != null),
+            'label');
+      }
+    );
   }
 
   onEntityTypeSelect(refresh) {
-    this.availableMetrics =
-      _.sortBy(
-        _.map(
-          this.metricsDefinition[this.target.entityType.toLowerCase()].metrics,
-            (value, key) => {
-              return { 'key' : key, 'label' : value};
-            }),
-        'key');
+    return this.datasource.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(
+      metrics => {
+        this.availableMetrics =
+        _.sortBy(
+          metrics,
+          'key');
 
-    this.adjustMetricSelectionPlaceholder();
-    this.checkMetricAndRefresh(refresh);
+        this.adjustMetricSelectionPlaceholder();
+        this.checkMetricAndRefresh(refresh);
+      }
+    );
   }
 
   onMetricsFilter(refresh) {
@@ -204,6 +204,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
       // as there was no type selection upfront, but the metric itself contains the type
       this.target.entityType = this.target.metric.entityType;
     }
+    this.panelCtrl.refresh();
+  }
+
+  onLabelChange() {
+    // we just want to refresh, even this is expensive
     this.panelCtrl.refresh();
   }
 }

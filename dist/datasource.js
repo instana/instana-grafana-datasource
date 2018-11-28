@@ -1,8 +1,11 @@
-System.register(['lodash'], function(exports_1) {
-    var lodash_1;
+System.register(['./rollups', 'lodash'], function(exports_1) {
+    var rollups_1, lodash_1;
     var InstanaDatasource;
     return {
         setters:[
+            function (rollups_1_1) {
+                rollups_1 = rollups_1_1;
+            },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
             }],
@@ -14,77 +17,15 @@ System.register(['lodash'], function(exports_1) {
                     this.backendSrv = backendSrv;
                     this.templateSrv = templateSrv;
                     this.$q = $q;
+                    this.rollupDurationThresholds = rollups_1.default;
                     this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
                     this.CACHE_MAX_AGE = 60000;
-                    this.rollupDurationThresholds = [
-                        {
-                            availableFor: 1000 * 60 * 10 + 3000,
-                            rollup: 1000,
-                            label: '1s'
-                        },
-                        {
-                            availableFor: 1000 * 60 * 60 * 24,
-                            rollup: 1000 * 5,
-                            label: '5s'
-                        },
-                        {
-                            availableFor: 1000 * 60 * 60 * 24 * 31,
-                            rollup: 1000 * 60,
-                            label: '1min'
-                        },
-                        {
-                            availableFor: 1000 * 60 * 60 * 24 * 31 * 3,
-                            rollup: 1000 * 60 * 5,
-                            label: '5min'
-                        },
-                        {
-                            availableFor: Number.MAX_VALUE,
-                            rollup: 1000 * 60 * 60,
-                            label: '1h'
-                        }
-                    ];
-                    this.storeInCache = function (id, query, data) {
-                        if (!_this.snapshotCache) {
-                            _this.snapshotCache = {};
-                        }
-                        if (!_this.snapshotCache[id]) {
-                            _this.snapshotCache[id] = {};
-                        }
-                        if (!_this.snapshotCache[id][query]) {
-                            _this.snapshotCache[id][query] = {};
-                        }
-                        _this.snapshotCache[id][query] = data;
+                    this.storeInCache = function (query, data) {
+                        _this.snapshotCache[query] = data;
                     };
-                    this.getSnapshotCache = function () { return _this.snapshotCache; };
                     this.wasLastFetchedFromApi = function () { return _this.lastFetchedFromAPI; };
                     this.setLastFetchedFromApi = function (value) { _this.lastFetchedFromAPI = value; };
-                    this.getCatalog = function () {
-                        if (!_this.catalogPromise) {
-                            _this.catalogPromise = _this.$q.resolve(_this.doRequest("/api/metricsCatalog/custom").then(function (catalogResponse) {
-                                return _this.$q.all(lodash_1.default.map(catalogResponse.data, function (entry) { return ({
-                                    'key': entry.metricId,
-                                    'label': entry.description,
-                                    'entityType': entry.pluginId
-                                }); }));
-                            }));
-                        }
-                        return _this.catalogPromise;
-                    };
-                    this.name = instanceSettings.name;
-                    this.id = instanceSettings.id;
-                    this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
-                    this.snapshotCache = {};
-                    // 5.3+ wanted to resolve dynamic routes in proxy mode
-                    var version = lodash_1.default.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
-                    var versions = lodash_1.default.split(version, '.', 2);
-                    if (versions[0] >= 5 && versions[1] >= 3) {
-                        this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
-                    }
-                    else {
-                        this.url = instanceSettings.jsonData.url;
-                        this.apiToken = instanceSettings.jsonData.apiToken;
-                        console.log("No proxy mode, send request to " + this.url + " directly.");
-                    }
+
                     this.currentTime = function () { return new Date().getTime(); };
                 }
                 InstanaDatasource.prototype.doRequest = function (url, maxRetries) {
@@ -106,17 +47,50 @@ System.register(['lodash'], function(exports_1) {
                         throw error;
                     });
                 };
+                InstanaDatasource.prototype.getEntityTypes = function () {
+                    var now = this.currentTime();
+                    if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
+                        this.entityTypesCache = {
+                            age: now,
+                            entityTypes: this.request('GET', '/api/infrastructure-monitoring/catalog/plugins/').then(function (typesResponse) {
+                                return typesResponse.data.map(function (entry) { return ({
+                                    'key': entry.plugin,
+                                    'label': entry.label
+                                }); });
+                            })
+                        };
+                    }
+                    return this.entityTypesCache.entityTypes;
+                };
+                InstanaDatasource.prototype.getMetricsCatalog = function (plugin, metricCategory) {
+                    var id = plugin + '|' + metricCategory;
+                    var now = this.currentTime();
+                    if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
+                        var filter = metricCategory === 1 ? 'custom' : 'builtin';
+                        this.catalogCache[id] = {
+                            age: now,
+                            metrics: this.request('GET', "/api/infrastructure-monitoring/catalog/metrics/" + plugin + "?filter=" + filter).then(function (catalogResponse) {
+                                return catalogResponse.data.map(function (entry) { return ({
+                                    'key': entry.metricId,
+                                    'label': metricCategory === 1 ? entry.description : entry.label,
+                                    'entityType': entry.pluginId
+                                }); });
+                            })
+                        };
+                    }
+                    return this.catalogCache[id].metrics;
+                };
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;
                     if (Object.keys(options.targets[0]).length === 0) {
                         return this.$q.resolve({ data: [] });
                     }
                     // Convert ISO 8601 timestamps to millis.
-                    var fromInMs = new Date(options.range.from).getTime();
-                    var toInMs = new Date(options.range.to).getTime();
+                    this.fromFilter = new Date(options.range.from).getTime();
+                    this.toFilter = new Date(options.range.to).getTime();
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
                         // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
-                        return _this.fetchSnapshotsForTarget(target, fromInMs, toInMs)
+                        return _this.fetchSnapshotsForTarget(target, _this.fromFilter, _this.toFilter)
                             .then(function (snapshots) {
                             return {
                                 'target': target,
@@ -128,17 +102,19 @@ System.register(['lodash'], function(exports_1) {
                             // For every target with all snapshots that were returned by the lucene query...
                             // Cache the data if fresh
                             if (_this.wasLastFetchedFromApi()) {
-                                _this.storeInCache(targetWithSnapshots.target.refId, _this.buildQuery(targetWithSnapshots.target), { time: toInMs, snapshots: targetWithSnapshots.snapshots });
+                                _this.storeInCache(_this.buildQuery(targetWithSnapshots.target), { time: _this.toFilter, age: _this.currentTime(), snapshots: targetWithSnapshots.snapshots });
+                            }
+                            // do not try to retrieve data without selected metric
+                            if (!targetWithSnapshots.target.metric) {
+                                return _this.$q.resolve({ data: [] });
                             }
                             return _this.$q.all(lodash_1.default.map(targetWithSnapshots.snapshots, function (snapshot) {
                                 // ...fetch the metric data for every snapshot in the results.
-                                return _this.fetchMetricsForSnapshot(snapshot.snapshotId, targetWithSnapshots.target.metric.key, fromInMs, toInMs)
+                                return _this.fetchMetricsForSnapshot(snapshot.snapshotId, targetWithSnapshots.target.metric.key, _this.fromFilter, _this.toFilter)
                                     .then(function (response) {
-                                    var timeseries = targetWithSnapshots.target.pluginId === "singlestat" || targetWithSnapshots.target.pluginId === "table"
-                                        ? _this.correctForSingleStat(response.data.values, fromInMs, toInMs)
-                                        : response.data.values;
+                                    var timeseries = response.data.values;
                                     var result = {
-                                        'target': snapshot.label,
+                                        'target': _this.buildLabel(snapshot.response, snapshot.host, targetWithSnapshots.target),
                                         'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; })
                                     };
                                     return result;
@@ -150,57 +126,72 @@ System.register(['lodash'], function(exports_1) {
                         return { data: [].concat.apply([], results) };
                     });
                 };
-                InstanaDatasource.prototype.correctForSingleStat = function (values, fromInMs, toInMs) {
-                    var rollup = this.getDefaultMetricRollupDuration(fromInMs, toInMs).rollup;
-                    var aggregationToSecondMultiplier = rollup / 1000;
-                    return lodash_1.default.map(values, function (value) { return { 'value': value.value * aggregationToSecondMultiplier, 'timestamp': value.timestamp }; });
+                InstanaDatasource.prototype.fetchTypesForTarget = function (target) {
+                    // as long no timewindow was adjusted for newly created dashboards (now-6h)
+                    var timeQuery = (this.fromFilter && this.toFilter) ?
+                        "&from=" + this.fromFilter + "&to=" + this.toFilter :
+                        "&time=" + Date.now();
+                    var fetchSnapshotTypesUrl = "/api/snapshots/types" +
+                        ("?q=" + encodeURIComponent(target.entityQuery)) +
+                        ("" + timeQuery) +
+                        "&newApplicationModelEnabled=true";
+                    return this.request('GET', fetchSnapshotTypesUrl);
                 };
                 InstanaDatasource.prototype.fetchSnapshotsForTarget = function (target, from, to) {
                     var _this = this;
                     var query = this.buildQuery(target);
-                    if (this.localCacheCopyAvailable(target, query)) {
+                    if (this.localCacheCopyAvailable(query)) {
                         this.setLastFetchedFromApi(false);
-                        return this.$q.resolve(this.getSnapshotCache()[target.refId][query].snapshots);
+                        return this.$q.resolve(this.snapshotCache[query].snapshots);
                     }
                     this.setLastFetchedFromApi(true);
-                    var fetchSnapshotsUrl = ("/api/snapshots?from=" + from + "&to=" + to + "&q=" + query + "&size=100") +
-                        ("&newApplicationModelEnabled=" + (this.newApplicationModelEnabled === true));
-                    var fetchSnapshotContextsUrl = ("/api/snapshots/context?q=" + query + "&time=" + to + "&from=" + from + "&to=" + to + "&size=100") +
-                        ("&newApplicationModelEnabled=" + (this.newApplicationModelEnabled === true));
-                    return this.$q.all([
-                        this.doRequest(fetchSnapshotsUrl),
-                        this.doRequest(fetchSnapshotContextsUrl)
-                    ]).then(function (snapshotsWithContextsResponse) {
-                        return _this.$q.all(lodash_1.default.map(snapshotsWithContextsResponse[0].data, function (snapshotId) {
-                            var fetchSnapshotUrl = "/api/snapshots/" + snapshotId + "?time=" + to;
-                            return _this.doRequest(fetchSnapshotUrl).then(function (snapshotResponse) {
+
                                 return {
-                                    'snapshotId': snapshotId,
-                                    'label': snapshotResponse.data.label + _this.getHostSuffix(snapshotsWithContextsResponse[1].data, snapshotId)
+                                    snapshotId: snapshotId, host: host,
+                                    'response': _this.reduceSnapshot(snapshotResponse)
                                 };
                             });
                         }));
                     });
                 };
-                InstanaDatasource.prototype.localCacheCopyAvailable = function (target, query) {
-                    return this.snapshotCache[target.refId] &&
-                        lodash_1.default.includes(Object.keys(this.snapshotCache[target.refId]), query) &&
-                        this.currentTime() - this.snapshotCache[target.refId][query].time < this.CACHE_MAX_AGE;
+                InstanaDatasource.prototype.reduceSnapshot = function (snapshotResponse) {
+                    // reduce data to used label formatting values
+                    snapshotResponse.data = lodash_1.default.pick(snapshotResponse.data, ["id", "label", "plugin", "data"]);
+                    return snapshotResponse;
+                };
+                InstanaDatasource.prototype.localCacheCopyAvailable = function (query) {
+                    return this.snapshotCache[query] &&
+                        this.toFilter - this.snapshotCache[query].time < this.CACHE_MAX_AGE &&
+                        this.currentTime() - this.snapshotCache[query].age < this.CACHE_MAX_AGE;
                 };
                 InstanaDatasource.prototype.buildQuery = function (target) {
                     return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType);
                 };
-                InstanaDatasource.prototype.getHostSuffix = function (contexts, snapshotId) {
-                    var host = lodash_1.default.find(contexts, function (context) { return context.snapshotId === snapshotId; }).host;
-                    if (!host) {
-                        return '';
+                InstanaDatasource.prototype.buildLabel = function (snapshotResponse, host, target) {
+                    if (target.labelFormat) {
+                        var label = target.labelFormat;
+                        label = lodash_1.default.replace(label, "$label", snapshotResponse.data.label);
+                        label = lodash_1.default.replace(label, "$plugin", snapshotResponse.data.plugin); // not documented
+                        label = lodash_1.default.replace(label, "$snapshot", snapshotResponse.data.id); // not documented
+                        label = lodash_1.default.replace(label, "$host", host ? host : "unknown");
+                        label = lodash_1.default.replace(label, "$pid", lodash_1.default.get(snapshotResponse.data, ["data", "pid"], ""));
+                        label = lodash_1.default.replace(label, "$type", lodash_1.default.get(snapshotResponse.data, ["data", "type"], ""));
+                        label = lodash_1.default.replace(label, "$name", lodash_1.default.get(snapshotResponse.data, ["data", "name"], ""));
+                        label = lodash_1.default.replace(label, "$service", lodash_1.default.get(snapshotResponse.data, ["data", "service_name"], ""));
+                        label = lodash_1.default.replace(label, "$metric", lodash_1.default.get(target, ["metric", "key"], "n/a"));
+                        return label;
                     }
-                    return ' (on host "' + host + '")';
+                    return snapshotResponse.data.label + this.getHostSuffix(host);
+                };
+                InstanaDatasource.prototype.getHostSuffix = function (host) {
+                    if (host) {
+                        return ' (on host "' + host + '")';
+                    }
+                    return '';
                 };
                 InstanaDatasource.prototype.fetchMetricsForSnapshot = function (snapshotId, metric, from, to) {
                     var rollup = this.getDefaultMetricRollupDuration(from, to).rollup;
-                    var url = '/api/metrics?metric=' + metric + '&from=' + from + '&to=' + to + '&rollup=' + rollup + '&snapshotId=' + snapshotId;
-                    return this.doRequest(url);
+
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {
                     throw new Error('Annotation Support not implemented yet.');
@@ -209,7 +200,7 @@ System.register(['lodash'], function(exports_1) {
                     throw new Error('Template Variable Support not implemented yet.');
                 };
                 InstanaDatasource.prototype.testDatasource = function () {
-                    return this.doRequest("/api/snapshots/non-existing-snapshot-id?time=0")
+
                         .then(
                     // We always expect an error response, either a 404 (Not Found) or a 401 (Unauthorized).
                     function (result) {

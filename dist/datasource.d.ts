@@ -1,37 +1,45 @@
+export interface EntityTypesCache {
+    age: number;
+    entityTypes: Array<Object>;
+}
 export default class InstanaDatasource {
     private backendSrv;
     private templateSrv;
     private $q;
-    id: number;
-    name: string;
-    url: string;
-    apiToken: string;
-    newApplicationModelEnabled: boolean;
-    currentTime: () => number;
-    snapshotCache: Object;
-    catalogPromise: Object;
-    lastFetchedFromAPI: boolean;
-    MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
-    CACHE_MAX_AGE: number;
     rollupDurationThresholds: {
         availableFor: number;
         rollup: number;
         label: string;
     }[];
+    id: number;
+    name: string;
+    url: string;
+    apiToken: string;
+    currentTime: () => number;
+    entityTypesCache: EntityTypesCache;
+    snapshotCache: Object;
+    catalogCache: Object;
+    fromFilter: number;
+    toFilter: number;
+    lastFetchedFromAPI: boolean;
+    MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
+    CACHE_MAX_AGE: number;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
-    storeInCache: (id: any, query: any, data: any) => void;
-    getSnapshotCache: () => Object;
+    storeInCache: (query: any, data: any) => void;
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;
     doRequest(url: any, maxRetries?: number): any;
-    getCatalog: () => Object;
+    getEntityTypes(): Object[];
+    getMetricsCatalog(plugin: any, metricCategory: any): any;
     query(options: any): any;
-    correctForSingleStat(values: any, fromInMs: any, toInMs: any): any;
+    fetchTypesForTarget(target: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;
-    localCacheCopyAvailable(target: any, query: any): boolean;
+    reduceSnapshot(snapshotResponse: any): any;
+    localCacheCopyAvailable(query: any): boolean;
     buildQuery(target: any): string;
-    getHostSuffix(contexts: any, snapshotId: any): string;
+    buildLabel(snapshotResponse: any, host: any, target: any): any;
+    getHostSuffix(host: any): string;
     fetchMetricsForSnapshot(snapshotId: any, metric: any, from: any, to: any): any;
     annotationQuery(options: any): void;
     metricFindQuery(query: string): void;
