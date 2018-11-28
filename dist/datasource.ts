@@ -4,6 +4,7 @@ export default class InstanaDatasource {
   id: number;
   name: string;
   url: string;
+  apiToken: string;
   newApplicationModelEnabled: boolean;
   currentTime: () => number;
   snapshotCache: Object;
@@ -46,10 +47,20 @@ export default class InstanaDatasource {
   constructor(instanceSettings, private backendSrv, private templateSrv, private $q) {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
-    this.url = instanceSettings.url;
+    this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
     this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
     this.snapshotCache = {};
 
+    this.backendSrv.get('/api/frontend/settings').then(settings => {
+      // 5.3+ needed to resolve dynamic routes in proxy mode
+      const version = _.get(settings, ["buildInfo", "version"], "3.0.0");
+      const versions = version.split(".");
+      if (!(versions[0] >= 5 && versions[1] >= 3)) {
+        this.url = instanceSettings.jsonData.url;
+        this.apiToken = instanceSettings.jsonData.apiToken;
+        console.log(`No proxy mode, send request to ${this.url} directly.`);
+      }
+    });
     this.currentTime = () => { return new Date().getTime(); };
   }
 
@@ -73,17 +84,20 @@ export default class InstanaDatasource {
 
   setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; };
 
-  doRequest(url, data, maxRetries = 1) {
+  doRequest(url, maxRetries = 1) {
+    const request = {
+      method: 'GET',
+      url: this.url + url
+    };
+    if (this.apiToken) {
+      request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
+    }
     return this.backendSrv
-      .datasourceRequest({
-        url: this.url + '/instana' + url,
-        method: 'GET',
-      })
+      .datasourceRequest(request)
       .catch(error => {
         if (maxRetries > 0) {
-          return this.doRequest(url, data, maxRetries - 1);
+          return this.doRequest(url, maxRetries - 1);
         }
-
         throw error;
       });
   }
@@ -91,7 +105,7 @@ export default class InstanaDatasource {
   getCatalog = () => {
     if (!this.catalogPromise) {
       this.catalogPromise = this.$q.resolve(
-        this.doRequest("/api/metricsCatalog/custom", null).then(catalogResponse =>
+        this.doRequest("/api/metricsCatalog/custom").then(catalogResponse =>
           this.$q.all(
             _.map(catalogResponse.data, entry => ({
               'key' : entry.metricId,
@@ -188,14 +202,14 @@ export default class InstanaDatasource {
       `&newApplicationModelEnabled=${this.newApplicationModelEnabled === true}`;
 
     return this.$q.all([
-      this.doRequest(fetchSnapshotsUrl, null),
-      this.doRequest(fetchSnapshotContextsUrl, null)
+      this.doRequest(fetchSnapshotsUrl),
+      this.doRequest(fetchSnapshotContextsUrl)
     ]).then(snapshotsWithContextsResponse => {
       return this.$q.all(
         _.map(snapshotsWithContextsResponse[0].data, snapshotId => {
           const fetchSnapshotUrl = `/api/snapshots/${snapshotId}?time=${to}`;
 
-          return this.doRequest(fetchSnapshotUrl, null).then(snapshotResponse => {
+          return this.doRequest(fetchSnapshotUrl).then(snapshotResponse => {
             return {
               'snapshotId': snapshotId,
               'label': snapshotResponse.data.label + this.getHostSuffix(snapshotsWithContextsResponse[1].data, snapshotId)
@@ -228,7 +242,7 @@ export default class InstanaDatasource {
     const rollup = this.getDefaultMetricRollupDuration(from, to).rollup;
     const url = '/api/metrics?metric=' + metric + '&from=' + from + '&to=' + to + '&rollup=' + rollup + '&snapshotId=' + snapshotId;
 
-    return this.doRequest(url, null);
+    return this.doRequest(url);
   }
 
   annotationQuery(options) {
@@ -240,7 +254,7 @@ export default class InstanaDatasource {
   }
 
   testDatasource() {
-    return this.doRequest("/api/snapshots/non-existing-snapshot-id?time=0", null)
+    return this.doRequest("/api/snapshots/non-existing-snapshot-id?time=0")
     .then(
       // We always expect an error response, either a 404 (Not Found) or a 401 (Unauthorized).
       result => {

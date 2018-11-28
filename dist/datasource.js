@@ -60,7 +60,7 @@ System.register(['lodash'], function(exports_1) {
                     this.setLastFetchedFromApi = function (value) { _this.lastFetchedFromAPI = value; };
                     this.getCatalog = function () {
                         if (!_this.catalogPromise) {
-                            _this.catalogPromise = _this.$q.resolve(_this.doRequest("/api/metricsCatalog/custom", null).then(function (catalogResponse) {
+                            _this.catalogPromise = _this.$q.resolve(_this.doRequest("/api/metricsCatalog/custom").then(function (catalogResponse) {
                                 return _this.$q.all(lodash_1.default.map(catalogResponse.data, function (entry) { return ({
                                     'key': entry.metricId,
                                     'label': entry.description,
@@ -72,22 +72,36 @@ System.register(['lodash'], function(exports_1) {
                     };
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
-                    this.url = instanceSettings.url;
+                    this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
                     this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
                     this.snapshotCache = {};
+                    this.backendSrv.get('/api/frontend/settings').then(function (settings) {
+                        // 5.3+ needed to resolve dynamic routes in proxy mode
+                        var version = lodash_1.default.get(settings, ["buildInfo", "version"], "3.0.0");
+                        var versions = version.split(".");
+                        if (!(versions[0] >= 5 && versions[1] >= 3)) {
+                            _this.url = instanceSettings.jsonData.url;
+                            _this.apiToken = instanceSettings.jsonData.apiToken;
+                            console.log("No proxy mode, send request to " + _this.url + " directly.");
+                        }
+                    });
                     this.currentTime = function () { return new Date().getTime(); };
                 }
-                InstanaDatasource.prototype.doRequest = function (url, data, maxRetries) {
+                InstanaDatasource.prototype.doRequest = function (url, maxRetries) {
                     var _this = this;
                     if (maxRetries === void 0) { maxRetries = 1; }
-                    return this.backendSrv
-                        .datasourceRequest({
-                        url: this.url + '/instana' + url,
+                    var request = {
                         method: 'GET',
-                    })
+                        url: this.url + url
+                    };
+                    if (this.apiToken) {
+                        request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
+                    }
+                    return this.backendSrv
+                        .datasourceRequest(request)
                         .catch(function (error) {
                         if (maxRetries > 0) {
-                            return _this.doRequest(url, data, maxRetries - 1);
+                            return _this.doRequest(url, maxRetries - 1);
                         }
                         throw error;
                     });
@@ -154,12 +168,12 @@ System.register(['lodash'], function(exports_1) {
                     var fetchSnapshotContextsUrl = ("/api/snapshots/context?q=" + query + "&time=" + to + "&from=" + from + "&to=" + to + "&size=100") +
                         ("&newApplicationModelEnabled=" + (this.newApplicationModelEnabled === true));
                     return this.$q.all([
-                        this.doRequest(fetchSnapshotsUrl, null),
-                        this.doRequest(fetchSnapshotContextsUrl, null)
+                        this.doRequest(fetchSnapshotsUrl),
+                        this.doRequest(fetchSnapshotContextsUrl)
                     ]).then(function (snapshotsWithContextsResponse) {
                         return _this.$q.all(lodash_1.default.map(snapshotsWithContextsResponse[0].data, function (snapshotId) {
                             var fetchSnapshotUrl = "/api/snapshots/" + snapshotId + "?time=" + to;
-                            return _this.doRequest(fetchSnapshotUrl, null).then(function (snapshotResponse) {
+                            return _this.doRequest(fetchSnapshotUrl).then(function (snapshotResponse) {
                                 return {
                                     'snapshotId': snapshotId,
                                     'label': snapshotResponse.data.label + _this.getHostSuffix(snapshotsWithContextsResponse[1].data, snapshotId)
@@ -186,7 +200,7 @@ System.register(['lodash'], function(exports_1) {
                 InstanaDatasource.prototype.fetchMetricsForSnapshot = function (snapshotId, metric, from, to) {
                     var rollup = this.getDefaultMetricRollupDuration(from, to).rollup;
                     var url = '/api/metrics?metric=' + metric + '&from=' + from + '&to=' + to + '&rollup=' + rollup + '&snapshotId=' + snapshotId;
-                    return this.doRequest(url, null);
+                    return this.doRequest(url);
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {
                     throw new Error('Annotation Support not implemented yet.');
@@ -195,7 +209,7 @@ System.register(['lodash'], function(exports_1) {
                     throw new Error('Template Variable Support not implemented yet.');
                 };
                 InstanaDatasource.prototype.testDatasource = function () {
-                    return this.doRequest("/api/snapshots/non-existing-snapshot-id?time=0", null)
+                    return this.doRequest("/api/snapshots/non-existing-snapshot-id?time=0")
                         .then(
                     // We always expect an error response, either a 404 (Not Found) or a 401 (Unauthorized).
                     function (result) {

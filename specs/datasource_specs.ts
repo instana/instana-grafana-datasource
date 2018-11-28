@@ -13,6 +13,9 @@ describe('InstanaDatasource', function() {
 
   beforeEach(function() {
     ctx.$q = Q;
+    ctx.backendSrv.get = function(options) {
+      return ctx.$q.resolve( { 'buildInfo': { 'version' : "5.3.0" } } );
+    };
     ctx.instanceSettings = {
       id: 1,
       name: 'instana-local-test',

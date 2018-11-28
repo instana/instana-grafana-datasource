@@ -4,6 +4,7 @@ export default class InstanaDatasource {
   id: number;
   name: string;
   url: string;
+  apiToken: string;
   newApplicationModelEnabled: boolean;
   currentTime: () => number;
   snapshotCache: Object;
@@ -46,10 +47,20 @@ export default class InstanaDatasource {
   constructor(instanceSettings, private backendSrv, private templateSrv, private $q) {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
-    this.url = instanceSettings.url;
+    this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
     this.newApplicationModelEnabled = instanceSettings.jsonData.newApplicationModelEnabled;
     this.snapshotCache = {};
 
+    this.backendSrv.get('/api/frontend/settings').then(settings => {
+      // 5.3+ needed to resolve dynamic routes in proxy mode
+      const version = _.get(settings, ["buildInfo", "version"], "3.0.0");
+      const versions = version.split(".");
+      if (!(versions[0] >= 5 && versions[1] >= 3)) {
+        this.url = instanceSettings.jsonData.url;
+        this.apiToken = instanceSettings.jsonData.apiToken;
+        console.log(`No proxy mode, send request to ${this.url} directly.`);
+      }
+    });
     this.currentTime = () => { return new Date().getTime(); };
   }
 
@@ -74,11 +85,15 @@ export default class InstanaDatasource {
   setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; };
 
   doRequest(url, maxRetries = 1) {
+    const request = {
+      method: 'GET',
+      url: this.url + url
+    };
+    if (this.apiToken) {
+      request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
+    }
     return this.backendSrv
-      .datasourceRequest({
-        url: this.url + '/instana' + url,
-        method: 'GET',
-      })
+      .datasourceRequest(request)
       .catch(error => {
         if (maxRetries > 0) {
           return this.doRequest(url, maxRetries - 1);
