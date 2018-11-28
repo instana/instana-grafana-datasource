@@ -68,7 +68,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
         `&time=${Date.now()}` +
         `&newApplicationModelEnabled=${this.datasource.newApplicationModelEnabled === true}`;
 
-      return this.datasource.request('GET', url)
+      return this.datasource.doRequest(url, null)
         .then(
           response => {
             this.target.queryIsValid = true;

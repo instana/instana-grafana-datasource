@@ -68,7 +68,7 @@ System.register(['./metrics', 'app/plugins/sdk', 'lodash', './css/query_editor.c
                         var url = ("/api/snapshots/types?q=" + encodeURIComponent(this.target.entityQuery)) +
                             ("&time=" + Date.now()) +
                             ("&newApplicationModelEnabled=" + (this.datasource.newApplicationModelEnabled === true));
-                        return this.datasource.request('GET', url)
+                        return this.datasource.doRequest(url, null)
                             .then(function (response) {
                             _this.target.queryIsValid = true;
                             _this.snapshots = response.data;

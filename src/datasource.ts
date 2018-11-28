@@ -73,21 +73,24 @@ export default class InstanaDatasource {
 
   setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; };
 
-  request(method, url, requestId?) {
-    return this.backendSrv.datasourceRequest({
-      url: this.url + '/instana' + url, // for plugin.json.route matching
-      method: method,
-      requestId: requestId
-    }).catch(error => {
-      console.log(error);
-      throw error;
-    });
+  doRequest(url, maxRetries = 1) {
+    return this.backendSrv
+      .datasourceRequest({
+        url: this.url + '/instana' + url,
+        method: 'GET',
+      })
+      .catch(error => {
+        if (maxRetries > 0) {
+          return this.doRequest(url, maxRetries - 1);
+        }
+        throw error;
+      });
   }
 
   getCatalog = () => {
     if (!this.catalogPromise) {
       this.catalogPromise = this.$q.resolve(
-        this.request('GET', "/api/metricsCatalog/custom").then(catalogResponse =>
+        this.doRequest("/api/metricsCatalog/custom").then(catalogResponse =>
           this.$q.all(
             _.map(catalogResponse.data, entry => ({
               'key' : entry.metricId,
@@ -184,14 +187,14 @@ export default class InstanaDatasource {
       `&newApplicationModelEnabled=${this.newApplicationModelEnabled === true}`;
 
     return this.$q.all([
-      this.request('GET', fetchSnapshotsUrl),
-      this.request('GET', fetchSnapshotContextsUrl)
+      this.doRequest(fetchSnapshotsUrl),
+      this.doRequest(fetchSnapshotContextsUrl)
     ]).then(snapshotsWithContextsResponse => {
       return this.$q.all(
         _.map(snapshotsWithContextsResponse[0].data, snapshotId => {
-          const fetchSnapshotUrl = '/api/snapshots/' + snapshotId + '?time=' + to;
+          const fetchSnapshotUrl = `/api/snapshots/${snapshotId}?time=${to}`;
 
-          return this.request('GET', fetchSnapshotUrl).then(snapshotResponse => {
+          return this.doRequest(fetchSnapshotUrl).then(snapshotResponse => {
             return {
               'snapshotId': snapshotId,
               'label': snapshotResponse.data.label + this.getHostSuffix(snapshotsWithContextsResponse[1].data, snapshotId)
@@ -224,7 +227,7 @@ export default class InstanaDatasource {
     const rollup = this.getDefaultMetricRollupDuration(from, to).rollup;
     const url = '/api/metrics?metric=' + metric + '&from=' + from + '&to=' + to + '&rollup=' + rollup + '&snapshotId=' + snapshotId;
 
-    return this.request('GET', url);
+    return this.doRequest(url);
   }
 
   annotationQuery(options) {
@@ -236,7 +239,7 @@ export default class InstanaDatasource {
   }
 
   testDatasource() {
-    return this.request('GET', '/api/snapshots/non-existing-snapshot-id?time=0')
+    return this.doRequest("/api/snapshots/non-existing-snapshot-id?time=0")
     .then(
       // We always expect an error response, either a 404 (Not Found) or a 401 (Unauthorized).
       result => {

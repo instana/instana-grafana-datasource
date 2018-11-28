@@ -34,7 +34,7 @@ describe("InstanaQueryCtrl", function() {
   describe("when entering a dynamic focus query", function() {
     describe("that returns some snapshots", function() {
       it("should populate the entity types dropdown with unique entity types", function() {
-        queryCtrl.datasource.request = function(options) {
+        queryCtrl.datasource.doRequest = function(options) {
           return ctx.$q.resolve({
             data: ["docker", "host", "weblogicapplicationcontainer"]
           });
@@ -55,7 +55,7 @@ describe("InstanaQueryCtrl", function() {
 
     describe("that returns zero snapshots", function() {
       it("should show no entity types found in the entity type drowdown", function() {
-        queryCtrl.datasource.request = function(options) {
+        queryCtrl.datasource.doRequest = function(options) {
           return ctx.$q.resolve({
             data: []
           });
@@ -71,7 +71,7 @@ describe("InstanaQueryCtrl", function() {
 
     describe("that returns a query parsing error", function() {
       it("should set the query state to invalid", function() {
-        queryCtrl.datasource.request = function(options) {
+        queryCtrl.datasource.doRequest = function(options) {
           return ctx.$q.reject({
             status: 400
           });
