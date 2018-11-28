@@ -65,7 +65,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.selectionReset();
       return this.$q.resolve();
     } else {
-
+      return this.datasource.fetchTypesForTarget(this.target)
         .then(
           response => {
             this.target.queryIsValid = true;

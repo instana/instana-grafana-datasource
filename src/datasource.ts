@@ -75,7 +75,7 @@ export default class InstanaDatasource {
     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
       this.entityTypesCache = {
         age: now,
-        entityTypes: this.request('GET', '/api/infrastructure-monitoring/catalog/plugins/').then(typesResponse =>
+        entityTypes: this.doRequest('/api/infrastructure-monitoring/catalog/plugins/').then(typesResponse =>
           typesResponse.data.map(entry => ({
             'key' : entry.plugin,
             'label' : entry.label
@@ -93,7 +93,7 @@ export default class InstanaDatasource {
       const filter = metricCategory === 1 ? 'custom' : 'builtin';
       this.catalogCache[id] = {
         age: now,
-        metrics: this.request('GET', `/api/infrastructure-monitoring/catalog/metrics/${plugin}?filter=${filter}`).then(catalogResponse =>
+        metrics: this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin}?filter=${filter}`).then(catalogResponse =>
           catalogResponse.data.map(entry => ({
             'key' : entry.metricId,
             'label' : metricCategory === 1 ? entry.description : entry.label, // built in metrics have nicer labels
@@ -175,7 +175,7 @@ export default class InstanaDatasource {
       `?q=${encodeURIComponent(target.entityQuery)}` +
       `${timeQuery}` +
       `&newApplicationModelEnabled=true`;
-    return this.request('GET', fetchSnapshotTypesUrl);
+    return this.doRequest(fetchSnapshotTypesUrl);
   }
 
   fetchSnapshotsForTarget(target, from, to) {
@@ -213,7 +213,7 @@ export default class InstanaDatasource {
 
   reduceSnapshot(snapshotResponse) {
     // reduce data to used label formatting values
-    snapshotResponse.data = _.pick(snapshotResponse.data, ["id", "label", "plugin", "data"]);
+    snapshotResponse.data = _.pick(snapshotResponse.data, ['id', 'label', 'plugin', 'data']);
     return snapshotResponse;
   }
 
@@ -230,15 +230,15 @@ export default class InstanaDatasource {
   buildLabel(snapshotResponse, host, target) {
     if (target.labelFormat) {
       let label = target.labelFormat;
-      label = _.replace(label, "$label", snapshotResponse.data.label);
-      label = _.replace(label, "$plugin", snapshotResponse.data.plugin); // not documented
-      label = _.replace(label, "$snapshot", snapshotResponse.data.id); // not documented
-      label = _.replace(label, "$host", host ? host : "unknown");
-      label = _.replace(label, "$pid", _.get(snapshotResponse.data, ["data", "pid"], ""));
-      label = _.replace(label, "$type", _.get(snapshotResponse.data, ["data", "type"], ""));
-      label = _.replace(label, "$name", _.get(snapshotResponse.data, ["data", "name"], ""));
-      label = _.replace(label, "$service", _.get(snapshotResponse.data, ["data", "service_name"], ""));
-      label = _.replace(label, "$metric", _.get(target, ["metric", "key"], "n/a"));
+      label = _.replace(label, '$label', snapshotResponse.data.label);
+      label = _.replace(label, '$plugin', snapshotResponse.data.plugin); // not documented
+      label = _.replace(label, '$snapshot', snapshotResponse.data.id); // not documented
+      label = _.replace(label, '$host', host ? host : 'unknown');
+      label = _.replace(label, '$pid', _.get(snapshotResponse.data, ['data', 'pid'], ''));
+      label = _.replace(label, '$type', _.get(snapshotResponse.data, ['data', 'type'], ''));
+      label = _.replace(label, '$name', _.get(snapshotResponse.data, ['data', 'name'], ''));
+      label = _.replace(label, '$service', _.get(snapshotResponse.data, ['data', 'service_name'], ''));
+      label = _.replace(label, '$metric', _.get(target, ['metric', 'key'], 'n/a'));
       return label;
     }
     return snapshotResponse.data.label + this.getHostSuffix(host);
@@ -267,7 +267,7 @@ export default class InstanaDatasource {
   }
 
   testDatasource() {
-    return this.doRequest("/api/snapshots/non-existing-snapshot-id?time=0")
+    return this.doRequest('/api/snapshots/non-existing-snapshot-id?time=0')
     .then(
       // We always expect an error response, either a 404 (Not Found) or a 401 (Unauthorized).
       result => {

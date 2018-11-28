@@ -65,7 +65,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                         return this.$q.resolve();
                     }
                     else {
-
+                        return this.datasource.fetchTypesForTarget(this.target)
                             .then(function (response) {
                             _this.target.queryIsValid = true;
                             _this.snapshots = response.data;
