@@ -24,13 +24,14 @@ export default class InstanaDatasource {
     lastFetchedFromAPI: boolean;
     MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
     CACHE_MAX_AGE: number;
+    CUSTOM_METRICS: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     storeInCache: (query: any, data: any) => void;
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;
     doRequest(url: any, maxRetries?: number): any;
-    getEntityTypes(): Object[];
+    getEntityTypes(metricCategory: any): Object[];
     getMetricsCatalog(plugin: any, metricCategory: any): any;
     query(options: any): any;
     fetchTypesForTarget(target: any): any;

@@ -46,7 +46,7 @@ The settings for Karma are in the karma.conf.js file in the root. If you add any
 ## Publishing a New Version
 
 * Run `yarn install`.
-* Run the full build.
+* Run the full build with `yarn install`.
 * Make sure that the quick check scenario described below works locally.
 * Update `src/plugin.json` with the new version number and the version date.
 * Run the full build again, this should update `dist/plugin.json`.

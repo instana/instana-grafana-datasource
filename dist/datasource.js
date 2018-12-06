@@ -20,6 +20,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     this.rollupDurationThresholds = rollups_1.default;
                     this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
                     this.CACHE_MAX_AGE = 60000;
+                    this.CUSTOM_METRICS = '1';
                     this.storeInCache = function (query, data) {
                         _this.snapshotCache[query] = data;
                     };
@@ -61,7 +62,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         throw error;
                     });
                 };
-                InstanaDatasource.prototype.getEntityTypes = function () {
+                InstanaDatasource.prototype.getEntityTypes = function (metricCategory) {
                     var now = this.currentTime();
                     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
                         this.entityTypesCache = {
@@ -77,16 +78,17 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     return this.entityTypesCache.entityTypes;
                 };
                 InstanaDatasource.prototype.getMetricsCatalog = function (plugin, metricCategory) {
+                    var _this = this;
                     var id = plugin + '|' + metricCategory;
                     var now = this.currentTime();
                     if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
-                        var filter = metricCategory === 1 ? 'custom' : 'builtin';
+                        var filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
                         this.catalogCache[id] = {
                             age: now,
                             metrics: this.doRequest("/api/infrastructure-monitoring/catalog/metrics/" + plugin + "?filter=" + filter).then(function (catalogResponse) {
                                 return catalogResponse.data.map(function (entry) { return ({
                                     'key': entry.metricId,
-                                    'label': metricCategory === 1 ? entry.description : entry.label,
+                                    'label': metricCategory === _this.CUSTOM_METRICS ? entry.description : entry.label,
                                     'entityType': entry.pluginId
                                 }); });
                             })
