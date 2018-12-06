@@ -117,17 +117,16 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                             _this.allCustomMetrics = metrics;
                             _this.onMetricsFilter(refresh);
                         }
-                        _this.adjustMetricSelectionPlaceholder();
                         _this.checkMetricAndRefresh(refresh);
+                        _this.adjustMetricSelectionPlaceholder();
                     });
                 };
                 InstanaQueryCtrl.prototype.onMetricsFilter = function (refresh) {
-                    var _this = this;
                     var filter = this.target.filter ? this.target.filter.toLowerCase() : '';
                     this.availableMetrics =
-                        lodash_1.default.sortBy(lodash_1.default.filter(this.allCustomMetrics, function (metric) { return lodash_1.default.includes(_this.snapshots, metric.entityType) && metric.key.toLowerCase().includes(filter); }), 'key');
-                    this.adjustMetricSelectionPlaceholder();
+                        lodash_1.default.sortBy(lodash_1.default.filter(this.allCustomMetrics, function (metric) { return metric.key.toLowerCase().includes(filter); }), 'key');
                     this.checkMetricAndRefresh(refresh);
+                    this.adjustMetricSelectionPlaceholder();
                 };
                 InstanaQueryCtrl.prototype.checkMetricAndRefresh = function (refresh) {
                     if (this.target.metric && !lodash_1.default.includes(lodash_1.default.map(this.availableMetrics, function (m) { return m.key; }), this.target.metric.key)) {

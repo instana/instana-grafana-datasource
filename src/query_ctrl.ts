@@ -132,8 +132,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
           this.onMetricsFilter(refresh);
         }
 
-        this.adjustMetricSelectionPlaceholder();
         this.checkMetricAndRefresh(refresh);
+        this.adjustMetricSelectionPlaceholder();
       }
     );
   }
@@ -144,11 +144,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
       _.sortBy(
         _.filter(
           this.allCustomMetrics,
-          metric => _.includes(this.snapshots, metric.entityType) && metric.key.toLowerCase().includes(filter)),
+          metric => metric.key.toLowerCase().includes(filter)),
         'key');
 
-    this.adjustMetricSelectionPlaceholder();
     this.checkMetricAndRefresh(refresh);
+    this.adjustMetricSelectionPlaceholder();
   }
 
   checkMetricAndRefresh(refresh) {
