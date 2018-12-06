@@ -22,6 +22,7 @@ export default class InstanaDatasource {
 
   MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
   CACHE_MAX_AGE = 60000;
+  CUSTOM_METRICS = '1';
 
   /** @ngInject */
   constructor(instanceSettings, private backendSrv, private templateSrv, private $q) {
@@ -70,7 +71,7 @@ export default class InstanaDatasource {
       });
   }
 
-  getEntityTypes() {
+  getEntityTypes(metricCategory) {
     const now = this.currentTime();
     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
       this.entityTypesCache = {
@@ -90,13 +91,13 @@ export default class InstanaDatasource {
     const id = plugin + '|' + metricCategory;
     const now = this.currentTime();
     if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
-      const filter = metricCategory === 1 ? 'custom' : 'builtin';
+      const filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
       this.catalogCache[id] = {
         age: now,
         metrics: this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin}?filter=${filter}`).then(catalogResponse =>
           catalogResponse.data.map(entry => ({
             'key' : entry.metricId,
-            'label' : metricCategory === 1 ? entry.description : entry.label, // built in metrics have nicer labels
+            'label' : metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // built in metrics have nicer labels
             'entityType' : entry.pluginId
           }))
         )

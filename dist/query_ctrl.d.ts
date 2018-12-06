@@ -21,8 +21,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     onFilterChange(refresh: any): any;
     onMetricCategorySelect(): void;
     filterForEntityType(refresh: any): void;
-    filterForCustom(refresh: any): void;
     filterEntityTypes(): any;
+    findMatchingEntityTypes(entityType: any): boolean;
     onEntityTypeSelect(refresh: any): any;
     onMetricsFilter(refresh: any): void;
     checkMetricAndRefresh(refresh: any): void;
