@@ -1,5 +1,28 @@
 <query-editor-row query-ctrl="ctrl" can-collapse="false">
   <div class="gf-form">
+    <label class="gf-form-label width-13 pointer" for="in-category-{{ctrl.target.refId}}">
+      Category
+      <info-popover position="top center" mode="right-normal">
+        <p>Select a metric category.</p>
+      </info-popover>
+    </label>
+    <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+      <select id="in-category-{{ctrl.target.refId}}"
+        class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+        ng-model="ctrl.target.metricCategory"
+        ng-change="ctrl.onMetricCategorySelect()">
+        <option value="0" selected>Infrastructure built-in metrics</option>
+        <option value="1">Infrastructure custom metrics</option>
+        <option value="2">Application metrics</option>
+        <option value="3">Website metrics</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- <div ng-include="'query/df.html'"></div> -->
+  <!--  directive ?? -->
+
+  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3'">
     <label class="gf-form-label width-13 pointer" for="in-query-{{ctrl.target.refId}}">
       Query
       <info-popover position="top center" mode="right-normal">
@@ -19,25 +42,7 @@
            spellcheck='false'/>
   </div>
 
-  <div class="gf-form">
-    <label class="gf-form-label width-13 pointer" for="in-category-{{ctrl.target.refId}}">
-      Category
-      <info-popover position="top center" mode="right-normal">
-        <p>Select a metric category.</p>
-      </info-popover>
-    </label>
-    <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
-      <select id="in-category-{{ctrl.target.refId}}"
-              class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-              ng-model="ctrl.target.metricCategory"
-              ng-change="ctrl.onMetricCategorySelect()">
-        <option value="0" selected>Built-in metrics</option>
-        <option value="1">Custom metrics</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '1'">
+  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '1' || ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3'">
     <label class="gf-form-label width-13 pointer" for="in-type-{{ctrl.target.refId}}">
       Type
       <info-popover position="top center" mode="right-normal">
@@ -55,7 +60,7 @@
     </div>
   </div>
 
-  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '0'">
+  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '0' || ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3'">
     <label class="gf-form-label width-13 pointer" for="in-filter-{{ctrl.target.refId}}">
       Filter metric select
       <info-popover position="top center" mode="right-normal">
@@ -90,7 +95,7 @@
     </div>
   </div>
 
-  <div class="gf-form">
+  <div class="gf-form" ng-hide="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3'">
     <label class="gf-form-label width-13 pointer">
       Legend format
       <info-popover position="top center" mode="right-normal">
