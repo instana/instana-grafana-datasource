@@ -40,20 +40,13 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.previousMetricCategory = this.target.metricCategory;
                     if (this.target.entityQuery) {
                         this.onFilterChange(false).then(function () {
-                            // built-in metrics support available metrics on a selected entity type
-                            if (_this.target.entityType && _this.target.metricCategory === _this.BUILT_IN_METRICS) {
+                            // infrastructure metrics support available metrics on a selected entity type
+                            if (_this.target.entityType) {
                                 _this.onEntityTypeSelect(false).then(function () {
                                     if (_this.target.metric) {
                                         _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                                     }
                                 });
-                            }
-                            // custom metrics include their entity type but can be filtered
-                            if (_this.target.metricCategory === _this.CUSTOM_METRICS) {
-                                _this.onMetricsFilter(false);
-                                if (_this.target.metric) {
-                                    _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
-                                }
                             }
                         });
                     }
@@ -69,12 +62,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                             .then(function (response) {
                             _this.target.queryIsValid = true;
                             _this.snapshots = response.data;
-                            if (_this.target.metricCategory === _this.CUSTOM_METRICS) {
-                                _this.filterForCustom(refresh);
-                            }
-                            else if (_this.target.metricCategory === _this.BUILT_IN_METRICS) {
-                                _this.filterForEntityType(refresh);
-                            }
+                            _this.filterForEntityType(refresh);
                         }, function (error) {
                             _this.target.queryIsValid = false;
                             _this.selectionReset();
@@ -103,36 +91,42 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                         }
                     });
                 };
-                InstanaQueryCtrl.prototype.filterForCustom = function (refresh) {
-                    var _this = this;
-                    this.datasource.getMetricsCatalog(this.target.entityType, this.CUSTOM_METRICS).then(function (customMetrics) {
-                        _this.allCustomMetrics = customMetrics;
-                        _this.onMetricsFilter(refresh);
-                    });
-                };
                 InstanaQueryCtrl.prototype.filterEntityTypes = function () {
                     var _this = this;
-                    return this.datasource.getEntityTypes().then(function (entityTypes) {
+                    return this.datasource.getEntityTypes(this.target.metricCategory).then(function (entityTypes) {
                         _this.uniqueEntityTypes =
-                            lodash_1.default.sortBy(lodash_1.default.filter(entityTypes, function (entityType) { return _this.snapshots.find(function (type) { return type === entityType.key; }) && entityType.label != null; }), 'label');
+                            lodash_1.default.sortBy(lodash_1.default.filter(entityTypes, function (entityType) { return _this.findMatchingEntityTypes(entityType); }), 'label');
                     });
+                };
+                InstanaQueryCtrl.prototype.findMatchingEntityTypes = function (entityType) {
+                    // workaround as long the api does not support returning plugins with custom metrics only
+                    if (this.target.metricCategory === this.BUILT_IN_METRICS ||
+                        entityType.key === 'statsd' ||
+                        entityType.key === 'jvmRuntimePlatform' ||
+                        entityType.key === 'dropwizardApplicationContainer') {
+                        return this.snapshots.find(function (type) { return type === entityType.key; }) && entityType.label != null;
+                    }
                 };
                 InstanaQueryCtrl.prototype.onEntityTypeSelect = function (refresh) {
                     var _this = this;
                     return this.datasource.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(function (metrics) {
                         _this.availableMetrics =
                             lodash_1.default.sortBy(metrics, 'key');
-                        _this.adjustMetricSelectionPlaceholder();
+                        // store all metrics in addition for filtering
+                        if (_this.target.metricCategory === _this.CUSTOM_METRICS) {
+                            _this.allCustomMetrics = metrics;
+                            _this.onMetricsFilter(refresh);
+                        }
                         _this.checkMetricAndRefresh(refresh);
+                        _this.adjustMetricSelectionPlaceholder();
                     });
                 };
                 InstanaQueryCtrl.prototype.onMetricsFilter = function (refresh) {
-                    var _this = this;
                     var filter = this.target.filter ? this.target.filter.toLowerCase() : '';
                     this.availableMetrics =
-                        lodash_1.default.sortBy(lodash_1.default.filter(this.allCustomMetrics, function (metric) { return lodash_1.default.includes(_this.snapshots, metric.entityType) && metric.key.toLowerCase().includes(filter); }), 'key');
-                    this.adjustMetricSelectionPlaceholder();
+                        lodash_1.default.sortBy(lodash_1.default.filter(this.allCustomMetrics, function (metric) { return metric.key.toLowerCase().includes(filter); }), 'key');
                     this.checkMetricAndRefresh(refresh);
+                    this.adjustMetricSelectionPlaceholder();
                 };
                 InstanaQueryCtrl.prototype.checkMetricAndRefresh = function (refresh) {
                     if (this.target.metric && !lodash_1.default.includes(lodash_1.default.map(this.availableMetrics, function (m) { return m.key; }), this.target.metric.key)) {
@@ -174,10 +168,6 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     }
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {
-                    if (this.target.metricCategory === this.CUSTOM_METRICS) {
-                        // as there was no type selection upfront, but the metric itself contains the type
-                        this.target.entityType = this.target.metric.entityType;
-                    }
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onLabelChange = function () {

@@ -43,10 +43,18 @@ The settings for Karma are in the karma.conf.js file in the root. If you add any
 
 `yarn test` will start the karma runner and execute all tests in the specs folder.
 
+## Screenshots
+
+The actual screenshots are from https://current-instana.instana.io with "java AND ip-172-31-16-128.ec2.internal" (where ip is removed in screen) as dynamic focus and a sliding time window of 6 hours.
+Showcaseable metrics are
+* Built-In -> Processes -> user.cpu
+* Custom -> Java virtual maschine -> metrics.gauges.gauge.response.healthcheck
+
+
 ## Publishing a New Version
 
 * Run `yarn install`.
-* Run the full build.
+* Run the full build with `yarn install`.
 * Make sure that the quick check scenario described below works locally.
 * Update `src/plugin.json` with the new version number and the version date.
 * Run the full build again, this should update `dist/plugin.json`.
