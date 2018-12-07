@@ -2,6 +2,10 @@
 
 This is a Grafana datasource for showing metrics from Instana AI-Powered APM for dynamic applications.
 
+## Requirements
+
+Attention: For On-premise customers Instana Release 145 is required.
+
 ## Features
 
 - Dynamic Focus queries
@@ -29,15 +33,17 @@ Once you filled in the query the available types dropdown will be automatically 
 
 As you select the type, the available metrics dropdown will be automatically populated, select the metric you want.
 
-If your Dynamic Focus query matches multiple instances then, the returned dataset will include metrics from all those matching instances; providing graphs with multiple plots like the example below.
+If your Dynamic Focus query matches multiple instances then, the returned dataset will include metrics from all those matching instances, providing graphs with multiple plots like the example below.
 
 ![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/complete-query-sml.png)
 
 #### Custom metrics
 
-To choose custom metrics matching your query you need to select "Custom metrics" from the category dropdown, which will automatically populate the available metrics dropdown. As there might be a huge amount of custom metrics, you can specify an optional filter to reduce to a corresponding subset.
+To choose custom metrics matching your query you need to select "Custom metrics" from the category dropdown, which will automatically populate the available types dropdown.
 
-If your Dynamic Focus query matches multiple instances then, the returned dataset will include metrics from all those matching instances; providing graphs with multiple plots like the example below.
+As you select the type, the available metrics dropdown will be automatically populated, select the metric you want. As there might be a huge amount of custom metrics, you can specify an optional filter to reduce to a corresponding subset.
+
+If your Dynamic Focus query matches multiple instances then, the returned dataset will include metrics from all those matching instances, providing graphs with multiple plots like the example below.
 
 ![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/custom-metrics-sml.png)
 
