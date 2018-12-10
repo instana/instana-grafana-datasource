@@ -6,6 +6,16 @@ export interface EntityTypesCache {
   entityTypes: Array<Object>;
 }
 
+export interface WebsitesCache {
+  age: number;
+  websites: Array<Object>;
+}
+
+export interface TagsCache {
+  age: number;
+  tags: Array<Object>;
+}
+
 export default class InstanaDatasource {
   rollupDurationThresholds = rollupDurationThresholds;
   id: number;
@@ -14,6 +24,8 @@ export default class InstanaDatasource {
   apiToken: string;
   currentTime: () => number;
   entityTypesCache: EntityTypesCache;
+  websitesCache: WebsitesCache;
+  websiteTagsCache: TagsCache;
   snapshotCache: Object;
   catalogCache: Object;
   fromFilter: number;
@@ -71,6 +83,25 @@ export default class InstanaDatasource {
       });
   }
 
+  postRequest(url, data, maxRetries = 0) {
+    const request = {
+      method: 'POST',
+      url: this.url + url,
+      data: data
+    };
+    if (this.apiToken) {
+      request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
+    }
+    return this.backendSrv
+      .datasourceRequest(request)
+      .catch(error => {
+        if (maxRetries > 0) {
+          return this.postRequest(url, data, maxRetries - 1);
+        }
+        throw error;
+      });
+  }
+
   getEntityTypes(metricCategory) {
     const now = this.currentTime();
     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
@@ -104,6 +135,51 @@ export default class InstanaDatasource {
       };
     }
     return this.catalogCache[id].metrics;
+  }
+
+  getWebsites() {
+      const now = this.currentTime();
+      if (!this.websitesCache || now - this.websitesCache.age > this.CACHE_MAX_AGE) {
+      const data = {
+        group: {
+          groupbyTag: "beacon.website.name"
+        },
+        order: {
+          by: "pageLoads",
+          direction: "desc"
+        },
+        metrics: [{
+          metric: "pageLoads",
+          aggregation: "sum"
+        }]
+      };
+        this.websitesCache = {
+          age: now,
+          websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
+            websitesResponse.items.map(entry => ({
+              'key' : entry.name,
+              'label' : entry.name
+            }))
+          )
+        };
+      }
+      return this.websitesCache.websites;
+  }
+
+  getWebsiteTags() {
+    const now = this.currentTime();
+    if (!this.websiteTagsCache || now - this.websiteTagsCache.age > this.CACHE_MAX_AGE) {
+      this.websiteTagsCache = {
+        age: now,
+        tags: this.doRequest('/api/website-monitoring/catalog/tags').then(tagsResponse =>
+          tagsResponse.data.map(entry => ({
+            'key' : entry.name,
+            'type' : entry.type
+          }))
+        )
+      };
+    }
+    return this.websiteTagsCache.tags;
   }
 
   query(options) {

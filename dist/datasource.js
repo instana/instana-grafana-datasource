@@ -62,6 +62,26 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         throw error;
                     });
                 };
+                InstanaDatasource.prototype.postRequest = function (url, data, maxRetries) {
+                    var _this = this;
+                    if (maxRetries === void 0) { maxRetries = 0; }
+                    var request = {
+                        method: 'POST',
+                        url: this.url + url,
+                        data: data
+                    };
+                    if (this.apiToken) {
+                        request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
+                    }
+                    return this.backendSrv
+                        .datasourceRequest(request)
+                        .catch(function (error) {
+                        if (maxRetries > 0) {
+                            return _this.postRequest(url, data, maxRetries - 1);
+                        }
+                        throw error;
+                    });
+                };
                 InstanaDatasource.prototype.getEntityTypes = function (metricCategory) {
                     var now = this.currentTime();
                     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
@@ -95,6 +115,49 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         };
                     }
                     return this.catalogCache[id].metrics;
+                };
+                InstanaDatasource.prototype.getWebsites = function () {
+                    var now = this.currentTime();
+                    if (!this.websitesCache || now - this.websitesCache.age > this.CACHE_MAX_AGE) {
+                        var data = {
+                            group: {
+                                groupbyTag: "beacon.website.name"
+                            },
+                            order: {
+                                by: "pageLoads",
+                                direction: "desc"
+                            },
+                            metrics: [{
+                                    metric: "pageLoads",
+                                    aggregation: "sum"
+                                }]
+                        };
+                        this.websitesCache = {
+                            age: now,
+                            websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(function (websitesResponse) {
+                                return websitesResponse.items.map(function (entry) { return ({
+                                    'key': entry.name,
+                                    'label': entry.name
+                                }); });
+                            })
+                        };
+                    }
+                    return this.websitesCache.websites;
+                };
+                InstanaDatasource.prototype.getWebsiteTags = function () {
+                    var now = this.currentTime();
+                    if (!this.websiteTagsCache || now - this.websiteTagsCache.age > this.CACHE_MAX_AGE) {
+                        this.websiteTagsCache = {
+                            age: now,
+                            tags: this.doRequest('/api/website-monitoring/catalog/tags').then(function (tagsResponse) {
+                                return tagsResponse.data.map(function (entry) { return ({
+                                    'key': entry.name,
+                                    'type': entry.type
+                                }); });
+                            })
+                        };
+                    }
+                    return this.websiteTagsCache.tags;
                 };
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;

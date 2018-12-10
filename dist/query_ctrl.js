@@ -30,6 +30,9 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.BUILT_IN_METRICS = '0';
                     this.CUSTOM_METRICS = '1';
                     this.defaults = {};
+                    this.uniqueEntities = [{ key: "key", label: "label" }];
+                    this.uniqueTags = [{ key: "key.number", type: "NUMBER" }, { key: "key.string", type: "STRING" }, { key: "key.boolean", type: "BOOLEAN" }];
+                    this.uniqueOperators = [{ key: "op.equals", label: "equals" }, { key: "key.or", label: "or" }, { key: "key.nothing", label: "NOTHING" }];
                     this.target.pluginId = this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
@@ -128,6 +131,28 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.checkMetricAndRefresh(refresh);
                     this.adjustMetricSelectionPlaceholder();
                 };
+                InstanaQueryCtrl.prototype.onEntitySelect = function (refresh) {
+                    console.log(this.target.entity);
+                };
+                InstanaQueryCtrl.prototype.addFilter = function () {
+                    if (!this.target.filters) {
+                        this.target.filters = [];
+                    }
+                    this.target.filters.push({
+                        id: this.target.filters.length,
+                        name: "key.number",
+                        operator: "op.equals",
+                        stringValue: "",
+                        numberValue: 0,
+                        booleanValue: false
+                    });
+                };
+                InstanaQueryCtrl.prototype.removeFilter = function (index) {
+                    this.target.filters.splice(index, 1);
+                };
+                InstanaQueryCtrl.prototype.onTagFilterChange = function (refresh, index) {
+                    console.log("refresh " + refresh + "-" + index);
+                };
                 InstanaQueryCtrl.prototype.checkMetricAndRefresh = function (refresh) {
                     if (this.target.metric && !lodash_1.default.includes(lodash_1.default.map(this.availableMetrics, function (m) { return m.key; }), this.target.metric.key)) {
                         this.resetMetricSelection();
@@ -145,6 +170,10 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                 InstanaQueryCtrl.prototype.resetEntityTypeSelection = function () {
                     this.target.entityType = null;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
+                };
+                InstanaQueryCtrl.prototype.resetWebsiteSelection = function () {
+                    this.target.entity = null;
+                    this.target.filters = [];
                 };
                 InstanaQueryCtrl.prototype.resetMetricSelection = function () {
                     this.target.metric = null;

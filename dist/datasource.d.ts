@@ -2,6 +2,14 @@ export interface EntityTypesCache {
     age: number;
     entityTypes: Array<Object>;
 }
+export interface WebsitesCache {
+    age: number;
+    websites: Array<Object>;
+}
+export interface TagsCache {
+    age: number;
+    tags: Array<Object>;
+}
 export default class InstanaDatasource {
     private backendSrv;
     private templateSrv;
@@ -17,6 +25,8 @@ export default class InstanaDatasource {
     apiToken: string;
     currentTime: () => number;
     entityTypesCache: EntityTypesCache;
+    websitesCache: WebsitesCache;
+    websiteTagsCache: TagsCache;
     snapshotCache: Object;
     catalogCache: Object;
     fromFilter: number;
@@ -31,8 +41,11 @@ export default class InstanaDatasource {
     wasLastFetchedFromApi: () => boolean;
     setLastFetchedFromApi: (value: any) => void;
     doRequest(url: any, maxRetries?: number): any;
+    postRequest(url: any, data: any, maxRetries?: number): any;
     getEntityTypes(metricCategory: any): Object[];
     getMetricsCatalog(plugin: any, metricCategory: any): any;
+    getWebsites(): Object[];
+    getWebsiteTags(): Object[];
     query(options: any): any;
     fetchTypesForTarget(target: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;

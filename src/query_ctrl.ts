@@ -5,6 +5,15 @@ import _ from 'lodash';
 
 import './css/query_editor.css!';
 
+export interface TagFilter {
+  id: number;
+  name: string;
+  operator: string;
+  stringValue: string;
+  numberValue: number;
+  booleanValue: boolean;
+}
+
 export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
 
@@ -15,6 +24,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
   entitySelectionText: string;
   metricSelectionText: string;
   previousMetricCategory: string;
+  uniqueEntities: Array<Object>;
+  uniqueTags: Array<Object>;
+  uniqueOperators: Array<Object>;
 
   EMPTY_DROPDOWN_TEXT = ' - ';
   BUILT_IN_METRICS = '0';
@@ -26,6 +38,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
   /** @ngInject **/
   constructor($scope, $injector, private templateSrv, private backendSrv, private $q) {
     super($scope, $injector);
+
+    this.uniqueEntities = [{key: "key", label: "label"}];
+    this.uniqueTags = [{key: "key.number", type: "NUMBER"},{key: "key.string", type: "STRING"},{key: "key.boolean", type: "BOOLEAN"}];
+    this.uniqueOperators = [{key: "op.equals", label: "equals"},{key: "key.or", label: "or"},{key: "key.nothing", label: "NOTHING"}];
 
     this.target.pluginId = this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
@@ -43,9 +59,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
         // infrastructure metrics support available metrics on a selected entity type
         if (this.target.entityType) {
           this.onEntityTypeSelect(false).then(() => {
-              if (this.target.metric) {
-                this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
-              }
+            if (this.target.metric) {
+              this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+            }
           });
         }
       });
@@ -151,6 +167,32 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.adjustMetricSelectionPlaceholder();
   }
 
+  onEntitySelect(refresh) {
+    console.log(this.target.entity);
+  }
+
+  addFilter() {
+    if (!this.target.filters) {
+      this.target.filters = [];
+    }
+    this.target.filters.push({
+      id: this.target.filters.length,
+      name: "key.number",
+      operator: "op.equals",
+      stringValue: "",
+      numberValue: 0,
+      booleanValue: false
+    });
+  }
+
+  removeFilter(index) {
+    this.target.filters.splice(index, 1);
+  }
+
+  onTagFilterChange(refresh, index) {
+    console.log("refresh " + refresh + "-" + index);
+  }
+
   checkMetricAndRefresh(refresh) {
     if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
       this.resetMetricSelection();
@@ -169,6 +211,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
   resetEntityTypeSelection() {
     this.target.entityType = null;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
+  }
+
+  resetWebsiteSelection() {
+    this.target.entity = null;
+    this.target.filters = [];
   }
 
   resetMetricSelection() {
