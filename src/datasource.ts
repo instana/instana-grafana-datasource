@@ -34,12 +34,11 @@ export default class InstanaDatasource {
     // 5.3+ wanted to resolve dynamic routes in proxy mode
     const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
     const versions = _.split(version, '.', 2);
-    if (versions[0] >= 5 && versions[1] >= 3) {
+    if (versions[0] >= 5 && versions[1] >= 3 && "http://localhost:8010" !== instanceSettings.jsonData.url) {
       this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
     } else {
       this.url = instanceSettings.jsonData.url;
       this.apiToken = instanceSettings.jsonData.apiToken;
-      console.log(`No proxy mode, send request to ${this.url} directly.`);
     }
 
     this.currentTime = () => { return new Date().getTime(); };
@@ -76,7 +75,7 @@ export default class InstanaDatasource {
     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
       this.entityTypesCache = {
         age: now,
-        entityTypes: this.doRequest('/api/infrastructure-monitoring/catalog/plugins/').then(typesResponse =>
+        entityTypes: this.doRequest('/api/infrastructure-monitoring/catalog/plugins').then(typesResponse =>
           typesResponse.data.map(entry => ({
             'key' : entry.plugin,
             'label' : entry.label

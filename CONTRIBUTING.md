@@ -89,6 +89,7 @@ This should render a chart with two datasets (`node (on host "host-1")` and `nod
 #### Custom metrics
 * Query: `filler`
 * Category: `Custom metrics`
+* Type: `Dropwizard`
 * Filter: ``
 * Metric: `Dropwizard meter (KPI.errors)`
 
