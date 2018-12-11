@@ -74,7 +74,8 @@ This procedure is used to test the Instana Grafana data source before the versio
 * `cd instana-datasource`
 * `docker-compose up mountebank`
 * Create a datasource for Instana in Grafana
-    * URL: `http://mountebank:8010`
+    * URL (Grafana 5.3+): `http://mountebank:8010`
+    * URL (Grafana <5.3): `http://localhost:8010`
     * API Token: `valid-api-token`
 * Create a new dashboard with a graph panel
 
