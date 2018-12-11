@@ -5,7 +5,7 @@ const puppeteer = require('puppeteer');
 describe('When adding the Instana datasource to Grafana', function() {
 
   // Set default values for back end URL and API token. Those will only work for the mountebank server.
-  const instanaUiBackendUrl = process.env.INSTANA_UI_BACKEND_URL || 'http://localhost:8010';
+  const instanaUiBackendUrl = process.env.INSTANA_UI_BACKEND_URL || 'http://mountebank:8010'; // to support docker link
   const instanaApiToken = process.env.INSTANA_API_TOKEN || 'valid-api-token';
 
   this.timeout(10000);
@@ -62,4 +62,3 @@ function randomString(length) {
   for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
   return result;
 }
-

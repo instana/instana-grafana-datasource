@@ -34,7 +34,7 @@ export default class InstanaDatasource {
     // 5.3+ wanted to resolve dynamic routes in proxy mode
     const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
     const versions = _.split(version, '.', 2);
-    if (versions[0] >= 5 && versions[1] >= 3 && "http://localhost:8010" !== instanceSettings.jsonData.url) {
+    if (versions[0] >= 5 && versions[1] >= 3) {
       this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
     } else {
       this.url = instanceSettings.jsonData.url;

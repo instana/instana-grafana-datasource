@@ -33,7 +33,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     // 5.3+ wanted to resolve dynamic routes in proxy mode
                     var version = lodash_1.default.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
                     var versions = lodash_1.default.split(version, '.', 2);
-                    if (versions[0] >= 5 && versions[1] >= 3 && "http://localhost:8010" !== instanceSettings.jsonData.url) {
+                    if (versions[0] >= 5 && versions[1] >= 3) {
                         this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
                     }
                     else {

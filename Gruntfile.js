@@ -4,6 +4,10 @@ module.exports = function(grunt) {
 
   let instanaUiBackendUrl = process.env.INSTANA_UI_BACKEND_URL;
   if (instanaUiBackendUrl) {
+    // to erase docker link support with mountebank :(
+    if ("http://mountebank:8010" === instanaUiBackendUrl) {
+      instanaUiBackendUrl = 'http://localhost:8010';
+    }
     grunt.log.writeln('✅ env var INSTANA_UI_BACKEND_URL set: ' + instanaUiBackendUrl);
   } else {
     instanaUiBackendUrl = 'http://localhost:8010';
