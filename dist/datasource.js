@@ -159,6 +159,25 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     }
                     return this.websiteTagsCache.tags;
                 };
+                InstanaDatasource.prototype.getWebsiteMetricsCatalog = function (plugin, metricCategory) {
+                    var _this = this;
+                    var id = plugin + '|' + metricCategory;
+                    var now = this.currentTime();
+                    if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
+                        var filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
+                        this.catalogCache[id] = {
+                            age: now,
+                            metrics: this.doRequest("/api/infrastructure-monitoring/catalog/metrics/" + plugin + "?filter=" + filter).then(function (catalogResponse) {
+                                return catalogResponse.data.map(function (entry) { return ({
+                                    'key': entry.metricId,
+                                    'label': metricCategory === _this.CUSTOM_METRICS ? entry.description : entry.label,
+                                    'entityType': entry.pluginId
+                                }); });
+                            })
+                        };
+                    }
+                    return this.catalogCache[id].metrics;
+                };
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;
                     if (Object.keys(options.targets[0]).length === 0) {

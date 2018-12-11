@@ -46,6 +46,7 @@ export default class InstanaDatasource {
     getMetricsCatalog(plugin: any, metricCategory: any): any;
     getWebsites(): Object[];
     getWebsiteTags(): Object[];
+    getWebsiteMetricsCatalog(plugin: any, metricCategory: any): any;
     query(options: any): any;
     fetchTypesForTarget(target: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;

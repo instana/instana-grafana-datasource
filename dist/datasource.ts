@@ -26,6 +26,7 @@ export default class InstanaDatasource {
   entityTypesCache: EntityTypesCache;
   websitesCache: WebsitesCache;
   websiteTagsCache: TagsCache;
+  websiteCatalogCache: Object;
   snapshotCache: Object;
   catalogCache: Object;
   fromFilter: number;
@@ -42,6 +43,7 @@ export default class InstanaDatasource {
     this.id = instanceSettings.id;
     this.snapshotCache = {};
     this.catalogCache = {};
+    this.websiteCatalogCache = {};
 
     // 5.3+ wanted to resolve dynamic routes in proxy mode
     const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
@@ -180,6 +182,22 @@ export default class InstanaDatasource {
       };
     }
     return this.websiteTagsCache.tags;
+  }
+
+  getWebsiteMetricsCatalog() {
+    const now = this.currentTime();
+    if (!this.websiteCatalogCache || now - this.websiteCatalogCache.age > this.CACHE_MAX_AGE) {
+      this.websiteCatalogCache = {
+        age: now,
+        metrics: this.doRequest('/api/website-monitoring/catalog/metrics').then(catalogResponse =>
+          catalogResponse.data.map(entry => ({
+            'key' : entry.metricId,
+            'label' : entry.label
+          }))
+        )
+      };
+    }
+    return this.websiteCatalogCache.metrics;
   }
 
   query(options) {
