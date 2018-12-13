@@ -45,7 +45,7 @@ The settings for Karma are in the karma.conf.js file in the root. If you add any
 
 ## Screenshots
 
-The actual screenshots are from https://current-instana.instana.io with "java AND ip-172-31-16-128.ec2.internal" (where ip is removed in screen) as dynamic focus and a sliding time window of 6 hours.
+The actual screenshots are from https://current-instana.instana.io with "java AND one IP" (where the ip is removed in screen) as dynamic focus and a sliding time window of 6 hours.
 Showcaseable metrics are
 * Built-In -> Processes -> user.cpu
 * Custom -> Java virtual maschine -> metrics.gauges.gauge.response.healthcheck
@@ -74,7 +74,8 @@ This procedure is used to test the Instana Grafana data source before the versio
 * `cd instana-datasource`
 * `docker-compose up mountebank`
 * Create a datasource for Instana in Grafana
-    * URL: `http://localhost:8010`
+    * URL (Grafana 5.3+): `http://mountebank:8010`
+    * URL (Grafana <5.3): `http://localhost:8010`
     * API Token: `valid-api-token`
 * Create a new dashboard with a graph panel
 
@@ -89,6 +90,7 @@ This should render a chart with two datasets (`node (on host "host-1")` and `nod
 #### Custom metrics
 * Query: `filler`
 * Category: `Custom metrics`
+* Type: `Dropwizard`
 * Filter: ``
 * Metric: `Dropwizard meter (KPI.errors)`
 

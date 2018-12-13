@@ -11,6 +11,11 @@ export interface WebsitesCache {
   websites: Array<Object>;
 }
 
+export interface MetricsCatalogCache {
+  age: number;
+  metrics: Array<Object>;
+}
+
 export interface TagsCache {
   age: number;
   tags: Array<Object>;
@@ -26,7 +31,7 @@ export default class InstanaDatasource {
   entityTypesCache: EntityTypesCache;
   websitesCache: WebsitesCache;
   websiteTagsCache: TagsCache;
-  websiteCatalogCache: Object;
+  websiteCatalogCache: MetricsCatalogCache;
   snapshotCache: Object;
   catalogCache: Object;
   fromFilter: number;
@@ -43,7 +48,6 @@ export default class InstanaDatasource {
     this.id = instanceSettings.id;
     this.snapshotCache = {};
     this.catalogCache = {};
-    this.websiteCatalogCache = {};
 
     // 5.3+ wanted to resolve dynamic routes in proxy mode
     const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
@@ -53,7 +57,6 @@ export default class InstanaDatasource {
     } else {
       this.url = instanceSettings.jsonData.url;
       this.apiToken = instanceSettings.jsonData.apiToken;
-      console.log(`No proxy mode, send request to ${this.url} directly.`);
     }
 
     this.currentTime = () => { return new Date().getTime(); };
@@ -109,7 +112,7 @@ export default class InstanaDatasource {
     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
       this.entityTypesCache = {
         age: now,
-        entityTypes: this.doRequest('/api/infrastructure-monitoring/catalog/plugins/').then(typesResponse =>
+        entityTypes: this.doRequest('/api/infrastructure-monitoring/catalog/plugins').then(typesResponse =>
           typesResponse.data.map(entry => ({
             'key' : entry.plugin,
             'label' : entry.label

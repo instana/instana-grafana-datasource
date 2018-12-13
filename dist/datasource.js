@@ -39,7 +39,6 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     else {
                         this.url = instanceSettings.jsonData.url;
                         this.apiToken = instanceSettings.jsonData.apiToken;
-                        console.log("No proxy mode, send request to " + this.url + " directly.");
                     }
                     this.currentTime = function () { return new Date().getTime(); };
                 }
@@ -87,7 +86,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
                         this.entityTypesCache = {
                             age: now,
-                            entityTypes: this.doRequest('/api/infrastructure-monitoring/catalog/plugins/').then(function (typesResponse) {
+                            entityTypes: this.doRequest('/api/infrastructure-monitoring/catalog/plugins').then(function (typesResponse) {
                                 return typesResponse.data.map(function (entry) { return ({
                                     'key': entry.plugin,
                                     'label': entry.label
@@ -159,24 +158,20 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     }
                     return this.websiteTagsCache.tags;
                 };
-                InstanaDatasource.prototype.getWebsiteMetricsCatalog = function (plugin, metricCategory) {
-                    var _this = this;
-                    var id = plugin + '|' + metricCategory;
+                InstanaDatasource.prototype.getWebsiteMetricsCatalog = function () {
                     var now = this.currentTime();
-                    if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
-                        var filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
-                        this.catalogCache[id] = {
+                    if (!this.websiteCatalogCache || now - this.websiteCatalogCache.age > this.CACHE_MAX_AGE) {
+                        this.websiteCatalogCache = {
                             age: now,
-                            metrics: this.doRequest("/api/infrastructure-monitoring/catalog/metrics/" + plugin + "?filter=" + filter).then(function (catalogResponse) {
+                            metrics: this.doRequest('/api/website-monitoring/catalog/metrics').then(function (catalogResponse) {
                                 return catalogResponse.data.map(function (entry) { return ({
                                     'key': entry.metricId,
-                                    'label': metricCategory === _this.CUSTOM_METRICS ? entry.description : entry.label,
-                                    'entityType': entry.pluginId
+                                    'label': entry.label
                                 }); });
                             })
                         };
                     }
-                    return this.catalogCache[id].metrics;
+                    return this.websiteCatalogCache.metrics;
                 };
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;

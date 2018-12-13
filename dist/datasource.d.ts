@@ -6,6 +6,10 @@ export interface WebsitesCache {
     age: number;
     websites: Array<Object>;
 }
+export interface MetricsCatalogCache {
+    age: number;
+    metrics: Array<Object>;
+}
 export interface TagsCache {
     age: number;
     tags: Array<Object>;
@@ -27,6 +31,7 @@ export default class InstanaDatasource {
     entityTypesCache: EntityTypesCache;
     websitesCache: WebsitesCache;
     websiteTagsCache: TagsCache;
+    websiteCatalogCache: MetricsCatalogCache;
     snapshotCache: Object;
     catalogCache: Object;
     fromFilter: number;
@@ -46,7 +51,7 @@ export default class InstanaDatasource {
     getMetricsCatalog(plugin: any, metricCategory: any): any;
     getWebsites(): Object[];
     getWebsiteTags(): Object[];
-    getWebsiteMetricsCatalog(plugin: any, metricCategory: any): any;
+    getWebsiteMetricsCatalog(): Object[];
     query(options: any): any;
     fetchTypesForTarget(target: any): any;
     fetchSnapshotsForTarget(target: any, from: any, to: any): any;

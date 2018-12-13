@@ -119,7 +119,7 @@
       "predicates": [{
         "equals": {
           "method": "GET",
-          "path": "/api/metricsCatalog/custom"
+          "path": "/api/infrastructure-monitoring/catalog/plugins"
         }
       }],
       "responses": [{
@@ -130,7 +130,51 @@
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
           },
-          "body": "[{\"formatter\": \"NUMBER\",\"label\": \"Dropwizard meter service.errors\",\"description\": \"Dropwizard meter\",\"metricId\": \"service.errors\",\"pluginId\": \"jvmRuntimePlatform\"},{\"formatter\": \"NUMBER\",\"label\": \"Dropwizard meter KPI.errors\",\"description\": \"Dropwizard meter\",\"metricId\": \"KPI.errors\",\"pluginId\": \"dropwizardApplicationContainer\"},{\"formatter\": \"MILLIS\",\"label\": \"Dropwizard timer (99th)\",\"description\":\"Dropwizard timer, 99th percentile\",\"metricId\": \"KPI.time.99th\",\"pluginId\": \"dropwizardApplicationContainer\"}]"
+          "body": "[{\"plugin\": \"host\", \"label\": \"Host\"}, {\"plugin\": \"process\", \"label\": \"Process\"}, {\"plugin\": \"awsEc\", \"label\": \"AWS ElastiCache instance\"}, {\"plugin\": \"hadoopYARN\", \"label\": \"Hadoop YARN\"}, {\"plugin\": \"dropwizardApplicationContainer\", \"label\": \"Dropwizard\"}]"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/infrastructure-monitoring/catalog/metrics/process",
+          "query": {
+            "filter": "builtin"
+          }
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "[{\"formatter\": \"NUMBER\",\"label\": \"Virtual\",\"description\": \"Virtual\",\"metricId\": \"mem.virtual\",\"pluginId\": \"process\"}, {\"formatter\": \"NUMBER\",\"label\": \"CPU\",\"description\": \"CPU\",\"metricId\": \"cpu.user\",\"pluginId\": \"process\"}, {\"formatter\": \"NUMBER\",\"label\": \"CPU\",\"description\": \"CPU\",\"metricId\": \"cpu.sys\",\"pluginId\": \"process\"}]"
+        }
+      }]
+    },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/infrastructure-monitoring/catalog/metrics/dropwizardApplicationContainer",
+          "query": {
+            "filter": "custom"
+          }
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "[{\"formatter\": \"NUMBER\",\"label\": \"Dropwizard meter service.errors\",\"description\": \"Dropwizard meter\",\"metricId\": \"service.errors\",\"pluginId\": \"dropwizardApplicationContainer\"},{\"formatter\": \"NUMBER\",\"label\": \"Dropwizard meter KPI.errors\",\"description\": \"Dropwizard meter\",\"metricId\": \"KPI.errors\",\"pluginId\": \"dropwizardApplicationContainer\"},{\"formatter\": \"MILLIS\",\"label\": \"Dropwizard timer (99th)\",\"description\":\"Dropwizard timer, 99th percentile\",\"metricId\": \"KPI.time.99th\",\"pluginId\": \"dropwizardApplicationContainer\"}]"
         }
       }]
     },
