@@ -49,6 +49,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         method: 'GET',
                         url: this.url + url
                     };
+                    // TODO request['headers'] = { ClientGroup: 'Grafana 2.0.1' };
                     if (this.apiToken) {
                         request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
                     }
@@ -69,6 +70,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         url: this.url + url,
                         data: data
                     };
+                    // TODO request['headers'] = { ClientGroup: 'Grafana 2.0.1' };
                     if (this.apiToken) {
                         request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
                     }
@@ -134,7 +136,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         this.websitesCache = {
                             age: now,
                             websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(function (websitesResponse) {
-                                return websitesResponse.items.map(function (entry) { return ({
+                                return websitesResponse.data.items.map(function (entry) { return ({
                                     'key': entry.name,
                                     'label': entry.name
                                 }); });
@@ -166,7 +168,8 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                             metrics: this.doRequest('/api/website-monitoring/catalog/metrics').then(function (catalogResponse) {
                                 return catalogResponse.data.map(function (entry) { return ({
                                     'key': entry.metricId,
-                                    'label': entry.label
+                                    'label': entry.label,
+                                    'entityType': 'website'
                                 }); });
                             })
                         };
@@ -296,6 +299,33 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     var rollup = this.getDefaultMetricRollupDuration(from, to).rollup;
                     var url = "/api/metrics?metric=" + metric + "&from=" + from + "&to=" + to + "&rollup=" + rollup + "&snapshotId=" + snapshotId;
                     return this.doRequest(url);
+                };
+                InstanaDatasource.prototype.fetchMetricsForEntity = function (target, from, to) {
+                    var granularity = 1; // TODO calc from & to max (800)
+                    var tagFilters = [{
+                            name: "beacon.website.name",
+                            operator: "EQUALS",
+                            value: target.entity
+                        }];
+                    target.filters.forEach(function (filter) {
+                        // TODO add more tagFilters
+                        console.log('filter' + filter);
+                    });
+                    var data = {
+                        group: {
+                            groupbyTag: target.group
+                        },
+                        tagFilters: tagFilters,
+                        order: {
+                            by: target.metric.key,
+                            direction: "desc"
+                        },
+                        metrics: [{
+                                metric: target.metric.key,
+                                aggregation: "sum"
+                            }]
+                    };
+                    return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {
                     throw new Error('Annotation Support not implemented yet.');

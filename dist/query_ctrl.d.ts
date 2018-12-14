@@ -26,6 +26,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     EMPTY_DROPDOWN_TEXT: string;
     BUILT_IN_METRICS: string;
     CUSTOM_METRICS: string;
+    APPLICATION_METRICS: string;
+    WEBSITE_METRICS: string;
     defaults: {};
     /** @ngInject **/
     constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any, $q: any);
@@ -43,7 +45,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     checkMetricAndRefresh(refresh: any): void;
     selectionReset(): void;
     resetEntityTypeSelection(): void;
-    resetWebsiteSelection(): void;
+    resetEntitySelection(): void;
     resetMetricSelection(): void;
     adjustEntitySelectionPlaceholder(): void;
     adjustMetricSelectionPlaceholder(): void;

@@ -31,6 +31,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
   EMPTY_DROPDOWN_TEXT = ' - ';
   BUILT_IN_METRICS = '0';
   CUSTOM_METRICS = '1';
+  APPLICATION_METRICS = '2';
+  WEBSITE_METRICS = '3';
 
   defaults = {
   };
@@ -39,9 +41,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   constructor($scope, $injector, private templateSrv, private backendSrv, private $q) {
     super($scope, $injector);
 
-    this.uniqueEntities = [{key: "key", label: "label"}];
-    this.uniqueTags = [{key: "key.number", type: "NUMBER"},{key: "key.string", type: "STRING"},{key: "key.boolean", type: "BOOLEAN"}];
-    this.uniqueOperators = [{key: "op.equals", label: "equals"},{key: "key.or", label: "or"},{key: "key.nothing", label: "NOTHING"}];
 
     this.target.pluginId = this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
@@ -53,6 +52,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
     this.previousMetricCategory = this.target.metricCategory;
 
+    // infrastructure
     if (this.target.entityQuery) {
       this.onFilterChange(false).then(() => {
 
@@ -65,6 +65,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
           });
         }
       });
+    }
+
+    // websites & application
+    if (this.target.entity) {
+
     }
   }
 
@@ -95,6 +100,30 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.selectionReset();
       this.onFilterChange(true);
     }
+
+    if (this.target.metricCategory === this.WEBSITE_METRICS) {
+      this.uniqueOperators = [
+        { key: "op.equals", label: "equals", type: "STRING" },
+        { key: "key.contains", label: "contains", type: "STRING" },
+        { key: "key.less", label: "LESS", type: "NUMBER" }
+      ];
+      this.datasource.getWebsites().then(
+        websites => {
+          this.uniqueEntities = websites;
+        }
+      );
+      this.datasource.getWebsiteTags().then(
+        websiteTags => {
+          this.uniqueTags = websiteTags;
+        }
+      );
+      this.datasource.getWebsiteMetricsCatalog().then(
+        metrics => {
+          this.availableMetrics = metrics;
+        }
+      );
+    }
+
     this.previousMetricCategory = this.target.metricCategory;
   }
 
@@ -168,7 +197,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onEntitySelect(refresh) {
-    console.log(this.target.entity);
+    this.resetEntitySelection();
   }
 
   addFilter() {
@@ -213,9 +242,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
   }
 
-  resetWebsiteSelection() {
+  resetEntitySelection() {
     this.target.entity = null;
     this.target.filters = [];
+
+    this.availableMetrics = [];
   }
 
   resetMetricSelection() {

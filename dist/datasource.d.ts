@@ -61,6 +61,7 @@ export default class InstanaDatasource {
     buildLabel(snapshotResponse: any, host: any, target: any): any;
     getHostSuffix(host: any): string;
     fetchMetricsForSnapshot(snapshotId: any, metric: any, from: any, to: any): any;
+    fetchMetricsForEntity(target: any, from: any, to: any): any;
     annotationQuery(options: any): void;
     metricFindQuery(query: string): void;
     testDatasource(): any;

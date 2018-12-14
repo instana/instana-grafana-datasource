@@ -33,7 +33,7 @@
   "routes": [
     {
       "path": "instana",
-      "method": "GET",
+      "method": "*",
       "url": "{{.JsonData.url}}",
       "headers": [
           {"name": "Authorization", "content": "apiToken {{.JsonData.apiToken}}"}

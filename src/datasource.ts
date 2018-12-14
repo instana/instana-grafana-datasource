@@ -75,6 +75,7 @@ export default class InstanaDatasource {
       method: 'GET',
       url: this.url + url
     };
+    // TODO request['headers'] = { ClientGroup: 'Grafana 2.0.1' };
     if (this.apiToken) {
       request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
     }
@@ -94,6 +95,7 @@ export default class InstanaDatasource {
       url: this.url + url,
       data: data
     };
+    // TODO request['headers'] = { ClientGroup: 'Grafana 2.0.1' };
     if (this.apiToken) {
       request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
     }
@@ -161,7 +163,7 @@ export default class InstanaDatasource {
         this.websitesCache = {
           age: now,
           websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
-            websitesResponse.items.map(entry => ({
+            websitesResponse.data.items.map(entry => ({
               'key' : entry.name,
               'label' : entry.name
             }))
@@ -195,7 +197,8 @@ export default class InstanaDatasource {
         metrics: this.doRequest('/api/website-monitoring/catalog/metrics').then(catalogResponse =>
           catalogResponse.data.map(entry => ({
             'key' : entry.metricId,
-            'label' : entry.label
+            'label' : entry.label,
+            'entityType' : 'website'
           }))
         )
       };
@@ -207,6 +210,20 @@ export default class InstanaDatasource {
     if (Object.keys(options.targets[0]).length === 0) {
       return this.$q.resolve({ data: [] });
     }
+
+    // TODO FIXME DOIT ...
+    _.map(options.targets, target => {
+      if (target.category === this.WEBSITE_METRICS) {
+        this.fetchMetricsForEntity(target, 0, 1).then(response => {
+          const website = response.data.items.name;
+          const timeseries = response.data.items.metrics;
+          console.log(website + " " + timeseries.stringify());
+        });
+        return this.$q.resolve({ data: [] });
+      }
+    });
+
+
 
     // Convert ISO 8601 timestamps to millis.
     this.fromFilter  = new Date(options.range.from).getTime();
@@ -354,6 +371,36 @@ export default class InstanaDatasource {
     const url = `/api/metrics?metric=${metric}&from=${from}&to=${to}&rollup=${rollup}&snapshotId=${snapshotId}`;
 
     return this.doRequest(url);
+  }
+
+  fetchMetricsForEntity(target, from, to) {
+    const granularity = 1; // TODO calc from & to max (800)
+    const tagFilters = [{
+      name: "beacon.website.name",
+      operator: "EQUALS",
+      value: target.entity
+    }];
+    if (target.filters) {
+      target.filters.forEach(filter => {
+        // TODO add more tagFilters
+        console.log('filter' + filter);
+      });
+    }
+    const data = {
+      group: {
+        groupbyTag: target.group
+      },
+      tagFilters: tagFilters,
+      order: {
+        by: target.metric.key,
+        direction: "desc"
+      },
+      metrics: [{
+        metric: target.metric.key,
+        aggregation: "sum"
+      }]
+    };
+    return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
   }
 
   annotationQuery(options) {
