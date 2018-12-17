@@ -19,6 +19,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     this.$q = $q;
                     this.rollupDurationThresholds = rollups_1.default;
                     this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
+                    this.MAX_NUMBER_OF_RESULTS = 600;
                     this.CACHE_MAX_AGE = 60000;
                     this.CUSTOM_METRICS = '1';
                     this.WEBSITE_METRICS = '3';
@@ -183,32 +184,30 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     if (Object.keys(options.targets[0]).length === 0) {
                         return this.$q.resolve({ data: [] });
                     }
+                    // Convert ISO 8601 timestamps to millis.
+                    this.fromFilter = new Date(options.range.from).getTime();
+                    this.toFilter = new Date(options.range.to).getTime();
                     // TODO FIXME DOIT ...
                     if (true) {
                         return this.$q.all(lodash_1.default.map(options.targets, function (target) {
                             if (target.metricCategory === _this.WEBSITE_METRICS) {
-                                var metrics = _this.fetchMetricsForEntity(target, 0, 1).then(function (response) {
-                                    var websiteResults = response.data.items.map(function (item) {
-                                        var mapy = lodash_1.default.map(item.metrics, function (value, key) {
+                                return _this.fetchMetricsForEntity(target, _this.fromFilter, _this.toFilter).then(function (response) {
+                                    // as we map two times we need to flatten the result
+                                    return lodash_1.default.flatten(response.data.items.map(function (item) {
+                                        return lodash_1.default.map(item.metrics, function (value, key) {
                                             return {
                                                 'target': item.name.replace(/"/g, '') + '.' + key,
                                                 'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
                                             };
                                         });
-                                        return mapy;
-                                    });
-                                    return websiteResults;
+                                    }));
                                 });
-                                return metrics;
                             }
                         })).then(function (results) {
                             // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
                             return { data: [].concat.apply([], results) };
                         });
                     }
-                    // Convert ISO 8601 timestamps to millis.
-                    this.fromFilter = new Date(options.range.from).getTime();
-                    this.toFilter = new Date(options.range.to).getTime();
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
                         // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
                         return _this.fetchSnapshotsForTarget(target, _this.fromFilter, _this.toFilter)
@@ -326,7 +325,10 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     return this.doRequest(url);
                 };
                 InstanaDatasource.prototype.fetchMetricsForEntity = function (target, from, to) {
-                    var granularity = 1; // TODO calc from & to max (800)
+                    // new api is limited to MAX_NUMBER_OF_RESULTS results
+                    var windowSize = to - from;
+                    var bestGuess = lodash_1.default.toInteger(windowSize / 1000 / this.MAX_NUMBER_OF_RESULTS);
+                    var granularity = bestGuess < 1 ? 1 : bestGuess; // at least a second
                     // TODO remove
                     if (!target.metric) {
                         return [];
@@ -334,14 +336,17 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     var tagFilters = [{
                             name: "beacon.website.name",
                             operator: "EQUALS",
-                            value: "Shop Shop"
+                            value: target.entity
                         }];
-                    if (target.filters) {
-                        target.filters.forEach(function (filter) {
-                            // TODO add more tagFilters
-                            console.log('filter' + filter);
-                        });
-                    }
+                    lodash_1.default.forEach(target.filters, function (filter) {
+                        // TODO type for value
+                        var tagFilter = {
+                            name: filter.name,
+                            operator: filter.operator,
+                            value: filter.stringValue
+                        };
+                        tagFilters.push(tagFilter);
+                    });
                     // TODO add timeframe
                     // TODO groupbyTag: target.group
                     var data = {

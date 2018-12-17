@@ -85,9 +85,9 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     }
                     if (this.target.metricCategory === this.WEBSITE_METRICS) {
                         this.uniqueOperators = [
-                            { key: "op.equals", label: "equals", type: "STRING" },
-                            { key: "key.contains", label: "contains", type: "STRING" },
-                            { key: "key.less", label: "LESS", type: "NUMBER" }
+                            { key: "EQUALS", label: "equals", type: "STRING" },
+                            { key: "CONTAINS", label: "contains", type: "STRING" },
+                            { key: "LESS", label: "less than", type: "NUMBER" }
                         ];
                         this.datasource.getWebsites().then(function (websites) {
                             _this.uniqueEntities = websites;
@@ -160,8 +160,8 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     }
                     this.target.filters.push({
                         id: this.target.filters.length,
-                        name: "key.number",
-                        operator: "op.equals",
+                        name: "",
+                        operator: "",
                         stringValue: "",
                         numberValue: 0,
                         booleanValue: false
@@ -172,6 +172,8 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                 };
                 InstanaQueryCtrl.prototype.onTagFilterChange = function (refresh, index) {
                     console.log("refresh " + refresh + "-" + index);
+                    // TODO validate dat filter, before
+                    this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.checkMetricAndRefresh = function (refresh) {
                     if (this.target.metric && !lodash_1.default.includes(lodash_1.default.map(this.availableMetrics, function (m) { return m.key; }), this.target.metric.key)) {

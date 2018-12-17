@@ -103,9 +103,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     if (this.target.metricCategory === this.WEBSITE_METRICS) {
       this.uniqueOperators = [
-        { key: "op.equals", label: "equals", type: "STRING" },
-        { key: "key.contains", label: "contains", type: "STRING" },
-        { key: "key.less", label: "LESS", type: "NUMBER" }
+        { key: "EQUALS", label: "equals", type: "STRING" },
+        { key: "CONTAINS", label: "contains", type: "STRING" },
+        { key: "LESS", label: "less than", type: "NUMBER" }
       ];
       this.datasource.getWebsites().then(
         websites => {
@@ -206,8 +206,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
     this.target.filters.push({
       id: this.target.filters.length,
-      name: "key.number",
-      operator: "op.equals",
+      name: "",
+      operator: "",
       stringValue: "",
       numberValue: 0,
       booleanValue: false
@@ -220,6 +220,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   onTagFilterChange(refresh, index) {
     console.log("refresh " + refresh + "-" + index);
+    // TODO validate dat filter, before
+    this.panelCtrl.refresh();
   }
 
   checkMetricAndRefresh(refresh) {

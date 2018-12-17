@@ -38,6 +38,7 @@ export default class InstanaDatasource {
     toFilter: number;
     lastFetchedFromAPI: boolean;
     MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
+    MAX_NUMBER_OF_RESULTS: number;
     CACHE_MAX_AGE: number;
     CUSTOM_METRICS: string;
     WEBSITE_METRICS: string;

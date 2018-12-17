@@ -39,6 +39,7 @@ export default class InstanaDatasource {
   lastFetchedFromAPI: boolean;
 
   MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
+  MAX_NUMBER_OF_RESULTS = 600;
   CACHE_MAX_AGE = 60000;
   CUSTOM_METRICS = '1';
   WEBSITE_METRICS = '3';
@@ -213,24 +214,26 @@ export default class InstanaDatasource {
       return this.$q.resolve({ data: [] });
     }
 
+    // Convert ISO 8601 timestamps to millis.
+    this.fromFilter  = new Date(options.range.from).getTime();
+    this.toFilter = new Date(options.range.to).getTime();
+
     // TODO FIXME DOIT ...
     if (true) {
       return this.$q.all(
         _.map(options.targets, target => {
           if (target.metricCategory === this.WEBSITE_METRICS) {
-            var metrics = this.fetchMetricsForEntity(target, 0, 1).then(response => {
-              var websiteResults = response.data.items.map(item => {
-                var mapy = _.map(item.metrics, function(value, key) {
+            return this.fetchMetricsForEntity(target, this.fromFilter, this.toFilter).then(response => {
+              // as we map two times we need to flatten the result
+              return _.flatten(response.data.items.map(item => {
+                return _.map(item.metrics, function(value, key) {
                   return {
                     'target': item.name.replace(/"/g, '') + '.' + key, // TODO remove in API
                     'datapoints': _.map(value, metric => [metric[1], metric[0]])
                   };
                 });
-                return mapy;
-              });
-              return websiteResults;
+              }));
             });
-            return metrics;
           }
         })
       ).then(results => {
@@ -239,9 +242,6 @@ export default class InstanaDatasource {
       });
     }
 
-    // Convert ISO 8601 timestamps to millis.
-    this.fromFilter  = new Date(options.range.from).getTime();
-    this.toFilter = new Date(options.range.to).getTime();
     return this.$q.all(
       _.map(options.targets, target => {
         // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
@@ -388,31 +388,41 @@ export default class InstanaDatasource {
   }
 
   fetchMetricsForEntity(target, from, to) {
-    const granularity = 1; // TODO calc from & to max (800)
+    // new api is limited to MAX_NUMBER_OF_RESULTS results
+    const windowSize = to - from;
+    const bestGuess = _.toInteger(windowSize / 1000 / this.MAX_NUMBER_OF_RESULTS);
+    const granularity = bestGuess < 1 ? 1 : bestGuess; // at least a second
 
-// TODO remove
+    // TODO remove
     if (!target.metric) {
       return [];
     }
 
-
     const tagFilters = [{
       name: "beacon.website.name",
       operator: "EQUALS",
-      value: "Shop Shop"
+      value: target.entity
     }];
-    if (target.filters) {
-      target.filters.forEach(filter => {
-        // TODO add more tagFilters
-        console.log('filter' + filter);
-      });
-    }
-    // TODO add timeframe
+    _.forEach(target.filters, filter => {
+      // TODO type for value
+      const tagFilter = {
+        name: filter.name,
+        operator: filter.operator,
+        value: filter.stringValue
+      };
+      tagFilters.push(tagFilter);
+    });
+
+    // TODO windowsize fixing
     // TODO groupbyTag: target.group
     const data = {
       group: {
         groupbyTag: "beacon.page.name"
       },
+      timeFrame: {
+        to: to,
+        windowSize: windowSize
+	    },
       tagFilters: tagFilters,
       metrics: [{
         metric: target.metric.key,
