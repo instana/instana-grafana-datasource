@@ -139,8 +139,8 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                             age: now,
                             websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(function (websitesResponse) {
                                 return websitesResponse.data.items.map(function (entry) { return ({
-                                    'key': entry.name,
-                                    'label': entry.name
+                                    'key': entry.name.replace(/"/g, ''),
+                                    'label': entry.name.replace(/"/g, '')
                                 }); });
                             })
                         };
@@ -184,17 +184,28 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         return this.$q.resolve({ data: [] });
                     }
                     // TODO FIXME DOIT ...
-                    lodash_1.default.map(options.targets, function (target) {
-                        if (target.metricCategory === _this.WEBSITE_METRICS) {
-                            _this.fetchMetricsForEntity(target, 0, 1).then(function (response) {
-                                response.data.items.map(function (_a) {
-                                    var name = _a.name, metrics = _a.metrics;
-                                    console.log(name + " " + metrics.stringify());
+                    if (true) {
+                        return this.$q.all(lodash_1.default.map(options.targets, function (target) {
+                            if (target.metricCategory === _this.WEBSITE_METRICS) {
+                                var metrics = _this.fetchMetricsForEntity(target, 0, 1).then(function (response) {
+                                    var websiteResults = response.data.items.map(function (item) {
+                                        var mapy = lodash_1.default.map(item.metrics, function (value, key) {
+                                            return {
+                                                'target': item.name.replace(/"/g, '') + '.' + key,
+                                                'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
+                                            };
+                                        });
+                                        return mapy;
+                                    });
+                                    return websiteResults;
                                 });
-                            });
-                            return _this.$q.resolve({ data: [] });
-                        }
-                    });
+                                return metrics;
+                            }
+                        })).then(function (results) {
+                            // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+                            return { data: [].concat.apply([], results) };
+                        });
+                    }
                     // Convert ISO 8601 timestamps to millis.
                     this.fromFilter = new Date(options.range.from).getTime();
                     this.toFilter = new Date(options.range.to).getTime();
@@ -316,7 +327,10 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                 };
                 InstanaDatasource.prototype.fetchMetricsForEntity = function (target, from, to) {
                     var granularity = 1; // TODO calc from & to max (800)
-                    // TODO target.entity
+                    // TODO remove
+                    if (!target.metric) {
+                        return [];
+                    }
                     var tagFilters = [{
                             name: "beacon.website.name",
                             operator: "EQUALS",
@@ -335,10 +349,6 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                             groupbyTag: "beacon.page.name"
                         },
                         tagFilters: tagFilters,
-                        order: {
-                            by: target.metric.key,
-                            direction: "desc"
-                        },
                         metrics: [{
                                 metric: target.metric.key,
                                 aggregation: "sum",

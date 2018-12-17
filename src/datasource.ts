@@ -166,8 +166,8 @@ export default class InstanaDatasource {
           age: now,
           websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
             websitesResponse.data.items.map(entry => ({
-              'key' : entry.name,
-              'label' : entry.name
+              'key' : entry.name.replace(/"/g, ''), // TODO FIXME in API
+              'label' : entry.name.replace(/"/g, '')
             }))
           )
         };
@@ -214,16 +214,30 @@ export default class InstanaDatasource {
     }
 
     // TODO FIXME DOIT ...
-    _.map(options.targets, target => {
-      if (target.metricCategory === this.WEBSITE_METRICS) {
-        this.fetchMetricsForEntity(target, 0, 1).then(response => {
-          response.data.items.map(({name, metrics}) => {
-            console.log(name + " " + metrics.stringify());
-          });
-        });
-        return this.$q.resolve({ data: [] });
-      }
-    });
+    if (true) {
+      return this.$q.all(
+        _.map(options.targets, target => {
+          if (target.metricCategory === this.WEBSITE_METRICS) {
+            var metrics = this.fetchMetricsForEntity(target, 0, 1).then(response => {
+              var websiteResults = response.data.items.map(item => {
+                var mapy = _.map(item.metrics, function(value, key) {
+                  return {
+                    'target': item.name.replace(/"/g, '') + '.' + key, // TODO remove in API
+                    'datapoints': _.map(value, metric => [metric[1], metric[0]])
+                  };
+                });
+                return mapy;
+              });
+              return websiteResults;
+            });
+            return metrics;
+          }
+        })
+      ).then(results => {
+        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+        return { data: [].concat.apply([], results) };
+      });
+    }
 
     // Convert ISO 8601 timestamps to millis.
     this.fromFilter  = new Date(options.range.from).getTime();
@@ -376,7 +390,12 @@ export default class InstanaDatasource {
   fetchMetricsForEntity(target, from, to) {
     const granularity = 1; // TODO calc from & to max (800)
 
-    // TODO target.entity
+// TODO remove
+    if (!target.metric) {
+      return [];
+    }
+
+
     const tagFilters = [{
       name: "beacon.website.name",
       operator: "EQUALS",
@@ -395,10 +414,6 @@ export default class InstanaDatasource {
         groupbyTag: "beacon.page.name"
       },
       tagFilters: tagFilters,
-      order: {
-        by: target.metric.key,
-        direction: "desc"
-      },
       metrics: [{
         metric: target.metric.key,
         aggregation: "sum",
