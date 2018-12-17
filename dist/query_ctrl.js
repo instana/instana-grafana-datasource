@@ -83,7 +83,11 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                         this.selectionReset();
                         this.onFilterChange(true);
                     }
+                    // TODO this must be somehwere else
                     if (this.target.metricCategory === this.WEBSITE_METRICS) {
+                        this.target.group = "beacon.page.name"; // TODO default selection for group
+                        this.target.filters = [];
+                        // TODO all operatos
                         this.uniqueOperators = [
                             { key: "EQUALS", label: "equals", type: "STRING" },
                             { key: "CONTAINS", label: "contains", type: "STRING" },
@@ -159,20 +163,30 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                         this.target.filters = [];
                     }
                     this.target.filters.push({
-                        id: this.target.filters.length,
-                        name: "",
+                        name: "beacon.page.name",
                         operator: "",
                         stringValue: "",
                         numberValue: 0,
-                        booleanValue: false
+                        booleanValue: false,
+                        isValid: false
                     });
                 };
                 InstanaQueryCtrl.prototype.removeFilter = function (index) {
                     this.target.filters.splice(index, 1);
+                    this.panelCtrl.refresh();
                 };
-                InstanaQueryCtrl.prototype.onTagFilterChange = function (refresh, index) {
-                    console.log("refresh " + refresh + "-" + index);
-                    // TODO validate dat filter, before
+                InstanaQueryCtrl.prototype.onTagFilterChange = function (index) {
+                    var filter = this.target.filters[index];
+                    // TODO number, boolean support
+                    if (filter.name && filter.operator && filter.stringValue) {
+                        filter.isValid = true;
+                        this.panelCtrl.refresh();
+                    }
+                    else {
+                        filter.isValid = false;
+                    }
+                };
+                InstanaQueryCtrl.prototype.onGroupChange = function () {
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.checkMetricAndRefresh = function (refresh) {
@@ -223,7 +237,6 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onLabelChange = function () {
-                    // we just want to refresh, even this is expensive
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.templateUrl = 'partials/query.editor.html';

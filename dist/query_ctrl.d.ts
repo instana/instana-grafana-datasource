@@ -1,12 +1,12 @@
 /// <reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import { QueryCtrl } from 'app/plugins/sdk';
 export interface TagFilter {
-    id: number;
     name: string;
     operator: string;
     stringValue: string;
     numberValue: number;
     booleanValue: boolean;
+    isValid: boolean;
 }
 export declare class InstanaQueryCtrl extends QueryCtrl {
     private templateSrv;
@@ -41,7 +41,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     onEntitySelect(refresh: any): void;
     addFilter(): void;
     removeFilter(index: any): void;
-    onTagFilterChange(refresh: any, index: any): void;
+    onTagFilterChange(index: any): void;
+    onGroupChange(): void;
     checkMetricAndRefresh(refresh: any): void;
     selectionReset(): void;
     resetEntityTypeSelection(): void;

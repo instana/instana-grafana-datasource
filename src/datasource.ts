@@ -7,6 +7,7 @@ export interface EntityTypesCache {
 }
 
 export interface WebsitesCache {
+  time: number;
   age: number;
   websites: Array<Object>;
 }
@@ -77,18 +78,7 @@ export default class InstanaDatasource {
       method: 'GET',
       url: this.url + url
     };
-    // TODO request['headers'] = { x-client-app: 'Grafana 2.0.1' };
-    if (this.apiToken) {
-      request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
-    }
-    return this.backendSrv
-      .datasourceRequest(request)
-      .catch(error => {
-        if (maxRetries > 0) {
-          return this.doRequest(url, maxRetries - 1);
-        }
-        throw error;
-      });
+    return this.execute(request, maxRetries);
   }
 
   postRequest(url, data, maxRetries = 0) {
@@ -97,6 +87,10 @@ export default class InstanaDatasource {
       url: this.url + url,
       data: data
     };
+    return this.execute(request, maxRetries);
+  }
+
+  execute(request, maxRetries) {
     // TODO request['headers'] = { x-client-app: 'Grafana 2.0.1' };
     if (this.apiToken) {
       request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
@@ -105,7 +99,7 @@ export default class InstanaDatasource {
       .datasourceRequest(request)
       .catch(error => {
         if (maxRetries > 0) {
-          return this.postRequest(url, data, maxRetries - 1);
+          return this.execute(request, maxRetries - 1);
         }
         throw error;
       });
@@ -148,11 +142,20 @@ export default class InstanaDatasource {
 
   getWebsites() {
       const now = this.currentTime();
-      if (!this.websitesCache || now - this.websitesCache.age > this.CACHE_MAX_AGE) {
-      // TODO add timeframe
+      const to = this.toFilter ? this.toFilter : now;
+      const windowSize = this.fromFilter ? to - this.fromFilter : 3600;
+
+      if (!this.websitesCache ||
+          to - this.websitesCache.time > this.CACHE_MAX_AGE ||
+          now - this.websitesCache.age > this.CACHE_MAX_AGE) {
+
       const data = {
         group: {
           groupbyTag: "beacon.website.name"
+        },
+        timeFrame: {
+          to: to,
+          windowSize: windowSize
         },
         order: {
           by: "pageLoads",
@@ -164,11 +167,12 @@ export default class InstanaDatasource {
         }]
       };
         this.websitesCache = {
+          time: this.toFilter,
           age: now,
           websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
             websitesResponse.data.items.map(entry => ({
               'key' : entry.name.replace(/"/g, ''), // TODO FIXME in API
-              'label' : entry.name.replace(/"/g, '')
+              'label' : entry.name.replace(/"/g, '') // TODO FIXME in API
             }))
           )
         };
@@ -210,13 +214,13 @@ export default class InstanaDatasource {
   }
 
   query(options) {
-    if (Object.keys(options.targets[0]).length === 0) {
-      return this.$q.resolve({ data: [] });
-    }
-
     // Convert ISO 8601 timestamps to millis.
     this.fromFilter  = new Date(options.range.from).getTime();
     this.toFilter = new Date(options.range.to).getTime();
+
+    if (Object.keys(options.targets[0]).length === 0) {
+      return this.$q.resolve({ data: [] });
+    }
 
     // TODO FIXME DOIT ...
     if (true) {
@@ -228,7 +232,7 @@ export default class InstanaDatasource {
               return _.flatten(response.data.items.map(item => {
                 return _.map(item.metrics, function(value, key) {
                   return {
-                    'target': item.name.replace(/"/g, '') + '.' + key, // TODO remove in API
+                    'target': item.name.replace(/"/g, '') + ' (' + target.entity + ') - ' + key, // TODO remove in API
                     'datapoints': _.map(value, metric => [metric[1], metric[0]])
                   };
                 });
@@ -413,16 +417,14 @@ export default class InstanaDatasource {
       tagFilters.push(tagFilter);
     });
 
-    // TODO windowsize fixing
-    // TODO groupbyTag: target.group
     const data = {
       group: {
-        groupbyTag: "beacon.page.name"
+        groupbyTag: target.group
       },
       timeFrame: {
         to: to,
         windowSize: windowSize
-	    },
+      },
       tagFilters: tagFilters,
       metrics: [{
         metric: target.metric.key,

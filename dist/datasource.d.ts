@@ -3,6 +3,7 @@ export interface EntityTypesCache {
     entityTypes: Array<Object>;
 }
 export interface WebsitesCache {
+    time: number;
     age: number;
     websites: Array<Object>;
 }
@@ -49,6 +50,7 @@ export default class InstanaDatasource {
     setLastFetchedFromApi: (value: any) => void;
     doRequest(url: any, maxRetries?: number): any;
     postRequest(url: any, data: any, maxRetries?: number): any;
+    execute(request: any, maxRetries: any): any;
     getEntityTypes(metricCategory: any): Object[];
     getMetricsCatalog(plugin: any, metricCategory: any): any;
     getWebsites(): Object[];

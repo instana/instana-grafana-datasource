@@ -40,8 +40,9 @@
 
   <div ng-show="ctrl.target.metricCategory === '3'">
 		<div ng-include src="'website.html'"/>
+    <div ng-include src="'group.html'"/>
+    <div ng-include src="'metric.html'"/>
     <div ng-include src="'filters.html'"/>
-		<div ng-include src="'metric.html'"/>
   </div>
 
   <script type="text/ng-template" id="query.html">
@@ -167,61 +168,85 @@
                 ng-model="ctrl.target.entity"
                 ng-change="ctrl.onEntitySelect(true)"
                 ng-options="f.key as f.label for f in ctrl.uniqueEntities track by f.key">
-            <option value="" disabled selected>Pick a website</option>
+          <option value="" disabled selected>Pick a website</option>
         </select>
       </div>
     </div>
   </script>
 
-  <script type="text/ng-template" id="filters.html">
-    <div ng-repeat="filter in ctrl.target.filters">
+  <script type="text/ng-template" id="group.html">
       <div class="gf-form">
-        <label class="gf-form-label width-13 pointer" for="in-filters-{{ctrl.target.refId}}-{{$index}}">
-          {{$index+1}}. Filter
+        <label class="gf-form-label width-13 pointer" for="in-group-{{ctrl.target.refId}}">
+          Group by
           <info-popover position="top center" mode="right-normal">
-            <p>Filter by tag</p>
+            <p>Group by tag</p>
           </info-popover>
         </label>
-        <div class="gf-form-select-wrapper width-14 gf-form-select-wrapper--has-help-icon">
-          <select id="in-filter-name-{{ctrl.target.refId}}-{{$index}}"
+        <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+          <select id="in-group-name-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                  ng-model="ctrl.target.filters[$index].name"
-                  ng-change="ctrl.onTagFilterChange(true, $index)"
-                  ng-options="f.key as f.key + ' (' + f.type + ')' for f in ctrl.uniqueTags track by f.key">
+                  ng-model="ctrl.target.group"
+                  ng-change="ctrl.onGroupChange()"
+                  ng-options="f.key as f.key for f in ctrl.uniqueTags track by f.key">
+            <option value="" disabled selected>Choose a group</option>
           </select>
         </div>
-        <div class="gf-form-select-wrapper width-8 gf-form-select-wrapper--has-help-icon">
-          <select id="in-filter-operator-{{ctrl.target.refId}}-{{$index}}"
-                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                  ng-model="ctrl.target.filters[$index].operator"
-                  ng-change="ctrl.onTagFilterChange(true, $index)"
-                  ng-options="f.key as f.label for f in ctrl.uniqueOperators track by f.key">
-          </select>
-        </div>
-        <input id="in-filter-stringValue-{{ctrl.target.refId}}-{{$index}}"
-               class="gf-form-input width-22"
-               type="text"
-               ng-model="ctrl.target.filters[$index].stringValue"
-               ng-model-options='{ debounce: 400 }'
-               ng-change="ctrl.onTagFilterChange(true, $index)"
-               placeholder=""
-               spellcheck='false'/>
-        <button class="btn btn-inverse" ng-click="ctrl.removeFilter($index)">
-			    <i class="fa fa-minus"></i>
-		    </button>
       </div>
-    </div>
-    <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-website-{{ctrl.target.refId}}">
-        Add filter
-        <info-popover position="top center" mode="right-normal">
-          <p>Add an additional tag filter</p>
-        </info-popover>
-      </label>
-      <button class="btn btn-inverse" ng-click="ctrl.addFilter()">
-		    <i class="fa fa-plus"></i>
-	    </button>
-    </div>
   </script>
+
+    <script type="text/ng-template" id="filters.html">
+      <div ng-repeat="filter in ctrl.target.filters">
+        <div class="gf-form">
+          <label class="gf-form-label width-13 pointer" for="in-filters-{{ctrl.target.refId}}-{{$index}}">
+            {{$index+1}}. Filter
+            <info-popover position="top center" mode="right-normal">
+              <p>Filter by tag</p>
+            </info-popover>
+          </label>
+          <div class="gf-form-select-wrapper width-14 gf-form-select-wrapper--has-help-icon">
+            <select id="in-filter-name-{{ctrl.target.refId}}-{{$index}}"
+                    class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                    ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
+                    ng-model="ctrl.target.filters[$index].name"
+                    ng-change="ctrl.onTagFilterChange($index)"
+                    ng-options="f.key as f.key + ' (' + f.type + ')' for f in ctrl.uniqueTags track by f.key">
+            </select>
+          </div>
+          <div class="gf-form-select-wrapper width-8 gf-form-select-wrapper--has-help-icon">
+            <select id="in-filter-operator-{{ctrl.target.refId}}-{{$index}}"
+                    class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                    ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
+                    ng-model="ctrl.target.filters[$index].operator"
+                    ng-change="ctrl.onTagFilterChange($index)"
+                    ng-options="f.key as f.label for f in ctrl.uniqueOperators track by f.key">
+                    // TODO <!-- filter:f.type:ctrl.target.filters[$index].type -->
+            </select>
+          </div>
+          <input id="in-filter-stringValue-{{ctrl.target.refId}}-{{$index}}"
+                 type="text"
+                 class="gf-form-input width-22"
+                 ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
+                 ng-model="ctrl.target.filters[$index].stringValue"
+                 ng-model-options='{ debounce: 400 }'
+                 ng-change="ctrl.onTagFilterChange($index)"
+                 placeholder="Please Specify"
+                 spellcheck='false'/>
+          <button class="btn btn-inverse" ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'" ng-click="ctrl.removeFilter($index)">
+  			    <i class="fa fa-minus"></i>
+  		    </button>
+        </div>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-13 pointer" for="in-website-{{ctrl.target.refId}}">
+          Add filter
+          <info-popover position="top center" mode="right-normal">
+            <p>Add an additional tag filter</p>
+          </info-popover>
+        </label>
+        <button class="btn btn-inverse" ng-click="ctrl.addFilter()">
+  		    <i class="fa fa-plus"></i>
+  	    </button>
+      </div>
+    </script>
 
 </query-editor-row>

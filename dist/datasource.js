@@ -45,33 +45,24 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     this.currentTime = function () { return new Date().getTime(); };
                 }
                 InstanaDatasource.prototype.doRequest = function (url, maxRetries) {
-                    var _this = this;
                     if (maxRetries === void 0) { maxRetries = 1; }
                     var request = {
                         method: 'GET',
                         url: this.url + url
                     };
-                    // TODO request['headers'] = { x-client-app: 'Grafana 2.0.1' };
-                    if (this.apiToken) {
-                        request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
-                    }
-                    return this.backendSrv
-                        .datasourceRequest(request)
-                        .catch(function (error) {
-                        if (maxRetries > 0) {
-                            return _this.doRequest(url, maxRetries - 1);
-                        }
-                        throw error;
-                    });
+                    return this.execute(request, maxRetries);
                 };
                 InstanaDatasource.prototype.postRequest = function (url, data, maxRetries) {
-                    var _this = this;
                     if (maxRetries === void 0) { maxRetries = 0; }
                     var request = {
                         method: 'POST',
                         url: this.url + url,
                         data: data
                     };
+                    return this.execute(request, maxRetries);
+                };
+                InstanaDatasource.prototype.execute = function (request, maxRetries) {
+                    var _this = this;
                     // TODO request['headers'] = { x-client-app: 'Grafana 2.0.1' };
                     if (this.apiToken) {
                         request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
@@ -80,7 +71,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         .datasourceRequest(request)
                         .catch(function (error) {
                         if (maxRetries > 0) {
-                            return _this.postRequest(url, data, maxRetries - 1);
+                            return _this.execute(request, maxRetries - 1);
                         }
                         throw error;
                     });
@@ -121,11 +112,18 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                 };
                 InstanaDatasource.prototype.getWebsites = function () {
                     var now = this.currentTime();
-                    if (!this.websitesCache || now - this.websitesCache.age > this.CACHE_MAX_AGE) {
-                        // TODO add timeframe
+                    var to = this.toFilter ? this.toFilter : now;
+                    var windowSize = this.fromFilter ? to - this.fromFilter : 3600;
+                    if (!this.websitesCache ||
+                        to - this.websitesCache.time > this.CACHE_MAX_AGE ||
+                        now - this.websitesCache.age > this.CACHE_MAX_AGE) {
                         var data = {
                             group: {
                                 groupbyTag: "beacon.website.name"
+                            },
+                            timeFrame: {
+                                to: to,
+                                windowSize: windowSize
                             },
                             order: {
                                 by: "pageLoads",
@@ -137,11 +135,12 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                                 }]
                         };
                         this.websitesCache = {
+                            time: this.toFilter,
                             age: now,
                             websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(function (websitesResponse) {
                                 return websitesResponse.data.items.map(function (entry) { return ({
                                     'key': entry.name.replace(/"/g, ''),
-                                    'label': entry.name.replace(/"/g, '')
+                                    'label': entry.name.replace(/"/g, '') // TODO FIXME in API
                                 }); });
                             })
                         };
@@ -181,12 +180,12 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                 };
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;
-                    if (Object.keys(options.targets[0]).length === 0) {
-                        return this.$q.resolve({ data: [] });
-                    }
                     // Convert ISO 8601 timestamps to millis.
                     this.fromFilter = new Date(options.range.from).getTime();
                     this.toFilter = new Date(options.range.to).getTime();
+                    if (Object.keys(options.targets[0]).length === 0) {
+                        return this.$q.resolve({ data: [] });
+                    }
                     // TODO FIXME DOIT ...
                     if (true) {
                         return this.$q.all(lodash_1.default.map(options.targets, function (target) {
@@ -196,7 +195,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                                     return lodash_1.default.flatten(response.data.items.map(function (item) {
                                         return lodash_1.default.map(item.metrics, function (value, key) {
                                             return {
-                                                'target': item.name.replace(/"/g, '') + '.' + key,
+                                                'target': item.name.replace(/"/g, '') + ' (' + target.entity + ') - ' + key,
                                                 'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
                                             };
                                         });
@@ -347,11 +346,13 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         };
                         tagFilters.push(tagFilter);
                     });
-                    // TODO add timeframe
-                    // TODO groupbyTag: target.group
                     var data = {
                         group: {
-                            groupbyTag: "beacon.page.name"
+                            groupbyTag: target.group
+                        },
+                        timeFrame: {
+                            to: to,
+                            windowSize: windowSize
                         },
                         tagFilters: tagFilters,
                         metrics: [{
