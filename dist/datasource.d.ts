@@ -40,6 +40,7 @@ export default class InstanaDatasource {
     MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
     CACHE_MAX_AGE: number;
     CUSTOM_METRICS: string;
+    WEBSITE_METRICS: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     storeInCache: (query: any, data: any) => void;

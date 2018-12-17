@@ -192,9 +192,9 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                 };
                 InstanaQueryCtrl.prototype.resetEntitySelection = function () {
-                    this.target.entity = null;
-                    this.target.filters = [];
-                    this.availableMetrics = [];
+                    // this.target.entity = null;
+                    // this.target.filters = [];
+                    // this.availableMetrics = [];
                 };
                 InstanaQueryCtrl.prototype.resetMetricSelection = function () {
                     this.target.metric = null;

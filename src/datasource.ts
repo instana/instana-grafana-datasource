@@ -41,6 +41,7 @@ export default class InstanaDatasource {
   MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
   CACHE_MAX_AGE = 60000;
   CUSTOM_METRICS = '1';
+  WEBSITE_METRICS = '3';
 
   /** @ngInject */
   constructor(instanceSettings, private backendSrv, private templateSrv, private $q) {
@@ -75,7 +76,7 @@ export default class InstanaDatasource {
       method: 'GET',
       url: this.url + url
     };
-    // TODO request['headers'] = { ClientGroup: 'Grafana 2.0.1' };
+    // TODO request['headers'] = { x-client-app: 'Grafana 2.0.1' };
     if (this.apiToken) {
       request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
     }
@@ -95,7 +96,7 @@ export default class InstanaDatasource {
       url: this.url + url,
       data: data
     };
-    // TODO request['headers'] = { ClientGroup: 'Grafana 2.0.1' };
+    // TODO request['headers'] = { x-client-app: 'Grafana 2.0.1' };
     if (this.apiToken) {
       request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
     }
@@ -147,6 +148,7 @@ export default class InstanaDatasource {
   getWebsites() {
       const now = this.currentTime();
       if (!this.websitesCache || now - this.websitesCache.age > this.CACHE_MAX_AGE) {
+      // TODO add timeframe
       const data = {
         group: {
           groupbyTag: "beacon.website.name"
@@ -213,17 +215,15 @@ export default class InstanaDatasource {
 
     // TODO FIXME DOIT ...
     _.map(options.targets, target => {
-      if (target.category === this.WEBSITE_METRICS) {
+      if (target.metricCategory === this.WEBSITE_METRICS) {
         this.fetchMetricsForEntity(target, 0, 1).then(response => {
-          const website = response.data.items.name;
-          const timeseries = response.data.items.metrics;
-          console.log(website + " " + timeseries.stringify());
+          response.data.items.map(({name, metrics}) => {
+            console.log(name + " " + metrics.stringify());
+          });
         });
         return this.$q.resolve({ data: [] });
       }
     });
-
-
 
     // Convert ISO 8601 timestamps to millis.
     this.fromFilter  = new Date(options.range.from).getTime();
@@ -375,10 +375,12 @@ export default class InstanaDatasource {
 
   fetchMetricsForEntity(target, from, to) {
     const granularity = 1; // TODO calc from & to max (800)
+
+    // TODO target.entity
     const tagFilters = [{
       name: "beacon.website.name",
       operator: "EQUALS",
-      value: target.entity
+      value: "Shop Shop"
     }];
     if (target.filters) {
       target.filters.forEach(filter => {
@@ -386,9 +388,11 @@ export default class InstanaDatasource {
         console.log('filter' + filter);
       });
     }
+    // TODO add timeframe
+    // TODO groupbyTag: target.group
     const data = {
       group: {
-        groupbyTag: target.group
+        groupbyTag: "beacon.page.name"
       },
       tagFilters: tagFilters,
       order: {
@@ -397,7 +401,8 @@ export default class InstanaDatasource {
       },
       metrics: [{
         metric: target.metric.key,
-        aggregation: "sum"
+        aggregation: "sum",
+        granularity: granularity
       }]
     };
     return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);

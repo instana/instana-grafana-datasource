@@ -21,6 +21,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
                     this.CACHE_MAX_AGE = 60000;
                     this.CUSTOM_METRICS = '1';
+                    this.WEBSITE_METRICS = '3';
                     this.storeInCache = function (query, data) {
                         _this.snapshotCache[query] = data;
                     };
@@ -49,7 +50,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         method: 'GET',
                         url: this.url + url
                     };
-                    // TODO request['headers'] = { ClientGroup: 'Grafana 2.0.1' };
+                    // TODO request['headers'] = { x-client-app: 'Grafana 2.0.1' };
                     if (this.apiToken) {
                         request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
                     }
@@ -70,7 +71,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         url: this.url + url,
                         data: data
                     };
-                    // TODO request['headers'] = { ClientGroup: 'Grafana 2.0.1' };
+                    // TODO request['headers'] = { x-client-app: 'Grafana 2.0.1' };
                     if (this.apiToken) {
                         request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
                     }
@@ -120,6 +121,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                 InstanaDatasource.prototype.getWebsites = function () {
                     var now = this.currentTime();
                     if (!this.websitesCache || now - this.websitesCache.age > this.CACHE_MAX_AGE) {
+                        // TODO add timeframe
                         var data = {
                             group: {
                                 groupbyTag: "beacon.website.name"
@@ -181,6 +183,18 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     if (Object.keys(options.targets[0]).length === 0) {
                         return this.$q.resolve({ data: [] });
                     }
+                    // TODO FIXME DOIT ...
+                    lodash_1.default.map(options.targets, function (target) {
+                        if (target.metricCategory === _this.WEBSITE_METRICS) {
+                            _this.fetchMetricsForEntity(target, 0, 1).then(function (response) {
+                                response.data.items.map(function (_a) {
+                                    var name = _a.name, metrics = _a.metrics;
+                                    console.log(name + " " + metrics.stringify());
+                                });
+                            });
+                            return _this.$q.resolve({ data: [] });
+                        }
+                    });
                     // Convert ISO 8601 timestamps to millis.
                     this.fromFilter = new Date(options.range.from).getTime();
                     this.toFilter = new Date(options.range.to).getTime();
@@ -302,18 +316,23 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                 };
                 InstanaDatasource.prototype.fetchMetricsForEntity = function (target, from, to) {
                     var granularity = 1; // TODO calc from & to max (800)
+                    // TODO target.entity
                     var tagFilters = [{
                             name: "beacon.website.name",
                             operator: "EQUALS",
-                            value: target.entity
+                            value: "Shop Shop"
                         }];
-                    target.filters.forEach(function (filter) {
-                        // TODO add more tagFilters
-                        console.log('filter' + filter);
-                    });
+                    if (target.filters) {
+                        target.filters.forEach(function (filter) {
+                            // TODO add more tagFilters
+                            console.log('filter' + filter);
+                        });
+                    }
+                    // TODO add timeframe
+                    // TODO groupbyTag: target.group
                     var data = {
                         group: {
-                            groupbyTag: target.group
+                            groupbyTag: "beacon.page.name"
                         },
                         tagFilters: tagFilters,
                         order: {
@@ -322,7 +341,8 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         },
                         metrics: [{
                                 metric: target.metric.key,
-                                aggregation: "sum"
+                                aggregation: "sum",
+                                granularity: granularity
                             }]
                     };
                     return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);

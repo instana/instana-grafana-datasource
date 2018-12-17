@@ -243,10 +243,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   resetEntitySelection() {
-    this.target.entity = null;
-    this.target.filters = [];
-
-    this.availableMetrics = [];
+    // this.target.entity = null;
+    // this.target.filters = [];
+    // this.availableMetrics = [];
   }
 
   resetMetricSelection() {
