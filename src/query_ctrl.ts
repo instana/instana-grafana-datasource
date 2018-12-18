@@ -6,7 +6,7 @@ import _ from 'lodash';
 import './css/query_editor.css!';
 
 export interface TagFilter {
-  name: string;
+  tag: Object;
   operator: string;
   stringValue: string;
   numberValue: number;
@@ -209,7 +209,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.target.filters = [];
     }
     this.target.filters.push({
-      name: "beacon.page.name",
+      tag: undefined,
       operator: "",
       stringValue: "",
       numberValue: 0,
@@ -227,7 +227,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onTagFilterChange(index) {
     let filter: TagFilter = this.target.filters[index];
     // TODO number, boolean support
-    if (filter.name && filter.operator && filter.stringValue) {
+    if (filter.tag && filter.operator && filter.stringValue) {
       filter.isValid = true;
       this.panelCtrl.refresh();
     } else {

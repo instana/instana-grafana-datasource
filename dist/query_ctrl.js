@@ -163,7 +163,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                         this.target.filters = [];
                     }
                     this.target.filters.push({
-                        name: "beacon.page.name",
+                        tag: undefined,
                         operator: "",
                         stringValue: "",
                         numberValue: 0,
@@ -178,7 +178,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                 InstanaQueryCtrl.prototype.onTagFilterChange = function (index) {
                     var filter = this.target.filters[index];
                     // TODO number, boolean support
-                    if (filter.name && filter.operator && filter.stringValue) {
+                    if (filter.tag && filter.operator && filter.stringValue) {
                         filter.isValid = true;
                         this.panelCtrl.refresh();
                     }

@@ -66,6 +66,11 @@ export default class InstanaDatasource {
     getHostSuffix(host: any): string;
     fetchMetricsForSnapshot(snapshotId: any, metric: any, from: any, to: any): any;
     fetchMetricsForEntity(target: any, from: any, to: any): any;
+    createTagFilter(filter: any): {
+        name: any;
+        operator: any;
+        value: any;
+    };
     annotationQuery(options: any): void;
     metricFindQuery(query: string): void;
     testDatasource(): any;

@@ -207,9 +207,9 @@
             <select id="in-filter-name-{{ctrl.target.refId}}-{{$index}}"
                     class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                     ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
-                    ng-model="ctrl.target.filters[$index].name"
+                    ng-model="ctrl.target.filters[$index].tag"
                     ng-change="ctrl.onTagFilterChange($index)"
-                    ng-options="f.key as f.key + ' (' + f.type + ')' for f in ctrl.uniqueTags track by f.key">
+                    ng-options="f as f.key + ' (' + f.type + ')' for f in ctrl.uniqueTags track by f.key">
             </select>
           </div>
           <div class="gf-form-select-wrapper width-8 gf-form-select-wrapper--has-help-icon">
@@ -219,7 +219,7 @@
                     ng-model="ctrl.target.filters[$index].operator"
                     ng-change="ctrl.onTagFilterChange($index)"
                     ng-options="f.key as f.label for f in ctrl.uniqueOperators track by f.key">
-                    // TODO <!-- filter:f.type:ctrl.target.filters[$index].type -->
+                    // TODO <!-- filter:f.type:ctrl.target.filters[$index].tag.type -->
             </select>
           </div>
           <input id="in-filter-stringValue-{{ctrl.target.refId}}-{{$index}}"

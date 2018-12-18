@@ -157,7 +157,7 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                                     'key': entry.name,
                                     'type': entry.type
                                 }); });
-                            })
+                            }),
                         };
                     }
                     return this.websiteTagsCache.tags;
@@ -324,10 +324,11 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     return this.doRequest(url);
                 };
                 InstanaDatasource.prototype.fetchMetricsForEntity = function (target, from, to) {
+                    var _this = this;
                     // new api is limited to MAX_NUMBER_OF_RESULTS results
                     var windowSize = to - from;
                     var bestGuess = lodash_1.default.toInteger(windowSize / 1000 / this.MAX_NUMBER_OF_RESULTS);
-                    var granularity = bestGuess < 1 ? 1 : bestGuess; // at least a second
+                    var granularity = bestGuess < 1 ? 1 : bestGuess; // must be at least a second
                     // TODO remove
                     if (!target.metric) {
                         return [];
@@ -338,13 +339,9 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                             value: target.entity
                         }];
                     lodash_1.default.forEach(target.filters, function (filter) {
-                        // TODO type for value
-                        var tagFilter = {
-                            name: filter.name,
-                            operator: filter.operator,
-                            value: filter.stringValue
-                        };
-                        tagFilters.push(tagFilter);
+                        if (filter.isValid) {
+                            tagFilters.push(_this.createTagFilter(filter));
+                        }
                     });
                     var data = {
                         group: {
@@ -362,6 +359,21 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                             }]
                     };
                     return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
+                };
+                InstanaDatasource.prototype.createTagFilter = function (filter) {
+                    var tagFilter = {
+                        name: filter.tag.key,
+                        operator: filter.operator,
+                        value: filter.stringValue
+                    };
+                    if ("NUMBER" === filter.tag.type) {
+                        tagFilter.value = filter.numberValue;
+                    }
+                    else if ("BOOLEAN" === filter.tag.type) {
+                        tagFilter.value = filter.booleanValue;
+                    }
+                    console.log(tagFilter.value);
+                    return tagFilter;
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {
                     throw new Error('Annotation Support not implemented yet.');

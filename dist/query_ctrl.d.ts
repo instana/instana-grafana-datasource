@@ -1,7 +1,7 @@
 /// <reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import { QueryCtrl } from 'app/plugins/sdk';
 export interface TagFilter {
-    name: string;
+    tag: Object;
     operator: string;
     stringValue: string;
     numberValue: number;

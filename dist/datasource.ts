@@ -190,7 +190,7 @@ export default class InstanaDatasource {
             'key' : entry.name,
             'type' : entry.type
           }))
-        )
+        ),
       };
     }
     return this.websiteTagsCache.tags;
@@ -395,7 +395,7 @@ export default class InstanaDatasource {
     // new api is limited to MAX_NUMBER_OF_RESULTS results
     const windowSize = to - from;
     const bestGuess = _.toInteger(windowSize / 1000 / this.MAX_NUMBER_OF_RESULTS);
-    const granularity = bestGuess < 1 ? 1 : bestGuess; // at least a second
+    const granularity = bestGuess < 1 ? 1 : bestGuess; // must be at least a second
 
     // TODO remove
     if (!target.metric) {
@@ -408,13 +408,9 @@ export default class InstanaDatasource {
       value: target.entity
     }];
     _.forEach(target.filters, filter => {
-      // TODO type for value
-      const tagFilter = {
-        name: filter.name,
-        operator: filter.operator,
-        value: filter.stringValue
-      };
-      tagFilters.push(tagFilter);
+      if (filter.isValid) {
+        tagFilters.push(this.createTagFilter(filter));
+      }
     });
 
     const data = {
@@ -428,11 +424,28 @@ export default class InstanaDatasource {
       tagFilters: tagFilters,
       metrics: [{
         metric: target.metric.key,
-        aggregation: "sum",
+        aggregation: "sum", // TODO insert matching aggregation for metric
         granularity: granularity
       }]
     };
     return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
+  }
+
+  createTagFilter(filter) {
+    const tagFilter = {
+      name: filter.tag.key,
+      operator: filter.operator,
+      value: filter.stringValue
+    };
+
+    if ("NUMBER" === filter.tag.type) {
+      tagFilter.value = filter.numberValue;
+    } else if ("BOOLEAN" === filter.tag.type) {
+      tagFilter.value = filter.booleanValue;
+    }
+    console.log(tagFilter.value);
+
+    return tagFilter;
   }
 
   annotationQuery(options) {
