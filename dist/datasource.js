@@ -330,8 +330,8 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     var bestGuess = lodash_1.default.toInteger(windowSize / 1000 / this.MAX_NUMBER_OF_RESULTS);
                     var granularity = bestGuess < 1 ? 1 : bestGuess; // must be at least a second
                     // TODO remove
-                    if (!target.metric) {
-                        return [];
+                    if (!target || !target.metric || !target.group) {
+                        return this.$q.resolve();
                     }
                     var tagFilters = [{
                             name: "beacon.website.name",
@@ -372,7 +372,6 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     else if ("BOOLEAN" === filter.tag.type) {
                         tagFilter.value = filter.booleanValue;
                     }
-                    console.log(tagFilter.value);
                     return tagFilter;
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {

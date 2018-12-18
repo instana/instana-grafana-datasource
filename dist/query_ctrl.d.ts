@@ -1,7 +1,12 @@
 /// <reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import { QueryCtrl } from 'app/plugins/sdk';
+export interface Selectable {
+    key: string;
+    label: string;
+    type: string;
+}
 export interface TagFilter {
-    tag: Object;
+    tag: Selectable;
     operator: string;
     stringValue: string;
     numberValue: number;
@@ -23,6 +28,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     uniqueEntities: Array<Object>;
     uniqueTags: Array<Object>;
     uniqueOperators: Array<Object>;
+    uniqueAggregations: Array<Object>;
     EMPTY_DROPDOWN_TEXT: string;
     BUILT_IN_METRICS: string;
     CUSTOM_METRICS: string;
@@ -31,6 +37,8 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     defaults: {};
     /** @ngInject **/
     constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any, $q: any);
+    onEveryChange(refresh: any): void;
+    onSomeChange(refresh: any): any;
     onFilterChange(refresh: any): any;
     onMetricCategorySelect(): void;
     filterForEntityType(refresh: any): void;

@@ -40,7 +40,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                         this.target.metricCategory = this.BUILT_IN_METRICS;
                     }
                     this.previousMetricCategory = this.target.metricCategory;
-                    // infrastructure
+                    // infrastructure (built-in & custom)
                     if (this.target.entityQuery) {
                         this.onFilterChange(false).then(function () {
                             // infrastructure metrics support available metrics on a selected entity type
@@ -53,10 +53,68 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                             }
                         });
                     }
-                    // websites & application
+                    // websites & applications
                     if (this.target.entity) {
+                        this.onSomeChange(false).then(function () {
+                            if (_this.target.metric) {
+                                _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
+                            }
+                        });
                     }
                 }
+                InstanaQueryCtrl.prototype.onEveryChange = function (refresh) {
+                    if (this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS) {
+                        this.onFilterChange(refresh);
+                    }
+                    if (this.target.metricCategory === this.WEBSITE_METRICS) {
+                        this.onSomeChange(refresh);
+                    }
+                };
+                InstanaQueryCtrl.prototype.onSomeChange = function (refresh) {
+                    var _this = this;
+                    // TODO all operatos
+                    this.uniqueOperators = [
+                        { key: "EQUALS", label: "equals", type: "STRING" },
+                        { key: "CONTAINS", label: "contains", type: "STRING" },
+                        { key: "NOT_CONTAIN", label: "not contains", type: "STRING" },
+                        { key: "NOT_EQUAL", label: "is empty", type: "STRING" },
+                        { key: "IS_EMPTY", label: "is empty", type: "STRING" },
+                        { key: "EQUALS", label: "equals", type: "NUMBER" },
+                        { key: "LESS_THAN", label: "less than", type: "NUMBER" },
+                        { key: "GREATER_THAN", label: "greater than", type: "NUMBER" },
+                        { key: "EQUALS", label: "not empty", type: "BOOLEAN" },
+                    ];
+                    this.uniqueAggregations = [
+                        { key: "SUM", label: "sum", type: "" },
+                        { key: "MEAN", label: "mean", type: "" },
+                        { key: "MAX", label: "max", type: "" },
+                        { key: "MIN", label: "min", type: "" },
+                        { key: "P25", label: "p 25", type: "" },
+                        { key: "P50", label: "p 50", type: "" },
+                        { key: "P90", label: "p 90", type: "" },
+                        { key: "P95", label: "p 95", type: "" },
+                        { key: "P98", label: "p 98", type: "" },
+                        { key: "P99", label: "p 99", type: "" },
+                        { key: "DISTINCT_COUNT", label: "count", type: "" },
+                    ];
+                    this.datasource.getWebsites().then(function (websites) {
+                        _this.uniqueEntities = websites;
+                    });
+                    this.datasource.getWebsiteTags().then(function (websiteTags) {
+                        _this.uniqueTags = websiteTags;
+                    });
+                    this.datasource.getWebsiteMetricsCatalog().then(function (metrics) {
+                        _this.availableMetrics = metrics;
+                    });
+                    if (this.target.entity === '') {
+                        this.selectionReset();
+                        return this.$q.resolve();
+                    }
+                    else {
+                        this.checkMetricAndRefresh(refresh);
+                        return this.$q.resolve();
+                    }
+                };
                 InstanaQueryCtrl.prototype.onFilterChange = function (refresh) {
                     var _this = this;
                     if (this.target.entityQuery === '') {
@@ -76,32 +134,11 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     }
                 };
                 InstanaQueryCtrl.prototype.onMetricCategorySelect = function () {
-                    var _this = this;
                     if (this.previousMetricCategory === this.target.metricCategory) {
                     }
                     else {
                         this.selectionReset();
-                        this.onFilterChange(true);
-                    }
-                    // TODO this must be somehwere else
-                    if (this.target.metricCategory === this.WEBSITE_METRICS) {
-                        this.target.group = "beacon.page.name"; // TODO default selection for group
-                        this.target.filters = [];
-                        // TODO all operatos
-                        this.uniqueOperators = [
-                            { key: "EQUALS", label: "equals", type: "STRING" },
-                            { key: "CONTAINS", label: "contains", type: "STRING" },
-                            { key: "LESS", label: "less than", type: "NUMBER" }
-                        ];
-                        this.datasource.getWebsites().then(function (websites) {
-                            _this.uniqueEntities = websites;
-                        });
-                        this.datasource.getWebsiteTags().then(function (websiteTags) {
-                            _this.uniqueTags = websiteTags;
-                        });
-                        this.datasource.getWebsiteMetricsCatalog().then(function (metrics) {
-                            _this.availableMetrics = metrics;
-                        });
+                        this.onEveryChange(true);
                     }
                     this.previousMetricCategory = this.target.metricCategory;
                 };
@@ -156,7 +193,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.adjustMetricSelectionPlaceholder();
                 };
                 InstanaQueryCtrl.prototype.onEntitySelect = function (refresh) {
-                    this.resetEntitySelection();
+                    this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.addFilter = function () {
                     if (!this.target.filters) {
@@ -176,15 +213,26 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onTagFilterChange = function (index) {
+                    // validate changed filter
                     var filter = this.target.filters[index];
-                    // TODO number, boolean support
-                    if (filter.tag && filter.operator && filter.stringValue) {
-                        filter.isValid = true;
-                        this.panelCtrl.refresh();
+                    if (filter.tag && filter.operator) {
+                        if ("STRING" === filter.tag.type && filter.stringValue) {
+                            filter.isValid = true;
+                        }
+                        else if ("NUMBER" === filter.tag.type && filter.numberValue) {
+                            filter.isValid = true;
+                        }
+                        else if ("BOOLEAN" === filter.tag.type && filter.booleanValue) {
+                            filter.isValid = true;
+                        }
+                        else {
+                            filter.isValid = false;
+                        }
                     }
                     else {
                         filter.isValid = false;
                     }
+                    this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onGroupChange = function () {
                     this.panelCtrl.refresh();
@@ -201,6 +249,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.uniqueEntityTypes = [];
                     this.availableMetrics = [];
                     this.resetEntityTypeSelection();
+                    this.resetEntitySelection();
                     this.resetMetricSelection();
                 };
                 InstanaQueryCtrl.prototype.resetEntityTypeSelection = function () {
@@ -208,9 +257,10 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                 };
                 InstanaQueryCtrl.prototype.resetEntitySelection = function () {
-                    // this.target.entity = null;
-                    // this.target.filters = [];
-                    // this.availableMetrics = [];
+                    this.target.entity = null;
+                    this.target.group = null;
+                    this.target.filters = [];
+                    console.log(this.target);
                 };
                 InstanaQueryCtrl.prototype.resetMetricSelection = function () {
                     this.target.metric = null;

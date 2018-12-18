@@ -398,8 +398,8 @@ export default class InstanaDatasource {
     const granularity = bestGuess < 1 ? 1 : bestGuess; // must be at least a second
 
     // TODO remove
-    if (!target.metric) {
-      return [];
+    if (!target || !target.metric || !target.group) {
+      return this.$q.resolve();
     }
 
     const tagFilters = [{
@@ -443,7 +443,6 @@ export default class InstanaDatasource {
     } else if ("BOOLEAN" === filter.tag.type) {
       tagFilter.value = filter.booleanValue;
     }
-    console.log(tagFilter.value);
 
     return tagFilter;
   }
