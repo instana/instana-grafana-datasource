@@ -1,16 +1,21 @@
-///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
-System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, lodash_1;
+    var sdk_1, aggregators_1, operators_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
             function (sdk_1_1) {
                 sdk_1 = sdk_1_1;
+            },
+            function (aggregators_1_1) {
+                aggregators_1 = aggregators_1_1;
+            },
+            function (operators_1_1) {
+                operators_1 = operators_1_1;
             },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
@@ -26,12 +31,22 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.templateSrv = templateSrv;
                     this.backendSrv = backendSrv;
                     this.$q = $q;
+                    this.uniqueAggregators = aggregators_1.default;
+                    this.uniqueOperators = operators_1.default;
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
+                    this.OPERATOR_STRING = 'STRING';
+                    this.OPERATOR_NUMBER = 'NUMBER';
+                    this.OPERATOR_BOOLEAN = 'BOOLEAN';
                     this.BUILT_IN_METRICS = '0';
                     this.CUSTOM_METRICS = '1';
                     this.APPLICATION_METRICS = '2';
                     this.WEBSITE_METRICS = '3';
                     this.defaults = {};
+                    var ctrl = this;
+                    console.log('Constructor state ', ctrl);
+                    $scope.$watch(function () {
+                        console.log('Last controller state', ctrl);
+                    });
                     this.target.pluginId = this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
@@ -41,7 +56,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     }
                     this.previousMetricCategory = this.target.metricCategory;
                     // infrastructure (built-in & custom)
-                    if (this.target.entityQuery) {
+                    if (this.isInfrastructure() && this.target.entityQuery) {
                         this.onFilterChange(false).then(function () {
                             // infrastructure metrics support available metrics on a selected entity type
                             if (_this.target.entityType) {
@@ -54,70 +69,49 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                         });
                     }
                     // websites & applications
-                    if (this.target.entity) {
-                        this.onSomeChange(false).then(function () {
+                    if (this.isEntity()) {
+                        this.onEntityChanges(false).then(function () {
                             if (_this.target.metric) {
                                 _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                             }
                         });
                     }
                 }
+                InstanaQueryCtrl.prototype.isInfrastructure = function () {
+                    return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
+                };
+                InstanaQueryCtrl.prototype.isEntity = function () {
+                    return this.target.metricCategory === this.WEBSITE_METRICS;
+                };
                 InstanaQueryCtrl.prototype.onEveryChange = function (refresh) {
-                    if (this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS) {
+                    if (this.isInfrastructure()) {
                         this.onFilterChange(refresh);
                     }
-                    if (this.target.metricCategory === this.WEBSITE_METRICS) {
-                        this.onSomeChange(refresh);
+                    if (this.isEntity()) {
+                        this.onEntityChanges(refresh);
                     }
                 };
-                InstanaQueryCtrl.prototype.onSomeChange = function (refresh) {
+                InstanaQueryCtrl.prototype.onEntityChanges = function (refresh) {
                     var _this = this;
-                    // TODO all operatos
-                    this.uniqueOperators = [
-                        { key: "EQUALS", label: "equals", type: "STRING" },
-                        { key: "CONTAINS", label: "contains", type: "STRING" },
-                        { key: "NOT_CONTAIN", label: "not contains", type: "STRING" },
-                        { key: "NOT_EQUAL", label: "is empty", type: "STRING" },
-                        { key: "IS_EMPTY", label: "is empty", type: "STRING" },
-                        { key: "EQUALS", label: "equals", type: "NUMBER" },
-                        { key: "LESS_THAN", label: "less than", type: "NUMBER" },
-                        { key: "GREATER_THAN", label: "greater than", type: "NUMBER" },
-                        { key: "EQUALS", label: "not empty", type: "BOOLEAN" },
-                    ];
-                    this.uniqueAggregations = [
-                        { key: "SUM", label: "sum", type: "" },
-                        { key: "MEAN", label: "mean", type: "" },
-                        { key: "MAX", label: "max", type: "" },
-                        { key: "MIN", label: "min", type: "" },
-                        { key: "P25", label: "p 25", type: "" },
-                        { key: "P50", label: "p 50", type: "" },
-                        { key: "P90", label: "p 90", type: "" },
-                        { key: "P95", label: "p 95", type: "" },
-                        { key: "P98", label: "p 98", type: "" },
-                        { key: "P99", label: "p 99", type: "" },
-                        { key: "DISTINCT_COUNT", label: "count", type: "" },
-                    ];
                     this.datasource.getWebsites().then(function (websites) {
                         _this.uniqueEntities = websites;
                     });
                     this.datasource.getWebsiteTags().then(function (websiteTags) {
                         _this.uniqueTags = websiteTags;
+                        // select a meaningfull default group
+                        if (_this.target && !_this.target.group) {
+                            _this.target.group = lodash_1.default.find(websiteTags, ['key', 'beacon.page.name']);
+                        }
                     });
                     this.datasource.getWebsiteMetricsCatalog().then(function (metrics) {
                         _this.availableMetrics = metrics;
                     });
-                    if (this.target.entity === '') {
-                        this.selectionReset();
-                        return this.$q.resolve();
-                    }
-                    else {
-                        this.checkMetricAndRefresh(refresh);
-                        return this.$q.resolve();
-                    }
+                    this.checkMetricAndRefresh(refresh);
+                    return this.$q.resolve();
                 };
                 InstanaQueryCtrl.prototype.onFilterChange = function (refresh) {
                     var _this = this;
-                    if (this.target.entityQuery === '') {
+                    if (!this.target.entityQuery) {
                         this.selectionReset();
                         return this.$q.resolve();
                     }
@@ -146,7 +140,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     var _this = this;
                     this.filterEntityTypes().then(function () {
                         _this.adjustEntitySelectionPlaceholder();
-                        if (!lodash_1.default.find(_this.uniqueEntityTypes, ['key', _this.target.entityType])) {
+                        if (_this.target.entityType && !lodash_1.default.find(_this.uniqueEntityTypes, ['key', _this.target.entityType.key])) {
                             _this.target.entityType = null; // entity selection label will be untouched
                             _this.resetMetricSelection();
                         }
@@ -192,7 +186,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.checkMetricAndRefresh(refresh);
                     this.adjustMetricSelectionPlaceholder();
                 };
-                InstanaQueryCtrl.prototype.onEntitySelect = function (refresh) {
+                InstanaQueryCtrl.prototype.onEntitySelect = function () {
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.addFilter = function () {
@@ -201,7 +195,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     }
                     this.target.filters.push({
                         tag: undefined,
-                        operator: "",
+                        operator: undefined,
                         stringValue: "",
                         numberValue: 0,
                         booleanValue: false,
@@ -215,14 +209,14 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                 InstanaQueryCtrl.prototype.onTagFilterChange = function (index) {
                     // validate changed filter
                     var filter = this.target.filters[index];
-                    if (filter.tag && filter.operator) {
-                        if ("STRING" === filter.tag.type && filter.stringValue) {
+                    if (filter.tag && filter.operator && filter.tag.type === filter.operator.type) {
+                        if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
                             filter.isValid = true;
                         }
-                        else if ("NUMBER" === filter.tag.type && filter.numberValue) {
+                        else if (this.OPERATOR_NUMBER === filter.tag.type && filter.numberValue) {
                             filter.isValid = true;
                         }
-                        else if ("BOOLEAN" === filter.tag.type && filter.booleanValue) {
+                        else if (this.OPERATOR_BOOLEAN === filter.tag.type && filter.booleanValue) {
                             filter.isValid = true;
                         }
                         else {
@@ -248,6 +242,8 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                 InstanaQueryCtrl.prototype.selectionReset = function () {
                     this.uniqueEntityTypes = [];
                     this.availableMetrics = [];
+                    this.uniqueEntities = [];
+                    this.uniqueTags = [];
                     this.resetEntityTypeSelection();
                     this.resetEntitySelection();
                     this.resetMetricSelection();
@@ -260,7 +256,6 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.target.entity = null;
                     this.target.group = null;
                     this.target.filters = [];
-                    console.log(this.target);
                 };
                 InstanaQueryCtrl.prototype.resetMetricSelection = function () {
                     this.target.metric = null;

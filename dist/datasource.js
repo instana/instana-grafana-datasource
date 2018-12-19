@@ -39,9 +39,10 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                         this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
                     }
                     else {
-                        this.url = instanceSettings.jsonData.url;
-                        this.apiToken = instanceSettings.jsonData.apiToken;
                     }
+                    // FIXME move up
+                    this.url = instanceSettings.jsonData.url;
+                    this.apiToken = instanceSettings.jsonData.apiToken;
                     this.currentTime = function () { return new Date().getTime(); };
                 }
                 InstanaDatasource.prototype.doRequest = function (url, maxRetries) {
@@ -93,13 +94,13 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                 };
                 InstanaDatasource.prototype.getMetricsCatalog = function (plugin, metricCategory) {
                     var _this = this;
-                    var id = plugin + '|' + metricCategory;
+                    var id = plugin.key + '|' + metricCategory;
                     var now = this.currentTime();
                     if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
                         var filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
                         this.catalogCache[id] = {
                             age: now,
-                            metrics: this.doRequest("/api/infrastructure-monitoring/catalog/metrics/" + plugin + "?filter=" + filter).then(function (catalogResponse) {
+                            metrics: this.doRequest("/api/infrastructure-monitoring/catalog/metrics/" + plugin.key + "?filter=" + filter).then(function (catalogResponse) {
                                 return catalogResponse.data.map(function (entry) { return ({
                                     'key': entry.metricId,
                                     'label': metricCategory === _this.CUSTOM_METRICS ? entry.description : entry.label,
@@ -186,27 +187,24 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     if (Object.keys(options.targets[0]).length === 0) {
                         return this.$q.resolve({ data: [] });
                     }
-                    // TODO FIXME DOIT ...
-                    if (true) {
-                        return this.$q.all(lodash_1.default.map(options.targets, function (target) {
-                            if (target.metricCategory === _this.WEBSITE_METRICS) {
-                                return _this.fetchMetricsForEntity(target, _this.fromFilter, _this.toFilter).then(function (response) {
-                                    // as we map two times we need to flatten the result
-                                    return lodash_1.default.flatten(response.data.items.map(function (item) {
-                                        return lodash_1.default.map(item.metrics, function (value, key) {
-                                            return {
-                                                'target': item.name.replace(/"/g, '') + ' (' + target.entity + ') - ' + key,
-                                                'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
-                                            };
-                                        });
-                                    }));
-                                });
-                            }
-                        })).then(function (results) {
-                            // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-                            return { data: [].concat.apply([], results) };
-                        });
-                    }
+                    return this.$q.all(lodash_1.default.map(options.targets, function (target) {
+                        if (target.metricCategory === _this.WEBSITE_METRICS) {
+                            return _this.fetchMetricsForEntity(target, _this.fromFilter, _this.toFilter).then(function (response) {
+                                // as we map two times we need to flatten the result
+                                return lodash_1.default.flatten(response.data.items.map(function (item) {
+                                    return lodash_1.default.map(item.metrics, function (value, key) {
+                                        return {
+                                            'target': item.name.replace(/"/g, '') + ' (' + target.entity + ') - ' + key,
+                                            'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
+                                        };
+                                    });
+                                }));
+                            });
+                        }
+                    })).then(function (results) {
+                        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+                        return { data: [].concat.apply([], results) };
+                    });
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
                         // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
                         return _this.fetchSnapshotsForTarget(target, _this.fromFilter, _this.toFilter)
@@ -330,8 +328,8 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                     var bestGuess = lodash_1.default.toInteger(windowSize / 1000 / this.MAX_NUMBER_OF_RESULTS);
                     var granularity = bestGuess < 1 ? 1 : bestGuess; // must be at least a second
                     // TODO remove
-                    if (!target || !target.metric || !target.group) {
-                        return this.$q.resolve();
+                    if (!target || !target.metric || !target.group || !target.entity) {
+                        return this.$q.resolve({ data: { items: [] } });
                     }
                     var tagFilters = [{
                             name: "beacon.website.name",

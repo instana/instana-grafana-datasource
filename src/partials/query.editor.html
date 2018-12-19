@@ -80,7 +80,7 @@
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.entityType"
                 ng-change="ctrl.onEntityTypeSelect(true)"
-                ng-options="f.key as f.label for f in ctrl.uniqueEntityTypes track by f.key">
+                ng-options="f as f.label for f in ctrl.uniqueEntityTypes track by f.key">
           <option value="" disabled selected>{{ctrl.entitySelectionText}}</option>
         </select>
       </div>
@@ -166,9 +166,9 @@
         <select id="in-website-{{ctrl.target.refId}}"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.entity"
-                ng-change="ctrl.onEntitySelect(true)"
-                ng-options="f.key as f.label for f in ctrl.uniqueEntities track by f.key">
-          <option value="?" disabled selected>Pick a website</option>
+                ng-change="ctrl.onEntitySelect()"
+                ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
+          <option value="" disabled selected>Pick a Website</option>
         </select>
       </div>
     </div>
@@ -183,12 +183,11 @@
           </info-popover>
         </label>
         <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
-          <select id="in-group-name-{{ctrl.target.refId}}"
+          <select id="in-group-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.group"
                   ng-change="ctrl.onGroupChange()"
-                  ng-options="f.key as f.key for f in ctrl.uniqueTags track by f.key">
-            <option value="?" disabled selected>Choose a group</option>
+                  ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
           </select>
         </div>
       </div>
@@ -216,8 +215,7 @@
                     class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                     ng-model="ctrl.target.filters[$index].operator"
                     ng-change="ctrl.onTagFilterChange($index)"
-                    ng-options="f.key as f.label for f in ctrl.uniqueOperators track by f.key">
-                    // TODO <!-- filter:f.type:ctrl.target.filters[$index].tag.type -->
+                    ng-options="f as f.label for f in ctrl.uniqueOperators track by f.key">
             </select>
           </div>
           <input id="in-filter-stringValue-{{ctrl.target.refId}}-{{$index}}"
@@ -228,6 +226,7 @@
                  ng-change="ctrl.onTagFilterChange($index)"
                  placeholder="Please Specify"
                  spellcheck='false'/>
+          {{ctrl.target.filters[$index].operator.type}}
           <button class="btn btn-inverse" ng-click="ctrl.removeFilter($index)">
   			    <i class="fa fa-minus"></i>
   		    </button>

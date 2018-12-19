@@ -58,9 +58,10 @@ export default class InstanaDatasource {
     if (versions[0] >= 5 && versions[1] >= 3) {
       this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
     } else {
-      this.url = instanceSettings.jsonData.url;
-      this.apiToken = instanceSettings.jsonData.apiToken;
     }
+    // FIXME move up
+    this.url = instanceSettings.jsonData.url;
+    this.apiToken = instanceSettings.jsonData.apiToken;
 
     this.currentTime = () => { return new Date().getTime(); };
   }
@@ -122,13 +123,13 @@ export default class InstanaDatasource {
   }
 
   getMetricsCatalog(plugin, metricCategory) {
-    const id = plugin + '|' + metricCategory;
+    const id = plugin.key + '|' + metricCategory;
     const now = this.currentTime();
     if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
       const filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
       this.catalogCache[id] = {
         age: now,
-        metrics: this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin}?filter=${filter}`).then(catalogResponse =>
+        metrics: this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`).then(catalogResponse =>
           catalogResponse.data.map(entry => ({
             'key' : entry.metricId,
             'label' : metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // built in metrics have nicer labels
@@ -222,29 +223,28 @@ export default class InstanaDatasource {
       return this.$q.resolve({ data: [] });
     }
 
-    // TODO FIXME DOIT ...
-    if (true) {
-      return this.$q.all(
-        _.map(options.targets, target => {
-          if (target.metricCategory === this.WEBSITE_METRICS) {
-            return this.fetchMetricsForEntity(target, this.fromFilter, this.toFilter).then(response => {
-              // as we map two times we need to flatten the result
-              return _.flatten(response.data.items.map(item => {
-                return _.map(item.metrics, function(value, key) {
-                  return {
-                    'target': item.name.replace(/"/g, '') + ' (' + target.entity + ') - ' + key, // TODO remove in API
-                    'datapoints': _.map(value, metric => [metric[1], metric[0]])
-                  };
-                });
-              }));
-            });
-          }
-        })
-      ).then(results => {
-        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-        return { data: [].concat.apply([], results) };
-      });
-    }
+    return this.$q.all(
+      _.map(options.targets, target => {
+
+        if (target.metricCategory === this.WEBSITE_METRICS) {
+          return this.fetchMetricsForEntity(target, this.fromFilter, this.toFilter).then(response => {
+            // as we map two times we need to flatten the result
+            return _.flatten(response.data.items.map(item => {
+              return _.map(item.metrics, function(value, key) {
+                return {
+                  'target': item.name.replace(/"/g, '') + ' (' + target.entity + ') - ' + key, // TODO remove in API
+                  'datapoints': _.map(value, metric => [metric[1], metric[0]])
+                };
+              });
+            }));
+          });
+        }
+      })
+    ).then(results => {
+      // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+      return { data: [].concat.apply([], results) };
+    });
+
 
     return this.$q.all(
       _.map(options.targets, target => {
@@ -398,8 +398,8 @@ export default class InstanaDatasource {
     const granularity = bestGuess < 1 ? 1 : bestGuess; // must be at least a second
 
     // TODO remove
-    if (!target || !target.metric || !target.group) {
-      return this.$q.resolve();
+    if (!target || !target.metric || !target.group || !target.entity) {
+      return this.$q.resolve({ data: { items: [] } });
     }
 
     const tagFilters = [{

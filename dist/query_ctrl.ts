@@ -1,6 +1,7 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
-
 import {QueryCtrl} from 'app/plugins/sdk';
+import aggregators from './aggregators';
+import operators from './operators';
 import _ from 'lodash';
 
 import './css/query_editor.css!';
@@ -13,7 +14,7 @@ export interface Selectable {
 
 export interface TagFilter {
   tag: Selectable;
-  operator: string;
+  operator: Selectable;
   stringValue: string;
   numberValue: number;
   booleanValue: boolean;
@@ -22,6 +23,9 @@ export interface TagFilter {
 
 export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
+
+  uniqueAggregators = aggregators;
+  uniqueOperators = operators;
 
   uniqueEntityTypes: Array<Object>; // subset of allEntityTypes filtered by DF
   allCustomMetrics: Array<Object>; // internal reference only to speed up filtering // TODO needed ?
@@ -32,10 +36,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
   previousMetricCategory: string;
   uniqueEntities: Array<Object>;
   uniqueTags: Array<Object>;
-  uniqueOperators: Array<Object>;
-  uniqueAggregations: Array<Object>;
 
   EMPTY_DROPDOWN_TEXT = ' - ';
+
+  OPERATOR_STRING = 'STRING';
+  OPERATOR_NUMBER = 'NUMBER';
+  OPERATOR_BOOLEAN = 'BOOLEAN';
+
   BUILT_IN_METRICS = '0';
   CUSTOM_METRICS = '1';
   APPLICATION_METRICS = '2';
@@ -48,6 +55,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
   constructor($scope, $injector, private templateSrv, private backendSrv, private $q) {
     super($scope, $injector);
 
+    const ctrl = this;
+    console.log('Constructor state ', ctrl);
+    $scope.$watch(function(){
+      console.log('Last controller state', ctrl);
+    });
+
     this.target.pluginId = this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
@@ -59,7 +72,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.previousMetricCategory = this.target.metricCategory;
 
     // infrastructure (built-in & custom)
-    if (this.target.entityQuery) {
+    if (this.isInfrastructure() && this.target.entityQuery) {
       this.onFilterChange(false).then(() => {
 
         // infrastructure metrics support available metrics on a selected entity type
@@ -74,8 +87,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
 
     // websites & applications
-    if (this.target.entity) {
-      this.onSomeChange(false).then(() => {
+    if (this.isEntity()) {
+      this.onEntityChanges(false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
         }
@@ -83,45 +96,24 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
   }
 
+  isInfrastructure() {
+    return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
+  }
+
+  isEntity() {
+    return this.target.metricCategory === this.WEBSITE_METRICS;
+  }
+
   onEveryChange(refresh) {
-    if (this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS) {
+    if (this.isInfrastructure()) {
       this.onFilterChange(refresh);
     }
-    if (this.target.metricCategory === this.WEBSITE_METRICS) {
-      this.onSomeChange(refresh);
+    if (this.isEntity()) {
+      this.onEntityChanges(refresh);
     }
   }
 
-  onSomeChange(refresh) {
-    // TODO all operatos
-    this.uniqueOperators = [
-      { key: "EQUALS", label: "equals", type: "STRING" },
-      { key: "CONTAINS", label: "contains", type: "STRING" },
-      { key: "NOT_CONTAIN", label: "not contains", type: "STRING" },
-      { key: "NOT_EQUAL", label: "is empty", type: "STRING" },
-      { key: "IS_EMPTY", label: "is empty", type: "STRING" },
-
-      { key: "EQUALS", label: "equals", type: "NUMBER" },
-      { key: "LESS_THAN", label: "less than", type: "NUMBER" },
-      { key: "GREATER_THAN", label: "greater than", type: "NUMBER" },
-
-      { key: "EQUALS", label: "not empty", type: "BOOLEAN" },
-    ];
-
-    this.uniqueAggregations = [
-      { key: "SUM", label: "sum", type: ""},
-      { key: "MEAN", label: "mean", type: ""},
-      { key: "MAX", label: "max", type: ""},
-      { key: "MIN", label: "min", type: ""},
-      { key: "P25", label: "p 25", type: ""},
-      { key: "P50", label: "p 50", type: ""},
-      { key: "P90", label: "p 90", type: ""},
-      { key: "P95", label: "p 95", type: ""},
-      { key: "P98", label: "p 98", type: ""},
-      { key: "P99", label: "p 99", type: ""},
-      { key: "DISTINCT_COUNT", label: "count", type: ""},
-    ];
-
+  onEntityChanges(refresh) {
     this.datasource.getWebsites().then(
       websites => {
         this.uniqueEntities = websites;
@@ -130,6 +122,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.datasource.getWebsiteTags().then(
       websiteTags => {
         this.uniqueTags = websiteTags;
+        // select a meaningfull default group
+        if (this.target && !this.target.group) {
+          this.target.group = _.find(websiteTags, ['key', 'beacon.page.name']);
+        }
       }
     );
     this.datasource.getWebsiteMetricsCatalog().then(
@@ -138,17 +134,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
       }
     );
 
-    if (this.target.entity === '') {
-      this.selectionReset();
-      return this.$q.resolve();
-    } else {
-      this.checkMetricAndRefresh(refresh);
-      return this.$q.resolve();
-    }
+    this.checkMetricAndRefresh(refresh);
+    return this.$q.resolve();
   }
 
   onFilterChange(refresh) {
-    if (this.target.entityQuery === '') {
+    if (!this.target.entityQuery) {
       this.selectionReset();
       return this.$q.resolve();
     } else {
@@ -181,7 +172,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.filterEntityTypes().then(() => {
       this.adjustEntitySelectionPlaceholder();
 
-      if (!_.find(this.uniqueEntityTypes, ['key', this.target.entityType])) {
+      if (this.target.entityType && !_.find(this.uniqueEntityTypes, ['key', this.target.entityType.key])) {
         this.target.entityType = null; // entity selection label will be untouched
         this.resetMetricSelection();
       } else if (this.target.metric && refresh) {
@@ -246,7 +237,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.adjustMetricSelectionPlaceholder();
   }
 
-  onEntitySelect(refresh) {
+  onEntitySelect() {
     this.panelCtrl.refresh();
   }
 
@@ -256,7 +247,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
     this.target.filters.push({
       tag: undefined,
-      operator: "",
+      operator: undefined,
       stringValue: "",
       numberValue: 0,
       booleanValue: false,
@@ -273,12 +264,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onTagFilterChange(index) {
     // validate changed filter
     let filter: TagFilter = this.target.filters[index];
-    if (filter.tag && filter.operator) {
-      if ("STRING" === filter.tag.type && filter.stringValue) {
+    if (filter.tag && filter.operator && filter.tag.type === filter.operator.type) {
+      if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
         filter.isValid = true;
-      } else if ("NUMBER" === filter.tag.type && filter.numberValue) {
+      } else if (this.OPERATOR_NUMBER === filter.tag.type && filter.numberValue) {
         filter.isValid = true;
-      } else if ("BOOLEAN" === filter.tag.type && filter.booleanValue) {
+      } else if (this.OPERATOR_BOOLEAN === filter.tag.type && filter.booleanValue) {
         filter.isValid = true;
       } else {
         filter.isValid = false;
@@ -304,6 +295,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
   selectionReset() {
     this.uniqueEntityTypes = [];
     this.availableMetrics = [];
+    this.uniqueEntities = [];
+    this.uniqueTags = [];
     this.resetEntityTypeSelection();
     this.resetEntitySelection();
     this.resetMetricSelection();
@@ -318,7 +311,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.entity = null;
     this.target.group = null;
     this.target.filters = [];
-    console.log(this.target);
   }
 
   resetMetricSelection() {

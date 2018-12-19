@@ -7,7 +7,7 @@ export interface Selectable {
 }
 export interface TagFilter {
     tag: Selectable;
-    operator: string;
+    operator: Selectable;
     stringValue: string;
     numberValue: number;
     booleanValue: boolean;
@@ -18,6 +18,16 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     private backendSrv;
     private $q;
     static templateUrl: string;
+    uniqueAggregators: {
+        key: string;
+        label: string;
+        type: string;
+    }[];
+    uniqueOperators: {
+        key: string;
+        label: string;
+        type: string;
+    }[];
     uniqueEntityTypes: Array<Object>;
     allCustomMetrics: Array<Object>;
     availableMetrics: Array<Object>;
@@ -27,9 +37,10 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     previousMetricCategory: string;
     uniqueEntities: Array<Object>;
     uniqueTags: Array<Object>;
-    uniqueOperators: Array<Object>;
-    uniqueAggregations: Array<Object>;
     EMPTY_DROPDOWN_TEXT: string;
+    OPERATOR_STRING: string;
+    OPERATOR_NUMBER: string;
+    OPERATOR_BOOLEAN: string;
     BUILT_IN_METRICS: string;
     CUSTOM_METRICS: string;
     APPLICATION_METRICS: string;
@@ -37,8 +48,10 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     defaults: {};
     /** @ngInject **/
     constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any, $q: any);
+    isInfrastructure(): boolean;
+    isEntity(): boolean;
     onEveryChange(refresh: any): void;
-    onSomeChange(refresh: any): any;
+    onEntityChanges(refresh: any): any;
     onFilterChange(refresh: any): any;
     onMetricCategorySelect(): void;
     filterForEntityType(refresh: any): void;
@@ -46,7 +59,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     findMatchingEntityTypes(entityType: any): boolean;
     onEntityTypeSelect(refresh: any): any;
     onMetricsFilter(refresh: any): void;
-    onEntitySelect(refresh: any): void;
+    onEntitySelect(): void;
     addFilter(): void;
     removeFilter(index: any): void;
     onTagFilterChange(index: any): void;
