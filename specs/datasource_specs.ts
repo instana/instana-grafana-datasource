@@ -5,7 +5,7 @@ import Q from 'q';
 import moment from 'moment';
 import { Object } from 'es6-shim';
 
-describe('InstanaDatasource', function() {
+describe('Given an InstanaDatasource', function() {
   let ctx: any = {
     backendSrv: {},
     templateSrv: new TemplateSrvStub()
@@ -592,5 +592,55 @@ describe('InstanaDatasource', function() {
         expect(datapoints).to.deep.include.members([[ 3, 1516451103603 ]]);
       });
     });
+  });
+});
+
+describe('Given an InstanaDatasource without proxy', function() {
+  let ctx: any = {
+    backendSrv: {},
+    templateSrv: new TemplateSrvStub()
+  };
+  window.grafanaBootData =  { settings: { buildInfo: { version : "5.2.9" } } };
+
+  beforeEach(function() {
+    ctx.$q = Q;
+    ctx.instanceSettings = {
+      id: 1,
+      name: 'instana-local-test',
+      url: '/api/datasources/proxy/1',
+      jsonData: {
+        url: 'http://localhost:8010',
+        apiToken: 'valid-api-token'
+      }
+    };
+
+    ctx.ds = new InstanaDatasource(ctx.instanceSettings, ctx.backendSrv, ctx.templateSrv, ctx.$q);
+  });
+
+  describe('When performing any request', function() {
+
+    beforeEach(function() {
+      const response = {
+        data: {},
+        status: 404,
+        statusText: 'Not Found'
+      };
+      ctx.backendSrv.datasourceRequest = function(options) {
+        switch (options.url) {
+          case "http://localhost:8010/api/snapshots/non-existing-snapshot-id?time=0":
+            return ctx.$q.resolve(response);
+          default:
+            throw new Error('Unexpected call URL: ' + options.url);
+        }
+      };
+    });
+
+    it('should use a direkt call', function() {
+      return ctx.ds.testDatasource().then(function(results) {
+        expect(results.status).to.equal('success');
+        expect(results.message).to.equal('Successfully connected to the Instana API.');
+      });
+    });
+
   });
 });

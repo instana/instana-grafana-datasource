@@ -5,7 +5,7 @@ import { PanelCtrl } from "app/plugins/sdk";
 import moment from "moment";
 import Q from "q";
 
-describe("InstanaQueryCtrl", function() {
+describe("Given an InstanaQueryCtrl", function() {
   let ctx: any = {
     backendSrv: {},
     templateSrv: new TemplateSrvStub()
@@ -20,10 +20,13 @@ describe("InstanaQueryCtrl", function() {
       {},
       {},
       new TemplateSrvStub(),
-      ctx.backendSrv
+      ctx.backendSrv,
+      Q
     );
     queryCtrl.datasource = {
       $q: Q,
+      infrastructure: {},
+      website: {},
       registerCacheSnapshotDataCallback: function(cb) {}
     };
     queryCtrl.panelCtrl = {
@@ -34,12 +37,12 @@ describe("InstanaQueryCtrl", function() {
   describe("when entering a dynamic focus query", function() {
     describe("that returns some snapshots", function() {
       it("should populate the entity types dropdown with unique entity types", function() {
-        queryCtrl.datasource.fetchTypesForTarget = function(options) {
+        queryCtrl.datasource.infrastructure.fetchTypesForTarget = function(options) {
           return ctx.$q.resolve({
             data: ["docker", "host", "weblogicapplicationcontainer"]
           });
         };
-        queryCtrl.datasource.getEntityTypes = function(options) {
+        queryCtrl.datasource.infrastructure.getEntityTypes = function(options) {
           return ctx.$q.resolve(
             [{
               key: "docker",
@@ -73,12 +76,12 @@ describe("InstanaQueryCtrl", function() {
 
     describe("that returns zero snapshots", function() {
       it("should show no entity types found in the entity type drowdown", function() {
-        queryCtrl.datasource.fetchTypesForTarget = function(options) {
+        queryCtrl.datasource.infrastructure.fetchTypesForTarget = function(options) {
           return ctx.$q.resolve({
             data: []
           });
         };
-        queryCtrl.datasource.getEntityTypes = function(options) {
+        queryCtrl.datasource.infrastructure.getEntityTypes = function(options) {
           return ctx.$q.resolve(
             [{
               key: "docker",
@@ -96,6 +99,8 @@ describe("InstanaQueryCtrl", function() {
           );
         };
 
+        queryCtrl.target.entityQuery = "unknown";
+
         return queryCtrl.onFilterChange(false).then(() => {
           expect(queryCtrl.uniqueEntityTypes).to.eql([]);
           // expect(queryCtrl.target.entityType).to.equal(null); // TODO this is async
@@ -105,17 +110,42 @@ describe("InstanaQueryCtrl", function() {
     });
 
     describe("that returns a query parsing error", function() {
-      it("should set the query state to invalid", function() {
-        queryCtrl.datasource.fetchTypesForTarget = function(options) {
+      it("should set the query state to invalid and reset all selections", function() {
+        queryCtrl.datasource.infrastructure.fetchTypesForTarget = function(options) {
           return ctx.$q.reject({
             status: 400
           });
         };
 
-        queryCtrl.target.entityQuery = "*eu";
+        queryCtrl.target.entityQuery = "parse error";
+        queryCtrl.target.queryIsValid = true;
+        queryCtrl.uniqueEntityTypes = [{ key: "docker", label: "Docker" }];
+        queryCtrl.availableMetrics = [{ key: "peter.pan", label: "Metric" }];
+        queryCtrl.target.metric = [{ key: "peter.pan", label: "Metric" }];
 
         return queryCtrl.onFilterChange(false).then(() => {
           expect(queryCtrl.target.queryIsValid).to.equal(false);
+          expect(queryCtrl.uniqueEntityTypes).to.eql([]);
+          expect(queryCtrl.availableMetrics).to.eql([]);
+          expect(queryCtrl.target.metric).to.equal(null);
+        });
+      });
+    });
+
+    describe("that is falsy", function() {
+      it("should reset all selections", function() {
+
+        queryCtrl.target.entityQuery = "";
+        queryCtrl.target.queryIsValid = true;
+        queryCtrl.uniqueEntityTypes = [{ key: "docker", label: "Docker" }];
+        queryCtrl.availableMetrics = [{ key: "peter.pan", label: "Metric" }];
+        queryCtrl.target.metric = [{ key: "peter.pan", label: "Metric" }];
+
+        return queryCtrl.onFilterChange(false).then(() => {
+          expect(queryCtrl.target.queryIsValid).to.equal(true);
+          expect(queryCtrl.uniqueEntityTypes).to.eql([]);
+          expect(queryCtrl.availableMetrics).to.eql([]);
+          expect(queryCtrl.target.metric).to.equal(null);
         });
       });
     });
@@ -125,7 +155,7 @@ describe("InstanaQueryCtrl", function() {
     it("should populate metric dropdown with built-in metrics", function() {
       queryCtrl.target.entityType = "hadoopyarnnode";
       queryCtrl.target.metricCategory = InstanaQueryCtrl.BUILT_IN_METRICS;
-      queryCtrl.datasource.getMetricsCatalog = function(options) {
+      queryCtrl.datasource.infrastructure.getMetricsCatalog = function(options) {
         return ctx.$q.resolve(
           [{
             key: "allocatedMem",
@@ -160,7 +190,7 @@ describe("InstanaQueryCtrl", function() {
     it("should populate metric dropdown with custom metrics", function() {
       queryCtrl.target.entityType = "dropwizardapplication";
       queryCtrl.target.metricCategory = InstanaQueryCtrl.CUSTOM_METRICS;
-      queryCtrl.datasource.getMetricsCatalog = function(options) {
+      queryCtrl.datasource.infrastructure.getMetricsCatalog = function(options) {
         return ctx.$q.resolve(
           [{
             key: "dropwizardTimer",
@@ -178,6 +208,43 @@ describe("InstanaQueryCtrl", function() {
         expect(queryCtrl.availableMetrics).to.eql([
           { key: "dropwizardTimer", label: "Dropwizard Timer", entityType: "dropwizardapplication" },
           { key: "dropwizardXomething", label: "Something Custom From Dropwizard", entityType: "dropwizardapplication" }
+        ]);
+      });
+    });
+  });
+
+  describe("when selecting entity type", function() {
+    it("should populate metric dropdown with built-in metrics", function() {
+      queryCtrl.target.entityType = "hadoopyarnnode";
+      queryCtrl.target.metricCategory = InstanaQueryCtrl.BUILT_IN_METRICS;
+      queryCtrl.datasource.infrastructure.getMetricsCatalog = function(options) {
+        return ctx.$q.resolve(
+          [{
+            key: "allocatedMem",
+            label: "Allocated Memory",
+            entityType: "hadoopyarnnode"
+          },{
+            key: "allocatedVCores",
+            label: "Allocated Virtual Cores",
+            entityType: "hadoopyarnnode"
+          },{
+            key: "availableMem",
+            label: "Available Memory",
+            entityType: "hadoopyarnnode"
+          },{
+            key: "availableVCores",
+            label: "Available Virtual Cores",
+            entityType: "hadoopyarnnode"
+          }]
+        );
+      };
+
+      return queryCtrl.onEntityTypeSelect(false).then(() => {
+        expect(queryCtrl.availableMetrics).to.eql([
+          { key: "allocatedMem", label: "Allocated Memory", entityType: "hadoopyarnnode" },
+          { key: "allocatedVCores", label: "Allocated Virtual Cores", entityType: "hadoopyarnnode" },
+          { key: "availableMem", label: "Available Memory", entityType: "hadoopyarnnode" },
+          { key: "availableVCores", label: "Available Virtual Cores", entityType: "hadoopyarnnode" }
         ]);
       });
     });
