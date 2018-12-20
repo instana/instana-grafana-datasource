@@ -143,7 +143,7 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                     }
                     return '';
                 };
-                InstanaInfrastructureDataSource.prototype.getMetricsForTarget = function (target, snapshots, timeFilter) {
+                InstanaInfrastructureDataSource.prototype.fetchMetricsForSnapshots = function (target, snapshots, timeFilter) {
                     var _this = this;
                     // Cache the data if fresh
                     if (this.wasLastFetchedFromApi()) {

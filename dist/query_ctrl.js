@@ -37,6 +37,7 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     this.OPERATOR_STRING = 'STRING';
                     this.OPERATOR_NUMBER = 'NUMBER';
                     this.OPERATOR_BOOLEAN = 'BOOLEAN';
+                    this.OPERATOR_KEY_VALUE = 'KEY_VALUE';
                     this.BUILT_IN_METRICS = '0';
                     this.CUSTOM_METRICS = '1';
                     this.APPLICATION_METRICS = '2';

@@ -59,11 +59,10 @@ export default class InstanaDatasource extends AbstractDatasource {
       return this.$q.resolve({ data: [] });
     }
 
-    // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
-    return this.infrastructure.fetchSnapshotsForTarget(target, this.timeFilter)
-      .then(snapshots => {
-        return this.infrastructure.getMetricsForTarget(target, snapshots, this.timeFilter);
-      });
+    // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
+    return this.infrastructure.fetchSnapshotsForTarget(target, this.timeFilter).then(snapshots => {
+      return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, this.timeFilter);
+    });
   }
 
   getWebsiteMetrics(target) {
@@ -89,8 +88,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   testDatasource() {
-    return this.doRequest('/api/snapshots/non-existing-snapshot-id?time=0')
-    .then(
+    return this.doRequest('/api/snapshots/non-existing-snapshot-id?time=0').then(
       // We always expect an error response, either a 404 (Not Found) or a 401 (Unauthorized).
       result => {
         return {
@@ -119,6 +117,7 @@ export default class InstanaDatasource extends AbstractDatasource {
             title: 'Error'
           };
         }
-      });
+      }
+    );
   }
 }

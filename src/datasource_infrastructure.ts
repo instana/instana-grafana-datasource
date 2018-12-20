@@ -128,8 +128,8 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   localCacheCopyAvailable(query, timeFilter) {
     return this.snapshotCache[query] &&
-           timeFilter.to - this.snapshotCache[query].time < this.CACHE_MAX_AGE &&
-           this.currentTime() - this.snapshotCache[query].age < this.CACHE_MAX_AGE;
+      timeFilter.to - this.snapshotCache[query].time < this.CACHE_MAX_AGE &&
+      this.currentTime() - this.snapshotCache[query].age < this.CACHE_MAX_AGE;
   }
 
   buildQuery(target) {
@@ -160,10 +160,11 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return '';
   }
 
-  getMetricsForTarget(target, snapshots, timeFilter) {
+  fetchMetricsForSnapshots(target, snapshots, timeFilter) {
     // Cache the data if fresh
     if (this.wasLastFetchedFromApi()) {
-      this.storeInCache(this.buildQuery(target),
+      this.storeInCache(
+        this.buildQuery(target),
         { time: timeFilter.to, age: this.currentTime(), snapshots: snapshots }
       );
     }
@@ -171,18 +172,14 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return this.$q.all(
       _.map(snapshots, snapshot => {
         // ...fetch the metric data for every snapshot in the results.
-        return this.fetchMetricsForSnapshot(
-          snapshot.snapshotId,
-          target.metric.key,
-          timeFilter)
-          .then(response => {
-            const timeseries = response.data.values;
-            var result = {
-              'target': this.buildLabel(snapshot.response, snapshot.host, target),
-              'datapoints': _.map(timeseries, value => [value.value, value.timestamp])
-            };
-            return result;
-          });
+        return this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter).then(response => {
+          const timeseries = response.data.values;
+          var result = {
+            'target': this.buildLabel(snapshot.response, snapshot.host, target),
+            'datapoints': _.map(timeseries, value => [value.value, value.timestamp])
+          };
+          return result;
+        });
       })
     );
   }

@@ -53,6 +53,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     OPERATOR_STRING: string;
     OPERATOR_NUMBER: string;
     OPERATOR_BOOLEAN: string;
+    OPERATOR_KEY_VALUE: string;
     BUILT_IN_METRICS: string;
     CUSTOM_METRICS: string;
     APPLICATION_METRICS: string;

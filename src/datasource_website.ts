@@ -33,42 +33,45 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
   }
 
   getWebsites(timeFilter) {
-      const now = this.currentTime();
-      const windowSize = this.getWindowSize(timeFilter);
+    const now = this.currentTime();
+    const windowSize = this.getWindowSize(timeFilter);
 
-      if (!this.websitesCache ||
-          timeFilter.to - this.websitesCache.time > this.CACHE_MAX_AGE ||
-          now - this.websitesCache.age > this.CACHE_MAX_AGE) {
-
-      const data = {
-        group: {
-          groupbyTag: 'beacon.website.name'
-        },
-        timeFrame: {
-          to: timeFilter.to,
-          windowSize: windowSize
-        },
-        order: {
-          by: 'pageLoads',
-          direction: "desc"
-        },
-        metrics: [{
-          metric: 'pageLoads',
-          aggregation: 'sum'
-        }]
+    if (this.noCacheCopyAvailable(timeFilter)) {
+    const data = {
+      group: {
+        groupbyTag: 'beacon.website.name'
+      },
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: windowSize
+      },
+      order: {
+        by: 'pageLoads',
+        direction: "desc"
+      },
+      metrics: [{
+        metric: 'pageLoads',
+        aggregation: 'sum'
+      }]
+    };
+      this.websitesCache = {
+        time: timeFilter.to,
+        age: now,
+        websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
+          websitesResponse.data.items.map(entry => ({
+            'key' : entry.name.replace(/"/g, ''), // TODO FIXME in API
+            'label' : entry.name.replace(/"/g, '') // TODO FIXME in API
+          }))
+        )
       };
-        this.websitesCache = {
-          time: timeFilter.to,
-          age: now,
-          websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
-            websitesResponse.data.items.map(entry => ({
-              'key' : entry.name.replace(/"/g, ''), // TODO FIXME in API
-              'label' : entry.name.replace(/"/g, '') // TODO FIXME in API
-            }))
-          )
-        };
-      }
-      return this.websitesCache.websites;
+    }
+    return this.websitesCache.websites;
+  }
+
+  noCacheCopyAvailable(timeFilter) {
+    return !this.websitesCache ||
+      timeFilter.to - this.websitesCache.time > this.CACHE_MAX_AGE ||
+      now - this.websitesCache.age > this.CACHE_MAX_AGE;
   }
 
   getWebsiteTags() {

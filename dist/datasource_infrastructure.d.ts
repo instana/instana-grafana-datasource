@@ -34,7 +34,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     buildQuery(target: any): string;
     buildLabel(snapshotResponse: any, host: any, target: any): any;
     getHostSuffix(host: any): string;
-    getMetricsForTarget(target: any, snapshots: any, timeFilter: any): any;
+    fetchMetricsForSnapshots(target: any, snapshots: any, timeFilter: any): any;
     fetchMetricsForSnapshot(snapshotId: any, metric: any, timeFilter: any): any;
     getDefaultMetricRollupDuration(timeFilter: any, minRollup?: number): {
         availableFor: number;

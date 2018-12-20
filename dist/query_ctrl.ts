@@ -42,6 +42,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   OPERATOR_STRING = 'STRING';
   OPERATOR_NUMBER = 'NUMBER';
   OPERATOR_BOOLEAN = 'BOOLEAN';
+  OPERATOR_KEY_VALUE = 'KEY_VALUE';
 
   BUILT_IN_METRICS = '0';
   CUSTOM_METRICS = '1';
