@@ -14,6 +14,9 @@ System.register(['lodash'], function(exports_1) {
                     this.templateSrv = templateSrv;
                     this.$q = $q;
                     this.CACHE_MAX_AGE = 60000;
+                    this.currentTime = function () {
+                        return new Date().getTime();
+                    };
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
                     // 5.3+ wanted to resolve dynamic routes in proxy mode
@@ -27,9 +30,6 @@ System.register(['lodash'], function(exports_1) {
                         this.apiToken = instanceSettings.jsonData.apiToken;
                     }
                 }
-                AbstractDatasource.prototype.currentTime = function () {
-                    return new Date().getTime();
-                };
                 AbstractDatasource.prototype.getWindowSize = function (timeFilter) {
                     return timeFilter.from ? timeFilter.to - timeFilter.from : timeFilter.windowSize;
                 };

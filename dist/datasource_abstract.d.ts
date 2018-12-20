@@ -9,7 +9,7 @@ export default class AbstractDatasource {
     CACHE_MAX_AGE: number;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
-    currentTime(): number;
+    currentTime: () => number;
     getWindowSize(timeFilter: any): any;
     doRequest(url: any, maxRetries?: number): any;
     postRequest(url: any, data: any, maxRetries?: number): any;

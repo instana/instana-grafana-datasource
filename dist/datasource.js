@@ -37,8 +37,8 @@ System.register(['./datasource_infrastructure', './datasource_website', './datas
                 }
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;
-                    this.timeFilter.from = options.range.from.valueOf();
-                    this.timeFilter.to = options.range.to.valueOf();
+                    this.timeFilter.from = new Date(options.range.from).getTime();
+                    this.timeFilter.to = new Date(options.range.to).getTime();
                     this.timeFilter.windowSize = this.timeFilter.to - this.timeFilter.from;
                     if (Object.keys(options.targets[0]).length === 0) {
                         return this.$q.resolve({ data: [] });

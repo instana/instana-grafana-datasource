@@ -24,7 +24,7 @@ export default class AbstractDatasource {
     }
   }
 
-  currentTime() {
+  currentTime = () => {
     return new Date().getTime();
   }
 
