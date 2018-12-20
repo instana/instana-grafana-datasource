@@ -36,7 +36,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     const now = this.currentTime();
     const windowSize = this.getWindowSize(timeFilter);
 
-    if (this.noCacheCopyAvailable(timeFilter)) {
+    if (this.noCacheCopyAvailable(timeFilter, now)) {
     const data = {
       group: {
         groupbyTag: 'beacon.website.name'
@@ -68,7 +68,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return this.websitesCache.websites;
   }
 
-  noCacheCopyAvailable(timeFilter) {
+  noCacheCopyAvailable(timeFilter, now) {
     return !this.websitesCache ||
       timeFilter.to - this.websitesCache.time > this.CACHE_MAX_AGE ||
       now - this.websitesCache.age > this.CACHE_MAX_AGE;

@@ -22,6 +22,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     getWebsites(timeFilter: any): Object[];
+    noCacheCopyAvailable(timeFilter: any, now: any): boolean;
     getWebsiteTags(): Object[];
     getWebsiteMetricsCatalog(): Object[];
     fetchMetricsForEntity(target: any, timeFilter: any): any;

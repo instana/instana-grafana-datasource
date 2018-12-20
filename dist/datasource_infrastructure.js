@@ -151,8 +151,7 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                     }
                     return this.$q.all(lodash_1.default.map(snapshots, function (snapshot) {
                         // ...fetch the metric data for every snapshot in the results.
-                        return _this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter)
-                            .then(function (response) {
+                        return _this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter).then(function (response) {
                             var timeseries = response.data.values;
                             var result = {
                                 'target': _this.buildLabel(snapshot.response, snapshot.host, target),

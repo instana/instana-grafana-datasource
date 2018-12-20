@@ -27,9 +27,7 @@ System.register(['./datasource_abstract', 'lodash'], function(exports_1) {
                 InstanaWebsiteDataSource.prototype.getWebsites = function (timeFilter) {
                     var now = this.currentTime();
                     var windowSize = this.getWindowSize(timeFilter);
-                    if (!this.websitesCache ||
-                        timeFilter.to - this.websitesCache.time > this.CACHE_MAX_AGE ||
-                        now - this.websitesCache.age > this.CACHE_MAX_AGE) {
+                    if (this.noCacheCopyAvailable(timeFilter, now)) {
                         var data = {
                             group: {
                                 groupbyTag: 'beacon.website.name'
@@ -59,6 +57,11 @@ System.register(['./datasource_abstract', 'lodash'], function(exports_1) {
                         };
                     }
                     return this.websitesCache.websites;
+                };
+                InstanaWebsiteDataSource.prototype.noCacheCopyAvailable = function (timeFilter, now) {
+                    return !this.websitesCache ||
+                        timeFilter.to - this.websitesCache.time > this.CACHE_MAX_AGE ||
+                        now - this.websitesCache.age > this.CACHE_MAX_AGE;
                 };
                 InstanaWebsiteDataSource.prototype.getWebsiteTags = function () {
                     var now = this.currentTime();
