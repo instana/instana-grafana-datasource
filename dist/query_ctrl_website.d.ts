@@ -70,9 +70,11 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     findMatchingEntityTypes(entityType: any): boolean;
     onEntityTypeSelect(refresh: any): any;
     onMetricsFilter(refresh: any): void;
+    onEntitySelect(): void;
     addFilter(): void;
     removeFilter(index: any): void;
     onTagFilterChange(index: any): void;
+    onGroupChange(): void;
     checkMetricAndRefresh(refresh: any): void;
     selectionReset(): void;
     resetEntityTypeSelection(): void;
@@ -80,8 +82,6 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     resetMetricSelection(): void;
     adjustEntitySelectionPlaceholder(): void;
     adjustMetricSelectionPlaceholder(): void;
-    onEntitySelect(): void;
-    onGroupChange(): void;
     onMetricSelect(): void;
     onLabelChange(): void;
 }

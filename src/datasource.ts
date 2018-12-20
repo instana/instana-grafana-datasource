@@ -33,6 +33,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   query(options) {
     this.timeFilter.from = options.range.from.valueOf();
     this.timeFilter.to = options.range.to.valueOf();
+    this.timeFilter.windowSize = this.timeFilter.to - this.timeFilter.from;
 
     if (Object.keys(options.targets[0]).length === 0) {
       return this.$q.resolve({ data: [] });
@@ -40,78 +41,42 @@ export default class InstanaDatasource extends AbstractDatasource {
 
     return this.$q.all(
       _.map(options.targets, target => {
-
         if (target.metricCategory === this.WEBSITE_METRICS) {
-          return this.website.fetchMetricsForEntity(target, this.timeFilter).then(response => {
-            // as we map two times we need to flatten the result
-            return _.flatten(response.data.items.map(item => {
-              return _.map(item.metrics, function(value, key) {
-                return {
-                  'target': item.name.replace(/"/g, '') + ' (' + target.entity.key + ') - ' + key, // TODO remove in API
-                  'datapoints': _.map(value, metric => [metric[1], metric[0]])
-                };
-              });
-            }));
-          });
+          return this.getWebsiteMetrics(target);
         } else {
-          // TODO here infrastructure
+          return this.getInfrastructureMetrics(target);
         }
       })
     ).then(results => {
       // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
       return { data: [].concat.apply([], results) };
     });
+  }
 
-    return this.$q.all(
-      _.map(options.targets, target => {
-        // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
-        return this.infrastructure.fetchSnapshotsForTarget(target, this.timeFilter)
-          .then(snapshots => {
-            return {
-              'target': target,
-              'snapshots': snapshots
-            };
-          });
-      })
-    ).then(targetsWithSnapshots => {
-      return this.$q.all(
-        _.map(targetsWithSnapshots, targetWithSnapshots => {
-          // For every target with all snapshots that were returned by the lucene query...
-          // Cache the data if fresh
-          if (this.infrastructure.wasLastFetchedFromApi()) {
-            this.infrastructure.storeInCache(this.infrastructure.buildQuery(targetWithSnapshots.target),
-              { time: this.timeFilter.to, age: this.currentTime(), snapshots: targetWithSnapshots.snapshots }
-            );
-          }
+  getInfrastructureMetrics(target) {
+    // do not try to retrieve data without selected metric
+    if (!target.metric) {
+      return this.$q.resolve({ data: [] });
+    }
 
-          // do not try to retrieve data without selected metric
-          if (!targetWithSnapshots.target.metric) {
-            return this.$q.resolve({ data: [] });
-          }
+    // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
+    return this.infrastructure.fetchSnapshotsForTarget(target, this.timeFilter)
+      .then(snapshots => {
+        return this.infrastructure.getMetricsForTarget(target, snapshots, this.timeFilter);
+      });
+  }
 
-          return this.$q.all(
-            _.map(targetWithSnapshots.snapshots, snapshot => {
-
-              // ...fetch the metric data for every snapshot in the results.
-              return this.infrastructure.fetchMetricsForSnapshot(
-                snapshot.snapshotId,
-                targetWithSnapshots.target.metric.key,
-                this.timeFilter)
-                .then(response => {
-                  const timeseries = response.data.values;
-                  var result = {
-                    'target': this.infrastructure.buildLabel(snapshot.response, snapshot.host, targetWithSnapshots.target),
-                    'datapoints': _.map(timeseries, value => [value.value, value.timestamp])
-                  };
-                  return result;
-                });
-            })
-          );
-        })
-      );
-    }).then(results => {
-      // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-      return { data: [].concat.apply([], results) };
+  getWebsiteMetrics(target) {
+    return this.website.fetchMetricsForEntity(target, this.timeFilter).then(response => {
+      // as we map two times we need to flatten the result
+      return _.flatten(response.data.items.map(item => {
+        return _.map(item.metrics, function(value, key) {
+          return {
+            'target': item.name.replace(/"/g, '') + ' (' + target.entity.key + ') - ' + key, // TODO remove in API
+            'datapoints': _.map(value, metric => [metric[1], metric[0]])
+          };
+        });
+      }));
     });
   }
 

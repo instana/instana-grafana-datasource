@@ -119,7 +119,7 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                         this.currentTime() - this.snapshotCache[query].age < this.CACHE_MAX_AGE;
                 };
                 InstanaInfrastructureDataSource.prototype.buildQuery = function (target) {
-                    return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType);
+                    return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType.key);
                 };
                 InstanaInfrastructureDataSource.prototype.buildLabel = function (snapshotResponse, host, target) {
                     if (target.labelFormat) {
@@ -142,6 +142,25 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                         return ' (on host "' + host + '")';
                     }
                     return '';
+                };
+                InstanaInfrastructureDataSource.prototype.getMetricsForTarget = function (target, snapshots, timeFilter) {
+                    var _this = this;
+                    // Cache the data if fresh
+                    if (this.wasLastFetchedFromApi()) {
+                        this.storeInCache(this.buildQuery(target), { time: timeFilter.to, age: this.currentTime(), snapshots: snapshots });
+                    }
+                    return this.$q.all(lodash_1.default.map(snapshots, function (snapshot) {
+                        // ...fetch the metric data for every snapshot in the results.
+                        return _this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter)
+                            .then(function (response) {
+                            var timeseries = response.data.values;
+                            var result = {
+                                'target': _this.buildLabel(snapshot.response, snapshot.host, target),
+                                'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; })
+                            };
+                            return result;
+                        });
+                    }));
                 };
                 InstanaInfrastructureDataSource.prototype.fetchMetricsForSnapshot = function (snapshotId, metric, timeFilter) {
                     var rollup = this.getDefaultMetricRollupDuration(timeFilter).rollup;

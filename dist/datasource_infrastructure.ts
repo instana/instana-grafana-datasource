@@ -133,7 +133,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   }
 
   buildQuery(target) {
-    return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType}`);
+    return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType.key}`);
   }
 
   buildLabel(snapshotResponse, host, target) {
@@ -158,6 +158,33 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       return ' (on host "' + host + '")';
     }
     return '';
+  }
+
+  getMetricsForTarget(target, snapshots, timeFilter) {
+    // Cache the data if fresh
+    if (this.wasLastFetchedFromApi()) {
+      this.storeInCache(this.buildQuery(target),
+        { time: timeFilter.to, age: this.currentTime(), snapshots: snapshots }
+      );
+    }
+
+    return this.$q.all(
+      _.map(snapshots, snapshot => {
+        // ...fetch the metric data for every snapshot in the results.
+        return this.fetchMetricsForSnapshot(
+          snapshot.snapshotId,
+          target.metric.key,
+          timeFilter)
+          .then(response => {
+            const timeseries = response.data.values;
+            var result = {
+              'target': this.buildLabel(snapshot.response, snapshot.host, target),
+              'datapoints': _.map(timeseries, value => [value.value, value.timestamp])
+            };
+            return result;
+          });
+      })
+    );
   }
 
   fetchMetricsForSnapshot(snapshotId, metric, timeFilter) {

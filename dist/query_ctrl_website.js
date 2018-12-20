@@ -184,6 +184,9 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     this.checkMetricAndRefresh(refresh);
                     this.adjustMetricSelectionPlaceholder();
                 };
+                InstanaQueryCtrl.prototype.onEntitySelect = function () {
+                    this.panelCtrl.refresh();
+                };
                 InstanaQueryCtrl.prototype.addFilter = function () {
                     if (!this.target.filters) {
                         this.target.filters = [];
@@ -225,6 +228,9 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     else {
                         filter.isValid = false;
                     }
+                    this.panelCtrl.refresh();
+                };
+                InstanaQueryCtrl.prototype.onGroupChange = function () {
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.checkMetricAndRefresh = function (refresh) {
@@ -274,12 +280,6 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                             : this.EMPTY_DROPDOWN_TEXT;
                     }
                 };
-                InstanaQueryCtrl.prototype.onEntitySelect = function () {
-                    this.panelCtrl.refresh();
-                };
-                InstanaQueryCtrl.prototype.onGroupChange = function () {
-                    this.panelCtrl.refresh();
-                };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {
                     this.panelCtrl.refresh();
                 };
@@ -293,4 +293,4 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
         }
     }
 });
-//# sourceMappingURL=query_ctrl.js.map
+//# sourceMappingURL=query_ctrl_website.js.map

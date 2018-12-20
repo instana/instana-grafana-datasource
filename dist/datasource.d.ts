@@ -15,6 +15,8 @@ export default class InstanaDatasource extends AbstractDatasource {
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     query(options: any): any;
+    getInfrastructureMetrics(target: any): any;
+    getWebsiteMetrics(target: any): any;
     annotationQuery(options: any): void;
     metricFindQuery(query: string): void;
     testDatasource(): any;

@@ -39,65 +39,45 @@ System.register(['./datasource_infrastructure', './datasource_website', './datas
                     var _this = this;
                     this.timeFilter.from = options.range.from.valueOf();
                     this.timeFilter.to = options.range.to.valueOf();
+                    this.timeFilter.windowSize = this.timeFilter.to - this.timeFilter.from;
                     if (Object.keys(options.targets[0]).length === 0) {
                         return this.$q.resolve({ data: [] });
                     }
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
                         if (target.metricCategory === _this.WEBSITE_METRICS) {
-                            return _this.website.fetchMetricsForEntity(target, _this.timeFilter).then(function (response) {
-                                // as we map two times we need to flatten the result
-                                return lodash_1.default.flatten(response.data.items.map(function (item) {
-                                    return lodash_1.default.map(item.metrics, function (value, key) {
-                                        return {
-                                            'target': item.name.replace(/"/g, '') + ' (' + target.entity.key + ') - ' + key,
-                                            'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
-                                        };
-                                    });
-                                }));
-                            });
+                            return _this.getWebsiteMetrics(target);
                         }
                         else {
+                            return _this.getInfrastructureMetrics(target);
                         }
                     })).then(function (results) {
                         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
                         return { data: [].concat.apply([], results) };
                     });
-                    return this.$q.all(lodash_1.default.map(options.targets, function (target) {
-                        // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
-                        return _this.infrastructure.fetchSnapshotsForTarget(target, _this.timeFilter)
-                            .then(function (snapshots) {
-                            return {
-                                'target': target,
-                                'snapshots': snapshots
-                            };
-                        });
-                    })).then(function (targetsWithSnapshots) {
-                        return _this.$q.all(lodash_1.default.map(targetsWithSnapshots, function (targetWithSnapshots) {
-                            // For every target with all snapshots that were returned by the lucene query...
-                            // Cache the data if fresh
-                            if (_this.infrastructure.wasLastFetchedFromApi()) {
-                                _this.infrastructure.storeInCache(_this.infrastructure.buildQuery(targetWithSnapshots.target), { time: _this.timeFilter.to, age: _this.currentTime(), snapshots: targetWithSnapshots.snapshots });
-                            }
-                            // do not try to retrieve data without selected metric
-                            if (!targetWithSnapshots.target.metric) {
-                                return _this.$q.resolve({ data: [] });
-                            }
-                            return _this.$q.all(lodash_1.default.map(targetWithSnapshots.snapshots, function (snapshot) {
-                                // ...fetch the metric data for every snapshot in the results.
-                                return _this.infrastructure.fetchMetricsForSnapshot(snapshot.snapshotId, targetWithSnapshots.target.metric.key, _this.timeFilter)
-                                    .then(function (response) {
-                                    var timeseries = response.data.values;
-                                    var result = {
-                                        'target': _this.infrastructure.buildLabel(snapshot.response, snapshot.host, targetWithSnapshots.target),
-                                        'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; })
-                                    };
-                                    return result;
-                                });
-                            }));
+                };
+                InstanaDatasource.prototype.getInfrastructureMetrics = function (target) {
+                    var _this = this;
+                    // do not try to retrieve data without selected metric
+                    if (!target.metric) {
+                        return this.$q.resolve({ data: [] });
+                    }
+                    // For every target, fetch snapshots that in the selected timeframe that satisfy the lucene query.
+                    return this.infrastructure.fetchSnapshotsForTarget(target, this.timeFilter)
+                        .then(function (snapshots) {
+                        return _this.infrastructure.getMetricsForTarget(target, snapshots, _this.timeFilter);
+                    });
+                };
+                InstanaDatasource.prototype.getWebsiteMetrics = function (target) {
+                    return this.website.fetchMetricsForEntity(target, this.timeFilter).then(function (response) {
+                        // as we map two times we need to flatten the result
+                        return lodash_1.default.flatten(response.data.items.map(function (item) {
+                            return lodash_1.default.map(item.metrics, function (value, key) {
+                                return {
+                                    'target': item.name.replace(/"/g, '') + ' (' + target.entity.key + ') - ' + key,
+                                    'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
+                                };
+                            });
                         }));
-                    }).then(function (results) {
-                        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-                        return { data: [].concat.apply([], results) };
                     });
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {

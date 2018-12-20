@@ -233,10 +233,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.adjustMetricSelectionPlaceholder();
   }
 
-  onEntitySelect() {
-    this.panelCtrl.refresh();
-  }
-
   addFilter() {
     if (!this.target.filters) {
       this.target.filters = [];
@@ -278,10 +274,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     } else {
       filter.isValid = false;
     }
-    this.panelCtrl.refresh();
-  }
-
-  onGroupChange() {
     this.panelCtrl.refresh();
   }
 
@@ -335,6 +327,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
       ? 'Please select (' + this.availableMetrics.length + ')'
       : this.EMPTY_DROPDOWN_TEXT;
     }
+  }
+
+  onEntitySelect() {
+    this.panelCtrl.refresh();
+  }
+
+  onGroupChange() {
+    this.panelCtrl.refresh();
   }
 
   onMetricSelect() {
