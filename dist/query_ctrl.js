@@ -45,7 +45,7 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     var ctrl = this;
                     console.log('Constructor state ', ctrl.target);
                     $scope.$watch(function () {
-                        console.log('Last controller state', ctrl.target);
+                        // console.log('Last controller state', ctrl.target);
                     });
                     this.target.pluginId = this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
@@ -85,19 +85,20 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                 };
                 InstanaQueryCtrl.prototype.onEntityChanges = function (refresh) {
                     var _this = this;
-                    this.datasource.getWebsites().then(function (websites) {
+                    this.datasource.website.getWebsites(this.datasource.timeFilter).then(function (websites) {
                         _this.uniqueEntities = websites;
                     });
-                    this.datasource.getWebsiteTags().then(function (websiteTags) {
+                    this.datasource.website.getWebsiteTags().then(function (websiteTags) {
                         _this.uniqueTags = websiteTags;
                         // select a meaningful default group
                         if (_this.target && !_this.target.group) {
                             _this.target.group = lodash_1.default.find(websiteTags, ['key', 'beacon.page.name']);
                         }
                     });
-                    return this.datasource.getWebsiteMetricsCatalog().then(function (metrics) {
+                    return this.datasource.website.getWebsiteMetricsCatalog().then(function (metrics) {
                         _this.availableMetrics = metrics;
                         _this.checkMetricAndRefresh(refresh);
+                        _this.adjustMetricSelectionPlaceholder();
                     });
                 };
                 InstanaQueryCtrl.prototype.onFilterChange = function (refresh) {
@@ -107,7 +108,7 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                         return this.$q.resolve();
                     }
                     else {
-                        return this.datasource.fetchTypesForTarget(this.target)
+                        return this.datasource.infrastructure.fetchTypesForTarget(this.target, this.datasource.timeFilter)
                             .then(function (response) {
                             _this.target.queryIsValid = true;
                             _this.snapshots = response.data;
@@ -148,7 +149,7 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                 };
                 InstanaQueryCtrl.prototype.filterEntityTypes = function () {
                     var _this = this;
-                    return this.datasource.getEntityTypes(this.target.metricCategory).then(function (entityTypes) {
+                    return this.datasource.infrastructure.getEntityTypes(this.target.metricCategory).then(function (entityTypes) {
                         _this.uniqueEntityTypes =
                             lodash_1.default.sortBy(lodash_1.default.filter(entityTypes, function (entityType) { return _this.findMatchingEntityTypes(entityType); }), 'label');
                     });
@@ -164,7 +165,7 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                 };
                 InstanaQueryCtrl.prototype.onEntityTypeSelect = function (refresh) {
                     var _this = this;
-                    return this.datasource.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(function (metrics) {
+                    return this.datasource.infrastructure.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(function (metrics) {
                         _this.availableMetrics =
                             lodash_1.default.sortBy(metrics, 'key');
                         // store all metrics in addition for filtering
@@ -204,9 +205,13 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onTagFilterChange = function (index) {
-                    // validate changed filter
                     var filter = this.target.filters[index];
-                    if (filter.tag && filter.operator && filter.tag.type === filter.operator.type) {
+                    // select a matching operator if not provided
+                    if (filter.tag && (!filter.operator || filter.tag.type !== filter.operator.type)) {
+                        filter.operator = this.uniqueOperators[filter.tag.type][0];
+                    }
+                    // validate changed filter
+                    if (filter.tag) {
                         if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
                             filter.isValid = true;
                         }

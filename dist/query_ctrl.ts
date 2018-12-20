@@ -58,7 +58,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     const ctrl = this;
     console.log('Constructor state ', ctrl.target);
     $scope.$watch(function(){
-      console.log('Last controller state', ctrl.target);
+      // console.log('Last controller state', ctrl.target);
     });
 
     this.target.pluginId = this.panelCtrl.pluginId;
@@ -105,12 +105,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onEntityChanges(refresh) {
-    this.datasource.getWebsites().then(
+    this.datasource.website.getWebsites(this.datasource.timeFilter).then(
       websites => {
         this.uniqueEntities = websites;
       }
     );
-    this.datasource.getWebsiteTags().then(
+    this.datasource.website.getWebsiteTags().then(
       websiteTags => {
         this.uniqueTags = websiteTags;
         // select a meaningful default group
@@ -119,10 +119,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
         }
       }
     );
-    return this.datasource.getWebsiteMetricsCatalog().then(
+    return this.datasource.website.getWebsiteMetricsCatalog().then(
       metrics => {
         this.availableMetrics = metrics;
         this.checkMetricAndRefresh(refresh);
+        this.adjustMetricSelectionPlaceholder();
       }
     );
   }
@@ -132,7 +133,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.selectionReset();
       return this.$q.resolve();
     } else {
-      return this.datasource.fetchTypesForTarget(this.target)
+      return this.datasource.infrastructure.fetchTypesForTarget(this.target, this.datasource.timeFilter)
         .then(
           response => {
             this.target.queryIsValid = true;
@@ -177,7 +178,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   filterEntityTypes() {
-    return this.datasource.getEntityTypes(this.target.metricCategory).then(
+    return this.datasource.infrastructure.getEntityTypes(this.target.metricCategory).then(
       entityTypes => {
         this.uniqueEntityTypes =
           _.sortBy(
@@ -200,7 +201,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onEntityTypeSelect(refresh) {
-    return this.datasource.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(
+    return this.datasource.infrastructure.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(
       metrics => {
         this.availableMetrics =
         _.sortBy(
@@ -257,9 +258,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onTagFilterChange(index) {
-    // validate changed filter
     let filter: TagFilter = this.target.filters[index];
-    if (filter.tag && filter.operator && filter.tag.type === filter.operator.type) {
+
+    // select a matching operator if not provided
+    if (filter.tag && (!filter.operator || filter.tag.type !== filter.operator.type)) {
+      filter.operator = this.uniqueOperators[filter.tag.type][0];
+    }
+    // validate changed filter
+    if (filter.tag) {
       if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
         filter.isValid = true;
       } else if (this.OPERATOR_NUMBER === filter.tag.type && filter.numberValue) {

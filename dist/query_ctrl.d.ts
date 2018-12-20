@@ -24,10 +24,22 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         type: string;
     }[];
     uniqueOperators: {
-        key: string;
-        label: string;
-        type: string;
-    }[];
+        string: {
+            key: string;
+            label: string;
+            type: string;
+        }[];
+        number: {
+            key: string;
+            label: string;
+            type: string;
+        }[];
+        boolean: {
+            key: string;
+            label: string;
+            type: string;
+        }[];
+    };
     uniqueEntityTypes: Array<Object>;
     allCustomMetrics: Array<Object>;
     availableMetrics: Array<Object>;
