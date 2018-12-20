@@ -55,12 +55,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   constructor($scope, $injector, private templateSrv, private backendSrv, private $q) {
     super($scope, $injector);
 
-    const ctrl = this;
-    console.log('Constructor state ', ctrl.target);
-    $scope.$watch(function(){
-      // console.log('Last controller state', ctrl.target);
-    });
-
     this.target.pluginId = this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;

@@ -42,11 +42,6 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     this.APPLICATION_METRICS = '2';
                     this.WEBSITE_METRICS = '3';
                     this.defaults = {};
-                    var ctrl = this;
-                    console.log('Constructor state ', ctrl.target);
-                    $scope.$watch(function () {
-                        // console.log('Last controller state', ctrl.target);
-                    });
                     this.target.pluginId = this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
