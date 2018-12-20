@@ -43,9 +43,9 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     this.WEBSITE_METRICS = '3';
                     this.defaults = {};
                     var ctrl = this;
-                    console.log('Constructor state ', ctrl);
+                    console.log('Constructor state ', ctrl.target);
                     $scope.$watch(function () {
-                        console.log('Last controller state', ctrl);
+                        console.log('Last controller state', ctrl.target);
                     });
                     this.target.pluginId = this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
@@ -83,14 +83,6 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                 InstanaQueryCtrl.prototype.isEntity = function () {
                     return this.target.metricCategory === this.WEBSITE_METRICS;
                 };
-                InstanaQueryCtrl.prototype.onEveryChange = function (refresh) {
-                    if (this.isInfrastructure()) {
-                        this.onFilterChange(refresh);
-                    }
-                    if (this.isEntity()) {
-                        this.onEntityChanges(refresh);
-                    }
-                };
                 InstanaQueryCtrl.prototype.onEntityChanges = function (refresh) {
                     var _this = this;
                     this.datasource.getWebsites().then(function (websites) {
@@ -98,16 +90,15 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     });
                     this.datasource.getWebsiteTags().then(function (websiteTags) {
                         _this.uniqueTags = websiteTags;
-                        // select a meaningfull default group
+                        // select a meaningful default group
                         if (_this.target && !_this.target.group) {
                             _this.target.group = lodash_1.default.find(websiteTags, ['key', 'beacon.page.name']);
                         }
                     });
-                    this.datasource.getWebsiteMetricsCatalog().then(function (metrics) {
+                    return this.datasource.getWebsiteMetricsCatalog().then(function (metrics) {
                         _this.availableMetrics = metrics;
+                        _this.checkMetricAndRefresh(refresh);
                     });
-                    this.checkMetricAndRefresh(refresh);
-                    return this.$q.resolve();
                 };
                 InstanaQueryCtrl.prototype.onFilterChange = function (refresh) {
                     var _this = this;
@@ -132,7 +123,13 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     }
                     else {
                         this.selectionReset();
-                        this.onEveryChange(true);
+                        // fresh internal used lists without re-rendering
+                        if (this.isInfrastructure()) {
+                            this.onFilterChange(false);
+                        }
+                        if (this.isEntity()) {
+                            this.onEntityChanges(false);
+                        }
                     }
                     this.previousMetricCategory = this.target.metricCategory;
                 };

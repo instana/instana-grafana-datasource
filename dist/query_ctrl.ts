@@ -56,9 +56,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
     super($scope, $injector);
 
     const ctrl = this;
-    console.log('Constructor state ', ctrl);
+    console.log('Constructor state ', ctrl.target);
     $scope.$watch(function(){
-      console.log('Last controller state', ctrl);
+      console.log('Last controller state', ctrl.target);
     });
 
     this.target.pluginId = this.panelCtrl.pluginId;
@@ -104,15 +104,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     return this.target.metricCategory === this.WEBSITE_METRICS;
   }
 
-  onEveryChange(refresh) {
-    if (this.isInfrastructure()) {
-      this.onFilterChange(refresh);
-    }
-    if (this.isEntity()) {
-      this.onEntityChanges(refresh);
-    }
-  }
-
   onEntityChanges(refresh) {
     this.datasource.getWebsites().then(
       websites => {
@@ -122,20 +113,18 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.datasource.getWebsiteTags().then(
       websiteTags => {
         this.uniqueTags = websiteTags;
-        // select a meaningfull default group
+        // select a meaningful default group
         if (this.target && !this.target.group) {
           this.target.group = _.find(websiteTags, ['key', 'beacon.page.name']);
         }
       }
     );
-    this.datasource.getWebsiteMetricsCatalog().then(
+    return this.datasource.getWebsiteMetricsCatalog().then(
       metrics => {
         this.availableMetrics = metrics;
+        this.checkMetricAndRefresh(refresh);
       }
     );
-
-    this.checkMetricAndRefresh(refresh);
-    return this.$q.resolve();
   }
 
   onFilterChange(refresh) {
@@ -163,7 +152,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
       // nothing needs to be done
     } else {
       this.selectionReset();
-      this.onEveryChange(true);
+      // fresh internal used lists without re-rendering
+      if (this.isInfrastructure()) {
+        this.onFilterChange(false);
+      }
+      if (this.isEntity()) {
+        this.onEntityChanges(false);
+      }
     }
     this.previousMetricCategory = this.target.metricCategory;
   }

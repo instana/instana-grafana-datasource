@@ -201,6 +201,8 @@ System.register(['./rollups', 'lodash'], function(exports_1) {
                                 }));
                             });
                         }
+                        else {
+                        }
                     })).then(function (results) {
                         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
                         return { data: [].concat.apply([], results) };

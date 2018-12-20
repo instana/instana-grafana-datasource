@@ -50,7 +50,6 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any, $q: any);
     isInfrastructure(): boolean;
     isEntity(): boolean;
-    onEveryChange(refresh: any): void;
     onEntityChanges(refresh: any): any;
     onFilterChange(refresh: any): any;
     onMetricCategorySelect(): void;
