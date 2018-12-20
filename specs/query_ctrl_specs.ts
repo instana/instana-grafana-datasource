@@ -213,41 +213,4 @@ describe("Given an InstanaQueryCtrl", function() {
     });
   });
 
-  describe("when selecting entity type", function() {
-    it("should populate metric dropdown with built-in metrics", function() {
-      queryCtrl.target.entityType = "hadoopyarnnode";
-      queryCtrl.target.metricCategory = InstanaQueryCtrl.BUILT_IN_METRICS;
-      queryCtrl.datasource.infrastructure.getMetricsCatalog = function(options) {
-        return ctx.$q.resolve(
-          [{
-            key: "allocatedMem",
-            label: "Allocated Memory",
-            entityType: "hadoopyarnnode"
-          },{
-            key: "allocatedVCores",
-            label: "Allocated Virtual Cores",
-            entityType: "hadoopyarnnode"
-          },{
-            key: "availableMem",
-            label: "Available Memory",
-            entityType: "hadoopyarnnode"
-          },{
-            key: "availableVCores",
-            label: "Available Virtual Cores",
-            entityType: "hadoopyarnnode"
-          }]
-        );
-      };
-
-      return queryCtrl.onEntityTypeSelect(false).then(() => {
-        expect(queryCtrl.availableMetrics).to.eql([
-          { key: "allocatedMem", label: "Allocated Memory", entityType: "hadoopyarnnode" },
-          { key: "allocatedVCores", label: "Allocated Virtual Cores", entityType: "hadoopyarnnode" },
-          { key: "availableMem", label: "Available Memory", entityType: "hadoopyarnnode" },
-          { key: "availableVCores", label: "Available Virtual Cores", entityType: "hadoopyarnnode" }
-        ]);
-      });
-    });
-  });
-
 });
