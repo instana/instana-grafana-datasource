@@ -47,6 +47,14 @@ System.register(['app/plugins/sdk', './operators', './migration', 'lodash', './c
                     this.target.pluginId = this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
+                    // can we read the options here ??
+                    var now = new Date().getTime();
+                    var windowSize = 6 * 60 * 60 * 1000; // 6h
+                    this.timeFilter = {
+                        from: now - windowSize,
+                        to: now,
+                        windowSize: windowSize
+                    };
                     // on new panel creation we default the category selection to built-in
                     if (!this.target.metricCategory) {
                         this.target.metricCategory = this.BUILT_IN_METRICS;
@@ -82,7 +90,7 @@ System.register(['app/plugins/sdk', './operators', './migration', 'lodash', './c
                 };
                 InstanaQueryCtrl.prototype.onEntityChanges = function (refresh) {
                     var _this = this;
-                    this.datasource.website.getWebsites(this.datasource.timeFilter).then(function (websites) {
+                    this.datasource.website.getWebsites(this.timeFilter).then(function (websites) {
                         _this.uniqueEntities = websites;
                         // select the most loaded website for default/replacement
                         if (_this.target && !_this.target.entity && websites) {
@@ -113,7 +121,7 @@ System.register(['app/plugins/sdk', './operators', './migration', 'lodash', './c
                         return this.$q.resolve();
                     }
                     else {
-                        return this.datasource.infrastructure.fetchTypesForTarget(this.target, this.datasource.timeFilter)
+                        return this.datasource.infrastructure.fetchTypesForTarget(this.target, this.timeFilter)
                             .then(function (response) {
                             _this.target.queryIsValid = true;
                             _this.snapshots = response.data;

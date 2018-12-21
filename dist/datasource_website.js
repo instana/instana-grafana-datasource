@@ -60,8 +60,9 @@ System.register(['./datasource_abstract', 'lodash'], function(exports_1) {
                                 }]
                         };
                         this.websitesCache = {
-                            time: timeFilter.to,
-                            age: now,
+                            at: now,
+                            from: timeFilter.from,
+                            to: timeFilter.to,
                             websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(function (websitesResponse) {
                                 return websitesResponse.data.items.map(function (entry) { return ({
                                     'key': entry.name,
@@ -74,8 +75,9 @@ System.register(['./datasource_abstract', 'lodash'], function(exports_1) {
                 };
                 InstanaWebsiteDataSource.prototype.noCacheCopyAvailable = function (timeFilter, now) {
                     return !this.websitesCache ||
-                        timeFilter.to - this.websitesCache.time > this.CACHE_MAX_AGE ||
-                        now - this.websitesCache.age > this.CACHE_MAX_AGE;
+                        timeFilter.from - this.websitesCache.from > this.CACHE_MAX_AGE ||
+                        timeFilter.to - this.websitesCache.to > this.CACHE_MAX_AGE ||
+                        now - this.websitesCache.at > this.CACHE_MAX_AGE;
                 };
                 InstanaWebsiteDataSource.prototype.getWebsiteTags = function () {
                     var now = this.currentTime();

@@ -5,16 +5,9 @@ import rollupDurationThresholds from './rollups';
 import migrate from './migration';
 import _ from 'lodash';
 
-export interface TimeFilter {
-  to: number;
-  from?: number;
-  windowSize?: number;
-}
-
 export default class InstanaDatasource extends AbstractDatasource {
   infrastructure: InstanaInfrastructureDataSource;
   website: InstanaWebsiteDataSource;
-  timeFilter: TimeFilter;
 
   CUSTOM_METRICS = '1';
   WEBSITE_METRICS = '3';
@@ -25,20 +18,14 @@ export default class InstanaDatasource extends AbstractDatasource {
 
     this.infrastructure = new InstanaInfrastructureDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);
-    this.timeFilter = {
-      to: this.currentTime(),
-      windowSize: 3600
-    };
   }
 
   query(options) {
-    this.timeFilter.from = new Date(options.range.from).getTime();
-    this.timeFilter.to = new Date(options.range.to).getTime();
-    this.timeFilter.windowSize = this.timeFilter.to - this.timeFilter.from;
-
     if (Object.keys(options.targets[0]).length === 0) {
       return this.$q.resolve({ data: [] });
     }
+
+    const timeFilter = this.readTime(options);
 
     return this.$q.all(
       _.map(options.targets, target => {
@@ -47,9 +34,9 @@ export default class InstanaDatasource extends AbstractDatasource {
         migrate(target);
 
         if (target.metricCategory === this.WEBSITE_METRICS) {
-          return this.getWebsiteMetrics(target);
+          return this.getWebsiteMetrics(target, timeFilter);
         } else {
-          return this.getInfrastructureMetrics(target);
+          return this.getInfrastructureMetrics(target, timeFilter);
         }
       })
     ).then(results => {
@@ -58,20 +45,30 @@ export default class InstanaDatasource extends AbstractDatasource {
     });
   }
 
-  getInfrastructureMetrics(target) {
+  readTime(options) {
+    const from = new Date(options.range.from).getTime();
+    const to = new Date(options.range.to).getTime();
+    return {
+      from: from,
+      to: to,
+      windowSize: to - from
+    };
+  }
+
+  getInfrastructureMetrics(target, timeFilter) {
     // do not try to retrieve data without selected metric
     if (!target.metric) {
       return this.$q.resolve({ data: [] });
     }
 
     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
-    return this.infrastructure.fetchSnapshotsForTarget(target, this.timeFilter).then(snapshots => {
-      return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, this.timeFilter);
+    return this.infrastructure.fetchSnapshotsForTarget(target, timeFilter).then(snapshots => {
+      return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter);
     });
   }
 
-  getWebsiteMetrics(target) {
-    return this.website.fetchMetricsForEntity(target, this.timeFilter).then(response => {
+  getWebsiteMetrics(target, timeFilter) {
+    return this.website.fetchMetricsForEntity(target, timeFilter).then(response => {
       // as we map two times we need to flatten the result
       return _.flatten(response.data.items.map(item => {
         return _.map(item.metrics, function(value, key) {

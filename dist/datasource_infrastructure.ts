@@ -32,6 +32,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     this.catalogCache = {};
   }
 
+  // FIXME CACHE
   storeInCache = (query, data) => {
     this.snapshotCache[query] = data;
   }
@@ -76,13 +77,9 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   }
 
   fetchTypesForTarget(target, timeFilter) {
-    // as long no timewindow was adjusted for newly created dashboards (now-6h)
-    const timeQuery = (timeFilter.from && timeFilter.to) ?
-      `&from=${timeFilter.from}&to=${timeFilter.to}` :
-      `&time=${this.currentTime()}`;
     const fetchSnapshotTypesUrl = `/api/snapshots/types`+
       `?q=${encodeURIComponent(target.entityQuery)}` +
-      `${timeQuery}` +
+      `&from=${timeFilter.from}&to=${timeFilter.to}` +
       `&newApplicationModelEnabled=true`;
     return this.doRequest(fetchSnapshotTypesUrl);
   }
@@ -90,6 +87,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   fetchSnapshotsForTarget(target, timeFilter) {
     const query = this.buildQuery(target);
 
+    // FIXME CACHE
     if (this.localCacheCopyAvailable(query, timeFilter)) {
       this.setLastFetchedFromApi(false);
       return this.$q.resolve(this.snapshotCache[query].snapshots);
@@ -128,8 +126,9 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   localCacheCopyAvailable(query, timeFilter) {
     return this.snapshotCache[query] &&
-      timeFilter.to - this.snapshotCache[query].time < this.CACHE_MAX_AGE &&
-      this.currentTime() - this.snapshotCache[query].age < this.CACHE_MAX_AGE;
+      timeFilter.to - this.snapshotCache[query].to < this.CACHE_MAX_AGE &&
+      timeFilter.from - this.snapshotCache[query].from < this.CACHE_MAX_AGE &&
+      this.currentTime() - this.snapshotCache[query].at < this.CACHE_MAX_AGE;
   }
 
   buildQuery(target) {
@@ -163,9 +162,10 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   fetchMetricsForSnapshots(target, snapshots, timeFilter) {
     // Cache the data if fresh
     if (this.wasLastFetchedFromApi()) {
+      // FIXME CACHE
       this.storeInCache(
         this.buildQuery(target),
-        { time: timeFilter.to, age: this.currentTime(), snapshots: snapshots }
+        { at: this.currentTime(), from: timeFilter.from, to: timeFilter.to, snapshots: snapshots }
       );
     }
 

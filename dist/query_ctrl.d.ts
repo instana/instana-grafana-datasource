@@ -32,6 +32,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     previousMetricCategory: string;
     uniqueEntities: Array<Object>;
     uniqueTags: Array<Object>;
+    timeFilter: Object;
     EMPTY_DROPDOWN_TEXT: string;
     OPERATOR_STRING: string;
     OPERATOR_NUMBER: string;

@@ -35,6 +35,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   previousMetricCategory: string;
   uniqueEntities: Array<Object>;
   uniqueTags: Array<Object>;
+  timeFilter: Object;
 
   EMPTY_DROPDOWN_TEXT = ' - ';
 
@@ -61,6 +62,15 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.pluginId = this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
+
+    // can we read the options here ??
+    const now = new Date().getTime();
+    const windowSize = 6 * 60 * 60 * 1000; // 6h
+    this.timeFilter = {
+      from: now - windowSize,
+      to: now,
+      windowSize: windowSize
+    };
 
     // on new panel creation we default the category selection to built-in
     if (!this.target.metricCategory) {
@@ -102,7 +112,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onEntityChanges(refresh) {
-    this.datasource.website.getWebsites(this.datasource.timeFilter).then(
+    this.datasource.website.getWebsites(this.timeFilter).then(
       websites => {
         this.uniqueEntities = websites;
         // select the most loaded website for default/replacement
@@ -139,7 +149,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.selectionReset();
       return this.$q.resolve();
     } else {
-      return this.datasource.infrastructure.fetchTypesForTarget(this.target, this.datasource.timeFilter)
+      return this.datasource.infrastructure.fetchTypesForTarget(this.target, this.timeFilter)
         .then(
           response => {
             this.target.queryIsValid = true;

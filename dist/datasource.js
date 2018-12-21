@@ -33,46 +33,49 @@ System.register(['./datasource_infrastructure', './datasource_website', './datas
                     this.WEBSITE_METRICS = '3';
                     this.infrastructure = new datasource_infrastructure_1.default(instanceSettings, backendSrv, templateSrv, $q);
                     this.website = new datasource_website_1.default(instanceSettings, backendSrv, templateSrv, $q);
-                    this.timeFilter = {
-                        to: this.currentTime(),
-                        windowSize: 3600
-                    };
                 }
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;
-                    this.timeFilter.from = new Date(options.range.from).getTime();
-                    this.timeFilter.to = new Date(options.range.to).getTime();
-                    this.timeFilter.windowSize = this.timeFilter.to - this.timeFilter.from;
                     if (Object.keys(options.targets[0]).length === 0) {
                         return this.$q.resolve({ data: [] });
                     }
+                    var timeFilter = this.readTime(options);
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
                         // target migration for downwards compability
                         migration_1.default(target);
                         if (target.metricCategory === _this.WEBSITE_METRICS) {
-                            return _this.getWebsiteMetrics(target);
+                            return _this.getWebsiteMetrics(target, timeFilter);
                         }
                         else {
-                            return _this.getInfrastructureMetrics(target);
+                            return _this.getInfrastructureMetrics(target, timeFilter);
                         }
                     })).then(function (results) {
                         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
                         return { data: [].concat.apply([], results) };
                     });
                 };
-                InstanaDatasource.prototype.getInfrastructureMetrics = function (target) {
+                InstanaDatasource.prototype.readTime = function (options) {
+                    var from = new Date(options.range.from).getTime();
+                    var to = new Date(options.range.to).getTime();
+                    return {
+                        from: from,
+                        to: to,
+                        windowSize: to - from
+                    };
+                };
+                InstanaDatasource.prototype.getInfrastructureMetrics = function (target, timeFilter) {
                     var _this = this;
                     // do not try to retrieve data without selected metric
                     if (!target.metric) {
                         return this.$q.resolve({ data: [] });
                     }
                     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
-                    return this.infrastructure.fetchSnapshotsForTarget(target, this.timeFilter).then(function (snapshots) {
-                        return _this.infrastructure.fetchMetricsForSnapshots(target, snapshots, _this.timeFilter);
+                    return this.infrastructure.fetchSnapshotsForTarget(target, timeFilter).then(function (snapshots) {
+                        return _this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter);
                     });
                 };
-                InstanaDatasource.prototype.getWebsiteMetrics = function (target) {
-                    return this.website.fetchMetricsForEntity(target, this.timeFilter).then(function (response) {
+                InstanaDatasource.prototype.getWebsiteMetrics = function (target, timeFilter) {
+                    return this.website.fetchMetricsForEntity(target, timeFilter).then(function (response) {
                         // as we map two times we need to flatten the result
                         return lodash_1.default.flatten(response.data.items.map(function (item) {
                             return lodash_1.default.map(item.metrics, function (value, key) {

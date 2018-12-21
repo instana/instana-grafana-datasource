@@ -2,8 +2,9 @@ import AbstractDatasource from './datasource_abstract';
 import _ from 'lodash';
 
 export interface WebsitesCache {
-  time: number;
-  age: number;
+  at: number;
+  from: number;
+  to: number;
   websites: Array<Object>;
 }
 
@@ -69,8 +70,9 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       }]
     };
       this.websitesCache = {
-        time: timeFilter.to,
-        age: now,
+        at: now,
+        from: timeFilter.from,
+        to: timeFilter.to,
         websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
           websitesResponse.data.items.map(entry => ({
             'key' : entry.name,
@@ -84,8 +86,9 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
 
   noCacheCopyAvailable(timeFilter, now) {
     return !this.websitesCache ||
-      timeFilter.to - this.websitesCache.time > this.CACHE_MAX_AGE ||
-      now - this.websitesCache.age > this.CACHE_MAX_AGE;
+      timeFilter.from - this.websitesCache.from > this.CACHE_MAX_AGE ||
+      timeFilter.to - this.websitesCache.to > this.CACHE_MAX_AGE ||
+      now - this.websitesCache.at > this.CACHE_MAX_AGE;
   }
 
   getWebsiteTags() {

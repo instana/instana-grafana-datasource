@@ -1,7 +1,8 @@
 import AbstractDatasource from './datasource_abstract';
 export interface WebsitesCache {
-    time: number;
-    age: number;
+    at: number;
+    from: number;
+    to: number;
     websites: Array<Object>;
 }
 export interface MetricsCatalogCache {

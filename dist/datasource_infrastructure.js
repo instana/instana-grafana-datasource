@@ -28,6 +28,7 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                     this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
                     this.CACHE_MAX_AGE = 60000;
                     this.CUSTOM_METRICS = '1';
+                    // FIXME CACHE
                     this.storeInCache = function (query, data) {
                         _this.snapshotCache[query] = data;
                     };
@@ -71,19 +72,16 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                     return this.catalogCache[id].metrics;
                 };
                 InstanaInfrastructureDataSource.prototype.fetchTypesForTarget = function (target, timeFilter) {
-                    // as long no timewindow was adjusted for newly created dashboards (now-6h)
-                    var timeQuery = (timeFilter.from && timeFilter.to) ?
-                        "&from=" + timeFilter.from + "&to=" + timeFilter.to :
-                        "&time=" + this.currentTime();
                     var fetchSnapshotTypesUrl = "/api/snapshots/types" +
                         ("?q=" + encodeURIComponent(target.entityQuery)) +
-                        ("" + timeQuery) +
+                        ("&from=" + timeFilter.from + "&to=" + timeFilter.to) +
                         "&newApplicationModelEnabled=true";
                     return this.doRequest(fetchSnapshotTypesUrl);
                 };
                 InstanaInfrastructureDataSource.prototype.fetchSnapshotsForTarget = function (target, timeFilter) {
                     var _this = this;
                     var query = this.buildQuery(target);
+                    // FIXME CACHE
                     if (this.localCacheCopyAvailable(query, timeFilter)) {
                         this.setLastFetchedFromApi(false);
                         return this.$q.resolve(this.snapshotCache[query].snapshots);
@@ -115,8 +113,9 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                 };
                 InstanaInfrastructureDataSource.prototype.localCacheCopyAvailable = function (query, timeFilter) {
                     return this.snapshotCache[query] &&
-                        timeFilter.to - this.snapshotCache[query].time < this.CACHE_MAX_AGE &&
-                        this.currentTime() - this.snapshotCache[query].age < this.CACHE_MAX_AGE;
+                        timeFilter.to - this.snapshotCache[query].to < this.CACHE_MAX_AGE &&
+                        timeFilter.from - this.snapshotCache[query].from < this.CACHE_MAX_AGE &&
+                        this.currentTime() - this.snapshotCache[query].at < this.CACHE_MAX_AGE;
                 };
                 InstanaInfrastructureDataSource.prototype.buildQuery = function (target) {
                     return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType.key);
@@ -147,7 +146,8 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                     var _this = this;
                     // Cache the data if fresh
                     if (this.wasLastFetchedFromApi()) {
-                        this.storeInCache(this.buildQuery(target), { time: timeFilter.to, age: this.currentTime(), snapshots: snapshots });
+                        // FIXME CACHE
+                        this.storeInCache(this.buildQuery(target), { at: this.currentTime(), from: timeFilter.from, to: timeFilter.to, snapshots: snapshots });
                     }
                     return this.$q.all(lodash_1.default.map(snapshots, function (snapshot) {
                         // ...fetch the metric data for every snapshot in the results.
