@@ -71,7 +71,7 @@ export default class InstanaDatasource extends AbstractDatasource {
       return _.flatten(response.data.items.map(item => {
         return _.map(item.metrics, function(value, key) {
           return {
-            'target': item.name.replace(/"/g, '') + ' (' + target.entity.key + ') - ' + key, // TODO remove in API
+            'target': item.name + ' (' + target.entity.key + ') - ' + key,
             'datapoints': _.map(value, metric => [metric[1], metric[0]])
           };
         });

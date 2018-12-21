@@ -72,7 +72,7 @@ System.register(['./datasource_infrastructure', './datasource_website', './datas
                         return lodash_1.default.flatten(response.data.items.map(function (item) {
                             return lodash_1.default.map(item.metrics, function (value, key) {
                                 return {
-                                    'target': item.name.replace(/"/g, '') + ' (' + target.entity.key + ') - ' + key,
+                                    'target': item.name + ' (' + target.entity.key + ') - ' + key,
                                     'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
                                 };
                             });

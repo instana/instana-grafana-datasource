@@ -51,7 +51,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       },
       metrics: [{
         metric: 'pageLoads',
-        aggregation: 'sum'
+        aggregation: 'SUM'
       }]
     };
       this.websitesCache = {
@@ -59,8 +59,8 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
         age: now,
         websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
           websitesResponse.data.items.map(entry => ({
-            'key' : entry.name.replace(/"/g, ''), // TODO FIXME in API
-            'label' : entry.name.replace(/"/g, '') // TODO FIXME in API
+            'key' : entry.name,
+            'label' : entry.name
           }))
         )
       };
@@ -99,7 +99,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
           catalogResponse.data.map(entry => ({
             'key' : entry.metricId,
             'label' : entry.label,
-            'entityType' : 'website'
+            'aggregations' : entry.aggregations ? entry.aggregations.sort() : []
           }))
         )
       };
@@ -140,7 +140,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       tagFilters: tagFilters,
       metrics: [{
         metric: target.metric.key,
-        aggregation: 'sum', // TODO insert matching aggregation for metric
+        aggregation: target.aggregation ? target.aggregation : 'SUM',
         granularity: granularity
       }]
     };

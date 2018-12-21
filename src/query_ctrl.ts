@@ -1,6 +1,5 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import {QueryCtrl} from 'app/plugins/sdk';
-import aggregators from './aggregators';
 import operators from './operators';
 import _ from 'lodash';
 
@@ -24,7 +23,6 @@ export interface TagFilter {
 export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
 
-  uniqueAggregators = aggregators;
   uniqueOperators = operators;
 
   uniqueEntityTypes: Array<Object>; // subset of allEntityTypes filtered by DF
@@ -42,7 +40,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   OPERATOR_STRING = 'STRING';
   OPERATOR_NUMBER = 'NUMBER';
   OPERATOR_BOOLEAN = 'BOOLEAN';
-  OPERATOR_KEY_VALUE = 'KEY_VALUE';
+  OPERATOR_KEY_VALUE = 'KEY_VALUE_PAIR';
 
   BUILT_IN_METRICS = '0';
   CUSTOM_METRICS = '1';
@@ -103,11 +101,20 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.datasource.website.getWebsites(this.datasource.timeFilter).then(
       websites => {
         this.uniqueEntities = websites;
+        // select the most loaded website for default/replacement
+        if (this.target && !this.target.entity && websites) {
+          this.target.entity = websites[0];
+        } else if (this.target && this.target.entity && !_.find(websites, ['key', this.target.entity.key])) {
+          this.target.entity = websites[0];
+        }
       }
     );
     this.datasource.website.getWebsiteTags().then(
       websiteTags => {
-        this.uniqueTags = websiteTags;
+        this.uniqueTags =
+          _.sortBy(
+            websiteTags,
+            'key');
         // select a meaningful default group
         if (this.target && !this.target.group) {
           this.target.group = _.find(websiteTags, ['key', 'beacon.page.name']);
@@ -232,12 +239,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
     if (!this.target.filters) {
       this.target.filters = [];
     }
+
     this.target.filters.push({
-      tag: undefined,
-      operator: undefined,
+      tag: this.target.group,
+      operator: { key: 'EQUALS', type: this.target.group.type },
       stringValue: "",
       numberValue: 0,
-      booleanValue: false,
+      booleanValue: "true",
       isValid: false
     });
   }
@@ -253,11 +261,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // select a matching operator if not provided
     if (filter.tag && (!filter.operator || filter.tag.type !== filter.operator.type)) {
-      filter.operator = this.uniqueOperators[filter.tag.type][0];
+      filter.operator = _.find(this.uniqueOperators, ['type', filter.tag.type]);
     }
     // validate changed filter
     if (filter.tag) {
       if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
+        filter.isValid = true;
+      } else if (this.OPERATOR_KEY_VALUE === filter.tag.type && filter.stringValue && filter.stringValue.includes('=') ) {
         filter.isValid = true;
       } else if (this.OPERATOR_NUMBER === filter.tag.type && filter.numberValue) {
         filter.isValid = true;
@@ -333,6 +343,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onMetricSelect() {
+    if (this.target.metricCategory === this.WEBSITE_METRICS && !_.includes(this.target.metric.aggregations, this.target.aggregation)) {
+      this.target.aggregation = this.target.metric.aggregations[0];
+    }
     this.panelCtrl.refresh();
   }
 

@@ -42,7 +42,7 @@ System.register(['./datasource_abstract', 'lodash'], function(exports_1) {
                             },
                             metrics: [{
                                     metric: 'pageLoads',
-                                    aggregation: 'sum'
+                                    aggregation: 'SUM'
                                 }]
                         };
                         this.websitesCache = {
@@ -50,8 +50,8 @@ System.register(['./datasource_abstract', 'lodash'], function(exports_1) {
                             age: now,
                             websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(function (websitesResponse) {
                                 return websitesResponse.data.items.map(function (entry) { return ({
-                                    'key': entry.name.replace(/"/g, ''),
-                                    'label': entry.name.replace(/"/g, '') // TODO FIXME in API
+                                    'key': entry.name,
+                                    'label': entry.name
                                 }); });
                             })
                         };
@@ -87,7 +87,7 @@ System.register(['./datasource_abstract', 'lodash'], function(exports_1) {
                                 return catalogResponse.data.map(function (entry) { return ({
                                     'key': entry.metricId,
                                     'label': entry.label,
-                                    'entityType': 'website'
+                                    'aggregations': entry.aggregations ? entry.aggregations.sort() : []
                                 }); });
                             })
                         };
@@ -125,7 +125,7 @@ System.register(['./datasource_abstract', 'lodash'], function(exports_1) {
                         tagFilters: tagFilters,
                         metrics: [{
                                 metric: target.metric.key,
-                                aggregation: 'sum',
+                                aggregation: target.aggregation ? target.aggregation : 'SUM',
                                 granularity: granularity
                             }]
                     };

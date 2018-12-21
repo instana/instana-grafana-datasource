@@ -1,18 +1,15 @@
-System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', './operators', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, aggregators_1, operators_1, lodash_1;
+    var sdk_1, operators_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
             function (sdk_1_1) {
                 sdk_1 = sdk_1_1;
-            },
-            function (aggregators_1_1) {
-                aggregators_1 = aggregators_1_1;
             },
             function (operators_1_1) {
                 operators_1 = operators_1_1;
@@ -31,13 +28,12 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     this.templateSrv = templateSrv;
                     this.backendSrv = backendSrv;
                     this.$q = $q;
-                    this.uniqueAggregators = aggregators_1.default;
                     this.uniqueOperators = operators_1.default;
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
                     this.OPERATOR_STRING = 'STRING';
                     this.OPERATOR_NUMBER = 'NUMBER';
                     this.OPERATOR_BOOLEAN = 'BOOLEAN';
-                    this.OPERATOR_KEY_VALUE = 'KEY_VALUE';
+                    this.OPERATOR_KEY_VALUE = 'KEY_VALUE_PAIR';
                     this.BUILT_IN_METRICS = '0';
                     this.CUSTOM_METRICS = '1';
                     this.APPLICATION_METRICS = '2';
@@ -83,9 +79,17 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     var _this = this;
                     this.datasource.website.getWebsites(this.datasource.timeFilter).then(function (websites) {
                         _this.uniqueEntities = websites;
+                        // select the most loaded website for default/replacement
+                        if (_this.target && !_this.target.entity && websites) {
+                            _this.target.entity = websites[0];
+                        }
+                        else if (_this.target && _this.target.entity && !lodash_1.default.find(websites, ['key', _this.target.entity.key])) {
+                            _this.target.entity = websites[0];
+                        }
                     });
                     this.datasource.website.getWebsiteTags().then(function (websiteTags) {
-                        _this.uniqueTags = websiteTags;
+                        _this.uniqueTags =
+                            lodash_1.default.sortBy(websiteTags, 'key');
                         // select a meaningful default group
                         if (_this.target && !_this.target.group) {
                             _this.target.group = lodash_1.default.find(websiteTags, ['key', 'beacon.page.name']);
@@ -185,11 +189,11 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                         this.target.filters = [];
                     }
                     this.target.filters.push({
-                        tag: undefined,
-                        operator: undefined,
+                        tag: this.target.group,
+                        operator: { key: 'EQUALS', type: this.target.group.type },
                         stringValue: "",
                         numberValue: 0,
-                        booleanValue: false,
+                        booleanValue: "true",
                         isValid: false
                     });
                 };
@@ -201,11 +205,14 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     var filter = this.target.filters[index];
                     // select a matching operator if not provided
                     if (filter.tag && (!filter.operator || filter.tag.type !== filter.operator.type)) {
-                        filter.operator = this.uniqueOperators[filter.tag.type][0];
+                        filter.operator = lodash_1.default.find(this.uniqueOperators, ['type', filter.tag.type]);
                     }
                     // validate changed filter
                     if (filter.tag) {
                         if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
+                            filter.isValid = true;
+                        }
+                        else if (this.OPERATOR_KEY_VALUE === filter.tag.type && filter.stringValue && filter.stringValue.includes('=')) {
                             filter.isValid = true;
                         }
                         else if (this.OPERATOR_NUMBER === filter.tag.type && filter.numberValue) {
@@ -277,6 +284,9 @@ System.register(['app/plugins/sdk', './aggregators', './operators', 'lodash', '.
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {
+                    if (this.target.metricCategory === this.WEBSITE_METRICS && !lodash_1.default.includes(this.target.metric.aggregations, this.target.aggregation)) {
+                        this.target.aggregation = this.target.metric.aggregations[0];
+                    }
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onLabelChange = function () {

@@ -3,19 +3,19 @@ System.register([], function(exports_1) {
         setters:[],
         execute: function() {
             exports_1("default",[
-                { key: "SUM", label: "sum", type: "" },
-                { key: "MEAN", label: "mean", type: "" },
-                { key: "MAX", label: "max", type: "" },
-                { key: "MIN", label: "min", type: "" },
-                { key: "P25", label: "p 25", type: "" },
-                { key: "P50", label: "p 50", type: "" },
-                { key: "P90", label: "p 90", type: "" },
-                { key: "P95", label: "p 95", type: "" },
-                { key: "P98", label: "p 98", type: "" },
-                { key: "P99", label: "p 99", type: "" },
-                { key: "DISTINCT_COUNT", label: "count", type: "" }
+                { key: "SUM", label: "sum", type: "COUNT" },
+                { key: "MEAN", label: "mean", type: "TIME" },
+                { key: "MAX", label: "max", type: "TIME" },
+                { key: "MIN", label: "min", type: "TIME" },
+                { key: "P25", label: "25th", type: "TIME" },
+                { key: "P50", label: "50th", type: "TIME" },
+                { key: "P90", label: "90th", type: "TIME" },
+                { key: "P95", label: "95th", type: "TIME" },
+                { key: "P98", label: "98th", type: "TIME" },
+                { key: "P99", label: "99th", type: "TIME" }
             ]);
         }
     }
 });
+// { key: "DISTINCT_COUNT", label: "count", type: "COUNT"}
 //# sourceMappingURL=aggregators.js.map

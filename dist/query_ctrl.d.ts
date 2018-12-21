@@ -18,28 +18,11 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     private backendSrv;
     private $q;
     static templateUrl: string;
-    uniqueAggregators: {
+    uniqueOperators: {
         key: string;
         label: string;
         type: string;
     }[];
-    uniqueOperators: {
-        string: {
-            key: string;
-            label: string;
-            type: string;
-        }[];
-        number: {
-            key: string;
-            label: string;
-            type: string;
-        }[];
-        boolean: {
-            key: string;
-            label: string;
-            type: string;
-        }[];
-    };
     uniqueEntityTypes: Array<Object>;
     allCustomMetrics: Array<Object>;
     availableMetrics: Array<Object>;

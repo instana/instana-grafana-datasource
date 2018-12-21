@@ -368,6 +368,7 @@
         "inject": "<%- stringify(filename, 'metrics_factory_3.ejs') %>"
       }]
     },
+    <%- include('calls_website.ejs') %>
     {
       "predicates": [{
         "equals": {
@@ -401,6 +402,6 @@
           "body": "{\n    \"errors\": [\n        \"Unauthorized request\"\n    ]\n}"
         }
       }]
-    }
+    },
   ]
 }
