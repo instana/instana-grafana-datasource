@@ -244,7 +244,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       tag: this.target.group,
       operator: { key: 'EQUALS', type: this.target.group.type },
       stringValue: "",
-      numberValue: 0,
+      numberValue: null,
       booleanValue: "true",
       isValid: false
     });
@@ -269,7 +269,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
         filter.isValid = true;
       } else if (this.OPERATOR_KEY_VALUE === filter.tag.type && filter.stringValue && filter.stringValue.includes('=') ) {
         filter.isValid = true;
-      } else if (this.OPERATOR_NUMBER === filter.tag.type && filter.numberValue) {
+      } else if (this.OPERATOR_NUMBER === filter.tag.type && filter.numberValue !== null) {
         filter.isValid = true;
       } else if (this.OPERATOR_BOOLEAN === filter.tag.type && filter.booleanValue) {
         filter.isValid = true;
