@@ -22,7 +22,21 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
   websiteTagsCache: TagsCache;
   websiteCatalogCache: MetricsCatalogCache;
 
-  MAX_NUMBER_OF_RESULTS = 600;
+  maximumNumberOfUsefulDataPoints = 80;
+  sensibleGranularities = [
+    1, // second
+    5,
+    10,
+    60, // minute
+    5 * 60,
+    10 * 60,
+    60 * 60, // hour
+    5 * 60 * 60,
+    10 * 60 * 60,
+    24 * 60 * 60, // day
+    5 * 24 * 60 * 60,
+    10 * 24 * 60 * 60
+  ];
 
   OPERATOR_NUMBER = 'NUMBER';
   OPERATOR_BOOLEAN = 'BOOLEAN';
@@ -113,10 +127,9 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       return this.$q.resolve({ data: { items: [] } });
     }
 
-    // new api is limited to MAX_NUMBER_OF_RESULTS results
+    // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
     const windowSize = this.getWindowSize(timeFilter);
-    const bestGuess = _.toInteger(windowSize / 1000 / this.MAX_NUMBER_OF_RESULTS);
-    const granularity = bestGuess < 1 ? 1 : bestGuess; // must be at least a second
+    const granularity = this.getChartGranularity(windowSize);
 
     const tagFilters = [{
       name: 'beacon.website.name',
@@ -145,6 +158,13 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       }]
     };
     return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
+  }
+
+  getChartGranularity(windowSize) {
+    const granularity = this.sensibleGranularities.find(
+      granularity => windowSize / 1000 / granularity <= this.maximumNumberOfUsefulDataPoints
+    );
+    return granularity || this.sensibleGranularities[this.sensibleGranularities.length - 1];
   }
 
   createTagFilter(filter) {

@@ -16,7 +16,8 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     websitesCache: WebsitesCache;
     websiteTagsCache: TagsCache;
     websiteCatalogCache: MetricsCatalogCache;
-    MAX_NUMBER_OF_RESULTS: number;
+    maximumNumberOfUsefulDataPoints: number;
+    sensibleGranularities: number[];
     OPERATOR_NUMBER: string;
     OPERATOR_BOOLEAN: string;
     /** @ngInject */
@@ -26,6 +27,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     getWebsiteTags(): Object[];
     getWebsiteMetricsCatalog(): Object[];
     fetchMetricsForEntity(target: any, timeFilter: any): any;
+    getChartGranularity(windowSize: any): number;
     createTagFilter(filter: any): {
         name: any;
         operator: any;

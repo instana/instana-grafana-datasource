@@ -20,7 +20,21 @@ System.register(['./datasource_abstract', 'lodash'], function(exports_1) {
                 /** @ngInject */
                 function InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q) {
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
-                    this.MAX_NUMBER_OF_RESULTS = 600;
+                    this.maximumNumberOfUsefulDataPoints = 80;
+                    this.sensibleGranularities = [
+                        1,
+                        5,
+                        10,
+                        60,
+                        5 * 60,
+                        10 * 60,
+                        60 * 60,
+                        5 * 60 * 60,
+                        10 * 60 * 60,
+                        24 * 60 * 60,
+                        5 * 24 * 60 * 60,
+                        10 * 24 * 60 * 60
+                    ];
                     this.OPERATOR_NUMBER = 'NUMBER';
                     this.OPERATOR_BOOLEAN = 'BOOLEAN';
                 }
@@ -100,10 +114,9 @@ System.register(['./datasource_abstract', 'lodash'], function(exports_1) {
                     if (!target || !target.metric || !target.group || !target.entity) {
                         return this.$q.resolve({ data: { items: [] } });
                     }
-                    // new api is limited to MAX_NUMBER_OF_RESULTS results
+                    // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
                     var windowSize = this.getWindowSize(timeFilter);
-                    var bestGuess = lodash_1.default.toInteger(windowSize / 1000 / this.MAX_NUMBER_OF_RESULTS);
-                    var granularity = bestGuess < 1 ? 1 : bestGuess; // must be at least a second
+                    var granularity = this.getChartGranularity(windowSize);
                     var tagFilters = [{
                             name: 'beacon.website.name',
                             operator: 'EQUALS',
@@ -130,6 +143,11 @@ System.register(['./datasource_abstract', 'lodash'], function(exports_1) {
                             }]
                     };
                     return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
+                };
+                InstanaWebsiteDataSource.prototype.getChartGranularity = function (windowSize) {
+                    var _this = this;
+                    var granularity = this.sensibleGranularities.find(function (granularity) { return windowSize / 1000 / granularity <= _this.maximumNumberOfUsefulDataPoints; });
+                    return granularity || this.sensibleGranularities[this.sensibleGranularities.length - 1];
                 };
                 InstanaWebsiteDataSource.prototype.createTagFilter = function (filter) {
                     var tagFilter = {
