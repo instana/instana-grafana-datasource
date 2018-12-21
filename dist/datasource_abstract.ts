@@ -3,6 +3,8 @@ import _ from 'lodash';
 export default class AbstractDatasource {
   id: number;
   name: string;
+  pluginVersion: string;
+
   url: string;
   apiToken: string;
 
@@ -12,8 +14,9 @@ export default class AbstractDatasource {
   constructor(instanceSettings, public backendSrv, public templateSrv, public $q) {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
+    this.pluginVersion = _.get(instanceSettings, ['meta', 'info', 'version'], '2.0.0');
 
-    // 5.3+ wanted to resolve dynamic routes in proxy mode
+    // grafana 5.3+ wanted to resolve dynamic routes in proxy mode
     const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
     const versions = _.split(version, '.', 2);
     if (versions[0] >= 5 && versions[1] >= 3) {
@@ -50,9 +53,10 @@ export default class AbstractDatasource {
   }
 
   execute(request, maxRetries) {
-    // TODO request['headers'] = { x-client-app: 'Grafana 2.0.1' };
     if (this.apiToken) {
       request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
+    } else {
+      // request['headers'] = { 'X-Client-App': 'Grafana', 'X-Client-Version': this.pluginVersion };
     }
     return this.backendSrv
       .datasourceRequest(request)

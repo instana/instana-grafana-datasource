@@ -19,7 +19,8 @@ System.register(['lodash'], function(exports_1) {
                     };
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
-                    // 5.3+ wanted to resolve dynamic routes in proxy mode
+                    this.pluginVersion = lodash_1.default.get(instanceSettings, ['meta', 'info', 'version'], '2.0.0');
+                    // grafana 5.3+ wanted to resolve dynamic routes in proxy mode
                     var version = lodash_1.default.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
                     var versions = lodash_1.default.split(version, '.', 2);
                     if (versions[0] >= 5 && versions[1] >= 3) {
@@ -52,9 +53,10 @@ System.register(['lodash'], function(exports_1) {
                 };
                 AbstractDatasource.prototype.execute = function (request, maxRetries) {
                     var _this = this;
-                    // TODO request['headers'] = { x-client-app: 'Grafana 2.0.1' };
                     if (this.apiToken) {
                         request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
+                    }
+                    else {
                     }
                     return this.backendSrv
                         .datasourceRequest(request)

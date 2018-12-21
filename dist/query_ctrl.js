@@ -1,10 +1,10 @@
-System.register(['app/plugins/sdk', './operators', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', './operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, operators_1, lodash_1;
+    var sdk_1, operators_1, migration_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
@@ -13,6 +13,9 @@ System.register(['app/plugins/sdk', './operators', 'lodash', './css/query_editor
             },
             function (operators_1_1) {
                 operators_1 = operators_1_1;
+            },
+            function (migration_1_1) {
+                migration_1 = migration_1_1;
             },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
@@ -39,6 +42,8 @@ System.register(['app/plugins/sdk', './operators', 'lodash', './css/query_editor
                     this.APPLICATION_METRICS = '2';
                     this.WEBSITE_METRICS = '3';
                     this.defaults = {};
+                    // target migration for downwards compability
+                    migration_1.default(this.target);
                     this.target.pluginId = this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;

@@ -1,6 +1,7 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import {QueryCtrl} from 'app/plugins/sdk';
 import operators from './operators';
+import migrate from './migration';
 import _ from 'lodash';
 
 import './css/query_editor.css!';
@@ -53,6 +54,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
   /** @ngInject **/
   constructor($scope, $injector, private templateSrv, private backendSrv, private $q) {
     super($scope, $injector);
+
+    // target migration for downwards compability
+    migrate(this.target);
 
     this.target.pluginId = this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;

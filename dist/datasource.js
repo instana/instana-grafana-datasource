@@ -1,10 +1,10 @@
-System.register(['./datasource_infrastructure', './datasource_website', './datasource_abstract', 'lodash'], function(exports_1) {
+System.register(['./datasource_infrastructure', './datasource_website', './datasource_abstract', './migration', 'lodash'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var datasource_infrastructure_1, datasource_website_1, datasource_abstract_1, lodash_1;
+    var datasource_infrastructure_1, datasource_website_1, datasource_abstract_1, migration_1, lodash_1;
     var InstanaDatasource;
     return {
         setters:[
@@ -16,6 +16,9 @@ System.register(['./datasource_infrastructure', './datasource_website', './datas
             },
             function (datasource_abstract_1_1) {
                 datasource_abstract_1 = datasource_abstract_1_1;
+            },
+            function (migration_1_1) {
+                migration_1 = migration_1_1;
             },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
@@ -44,6 +47,8 @@ System.register(['./datasource_infrastructure', './datasource_website', './datas
                         return this.$q.resolve({ data: [] });
                     }
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
+                        // target migration for downwards compability
+                        migration_1.default(target);
                         if (target.metricCategory === _this.WEBSITE_METRICS) {
                             return _this.getWebsiteMetrics(target);
                         }

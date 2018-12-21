@@ -4,6 +4,7 @@ export default class AbstractDatasource {
     $q: any;
     id: number;
     name: string;
+    pluginVersion: string;
     url: string;
     apiToken: string;
     CACHE_MAX_AGE: number;

@@ -2,6 +2,7 @@ import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
 import rollupDurationThresholds from './rollups';
+import migrate from './migration';
 import _ from 'lodash';
 
 export interface TimeFilter {
@@ -41,6 +42,10 @@ export default class InstanaDatasource extends AbstractDatasource {
 
     return this.$q.all(
       _.map(options.targets, target => {
+
+        // target migration for downwards compability
+        migrate(target);
+
         if (target.metricCategory === this.WEBSITE_METRICS) {
           return this.getWebsiteMetrics(target);
         } else {
