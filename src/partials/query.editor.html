@@ -6,7 +6,7 @@
         <p>Select a metric category.</p>
       </info-popover>
     </label>
-    <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+    <div class="gf-form-select-wrapper gf-form-select-wrapper--has-help-icon" style="width: 100%;">
       <select id="in-category-{{ctrl.target.refId}}"
         class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
         ng-model="ctrl.target.metricCategory"
@@ -123,9 +123,8 @@
           <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
         </select>
       </div>
-      <div class="gf-form-select-wrapper width-6">
+      <div class="gf-form-select-wrapper width-6" ng-show="ctrl.target.metricCategory === '3'">
         <select id="in-aggregation-{{ctrl.target.refId}}"
-                ng-show="ctrl.target.metricCategory === '3'"
                 ng-disabled="!ctrl.target.metric || ctrl.target.metric.aggregations.length <= 1"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.aggregation"
@@ -224,13 +223,14 @@
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.filters[$index].operator"
                   ng-change="ctrl.onTagFilterChange($index)"
-                  ng-options="f as f.label for f in ctrl.uniqueOperators | filter:{type:ctrl.target.filters[$index].tag.type} track by f.key">
+                  ng-options="f as f.label for f in ctrl.uniqueOperators | filter:{type:ctrl.target.filters[$index].tag.type} track by f.key + '_' + f.type">
           </select>
         </div>
         <input id="in-filter-stringValue-{{ctrl.target.refId}}-{{$index}}"
                type="text"
                ng-show="ctrl.target.filters[$index].tag.type === 'STRING' || ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR'"
                class="gf-form-input width-22"
+               ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
                ng-model="ctrl.target.filters[$index].stringValue"
                ng-model-options='{ debounce: 400 }'
                ng-change="ctrl.onTagFilterChange($index)"
@@ -240,6 +240,7 @@
                type="number"
                ng-show="ctrl.target.filters[$index].tag.type === 'NUMBER'"
                class="gf-form-input width-22"
+               ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
                ng-model="ctrl.target.filters[$index].numberValue"
                ng-model-options='{ debounce: 400 }'
                ng-change="ctrl.onTagFilterChange($index)"
@@ -249,6 +250,7 @@
                 ng-show="ctrl.target.filters[$index].tag.type === 'BOOLEAN'"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.filters[$index].booleanValue"
+                ng-model-options='{ debounce: 200 }'
                 ng-change="ctrl.onTagFilterChange($index)">
           <option value="true" selected>true</option>
           <option value="false">false</option>
