@@ -799,66 +799,7 @@ function (request, state, logger) {
     1152.0,
     1766.0,
     1729.0,
-    1036.0,
-    1644.0,
-    1230.0,
-    1812.0,
-    1874.0,
-    1118.0,
-    1443.0,
-    1339.0,
-    1628.0,
-    1754.0,
-    1951.0,
-    1781.0,
-    1403.0,
-    1784.0,
-    1336.0,
-    1144.0,
-    1646.0,
-    1499.0,
-    1391.0,
-    1253.0,
-    1506.0,
-    1487.0,
-    1116.0,
-    1473.0,
-    1300.0,
-    1757.0,
-    1355.0,
-    1973.0,
-    1406.0,
-    1842.0,
-    1167.0,
-    1399.0,
-    1799.0,
-    1922.0,
-    1412.0,
-    1331.0,
-    1588.0,
-    1602.0,
-    1371.0,
-    1629.0,
-    1150.0,
-    1581.0,
-    1414.0,
-    1310.0,
-    1396.0,
-    1731.0,
-    1926.0,
-    1796.0,
-    1551.0,
-    1789.0,
-    1795.0,
-    1693.0,
-    1954.0,
-    1279.0,
-    1747.0,
-    1773.0,
-    1600.0,
-    1105.0,
-    1154.0,
-    1695.0
+    1036.0
   ];
 
   var stepWidth = 300000;
@@ -868,18 +809,18 @@ function (request, state, logger) {
   rawValues.forEach(function(v) {
     values.push({
       timestamp: timestamp,
-      value: v,
+      value: v
     });
     timestamp += stepWidth;
   });
 
   return {
-  statusCode: 200,
-  headers: {
-    'Content-Type': 'application/json;charset=utf-8',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE'
-  },
-  body: JSON.stringify({ values: values })
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE'
+    },
+    body: JSON.stringify({ values: values })
   };
 }

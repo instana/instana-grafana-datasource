@@ -80,18 +80,26 @@ This procedure is used to test the Instana Grafana data source before the versio
 * Create a new dashboard with a graph panel
 
 #### Built-in metrics
+* Category: `Infrastructure built-in metrics`
 * Query: `filler`
-* Category: `Built-in metrics`
 * Type: `Processes`
 * Metric: `Virtual (mem.virtual)`
 
 This should render a chart with two datasets (`node (on host "host-1")` and `node (on host "host-2)`).
 
 #### Custom metrics
+* Category: `Infrastructure custom metrics`
 * Query: `filler`
-* Category: `Custom metrics`
 * Type: `Dropwizard`
 * Filter: ``
 * Metric: `Dropwizard meter (KPI.errors)`
 
 This should render a chart with one dataset (`node (on host "host-3")`).
+
+#### Website metrics
+* Category: `Website metrics`
+* Website: `www.instana.com`
+* Group by: `beacon.page.name`
+* Metric: `Beacon Count (beaconCount)`
+
+This should render a chart with one dataset (`home (www.instana.com) beaconCount.sum`).
