@@ -376,7 +376,7 @@ describe('Given an InstanaDatasource', function() {
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
-        expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].time).to.equal(time);
+        expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].to).to.equal(time);
         expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots.length).to.equal(2);
         expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].snapshotId).to.eql('A');
         expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].host).to.eql('Stans-Macbook-Pro');
