@@ -15,7 +15,7 @@ System.register(['lodash'], function(exports_1) {
                     this.$q = $q;
                     this.CACHE_MAX_AGE = 60000;
                     this.currentTime = function () {
-                        return new Date().getTime();
+                        return Date.now();
                     };
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;

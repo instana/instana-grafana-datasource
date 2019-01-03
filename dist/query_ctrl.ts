@@ -64,7 +64,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
 
     // can we read the options here ??
-    const now = new Date().getTime();
+    const now = Date.now();
     const windowSize = 6 * 60 * 60 * 1000; // 6h
     this.timeFilter = {
       from: now - windowSize,

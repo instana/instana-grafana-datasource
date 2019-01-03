@@ -48,7 +48,7 @@ System.register(['app/plugins/sdk', './operators', './migration', 'lodash', './c
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                     // can we read the options here ??
-                    var now = new Date().getTime();
+                    var now = Date.now();
                     var windowSize = 6 * 60 * 60 * 1000; // 6h
                     this.timeFilter = {
                         from: now - windowSize,

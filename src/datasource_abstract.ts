@@ -28,7 +28,7 @@ export default class AbstractDatasource {
   }
 
   currentTime = () => {
-    return new Date().getTime();
+    return Date.now();
   }
 
   getWindowSize(timeFilter) {
