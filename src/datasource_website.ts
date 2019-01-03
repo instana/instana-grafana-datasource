@@ -45,6 +45,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
 
   getWebsites(timeFilter) {
     const key = this.getTimeKey(timeFilter);
+
     let websites = this.websitesCache.get(key);
     if (websites) {
       return websites;

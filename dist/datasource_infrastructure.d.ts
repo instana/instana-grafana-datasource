@@ -18,8 +18,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     CUSTOM_METRICS: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
-    wasLastFetchedFromApi: () => boolean;
-    setLastFetchedFromApi: (value: any) => void;
     getEntityTypes(metricCategory: any): Object[];
     getMetricsCatalog(plugin: any, metricCategory: any): any;
     fetchTypesForTarget(target: any, timeFilter: any): any;

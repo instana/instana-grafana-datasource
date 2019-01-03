@@ -26,10 +26,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     this.catalogCache = new Cache();
   }
 
-  wasLastFetchedFromApi = () => { return this.lastFetchedFromAPI; };
-
-  setLastFetchedFromApi = (value) => { this.lastFetchedFromAPI = value; };
-
   getEntityTypes(metricCategory) {
     const now = this.currentTime();
     if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
@@ -48,18 +44,22 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   getMetricsCatalog(plugin, metricCategory) {
     const key = plugin.key + this.SEPARATOR + metricCategory;
+
     let metrics = this.catalogCache.get(key);
-    if (!metrics) {
-      const filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
-      metrics = this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`).then(catalogResponse =>
-        catalogResponse.data.map(entry => ({
-          'key' : entry.metricId,
-          'label' : metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // built-in metrics have nicer labels
-          'entityType' : entry.pluginId
-        }))
-      );
-      this.catalogCache.put(key, metrics);
+    if (metrics) {
+      return metrics;
     }
+
+    const filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
+    metrics = this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`).then(catalogResponse =>
+      catalogResponse.data.map(entry => ({
+        'key' : entry.metricId,
+        'label' : metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // built-in metrics have nicer labels
+        'entityType' : entry.pluginId
+      }))
+    );
+    this.catalogCache.put(key, metrics);
+
     return metrics;
   }
 
@@ -71,15 +71,16 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return this.doRequest(fetchSnapshotTypesUrl);
   }
 
+// cache vorher: List<Snapshot>
+// return: Promise<List<Snapshot>>
   fetchSnapshotsForTarget(target, timeFilter) {
     const query = this.buildQuery(target);
     const key = this.buildSnapshotCacheKey(query, timeFilter);
-    const snapshots = this.snapshotCache.get(key);
+
+    let snapshots = this.snapshotCache.get(key);
     if (snapshots) {
-      this.setLastFetchedFromApi(false);
-      return this.$q.resolve(snapshots);
+      return snapshots;
     }
-    this.setLastFetchedFromApi(true);
 
     const fetchSnapshotContextsUrl = `/api/snapshots/context`+
       `?q=${query}` +
@@ -88,7 +89,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       `&size=100` +
       `&newApplicationModelEnabled=true`;
 
-    return this.doRequest(fetchSnapshotContextsUrl).then(contextsResponse => {
+    snapshots = this.doRequest(fetchSnapshotContextsUrl).then(contextsResponse => {
       return this.$q.all(
         contextsResponse.data.map(({snapshotId, host, plugin}) => {
           const fetchSnapshotUrl = `/api/snapshots/${snapshotId}`;
@@ -102,6 +103,9 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
         })
       );
     });
+    this.snapshotCache.put(key, snapshots);
+
+    return snapshots;
   }
 
   reduceSnapshot(snapshotResponse) {
@@ -143,12 +147,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   }
 
   fetchMetricsForSnapshots(target, snapshots, timeFilter) {
-    // Cache the data if fresh
-    if (this.wasLastFetchedFromApi()) {
-      const key = this.buildSnapshotCacheKey(this.buildQuery(target), timeFilter);
-      this.snapshotCache.put(key, snapshots);
-    }
-
     return this.$q.all(
       _.map(snapshots, snapshot => {
         // ...fetch the metric data for every snapshot in the results.

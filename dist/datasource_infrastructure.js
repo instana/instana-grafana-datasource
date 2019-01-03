@@ -25,13 +25,10 @@ System.register(['./datasource_abstract', './rollups', './cache', 'lodash'], fun
                 __extends(InstanaInfrastructureDataSource, _super);
                 /** @ngInject */
                 function InstanaInfrastructureDataSource(instanceSettings, backendSrv, templateSrv, $q) {
-                    var _this = this;
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
                     this.rollupDurationThresholds = rollups_1.default;
                     this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
                     this.CUSTOM_METRICS = '1';
-                    this.wasLastFetchedFromApi = function () { return _this.lastFetchedFromAPI; };
-                    this.setLastFetchedFromApi = function (value) { _this.lastFetchedFromAPI = value; };
                     this.snapshotCache = new cache_1.default();
                     this.catalogCache = new cache_1.default();
                 }
@@ -74,23 +71,23 @@ System.register(['./datasource_abstract', './rollups', './cache', 'lodash'], fun
                         "&newApplicationModelEnabled=true";
                     return this.doRequest(fetchSnapshotTypesUrl);
                 };
+                // cache vorher: List<Snapshot>
+                // return: Promise<List<Snapshot>>
                 InstanaInfrastructureDataSource.prototype.fetchSnapshotsForTarget = function (target, timeFilter) {
                     var _this = this;
                     var query = this.buildQuery(target);
                     var key = this.buildSnapshotCacheKey(query, timeFilter);
                     var snapshots = this.snapshotCache.get(key);
                     if (snapshots) {
-                        this.setLastFetchedFromApi(false);
-                        return this.$q.resolve(snapshots);
+                        return snapshots;
                     }
-                    this.setLastFetchedFromApi(true);
                     var fetchSnapshotContextsUrl = "/api/snapshots/context" +
                         ("?q=" + query) +
                         ("&from=" + timeFilter.from) +
                         ("&to=" + timeFilter.to) +
                         "&size=100" +
                         "&newApplicationModelEnabled=true";
-                    return this.doRequest(fetchSnapshotContextsUrl).then(function (contextsResponse) {
+                    snapshots = this.doRequest(fetchSnapshotContextsUrl).then(function (contextsResponse) {
                         return _this.$q.all(contextsResponse.data.map(function (_a) {
                             var snapshotId = _a.snapshotId, host = _a.host, plugin = _a.plugin;
                             var fetchSnapshotUrl = "/api/snapshots/" + snapshotId;
@@ -102,6 +99,8 @@ System.register(['./datasource_abstract', './rollups', './cache', 'lodash'], fun
                             });
                         }));
                     });
+                    this.snapshotCache.put(key, snapshots);
+                    return snapshots;
                 };
                 InstanaInfrastructureDataSource.prototype.reduceSnapshot = function (snapshotResponse) {
                     // reduce data to used label formatting values
@@ -138,11 +137,6 @@ System.register(['./datasource_abstract', './rollups', './cache', 'lodash'], fun
                 };
                 InstanaInfrastructureDataSource.prototype.fetchMetricsForSnapshots = function (target, snapshots, timeFilter) {
                     var _this = this;
-                    // Cache the data if fresh
-                    if (this.wasLastFetchedFromApi()) {
-                        var key = this.buildSnapshotCacheKey(this.buildQuery(target), timeFilter);
-                        this.snapshotCache.put(key, snapshots);
-                    }
                     return this.$q.all(lodash_1.default.map(snapshots, function (snapshot) {
                         // ...fetch the metric data for every snapshot in the results.
                         return _this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter).then(function (response) {

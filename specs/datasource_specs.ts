@@ -239,7 +239,6 @@ describe('Given an InstanaDatasource', function() {
             "key": "mem.virtual",
             "label": "Virtual",
           },
-          "snapshotCache": {},
           "refId": "A"
         },
         {
@@ -253,7 +252,6 @@ describe('Given an InstanaDatasource', function() {
             "key": "mem.virtual",
             "label": "Virtual",
           },
-          "snapshotCache": {},
           "hide": false
         }
       ],
@@ -313,7 +311,7 @@ describe('Given an InstanaDatasource', function() {
       status: 200,
       data: {
         "values": [
-          {"timestamp":1516451043603,"value":1.329086464E9},
+          {"timestamp":1516451043603,"value":1.3290864644444E9},
           {"timestamp":1516451103603,"value":1.3301699925333E9},
           {"timestamp":1516451163603,"value":1.3317253802666E9}
         ]
@@ -353,7 +351,7 @@ describe('Given an InstanaDatasource', function() {
           [1.3321622869333E9,1516451163603]
         ]);
         expect(results.data[1].datapoints).to.eql([
-          [1.329086464E9,1516451043603],
+          [1.3290864644444E9,1516451043603],
           [1.3301699925333E9,1516451103603],
           [1.3317253802666E9,1516451163603]
         ]);
@@ -363,7 +361,7 @@ describe('Given an InstanaDatasource', function() {
           [1.3321622869333E9,1516451163603]
         ]);
         expect(results.data[3].datapoints).to.eql([
-          [1.329086464E9,1516451043603],
+          [1.3290864644444E9,1516451043603],
           [1.3301699925333E9,1516451103603],
           [1.3317253802666E9,1516451163603]
         ]);
@@ -376,16 +374,20 @@ describe('Given an InstanaDatasource', function() {
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
+        const query = 'filler%20AND%20entity.pluginId%3Aprocess';
         const timeFilter = ctx.ds.readTime(options);
-        const key = ctx.ds.infrastructure.buildSnapshotCacheKey('filler%20AND%20entity.pluginId%3Aprocess', timeFilter);
+        const key = ctx.ds.infrastructure.buildSnapshotCacheKey(query, timeFilter);
 
-        expect(ctx.ds.infrastructure.snapshotCache.get(key).length).to.equal(2);
-        expect(ctx.ds.infrastructure.snapshotCache.get(key)[0].snapshotId).to.eql('A');
-        expect(ctx.ds.infrastructure.snapshotCache.get(key)[0].host).to.eql('Stans-Macbook-Pro');
-        expect(ctx.ds.infrastructure.snapshotCache.get(key)[0].response).to.eql(snapshotA);
-        expect(ctx.ds.infrastructure.snapshotCache.get(key)[1].snapshotId).to.eql('B');
-        expect(ctx.ds.infrastructure.snapshotCache.get(key)[1].host).to.eql('');
-        expect(ctx.ds.infrastructure.snapshotCache.get(key)[1].response).to.eql(snapshotB);
+        expect(key).to.equal(query + '|25274184|25274544'); // query time is contained inside key
+
+        const snapshots = ctx.ds.infrastructure.snapshotCache.get(key).valueOf();
+        expect(snapshots.length).to.equal(2);
+        expect(snapshots[0].snapshotId).to.eql('A');
+        expect(snapshots[0].host).to.eql('Stans-Macbook-Pro');
+        expect(snapshots[0].response).to.eql(snapshotA);
+        expect(snapshots[1].snapshotId).to.eql('B');
+        expect(snapshots[1].host).to.eql('');
+        expect(snapshots[1].response).to.eql(snapshotB);
       });
     });
   });

@@ -38,11 +38,11 @@ export default class AbstractDatasource {
 
   getTimeKey(timeFilter) {
     // time might be part of a cache key as this can cause different results
-    return this.reduce(timeFilter.from) + this.SEPARATOR + this.reduce(timeFilter.to);
+    return this.msToMin(timeFilter.from) + this.SEPARATOR + this.msToMin(timeFilter.to);
   }
 
-  private reduce(time: number) {
-    return Math.round(time / this.CACHE_MAX_AGE);
+  private msToMin(time: number) {
+    return Math.round(time / 60000);
   }
 
   doRequest(url, maxRetries = 1) {
