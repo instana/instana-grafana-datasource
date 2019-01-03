@@ -9,6 +9,7 @@ export default class AbstractDatasource {
   apiToken: string;
 
   CACHE_MAX_AGE = 60000;
+  SEPARATOR = '|';
 
   /** @ngInject */
   constructor(instanceSettings, public backendSrv, public templateSrv, public $q) {
@@ -35,6 +36,15 @@ export default class AbstractDatasource {
     return timeFilter.from ? timeFilter.to - timeFilter.from : timeFilter.windowSize;
   }
 
+  getTimeKey(timeFilter) {
+    // time might be part of a cache key as this can cause different results
+    return this.reduce(timeFilter.from) + this.SEPARATOR + this.reduce(timeFilter.to);
+  }
+
+  private reduce(time: number) {
+    return Math.round(time / this.CACHE_MAX_AGE);
+  }
+
   doRequest(url, maxRetries = 1) {
     const request = {
       method: 'GET',
@@ -52,12 +62,12 @@ export default class AbstractDatasource {
     return this.execute(request, maxRetries);
   }
 
-  execute(request, maxRetries) {
+  private execute(request, maxRetries) {
     if (this.apiToken) {
       request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
-    } else {
-      // request['headers'] = { 'X-Client-App': 'Grafana', 'X-Client-Version': this.pluginVersion };
     }
+    // request['headers'] = { User-Agent: 'Grafana ' + this.pluginVersion };
+
     return this.backendSrv
       .datasourceRequest(request)
       .catch(error => {

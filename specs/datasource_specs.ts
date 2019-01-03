@@ -376,14 +376,16 @@ describe('Given an InstanaDatasource', function() {
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
-        expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].to).to.equal(time);
-        expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots.length).to.equal(2);
-        expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].snapshotId).to.eql('A');
-        expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].host).to.eql('Stans-Macbook-Pro');
-        expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].response).to.eql(snapshotA);
-        expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].snapshotId).to.eql('B');
-        expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].host).to.eql('');
-        expect(ctx.ds.infrastructure.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].response).to.eql(snapshotB);
+        const timeFilter = ctx.ds.readTime(options);
+        const key = ctx.ds.infrastructure.buildSnapshotCacheKey('filler%20AND%20entity.pluginId%3Aprocess', timeFilter);
+
+        expect(ctx.ds.infrastructure.snapshotCache.get(key).length).to.equal(2);
+        expect(ctx.ds.infrastructure.snapshotCache.get(key)[0].snapshotId).to.eql('A');
+        expect(ctx.ds.infrastructure.snapshotCache.get(key)[0].host).to.eql('Stans-Macbook-Pro');
+        expect(ctx.ds.infrastructure.snapshotCache.get(key)[0].response).to.eql(snapshotA);
+        expect(ctx.ds.infrastructure.snapshotCache.get(key)[1].snapshotId).to.eql('B');
+        expect(ctx.ds.infrastructure.snapshotCache.get(key)[1].host).to.eql('');
+        expect(ctx.ds.infrastructure.snapshotCache.get(key)[1].response).to.eql(snapshotB);
       });
     });
   });

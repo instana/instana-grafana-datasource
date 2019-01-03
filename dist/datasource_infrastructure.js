@@ -1,10 +1,10 @@
-System.register(['./datasource_abstract', './rollups', 'lodash'], function(exports_1) {
+System.register(['./datasource_abstract', './rollups', './cache', 'lodash'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var datasource_abstract_1, rollups_1, lodash_1;
+    var datasource_abstract_1, rollups_1, cache_1, lodash_1;
     var InstanaInfrastructureDataSource;
     return {
         setters:[
@@ -13,6 +13,9 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
             },
             function (rollups_1_1) {
                 rollups_1 = rollups_1_1;
+            },
+            function (cache_1_1) {
+                cache_1 = cache_1_1;
             },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
@@ -26,16 +29,11 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
                     this.rollupDurationThresholds = rollups_1.default;
                     this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
-                    this.CACHE_MAX_AGE = 60000;
                     this.CUSTOM_METRICS = '1';
-                    // FIXME CACHE
-                    this.storeInCache = function (query, data) {
-                        _this.snapshotCache[query] = data;
-                    };
                     this.wasLastFetchedFromApi = function () { return _this.lastFetchedFromAPI; };
                     this.setLastFetchedFromApi = function (value) { _this.lastFetchedFromAPI = value; };
-                    this.snapshotCache = {};
-                    this.catalogCache = {};
+                    this.snapshotCache = new cache_1.default();
+                    this.catalogCache = new cache_1.default();
                 }
                 InstanaInfrastructureDataSource.prototype.getEntityTypes = function (metricCategory) {
                     var now = this.currentTime();
@@ -54,22 +52,20 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                 };
                 InstanaInfrastructureDataSource.prototype.getMetricsCatalog = function (plugin, metricCategory) {
                     var _this = this;
-                    var id = plugin.key + '|' + metricCategory;
-                    var now = this.currentTime();
-                    if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
+                    var key = plugin.key + this.SEPARATOR + metricCategory;
+                    var metrics = this.catalogCache.get(key);
+                    if (!metrics) {
                         var filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
-                        this.catalogCache[id] = {
-                            age: now,
-                            metrics: this.doRequest("/api/infrastructure-monitoring/catalog/metrics/" + plugin.key + "?filter=" + filter).then(function (catalogResponse) {
-                                return catalogResponse.data.map(function (entry) { return ({
-                                    'key': entry.metricId,
-                                    'label': metricCategory === _this.CUSTOM_METRICS ? entry.description : entry.label,
-                                    'entityType': entry.pluginId
-                                }); });
-                            })
-                        };
+                        metrics = this.doRequest("/api/infrastructure-monitoring/catalog/metrics/" + plugin.key + "?filter=" + filter).then(function (catalogResponse) {
+                            return catalogResponse.data.map(function (entry) { return ({
+                                'key': entry.metricId,
+                                'label': metricCategory === _this.CUSTOM_METRICS ? entry.description : entry.label,
+                                'entityType': entry.pluginId
+                            }); });
+                        });
+                        this.catalogCache.put(key, metrics);
                     }
-                    return this.catalogCache[id].metrics;
+                    return metrics;
                 };
                 InstanaInfrastructureDataSource.prototype.fetchTypesForTarget = function (target, timeFilter) {
                     var fetchSnapshotTypesUrl = "/api/snapshots/types" +
@@ -81,10 +77,11 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                 InstanaInfrastructureDataSource.prototype.fetchSnapshotsForTarget = function (target, timeFilter) {
                     var _this = this;
                     var query = this.buildQuery(target);
-                    // FIXME CACHE
-                    if (this.localCacheCopyAvailable(query, timeFilter)) {
+                    var key = this.buildSnapshotCacheKey(query, timeFilter);
+                    var snapshots = this.snapshotCache.get(key);
+                    if (snapshots) {
                         this.setLastFetchedFromApi(false);
-                        return this.$q.resolve(this.snapshotCache[query].snapshots);
+                        return this.$q.resolve(snapshots);
                     }
                     this.setLastFetchedFromApi(true);
                     var fetchSnapshotContextsUrl = "/api/snapshots/context" +
@@ -111,14 +108,11 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                     snapshotResponse.data = lodash_1.default.pick(snapshotResponse.data, ['id', 'label', 'plugin', 'data']);
                     return snapshotResponse;
                 };
-                InstanaInfrastructureDataSource.prototype.localCacheCopyAvailable = function (query, timeFilter) {
-                    return this.snapshotCache[query] &&
-                        timeFilter.to - this.snapshotCache[query].to < this.CACHE_MAX_AGE &&
-                        timeFilter.from - this.snapshotCache[query].from < this.CACHE_MAX_AGE &&
-                        this.currentTime() - this.snapshotCache[query].at < this.CACHE_MAX_AGE;
-                };
                 InstanaInfrastructureDataSource.prototype.buildQuery = function (target) {
                     return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType.key);
+                };
+                InstanaInfrastructureDataSource.prototype.buildSnapshotCacheKey = function (query, timeFilter) {
+                    return query + this.SEPARATOR + this.getTimeKey(timeFilter);
                 };
                 InstanaInfrastructureDataSource.prototype.buildLabel = function (snapshotResponse, host, target) {
                     if (target.labelFormat) {
@@ -146,8 +140,8 @@ System.register(['./datasource_abstract', './rollups', 'lodash'], function(expor
                     var _this = this;
                     // Cache the data if fresh
                     if (this.wasLastFetchedFromApi()) {
-                        // FIXME CACHE
-                        this.storeInCache(this.buildQuery(target), { at: this.currentTime(), from: timeFilter.from, to: timeFilter.to, snapshots: snapshots });
+                        var key = this.buildSnapshotCacheKey(this.buildQuery(target), timeFilter);
+                        this.snapshotCache.put(key, snapshots);
                     }
                     return this.$q.all(lodash_1.default.map(snapshots, function (snapshot) {
                         // ...fetch the metric data for every snapshot in the results.

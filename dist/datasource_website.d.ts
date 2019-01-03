@@ -1,10 +1,5 @@
 import AbstractDatasource from './datasource_abstract';
-export interface WebsitesCache {
-    at: number;
-    from: number;
-    to: number;
-    websites: Array<Object>;
-}
+import Cache from './cache';
 export interface MetricsCatalogCache {
     age: number;
     metrics: Array<Object>;
@@ -14,7 +9,7 @@ export interface TagsCache {
     tags: Array<Object>;
 }
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
-    websitesCache: WebsitesCache;
+    websitesCache: Cache;
     websiteTagsCache: TagsCache;
     websiteCatalogCache: MetricsCatalogCache;
     maximumNumberOfUsefulDataPoints: number;
@@ -23,8 +18,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     OPERATOR_BOOLEAN: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
-    getWebsites(timeFilter: any): Object[];
-    noCacheCopyAvailable(timeFilter: any, now: any): boolean;
+    getWebsites(timeFilter: any): any;
     getWebsiteTags(): Object[];
     getWebsiteMetricsCatalog(): Object[];
     fetchMetricsForEntity(target: any, timeFilter: any): any;

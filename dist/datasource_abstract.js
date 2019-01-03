@@ -14,6 +14,7 @@ System.register(['lodash'], function(exports_1) {
                     this.templateSrv = templateSrv;
                     this.$q = $q;
                     this.CACHE_MAX_AGE = 60000;
+                    this.SEPARATOR = '|';
                     this.currentTime = function () {
                         return Date.now();
                     };
@@ -33,6 +34,13 @@ System.register(['lodash'], function(exports_1) {
                 }
                 AbstractDatasource.prototype.getWindowSize = function (timeFilter) {
                     return timeFilter.from ? timeFilter.to - timeFilter.from : timeFilter.windowSize;
+                };
+                AbstractDatasource.prototype.getTimeKey = function (timeFilter) {
+                    // time might be part of a cache key as this can cause different results
+                    return this.reduce(timeFilter.from) + this.SEPARATOR + this.reduce(timeFilter.to);
+                };
+                AbstractDatasource.prototype.reduce = function (time) {
+                    return Math.round(time / this.CACHE_MAX_AGE);
                 };
                 AbstractDatasource.prototype.doRequest = function (url, maxRetries) {
                     if (maxRetries === void 0) { maxRetries = 1; }
@@ -56,8 +64,7 @@ System.register(['lodash'], function(exports_1) {
                     if (this.apiToken) {
                         request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
                     }
-                    else {
-                    }
+                    // request['headers'] = { User-Agent: 'Grafana ' + this.pluginVersion };
                     return this.backendSrv
                         .datasourceRequest(request)
                         .catch(function (error) {

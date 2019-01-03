@@ -1,5 +1,6 @@
 import AbstractDatasource from './datasource_abstract';
 import rollupDurationThresholds from './rollups';
+import Cache from './cache';
 import _ from 'lodash';
 
 export interface EntityTypesCache {
@@ -7,34 +8,22 @@ export interface EntityTypesCache {
   entityTypes: Array<Object>;
 }
 
-export interface MetricsCatalogCache {
-  age: number;
-  metrics: Array<Object>;
-}
-
 export default class InstanaInfrastructureDataSource extends AbstractDatasource {
   rollupDurationThresholds = rollupDurationThresholds;
   entityTypesCache: EntityTypesCache;
-  snapshotCache: Object;
-  catalogCache: Object;
+  snapshotCache: Cache;
+  catalogCache: Cache;
   lastFetchedFromAPI: boolean;
 
   MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
-  CACHE_MAX_AGE = 60000;
-
   CUSTOM_METRICS = '1';
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
 
-    this.snapshotCache = {};
-    this.catalogCache = {};
-  }
-
-  // FIXME CACHE
-  storeInCache = (query, data) => {
-    this.snapshotCache[query] = data;
+    this.snapshotCache = new Cache();
+    this.catalogCache = new Cache();
   }
 
   wasLastFetchedFromApi = () => { return this.lastFetchedFromAPI; };
@@ -58,22 +47,20 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   }
 
   getMetricsCatalog(plugin, metricCategory) {
-    const id = plugin.key + '|' + metricCategory;
-    const now = this.currentTime();
-    if (!this.catalogCache[id] || now - this.catalogCache[id].age > this.CACHE_MAX_AGE) {
+    const key = plugin.key + this.SEPARATOR + metricCategory;
+    let metrics = this.catalogCache.get(key);
+    if (!metrics) {
       const filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
-      this.catalogCache[id] = {
-        age: now,
-        metrics: this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`).then(catalogResponse =>
-          catalogResponse.data.map(entry => ({
-            'key' : entry.metricId,
-            'label' : metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // built in metrics have nicer labels
-            'entityType' : entry.pluginId
-          }))
-        )
-      };
+      metrics = this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`).then(catalogResponse =>
+        catalogResponse.data.map(entry => ({
+          'key' : entry.metricId,
+          'label' : metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // built-in metrics have nicer labels
+          'entityType' : entry.pluginId
+        }))
+      );
+      this.catalogCache.put(key, metrics);
     }
-    return this.catalogCache[id].metrics;
+    return metrics;
   }
 
   fetchTypesForTarget(target, timeFilter) {
@@ -86,13 +73,12 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   fetchSnapshotsForTarget(target, timeFilter) {
     const query = this.buildQuery(target);
-
-    // FIXME CACHE
-    if (this.localCacheCopyAvailable(query, timeFilter)) {
+    const key = this.buildSnapshotCacheKey(query, timeFilter);
+    const snapshots = this.snapshotCache.get(key);
+    if (snapshots) {
       this.setLastFetchedFromApi(false);
-      return this.$q.resolve(this.snapshotCache[query].snapshots);
+      return this.$q.resolve(snapshots);
     }
-
     this.setLastFetchedFromApi(true);
 
     const fetchSnapshotContextsUrl = `/api/snapshots/context`+
@@ -124,15 +110,12 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return snapshotResponse;
   }
 
-  localCacheCopyAvailable(query, timeFilter) {
-    return this.snapshotCache[query] &&
-      timeFilter.to - this.snapshotCache[query].to < this.CACHE_MAX_AGE &&
-      timeFilter.from - this.snapshotCache[query].from < this.CACHE_MAX_AGE &&
-      this.currentTime() - this.snapshotCache[query].at < this.CACHE_MAX_AGE;
-  }
-
   buildQuery(target) {
     return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType.key}`);
+  }
+
+  buildSnapshotCacheKey(query, timeFilter) {
+    return query + this.SEPARATOR + this.getTimeKey(timeFilter);
   }
 
   buildLabel(snapshotResponse, host, target) {
@@ -162,11 +145,8 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   fetchMetricsForSnapshots(target, snapshots, timeFilter) {
     // Cache the data if fresh
     if (this.wasLastFetchedFromApi()) {
-      // FIXME CACHE
-      this.storeInCache(
-        this.buildQuery(target),
-        { at: this.currentTime(), from: timeFilter.from, to: timeFilter.to, snapshots: snapshots }
-      );
+      const key = this.buildSnapshotCacheKey(this.buildQuery(target), timeFilter);
+      this.snapshotCache.put(key, snapshots);
     }
 
     return this.$q.all(

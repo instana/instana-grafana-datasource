@@ -1,12 +1,6 @@
 import AbstractDatasource from './datasource_abstract';
+import Cache from './cache';
 import _ from 'lodash';
-
-export interface WebsitesCache {
-  at: number;
-  from: number;
-  to: number;
-  websites: Array<Object>;
-}
 
 export interface MetricsCatalogCache {
   age: number;
@@ -19,7 +13,7 @@ export interface TagsCache {
 }
 
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
-  websitesCache: WebsitesCache;
+  websitesCache: Cache;
   websiteTagsCache: TagsCache;
   websiteCatalogCache: MetricsCatalogCache;
 
@@ -45,13 +39,18 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
+
+    this.websitesCache = new Cache();
   }
 
   getWebsites(timeFilter) {
-    const now = this.currentTime();
-    const windowSize = this.getWindowSize(timeFilter);
+    const key = this.getTimeKey(timeFilter);
+    let websites = this.websitesCache.get(key);
+    if (websites) {
+      return websites;
+    }
 
-    if (this.noCacheCopyAvailable(timeFilter, now)) {
+    const windowSize = this.getWindowSize(timeFilter);
     const data = {
       group: {
         groupbyTag: 'beacon.website.name'
@@ -69,26 +68,15 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
         aggregation: 'SUM'
       }]
     };
-      this.websitesCache = {
-        at: now,
-        from: timeFilter.from,
-        to: timeFilter.to,
-        websites: this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
-          websitesResponse.data.items.map(entry => ({
-            'key' : entry.name,
-            'label' : entry.name
-          }))
-        )
-      };
-    }
-    return this.websitesCache.websites;
-  }
+    websites = this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
+      websitesResponse.data.items.map(entry => ({
+        'key' : entry.name,
+        'label' : entry.name
+      }))
+    );
+    this.websitesCache.put(key, websites);
 
-  noCacheCopyAvailable(timeFilter, now) {
-    return !this.websitesCache ||
-      timeFilter.from - this.websitesCache.from > this.CACHE_MAX_AGE ||
-      timeFilter.to - this.websitesCache.to > this.CACHE_MAX_AGE ||
-      now - this.websitesCache.at > this.CACHE_MAX_AGE;
+    return websites;
   }
 
   getWebsiteTags() {
