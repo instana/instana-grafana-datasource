@@ -72,8 +72,6 @@ System.register(['./datasource_abstract', './rollups', './cache', 'lodash'], fun
                         "&newApplicationModelEnabled=true";
                     return this.doRequest(fetchSnapshotTypesUrl);
                 };
-                // cache vorher: List<Snapshot>
-                // return: Promise<List<Snapshot>>
                 InstanaInfrastructureDataSource.prototype.fetchSnapshotsForTarget = function (target, timeFilter) {
                     var _this = this;
                     var query = this.buildQuery(target);

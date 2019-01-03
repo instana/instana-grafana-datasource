@@ -54,7 +54,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     metrics = this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`).then(catalogResponse =>
       catalogResponse.data.map(entry => ({
         'key' : entry.metricId,
-        'label' : metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // built-in metrics have nicer labels
+        'label' : metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // custom-in metrics have shorter descriptions
         'entityType' : entry.pluginId
       }))
     );
@@ -71,8 +71,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return this.doRequest(fetchSnapshotTypesUrl);
   }
 
-// cache vorher: List<Snapshot>
-// return: Promise<List<Snapshot>>
   fetchSnapshotsForTarget(target, timeFilter) {
     const query = this.buildQuery(target);
     const key = this.buildSnapshotCacheKey(query, timeFilter);
