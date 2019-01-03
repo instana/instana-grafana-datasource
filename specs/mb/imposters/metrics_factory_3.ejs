@@ -802,7 +802,7 @@ function (request, state, logger) {
     1036.0
   ];
 
-  var stepWidth = 300000;
+  var stepWidth = 60000;
   var values = [];
   var to = parseInt(request.query.to, 10);
   var timestamp = to - stepWidth * (rawValues.length - 1);

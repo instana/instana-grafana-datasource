@@ -82,7 +82,7 @@ This procedure is used to test the Instana Grafana data source before the versio
 #### Built-in metrics
 * Category: `Infrastructure built-in metrics`
 * Query: `filler`
-* Type: `Processes`
+* Type: `Process`
 * Metric: `Virtual (mem.virtual)`
 
 This should render a chart with two datasets (`node (on host "host-1")` and `node (on host "host-2)`).
@@ -91,7 +91,7 @@ This should render a chart with two datasets (`node (on host "host-1")` and `nod
 * Category: `Infrastructure custom metrics`
 * Query: `filler`
 * Type: `Dropwizard`
-* Filter: ``
+* Filter metric select: ``
 * Metric: `Dropwizard meter (KPI.errors)`
 
 This should render a chart with one dataset (`node (on host "host-3")`).
