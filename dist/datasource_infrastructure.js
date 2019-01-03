@@ -51,17 +51,18 @@ System.register(['./datasource_abstract', './rollups', './cache', 'lodash'], fun
                     var _this = this;
                     var key = plugin.key + this.SEPARATOR + metricCategory;
                     var metrics = this.catalogCache.get(key);
-                    if (!metrics) {
-                        var filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
-                        metrics = this.doRequest("/api/infrastructure-monitoring/catalog/metrics/" + plugin.key + "?filter=" + filter).then(function (catalogResponse) {
-                            return catalogResponse.data.map(function (entry) { return ({
-                                'key': entry.metricId,
-                                'label': metricCategory === _this.CUSTOM_METRICS ? entry.description : entry.label,
-                                'entityType': entry.pluginId
-                            }); });
-                        });
-                        this.catalogCache.put(key, metrics);
+                    if (metrics) {
+                        return metrics;
                     }
+                    var filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
+                    metrics = this.doRequest("/api/infrastructure-monitoring/catalog/metrics/" + plugin.key + "?filter=" + filter).then(function (catalogResponse) {
+                        return catalogResponse.data.map(function (entry) { return ({
+                            'key': entry.metricId,
+                            'label': metricCategory === _this.CUSTOM_METRICS ? entry.description : entry.label,
+                            'entityType': entry.pluginId
+                        }); });
+                    });
+                    this.catalogCache.put(key, metrics);
                     return metrics;
                 };
                 InstanaInfrastructureDataSource.prototype.fetchTypesForTarget = function (target, timeFilter) {

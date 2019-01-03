@@ -37,10 +37,10 @@ System.register(['lodash'], function(exports_1) {
                 };
                 AbstractDatasource.prototype.getTimeKey = function (timeFilter) {
                     // time might be part of a cache key as this can cause different results
-                    return this.reduce(timeFilter.from) + this.SEPARATOR + this.reduce(timeFilter.to);
+                    return this.msToMin(timeFilter.from) + this.SEPARATOR + this.msToMin(timeFilter.to);
                 };
-                AbstractDatasource.prototype.reduce = function (time) {
-                    return Math.round(time / this.CACHE_MAX_AGE);
+                AbstractDatasource.prototype.msToMin = function (time) {
+                    return Math.round(time / 60000);
                 };
                 AbstractDatasource.prototype.doRequest = function (url, maxRetries) {
                     if (maxRetries === void 0) { maxRetries = 1; }

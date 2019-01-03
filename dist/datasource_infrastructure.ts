@@ -44,18 +44,22 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   getMetricsCatalog(plugin, metricCategory) {
     const key = plugin.key + this.SEPARATOR + metricCategory;
+
     let metrics = this.catalogCache.get(key);
-    if (!metrics) {
-      const filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
-      metrics = this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`).then(catalogResponse =>
-        catalogResponse.data.map(entry => ({
-          'key' : entry.metricId,
-          'label' : metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // built-in metrics have nicer labels
-          'entityType' : entry.pluginId
-        }))
-      );
-      this.catalogCache.put(key, metrics);
+    if (metrics) {
+      return metrics;
     }
+
+    const filter = metricCategory === this.CUSTOM_METRICS ? 'custom' : 'builtin';
+    metrics = this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`).then(catalogResponse =>
+      catalogResponse.data.map(entry => ({
+        'key' : entry.metricId,
+        'label' : metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // built-in metrics have nicer labels
+        'entityType' : entry.pluginId
+      }))
+    );
+    this.catalogCache.put(key, metrics);
+
     return metrics;
   }
 
@@ -72,6 +76,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   fetchSnapshotsForTarget(target, timeFilter) {
     const query = this.buildQuery(target);
     const key = this.buildSnapshotCacheKey(query, timeFilter);
+
     let snapshots = this.snapshotCache.get(key);
     if (snapshots) {
       return snapshots;
@@ -99,6 +104,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       );
     });
     this.snapshotCache.put(key, snapshots);
+
     return snapshots;
   }
 
