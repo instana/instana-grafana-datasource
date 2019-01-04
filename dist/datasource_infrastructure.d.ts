@@ -14,8 +14,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     snapshotCache: Cache;
     catalogCache: Cache;
     lastFetchedFromAPI: boolean;
-    MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
-    CUSTOM_METRICS: string;
+    maximumNumberOfUsefulDataPoints: number;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     getEntityTypes(metricCategory: any): Object[];

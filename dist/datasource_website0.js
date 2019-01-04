@@ -106,7 +106,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     }
                     return this.websiteCatalogCache.metrics;
                 };
-                InstanaWebsiteDataSource.prototype.fetchMetricsForWebsite = function (target, timeFilter) {
+                InstanaWebsiteDataSource.prototype.fetchMetricsForEntity = function (target, timeFilter) {
                     var _this = this;
                     // avoid invalid calls
                     if (!target || !target.metric || !target.group || !target.entity) {
@@ -167,4 +167,4 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
         }
     }
 });
-//# sourceMappingURL=datasource_website.js.map
+//# sourceMappingURL=datasource_website0.js.map

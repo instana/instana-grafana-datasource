@@ -85,7 +85,7 @@ function (request, state, logger) {
   var stepWidth = 300000;
   var values = [];
   var to = Date.now();
-  var timestamp = to - stepWidth * (rawValues.length - 1);;
+  var timestamp = to - stepWidth * (rawValues.length - 1);
   rawValues.forEach(function(v, index, array) {
     values.push([
       timestamp,

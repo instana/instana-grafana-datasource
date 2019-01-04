@@ -12,10 +12,10 @@ export interface TagsCache {
   tags: Array<Object>;
 }
 
-export default class InstanaWebsiteDataSource extends AbstractDatasource {
-  websitesCache: Cache;
-  websiteTagsCache: TagsCache;
-  websiteCatalogCache: MetricsCatalogCache;
+export default class InstanaApplicationDataSource extends AbstractDatasource {
+  applicationsCache: Cache;
+  applicationTagsCache: TagsCache;
+  applicationCatalogCache: MetricsCatalogCache;
 
   maximumNumberOfUsefulDataPoints = 80;
   sensibleGranularities = [
@@ -40,52 +40,52 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
 
-    this.websitesCache = new Cache();
+    this.applicationsCache = new Cache();
   }
 
-  getWebsites(timeFilter) {
+  getApplications(timeFilter) {
     const key = this.getTimeKey(timeFilter);
 
-    let websites = this.websitesCache.get(key);
-    if (websites) {
-      return websites;
+    let applications = this.applicationsCache.get(key);
+    if (applications) {
+      return applications;
     }
 
     const windowSize = this.getWindowSize(timeFilter);
     const data = {
       group: {
-        groupbyTag: 'beacon.website.name'
+        groupbyTag: 'application.name'
       },
       timeFrame: {
         to: timeFilter.to,
         windowSize: windowSize
       },
       order: {
-        by: 'pageLoads',
+        by: 'something', // TODO??
         direction: "desc"
       },
       metrics: [{
-        metric: 'pageLoads',
+        metric: 'calls',
         aggregation: 'SUM'
       }]
     };
-    websites = this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
-      websitesResponse.data.items.map(entry => ({
+    applications = this.postRequest('/api/application-monitoring/analyze/call-groups', data).then(applicationsResponse =>
+      applicationsResponse.data.items.map(entry => ({
         'key' : entry.name,
         'label' : entry.name
       }))
     );
-    this.websitesCache.put(key, websites);
+    this.applicationsCache.put(key, applications);
 
-    return websites;
+    return applications;
   }
 
-  getWebsiteTags() {
+  getApplicastionTags() {
     const now = this.currentTime();
-    if (!this.websiteTagsCache || now - this.websiteTagsCache.age > this.CACHE_MAX_AGE) {
-      this.websiteTagsCache = {
+    if (!this.applicationTagsCache || now - this.applicationTagsCache.age > this.CACHE_MAX_AGE) {
+      this.applicationTagsCache = {
         age: now,
-        tags: this.doRequest('/api/website-monitoring/catalog/tags').then(tagsResponse =>
+        tags: this.doRequest('/api/application-monitoring/catalog/tags').then(tagsResponse =>
           tagsResponse.data.map(entry => ({
             'key' : entry.name,
             'type' : entry.type
@@ -93,15 +93,15 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
         ),
       };
     }
-    return this.websiteTagsCache.tags;
+    return this.applicationTagsCache.tags;
   }
 
-  getWebsiteMetricsCatalog() {
+  getApplicationMetricsCatalog() {
     const now = this.currentTime();
-    if (!this.websiteCatalogCache || now - this.websiteCatalogCache.age > this.CACHE_MAX_AGE) {
-      this.websiteCatalogCache = {
+    if (!this.applicationCatalogCache || now - this.applicationCatalogCache.age > this.CACHE_MAX_AGE) {
+      this.applicationCatalogCache = {
         age: now,
-        metrics: this.doRequest('/api/website-monitoring/catalog/metrics').then(catalogResponse =>
+        metrics: this.doRequest('/api/application-monitoring/catalog/metrics').then(catalogResponse =>
           catalogResponse.data.map(entry => ({
             'key' : entry.metricId,
             'label' : entry.label,
@@ -110,10 +110,10 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
         )
       };
     }
-    return this.websiteCatalogCache.metrics;
+    return this.applicationCatalogCache.metrics;
   }
 
-  fetchMetricsForWebsite(target, timeFilter) {
+  fetchMetricsForApplication(target, timeFilter) {
     // avoid invalid calls
     if (!target || !target.metric || !target.group || !target.entity) {
       return this.$q.resolve({ data: { items: [] } });
@@ -124,7 +124,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     const granularity = this.getChartGranularity(windowSize);
 
     const tagFilters = [{
-      name: 'beacon.website.name',
+      name: 'application.name',
       operator: 'EQUALS',
       value: target.entity.key
     }];
@@ -149,7 +149,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
         granularity: granularity
       }]
     };
-    return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
+    return this.postRequest('/api/application-monitoring/analyze/call-groups', data);
   }
 
   getChartGranularity(windowSize) {

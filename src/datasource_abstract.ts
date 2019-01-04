@@ -8,6 +8,11 @@ export default class AbstractDatasource {
   url: string;
   apiToken: string;
 
+  BUILT_IN_METRICS = '0';
+  CUSTOM_METRICS = '1';
+  APPLICATION_METRICS = '2';
+  WEBSITE_METRICS = '3';
+
   CACHE_MAX_AGE = 60000;
   SEPARATOR = '|';
 

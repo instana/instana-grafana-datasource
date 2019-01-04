@@ -27,8 +27,7 @@ System.register(['./datasource_abstract', './rollups', './cache', 'lodash'], fun
                 function InstanaInfrastructureDataSource(instanceSettings, backendSrv, templateSrv, $q) {
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
                     this.rollupDurationThresholds = rollups_1.default;
-                    this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
-                    this.CUSTOM_METRICS = '1';
+                    this.maximumNumberOfUsefulDataPoints = 800;
                     this.snapshotCache = new cache_1.default();
                     this.catalogCache = new cache_1.default();
                 }
@@ -168,7 +167,7 @@ System.register(['./datasource_abstract', './rollups', './cache', 'lodash'], fun
                         // the first rollup matching the requirements is returned
                         var rollupDefinition = availableRollupDefinitions[i];
                         var rollup = rollupDefinition && rollupDefinition.rollup ? rollupDefinition.rollup : 1000;
-                        if (windowSize / rollup <= this.MAX_NUMBER_OF_METRICS_FOR_CHARTS) {
+                        if (windowSize / rollup <= this.maximumNumberOfUsefulDataPoints) {
                             return rollupDefinition;
                         }
                     }

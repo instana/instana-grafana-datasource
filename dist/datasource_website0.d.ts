@@ -21,7 +21,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     getWebsites(timeFilter: any): any;
     getWebsiteTags(): Object[];
     getWebsiteMetricsCatalog(): Object[];
-    fetchMetricsForWebsite(target: any, timeFilter: any): any;
+    fetchMetricsForEntity(target: any, timeFilter: any): any;
     getChartGranularity(windowSize: any): number;
     createTagFilter(filter: any): {
         name: any;

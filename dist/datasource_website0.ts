@@ -113,7 +113,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return this.websiteCatalogCache.metrics;
   }
 
-  fetchMetricsForWebsite(target, timeFilter) {
+  fetchMetricsForEntity(target, timeFilter) {
     // avoid invalid calls
     if (!target || !target.metric || !target.group || !target.entity) {
       return this.$q.resolve({ data: { items: [] } });

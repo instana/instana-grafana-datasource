@@ -8,20 +8,20 @@ export interface TagsCache {
     age: number;
     tags: Array<Object>;
 }
-export default class InstanaWebsiteDataSource extends AbstractDatasource {
-    websitesCache: Cache;
-    websiteTagsCache: TagsCache;
-    websiteCatalogCache: MetricsCatalogCache;
+export default class InstanaApplicationDataSource extends AbstractDatasource {
+    applicationsCache: Cache;
+    applicationTagsCache: TagsCache;
+    applicationCatalogCache: MetricsCatalogCache;
     maximumNumberOfUsefulDataPoints: number;
     sensibleGranularities: number[];
     OPERATOR_NUMBER: string;
     OPERATOR_BOOLEAN: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
-    getWebsites(timeFilter: any): any;
-    getWebsiteTags(): Object[];
-    getWebsiteMetricsCatalog(): Object[];
-    fetchMetricsForWebsite(target: any, timeFilter: any): any;
+    getApplications(timeFilter: any): any;
+    getApplicastionTags(): Object[];
+    getApplicationMetricsCatalog(): Object[];
+    fetchMetricsForApplication(target: any, timeFilter: any): any;
     getChartGranularity(windowSize: any): number;
     createTagFilter(filter: any): {
         name: any;

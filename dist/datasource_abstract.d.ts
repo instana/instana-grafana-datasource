@@ -7,6 +7,10 @@ export default class AbstractDatasource {
     pluginVersion: string;
     url: string;
     apiToken: string;
+    BUILT_IN_METRICS: string;
+    CUSTOM_METRICS: string;
+    APPLICATION_METRICS: string;
+    WEBSITE_METRICS: string;
     CACHE_MAX_AGE: number;
     SEPARATOR: string;
     /** @ngInject */
