@@ -5,17 +5,17 @@ import Rollup from './types/rollup';
 import Cache from './cache';
 export default class InstanaInfrastructureDataSource extends AbstractDatasource {
     rollupDurationThresholds: Array<Rollup>;
-    snapshotCache: Cache<Promise<Object>>;
-    catalogCache: Cache<Promise<Object>>;
+    snapshotCache: Cache<Promise<Array<Selectable>>>;
+    catalogCache: Cache<Promise<Array<Selectable>>>;
     lastFetchedFromAPI: boolean;
     MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
     CUSTOM_METRICS: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     getEntityTypes(metricCategory: string): Selectable[];
-    getMetricsCatalog(plugin: Selectable, metricCategory: string): Promise<Object>;
+    getMetricsCatalog(plugin: Selectable, metricCategory: string): Promise<Selectable[]>;
     fetchTypesForTarget(target: any, timeFilter: TimeFilter): any;
-    fetchSnapshotsForTarget(target: any, timeFilter: TimeFilter): Promise<Object>;
+    fetchSnapshotsForTarget(target: any, timeFilter: TimeFilter): Promise<Selectable[]>;
     reduceSnapshot(snapshotResponse: any): any;
     buildQuery(target: any): string;
     buildSnapshotCacheKey(query: string, timeFilter: TimeFilter): string;

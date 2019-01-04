@@ -10,8 +10,8 @@ import _ from 'lodash';
 export default class InstanaInfrastructureDataSource extends AbstractDatasource {
   rollupDurationThresholds: Array<Rollup> = rollupDurationThresholds;
 
-  snapshotCache: Cache<Promise<Object>>;
-  catalogCache: Cache<Promise<Object>>;
+  snapshotCache: Cache<Promise<Array<Selectable>>>;
+  catalogCache: Cache<Promise<Array<Selectable>>>;
   lastFetchedFromAPI: boolean;
 
   MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
@@ -21,8 +21,8 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
 
-    this.snapshotCache = new Cache<Promise<Object>>();
-    this.catalogCache = new Cache<Promise<Object>>();
+    this.snapshotCache = new Cache<Promise<Array<Selectable>>>();
+    this.catalogCache = new Cache<Promise<Array<Selectable>>>();
   }
 
   getEntityTypes(metricCategory: string) {

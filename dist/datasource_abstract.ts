@@ -1,3 +1,4 @@
+import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import Cache from './cache';
 
@@ -38,11 +39,11 @@ export default class AbstractDatasource {
     return Date.now();
   }
 
-  getWindowSize(timeFilter): number {
+  getWindowSize(timeFilter: TimeFilter): number {
     return timeFilter.from ? timeFilter.to - timeFilter.from : timeFilter.windowSize;
   }
 
-  getTimeKey(timeFilter): string {
+  getTimeKey(timeFilter: TimeFilter): string {
     // time might be part of a cache key as this can cause different results
     return this.msToMin(timeFilter.from) + this.SEPARATOR + this.msToMin(timeFilter.to);
   }

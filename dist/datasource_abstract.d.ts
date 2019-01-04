@@ -1,3 +1,4 @@
+import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import Cache from './cache';
 export default class AbstractDatasource {
@@ -15,8 +16,8 @@ export default class AbstractDatasource {
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     currentTime: () => number;
-    getWindowSize(timeFilter: any): number;
-    getTimeKey(timeFilter: any): string;
+    getWindowSize(timeFilter: TimeFilter): number;
+    getTimeKey(timeFilter: TimeFilter): string;
     private msToMin(time);
     doRequest(url: string, maxRetries?: number): any;
     postRequest(url: string, data: Object, maxRetries?: number): any;
