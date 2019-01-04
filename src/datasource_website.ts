@@ -60,6 +60,11 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
         to: timeFilter.to,
         windowSize: windowSize
       },
+      tagFilters: [{
+        name: 'beacon.type',
+        operator: 'EQUALS',
+        value: 'pageLoad'
+      }],
       order: {
         by: 'pageLoads',
         direction: "desc"
@@ -127,6 +132,10 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       name: 'beacon.website.name',
       operator: 'EQUALS',
       value: target.entity.key
+    },{
+      name: 'beacon.type',
+      operator: 'EQUALS',
+      value: target.entityType.key
     }];
     _.forEach(target.filters, filter => {
       if (filter.isValid) {

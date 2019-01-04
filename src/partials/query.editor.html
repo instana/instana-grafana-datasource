@@ -40,6 +40,7 @@
 
   <div ng-show="ctrl.target.metricCategory === '3'">
 		<div ng-include src="'website.html'"/>
+    <div ng-include src="'beacontype.html'"/>
     <div ng-include src="'group.html'"/>
     <div ng-include src="'metric.html'"/>
     <div ng-include src="'filters.html'"/>
@@ -158,7 +159,7 @@
              ng-model="ctrl.target.labelFormat"
              ng-model-options='{ debounce: 500 }'
              placeholder="$label (on host $host)"
-             ng-change="ctrl.onLabelChange()"
+             ng-change="ctrl.onChange()"
              spellcheck='false'/>
     </div>
   </script>
@@ -175,8 +176,27 @@
         <select id="in-website-{{ctrl.target.refId}}"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.entity"
-                ng-change="ctrl.onEntitySelect()"
+                ng-change="ctrl.onChange()"
                 ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
+        </select>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="beacontype.html">
+    <div class="gf-form">
+      <label class="gf-form-label width-13 pointer" for="in-beacontype-{{ctrl.target.refId}}">
+        Type
+        <info-popover position="top center" mode="right-normal">
+          <p>Select a beacon type.</p>
+        </info-popover>
+      </label>
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+        <select id="in-beacontype-{{ctrl.target.refId}}"
+          class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+          ng-model="ctrl.target.entityType"
+          ng-change="ctrl.onChange()"
+          ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
         </select>
       </div>
     </div>
@@ -194,7 +214,7 @@
           <select id="in-group-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.group"
-                  ng-change="ctrl.onGroupChange()"
+                  ng-change="ctrl.onChange()"
                   ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
           </select>
         </div>

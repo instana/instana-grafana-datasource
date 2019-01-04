@@ -23,6 +23,10 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
         label: string;
         type: string;
     }[];
+    uniqueBeaconTypes: {
+        key: string;
+        label: string;
+    }[];
     uniqueEntityTypes: Array<Object>;
     allCustomMetrics: Array<Object>;
     availableMetrics: Array<Object>;
@@ -65,8 +69,6 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     resetMetricSelection(): void;
     adjustEntitySelectionPlaceholder(): void;
     adjustMetricSelectionPlaceholder(): void;
-    onEntitySelect(): void;
-    onGroupChange(): void;
+    onChange(): void;
     onMetricSelect(): void;
-    onLabelChange(): void;
 }

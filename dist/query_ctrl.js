@@ -1,15 +1,18 @@
-System.register(['app/plugins/sdk', './operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', './beacon_types', './operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, operators_1, migration_1, lodash_1;
+    var sdk_1, beacon_types_1, operators_1, migration_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
             function (sdk_1_1) {
                 sdk_1 = sdk_1_1;
+            },
+            function (beacon_types_1_1) {
+                beacon_types_1 = beacon_types_1_1;
             },
             function (operators_1_1) {
                 operators_1 = operators_1_1;
@@ -32,6 +35,7 @@ System.register(['app/plugins/sdk', './operators', './migration', 'lodash', './c
                     this.backendSrv = backendSrv;
                     this.$q = $q;
                     this.uniqueOperators = operators_1.default;
+                    this.uniqueBeaconTypes = beacon_types_1.default;
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
                     this.OPERATOR_STRING = 'STRING';
                     this.OPERATOR_NUMBER = 'NUMBER';
@@ -90,6 +94,10 @@ System.register(['app/plugins/sdk', './operators', './migration', 'lodash', './c
                 };
                 InstanaQueryCtrl.prototype.onEntityChanges = function (refresh) {
                     var _this = this;
+                    // select a meaningful default group
+                    if (this.target && !this.target.entityType) {
+                        this.target.entityType = lodash_1.default.find(this.uniqueBeaconTypes, ['key', 'pageLoad']);
+                    }
                     this.datasource.website.getWebsites(this.timeFilter).then(function (websites) {
                         _this.uniqueEntities = websites;
                         // select the most loaded website for default/replacement
@@ -290,19 +298,13 @@ System.register(['app/plugins/sdk', './operators', './migration', 'lodash', './c
                             : this.EMPTY_DROPDOWN_TEXT;
                     }
                 };
-                InstanaQueryCtrl.prototype.onEntitySelect = function () {
-                    this.panelCtrl.refresh();
-                };
-                InstanaQueryCtrl.prototype.onGroupChange = function () {
+                InstanaQueryCtrl.prototype.onChange = function () {
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {
                     if (this.target.metricCategory === this.WEBSITE_METRICS && !lodash_1.default.includes(this.target.metric.aggregations, this.target.aggregation)) {
                         this.target.aggregation = this.target.metric.aggregations[0];
                     }
-                    this.panelCtrl.refresh();
-                };
-                InstanaQueryCtrl.prototype.onLabelChange = function () {
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.templateUrl = 'partials/query.editor.html';

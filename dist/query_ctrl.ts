@@ -1,5 +1,6 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import {QueryCtrl} from 'app/plugins/sdk';
+import beaconTypes from './beacon_types';
 import operators from './operators';
 import migrate from './migration';
 import _ from 'lodash';
@@ -25,6 +26,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
 
   uniqueOperators = operators;
+  uniqueBeaconTypes = beaconTypes;
 
   uniqueEntityTypes: Array<Object>; // subset of allEntityTypes filtered by DF
   allCustomMetrics: Array<Object>; // internal reference only to speed up filtering // TODO needed ?
@@ -112,6 +114,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onEntityChanges(refresh) {
+    // select a meaningful default group
+    if (this.target && !this.target.entityType) {
+      this.target.entityType = _.find(this.uniqueBeaconTypes, ['key', 'pageLoad']);
+    }
+
     this.datasource.website.getWebsites(this.timeFilter).then(
       websites => {
         this.uniqueEntities = websites;
@@ -348,11 +355,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
   }
 
-  onEntitySelect() {
-    this.panelCtrl.refresh();
-  }
-
-  onGroupChange() {
+  onChange() {
     this.panelCtrl.refresh();
   }
 
@@ -360,10 +363,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     if (this.target.metricCategory === this.WEBSITE_METRICS && !_.includes(this.target.metric.aggregations, this.target.aggregation)) {
       this.target.aggregation = this.target.metric.aggregations[0];
     }
-    this.panelCtrl.refresh();
-  }
-
-  onLabelChange() {
     this.panelCtrl.refresh();
   }
 }

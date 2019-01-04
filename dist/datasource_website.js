@@ -57,6 +57,11 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                             to: timeFilter.to,
                             windowSize: windowSize
                         },
+                        tagFilters: [{
+                                name: 'beacon.type',
+                                operator: 'EQUALS',
+                                value: 'pageLoad'
+                            }],
                         order: {
                             by: 'pageLoads',
                             direction: "desc"
@@ -119,6 +124,10 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                             name: 'beacon.website.name',
                             operator: 'EQUALS',
                             value: target.entity.key
+                        }, {
+                            name: 'beacon.type',
+                            operator: 'EQUALS',
+                            value: target.entityType.key
                         }];
                     lodash_1.default.forEach(target.filters, function (filter) {
                         if (filter.isValid) {
