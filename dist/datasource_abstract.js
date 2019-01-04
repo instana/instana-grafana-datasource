@@ -23,7 +23,6 @@ System.register(['./cache', 'lodash'], function(exports_1) {
                     };
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
-                    this.pluginVersion = lodash_1.default.get(instanceSettings, ['meta', 'info', 'version'], '2.0.0');
                     this.simpleCache = new cache_1.default();
                     // grafana 5.3+ wanted to resolve dynamic routes in proxy mode
                     var version = lodash_1.default.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
@@ -68,7 +67,6 @@ System.register(['./cache', 'lodash'], function(exports_1) {
                     if (this.apiToken) {
                         request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
                     }
-                    // request['headers'] = { User-Agent: 'Grafana ' + this.pluginVersion };
                     return this.backendSrv
                         .datasourceRequest(request)
                         .catch(function (error) {

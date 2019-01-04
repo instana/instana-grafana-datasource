@@ -1,9 +1,14 @@
 import AbstractDatasource from './datasource_abstract';
+import BeaconGroupBody from './types/beacon_group_body';
+import TimeFilter from './types/time_filter';
+import Selectable from './types/selectable';
+import TagFilter from './types/tag_filter';
 import Cache from './cache';
+
 import _ from 'lodash';
 
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
-  websitesCache: Cache;
+  websitesCache: Cache<Promise<Array<Selectable>>>;
 
   maximumNumberOfUsefulDataPoints = 80;
   sensibleGranularities = [
@@ -28,10 +33,10 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
 
-    this.websitesCache = new Cache();
+    this.websitesCache = new Cache<Promise<Array<Selectable>>>();
   }
 
-  getWebsites(timeFilter) {
+  getWebsites(timeFilter: TimeFilter) {
     const key = this.getTimeKey(timeFilter);
 
     let websites = this.websitesCache.get(key);
@@ -40,7 +45,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-    const data = {
+    const data: BeaconGroupBody = {
       group: {
         groupbyTag: 'beacon.website.name'
       },
@@ -55,7 +60,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       }],
       order: {
         by: 'pageLoads',
-        direction: "desc"
+        direction: 'desc'
       }
     };
     websites = this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
@@ -104,7 +109,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return websiteCatalog;
   }
 
-  fetchMetricsForEntity(target, timeFilter) {
+  fetchMetricsForEntity(target, timeFilter: TimeFilter) {
     // avoid invalid calls
     if (!target || !target.metric || !target.group || !target.entity) {
       return this.$q.resolve({ data: { items: [] } });
@@ -125,7 +130,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       }
     });
 
-    const data = {
+    const data: BeaconGroupBody = {
       group: {
         groupbyTag: target.group.key
       },
@@ -144,14 +149,14 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
   }
 
-  getChartGranularity(windowSize) {
+  getChartGranularity(windowSize: number): number {
     const granularity = this.sensibleGranularities.find(
       granularity => windowSize / 1000 / granularity <= this.maximumNumberOfUsefulDataPoints
     );
     return granularity || this.sensibleGranularities[this.sensibleGranularities.length - 1];
   }
 
-  createTagFilter(filter) {
+  createTagFilter(filter: TagFilter) {
     const tagFilter = {
       name: filter.tag.key,
       operator: filter.operator.key,
@@ -159,9 +164,9 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     };
 
     if (this.OPERATOR_NUMBER === filter.tag.type) {
-      tagFilter.value = filter.numberValue;
+      tagFilter.value = filter.numberValue.toString();
     } else if (this.OPERATOR_BOOLEAN === filter.tag.type) {
-      tagFilter.value = filter.booleanValue;
+      tagFilter.value = filter.booleanValue.toString();
     }
 
     return tagFilter;

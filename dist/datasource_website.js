@@ -64,7 +64,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                             }],
                         order: {
                             by: 'pageLoads',
-                            direction: "desc"
+                            direction: 'desc'
                         }
                     };
                     websites = this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(function (websitesResponse) {
@@ -154,10 +154,10 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                         value: filter.stringValue
                     };
                     if (this.OPERATOR_NUMBER === filter.tag.type) {
-                        tagFilter.value = filter.numberValue;
+                        tagFilter.value = filter.numberValue.toString();
                     }
                     else if (this.OPERATOR_BOOLEAN === filter.tag.type) {
-                        tagFilter.value = filter.booleanValue;
+                        tagFilter.value = filter.booleanValue.toString();
                     }
                     return tagFilter;
                 };

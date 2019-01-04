@@ -1,4 +1,6 @@
+import Selectable from './types/selectable';
 import Cache from './cache';
+
 import _ from 'lodash';
 
 export default class AbstractDatasource {
@@ -9,7 +11,7 @@ export default class AbstractDatasource {
   url: string;
   apiToken: string;
 
-  simpleCache: Cache;
+  simpleCache: Cache<Array<Selectable>>;
 
   CACHE_MAX_AGE = 60000;
   SEPARATOR = '|';
@@ -18,9 +20,8 @@ export default class AbstractDatasource {
   constructor(instanceSettings, public backendSrv, public templateSrv, public $q) {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
-    this.pluginVersion = _.get(instanceSettings, ['meta', 'info', 'version'], '2.0.0');
 
-    this.simpleCache = new Cache();
+    this.simpleCache = new Cache<Array<Selectable>>();
 
     // grafana 5.3+ wanted to resolve dynamic routes in proxy mode
     const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
@@ -37,20 +38,20 @@ export default class AbstractDatasource {
     return Date.now();
   }
 
-  getWindowSize(timeFilter) {
+  getWindowSize(timeFilter): number {
     return timeFilter.from ? timeFilter.to - timeFilter.from : timeFilter.windowSize;
   }
 
-  getTimeKey(timeFilter) {
+  getTimeKey(timeFilter): string {
     // time might be part of a cache key as this can cause different results
     return this.msToMin(timeFilter.from) + this.SEPARATOR + this.msToMin(timeFilter.to);
   }
 
-  private msToMin(time: number) {
+  private msToMin(time: number): number {
     return Math.round(time / 60000);
   }
 
-  doRequest(url, maxRetries = 1) {
+  doRequest(url: string, maxRetries = 1) {
     const request = {
       method: 'GET',
       url: this.url + url
@@ -58,7 +59,7 @@ export default class AbstractDatasource {
     return this.execute(request, maxRetries);
   }
 
-  postRequest(url, data, maxRetries = 0) {
+  postRequest(url: string, data: Object, maxRetries = 0) {
     const request = {
       method: 'POST',
       url: this.url + url,
@@ -71,7 +72,6 @@ export default class AbstractDatasource {
     if (this.apiToken) {
       request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
     }
-    // request['headers'] = { User-Agent: 'Grafana ' + this.pluginVersion };
 
     return this.backendSrv
       .datasourceRequest(request)

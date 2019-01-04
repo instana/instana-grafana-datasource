@@ -1,43 +1,34 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
-import {QueryCtrl} from 'app/plugins/sdk';
-import beaconTypes from './beacon_types';
-import operators from './operators';
+import { QueryCtrl } from 'app/plugins/sdk';
+
+import beaconTypes from './lists/beacon_types';
+import TimeFilter from './types/time_filter';
+import Selectable from './types/selectable';
+import TagFilter from './types/tag_filter';
+import operators from './lists/operators';
 import migrate from './migration';
+
 import _ from 'lodash';
 
 import './css/query_editor.css!';
 
-export interface Selectable {
-  key: string;
-  label: string;
-  type: string;
-}
-
-export interface TagFilter {
-  tag: Selectable;
-  operator: Selectable;
-  stringValue: string;
-  numberValue: number;
-  booleanValue: boolean;
-  isValid: boolean;
-}
-
 export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
 
-  uniqueOperators = operators;
-  uniqueBeaconTypes = beaconTypes;
+  uniqueOperators: Array<Selectable> = operators;
+  uniqueBeaconTypes: Array<Selectable> = beaconTypes;
 
-  uniqueEntityTypes: Array<Object>; // subset of allEntityTypes filtered by DF
-  allCustomMetrics: Array<Object>; // internal reference only to speed up filtering // TODO needed ?
-  availableMetrics: Array<Object>; // subset of allCustomMetrics for display only
+  uniqueEntityTypes: Array<Selectable>; // subset of allEntityTypes filtered by DF
+  allCustomMetrics: Array<Selectable>; // internal reference only to speed up filtering // TODO needed ?
+  availableMetrics: Array<Selectable>; // subset of allCustomMetrics for display only
+  uniqueEntities: Array<Selectable>;
+  uniqueTags: Array<Selectable>;
+
   snapshots: Array<string>;
   entitySelectionText: string;
   metricSelectionText: string;
   previousMetricCategory: string;
-  uniqueEntities: Array<Object>;
-  uniqueTags: Array<Object>;
-  timeFilter: Object;
+  timeFilter: TimeFilter;
 
   EMPTY_DROPDOWN_TEXT = ' - ';
 
@@ -113,7 +104,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     return this.target.metricCategory === this.WEBSITE_METRICS;
   }
 
-  onEntityChanges(refresh) {
+  onEntityChanges(refresh: boolean) {
     // select a meaningful default group
     if (this.target && !this.target.entityType) {
       this.target.entityType = _.find(this.uniqueBeaconTypes, ['key', 'pageLoad']);
@@ -151,7 +142,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
   }
 
-  onFilterChange(refresh) {
+  onFilterChange(refresh: boolean) {
     if (!this.target.entityQuery) {
       this.selectionReset();
       return this.$q.resolve();
@@ -187,7 +178,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.previousMetricCategory = this.target.metricCategory;
   }
 
-  filterForEntityType(refresh) {
+  filterForEntityType(refresh: boolean) {
     this.filterEntityTypes().then(() => {
       this.adjustEntitySelectionPlaceholder();
 
@@ -213,7 +204,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
   }
 
-  findMatchingEntityTypes(entityType) {
+  findMatchingEntityTypes(entityType: Selectable) {
     // workaround as long the api does not support returning plugins with custom metrics only
     if (this.target.metricCategory === this.BUILT_IN_METRICS ||
         entityType.key === 'statsd' ||
@@ -223,7 +214,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
   }
 
-  onEntityTypeSelect(refresh) {
+  onEntityTypeSelect(refresh: boolean) {
     return this.datasource.infrastructure.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(
       metrics => {
         this.availableMetrics =
@@ -243,7 +234,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
   }
 
-  onMetricsFilter(refresh) {
+  onMetricsFilter(refresh: boolean) {
     let filter = this.target.filter ? this.target.filter.toLowerCase() : '';
     this.availableMetrics =
       _.sortBy(
@@ -271,13 +262,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
     });
   }
 
-  removeFilter(index) {
+  removeFilter(index: number) {
     this.target.filters.splice(index, 1);
 
     this.panelCtrl.refresh();
   }
 
-  onTagFilterChange(index) {
+  onTagFilterChange(index: number) {
     let filter: TagFilter = this.target.filters[index];
 
     // select a matching operator if not provided
@@ -303,7 +294,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.panelCtrl.refresh();
   }
 
-  checkMetricAndRefresh(refresh) {
+  checkMetricAndRefresh(refresh: boolean) {
     if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
       this.resetMetricSelection();
     } else if (this.target.metric && refresh) {

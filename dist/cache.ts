@@ -1,11 +1,11 @@
-export default class Cache {
+export default class Cache<T> {
   store: any;
 
   constructor() {
     this.store = {};
   }
 
-  put(key, value, ttl = 60000): void {
+  put(key: string, value: T, ttl = 60000): void {
     if (key === undefined || value === undefined) {
       return;
     }
@@ -20,7 +20,7 @@ export default class Cache {
     };
   }
 
-  get(key): any {
+  get(key: string): T {
     var item = this.store[key];
     if (item && !(item.expiry && item.expiry > Date.now())) {
       this.del(key);

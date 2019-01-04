@@ -1,12 +1,17 @@
 import AbstractDatasource from './datasource_abstract';
-import rollupDurationThresholds from './rollups';
+import rollupDurationThresholds from './lists/rollups';
+import TimeFilter from './types/time_filter';
+import Selectable from './types/selectable';
+import Rollup from './types/rollup';
 import Cache from './cache';
+
 import _ from 'lodash';
 
 export default class InstanaInfrastructureDataSource extends AbstractDatasource {
-  rollupDurationThresholds = rollupDurationThresholds;
-  snapshotCache: Cache;
-  catalogCache: Cache;
+  rollupDurationThresholds: Array<Rollup> = rollupDurationThresholds;
+
+  snapshotCache: Cache<Promise<Object>>;
+  catalogCache: Cache<Promise<Object>>;
   lastFetchedFromAPI: boolean;
 
   MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
@@ -16,11 +21,11 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
 
-    this.snapshotCache = new Cache();
-    this.catalogCache = new Cache();
+    this.snapshotCache = new Cache<Promise<Object>>();
+    this.catalogCache = new Cache<Promise<Object>>();
   }
 
-  getEntityTypes(metricCategory) {
+  getEntityTypes(metricCategory: string) {
     let entityTypes = this.simpleCache.get('entityTypes');
     if (entityTypes) {
       return entityTypes;
@@ -37,7 +42,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return entityTypes;
   }
 
-  getMetricsCatalog(plugin, metricCategory) {
+  getMetricsCatalog(plugin: Selectable, metricCategory: string) {
     const key = plugin.key + this.SEPARATOR + metricCategory;
 
     let metrics = this.catalogCache.get(key);
@@ -58,7 +63,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return metrics;
   }
 
-  fetchTypesForTarget(target, timeFilter) {
+  fetchTypesForTarget(target, timeFilter: TimeFilter) {
     const fetchSnapshotTypesUrl = `/api/snapshots/types`+
       `?q=${encodeURIComponent(target.entityQuery)}` +
       `&from=${timeFilter.from}&to=${timeFilter.to}` +
@@ -66,7 +71,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return this.doRequest(fetchSnapshotTypesUrl);
   }
 
-  fetchSnapshotsForTarget(target, timeFilter) {
+  fetchSnapshotsForTarget(target, timeFilter: TimeFilter) {
     const query = this.buildQuery(target);
     const key = this.buildSnapshotCacheKey(query, timeFilter);
 
@@ -107,15 +112,15 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return snapshotResponse;
   }
 
-  buildQuery(target) {
+  buildQuery(target): string {
     return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType.key}`);
   }
 
-  buildSnapshotCacheKey(query, timeFilter) {
+  buildSnapshotCacheKey(query: string, timeFilter: TimeFilter): string {
     return query + this.SEPARATOR + this.getTimeKey(timeFilter);
   }
 
-  buildLabel(snapshotResponse, host, target) {
+  buildLabel(snapshotResponse, host, target): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', snapshotResponse.data.label);
@@ -132,14 +137,14 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return snapshotResponse.data.label + this.getHostSuffix(host);
   }
 
-  getHostSuffix(host) {
+  getHostSuffix(host: string): string {
     if (host) {
       return ' (on host "' + host + '")';
     }
     return '';
   }
 
-  fetchMetricsForSnapshots(target, snapshots, timeFilter) {
+  fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter) {
     return this.$q.all(
       _.map(snapshots, snapshot => {
         // ...fetch the metric data for every snapshot in the results.
@@ -155,14 +160,14 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     );
   }
 
-  fetchMetricsForSnapshot(snapshotId, metric, timeFilter) {
+  fetchMetricsForSnapshot(snapshotId: string, metric: string, timeFilter: TimeFilter) {
     const rollup = this.getDefaultMetricRollupDuration(timeFilter).rollup;
     const url = `/api/metrics?metric=${metric}&from=${timeFilter.from}&to=${timeFilter.to}&rollup=${rollup}&snapshotId=${snapshotId}`;
 
     return this.doRequest(url);
   }
 
-  getDefaultMetricRollupDuration(timeFilter, minRollup = 1000) {
+  getDefaultMetricRollupDuration(timeFilter: TimeFilter, minRollup = 1000): Rollup {
     // Ignoring time differences for now since small time differences
     // can be accepted. This time is only used to calculate the rollup.
     const now = this.currentTime();

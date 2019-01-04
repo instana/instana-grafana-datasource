@@ -1,42 +1,24 @@
 /// <reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import { QueryCtrl } from 'app/plugins/sdk';
-export interface Selectable {
-    key: string;
-    label: string;
-    type: string;
-}
-export interface TagFilter {
-    tag: Selectable;
-    operator: Selectable;
-    stringValue: string;
-    numberValue: number;
-    booleanValue: boolean;
-    isValid: boolean;
-}
+import TimeFilter from './types/time_filter';
+import Selectable from './types/selectable';
 export declare class InstanaQueryCtrl extends QueryCtrl {
     private templateSrv;
     private backendSrv;
     private $q;
     static templateUrl: string;
-    uniqueOperators: {
-        key: string;
-        label: string;
-        type: string;
-    }[];
-    uniqueBeaconTypes: {
-        key: string;
-        label: string;
-    }[];
-    uniqueEntityTypes: Array<Object>;
-    allCustomMetrics: Array<Object>;
-    availableMetrics: Array<Object>;
+    uniqueOperators: Array<Selectable>;
+    uniqueBeaconTypes: Array<Selectable>;
+    uniqueEntityTypes: Array<Selectable>;
+    allCustomMetrics: Array<Selectable>;
+    availableMetrics: Array<Selectable>;
+    uniqueEntities: Array<Selectable>;
+    uniqueTags: Array<Selectable>;
     snapshots: Array<string>;
     entitySelectionText: string;
     metricSelectionText: string;
     previousMetricCategory: string;
-    uniqueEntities: Array<Object>;
-    uniqueTags: Array<Object>;
-    timeFilter: Object;
+    timeFilter: TimeFilter;
     EMPTY_DROPDOWN_TEXT: string;
     OPERATOR_STRING: string;
     OPERATOR_NUMBER: string;
@@ -51,18 +33,18 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any, $q: any);
     isInfrastructure(): boolean;
     isEntity(): boolean;
-    onEntityChanges(refresh: any): any;
-    onFilterChange(refresh: any): any;
+    onEntityChanges(refresh: boolean): any;
+    onFilterChange(refresh: boolean): any;
     onMetricCategorySelect(): void;
-    filterForEntityType(refresh: any): void;
+    filterForEntityType(refresh: boolean): void;
     filterEntityTypes(): any;
-    findMatchingEntityTypes(entityType: any): boolean;
-    onEntityTypeSelect(refresh: any): any;
-    onMetricsFilter(refresh: any): void;
+    findMatchingEntityTypes(entityType: Selectable): boolean;
+    onEntityTypeSelect(refresh: boolean): any;
+    onMetricsFilter(refresh: boolean): void;
     addFilter(): void;
-    removeFilter(index: any): void;
-    onTagFilterChange(index: any): void;
-    checkMetricAndRefresh(refresh: any): void;
+    removeFilter(index: number): void;
+    onTagFilterChange(index: number): void;
+    checkMetricAndRefresh(refresh: boolean): void;
     selectionReset(): void;
     resetEntityTypeSelection(): void;
     resetEntitySelection(): void;

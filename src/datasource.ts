@@ -1,8 +1,10 @@
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
-import rollupDurationThresholds from './rollups';
+import rollupDurationThresholds from './lists/rollups';
+import TimeFilter from './types/time_filter';
 import migrate from './migration';
+
 import _ from 'lodash';
 
 export default class InstanaDatasource extends AbstractDatasource {
@@ -25,7 +27,7 @@ export default class InstanaDatasource extends AbstractDatasource {
       return this.$q.resolve({ data: [] });
     }
 
-    const timeFilter = this.readTime(options);
+    const timeFilter: TimeFilter = this.readTime(options);
 
     return this.$q.all(
       _.map(options.targets, target => {
@@ -45,7 +47,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     });
   }
 
-  readTime(options) {
+  readTime(options): TimeFilter {
     const from = new Date(options.range.from).getTime();
     const to = new Date(options.range.to).getTime();
     return {
@@ -55,7 +57,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     };
   }
 
-  getInfrastructureMetrics(target, timeFilter) {
+  getInfrastructureMetrics(target, timeFilter: TimeFilter) {
     // do not try to retrieve data without selected metric
     if (!target.metric) {
       return this.$q.resolve({ data: [] });
@@ -67,7 +69,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     });
   }
 
-  getWebsiteMetrics(target, timeFilter) {
+  getWebsiteMetrics(target, timeFilter: TimeFilter) {
     return this.website.fetchMetricsForEntity(target, timeFilter).then(response => {
       // as we map two times we need to flatten the result
       return _.flatten(response.data.items.map(item => {

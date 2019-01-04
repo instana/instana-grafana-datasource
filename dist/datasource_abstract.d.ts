@@ -1,3 +1,4 @@
+import Selectable from './types/selectable';
 import Cache from './cache';
 export default class AbstractDatasource {
     backendSrv: any;
@@ -8,16 +9,16 @@ export default class AbstractDatasource {
     pluginVersion: string;
     url: string;
     apiToken: string;
-    simpleCache: Cache;
+    simpleCache: Cache<Array<Selectable>>;
     CACHE_MAX_AGE: number;
     SEPARATOR: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     currentTime: () => number;
-    getWindowSize(timeFilter: any): any;
+    getWindowSize(timeFilter: any): number;
     getTimeKey(timeFilter: any): string;
     private msToMin(time);
-    doRequest(url: any, maxRetries?: number): any;
-    postRequest(url: any, data: any, maxRetries?: number): any;
+    doRequest(url: string, maxRetries?: number): any;
+    postRequest(url: string, data: Object, maxRetries?: number): any;
     private execute(request, maxRetries);
 }
