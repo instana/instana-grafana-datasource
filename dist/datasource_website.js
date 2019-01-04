@@ -57,19 +57,15 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                             to: timeFilter.to,
                             windowSize: windowSize
                         },
-                        tagFilters: [{
-                                name: 'beacon.type',
-                                operator: 'EQUALS',
-                                value: 'pageLoad'
+                        type: 'pageLoad',
+                        metrics: [{
+                                metric: 'pageLoads',
+                                aggregation: 'SUM'
                             }],
                         order: {
                             by: 'pageLoads',
                             direction: "desc"
-                        },
-                        metrics: [{
-                                metric: 'pageLoads',
-                                aggregation: 'SUM'
-                            }]
+                        }
                     };
                     websites = this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(function (websitesResponse) {
                         return websitesResponse.data.items.map(function (entry) { return ({
@@ -124,10 +120,6 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                             name: 'beacon.website.name',
                             operator: 'EQUALS',
                             value: target.entity.key
-                        }, {
-                            name: 'beacon.type',
-                            operator: 'EQUALS',
-                            value: target.entityType.key
                         }];
                     lodash_1.default.forEach(target.filters, function (filter) {
                         if (filter.isValid) {
@@ -143,6 +135,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                             windowSize: windowSize
                         },
                         tagFilters: tagFilters,
+                        type: target.entityType.key,
                         metrics: [{
                                 metric: target.metric.key,
                                 aggregation: target.aggregation ? target.aggregation : 'SUM',
