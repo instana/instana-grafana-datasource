@@ -3,14 +3,8 @@ import rollupDurationThresholds from './rollups';
 import Cache from './cache';
 import _ from 'lodash';
 
-export interface EntityTypesCache {
-  age: number;
-  entityTypes: Array<Object>;
-}
-
 export default class InstanaInfrastructureDataSource extends AbstractDatasource {
   rollupDurationThresholds = rollupDurationThresholds;
-  entityTypesCache: EntityTypesCache;
   snapshotCache: Cache;
   catalogCache: Cache;
   lastFetchedFromAPI: boolean;
@@ -27,19 +21,20 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   }
 
   getEntityTypes(metricCategory) {
-    const now = this.currentTime();
-    if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
-      this.entityTypesCache = {
-        age: now,
-        entityTypes: this.doRequest('/api/infrastructure-monitoring/catalog/plugins').then(typesResponse =>
-          typesResponse.data.map(entry => ({
-            'key' : entry.plugin,
-            'label' : entry.label
-          }))
-        )
-      };
+    let entityTypes = this.simpleCache.get('entityTypes');
+    if (entityTypes) {
+      return entityTypes;
     }
-    return this.entityTypesCache.entityTypes;
+
+    entityTypes = this.doRequest('/api/infrastructure-monitoring/catalog/plugins').then(typesResponse =>
+      typesResponse.data.map(entry => ({
+        'key' : entry.plugin,
+        'label' : entry.label
+      }))
+    );
+    this.simpleCache.put('entityTypes', entityTypes);
+
+    return entityTypes;
   }
 
   getMetricsCatalog(plugin, metricCategory) {

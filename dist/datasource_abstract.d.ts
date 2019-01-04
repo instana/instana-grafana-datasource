@@ -1,3 +1,4 @@
+import Cache from './cache';
 export default class AbstractDatasource {
     backendSrv: any;
     templateSrv: any;
@@ -7,6 +8,7 @@ export default class AbstractDatasource {
     pluginVersion: string;
     url: string;
     apiToken: string;
+    simpleCache: Cache;
     CACHE_MAX_AGE: number;
     SEPARATOR: string;
     /** @ngInject */

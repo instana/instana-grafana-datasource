@@ -1,3 +1,4 @@
+import Cache from './cache';
 import _ from 'lodash';
 
 export default class AbstractDatasource {
@@ -8,6 +9,8 @@ export default class AbstractDatasource {
   url: string;
   apiToken: string;
 
+  simpleCache: Cache;
+
   CACHE_MAX_AGE = 60000;
   SEPARATOR = '|';
 
@@ -16,6 +19,8 @@ export default class AbstractDatasource {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
     this.pluginVersion = _.get(instanceSettings, ['meta', 'info', 'version'], '2.0.0');
+
+    this.simpleCache = new Cache();
 
     // grafana 5.3+ wanted to resolve dynamic routes in proxy mode
     const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');

@@ -33,19 +33,18 @@ System.register(['./datasource_abstract', './rollups', './cache', 'lodash'], fun
                     this.catalogCache = new cache_1.default();
                 }
                 InstanaInfrastructureDataSource.prototype.getEntityTypes = function (metricCategory) {
-                    var now = this.currentTime();
-                    if (!this.entityTypesCache || now - this.entityTypesCache.age > this.CACHE_MAX_AGE) {
-                        this.entityTypesCache = {
-                            age: now,
-                            entityTypes: this.doRequest('/api/infrastructure-monitoring/catalog/plugins').then(function (typesResponse) {
-                                return typesResponse.data.map(function (entry) { return ({
-                                    'key': entry.plugin,
-                                    'label': entry.label
-                                }); });
-                            })
-                        };
+                    var entityTypes = this.simpleCache.get('entityTypes');
+                    if (entityTypes) {
+                        return entityTypes;
                     }
-                    return this.entityTypesCache.entityTypes;
+                    entityTypes = this.doRequest('/api/infrastructure-monitoring/catalog/plugins').then(function (typesResponse) {
+                        return typesResponse.data.map(function (entry) { return ({
+                            'key': entry.plugin,
+                            'label': entry.label
+                        }); });
+                    });
+                    this.simpleCache.put('entityTypes', entityTypes);
+                    return entityTypes;
                 };
                 InstanaInfrastructureDataSource.prototype.getMetricsCatalog = function (plugin, metricCategory) {
                     var _this = this;

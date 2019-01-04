@@ -2,20 +2,8 @@ import AbstractDatasource from './datasource_abstract';
 import Cache from './cache';
 import _ from 'lodash';
 
-export interface MetricsCatalogCache {
-  age: number;
-  metrics: Array<Object>;
-}
-
-export interface TagsCache {
-  age: number;
-  tags: Array<Object>;
-}
-
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
   websitesCache: Cache;
-  websiteTagsCache: TagsCache;
-  websiteCatalogCache: MetricsCatalogCache;
 
   maximumNumberOfUsefulDataPoints = 80;
   sensibleGranularities = [
@@ -82,36 +70,38 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
   }
 
   getWebsiteTags() {
-    const now = this.currentTime();
-    if (!this.websiteTagsCache || now - this.websiteTagsCache.age > this.CACHE_MAX_AGE) {
-      this.websiteTagsCache = {
-        age: now,
-        tags: this.doRequest('/api/website-monitoring/catalog/tags').then(tagsResponse =>
-          tagsResponse.data.map(entry => ({
-            'key' : entry.name,
-            'type' : entry.type
-          }))
-        ),
-      };
+    let websiteTags = this.simpleCache.get('websiteTags');
+    if (websiteTags) {
+      return websiteTags;
     }
-    return this.websiteTagsCache.tags;
+
+    websiteTags = this.doRequest('/api/website-monitoring/catalog/tags').then(tagsResponse =>
+      tagsResponse.data.map(entry => ({
+        'key' : entry.name,
+        'type' : entry.type
+      }))
+    );
+    this.simpleCache.put('websiteTags', websiteTags);
+
+    return websiteTags;
   }
 
   getWebsiteMetricsCatalog() {
-    const now = this.currentTime();
-    if (!this.websiteCatalogCache || now - this.websiteCatalogCache.age > this.CACHE_MAX_AGE) {
-      this.websiteCatalogCache = {
-        age: now,
-        metrics: this.doRequest('/api/website-monitoring/catalog/metrics').then(catalogResponse =>
-          catalogResponse.data.map(entry => ({
-            'key' : entry.metricId,
-            'label' : entry.label,
-            'aggregations' : entry.aggregations ? entry.aggregations.sort() : []
-          }))
-        )
-      };
+    let websiteCatalog = this.simpleCache.get('websiteCatalog');
+    if (websiteCatalog) {
+      return websiteCatalog;
     }
-    return this.websiteCatalogCache.metrics;
+
+    websiteCatalog = this.doRequest('/api/website-monitoring/catalog/metrics').then(catalogResponse =>
+      catalogResponse.data.map(entry => ({
+        'key' : entry.metricId,
+        'label' : entry.label,
+        'aggregations' : entry.aggregations ? entry.aggregations.sort() : []
+      }))
+    );
+    this.simpleCache.put('websiteCatalog', websiteCatalog);
+
+    return websiteCatalog;
   }
 
   fetchMetricsForEntity(target, timeFilter) {

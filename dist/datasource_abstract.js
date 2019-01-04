@@ -1,8 +1,11 @@
-System.register(['lodash'], function(exports_1) {
-    var lodash_1;
+System.register(['./cache', 'lodash'], function(exports_1) {
+    var cache_1, lodash_1;
     var AbstractDatasource;
     return {
         setters:[
+            function (cache_1_1) {
+                cache_1 = cache_1_1;
+            },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
             }],
@@ -21,6 +24,7 @@ System.register(['lodash'], function(exports_1) {
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
                     this.pluginVersion = lodash_1.default.get(instanceSettings, ['meta', 'info', 'version'], '2.0.0');
+                    this.simpleCache = new cache_1.default();
                     // grafana 5.3+ wanted to resolve dynamic routes in proxy mode
                     var version = lodash_1.default.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
                     var versions = lodash_1.default.split(version, '.', 2);

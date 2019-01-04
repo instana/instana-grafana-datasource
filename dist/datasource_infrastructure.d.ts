@@ -1,16 +1,11 @@
 import AbstractDatasource from './datasource_abstract';
 import Cache from './cache';
-export interface EntityTypesCache {
-    age: number;
-    entityTypes: Array<Object>;
-}
 export default class InstanaInfrastructureDataSource extends AbstractDatasource {
     rollupDurationThresholds: {
         availableFor: number;
         rollup: number;
         label: string;
     }[];
-    entityTypesCache: EntityTypesCache;
     snapshotCache: Cache;
     catalogCache: Cache;
     lastFetchedFromAPI: boolean;
@@ -18,7 +13,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     CUSTOM_METRICS: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
-    getEntityTypes(metricCategory: any): Object[];
+    getEntityTypes(metricCategory: any): any;
     getMetricsCatalog(plugin: any, metricCategory: any): any;
     fetchTypesForTarget(target: any, timeFilter: any): any;
     fetchSnapshotsForTarget(target: any, timeFilter: any): any;

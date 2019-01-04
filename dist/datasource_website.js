@@ -77,35 +77,33 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     return websites;
                 };
                 InstanaWebsiteDataSource.prototype.getWebsiteTags = function () {
-                    var now = this.currentTime();
-                    if (!this.websiteTagsCache || now - this.websiteTagsCache.age > this.CACHE_MAX_AGE) {
-                        this.websiteTagsCache = {
-                            age: now,
-                            tags: this.doRequest('/api/website-monitoring/catalog/tags').then(function (tagsResponse) {
-                                return tagsResponse.data.map(function (entry) { return ({
-                                    'key': entry.name,
-                                    'type': entry.type
-                                }); });
-                            }),
-                        };
+                    var websiteTags = this.simpleCache.get('websiteTags');
+                    if (websiteTags) {
+                        return websiteTags;
                     }
-                    return this.websiteTagsCache.tags;
+                    websiteTags = this.doRequest('/api/website-monitoring/catalog/tags').then(function (tagsResponse) {
+                        return tagsResponse.data.map(function (entry) { return ({
+                            'key': entry.name,
+                            'type': entry.type
+                        }); });
+                    });
+                    this.simpleCache.put('websiteTags', websiteTags);
+                    return websiteTags;
                 };
                 InstanaWebsiteDataSource.prototype.getWebsiteMetricsCatalog = function () {
-                    var now = this.currentTime();
-                    if (!this.websiteCatalogCache || now - this.websiteCatalogCache.age > this.CACHE_MAX_AGE) {
-                        this.websiteCatalogCache = {
-                            age: now,
-                            metrics: this.doRequest('/api/website-monitoring/catalog/metrics').then(function (catalogResponse) {
-                                return catalogResponse.data.map(function (entry) { return ({
-                                    'key': entry.metricId,
-                                    'label': entry.label,
-                                    'aggregations': entry.aggregations ? entry.aggregations.sort() : []
-                                }); });
-                            })
-                        };
+                    var websiteCatalog = this.simpleCache.get('websiteCatalog');
+                    if (websiteCatalog) {
+                        return websiteCatalog;
                     }
-                    return this.websiteCatalogCache.metrics;
+                    websiteCatalog = this.doRequest('/api/website-monitoring/catalog/metrics').then(function (catalogResponse) {
+                        return catalogResponse.data.map(function (entry) { return ({
+                            'key': entry.metricId,
+                            'label': entry.label,
+                            'aggregations': entry.aggregations ? entry.aggregations.sort() : []
+                        }); });
+                    });
+                    this.simpleCache.put('websiteCatalog', websiteCatalog);
+                    return websiteCatalog;
                 };
                 InstanaWebsiteDataSource.prototype.fetchMetricsForEntity = function (target, timeFilter) {
                     var _this = this;
