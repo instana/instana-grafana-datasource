@@ -99,7 +99,8 @@ This should render a chart with one dataset (`node (on host "host-3")`).
 #### Website metrics
 * Category: `Website metrics`
 * Website: `www.instana.com`
+* Type: `Page Loads`
 * Group by: `beacon.page.name`
 * Metric: `Beacon Count (beaconCount)`
 
-This should render a chart with one dataset (`home (www.instana.com) beaconCount.sum`).
+This should render a chart with one dataset (`home (www.instana.com) beaconCount.sum.300`).
