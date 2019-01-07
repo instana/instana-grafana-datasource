@@ -325,6 +325,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   resetMetricSelection() {
     this.target.metric = null;
+    this.target.filter = null;
+    this.target.labelFormat = null;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
   }
 

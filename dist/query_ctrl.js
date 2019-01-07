@@ -279,6 +279,8 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 };
                 InstanaQueryCtrl.prototype.resetMetricSelection = function () {
                     this.target.metric = null;
+                    this.target.filter = null;
+                    this.target.labelFormat = null;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                 };
                 InstanaQueryCtrl.prototype.adjustEntitySelectionPlaceholder = function () {
