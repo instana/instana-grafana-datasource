@@ -45,11 +45,7 @@ The settings for Karma are in the karma.conf.js file in the root. If you add any
 
 ## Screenshots
 
-The actual screenshots are from https://current-instana.instana.io with "java AND one IP" (where the ip is removed in screen) as dynamic focus and a sliding time window of 6 hours.
-Showcaseable metrics are
-* Built-In -> Processes -> user.cpu
-* Custom -> Java virtual maschine -> metrics.gauges.gauge.response.healthcheck
-
+The actual screenshots are from "Quick Check" example below.
 
 ## Publishing a New Version
 
