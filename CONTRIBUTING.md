@@ -45,11 +45,7 @@ The settings for Karma are in the karma.conf.js file in the root. If you add any
 
 ## Screenshots
 
-The actual screenshots are from https://current-instana.instana.io with "java AND one IP" (where the ip is removed in screen) as dynamic focus and a sliding time window of 6 hours.
-Showcaseable metrics are
-* Built-In -> Processes -> user.cpu
-* Custom -> Java virtual maschine -> metrics.gauges.gauge.response.healthcheck
-
+The actual screenshots are from "Quick Check" example below.
 
 ## Publishing a New Version
 
@@ -80,18 +76,27 @@ This procedure is used to test the Instana Grafana data source before the versio
 * Create a new dashboard with a graph panel
 
 #### Built-in metrics
+* Category: `Infrastructure built-in metrics`
 * Query: `filler`
-* Category: `Built-in metrics`
-* Type: `Processes`
+* Type: `Process`
 * Metric: `Virtual (mem.virtual)`
 
 This should render a chart with two datasets (`node (on host "host-1")` and `node (on host "host-2)`).
 
 #### Custom metrics
+* Category: `Infrastructure custom metrics`
 * Query: `filler`
-* Category: `Custom metrics`
 * Type: `Dropwizard`
-* Filter: ``
+* Filter metric select: ``
 * Metric: `Dropwizard meter (KPI.errors)`
 
 This should render a chart with one dataset (`node (on host "host-3")`).
+
+#### Website metrics
+* Category: `Website metrics`
+* Website: `www.instana.com`
+* Type: `Page Loads`
+* Group by: `beacon.page.name`
+* Metric: `Beacon Count (beaconCount)`
+
+This should render a chart with one dataset (`home (www.instana.com) beaconCount.sum.300`).

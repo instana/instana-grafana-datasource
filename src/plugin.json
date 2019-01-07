@@ -33,7 +33,7 @@
   "routes": [
     {
       "path": "instana",
-      "method": "GET",
+      "method": "*",
       "url": "{{.JsonData.url}}",
       "headers": [
           {"name": "Authorization", "content": "apiToken {{.JsonData.apiToken}}"}
@@ -43,7 +43,6 @@
 
   "dependencies": {
     "grafanaVersion": "3.x.x",
-    "instanaVersion": "1.144.x",
     "plugins": [ ]
   }
 }

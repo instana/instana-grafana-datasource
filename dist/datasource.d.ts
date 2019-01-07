@@ -1,53 +1,19 @@
-export interface EntityTypesCache {
-    age: number;
-    entityTypes: Array<Object>;
-}
-export default class InstanaDatasource {
-    private backendSrv;
-    private templateSrv;
-    private $q;
-    rollupDurationThresholds: {
-        availableFor: number;
-        rollup: number;
-        label: string;
-    }[];
-    id: number;
-    name: string;
-    url: string;
-    apiToken: string;
-    currentTime: () => number;
-    entityTypesCache: EntityTypesCache;
-    snapshotCache: Object;
-    catalogCache: Object;
-    fromFilter: number;
-    toFilter: number;
-    lastFetchedFromAPI: boolean;
-    MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
-    CACHE_MAX_AGE: number;
+import InstanaInfrastructureDataSource from './datasource_infrastructure';
+import InstanaWebsiteDataSource from './datasource_website';
+import AbstractDatasource from './datasource_abstract';
+import TimeFilter from './types/time_filter';
+export default class InstanaDatasource extends AbstractDatasource {
+    infrastructure: InstanaInfrastructureDataSource;
+    website: InstanaWebsiteDataSource;
     CUSTOM_METRICS: string;
+    WEBSITE_METRICS: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
-    storeInCache: (query: any, data: any) => void;
-    wasLastFetchedFromApi: () => boolean;
-    setLastFetchedFromApi: (value: any) => void;
-    doRequest(url: any, maxRetries?: number): any;
-    getEntityTypes(metricCategory: any): Object[];
-    getMetricsCatalog(plugin: any, metricCategory: any): any;
     query(options: any): any;
-    fetchTypesForTarget(target: any): any;
-    fetchSnapshotsForTarget(target: any, from: any, to: any): any;
-    reduceSnapshot(snapshotResponse: any): any;
-    localCacheCopyAvailable(query: any): boolean;
-    buildQuery(target: any): string;
-    buildLabel(snapshotResponse: any, host: any, target: any): any;
-    getHostSuffix(host: any): string;
-    fetchMetricsForSnapshot(snapshotId: any, metric: any, from: any, to: any): any;
+    readTime(options: any): TimeFilter;
+    getInfrastructureMetrics(target: any, timeFilter: TimeFilter): any;
+    getWebsiteMetrics(target: any, timeFilter: TimeFilter): any;
     annotationQuery(options: any): void;
     metricFindQuery(query: string): void;
     testDatasource(): any;
-    getDefaultMetricRollupDuration(from: any, to: any, minRollup?: number): {
-        availableFor: number;
-        rollup: number;
-        label: string;
-    };
 }

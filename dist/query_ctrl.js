@@ -1,16 +1,24 @@
-///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
-System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, lodash_1;
+    var sdk_1, beacon_types_1, operators_1, migration_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
             function (sdk_1_1) {
                 sdk_1 = sdk_1_1;
+            },
+            function (beacon_types_1_1) {
+                beacon_types_1 = beacon_types_1_1;
+            },
+            function (operators_1_1) {
+                operators_1 = operators_1_1;
+            },
+            function (migration_1_1) {
+                migration_1 = migration_1_1;
             },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
@@ -26,19 +34,38 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.templateSrv = templateSrv;
                     this.backendSrv = backendSrv;
                     this.$q = $q;
+                    this.uniqueOperators = operators_1.default;
+                    this.uniqueBeaconTypes = beacon_types_1.default;
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
+                    this.OPERATOR_STRING = 'STRING';
+                    this.OPERATOR_NUMBER = 'NUMBER';
+                    this.OPERATOR_BOOLEAN = 'BOOLEAN';
+                    this.OPERATOR_KEY_VALUE = 'KEY_VALUE_PAIR';
                     this.BUILT_IN_METRICS = '0';
                     this.CUSTOM_METRICS = '1';
+                    this.APPLICATION_METRICS = '2';
+                    this.WEBSITE_METRICS = '3';
                     this.defaults = {};
+                    // target migration for downwards compability
+                    migration_1.default(this.target);
                     this.target.pluginId = this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
+                    // can we read the options here ??
+                    var now = Date.now();
+                    var windowSize = 6 * 60 * 60 * 1000; // 6h
+                    this.timeFilter = {
+                        from: now - windowSize,
+                        to: now,
+                        windowSize: windowSize
+                    };
                     // on new panel creation we default the category selection to built-in
                     if (!this.target.metricCategory) {
                         this.target.metricCategory = this.BUILT_IN_METRICS;
                     }
                     this.previousMetricCategory = this.target.metricCategory;
-                    if (this.target.entityQuery) {
+                    // infrastructure (built-in & custom)
+                    if (this.isInfrastructure() && this.target.entityQuery) {
                         this.onFilterChange(false).then(function () {
                             // infrastructure metrics support available metrics on a selected entity type
                             if (_this.target.entityType) {
@@ -50,15 +77,59 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                             }
                         });
                     }
+                    // websites & applications
+                    if (this.isEntity()) {
+                        this.onEntityChanges(false).then(function () {
+                            if (_this.target.metric) {
+                                _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
+                            }
+                        });
+                    }
                 }
+                InstanaQueryCtrl.prototype.isInfrastructure = function () {
+                    return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
+                };
+                InstanaQueryCtrl.prototype.isEntity = function () {
+                    return this.target.metricCategory === this.WEBSITE_METRICS;
+                };
+                InstanaQueryCtrl.prototype.onEntityChanges = function (refresh) {
+                    var _this = this;
+                    // select a meaningful default group
+                    if (this.target && !this.target.entityType) {
+                        this.target.entityType = lodash_1.default.find(this.uniqueBeaconTypes, ['key', 'pageLoad']);
+                    }
+                    this.datasource.website.getWebsites(this.timeFilter).then(function (websites) {
+                        _this.uniqueEntities = websites;
+                        // select the most loaded website for default/replacement
+                        if (_this.target && !_this.target.entity && websites) {
+                            _this.target.entity = websites[0];
+                        }
+                        else if (_this.target && _this.target.entity && !lodash_1.default.find(websites, ['key', _this.target.entity.key])) {
+                            _this.target.entity = websites[0];
+                        }
+                    });
+                    this.datasource.website.getWebsiteTags().then(function (websiteTags) {
+                        _this.uniqueTags =
+                            lodash_1.default.sortBy(websiteTags, 'key');
+                        // select a meaningful default group
+                        if (_this.target && !_this.target.group) {
+                            _this.target.group = lodash_1.default.find(websiteTags, ['key', 'beacon.page.name']);
+                        }
+                    });
+                    return this.datasource.website.getWebsiteMetricsCatalog().then(function (metrics) {
+                        _this.availableMetrics = metrics;
+                        _this.checkMetricAndRefresh(refresh);
+                        _this.adjustMetricSelectionPlaceholder();
+                    });
+                };
                 InstanaQueryCtrl.prototype.onFilterChange = function (refresh) {
                     var _this = this;
-                    if (this.target.entityQuery === '') {
+                    if (!this.target.entityQuery) {
                         this.selectionReset();
                         return this.$q.resolve();
                     }
                     else {
-                        return this.datasource.fetchTypesForTarget(this.target)
+                        return this.datasource.infrastructure.fetchTypesForTarget(this.target, this.timeFilter)
                             .then(function (response) {
                             _this.target.queryIsValid = true;
                             _this.snapshots = response.data;
@@ -74,7 +145,13 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     }
                     else {
                         this.selectionReset();
-                        this.onFilterChange(true);
+                        // fresh internal used lists without re-rendering
+                        if (this.isInfrastructure()) {
+                            this.onFilterChange(false);
+                        }
+                        if (this.isEntity()) {
+                            this.onEntityChanges(false);
+                        }
                     }
                     this.previousMetricCategory = this.target.metricCategory;
                 };
@@ -82,7 +159,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     var _this = this;
                     this.filterEntityTypes().then(function () {
                         _this.adjustEntitySelectionPlaceholder();
-                        if (!lodash_1.default.find(_this.uniqueEntityTypes, ['key', _this.target.entityType])) {
+                        if (_this.target.entityType && !lodash_1.default.find(_this.uniqueEntityTypes, ['key', _this.target.entityType.key])) {
                             _this.target.entityType = null; // entity selection label will be untouched
                             _this.resetMetricSelection();
                         }
@@ -93,7 +170,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                 };
                 InstanaQueryCtrl.prototype.filterEntityTypes = function () {
                     var _this = this;
-                    return this.datasource.getEntityTypes(this.target.metricCategory).then(function (entityTypes) {
+                    return this.datasource.infrastructure.getEntityTypes(this.target.metricCategory).then(function (entityTypes) {
                         _this.uniqueEntityTypes =
                             lodash_1.default.sortBy(lodash_1.default.filter(entityTypes, function (entityType) { return _this.findMatchingEntityTypes(entityType); }), 'label');
                     });
@@ -109,7 +186,7 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                 };
                 InstanaQueryCtrl.prototype.onEntityTypeSelect = function (refresh) {
                     var _this = this;
-                    return this.datasource.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(function (metrics) {
+                    return this.datasource.infrastructure.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(function (metrics) {
                         _this.availableMetrics =
                             lodash_1.default.sortBy(metrics, 'key');
                         // store all metrics in addition for filtering
@@ -128,6 +205,52 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                     this.checkMetricAndRefresh(refresh);
                     this.adjustMetricSelectionPlaceholder();
                 };
+                InstanaQueryCtrl.prototype.addFilter = function () {
+                    if (!this.target.filters) {
+                        this.target.filters = [];
+                    }
+                    this.target.filters.push({
+                        tag: this.target.group,
+                        operator: { key: 'EQUALS', type: this.target.group.type },
+                        stringValue: "",
+                        numberValue: null,
+                        booleanValue: "true",
+                        isValid: false
+                    });
+                };
+                InstanaQueryCtrl.prototype.removeFilter = function (index) {
+                    this.target.filters.splice(index, 1);
+                    this.panelCtrl.refresh();
+                };
+                InstanaQueryCtrl.prototype.onTagFilterChange = function (index) {
+                    var filter = this.target.filters[index];
+                    // select a matching operator if not provided
+                    if (filter.tag && (!filter.operator || filter.tag.type !== filter.operator.type)) {
+                        filter.operator = lodash_1.default.find(this.uniqueOperators, ['type', filter.tag.type]);
+                    }
+                    // validate changed filter
+                    if (filter.tag) {
+                        if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
+                            filter.isValid = true;
+                        }
+                        else if (this.OPERATOR_KEY_VALUE === filter.tag.type && filter.stringValue && filter.stringValue.includes('=')) {
+                            filter.isValid = true;
+                        }
+                        else if (this.OPERATOR_NUMBER === filter.tag.type && filter.numberValue !== null) {
+                            filter.isValid = true;
+                        }
+                        else if (this.OPERATOR_BOOLEAN === filter.tag.type && filter.booleanValue) {
+                            filter.isValid = true;
+                        }
+                        else {
+                            filter.isValid = false;
+                        }
+                    }
+                    else {
+                        filter.isValid = false;
+                    }
+                    this.panelCtrl.refresh();
+                };
                 InstanaQueryCtrl.prototype.checkMetricAndRefresh = function (refresh) {
                     if (this.target.metric && !lodash_1.default.includes(lodash_1.default.map(this.availableMetrics, function (m) { return m.key; }), this.target.metric.key)) {
                         this.resetMetricSelection();
@@ -139,15 +262,25 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                 InstanaQueryCtrl.prototype.selectionReset = function () {
                     this.uniqueEntityTypes = [];
                     this.availableMetrics = [];
+                    this.uniqueEntities = [];
+                    this.uniqueTags = [];
                     this.resetEntityTypeSelection();
+                    this.resetEntitySelection();
                     this.resetMetricSelection();
                 };
                 InstanaQueryCtrl.prototype.resetEntityTypeSelection = function () {
                     this.target.entityType = null;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                 };
+                InstanaQueryCtrl.prototype.resetEntitySelection = function () {
+                    this.target.entity = null;
+                    this.target.group = null;
+                    this.target.filters = [];
+                };
                 InstanaQueryCtrl.prototype.resetMetricSelection = function () {
                     this.target.metric = null;
+                    this.target.filter = null;
+                    this.target.labelFormat = null;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                 };
                 InstanaQueryCtrl.prototype.adjustEntitySelectionPlaceholder = function () {
@@ -167,11 +300,13 @@ System.register(['app/plugins/sdk', 'lodash', './css/query_editor.css!'], functi
                             : this.EMPTY_DROPDOWN_TEXT;
                     }
                 };
-                InstanaQueryCtrl.prototype.onMetricSelect = function () {
+                InstanaQueryCtrl.prototype.onChange = function () {
                     this.panelCtrl.refresh();
                 };
-                InstanaQueryCtrl.prototype.onLabelChange = function () {
-                    // we just want to refresh, even this is expensive
+                InstanaQueryCtrl.prototype.onMetricSelect = function () {
+                    if (this.target.metricCategory === this.WEBSITE_METRICS && !lodash_1.default.includes(this.target.metric.aggregations, this.target.aggregation)) {
+                        this.target.aggregation = this.target.metric.aggregations[0];
+                    }
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.templateUrl = 'partials/query.editor.html';

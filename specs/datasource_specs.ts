@@ -5,10 +5,15 @@ import Q from 'q';
 import moment from 'moment';
 import { Object } from 'es6-shim';
 
-describe('InstanaDatasource', function() {
+describe('Given an InstanaDatasource', function() {
   let ctx: any = {
     backendSrv: {},
     templateSrv: new TemplateSrvStub()
+  };
+  let timeFilter: any = {
+    to: 1516472658604,
+    from: 1516451043603,
+    windowSize: 21615001
   };
   window.grafanaBootData =  { settings: { buildInfo: { version : "5.3.0" } } };
 
@@ -25,6 +30,7 @@ describe('InstanaDatasource', function() {
     };
 
     ctx.ds = new InstanaDatasource(ctx.instanceSettings, ctx.backendSrv, ctx.templateSrv, ctx.$q);
+    ctx.ds.timeFilter = timeFilter;
   });
 
   describe('When performing testDatasource', function() {
@@ -146,19 +152,19 @@ describe('InstanaDatasource', function() {
     });
 
     it('should return snapshots with response', function() {
-      return ctx.ds.fetchSnapshotsForTarget({
-        "$$hashKey": "object:84",
+      return ctx.ds.infrastructure.fetchSnapshotsForTarget({
         "entityQuery": "filler",
-        "entityTpe": "process",
+        "entityType": {
+          "key": "process",
+          "label": "Process"
+        },
         "metric": {
           "key": "mem.virtual",
-          "label": "Virtual",
-          "$$hashKey": "object:121"
+          "label": "Virtual"
         },
         "snapshotCache": {},
         "refId": "A",
-        "entityType": "process"
-      }, '1516451043603', '1516472658604')
+      }, timeFilter)
       .then(function(results) {
         expect(results.length).to.equal(2);
         expect(results[0]).to.eql({ snapshotId: 'A', host: 'Stans-Macbook-Pro', response: { status: 200, data: { label: 'label for A' }}});
@@ -167,16 +173,17 @@ describe('InstanaDatasource', function() {
     });
 
     xit('should cache snapshot data for a minute', function() {
-      ctx.ds.currentTime = () => { return 1516472658614; };
+      ctx.ds.infrastructure.currentTime = () => { return 1516472658614; };
 
-      return ctx.ds.fetchSnapshotsForTarget({
-        "$$hashKey": "object:84",
+      return ctx.ds.infrastructure.fetchSnapshotsForTarget({
         "entityQuery": "filler",
-        "entityTpe": "process",
+        "entityType": {
+          "key": "process",
+          "label": "Process"
+        },
         "metric": {
           "key": "mem.virtual",
           "label": "Virtual",
-          "$$hashKey": "object:121"
         },
         "snapshotCache": {
           'filler%20AND%20entity.pluginId%3Aprocess': {
@@ -194,8 +201,7 @@ describe('InstanaDatasource', function() {
           }
         },
         "refId": "A",
-        "entityType": "process"
-      }, '1516451043603', '1516472658614')
+      }, timeFilter)
       .then(function(results) {
         expect(results.length).to.equal(2);
         expect(results[0]).to.eql({ snapshotId: 'A', label: 'label for A (on host "Stans-Macbook-Pro")' });
@@ -224,28 +230,28 @@ describe('InstanaDatasource', function() {
       "intervalMs": 20000,
       "targets": [
         {
-          "$$hashKey": "object:84",
           "entityQuery": "filler",
-          "entityType": "process",
+          "entityType": {
+            "key": "process",
+            "label": "Process"
+          },
           "metric": {
             "key": "mem.virtual",
             "label": "Virtual",
-            "$$hashKey": "object:121"
           },
-          "snapshotCache": {},
           "refId": "A"
         },
         {
           "refId": "B",
-          "$$hashKey": "object:126",
           "entityQuery": "filler",
-          "entityType": "process",
+          "entityType": {
+            "key": "process",
+            "label": "Process"
+          },
           "metric": {
             "key": "mem.virtual",
             "label": "Virtual",
-            "$$hashKey": "object:142"
           },
-          "snapshotCache": {},
           "hide": false
         }
       ],
@@ -305,7 +311,7 @@ describe('InstanaDatasource', function() {
       status: 200,
       data: {
         "values": [
-          {"timestamp":1516451043603,"value":1.329086464E9},
+          {"timestamp":1516451043603,"value":1.3290864644444E9},
           {"timestamp":1516451103603,"value":1.3301699925333E9},
           {"timestamp":1516451163603,"value":1.3317253802666E9}
         ]
@@ -345,7 +351,7 @@ describe('InstanaDatasource', function() {
           [1.3321622869333E9,1516451163603]
         ]);
         expect(results.data[1].datapoints).to.eql([
-          [1.329086464E9,1516451043603],
+          [1.3290864644444E9,1516451043603],
           [1.3301699925333E9,1516451103603],
           [1.3317253802666E9,1516451163603]
         ]);
@@ -355,7 +361,7 @@ describe('InstanaDatasource', function() {
           [1.3321622869333E9,1516451163603]
         ]);
         expect(results.data[3].datapoints).to.eql([
-          [1.329086464E9,1516451043603],
+          [1.3290864644444E9,1516451043603],
           [1.3301699925333E9,1516451103603],
           [1.3317253802666E9,1516451163603]
         ]);
@@ -368,14 +374,20 @@ describe('InstanaDatasource', function() {
       ctx.ds.currentTime = () => { return time; };
 
       return ctx.ds.query(options).then(function(results) {
-        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].time).to.equal(time);
-        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots.length).to.equal(2);
-        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].snapshotId).to.eql('A');
-        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].host).to.eql('Stans-Macbook-Pro');
-        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[0].response).to.eql(snapshotA);
-        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].snapshotId).to.eql('B');
-        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].host).to.eql('');
-        expect(ctx.ds.snapshotCache['filler%20AND%20entity.pluginId%3Aprocess'].snapshots[1].response).to.eql(snapshotB);
+        const query = 'filler%20AND%20entity.pluginId%3Aprocess';
+        const timeFilter = ctx.ds.readTime(options);
+        const key = ctx.ds.infrastructure.buildSnapshotCacheKey(query, timeFilter);
+
+        expect(key).to.equal(query + '|25274184|25274544'); // query time is contained inside key
+
+        const snapshots = ctx.ds.infrastructure.snapshotCache.get(key).valueOf();
+        expect(snapshots.length).to.equal(2);
+        expect(snapshots[0].snapshotId).to.eql('A');
+        expect(snapshots[0].host).to.eql('Stans-Macbook-Pro');
+        expect(snapshots[0].response).to.eql(snapshotA);
+        expect(snapshots[1].snapshotId).to.eql('B');
+        expect(snapshots[1].host).to.eql('');
+        expect(snapshots[1].response).to.eql(snapshotB);
       });
     });
   });
@@ -401,14 +413,15 @@ describe('InstanaDatasource', function() {
       "intervalMs": 20000,
       "targets": [
         {
-          "$$hashKey": "object:84",
           "pluginId": "singlestat",
           "entityQuery": "filler",
-          "entityType": "process",
+          "entityType": {
+            "key": "process",
+            "label": "Process"
+          },
           "metric": {
             "key": "mem.virtual",
             "label": "Virtual",
-            "$$hashKey": "object:121"
           },
           "snapshotCache": {},
           "refId": "A"
@@ -480,9 +493,9 @@ describe('InstanaDatasource', function() {
         expect(results.data.length).to.equal(1);
         const datapoints = results.data[0].datapoints;
         expect(datapoints.length).to.equal(3);
-        expect(datapoints).to.deep.include.members([[ 1, 1516451163603 ]]);
-        expect(datapoints).to.deep.include.members([[ 2, 1516451043603 ]]);
-        expect(datapoints).to.deep.include.members([[ 3, 1516451103603 ]]);
+        expect(datapoints).to.deep.include.members([[ 3600, 1516451163603 ]]);
+        expect(datapoints).to.deep.include.members([[ 7200, 1516451043603 ]]);
+        expect(datapoints).to.deep.include.members([[ 10800, 1516451103603 ]]);
       });
     });
   });
@@ -508,14 +521,15 @@ describe('InstanaDatasource', function() {
       "intervalMs": 20000,
       "targets": [
         {
-          "$$hashKey": "object:84",
           "pluginId": "table",
           "entityQuery": "filler",
-          "entityType": "process",
+          "entityType": {
+            "key": "process",
+            "label": "Process"
+          },
           "metric": {
             "key": "mem.virtual",
             "label": "Virtual",
-            "$$hashKey": "object:121"
           },
           "snapshotCache": {},
           "refId": "A"
@@ -587,10 +601,61 @@ describe('InstanaDatasource', function() {
         expect(results.data.length).to.equal(1);
         const datapoints = results.data[0].datapoints;
         expect(datapoints.length).to.equal(3);
-        expect(datapoints).to.deep.include.members([[ 1, 1516451163603 ]]);
-        expect(datapoints).to.deep.include.members([[ 2, 1516451043603 ]]);
-        expect(datapoints).to.deep.include.members([[ 3, 1516451103603 ]]);
+        expect(datapoints).to.deep.include.members([[ 3600, 1516451163603 ]]);
+        expect(datapoints).to.deep.include.members([[ 7200, 1516451043603 ]]);
+        expect(datapoints).to.deep.include.members([[ 10800, 1516451103603 ]]);
       });
     });
+  });
+});
+
+describe('Given an InstanaDatasource without proxy', function() {
+  let ctx: any = {
+    backendSrv: {},
+    templateSrv: new TemplateSrvStub()
+  };
+
+  beforeEach(function() {
+    ctx.$q = Q;
+    ctx.instanceSettings = {
+      id: 1,
+      name: 'instana-local-test',
+      url: '/api/datasources/proxy/1',
+      jsonData: {
+        url: 'http://localhost:8010',
+        apiToken: 'valid-api-token'
+      }
+    };
+
+    window.grafanaBootData =  { settings: { buildInfo: { version : "5.2.9" } } };
+    ctx.ds = new InstanaDatasource(ctx.instanceSettings, ctx.backendSrv, ctx.templateSrv, ctx.$q);
+    window.grafanaBootData =  { settings: { buildInfo: { version : "5.3.0" } } };
+  });
+
+  describe('When performing any request', function() {
+
+    beforeEach(function() {
+      const response = {
+        data: {},
+        status: 404,
+        statusText: 'Not Found'
+      };
+      ctx.backendSrv.datasourceRequest = function(options) {
+        switch (options.url) {
+          case "http://localhost:8010/api/snapshots/non-existing-snapshot-id?time=0":
+            return ctx.$q.reject(response);
+          default:
+            throw new Error('Unexpected call URL: ' + options.url);
+        }
+      };
+    });
+
+    it('should use a direkt call', function() {
+      return ctx.ds.testDatasource().then(function(results) {
+        expect(results.status).to.equal('success');
+        expect(results.message).to.equal('Successfully connected to the Instana API.');
+      });
+    });
+
   });
 });
