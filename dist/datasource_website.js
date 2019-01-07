@@ -23,6 +23,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                 /** @ngInject */
                 function InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q) {
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
+                    // our ui is limited to 80 results, same logic to stay comparable
                     this.maximumNumberOfUsefulDataPoints = 80;
                     this.sensibleGranularities = [
                         1,
@@ -111,9 +112,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     if (!target || !target.metric || !target.group || !target.entity) {
                         return this.$q.resolve({ data: { items: [] } });
                     }
-                    // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
                     var windowSize = this.getWindowSize(timeFilter);
-                    var granularity = this.getChartGranularity(windowSize);
                     var tagFilters = [{
                             name: 'beacon.website.name',
                             operator: 'EQUALS',
@@ -124,6 +123,13 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                             tagFilters.push(_this.createTagFilter(filter));
                         }
                     });
+                    var metric = {
+                        metric: target.metric.key,
+                        aggregation: target.aggregation ? target.aggregation : 'SUM'
+                    };
+                    if (target.pluginId !== "singlestat") {
+                        metric['granularity'] = this.getChartGranularity(windowSize);
+                    }
                     var data = {
                         group: {
                             groupbyTag: target.group.key
@@ -134,11 +140,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                         },
                         tagFilters: tagFilters,
                         type: target.entityType.key,
-                        metrics: [{
-                                metric: target.metric.key,
-                                aggregation: target.aggregation ? target.aggregation : 'SUM',
-                                granularity: granularity
-                            }]
+                        metrics: [metric]
                     };
                     return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
                 };

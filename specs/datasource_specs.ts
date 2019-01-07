@@ -493,9 +493,9 @@ describe('Given an InstanaDatasource', function() {
         expect(results.data.length).to.equal(1);
         const datapoints = results.data[0].datapoints;
         expect(datapoints.length).to.equal(3);
-        expect(datapoints).to.deep.include.members([[ 1, 1516451163603 ]]);
-        expect(datapoints).to.deep.include.members([[ 2, 1516451043603 ]]);
-        expect(datapoints).to.deep.include.members([[ 3, 1516451103603 ]]);
+        expect(datapoints).to.deep.include.members([[ 3600, 1516451163603 ]]);
+        expect(datapoints).to.deep.include.members([[ 7200, 1516451043603 ]]);
+        expect(datapoints).to.deep.include.members([[ 10800, 1516451103603 ]]);
       });
     });
   });
@@ -601,9 +601,9 @@ describe('Given an InstanaDatasource', function() {
         expect(results.data.length).to.equal(1);
         const datapoints = results.data[0].datapoints;
         expect(datapoints.length).to.equal(3);
-        expect(datapoints).to.deep.include.members([[ 1, 1516451163603 ]]);
-        expect(datapoints).to.deep.include.members([[ 2, 1516451043603 ]]);
-        expect(datapoints).to.deep.include.members([[ 3, 1516451103603 ]]);
+        expect(datapoints).to.deep.include.members([[ 3600, 1516451163603 ]]);
+        expect(datapoints).to.deep.include.members([[ 7200, 1516451043603 ]]);
+        expect(datapoints).to.deep.include.members([[ 10800, 1516451103603 ]]);
       });
     });
   });

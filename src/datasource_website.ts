@@ -10,6 +10,7 @@ import _ from 'lodash';
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
   websitesCache: Cache<Promise<Array<Selectable>>>;
 
+  // our ui is limited to 80 results, same logic to stay comparable
   maximumNumberOfUsefulDataPoints = 80;
   sensibleGranularities = [
     1, // second
@@ -115,9 +116,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       return this.$q.resolve({ data: { items: [] } });
     }
 
-    // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
     const windowSize = this.getWindowSize(timeFilter);
-    const granularity = this.getChartGranularity(windowSize);
 
     const tagFilters = [{
       name: 'beacon.website.name',
@@ -129,6 +128,13 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
         tagFilters.push(this.createTagFilter(filter));
       }
     });
+    const metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation ? target.aggregation : 'SUM'
+    };
+    if (target.pluginId !== "singlestat") { // no granularity for singlestat
+      metric['granularity'] = this.getChartGranularity(windowSize);
+    }
 
     const data: BeaconGroupBody = {
       group: {
@@ -140,11 +146,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       },
       tagFilters: tagFilters,
       type: target.entityType.key,
-      metrics: [{
-        metric: target.metric.key,
-        aggregation: target.aggregation ? target.aggregation : 'SUM',
-        granularity: granularity
-      }]
+      metrics: [ metric ]
     };
     return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
   }

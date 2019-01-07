@@ -138,7 +138,7 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                     return this.$q.all(lodash_1.default.map(snapshots, function (snapshot) {
                         // ...fetch the metric data for every snapshot in the results.
                         return _this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter).then(function (response) {
-                            var timeseries = response.data.values;
+                            var timeseries = _this.readTimeSeries(response.data.values, target.pluginId, timeFilter);
                             var result = {
                                 'target': _this.buildLabel(snapshot.response, snapshot.host, target),
                                 'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; })
@@ -146,6 +146,21 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                             return result;
                         });
                     }));
+                };
+                InstanaInfrastructureDataSource.prototype.readTimeSeries = function (values, pluginId, timeFilter) {
+                    if (pluginId === 'singlestat' || pluginId === 'table') {
+                        return this.correctMeanToSum(values, timeFilter);
+                    }
+                    return values;
+                };
+                InstanaInfrastructureDataSource.prototype.correctMeanToSum = function (values, timeFilter) {
+                    var secondMultiplier = this.getDefaultMetricRollupDuration(timeFilter).rollup / 1000;
+                    return lodash_1.default.map(values, function (value) {
+                        return {
+                            'value': value.value * secondMultiplier,
+                            'timestamp': value.timestamp
+                        };
+                    });
                 };
                 InstanaInfrastructureDataSource.prototype.fetchMetricsForSnapshot = function (snapshotId, metric, timeFilter) {
                     var rollup = this.getDefaultMetricRollupDuration(timeFilter).rollup;

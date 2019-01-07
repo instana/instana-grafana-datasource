@@ -149,7 +149,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       _.map(snapshots, snapshot => {
         // ...fetch the metric data for every snapshot in the results.
         return this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter).then(response => {
-          const timeseries = response.data.values;
+          const timeseries = this.readTimeSeries(response.data.values, target.pluginId, timeFilter);
           var result = {
             'target': this.buildLabel(snapshot.response, snapshot.host, target),
             'datapoints': _.map(timeseries, value => [value.value, value.timestamp])
@@ -158,6 +158,23 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
         });
       })
     );
+  }
+
+  readTimeSeries(values, pluginId: string, timeFilter: TimeFilter) {
+    if (pluginId === 'singlestat' || pluginId === 'table') {
+      return this.correctMeanToSum(values, timeFilter);
+    }
+    return values;
+  }
+
+  correctMeanToSum(values, timeFilter: TimeFilter) {
+    const secondMultiplier = this.getDefaultMetricRollupDuration(timeFilter).rollup / 1000;
+    return _.map(values, value => {
+     return {
+       'value': value.value * secondMultiplier,
+       'timestamp': value.timestamp
+     };
+    });
   }
 
   fetchMetricsForSnapshot(snapshotId: string, metric: string, timeFilter: TimeFilter) {
