@@ -392,7 +392,7 @@ describe('Given an InstanaDatasource', function() {
     });
   });
 
-  describe('When retrieving metrics for a singlestat panel', function() {
+  describe('When retrieving MEAN metrics for a singlestat panel', function() {
     // query data that is older than three months should result in one hour rollups being fetched
     const options = {
       "timezone": "browser",
@@ -421,8 +421,9 @@ describe('Given an InstanaDatasource', function() {
           },
           "metric": {
             "key": "mem.virtual",
-            "label": "Virtual",
+            "label": "Virtual"
           },
+          "aggregation" : "MEAN",
           "snapshotCache": {},
           "refId": "A"
         }
@@ -493,14 +494,14 @@ describe('Given an InstanaDatasource', function() {
         expect(results.data.length).to.equal(1);
         const datapoints = results.data[0].datapoints;
         expect(datapoints.length).to.equal(3);
-        expect(datapoints).to.deep.include.members([[ 3600, 1516451163603 ]]);
-        expect(datapoints).to.deep.include.members([[ 7200, 1516451043603 ]]);
-        expect(datapoints).to.deep.include.members([[ 10800, 1516451103603 ]]);
+        expect(datapoints).to.deep.include.members([[ 1, 1516451163603 ]]);
+        expect(datapoints).to.deep.include.members([[ 2, 1516451043603 ]]);
+        expect(datapoints).to.deep.include.members([[ 3, 1516451103603 ]]);
       });
     });
   });
 
-  describe('When retrieving metrics for a table', function() {
+  describe('When retrieving MEAN metrics for a table', function() {
     // query data that is older than three months should result in one hour rollups being fetched
     const options = {
       "timezone": "browser",
@@ -529,8 +530,9 @@ describe('Given an InstanaDatasource', function() {
           },
           "metric": {
             "key": "mem.virtual",
-            "label": "Virtual",
+            "label": "Virtual"
           },
+          "aggregation": "MEAN",
           "snapshotCache": {},
           "refId": "A"
         }
@@ -601,12 +603,231 @@ describe('Given an InstanaDatasource', function() {
         expect(results.data.length).to.equal(1);
         const datapoints = results.data[0].datapoints;
         expect(datapoints.length).to.equal(3);
+        expect(datapoints).to.deep.include.members([[ 1, 1516451163603 ]]);
+        expect(datapoints).to.deep.include.members([[ 2, 1516451043603 ]]);
+        expect(datapoints).to.deep.include.members([[ 3, 1516451103603 ]]);
+      });
+    });
+  });
+
+  describe('When retrieving SUM metrics for a singlestat panel', function() {
+    // query data that is older than three months should result in one hour rollups being fetched
+    const options = {
+      "timezone": "browser",
+      "panelId": 1,
+      "range": {
+        "from": "2018-04-20T18:24:00.603Z",
+        "to": "2018-04-22T18:24:00.603Z",
+        "raw": {
+          "from": "now-6h",
+          "to": "now"
+        }
+      },
+      "rangeRaw": {
+        "from": "now-2d",
+        "to": "now"
+      },
+      "interval": "20s",
+      "intervalMs": 20000,
+      "targets": [
+        {
+          "pluginId": "singlestat",
+          "entityQuery": "filler",
+          "entityType": {
+            "key": "process",
+            "label": "Process"
+          },
+          "metric": {
+            "key": "mem.virtual",
+            "label": "Virtual"
+          },
+          "aggregation": "SUM",
+          "snapshotCache": {},
+          "refId": "A"
+        }
+      ],
+      "format": "json",
+      "maxDataPoints": 1063,
+      "scopedVars": {
+        "__interval": {
+          "text": "20s",
+          "value": "20s"
+        },
+        "__interval_ms": {
+          "text": 20000,
+          "value": 20000
+        }
+      }
+    };
+
+    const contexts = {
+      status: 200,
+      data: [
+        {
+          "snapshotId": "A",
+          "host": "Stans-Macbook-Pro"
+        }
+      ]
+    }
+
+    const snapshotA = {
+      status: 200,
+      data: {
+        label: 'label for A'
+      }
+    };
+
+    const metricsForA = {
+      status: 200,
+      data: {
+        "values": [
+          {"timestamp":1516451043603,"value":2},
+          {"timestamp":1516451103603,"value":3},
+          {"timestamp":1516451163603,"value":1}
+        ]
+      }
+    };
+
+    beforeEach(function() {
+      ctx.backendSrv.datasourceRequest = function(options) {
+        switch (options.url) {
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&size=100&newApplicationModelEnabled=true":
+            return ctx.$q.resolve(contexts);
+          case "/api/datasources/proxy/1/instana/api/snapshots/A":
+            return ctx.$q.resolve(snapshotA);
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
+            return ctx.$q.resolve(metricsForA);
+          default:
+            throw new Error('Unexpected call URL: ' + options.url);
+        }
+      };
+    });
+
+    it("should return one target and extrapolate the data", function() {
+      const time = 1516472658604;
+
+      ctx.ds.currentTime = () => { return time; };
+
+      return ctx.ds.query(options).then(function(results) {
+        expect(results.data.length).to.equal(1);
+        const datapoints = results.data[0].datapoints;
+        expect(datapoints.length).to.equal(3);
         expect(datapoints).to.deep.include.members([[ 3600, 1516451163603 ]]);
         expect(datapoints).to.deep.include.members([[ 7200, 1516451043603 ]]);
         expect(datapoints).to.deep.include.members([[ 10800, 1516451103603 ]]);
       });
     });
   });
+
+  describe('When retrieving SUM metrics for a table', function() {
+    // query data that is older than three months should result in one hour rollups being fetched
+    const options = {
+      "timezone": "browser",
+      "panelId": 1,
+      "range": {
+        "from": "2018-04-20T18:24:00.603Z",
+        "to": "2018-04-22T18:24:00.603Z",
+        "raw": {
+          "from": "now-6h",
+          "to": "now"
+        }
+      },
+      "rangeRaw": {
+        "from": "now-2d",
+        "to": "now"
+      },
+      "interval": "20s",
+      "intervalMs": 20000,
+      "targets": [
+        {
+          "pluginId": "table",
+          "entityQuery": "filler",
+          "entityType": {
+            "key": "process",
+            "label": "Process"
+          },
+          "metric": {
+            "key": "mem.virtual",
+            "label": "Virtual"
+          },
+          "aggregation": "SUM",
+          "snapshotCache": {},
+          "refId": "A"
+        }
+      ],
+      "format": "json",
+      "maxDataPoints": 1063,
+      "scopedVars": {
+        "__interval": {
+          "text": "20s",
+          "value": "20s"
+        },
+        "__interval_ms": {
+          "text": 20000,
+          "value": 20000
+        }
+      }
+    };
+
+    const contexts = {
+      status: 200,
+      data: [
+        {
+          "snapshotId": "A",
+          "host": "Stans-Macbook-Pro"
+        }
+      ]
+    }
+
+    const snapshotA = {
+      status: 200,
+      data: {
+        label: 'label for A'
+      }
+    };
+
+    const metricsForA = {
+      status: 200,
+      data: {
+        "values": [
+          {"timestamp":1516451043603,"value":2},
+          {"timestamp":1516451103603,"value":3},
+          {"timestamp":1516451163603,"value":1}
+        ]
+      }
+    };
+
+    beforeEach(function() {
+      ctx.backendSrv.datasourceRequest = function(options) {
+        switch (options.url) {
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&size=100&newApplicationModelEnabled=true":
+            return ctx.$q.resolve(contexts);
+          case "/api/datasources/proxy/1/instana/api/snapshots/A":
+            return ctx.$q.resolve(snapshotA);
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
+            return ctx.$q.resolve(metricsForA);
+          default:
+            throw new Error('Unexpected call URL: ' + options.url);
+        }
+      };
+    });
+
+    it("should return one target and extrapolate the data", function() {
+      const time = 1516472658604;
+
+      ctx.ds.currentTime = () => { return time; };
+
+      return ctx.ds.query(options).then(function(results) {
+        expect(results.data.length).to.equal(1);
+        const datapoints = results.data[0].datapoints;
+        expect(datapoints.length).to.equal(3);
+        expect(datapoints).to.deep.include.members([[ 3600, 1516451163603 ]]);
+        expect(datapoints).to.deep.include.members([[ 7200, 1516451043603 ]]);
+        expect(datapoints).to.deep.include.members([[ 10800, 1516451103603 ]]);
+      });
+    });
+  });
+
 });
 
 describe('Given an InstanaDatasource without proxy', function() {

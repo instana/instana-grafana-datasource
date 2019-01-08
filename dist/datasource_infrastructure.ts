@@ -55,6 +55,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       catalogResponse.data.map(entry => ({
         'key' : entry.metricId,
         'label' : metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // custom-in metrics have shorter descriptions
+        'aggregations': ['MEAN','SUM'],
         'entityType' : entry.pluginId
       }))
     );
@@ -149,7 +150,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       _.map(snapshots, snapshot => {
         // ...fetch the metric data for every snapshot in the results.
         return this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter).then(response => {
-          const timeseries = this.readTimeSeries(response.data.values, target.pluginId, timeFilter);
+          const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
           var result = {
             'target': this.buildLabel(snapshot.response, snapshot.host, target),
             'datapoints': _.map(timeseries, value => [value.value, value.timestamp])
@@ -160,8 +161,8 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     );
   }
 
-  readTimeSeries(values, pluginId: string, timeFilter: TimeFilter) {
-    if (pluginId === 'singlestat' || pluginId === 'table') {
+  readTimeSeries(values, aggregation: string, pluginId: string, timeFilter: TimeFilter) {
+    if (aggregation === 'SUM' && (pluginId === 'singlestat' || pluginId === 'table')) {
       return this.correctMeanToSum(values, timeFilter);
     }
     return values;

@@ -304,7 +304,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {
-                    if (this.target.metricCategory === this.WEBSITE_METRICS && !lodash_1.default.includes(this.target.metric.aggregations, this.target.aggregation)) {
+                    if (!lodash_1.default.includes(this.target.metric.aggregations, this.target.aggregation)) {
                         this.target.aggregation = this.target.metric.aggregations[0];
                     }
                     this.panelCtrl.refresh();

@@ -22,7 +22,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     buildLabel(snapshotResponse: any, host: any, target: any): string;
     getHostSuffix(host: string): string;
     fetchMetricsForSnapshots(target: any, snapshots: any, timeFilter: TimeFilter): any;
-    readTimeSeries(values: any, pluginId: string, timeFilter: TimeFilter): any;
+    readTimeSeries(values: any, aggregation: string, pluginId: string, timeFilter: TimeFilter): any;
     correctMeanToSum(values: any, timeFilter: TimeFilter): any;
     fetchMetricsForSnapshot(snapshotId: string, metric: string, timeFilter: TimeFilter): any;
     getDefaultMetricRollupDuration(timeFilter: TimeFilter, minRollup?: number): Rollup;

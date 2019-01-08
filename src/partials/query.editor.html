@@ -124,7 +124,7 @@
           <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
         </select>
       </div>
-      <div class="gf-form-select-wrapper width-6" ng-show="ctrl.target.metricCategory === '3'">
+      <div class="gf-form-select-wrapper width-6" ng-show="ctrl.target.metricCategory === '3' || ctrl.target.pluginId === 'singlestat' || ctrl.target.pluginId === 'table'">
         <select id="in-aggregation-{{ctrl.target.refId}}"
                 ng-disabled="!ctrl.target.metric || ctrl.target.metric.aggregations.length <= 1"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"

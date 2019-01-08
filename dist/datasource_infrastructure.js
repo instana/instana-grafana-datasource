@@ -58,6 +58,7 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                         return catalogResponse.data.map(function (entry) { return ({
                             'key': entry.metricId,
                             'label': metricCategory === _this.CUSTOM_METRICS ? entry.description : entry.label,
+                            'aggregations': ['MEAN', 'SUM'],
                             'entityType': entry.pluginId
                         }); });
                     });
@@ -138,7 +139,7 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                     return this.$q.all(lodash_1.default.map(snapshots, function (snapshot) {
                         // ...fetch the metric data for every snapshot in the results.
                         return _this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter).then(function (response) {
-                            var timeseries = _this.readTimeSeries(response.data.values, target.pluginId, timeFilter);
+                            var timeseries = _this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
                             var result = {
                                 'target': _this.buildLabel(snapshot.response, snapshot.host, target),
                                 'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; })
@@ -147,8 +148,8 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                         });
                     }));
                 };
-                InstanaInfrastructureDataSource.prototype.readTimeSeries = function (values, pluginId, timeFilter) {
-                    if (pluginId === 'singlestat' || pluginId === 'table') {
+                InstanaInfrastructureDataSource.prototype.readTimeSeries = function (values, aggregation, pluginId, timeFilter) {
+                    if (aggregation === 'SUM' && (pluginId === 'singlestat' || pluginId === 'table')) {
                         return this.correctMeanToSum(values, timeFilter);
                     }
                     return values;
