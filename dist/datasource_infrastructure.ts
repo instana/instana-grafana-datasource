@@ -67,7 +67,9 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   fetchTypesForTarget(target, timeFilter: TimeFilter) {
     const fetchSnapshotTypesUrl = `/api/snapshots/types`+
       `?q=${encodeURIComponent(target.entityQuery)}` +
-      `&from=${timeFilter.from}&to=${timeFilter.to}` +
+      `&from=${timeFilter.from}` +
+      `&to=${timeFilter.to}` +
+      `&time=${timeFilter.to}` +
       `&newApplicationModelEnabled=true`;
     return this.doRequest(fetchSnapshotTypesUrl);
   }
@@ -85,6 +87,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       `?q=${query}` +
       `&from=${timeFilter.from}` +
       `&to=${timeFilter.to}` +
+      `&time=${timeFilter.to}` +
       `&size=100` +
       `&newApplicationModelEnabled=true`;
 

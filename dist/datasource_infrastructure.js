@@ -68,7 +68,9 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                 InstanaInfrastructureDataSource.prototype.fetchTypesForTarget = function (target, timeFilter) {
                     var fetchSnapshotTypesUrl = "/api/snapshots/types" +
                         ("?q=" + encodeURIComponent(target.entityQuery)) +
-                        ("&from=" + timeFilter.from + "&to=" + timeFilter.to) +
+                        ("&from=" + timeFilter.from) +
+                        ("&to=" + timeFilter.to) +
+                        ("&time=" + timeFilter.to) +
                         "&newApplicationModelEnabled=true";
                     return this.doRequest(fetchSnapshotTypesUrl);
                 };
@@ -84,6 +86,7 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                         ("?q=" + query) +
                         ("&from=" + timeFilter.from) +
                         ("&to=" + timeFilter.to) +
+                        ("&time=" + timeFilter.to) +
                         "&size=100" +
                         "&newApplicationModelEnabled=true";
                     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(function (contextsResponse) {

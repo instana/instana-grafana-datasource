@@ -62,11 +62,13 @@ If no custom format is provided the default '_$label (on host $host)_' will be s
 
 #### Website metrics
 
-To choose EUM website metrics you need to select "Website metrics" from the category dropdown, which will populate all further available dropdown lists. While switching the most called website will be selected per default.
+To choose EUM website metrics you need to select "Website metrics" from the category dropdown. This will populate the other  dropdown lists. 
 
-If multiple aggregation types are available the selected metric can be exactly defined with a specific aggregation type.
+The "Website" dropdown will contain a list of all websites sorted by their pageloads. 
 
-You can further more specify filters by adding them via "add Filter", if multiple filters are added they are connected via "AND".
+Most metrics will have more than one aggregation type (SUM, MEAN, ...) and you can choose which one to use.
+
+It's also possible to add additional filters via "add Filter". Multiple filters are concatenated using "AND".
 
 If your selection matches, the returned dataset will include metrics providing graphs like the example below.
 
