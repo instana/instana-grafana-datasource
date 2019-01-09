@@ -56,6 +56,7 @@ The actual screenshots are from "Quick Check" example below.
 * Run the full build again, this should update `dist/plugin.json`.
 * Commit this with a matching commit message (like `Bumped version to x.x.x`) and push this commit.
 * Note the commit hash of this commit (to extend repo.json in plugin-repository).
+* Tag your version with `git tag -a vx.x.x -m "plugin x.x.x" $commit && git push origin vx.x.x`
 * If you haven't already, `git clone github.com:instana/grafana-plugin-repository.git`
 * `cd grafana-plugin-repository`
 * `git remote add grafana git@github.com:grafana/grafana-plugin-repository.git`.
