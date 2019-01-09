@@ -92,7 +92,7 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(function (contextsResponse) {
                         return _this.$q.all(contextsResponse.data.map(function (_a) {
                             var snapshotId = _a.snapshotId, host = _a.host, plugin = _a.plugin;
-                            var fetchSnapshotUrl = "/api/snapshots/" + snapshotId;
+                            var fetchSnapshotUrl = "/api/snapshots/" + snapshotId + "?time=" + timeFilter.to;
                             return _this.doRequest(fetchSnapshotUrl).then(function (snapshotResponse) {
                                 return {
                                     snapshotId: snapshotId, host: host,

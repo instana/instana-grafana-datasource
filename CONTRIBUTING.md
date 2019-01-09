@@ -80,6 +80,7 @@ This procedure is used to test the Instana Grafana data source before the versio
 * Query: `filler`
 * Type: `Process`
 * Metric: `Virtual (mem.virtual)`
+* Legend format: ``
 
 This should render a chart with two datasets (`node (on host "host-1")` and `node (on host "host-2)`).
 
@@ -87,10 +88,11 @@ This should render a chart with two datasets (`node (on host "host-1")` and `nod
 * Category: `Infrastructure custom metrics`
 * Query: `filler`
 * Type: `Dropwizard`
-* Filter metric select: ``
+* Filter metric select: `kpi`
 * Metric: `Dropwizard meter (KPI.errors)`
+* Legend format: `$host ($pid)`
 
-This should render a chart with one dataset (`node (on host "host-3")`).
+This should render a chart with one dataset (`host-3 (29042)`).
 
 #### Website metrics
 * Category: `Website metrics`
