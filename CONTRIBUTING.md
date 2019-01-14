@@ -50,7 +50,7 @@ The actual screenshots are from "Quick Check" example below.
 ## Publishing a New Version
 
 * Run `yarn install`.
-* Run the full build with `yarn install`.
+* Run the full build with `yarn build`.
 * Make sure that the quick check scenario described below works locally.
 * Update `src/plugin.json` with the new version number and the version date.
 * Run the full build again, this should update `dist/plugin.json`.
