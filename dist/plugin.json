@@ -9,6 +9,7 @@
 
   "metrics": true,
   "annotations": true,
+  "alerting": true,
 
   "info": {
     "description": "Grafana datasource plugin for Instana: Automatic Infrastructure and Application Monitoring",

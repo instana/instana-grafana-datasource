@@ -353,7 +353,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onMetricSelect() {
-    if (!_.includes(this.target.metric.aggregations, this.target.aggregation)) {
+    if (this.target.metric && !_.includes(this.target.metric.aggregations, this.target.aggregation)) {
       this.target.aggregation = this.target.metric.aggregations[0];
     }
     this.panelCtrl.refresh();
