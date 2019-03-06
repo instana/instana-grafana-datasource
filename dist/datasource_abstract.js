@@ -27,7 +27,7 @@ System.register(['./cache', 'lodash'], function(exports_1) {
                     // grafana 5.3+ wanted to resolve dynamic routes in proxy mode
                     var version = lodash_1.default.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
                     var versions = lodash_1.default.split(version, '.', 2);
-                    if (versions[0] >= 5 && versions[1] >= 3) {
+                    if (version[0] >= 6 || (versions[0] >= 5 && versions[1] >= 3)) {
                         this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
                     }
                     else {
@@ -65,7 +65,9 @@ System.register(['./cache', 'lodash'], function(exports_1) {
                 AbstractDatasource.prototype.execute = function (request, maxRetries) {
                     var _this = this;
                     if (this.apiToken) {
-                        request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
+                        request['headers'] = {
+                            "Authorization": 'apiToken ' + this.apiToken
+                        };
                     }
                     return this.backendSrv
                         .datasourceRequest(request)

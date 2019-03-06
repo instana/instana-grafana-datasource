@@ -58,7 +58,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                             to: timeFilter.to,
                             windowSize: windowSize
                         },
-                        type: 'pageLoad',
+                        type: 'PAGELOAD',
                         metrics: [{
                                 metric: 'pageLoads',
                                 aggregation: 'SUM'
