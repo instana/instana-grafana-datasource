@@ -95,6 +95,14 @@ This should render a chart with two datasets (`node (on host "host-1")` and `nod
 
 This should render a chart with one dataset (`host-3 (29042)`).
 
+#### Application metrics
+* Category: `Application metrics`
+* Application: `AWS instances`
+* Group by: `endpoint.name`
+* Metric: `Call latency (latency)`
+
+This should render a chart with one dataset (`GET (AWS instances) latency.mean`).
+
 #### Website metrics
 * Category: `Website metrics`
 * Website: `www.instana.com`
