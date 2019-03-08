@@ -1,18 +1,18 @@
-System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'], function(exports_1) {
+System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var datasource_abstract_1, rollups_1, cache_1, lodash_1;
+    var rollups_1, datasource_abstract_1, cache_1, lodash_1;
     var InstanaInfrastructureDataSource;
     return {
         setters:[
-            function (datasource_abstract_1_1) {
-                datasource_abstract_1 = datasource_abstract_1_1;
-            },
             function (rollups_1_1) {
                 rollups_1 = rollups_1_1;
+            },
+            function (datasource_abstract_1_1) {
+                datasource_abstract_1 = datasource_abstract_1_1;
             },
             function (cache_1_1) {
                 cache_1 = cache_1_1;
@@ -27,8 +27,7 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                 function InstanaInfrastructureDataSource(instanceSettings, backendSrv, templateSrv, $q) {
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
                     this.rollupDurationThresholds = rollups_1.default;
-                    this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
-                    this.CUSTOM_METRICS = '1';
+                    this.maximumNumberOfUsefulDataPoints = 800;
                     this.snapshotCache = new cache_1.default();
                     this.catalogCache = new cache_1.default();
                 }
@@ -186,7 +185,7 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                         // the first rollup matching the requirements is returned
                         var rollupDefinition = availableRollupDefinitions[i];
                         var rollup = rollupDefinition && rollupDefinition.rollup ? rollupDefinition.rollup : 1000;
-                        if (windowSize / rollup <= this.MAX_NUMBER_OF_METRICS_FOR_CHARTS) {
+                        if (windowSize / rollup <= this.maximumNumberOfUsefulDataPoints) {
                             return rollupDefinition;
                         }
                     }

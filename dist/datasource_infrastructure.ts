@@ -1,5 +1,5 @@
-import AbstractDatasource from './datasource_abstract';
 import rollupDurationThresholds from './lists/rollups';
+import AbstractDatasource from './datasource_abstract';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import Rollup from './types/rollup';
@@ -14,8 +14,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   catalogCache: Cache<Promise<Array<Selectable>>>;
   lastFetchedFromAPI: boolean;
 
-  MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
-  CUSTOM_METRICS = '1';
+  maximumNumberOfUsefulDataPoints = 800;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -208,7 +207,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       // the first rollup matching the requirements is returned
       const rollupDefinition = availableRollupDefinitions[i];
       const rollup = rollupDefinition && rollupDefinition.rollup ? rollupDefinition.rollup : 1000;
-      if (windowSize / rollup <= this.MAX_NUMBER_OF_METRICS_FOR_CHARTS) {
+      if (windowSize / rollup <= this.maximumNumberOfUsefulDataPoints) {
         return rollupDefinition;
       }
     }

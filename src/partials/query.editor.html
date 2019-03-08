@@ -13,7 +13,7 @@
         ng-change="ctrl.onMetricCategorySelect()">
         <option value="0" selected>Infrastructure built-in metrics</option>
         <option value="1">Infrastructure custom metrics</option>
-        <!-- <option value="2">Application metrics</option>-->
+        <option value="2">Application metrics</option>
         <option value="3">Website metrics</option>
       </select>
     </div>
@@ -35,7 +35,10 @@
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '2'">
-
+		<div ng-include src="'application.html'"/>
+    <div ng-include src="'group.html'"/>
+    <div ng-include src="'metric.html'"/>
+    <div ng-include src="'filters.html'"/>
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '3'">
@@ -177,6 +180,25 @@
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.entity"
                 ng-change="ctrl.onChange()"
+                ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
+        </select>
+      </div>
+    </div>
+  </script>
+
+<script type="text/ng-template" id="application.html">
+    <div class="gf-form">
+      <label class="gf-form-label width-13 pointer" for="in-application-{{ctrl.target.refId}}">
+        Application
+        <info-popover position="top center" mode="right-normal">
+          <p>Select a application.</p>
+        </info-popover>
+      </label>
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+        <select id="in-application-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.entity"
+                ng-change="ctrl.onEntitySelect()"
                 ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
         </select>
       </div>

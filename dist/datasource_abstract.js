@@ -18,6 +18,10 @@ System.register(['./cache', 'lodash'], function(exports_1) {
                     this.$q = $q;
                     this.CACHE_MAX_AGE = 60000;
                     this.SEPARATOR = '|';
+                    this.BUILT_IN_METRICS = '0';
+                    this.CUSTOM_METRICS = '1';
+                    this.APPLICATION_METRICS = '2';
+                    this.WEBSITE_METRICS = '3';
                     this.currentTime = function () {
                         return Date.now();
                     };

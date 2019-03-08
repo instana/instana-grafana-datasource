@@ -13,6 +13,10 @@ export default class AbstractDatasource {
     simpleCache: Cache<Array<Selectable>>;
     CACHE_MAX_AGE: number;
     SEPARATOR: string;
+    BUILT_IN_METRICS: string;
+    CUSTOM_METRICS: string;
+    APPLICATION_METRICS: string;
+    WEBSITE_METRICS: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     currentTime: () => number;

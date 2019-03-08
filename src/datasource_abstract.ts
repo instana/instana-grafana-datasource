@@ -17,6 +17,11 @@ export default class AbstractDatasource {
   CACHE_MAX_AGE = 60000;
   SEPARATOR = '|';
 
+  BUILT_IN_METRICS = '0';
+  CUSTOM_METRICS = '1';
+  APPLICATION_METRICS = '2';
+  WEBSITE_METRICS = '3';
+
   /** @ngInject */
   constructor(instanceSettings, public backendSrv, public templateSrv, public $q) {
     this.name = instanceSettings.name;

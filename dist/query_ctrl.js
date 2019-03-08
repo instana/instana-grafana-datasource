@@ -77,9 +77,17 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                             }
                         });
                     }
-                    // websites & applications
-                    if (this.isEntity()) {
-                        this.onEntityChanges(false).then(function () {
+                    // websites
+                    if (this.isWebsite()) {
+                        this.onWebsiteChanges(false).then(function () {
+                            if (_this.target.metric) {
+                                _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
+                            }
+                        });
+                    }
+                    // applications
+                    if (this.isApplication()) {
+                        this.onApplicationChanges(false).then(function () {
                             if (_this.target.metric) {
                                 _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                             }
@@ -89,10 +97,13 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 InstanaQueryCtrl.prototype.isInfrastructure = function () {
                     return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
                 };
-                InstanaQueryCtrl.prototype.isEntity = function () {
+                InstanaQueryCtrl.prototype.isWebsite = function () {
                     return this.target.metricCategory === this.WEBSITE_METRICS;
                 };
-                InstanaQueryCtrl.prototype.onEntityChanges = function (refresh) {
+                InstanaQueryCtrl.prototype.isApplication = function () {
+                    return this.target.metricCategory === this.APPLICATION_METRICS;
+                };
+                InstanaQueryCtrl.prototype.onWebsiteChanges = function (refresh) {
                     var _this = this;
                     // select a meaningful default group
                     if (this.target && !this.target.entityType) {
@@ -117,6 +128,32 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                         }
                     });
                     return this.datasource.website.getWebsiteMetricsCatalog().then(function (metrics) {
+                        _this.availableMetrics = metrics;
+                        _this.checkMetricAndRefresh(refresh);
+                        _this.adjustMetricSelectionPlaceholder();
+                    });
+                };
+                InstanaQueryCtrl.prototype.onApplicationChanges = function (refresh) {
+                    var _this = this;
+                    this.datasource.application.getApplications(this.timeFilter).then(function (applications) {
+                        _this.uniqueEntities = applications;
+                        // select the most loaded website for default/replacement
+                        if (_this.target && !_this.target.entity && applications) {
+                            _this.target.entity = applications[0];
+                        }
+                        else if (_this.target && _this.target.entity && !lodash_1.default.find(applications, ['key', _this.target.entity.key])) {
+                            _this.target.entity = applications[0];
+                        }
+                    });
+                    this.datasource.application.getApplicastionTags().then(function (applicationTags) {
+                        _this.uniqueTags =
+                            lodash_1.default.sortBy(applicationTags, 'key');
+                        // select a meaningful default group
+                        if (_this.target && !_this.target.group) {
+                            _this.target.group = lodash_1.default.find(applicationTags, ['key', 'endpoint.name']);
+                        }
+                    });
+                    return this.datasource.application.getApplicationMetricsCatalog().then(function (metrics) {
                         _this.availableMetrics = metrics;
                         _this.checkMetricAndRefresh(refresh);
                         _this.adjustMetricSelectionPlaceholder();
@@ -149,8 +186,11 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                         if (this.isInfrastructure()) {
                             this.onFilterChange(false);
                         }
-                        if (this.isEntity()) {
-                            this.onEntityChanges(false);
+                        else if (this.isWebsite()) {
+                            this.onWebsiteChanges(false);
+                        }
+                        else if (this.isApplication()) {
+                            this.onApplicationChanges(false);
                         }
                     }
                     this.previousMetricCategory = this.target.metricCategory;

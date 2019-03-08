@@ -1,5 +1,5 @@
-import AbstractDatasource from './datasource_abstract';
 import BeaconGroupBody from './types/beacon_group_body';
+import AbstractDatasource from './datasource_abstract';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import TagFilter from './types/tag_filter';
@@ -110,7 +110,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return websiteCatalog;
   }
 
-  fetchMetricsForEntity(target, timeFilter: TimeFilter) {
+  fetchMetricsForWebsite(target, timeFilter: TimeFilter) {
     // avoid invalid calls
     if (!target || !target.metric || !target.group || !target.entity) {
       return this.$q.resolve({ data: { items: [] } });
