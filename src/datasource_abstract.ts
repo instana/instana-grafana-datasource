@@ -32,7 +32,8 @@ export default class AbstractDatasource {
     // grafana 5.3+ wanted to resolve dynamic routes in proxy mode
     const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
     const versions = _.split(version, '.', 2);
-    if (versions[0] >= 5 && versions[1] >= 3) {
+
+    if (version[0] >= 6 || (versions[0] >= 5 && versions[1] >= 3)) {
       this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
     } else {
       this.url = instanceSettings.jsonData.url;
@@ -76,7 +77,9 @@ export default class AbstractDatasource {
 
   private execute(request, maxRetries) {
     if (this.apiToken) {
-      request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
+      request['headers'] = {
+        "Authorization": 'apiToken ' + this.apiToken
+      };
     }
 
     return this.backendSrv

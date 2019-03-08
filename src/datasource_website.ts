@@ -54,7 +54,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
         to: timeFilter.to,
         windowSize: windowSize
       },
-      type: 'pageLoad',
+      type: 'PAGELOAD',
       metrics: [{
         metric: 'pageLoads',
         aggregation: 'SUM'
