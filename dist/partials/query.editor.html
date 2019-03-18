@@ -217,7 +217,7 @@
         <select id="in-beacontype-{{ctrl.target.refId}}"
           class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
           ng-model="ctrl.target.entityType"
-          ng-change="ctrl.onChange()"
+          ng-change="ctrl.onBeaconTypeSelect()"
           ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
         </select>
       </div>

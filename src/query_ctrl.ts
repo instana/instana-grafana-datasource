@@ -23,6 +23,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   availableMetrics: Array<Selectable>; // subset of allCustomMetrics for display only
   uniqueEntities: Array<Selectable>;
   uniqueTags: Array<Selectable>;
+  allWebsiteMetrics: Array<Selectable>;
 
   snapshots: Array<string>;
   entitySelectionText: string;
@@ -149,7 +150,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     return this.datasource.website.getWebsiteMetricsCatalog().then(
       metrics => {
-        this.availableMetrics = metrics;
+        this.allWebsiteMetrics = metrics;
+        this.availableMetrics = _.filter(this.allWebsiteMetrics, m => m.beaconTypes.includes(this.target.entityType.key));
         this.checkMetricAndRefresh(refresh);
         this.adjustMetricSelectionPlaceholder();
       }
@@ -225,6 +227,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
       }
     }
     this.previousMetricCategory = this.target.metricCategory;
+  }
+
+  onBeaconTypeSelect(refresh){
+    this.availableMetrics = _.filter(this.allWebsiteMetrics, m => m.beaconTypes.includes(this.target.entityType.key));
+    this.checkMetricAndRefresh(refresh);
+    this.adjustMetricSelectionPlaceholder();
   }
 
   filterForEntityType(refresh: boolean) {

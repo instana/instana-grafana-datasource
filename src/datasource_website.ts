@@ -102,7 +102,8 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       catalogResponse.data.map(entry => ({
         'key' : entry.metricId,
         'label' : entry.label,
-        'aggregations' : entry.aggregations ? entry.aggregations.sort() : []
+        'aggregations' : entry.aggregations ? entry.aggregations.sort() : [],
+        'beaconTypes' : entry.beaconTypes
       }))
     );
     this.simpleCache.put('websiteCatalog', websiteCatalog);

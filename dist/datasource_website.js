@@ -100,7 +100,8 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                         return catalogResponse.data.map(function (entry) { return ({
                             'key': entry.metricId,
                             'label': entry.label,
-                            'aggregations': entry.aggregations ? entry.aggregations.sort() : []
+                            'aggregations': entry.aggregations ? entry.aggregations.sort() : [],
+                            'beaconTypes': entry.beaconTypes
                         }); });
                     });
                     this.simpleCache.put('websiteCatalog', websiteCatalog);

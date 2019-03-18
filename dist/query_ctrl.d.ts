@@ -14,6 +14,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     availableMetrics: Array<Selectable>;
     uniqueEntities: Array<Selectable>;
     uniqueTags: Array<Selectable>;
+    allWebsiteMetrics: Array<Selectable>;
     snapshots: Array<string>;
     entitySelectionText: string;
     metricSelectionText: string;
@@ -38,6 +39,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     onApplicationChanges(refresh: any): any;
     onFilterChange(refresh: boolean): any;
     onMetricCategorySelect(): void;
+    onBeaconTypeSelect(refresh: any): void;
     filterForEntityType(refresh: boolean): void;
     filterEntityTypes(): any;
     findMatchingEntityTypes(entityType: Selectable): boolean;

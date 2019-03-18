@@ -128,7 +128,8 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                         }
                     });
                     return this.datasource.website.getWebsiteMetricsCatalog().then(function (metrics) {
-                        _this.availableMetrics = metrics;
+                        _this.allWebsiteMetrics = metrics;
+                        _this.availableMetrics = lodash_1.default.filter(_this.allWebsiteMetrics, function (m) { return m.beaconTypes.includes(_this.target.entityType.key); });
                         _this.checkMetricAndRefresh(refresh);
                         _this.adjustMetricSelectionPlaceholder();
                     });
@@ -197,6 +198,12 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                         }
                     }
                     this.previousMetricCategory = this.target.metricCategory;
+                };
+                InstanaQueryCtrl.prototype.onBeaconTypeSelect = function (refresh) {
+                    var _this = this;
+                    this.availableMetrics = lodash_1.default.filter(this.allWebsiteMetrics, function (m) { return m.beaconTypes.includes(_this.target.entityType.key); });
+                    this.checkMetricAndRefresh(refresh);
+                    this.adjustMetricSelectionPlaceholder();
                 };
                 InstanaQueryCtrl.prototype.filterForEntityType = function (refresh) {
                     var _this = this;

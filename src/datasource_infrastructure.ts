@@ -134,7 +134,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     } else {
       return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType.key}`);
     }
-
   }
 
   buildSnapshotCacheKey(query: string, timeFilter: TimeFilter): string {
