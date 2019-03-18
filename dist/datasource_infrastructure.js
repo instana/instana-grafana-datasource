@@ -114,7 +114,6 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                     });
                     this.snapshotCache.put(key, snapshots);
                     return snapshots;
-                    // entity.endpoint.name:GET*
                 };
                 InstanaInfrastructureDataSource.prototype.reduceSnapshot = function (snapshotResponse) {
                     // reduce data to used label formatting values
@@ -122,7 +121,13 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                     return snapshotResponse;
                 };
                 InstanaInfrastructureDataSource.prototype.buildQuery = function (target) {
-                    return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType.key);
+                    // check for entity.pluginId or entity.selfType, because otherwise the backend has a problem with `AND entity.pluginId`
+                    if (("" + target.entityQuery).includes("entity.pluginId:") || ("" + target.entityQuery).includes("entity.selfType:")) {
+                        return encodeURIComponent("" + target.entityQuery);
+                    }
+                    else {
+                        return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType.key);
+                    }
                 };
                 InstanaInfrastructureDataSource.prototype.buildSnapshotCacheKey = function (query, timeFilter) {
                     return query + this.SEPARATOR + this.getTimeKey(timeFilter);

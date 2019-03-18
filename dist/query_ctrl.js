@@ -1,18 +1,15 @@
-System.register(['app/plugins/sdk', './lists/website_metrics', './lists/beacon_types', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, website_metrics_1, beacon_types_1, operators_1, migration_1, lodash_1;
+    var sdk_1, beacon_types_1, operators_1, migration_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
             function (sdk_1_1) {
                 sdk_1 = sdk_1_1;
-            },
-            function (website_metrics_1_1) {
-                website_metrics_1 = website_metrics_1_1;
             },
             function (beacon_types_1_1) {
                 beacon_types_1 = beacon_types_1_1;
@@ -130,20 +127,11 @@ System.register(['app/plugins/sdk', './lists/website_metrics', './lists/beacon_t
                             _this.target.group = lodash_1.default.find(websiteTags, ['key', 'beacon.page.name']);
                         }
                     });
-                    // TODO
-                    /* this.availableMetrics = websiteMetrics[this.target.entityType.key];
-                    this.checkMetricAndRefresh(refresh);
-                    this.adjustMetricSelectionPlaceholder(); */
                     return this.datasource.website.getWebsiteMetricsCatalog().then(function (metrics) {
                         _this.availableMetrics = metrics;
                         _this.checkMetricAndRefresh(refresh);
                         _this.adjustMetricSelectionPlaceholder();
                     });
-                };
-                InstanaQueryCtrl.prototype.onBeaconTypeChange = function (refresh) {
-                    this.availableMetrics = website_metrics_1.default[this.target.entityType.key];
-                    this.checkMetricAndRefresh(refresh);
-                    this.adjustMetricSelectionPlaceholder();
                 };
                 InstanaQueryCtrl.prototype.onApplicationChanges = function (refresh) {
                     var _this = this;

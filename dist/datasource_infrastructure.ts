@@ -119,7 +119,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     this.snapshotCache.put(key, snapshots);
 
     return snapshots;
-     // entity.endpoint.name:GET*
   }
 
   reduceSnapshot(snapshotResponse) {
@@ -129,7 +128,13 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   }
 
   buildQuery(target): string {
-    return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType.key}`);
+    // check for entity.pluginId or entity.selfType, because otherwise the backend has a problem with `AND entity.pluginId`
+    if (`${target.entityQuery}`.includes("entity.pluginId:") || `${target.entityQuery}`.includes("entity.selfType:")){
+      return encodeURIComponent(`${target.entityQuery}`);
+    } else {
+      return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType.key}`);
+    }
+
   }
 
   buildSnapshotCacheKey(query: string, timeFilter: TimeFilter): string {
