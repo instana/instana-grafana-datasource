@@ -1,6 +1,7 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import { QueryCtrl } from 'app/plugins/sdk';
 
+import websiteMetrics from './lists/website_metrics';
 import beaconTypes from './lists/beacon_types';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
@@ -93,6 +94,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
         }
       });
+      // TODO
+      /* this.onWebsiteChanges(false);
+      if (this.target.metric) {
+        this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+      } */
     }
 
      // applications
@@ -146,6 +152,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
         }
       }
     );
+
+    // TODO
+    /* this.availableMetrics = websiteMetrics[this.target.entityType.key];
+    this.checkMetricAndRefresh(refresh);
+    this.adjustMetricSelectionPlaceholder(); */
+
     return this.datasource.website.getWebsiteMetricsCatalog().then(
       metrics => {
         this.availableMetrics = metrics;
@@ -155,10 +167,17 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
   }
 
-onApplicationChanges(refresh) {
+  onBeaconTypeChange(refresh: boolean){
+    this.availableMetrics = websiteMetrics[this.target.entityType.key];
+    this.checkMetricAndRefresh(refresh);
+    this.adjustMetricSelectionPlaceholder();
+  }
+
+  onApplicationChanges(refresh) {
     this.datasource.application.getApplications(this.timeFilter).then(
       applications => {
         this.uniqueEntities = applications;
+        if (this.uniqueEntities[this.uniqueEntities.length-1].key){this.uniqueEntities.push({key: null, label: "All Applications"});}
         // select the most loaded website for default/replacement
         if (this.target && !this.target.entity && applications) {
           this.target.entity = applications[0];

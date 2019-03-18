@@ -87,8 +87,9 @@ export default class InstanaDatasource extends AbstractDatasource {
     // as we map two times we need to flatten the result
     return _.flatten(response.data.items.map(item => {
       return _.map(item.metrics, function(value, key) {
+        const targetKey = target.entity.key ? ' (' + target.entity.key + ')' : '';
         return {
-          'target': item.name + ' (' + target.entity.key + ') - ' + key,
+          'target': item.name + targetKey + ' - ' + key,
           'datapoints': _.map(value, metric => [metric[1], metric[0]])
         };
       });

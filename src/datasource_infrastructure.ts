@@ -95,18 +95,31 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
         contextsResponse.data.map(({snapshotId, host, plugin}) => {
           const fetchSnapshotUrl = `/api/snapshots/${snapshotId}?time=${timeFilter.to}`;
 
-          return this.doRequest(fetchSnapshotUrl).then(snapshotResponse => {
-            return {
-              snapshotId, host,
-              'response': this.reduceSnapshot(snapshotResponse)
-            };
+          return this.doRequest(fetchSnapshotUrl, true).then(snapshotResponse => {
+            // check for undefined because the fetchSnapshotContexts is buggy
+            if (snapshotResponse !== undefined){
+              return {
+                snapshotId, host,
+                'response': this.reduceSnapshot(snapshotResponse)
+              };
+            }
           });
         })
       );
+    }).then(response => {
+      // this has to be done, because the fetchSnapshotContexts is buggy in the backend, maybe could be removed in the future
+      let newResponse = [];
+      for (let i in response){
+        if (response[i] !== undefined){
+          newResponse.push(response[i]);
+        }
+      }
+      return newResponse;
     });
     this.snapshotCache.put(key, snapshots);
 
     return snapshots;
+     // entity.endpoint.name:GET*
   }
 
   reduceSnapshot(snapshotResponse) {

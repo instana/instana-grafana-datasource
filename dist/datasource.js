@@ -95,8 +95,9 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                     // as we map two times we need to flatten the result
                     return lodash_1.default.flatten(response.data.items.map(function (item) {
                         return lodash_1.default.map(item.metrics, function (value, key) {
+                            var targetKey = target.entity.key ? ' (' + target.entity.key + ')' : '';
                             return {
-                                'target': item.name + ' (' + target.entity.key + ') - ' + key,
+                                'target': item.name + targetKey + ' - ' + key,
                                 'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
                             };
                         });

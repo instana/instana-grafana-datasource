@@ -118,11 +118,16 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
     const windowSize = this.getWindowSize(timeFilter);
 
-    const tagFilters = [{
-      name: 'application.name',
-      operator: 'EQUALS',
-      value: target.entity.key
-    }];
+    const tagFilters = [];
+
+    if (target.entity.key){
+      tagFilters.push({
+        name: 'application.name',
+        operator: 'EQUALS',
+        value: target.entity.key
+      });
+    }
+
     _.forEach(target.filters, filter => {
       if (filter.isValid) {
         tagFilters.push(this.createTagFilter(filter));

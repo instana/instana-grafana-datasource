@@ -35,6 +35,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     isWebsite(): boolean;
     isApplication(): boolean;
     onWebsiteChanges(refresh: any): any;
+    onBeaconTypeChange(refresh: boolean): void;
     onApplicationChanges(refresh: any): any;
     onFilterChange(refresh: boolean): any;
     onMetricCategorySelect(): void;

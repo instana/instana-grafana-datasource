@@ -49,24 +49,26 @@ System.register(['./cache', 'lodash'], function(exports_1) {
                 AbstractDatasource.prototype.msToMin = function (time) {
                     return Math.round(time / 60000);
                 };
-                AbstractDatasource.prototype.doRequest = function (url, maxRetries) {
+                AbstractDatasource.prototype.doRequest = function (url, swallowError, maxRetries) {
+                    if (swallowError === void 0) { swallowError = false; }
                     if (maxRetries === void 0) { maxRetries = 1; }
                     var request = {
                         method: 'GET',
                         url: this.url + url
                     };
-                    return this.execute(request, maxRetries);
+                    return this.execute(request, swallowError, maxRetries);
                 };
-                AbstractDatasource.prototype.postRequest = function (url, data, maxRetries) {
+                AbstractDatasource.prototype.postRequest = function (url, data, swallowError, maxRetries) {
+                    if (swallowError === void 0) { swallowError = false; }
                     if (maxRetries === void 0) { maxRetries = 0; }
                     var request = {
                         method: 'POST',
                         url: this.url + url,
                         data: data
                     };
-                    return this.execute(request, maxRetries);
+                    return this.execute(request, swallowError, maxRetries);
                 };
-                AbstractDatasource.prototype.execute = function (request, maxRetries) {
+                AbstractDatasource.prototype.execute = function (request, swallowError, maxRetries) {
                     var _this = this;
                     if (this.apiToken) {
                         request['headers'] = {
@@ -76,8 +78,12 @@ System.register(['./cache', 'lodash'], function(exports_1) {
                     return this.backendSrv
                         .datasourceRequest(request)
                         .catch(function (error) {
+                        if (swallowError && (error.status >= 400 || error.status < 500)) {
+                            console.log(error);
+                            return;
+                        }
                         if (maxRetries > 0) {
-                            return _this.execute(request, maxRetries - 1);
+                            return _this.execute(request, swallowError, maxRetries - 1);
                         }
                         throw error;
                     });

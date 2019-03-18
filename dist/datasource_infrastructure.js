@@ -92,16 +92,29 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                         return _this.$q.all(contextsResponse.data.map(function (_a) {
                             var snapshotId = _a.snapshotId, host = _a.host, plugin = _a.plugin;
                             var fetchSnapshotUrl = "/api/snapshots/" + snapshotId + "?time=" + timeFilter.to;
-                            return _this.doRequest(fetchSnapshotUrl).then(function (snapshotResponse) {
-                                return {
-                                    snapshotId: snapshotId, host: host,
-                                    'response': _this.reduceSnapshot(snapshotResponse)
-                                };
+                            return _this.doRequest(fetchSnapshotUrl, true).then(function (snapshotResponse) {
+                                // check for undefined because the fetchSnapshotContexts is buggy
+                                if (snapshotResponse !== undefined) {
+                                    return {
+                                        snapshotId: snapshotId, host: host,
+                                        'response': _this.reduceSnapshot(snapshotResponse)
+                                    };
+                                }
                             });
                         }));
+                    }).then(function (response) {
+                        // this has to be done, because the fetchSnapshotContexts is buggy in the backend, maybe could be removed in the future
+                        var newResponse = [];
+                        for (var i in response) {
+                            if (response[i] !== undefined) {
+                                newResponse.push(response[i]);
+                            }
+                        }
+                        return newResponse;
                     });
                     this.snapshotCache.put(key, snapshots);
                     return snapshots;
+                    // entity.endpoint.name:GET*
                 };
                 InstanaInfrastructureDataSource.prototype.reduceSnapshot = function (snapshotResponse) {
                     // reduce data to used label formatting values

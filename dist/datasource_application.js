@@ -113,11 +113,14 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     }
                     // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
                     var windowSize = this.getWindowSize(timeFilter);
-                    var tagFilters = [{
+                    var tagFilters = [];
+                    if (target.entity.key) {
+                        tagFilters.push({
                             name: 'application.name',
                             operator: 'EQUALS',
                             value: target.entity.key
-                        }];
+                        });
+                    }
                     lodash_1.default.forEach(target.filters, function (filter) {
                         if (filter.isValid) {
                             tagFilters.push(_this.createTagFilter(filter));

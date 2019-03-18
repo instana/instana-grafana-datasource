@@ -23,7 +23,7 @@ export default class AbstractDatasource {
     getWindowSize(timeFilter: TimeFilter): number;
     getTimeKey(timeFilter: TimeFilter): string;
     private msToMin(time);
-    doRequest(url: string, maxRetries?: number): any;
-    postRequest(url: string, data: Object, maxRetries?: number): any;
-    private execute(request, maxRetries);
+    doRequest(url: string, swallowError?: boolean, maxRetries?: number): any;
+    postRequest(url: string, data: Object, swallowError?: boolean, maxRetries?: number): any;
+    private execute(request, swallowError, maxRetries);
 }
