@@ -140,7 +140,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return query + this.SEPARATOR + this.getTimeKey(timeFilter);
   }
 
-  buildLabel(snapshotResponse, host, target): string {
+  buildLabel(snapshotResponse, host, target, index): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', snapshotResponse.data.label);
@@ -152,6 +152,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       label = _.replace(label, '$name', _.get(snapshotResponse.data, ['data', 'name'], ''));
       label = _.replace(label, '$service', _.get(snapshotResponse.data, ['data', 'service_name'], ''));
       label = _.replace(label, '$metric', _.get(target, ['metric', 'key'], 'n/a'));
+      label = _.replace(label, '$index', index + 1);
       return label;
     }
     return snapshotResponse.data.label + this.getHostSuffix(host);
@@ -166,12 +167,12 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter) {
     return this.$q.all(
-      _.map(snapshots, snapshot => {
+      _.map(snapshots, (snapshot,index) => {
         // ...fetch the metric data for every snapshot in the results.
         return this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter).then(response => {
           const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
           var result = {
-            'target': this.buildLabel(snapshot.response, snapshot.host, target),
+            'target': this.buildLabel(snapshot.response, snapshot.host, target, index),
             'datapoints': _.map(timeseries, value => [value.value, value.timestamp])
           };
           return result;
