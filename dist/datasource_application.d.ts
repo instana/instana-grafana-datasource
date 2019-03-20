@@ -21,4 +21,6 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
         operator: string;
         value: string;
     };
+    readItemMetrics(target: any, response: any): any;
+    buildLabel(target: any, item: any, key: any, index: any): string;
 }

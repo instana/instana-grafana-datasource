@@ -170,6 +170,31 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     }
                     return tagFilter;
                 };
+                InstanaWebsiteDataSource.prototype.readItemMetrics = function (target, response) {
+                    var _this = this;
+                    // as we map two times we need to flatten the result
+                    return lodash_1.default.flatten(response.data.items.map(function (item, index) {
+                        return lodash_1.default.map(item.metrics, function (value, key) {
+                            return {
+                                'target': _this.buildLabel(target, item, key, index),
+                                'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
+                            };
+                        });
+                    }));
+                };
+                InstanaWebsiteDataSource.prototype.buildLabel = function (target, item, key, index) {
+                    if (target.labelFormat) {
+                        var label = target.labelFormat;
+                        label = lodash_1.default.replace(label, '$label', item.name);
+                        label = lodash_1.default.replace(label, '$website', target.entity.label);
+                        label = lodash_1.default.replace(label, '$type', target.entityType.label);
+                        label = lodash_1.default.replace(label, '$metric', target.metric.label);
+                        label = lodash_1.default.replace(label, '$key', key);
+                        label = lodash_1.default.replace(label, '$index', index + 1);
+                        return label;
+                    }
+                    return item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+                };
                 return InstanaWebsiteDataSource;
             })(datasource_abstract_1.default);
             exports_1("default", InstanaWebsiteDataSource);

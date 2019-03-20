@@ -181,4 +181,30 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
 
     return tagFilter;
   }
+
+  readItemMetrics(target, response) {
+    // as we map two times we need to flatten the result
+    return _.flatten(response.data.items.map((item, index) => {
+      return _.map(item.metrics, (value, key) => {
+        return {
+          'target': this.buildLabel(target, item, key, index),
+          'datapoints': _.map(value, metric => [metric[1], metric[0]])
+        };
+      });
+    }));
+  }
+
+  buildLabel(target, item, key, index): string {
+    if (target.labelFormat) {
+      let label = target.labelFormat;
+      label = _.replace(label, '$label', item.name);
+      label = _.replace(label, '$website', target.entity.label);
+      label = _.replace(label, '$type', target.entityType.label);
+      label = _.replace(label, '$metric', target.metric.label);
+      label = _.replace(label, '$key', key);
+      label = _.replace(label, '$index', index + 1);
+      return label;
+    }
+    return item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+  }
 }

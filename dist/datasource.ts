@@ -73,27 +73,14 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   getWebsiteMetrics(target, timeFilter: TimeFilter) {
     return this.website.fetchMetricsForWebsite(target, timeFilter).then(response => {
-      return this.readItemMetrics(target, response);
+      return this.website.readItemMetrics(target, response);
     });
   }
 
   getApplicationMetrics(target, timeFilter) {
     return this.application.fetchMetricsForApplication(target, timeFilter).then(response => {
-      return this.readItemMetrics(target, response);
+      return this.application.readItemMetrics(target, response);
     });
-  }
-
-  private readItemMetrics(target, response) {
-    // as we map two times we need to flatten the result
-    return _.flatten(response.data.items.map(item => {
-      return _.map(item.metrics, function(value, key) {
-        const targetKey = target.entity.key ? ' (' + target.entity.key + ')' : '';
-        return {
-          'target': item.name + targetKey + ' - ' + key,
-          'datapoints': _.map(value, metric => [metric[1], metric[0]])
-        };
-      });
-    }));
   }
 
   annotationQuery(options) {

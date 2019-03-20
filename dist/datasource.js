@@ -82,26 +82,14 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                 InstanaDatasource.prototype.getWebsiteMetrics = function (target, timeFilter) {
                     var _this = this;
                     return this.website.fetchMetricsForWebsite(target, timeFilter).then(function (response) {
-                        return _this.readItemMetrics(target, response);
+                        return _this.website.readItemMetrics(target, response);
                     });
                 };
                 InstanaDatasource.prototype.getApplicationMetrics = function (target, timeFilter) {
                     var _this = this;
                     return this.application.fetchMetricsForApplication(target, timeFilter).then(function (response) {
-                        return _this.readItemMetrics(target, response);
+                        return _this.application.readItemMetrics(target, response);
                     });
-                };
-                InstanaDatasource.prototype.readItemMetrics = function (target, response) {
-                    // as we map two times we need to flatten the result
-                    return lodash_1.default.flatten(response.data.items.map(function (item) {
-                        return lodash_1.default.map(item.metrics, function (value, key) {
-                            var targetKey = target.entity.key ? ' (' + target.entity.key + ')' : '';
-                            return {
-                                'target': item.name + targetKey + ' - ' + key,
-                                'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
-                            };
-                        });
-                    }));
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {
                     throw new Error('Annotation Support not implemented yet.');
