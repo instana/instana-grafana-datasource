@@ -301,6 +301,10 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     }
                     this.panelCtrl.refresh();
                 };
+                InstanaQueryCtrl.prototype.onWebsiteGroupChange = function () {
+                    this.target.showWebsiteGroupBySecondeLevel = (this.target.group.key === "beacon.meta");
+                    this.panelCtrl.refresh();
+                };
                 InstanaQueryCtrl.prototype.checkMetricAndRefresh = function (refresh) {
                     if (this.target.metric && !lodash_1.default.includes(lodash_1.default.map(this.availableMetrics, function (m) { return m.key; }), this.target.metric.key)) {
                         this.resetMetricSelection();

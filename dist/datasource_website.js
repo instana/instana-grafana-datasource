@@ -52,7 +52,8 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     var windowSize = this.getWindowSize(timeFilter);
                     var data = {
                         group: {
-                            groupbyTag: 'beacon.website.name'
+                            groupbyTag: 'beacon.website.name',
+                            groupbyTagSecondLevelKey: ""
                         },
                         timeFrame: {
                             to: timeFilter.to,
@@ -131,9 +132,14 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     if (target.pluginId !== "singlestat") {
                         metric['granularity'] = this.getChartGranularity(windowSize);
                     }
+                    var groupbyTagSecondLevelKey = "";
+                    if (target.group.key === "beacon.meta") {
+                        groupbyTagSecondLevelKey = target.groupbyTagSecondLevelKey;
+                    }
                     var data = {
                         group: {
-                            groupbyTag: target.group.key
+                            groupbyTag: target.group.key,
+                            groupbyTagSecondLevelKey: groupbyTagSecondLevelKey
                         },
                         timeFrame: {
                             to: timeFilter.to,

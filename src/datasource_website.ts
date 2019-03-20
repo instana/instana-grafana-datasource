@@ -48,7 +48,8 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     const windowSize = this.getWindowSize(timeFilter);
     const data: BeaconGroupBody = {
       group: {
-        groupbyTag: 'beacon.website.name'
+        groupbyTag: 'beacon.website.name',
+        groupbyTagSecondLevelKey: ""
       },
       timeFrame: {
         to: timeFilter.to,
@@ -137,9 +138,15 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       metric['granularity'] = this.getChartGranularity(windowSize);
     }
 
+    let groupbyTagSecondLevelKey = "";
+    if (target.group.key === "beacon.meta"){
+      groupbyTagSecondLevelKey = target.groupbyTagSecondLevelKey;
+    }
+
     const data: BeaconGroupBody = {
       group: {
-        groupbyTag: target.group.key
+        groupbyTag: target.group.key,
+        groupbyTagSecondLevelKey
       },
       timeFrame: {
         to: timeFilter.to,

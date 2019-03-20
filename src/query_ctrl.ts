@@ -351,6 +351,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.panelCtrl.refresh();
   }
 
+  onWebsiteGroupChange(){
+    this.target.showWebsiteGroupBySecondeLevel = (this.target.group.key === "beacon.meta");
+    this.panelCtrl.refresh();
+  }
+
   checkMetricAndRefresh(refresh: boolean) {
     if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
       this.resetMetricSelection();

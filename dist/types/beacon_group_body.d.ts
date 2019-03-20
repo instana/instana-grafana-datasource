@@ -1,5 +1,6 @@
 export interface Group {
     groupbyTag: string;
+    groupbyTagSecondLevelKey: string;
 }
 export interface TimeFrame {
     to: number;

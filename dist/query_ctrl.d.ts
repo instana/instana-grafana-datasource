@@ -48,6 +48,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     addFilter(): void;
     removeFilter(index: number): void;
     onTagFilterChange(index: number): void;
+    onWebsiteGroupChange(): void;
     checkMetricAndRefresh(refresh: boolean): void;
     selectionReset(): void;
     resetEntityTypeSelection(): void;
