@@ -107,7 +107,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
         })
       );
     }).then(response => {
-      // this has to be done, because the fetchSnapshotContexts is buggy in the backend, maybe could be removed in the future
+      // this has to be done, because the fetchSnapshotContexts is buggy in the backend, maybe can be removed in the future
       let newResponse = [];
       for (let i in response){
         if (response[i] !== undefined){

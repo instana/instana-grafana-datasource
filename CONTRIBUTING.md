@@ -101,6 +101,7 @@ This should render a chart with one dataset (`host-3 (29042)`).
 * Application: `AWS instances`
 * Group by: `endpoint.name`
 * Metric: `Call latency (latency)`
+* Legend format: ``
 
 This should render a chart with one dataset (`GET (AWS instances) latency.mean`).
 
@@ -110,5 +111,6 @@ This should render a chart with one dataset (`GET (AWS instances) latency.mean`)
 * Type: `Page Loads`
 * Group by: `beacon.page.name`
 * Metric: `Beacon Count (beaconCount)`
+* Legend format: ``
 
 This should render a chart with one dataset (`home (www.instana.com) beaconCount.sum.300`).

@@ -103,7 +103,7 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                             });
                         }));
                     }).then(function (response) {
-                        // this has to be done, because the fetchSnapshotContexts is buggy in the backend, maybe could be removed in the future
+                        // this has to be done, because the fetchSnapshotContexts is buggy in the backend, maybe can be removed in the future
                         var newResponse = [];
                         for (var i in response) {
                             if (response[i] !== undefined) {
