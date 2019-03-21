@@ -88,6 +88,7 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                 InstanaDatasource.prototype.getApplicationMetrics = function (target, timeFilter) {
                     var _this = this;
                     return this.application.fetchMetricsForApplication(target, timeFilter).then(function (response) {
+                        target.showWarningCantShowAllResults = response.data.canLoadMore;
                         return _this.application.readItemMetrics(target, response);
                     });
                 };

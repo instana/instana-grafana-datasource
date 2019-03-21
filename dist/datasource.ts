@@ -79,6 +79,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   getApplicationMetrics(target, timeFilter) {
     return this.application.fetchMetricsForApplication(target, timeFilter).then(response => {
+      target.showWarningCantShowAllResults = response.data.canLoadMore;
       return this.application.readItemMetrics(target, response);
     });
   }
