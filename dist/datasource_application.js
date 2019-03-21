@@ -101,6 +101,15 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                             'label': entry.label,
                             'aggregations': entry.aggregations ? entry.aggregations.sort() : []
                         }); });
+                    }).then(function (catalogResponse) {
+                        // not all metrics in the metric catalog are working right now, so it is hard coded and manually set. Might be needless in the future
+                        var hardCodedResponse = [
+                            { key: "calls", label: "Call count", aggregations: ["SUM"] },
+                            { key: "latency", label: "Call latency", aggregations: ["MAX", "MEAN", "MIN", "P25", "P50", "P75", "P90", "P95", "P98", "P99"] },
+                            { key: "errors", label: "Error rate", aggregations: ["MEAN"] },
+                            { key: "services", label: "Service Count", aggregations: ["DISTINCT_COUNT"] },
+                        ];
+                        return hardCodedResponse;
                     });
                     this.simpleCache.put('applicationCatalog', applicationCatalog);
                     return applicationCatalog;
