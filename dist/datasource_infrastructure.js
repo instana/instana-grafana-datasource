@@ -91,7 +91,7 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(function (contextsResponse) {
                         return _this.$q.all(contextsResponse.data.map(function (_a) {
                             var snapshotId = _a.snapshotId, host = _a.host, plugin = _a.plugin;
-                            var fetchSnapshotUrl = "/api/snapshots/" + snapshotId + "?time=" + timeFilter.to;
+                            var fetchSnapshotUrl = "/api/snapshots/" + snapshotId + "?time=" + timeFilter.from;
                             return _this.doRequest(fetchSnapshotUrl, true).then(function (snapshotResponse) {
                                 // check for undefined because the fetchSnapshotContexts is buggy
                                 if (snapshotResponse !== undefined) {

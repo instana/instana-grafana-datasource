@@ -93,7 +93,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(contextsResponse => {
       return this.$q.all(
         contextsResponse.data.map(({snapshotId, host, plugin}) => {
-          const fetchSnapshotUrl = `/api/snapshots/${snapshotId}?time=${timeFilter.to}`;
+          const fetchSnapshotUrl = `/api/snapshots/${snapshotId}?time=${timeFilter.from}`;
 
           return this.doRequest(fetchSnapshotUrl, true).then(snapshotResponse => {
             // check for undefined because the fetchSnapshotContexts is buggy
