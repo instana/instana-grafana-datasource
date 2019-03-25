@@ -69,6 +69,7 @@ The actual screenshots are from "Quick Check" example below.
 This procedure is used to test the Instana Grafana data source before the version update PR is accepted by Grafana. That is, directory names as `instana-datasource` are valid in a Grafana workspace with this plugin installed, not in this repository. To run this scenario directly in this repository, simply omit `cd instana-datasource` and replace `docker-compose up mountebank` by `docker-compose up`.
 
 * `cd instana-datasource`
+* the grafana server needs to run at `http://localhost:3000` for the the Instana datasource
 * `docker-compose up mountebank`
 * Create a datasource for Instana in Grafana
     * URL (Grafana 5.3+): `http://mountebank:8010`
@@ -95,11 +96,21 @@ This should render a chart with two datasets (`node (on host "host-1")` and `nod
 
 This should render a chart with one dataset (`host-3 (29042)`).
 
+#### Application metrics
+* Category: `Application metrics`
+* Application: `AWS instances`
+* Group by: `endpoint.name`
+* Metric: `Call latency (latency)`
+* Legend format: ``
+
+This should render a chart with one dataset (`GET (AWS instances) latency.mean`).
+
 #### Website metrics
 * Category: `Website metrics`
 * Website: `www.instana.com`
 * Type: `Page Loads`
 * Group by: `beacon.page.name`
 * Metric: `Beacon Count (beaconCount)`
+* Legend format: ``
 
 This should render a chart with one dataset (`home (www.instana.com) beaconCount.sum.300`).

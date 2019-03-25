@@ -13,7 +13,7 @@
         ng-change="ctrl.onMetricCategorySelect()">
         <option value="0" selected>Infrastructure built-in metrics</option>
         <option value="1">Infrastructure custom metrics</option>
-        <!-- <option value="2">Application metrics</option>-->
+        <option value="2">Application metrics</option>
         <option value="3">Website metrics</option>
       </select>
     </div>
@@ -35,14 +35,19 @@
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '2'">
-
+		<div ng-include src="'application.html'"/>
+    <div ng-include src="'group.html'"/>
+    <div ng-include src="'metric.html'"/>
+    <div ng-include src="'websiteLegend.html'"/>
+    <div ng-include src="'filters.html'"/>
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '3'">
 		<div ng-include src="'website.html'"/>
     <div ng-include src="'beacontype.html'"/>
-    <div ng-include src="'group.html'"/>
+    <div ng-include src="'websiteGroup.html'"/>
     <div ng-include src="'metric.html'"/>
+    <div ng-include src="'applicationLegend.html'"/>
     <div ng-include src="'filters.html'"/>
   </div>
 
@@ -150,6 +155,7 @@
             <li>$type - entity type</li>
             <li>$service - service label</li>
             <li>$name - label alternative</li>
+            <li>$index - index in the list</li>
           </ul>
         </info-popover>
       </label>
@@ -157,8 +163,61 @@
              class="gf-form-input width-22"
              type="text"
              ng-model="ctrl.target.labelFormat"
-             ng-model-options='{ debounce: 500 }'
+             ng-model-options='{ debounce: 300 }'
              placeholder="$label (on host $host)"
+             ng-change="ctrl.onChange()"
+             spellcheck='false'/>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="websiteLegend.html">
+    <div class="gf-form">
+      <label class="gf-form-label width-13 pointer">
+        Legend format
+        <info-popover position="top center" mode="right-normal">
+          Default: "$label ($metric) - $key"
+          <ul>
+            <li>$label - entity label</li>
+            <li>$website - website label</li>
+            <li>$type - entity type</li>
+            <li>$metric - displayed metric</li>
+            <li>$key - metric with aggregation and rollup</li>
+            <li>$index - index in the list</li>
+          </ul>
+        </info-popover>
+      </label>
+      <input id="in-legend-{{ctrl.target.refId}}"
+             class="gf-form-input width-22"
+             type="text"
+             ng-model="ctrl.target.labelFormat"
+             ng-model-options='{ debounce: 300 }'
+             placeholder="$label ($metric) - $key"
+             ng-change="ctrl.onChange()"
+             spellcheck='false'/>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="applicationLegend.html">
+    <div class="gf-form">
+      <label class="gf-form-label width-13 pointer">
+        Legend format
+        <info-popover position="top center" mode="right-normal">
+          Default: $label ($metric) - $key
+          <ul>
+            <li>$label - entity label</li>
+            <li>$website - website label</li>
+            <li>$metric - displayed metric</li>
+            <li>$key - metric with aggregation and rollup</li>
+            <li>$index - index in the list</li>
+          </ul>
+        </info-popover>
+      </label>
+      <input id="in-legend-{{ctrl.target.refId}}"
+             class="gf-form-input width-22"
+             type="text"
+             ng-model="ctrl.target.labelFormat"
+             ng-model-options='{ debounce: 300 }'
+             placeholder="$label ($metric) - $key"
              ng-change="ctrl.onChange()"
              spellcheck='false'/>
     </div>
@@ -183,6 +242,25 @@
     </div>
   </script>
 
+ <script type="text/ng-template" id="application.html">
+    <div class="gf-form">
+      <label class="gf-form-label width-13 pointer" for="in-application-{{ctrl.target.refId}}">
+        Application
+        <info-popover position="top center" mode="right-normal">
+          <p>Select an application.</p>
+        </info-popover>
+      </label>
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+        <select id="in-application-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.entity"
+                ng-change="ctrl.onChange()"
+                ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
+        </select>
+      </div>
+    </div>
+  </script>
+
   <script type="text/ng-template" id="beacontype.html">
     <div class="gf-form">
       <label class="gf-form-label width-13 pointer" for="in-beacontype-{{ctrl.target.refId}}">
@@ -195,7 +273,7 @@
         <select id="in-beacontype-{{ctrl.target.refId}}"
           class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
           ng-model="ctrl.target.entityType"
-          ng-change="ctrl.onChange()"
+          ng-change="ctrl.onBeaconTypeSelect()"
           ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
         </select>
       </div>
@@ -220,6 +298,34 @@
         </div>
       </div>
   </script>
+
+  <script type="text/ng-template" id="websiteGroup.html">
+    <div class="gf-form">
+      <label class="gf-form-label width-13 pointer" for="in-group-{{ctrl.target.refId}}">
+        Group by
+        <info-popover position="top center" mode="right-normal">
+          <p>Group by tag</p>
+        </info-popover>
+      </label>
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+        <select id="in-group-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.group"
+                ng-change="ctrl.onWebsiteGroupChange()"
+                ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
+        </select>
+      </div>
+      <input id="group-by-seconde-level-{{ctrl.target.refId}}"
+             ng-hide="!ctrl.target.showWebsiteGroupBySecondeLevel"
+             class="gf-form-input width-22"
+             type="text"
+             ng-model='ctrl.target.groupbyTagSecondLevelKey'
+             ng-model-options='{ debounce: 300 }'
+             ng-change="ctrl.onChange()"
+             placeholder="Please Specify"
+             spellcheck='false'/>
+    </div>
+</script>
 
   <script type="text/ng-template" id="filters.html">
     <div ng-repeat="filter in ctrl.target.filters">
@@ -277,7 +383,7 @@
         </select>
         <button class="btn btn-inverse" ng-click="ctrl.removeFilter($index)">
 			    <i class="fa fa-minus"></i>
-		    </button>
+        </button>
       </div>
     </div>
     <div class="gf-form">
@@ -289,7 +395,15 @@
       </label>
       <button class="btn btn-inverse" ng-click="ctrl.addFilter()">
 		    <i class="fa fa-plus"></i>
-	    </button>
+      </button>
+      <label class="gf-form-label width-13 pointer"
+             for="in-website-{{ctrl.target.refId}}"
+             ng-hide="!ctrl.target.showWarningCantShowAllResults">
+          ⚠️ Can't show all results
+        <info-popover position="top center" mode="right-normal">
+          <p>Add Filter to narrow down the data</p>
+        </info-popover>
+      </label>
     </div>
   </script>
 

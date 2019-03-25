@@ -1,18 +1,18 @@
-System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'], function(exports_1) {
+System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var datasource_abstract_1, rollups_1, cache_1, lodash_1;
+    var rollups_1, datasource_abstract_1, cache_1, lodash_1;
     var InstanaInfrastructureDataSource;
     return {
         setters:[
-            function (datasource_abstract_1_1) {
-                datasource_abstract_1 = datasource_abstract_1_1;
-            },
             function (rollups_1_1) {
                 rollups_1 = rollups_1_1;
+            },
+            function (datasource_abstract_1_1) {
+                datasource_abstract_1 = datasource_abstract_1_1;
             },
             function (cache_1_1) {
                 cache_1 = cache_1_1;
@@ -27,8 +27,7 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                 function InstanaInfrastructureDataSource(instanceSettings, backendSrv, templateSrv, $q) {
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
                     this.rollupDurationThresholds = rollups_1.default;
-                    this.MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
-                    this.CUSTOM_METRICS = '1';
+                    this.maximumNumberOfUsefulDataPoints = 800;
                     this.snapshotCache = new cache_1.default();
                     this.catalogCache = new cache_1.default();
                 }
@@ -92,14 +91,26 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(function (contextsResponse) {
                         return _this.$q.all(contextsResponse.data.map(function (_a) {
                             var snapshotId = _a.snapshotId, host = _a.host, plugin = _a.plugin;
-                            var fetchSnapshotUrl = "/api/snapshots/" + snapshotId + "?time=" + timeFilter.to;
-                            return _this.doRequest(fetchSnapshotUrl).then(function (snapshotResponse) {
-                                return {
-                                    snapshotId: snapshotId, host: host,
-                                    'response': _this.reduceSnapshot(snapshotResponse)
-                                };
+                            var fetchSnapshotUrl = "/api/snapshots/" + snapshotId + "?time=" + timeFilter.from;
+                            return _this.doRequest(fetchSnapshotUrl, true).then(function (snapshotResponse) {
+                                // check for undefined because the fetchSnapshotContexts is buggy
+                                if (snapshotResponse !== undefined) {
+                                    return {
+                                        snapshotId: snapshotId, host: host,
+                                        'response': _this.reduceSnapshot(snapshotResponse)
+                                    };
+                                }
                             });
                         }));
+                    }).then(function (response) {
+                        // this has to be done, because the fetchSnapshotContexts is buggy in the backend, maybe can be removed in the future
+                        var newResponse = [];
+                        for (var i in response) {
+                            if (response[i] !== undefined) {
+                                newResponse.push(response[i]);
+                            }
+                        }
+                        return newResponse;
                     });
                     this.snapshotCache.put(key, snapshots);
                     return snapshots;
@@ -110,12 +121,18 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                     return snapshotResponse;
                 };
                 InstanaInfrastructureDataSource.prototype.buildQuery = function (target) {
-                    return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType.key);
+                    // check for entity.pluginId or entity.selfType, because otherwise the backend has a problem with `AND entity.pluginId`
+                    if (("" + target.entityQuery).includes("entity.pluginId:") || ("" + target.entityQuery).includes("entity.selfType:")) {
+                        return encodeURIComponent("" + target.entityQuery);
+                    }
+                    else {
+                        return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType.key);
+                    }
                 };
                 InstanaInfrastructureDataSource.prototype.buildSnapshotCacheKey = function (query, timeFilter) {
                     return query + this.SEPARATOR + this.getTimeKey(timeFilter);
                 };
-                InstanaInfrastructureDataSource.prototype.buildLabel = function (snapshotResponse, host, target) {
+                InstanaInfrastructureDataSource.prototype.buildLabel = function (snapshotResponse, host, target, index) {
                     if (target.labelFormat) {
                         var label = target.labelFormat;
                         label = lodash_1.default.replace(label, '$label', snapshotResponse.data.label);
@@ -127,6 +144,7 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                         label = lodash_1.default.replace(label, '$name', lodash_1.default.get(snapshotResponse.data, ['data', 'name'], ''));
                         label = lodash_1.default.replace(label, '$service', lodash_1.default.get(snapshotResponse.data, ['data', 'service_name'], ''));
                         label = lodash_1.default.replace(label, '$metric', lodash_1.default.get(target, ['metric', 'key'], 'n/a'));
+                        label = lodash_1.default.replace(label, '$index', index + 1);
                         return label;
                     }
                     return snapshotResponse.data.label + this.getHostSuffix(host);
@@ -139,12 +157,12 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                 };
                 InstanaInfrastructureDataSource.prototype.fetchMetricsForSnapshots = function (target, snapshots, timeFilter) {
                     var _this = this;
-                    return this.$q.all(lodash_1.default.map(snapshots, function (snapshot) {
+                    return this.$q.all(lodash_1.default.map(snapshots, function (snapshot, index) {
                         // ...fetch the metric data for every snapshot in the results.
                         return _this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter).then(function (response) {
                             var timeseries = _this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
                             var result = {
-                                'target': _this.buildLabel(snapshot.response, snapshot.host, target),
+                                'target': _this.buildLabel(snapshot.response, snapshot.host, target, index),
                                 'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; })
                             };
                             return result;
@@ -186,7 +204,7 @@ System.register(['./datasource_abstract', './lists/rollups', './cache', 'lodash'
                         // the first rollup matching the requirements is returned
                         var rollupDefinition = availableRollupDefinitions[i];
                         var rollup = rollupDefinition && rollupDefinition.rollup ? rollupDefinition.rollup : 1000;
-                        if (windowSize / rollup <= this.MAX_NUMBER_OF_METRICS_FOR_CHARTS) {
+                        if (windowSize / rollup <= this.maximumNumberOfUsefulDataPoints) {
                             return rollupDefinition;
                         }
                     }

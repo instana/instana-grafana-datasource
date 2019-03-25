@@ -66,7 +66,9 @@
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
       },
-      "body": "[{ \"metricId\": \"beaconCount\", \"label\": \"Beacon count\", \"formatter\": \"NUMBER\", \"description\": \"How many beacons matching a filter were recorded.\", \"aggregations\": [ \"SUM\" ] }, { \"metricId\": \"beaconDuration\", \"label\": \"Beacon duration\", \"formatter\": \"NUMBER\", \"description\": \"The recorded duration for a beacon.\", \"aggregations\": [ \"P99\", \"MEAN\", \"P25\", \"MIN\", \"MAX\", \"P90\", \"P50\", \"P95\", \"P98\", \"P75\" ] }, { \"metricId\": \"pageLoads\", \"label\": \"Page loads\", \"formatter\": \"NUMBER\", \"description\": \"How often a full page load occurred.\", \"aggregations\": [ \"SUM\" ] }]"
+      "body": "[{ \"metricId\": \"beaconCount\", \"label\": \"Beacon count\", \"formatter\": \"NUMBER\", \"description\": \"How many beacons matching a filter were recorded.\", \"aggregations\": [ \"SUM\" ], \"beaconTypes\":[\"pageLoad\",\"resourceLoad\"]  }, { \"metricId\": \"beaconDuration\", \"label\": \"Beacon duration\", \"formatter\": \"NUMBER\", \"description\": \"The recorded duration for a beacon.\", \"aggregations\": [ \"P99\", \"MEAN\", \"P25\", \"MIN\", \"MAX\", \"P90\", \"P50\", \"P95\", \"P98\", \"P75\" ], \"beaconTypes\":[\"pageLoad\",\"resourceLoad\"]  }, { \"metricId\": \"pageLoads\", \"label\": \"Page loads\", \"formatter\": \"NUMBER\", \"description\": \"How often a full page load occurred.\", \"aggregations\": [ \"SUM\" ], \"beaconTypes\":[\"pageLoad\"] }]"
     }
   }]
 },
+
+

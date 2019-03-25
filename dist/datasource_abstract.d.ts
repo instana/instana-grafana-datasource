@@ -13,13 +13,17 @@ export default class AbstractDatasource {
     simpleCache: Cache<Array<Selectable>>;
     CACHE_MAX_AGE: number;
     SEPARATOR: string;
+    BUILT_IN_METRICS: string;
+    CUSTOM_METRICS: string;
+    APPLICATION_METRICS: string;
+    WEBSITE_METRICS: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     currentTime: () => number;
     getWindowSize(timeFilter: TimeFilter): number;
     getTimeKey(timeFilter: TimeFilter): string;
     private msToMin(time);
-    doRequest(url: string, maxRetries?: number): any;
-    postRequest(url: string, data: Object, maxRetries?: number): any;
-    private execute(request, maxRetries);
+    doRequest(url: string, swallowError?: boolean, maxRetries?: number): any;
+    postRequest(url: string, data: Object, swallowError?: boolean, maxRetries?: number): any;
+    private execute(request, swallowError, maxRetries);
 }

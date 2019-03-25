@@ -1,5 +1,5 @@
-import AbstractDatasource from './datasource_abstract';
 import BeaconGroupBody from './types/beacon_group_body';
+import AbstractDatasource from './datasource_abstract';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import TagFilter from './types/tag_filter';
@@ -48,13 +48,14 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     const windowSize = this.getWindowSize(timeFilter);
     const data: BeaconGroupBody = {
       group: {
-        groupbyTag: 'beacon.website.name'
+        groupbyTag: 'beacon.website.name',
+        groupbyTagSecondLevelKey: ""
       },
       timeFrame: {
         to: timeFilter.to,
         windowSize: windowSize
       },
-      type: 'pageLoad',
+      type: 'PAGELOAD',
       metrics: [{
         metric: 'pageLoads',
         aggregation: 'SUM'
@@ -102,7 +103,8 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       catalogResponse.data.map(entry => ({
         'key' : entry.metricId,
         'label' : entry.label,
-        'aggregations' : entry.aggregations ? entry.aggregations.sort() : []
+        'aggregations' : entry.aggregations ? entry.aggregations.sort() : [],
+        'beaconTypes' : entry.beaconTypes
       }))
     );
     this.simpleCache.put('websiteCatalog', websiteCatalog);
@@ -110,7 +112,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return websiteCatalog;
   }
 
-  fetchMetricsForEntity(target, timeFilter: TimeFilter) {
+  fetchMetricsForWebsite(target, timeFilter: TimeFilter) {
     // avoid invalid calls
     if (!target || !target.metric || !target.group || !target.entity) {
       return this.$q.resolve({ data: { items: [] } });
@@ -136,9 +138,15 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       metric['granularity'] = this.getChartGranularity(windowSize);
     }
 
+    let groupbyTagSecondLevelKey = "";
+    if (target.group.key === "beacon.meta"){
+      groupbyTagSecondLevelKey = target.groupbyTagSecondLevelKey;
+    }
+
     const data: BeaconGroupBody = {
       group: {
-        groupbyTag: target.group.key
+        groupbyTag: target.group.key,
+        groupbyTagSecondLevelKey
       },
       timeFrame: {
         to: timeFilter.to,
@@ -172,5 +180,31 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     }
 
     return tagFilter;
+  }
+
+  readItemMetrics(target, response) {
+    // as we map two times we need to flatten the result
+    return _.flatten(response.data.items.map((item, index) => {
+      return _.map(item.metrics, (value, key) => {
+        return {
+          'target': this.buildLabel(target, item, key, index),
+          'datapoints': _.map(value, metric => [metric[1], metric[0]])
+        };
+      });
+    }));
+  }
+
+  buildLabel(target, item, key, index): string {
+    if (target.labelFormat) {
+      let label = target.labelFormat;
+      label = _.replace(label, '$label', item.name);
+      label = _.replace(label, '$website', target.entity.label);
+      label = _.replace(label, '$type', target.entityType.label);
+      label = _.replace(label, '$metric', target.metric.label);
+      label = _.replace(label, '$key', key);
+      label = _.replace(label, '$index', index + 1);
+      return label;
+    }
+    return item.name + ' (' + target.entity.label + ')' + ' - ' + key;
   }
 }

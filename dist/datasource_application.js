@@ -5,7 +5,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
     var datasource_abstract_1, cache_1, lodash_1;
-    var InstanaWebsiteDataSource;
+    var InstanaApplicationDataSource;
     return {
         setters:[
             function (datasource_abstract_1_1) {
@@ -18,10 +18,10 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                 lodash_1 = lodash_1_1;
             }],
         execute: function() {
-            InstanaWebsiteDataSource = (function (_super) {
-                __extends(InstanaWebsiteDataSource, _super);
+            InstanaApplicationDataSource = (function (_super) {
+                __extends(InstanaApplicationDataSource, _super);
                 /** @ngInject */
-                function InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q) {
+                function InstanaApplicationDataSource(instanceSettings, backendSrv, templateSrv, $q) {
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
                     // our ui is limited to 80 results, same logic to stay comparable
                     this.maximumNumberOfUsefulDataPoints = 80;
@@ -41,85 +41,95 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     ];
                     this.OPERATOR_NUMBER = 'NUMBER';
                     this.OPERATOR_BOOLEAN = 'BOOLEAN';
-                    this.websitesCache = new cache_1.default();
+                    this.applicationsCache = new cache_1.default();
                 }
-                InstanaWebsiteDataSource.prototype.getWebsites = function (timeFilter) {
+                InstanaApplicationDataSource.prototype.getApplications = function (timeFilter) {
                     var key = this.getTimeKey(timeFilter);
-                    var websites = this.websitesCache.get(key);
-                    if (websites) {
-                        return websites;
+                    var applications = this.applicationsCache.get(key);
+                    if (applications) {
+                        return applications;
                     }
                     var windowSize = this.getWindowSize(timeFilter);
                     var data = {
                         group: {
-                            groupbyTag: 'beacon.website.name',
-                            groupbyTagSecondLevelKey: ""
+                            groupbyTag: 'application.name'
                         },
                         timeFrame: {
                             to: timeFilter.to,
                             windowSize: windowSize
                         },
-                        type: 'PAGELOAD',
                         metrics: [{
-                                metric: 'pageLoads',
+                                metric: 'calls',
                                 aggregation: 'SUM'
                             }],
                         order: {
-                            by: 'pageLoads',
-                            direction: 'desc'
+                            by: 'calls',
+                            direction: "desc"
                         }
                     };
-                    websites = this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(function (websitesResponse) {
-                        return websitesResponse.data.items.map(function (entry) { return ({
+                    applications = this.postRequest('/api/application-monitoring/analyze/call-groups', data).then(function (applicationsResponse) {
+                        return applicationsResponse.data.items.map(function (entry) { return ({
                             'key': entry.name,
                             'label': entry.name
                         }); });
                     });
-                    this.websitesCache.put(key, websites);
-                    return websites;
+                    this.applicationsCache.put(key, applications);
+                    return applications;
                 };
-                InstanaWebsiteDataSource.prototype.getWebsiteTags = function () {
-                    var websiteTags = this.simpleCache.get('websiteTags');
-                    if (websiteTags) {
-                        return websiteTags;
+                InstanaApplicationDataSource.prototype.getApplicastionTags = function () {
+                    var applicationTags = this.simpleCache.get('applicationTags');
+                    if (applicationTags) {
+                        return applicationTags;
                     }
-                    websiteTags = this.doRequest('/api/website-monitoring/catalog/tags').then(function (tagsResponse) {
+                    applicationTags = this.doRequest('/api/application-monitoring/catalog/tags').then(function (tagsResponse) {
                         return tagsResponse.data.map(function (entry) { return ({
                             'key': entry.name,
                             'type': entry.type
                         }); });
                     });
-                    this.simpleCache.put('websiteTags', websiteTags);
-                    return websiteTags;
+                    this.simpleCache.put('applicationTags', applicationTags);
+                    return applicationTags;
                 };
-                InstanaWebsiteDataSource.prototype.getWebsiteMetricsCatalog = function () {
-                    var websiteCatalog = this.simpleCache.get('websiteCatalog');
-                    if (websiteCatalog) {
-                        return websiteCatalog;
+                InstanaApplicationDataSource.prototype.getApplicationMetricsCatalog = function () {
+                    var applicationCatalog = this.simpleCache.get('applicationCatalog');
+                    if (applicationCatalog) {
+                        return applicationCatalog;
                     }
-                    websiteCatalog = this.doRequest('/api/website-monitoring/catalog/metrics').then(function (catalogResponse) {
+                    applicationCatalog = this.doRequest('/api/application-monitoring/catalog/metrics').then(function (catalogResponse) {
                         return catalogResponse.data.map(function (entry) { return ({
                             'key': entry.metricId,
                             'label': entry.label,
-                            'aggregations': entry.aggregations ? entry.aggregations.sort() : [],
-                            'beaconTypes': entry.beaconTypes
+                            'aggregations': entry.aggregations ? entry.aggregations.sort() : []
                         }); });
+                    }).then(function (catalogResponse) {
+                        // not all metrics in the metric catalog are working right now, so it is hard coded and manually set. Might be needless in the future
+                        var hardCodedResponse = [
+                            { key: "calls", label: "Call count", aggregations: ["SUM"] },
+                            { key: "latency", label: "Call latency", aggregations: ["MAX", "MEAN", "MIN", "P25", "P50", "P75", "P90", "P95", "P98", "P99"] },
+                            { key: "errors", label: "Error rate", aggregations: ["MEAN"] },
+                            { key: "services", label: "Service Count", aggregations: ["DISTINCT_COUNT"] },
+                        ];
+                        return hardCodedResponse;
                     });
-                    this.simpleCache.put('websiteCatalog', websiteCatalog);
-                    return websiteCatalog;
+                    this.simpleCache.put('applicationCatalog', applicationCatalog);
+                    return applicationCatalog;
                 };
-                InstanaWebsiteDataSource.prototype.fetchMetricsForWebsite = function (target, timeFilter) {
+                InstanaApplicationDataSource.prototype.fetchMetricsForApplication = function (target, timeFilter) {
                     var _this = this;
                     // avoid invalid calls
                     if (!target || !target.metric || !target.group || !target.entity) {
                         return this.$q.resolve({ data: { items: [] } });
                     }
+                    // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
                     var windowSize = this.getWindowSize(timeFilter);
-                    var tagFilters = [{
-                            name: 'beacon.website.name',
+                    var tagFilters = [];
+                    if (target.entity.key) {
+                        tagFilters.push({
+                            name: 'application.name',
                             operator: 'EQUALS',
                             value: target.entity.key
-                        }];
+                        });
+                    }
                     lodash_1.default.forEach(target.filters, function (filter) {
                         if (filter.isValid) {
                             tagFilters.push(_this.createTagFilter(filter));
@@ -132,31 +142,25 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     if (target.pluginId !== "singlestat") {
                         metric['granularity'] = this.getChartGranularity(windowSize);
                     }
-                    var groupbyTagSecondLevelKey = "";
-                    if (target.group.key === "beacon.meta") {
-                        groupbyTagSecondLevelKey = target.groupbyTagSecondLevelKey;
-                    }
                     var data = {
                         group: {
-                            groupbyTag: target.group.key,
-                            groupbyTagSecondLevelKey: groupbyTagSecondLevelKey
+                            groupbyTag: target.group.key
                         },
                         timeFrame: {
                             to: timeFilter.to,
                             windowSize: windowSize
                         },
                         tagFilters: tagFilters,
-                        type: target.entityType.key,
                         metrics: [metric]
                     };
-                    return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
+                    return this.postRequest('/api/application-monitoring/analyze/call-groups', data);
                 };
-                InstanaWebsiteDataSource.prototype.getChartGranularity = function (windowSize) {
+                InstanaApplicationDataSource.prototype.getChartGranularity = function (windowSize) {
                     var _this = this;
                     var granularity = this.sensibleGranularities.find(function (granularity) { return windowSize / 1000 / granularity <= _this.maximumNumberOfUsefulDataPoints; });
                     return granularity || this.sensibleGranularities[this.sensibleGranularities.length - 1];
                 };
-                InstanaWebsiteDataSource.prototype.createTagFilter = function (filter) {
+                InstanaApplicationDataSource.prototype.createTagFilter = function (filter) {
                     var tagFilter = {
                         name: filter.tag.key,
                         operator: filter.operator.key,
@@ -170,7 +174,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     }
                     return tagFilter;
                 };
-                InstanaWebsiteDataSource.prototype.readItemMetrics = function (target, response) {
+                InstanaApplicationDataSource.prototype.readItemMetrics = function (target, response) {
                     var _this = this;
                     // as we map two times we need to flatten the result
                     return lodash_1.default.flatten(response.data.items.map(function (item, index) {
@@ -182,12 +186,11 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                         });
                     }));
                 };
-                InstanaWebsiteDataSource.prototype.buildLabel = function (target, item, key, index) {
+                InstanaApplicationDataSource.prototype.buildLabel = function (target, item, key, index) {
                     if (target.labelFormat) {
                         var label = target.labelFormat;
                         label = lodash_1.default.replace(label, '$label', item.name);
                         label = lodash_1.default.replace(label, '$website', target.entity.label);
-                        label = lodash_1.default.replace(label, '$type', target.entityType.label);
                         label = lodash_1.default.replace(label, '$metric', target.metric.label);
                         label = lodash_1.default.replace(label, '$key', key);
                         label = lodash_1.default.replace(label, '$index', index + 1);
@@ -195,10 +198,10 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     }
                     return item.name + ' (' + target.entity.label + ')' + ' - ' + key;
                 };
-                return InstanaWebsiteDataSource;
+                return InstanaApplicationDataSource;
             })(datasource_abstract_1.default);
-            exports_1("default", InstanaWebsiteDataSource);
+            exports_1("default", InstanaApplicationDataSource);
         }
     }
 });
-//# sourceMappingURL=datasource_website.js.map
+//# sourceMappingURL=datasource_application.js.map

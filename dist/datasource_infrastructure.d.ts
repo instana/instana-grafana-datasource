@@ -8,8 +8,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     snapshotCache: Cache<Promise<Array<Selectable>>>;
     catalogCache: Cache<Promise<Array<Selectable>>>;
     lastFetchedFromAPI: boolean;
-    MAX_NUMBER_OF_METRICS_FOR_CHARTS: number;
-    CUSTOM_METRICS: string;
+    maximumNumberOfUsefulDataPoints: number;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     getEntityTypes(metricCategory: string): Selectable[];
@@ -19,7 +18,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     reduceSnapshot(snapshotResponse: any): any;
     buildQuery(target: any): string;
     buildSnapshotCacheKey(query: string, timeFilter: TimeFilter): string;
-    buildLabel(snapshotResponse: any, host: any, target: any): string;
+    buildLabel(snapshotResponse: any, host: any, target: any, index: any): string;
     getHostSuffix(host: string): string;
     fetchMetricsForSnapshots(target: any, snapshots: any, timeFilter: TimeFilter): any;
     readTimeSeries(values: any, aggregation: string, pluginId: string, timeFilter: TimeFilter): any;

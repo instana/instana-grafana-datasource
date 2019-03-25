@@ -1,6 +1,5 @@
 export interface Group {
     groupbyTag: string;
-    groupbyTagSecondLevelKey: string;
 }
 export interface TimeFrame {
     to: number;
@@ -20,12 +19,11 @@ export interface Order {
     by: string;
     direction: string;
 }
-export interface BeaconGroupBody {
+export interface CallGroupBody {
     group: Group;
     timeFrame: TimeFrame;
-    type: string;
     metrics: Array<Metric>;
     tagFilters?: Array<TagFilter>;
     order?: Order;
 }
-export default BeaconGroupBody;
+export default CallGroupBody;

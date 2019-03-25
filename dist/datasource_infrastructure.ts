@@ -1,5 +1,5 @@
-import AbstractDatasource from './datasource_abstract';
 import rollupDurationThresholds from './lists/rollups';
+import AbstractDatasource from './datasource_abstract';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import Rollup from './types/rollup';
@@ -14,8 +14,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   catalogCache: Cache<Promise<Array<Selectable>>>;
   lastFetchedFromAPI: boolean;
 
-  MAX_NUMBER_OF_METRICS_FOR_CHARTS = 800;
-  CUSTOM_METRICS = '1';
+  maximumNumberOfUsefulDataPoints = 800;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -94,16 +93,28 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(contextsResponse => {
       return this.$q.all(
         contextsResponse.data.map(({snapshotId, host, plugin}) => {
-          const fetchSnapshotUrl = `/api/snapshots/${snapshotId}?time=${timeFilter.to}`;
+          const fetchSnapshotUrl = `/api/snapshots/${snapshotId}?time=${timeFilter.from}`;
 
-          return this.doRequest(fetchSnapshotUrl).then(snapshotResponse => {
-            return {
-              snapshotId, host,
-              'response': this.reduceSnapshot(snapshotResponse)
-            };
+          return this.doRequest(fetchSnapshotUrl, true).then(snapshotResponse => {
+            // check for undefined because the fetchSnapshotContexts is buggy
+            if (snapshotResponse !== undefined){
+              return {
+                snapshotId, host,
+                'response': this.reduceSnapshot(snapshotResponse)
+              };
+            }
           });
         })
       );
+    }).then(response => {
+      // this has to be done, because the fetchSnapshotContexts is buggy in the backend, maybe can be removed in the future
+      let newResponse = [];
+      for (let i in response){
+        if (response[i] !== undefined){
+          newResponse.push(response[i]);
+        }
+      }
+      return newResponse;
     });
     this.snapshotCache.put(key, snapshots);
 
@@ -117,14 +128,19 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   }
 
   buildQuery(target): string {
-    return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType.key}`);
+    // check for entity.pluginId or entity.selfType, because otherwise the backend has a problem with `AND entity.pluginId`
+    if (`${target.entityQuery}`.includes("entity.pluginId:") || `${target.entityQuery}`.includes("entity.selfType:")){
+      return encodeURIComponent(`${target.entityQuery}`);
+    } else {
+      return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType.key}`);
+    }
   }
 
   buildSnapshotCacheKey(query: string, timeFilter: TimeFilter): string {
     return query + this.SEPARATOR + this.getTimeKey(timeFilter);
   }
 
-  buildLabel(snapshotResponse, host, target): string {
+  buildLabel(snapshotResponse, host, target, index): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', snapshotResponse.data.label);
@@ -136,6 +152,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       label = _.replace(label, '$name', _.get(snapshotResponse.data, ['data', 'name'], ''));
       label = _.replace(label, '$service', _.get(snapshotResponse.data, ['data', 'service_name'], ''));
       label = _.replace(label, '$metric', _.get(target, ['metric', 'key'], 'n/a'));
+      label = _.replace(label, '$index', index + 1);
       return label;
     }
     return snapshotResponse.data.label + this.getHostSuffix(host);
@@ -150,12 +167,12 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter) {
     return this.$q.all(
-      _.map(snapshots, snapshot => {
+      _.map(snapshots, (snapshot,index) => {
         // ...fetch the metric data for every snapshot in the results.
         return this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter).then(response => {
           const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
           var result = {
-            'target': this.buildLabel(snapshot.response, snapshot.host, target),
+            'target': this.buildLabel(snapshot.response, snapshot.host, target, index),
             'datapoints': _.map(timeseries, value => [value.value, value.timestamp])
           };
           return result;
@@ -208,7 +225,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       // the first rollup matching the requirements is returned
       const rollupDefinition = availableRollupDefinitions[i];
       const rollup = rollupDefinition && rollupDefinition.rollup ? rollupDefinition.rollup : 1000;
-      if (windowSize / rollup <= this.MAX_NUMBER_OF_METRICS_FOR_CHARTS) {
+      if (windowSize / rollup <= this.maximumNumberOfUsefulDataPoints) {
         return rollupDefinition;
       }
     }

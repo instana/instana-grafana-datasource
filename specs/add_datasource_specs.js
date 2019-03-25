@@ -26,18 +26,23 @@ describe('When adding the Instana datasource to Grafana', function() {
     await page.type('input[name=newPassword]', 'admin');
     await page.type('input[name=confirmNew]', 'admin');
     saveNewButton.click();
+    await page.waitFor(1000); // don't ask
     await page.waitForSelector('a.btn.progress-step-cta');
-    await page.click('.progress-link');
     await page.goto('http://localhost:3000/datasources/new?gettingstarted');
-    await page.waitForSelector('select[ng-model="ctrl.current.type"]');
-    await page.select('select[ng-model="ctrl.current.type"]', 'string:instana-datasource');
+
+    const installButton = await page.waitForXPath('//div//span[contains(text(),"Instana")]');
+    //console.log(installButton);
+    installButton.click();
+    await page.waitFor(1000); // don't ask
 
     // Generate random datasource name to allow for multiple runs without refreshing Grafana.
     let runId = randomString(6);
-    await page.type('input[ng-model="ctrl.current.name"]', 'puppeteer-test-' + runId);
+    // await page.type('input[ng-model="ctrl.current.name"]', instanaUiBackendUrl + "-" + runId);
     await page.type('input[ng-model="ctrl.current.jsonData.url"]', instanaUiBackendUrl);
     await page.type('input[ng-model="ctrl.current.jsonData.apiToken"]', instanaApiToken);
-    await page.click('.btn'); // TODO: better selector
+    const saveAndTestButton = await page.waitForXPath('//button[contains(text(),"Save & Test")]');
+    saveAndTestButton.click();
+    //console.log(saveAndTestButton);
 
     // waitForSelector doesn't work for some reason so we'll do with a sleep for now
     await page.waitFor(2500);
@@ -49,7 +54,7 @@ describe('When adding the Instana datasource to Grafana', function() {
       ];
     }, 'div.alert-title');
 
-    expect(alerts[0]).to.be.equal('Datasource added');
+    expect(alerts[0]).to.be.equal('Datasource updated');
     expect(alerts[1]).to.be.equal('Successfully connected to the Instana API.');
 
     await browser.close();

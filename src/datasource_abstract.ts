@@ -17,6 +17,11 @@ export default class AbstractDatasource {
   CACHE_MAX_AGE = 60000;
   SEPARATOR = '|';
 
+  BUILT_IN_METRICS = '0';
+  CUSTOM_METRICS = '1';
+  APPLICATION_METRICS = '2';
+  WEBSITE_METRICS = '3';
+
   /** @ngInject */
   constructor(instanceSettings, public backendSrv, public templateSrv, public $q) {
     this.name = instanceSettings.name;
@@ -27,7 +32,8 @@ export default class AbstractDatasource {
     // grafana 5.3+ wanted to resolve dynamic routes in proxy mode
     const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
     const versions = _.split(version, '.', 2);
-    if (versions[0] >= 5 && versions[1] >= 3) {
+
+    if (version[0] >= 6 || (versions[0] >= 5 && versions[1] >= 3)) {
       this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
     } else {
       this.url = instanceSettings.jsonData.url;
@@ -52,33 +58,39 @@ export default class AbstractDatasource {
     return Math.round(time / 60000);
   }
 
-  doRequest(url: string, maxRetries = 1) {
+  doRequest(url: string, swallowError = false, maxRetries = 1) {
     const request = {
       method: 'GET',
       url: this.url + url
     };
-    return this.execute(request, maxRetries);
+    return this.execute(request, swallowError, maxRetries);
   }
 
-  postRequest(url: string, data: Object, maxRetries = 0) {
+  postRequest(url: string, data: Object, swallowError = false, maxRetries = 0) {
     const request = {
       method: 'POST',
       url: this.url + url,
       data: data
     };
-    return this.execute(request, maxRetries);
+    return this.execute(request, swallowError, maxRetries);
   }
 
-  private execute(request, maxRetries) {
+  private execute(request, swallowError, maxRetries) {
     if (this.apiToken) {
-      request['headers'] = { Authorization: 'apiToken ' + this.apiToken };
+      request['headers'] = {
+        "Authorization": 'apiToken ' + this.apiToken
+      };
     }
 
     return this.backendSrv
       .datasourceRequest(request)
       .catch(error => {
+        if (swallowError && (error.status >= 400 || error.status < 500)){
+          console.log(error);
+          return;
+        }
         if (maxRetries > 0) {
-          return this.execute(request, maxRetries - 1);
+          return this.execute(request, swallowError, maxRetries - 1);
         }
         throw error;
       });

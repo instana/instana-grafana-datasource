@@ -1,4 +1,5 @@
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
+import InstanaApplicationDataSource from './datasource_application';
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
 import rollupDurationThresholds from './lists/rollups';
@@ -9,16 +10,15 @@ import _ from 'lodash';
 
 export default class InstanaDatasource extends AbstractDatasource {
   infrastructure: InstanaInfrastructureDataSource;
+  application: InstanaApplicationDataSource;
   website: InstanaWebsiteDataSource;
-
-  CUSTOM_METRICS = '1';
-  WEBSITE_METRICS = '3';
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
 
     this.infrastructure = new InstanaInfrastructureDataSource(instanceSettings, backendSrv, templateSrv, $q);
+    this.application = new InstanaApplicationDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);
   }
 
@@ -37,6 +37,8 @@ export default class InstanaDatasource extends AbstractDatasource {
 
         if (target.metricCategory === this.WEBSITE_METRICS) {
           return this.getWebsiteMetrics(target, timeFilter);
+        } else if (target.metricCategory === this.APPLICATION_METRICS) {
+          return this.getApplicationMetrics(target, timeFilter);
         } else {
           return this.getInfrastructureMetrics(target, timeFilter);
         }
@@ -70,16 +72,15 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   getWebsiteMetrics(target, timeFilter: TimeFilter) {
-    return this.website.fetchMetricsForEntity(target, timeFilter).then(response => {
-      // as we map two times we need to flatten the result
-      return _.flatten(response.data.items.map(item => {
-        return _.map(item.metrics, function(value, key) {
-          return {
-            'target': item.name + ' (' + target.entity.key + ') - ' + key,
-            'datapoints': _.map(value, metric => [metric[1], metric[0]])
-          };
-        });
-      }));
+    return this.website.fetchMetricsForWebsite(target, timeFilter).then(response => {
+      return this.website.readItemMetrics(target, response);
+    });
+  }
+
+  getApplicationMetrics(target, timeFilter) {
+    return this.application.fetchMetricsForApplication(target, timeFilter).then(response => {
+      target.showWarningCantShowAllResults = response.data.canLoadMore;
+      return this.application.readItemMetrics(target, response);
     });
   }
 

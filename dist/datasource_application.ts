@@ -1,5 +1,5 @@
-import BeaconGroupBody from './types/beacon_group_body';
 import AbstractDatasource from './datasource_abstract';
+import CallGroupBody from './types/call_group_body';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import TagFilter from './types/tag_filter';
@@ -7,8 +7,8 @@ import Cache from './cache';
 
 import _ from 'lodash';
 
-export default class InstanaWebsiteDataSource extends AbstractDatasource {
-  websitesCache: Cache<Promise<Array<Selectable>>>;
+export default class InstanaApplicationDataSource extends AbstractDatasource {
+  applicationsCache: Cache<Promise<Array<Selectable>>>;
 
   // our ui is limited to 80 results, same logic to stay comparable
   maximumNumberOfUsefulDataPoints = 80;
@@ -34,97 +34,109 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
 
-    this.websitesCache = new Cache<Promise<Array<Selectable>>>();
+    this.applicationsCache = new Cache<Promise<Array<Selectable>>>();
   }
 
-  getWebsites(timeFilter: TimeFilter) {
+  getApplications(timeFilter: TimeFilter) {
     const key = this.getTimeKey(timeFilter);
 
-    let websites = this.websitesCache.get(key);
-    if (websites) {
-      return websites;
+    let applications = this.applicationsCache.get(key);
+    if (applications) {
+      return applications;
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-    const data: BeaconGroupBody = {
+    const data: CallGroupBody = {
       group: {
-        groupbyTag: 'beacon.website.name',
-        groupbyTagSecondLevelKey: ""
+        groupbyTag: 'application.name'
       },
       timeFrame: {
         to: timeFilter.to,
         windowSize: windowSize
       },
-      type: 'PAGELOAD',
       metrics: [{
-        metric: 'pageLoads',
+        metric: 'calls',
         aggregation: 'SUM'
       }],
       order: {
-        by: 'pageLoads',
-        direction: 'desc'
+        by: 'calls',
+        direction: "desc"
       }
     };
-    websites = this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
-      websitesResponse.data.items.map(entry => ({
+    applications = this.postRequest('/api/application-monitoring/analyze/call-groups', data).then(applicationsResponse =>
+      applicationsResponse.data.items.map(entry => ({
         'key' : entry.name,
         'label' : entry.name
       }))
     );
-    this.websitesCache.put(key, websites);
+    this.applicationsCache.put(key, applications);
 
-    return websites;
+    return applications;
   }
 
-  getWebsiteTags() {
-    let websiteTags = this.simpleCache.get('websiteTags');
-    if (websiteTags) {
-      return websiteTags;
+  getApplicastionTags() {
+    let applicationTags = this.simpleCache.get('applicationTags');
+    if (applicationTags) {
+      return applicationTags;
     }
 
-    websiteTags = this.doRequest('/api/website-monitoring/catalog/tags').then(tagsResponse =>
+    applicationTags = this.doRequest('/api/application-monitoring/catalog/tags').then(tagsResponse =>
       tagsResponse.data.map(entry => ({
         'key' : entry.name,
         'type' : entry.type
       }))
     );
-    this.simpleCache.put('websiteTags', websiteTags);
+    this.simpleCache.put('applicationTags', applicationTags);
 
-    return websiteTags;
+    return applicationTags;
   }
 
-  getWebsiteMetricsCatalog() {
-    let websiteCatalog = this.simpleCache.get('websiteCatalog');
-    if (websiteCatalog) {
-      return websiteCatalog;
+  getApplicationMetricsCatalog() {
+    let applicationCatalog = this.simpleCache.get('applicationCatalog');
+    if (applicationCatalog) {
+      return applicationCatalog;
     }
 
-    websiteCatalog = this.doRequest('/api/website-monitoring/catalog/metrics').then(catalogResponse =>
+    applicationCatalog = this.doRequest('/api/application-monitoring/catalog/metrics').then(catalogResponse =>
       catalogResponse.data.map(entry => ({
         'key' : entry.metricId,
         'label' : entry.label,
-        'aggregations' : entry.aggregations ? entry.aggregations.sort() : [],
-        'beaconTypes' : entry.beaconTypes
+        'aggregations' : entry.aggregations ? entry.aggregations.sort() : []
       }))
-    );
-    this.simpleCache.put('websiteCatalog', websiteCatalog);
+    ).then(catalogResponse => {
+      // not all metrics in the metric catalog are working right now, so it is hard coded and manually set. Might be needless in the future
+      const hardCodedResponse = [
+        {key: "calls", label: "Call count", aggregations: ["SUM"]},
+        {key: "latency", label: "Call latency", aggregations: ["MAX", "MEAN", "MIN", "P25", "P50", "P75", "P90", "P95", "P98", "P99"]},
+        {key: "errors", label: "Error rate", aggregations: ["MEAN"]},
+        {key: "services", label: "Service Count", aggregations: ["DISTINCT_COUNT"]},
+      ];
+      return hardCodedResponse;
+    });
+    this.simpleCache.put('applicationCatalog', applicationCatalog);
 
-    return websiteCatalog;
+    return applicationCatalog;
   }
 
-  fetchMetricsForWebsite(target, timeFilter: TimeFilter) {
+  fetchMetricsForApplication(target, timeFilter: TimeFilter) {
     // avoid invalid calls
-    if (!target || !target.metric || !target.group || !target.entity) {
+    if (!target || !target.metric || !target.group || !target.entity) {
       return this.$q.resolve({ data: { items: [] } });
     }
 
+    // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
     const windowSize = this.getWindowSize(timeFilter);
 
-    const tagFilters = [{
-      name: 'beacon.website.name',
-      operator: 'EQUALS',
-      value: target.entity.key
-    }];
+    const tagFilters = [];
+
+    if (target.entity.key){
+      tagFilters.push({
+        name: 'application.name',
+        operator: 'EQUALS',
+        value: target.entity.key
+      });
+    }
+
     _.forEach(target.filters, filter => {
       if (filter.isValid) {
         tagFilters.push(this.createTagFilter(filter));
@@ -138,28 +150,21 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       metric['granularity'] = this.getChartGranularity(windowSize);
     }
 
-    let groupbyTagSecondLevelKey = "";
-    if (target.group.key === "beacon.meta"){
-      groupbyTagSecondLevelKey = target.groupbyTagSecondLevelKey;
-    }
-
-    const data: BeaconGroupBody = {
+    const data: CallGroupBody = {
       group: {
-        groupbyTag: target.group.key,
-        groupbyTagSecondLevelKey
+        groupbyTag: target.group.key
       },
       timeFrame: {
         to: timeFilter.to,
         windowSize: windowSize
       },
       tagFilters: tagFilters,
-      type: target.entityType.key,
       metrics: [ metric ]
     };
-    return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
+    return this.postRequest('/api/application-monitoring/analyze/call-groups', data);
   }
 
-  getChartGranularity(windowSize: number): number {
+  getChartGranularity(windowSize) {
     const granularity = this.sensibleGranularities.find(
       granularity => windowSize / 1000 / granularity <= this.maximumNumberOfUsefulDataPoints
     );
@@ -199,7 +204,6 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
       label = _.replace(label, '$website', target.entity.label);
-      label = _.replace(label, '$type', target.entityType.label);
       label = _.replace(label, '$metric', target.metric.label);
       label = _.replace(label, '$key', key);
       label = _.replace(label, '$index', index + 1);

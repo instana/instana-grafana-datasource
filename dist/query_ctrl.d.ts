@@ -14,6 +14,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     availableMetrics: Array<Selectable>;
     uniqueEntities: Array<Selectable>;
     uniqueTags: Array<Selectable>;
+    allWebsiteMetrics: Array<Selectable>;
     snapshots: Array<string>;
     entitySelectionText: string;
     metricSelectionText: string;
@@ -32,10 +33,13 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     /** @ngInject **/
     constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any, $q: any);
     isInfrastructure(): boolean;
-    isEntity(): boolean;
-    onEntityChanges(refresh: boolean): any;
+    isWebsite(): boolean;
+    isApplication(): boolean;
+    onWebsiteChanges(refresh: any): any;
+    onApplicationChanges(refresh: any): any;
     onFilterChange(refresh: boolean): any;
     onMetricCategorySelect(): void;
+    onBeaconTypeSelect(refresh: any): void;
     filterForEntityType(refresh: boolean): void;
     filterEntityTypes(): any;
     findMatchingEntityTypes(entityType: Selectable): boolean;
@@ -44,6 +48,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     addFilter(): void;
     removeFilter(index: number): void;
     onTagFilterChange(index: number): void;
+    onWebsiteGroupChange(): void;
     checkMetricAndRefresh(refresh: boolean): void;
     selectionReset(): void;
     resetEntityTypeSelection(): void;
