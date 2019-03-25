@@ -32,6 +32,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   timeFilter: TimeFilter;
 
   EMPTY_DROPDOWN_TEXT = ' - ';
+  ALL_APPLICATIONS = '-- All Applications --';
 
   OPERATOR_STRING = 'STRING';
   OPERATOR_NUMBER = 'NUMBER';
@@ -162,7 +163,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.datasource.application.getApplications(this.timeFilter).then(
       applications => {
         this.uniqueEntities = applications;
-        if (this.uniqueEntities[this.uniqueEntities.length-1].key){this.uniqueEntities.push({key: null, label: "All Applications"});}
+        // if all is not existing, we insert it on top
+        if (!_.find(this.uniqueEntities, {'key': null})) {
+          this.uniqueEntities.unshift({key: null, label: this.ALL_APPLICATIONS});
+        }
         // select the most loaded website for default/replacement
         if (this.target && !this.target.entity && applications) {
           this.target.entity = applications[0];

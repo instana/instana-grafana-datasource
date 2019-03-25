@@ -21,6 +21,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     previousMetricCategory: string;
     timeFilter: TimeFilter;
     EMPTY_DROPDOWN_TEXT: string;
+    ALL_APPLICATIONS: string;
     OPERATOR_STRING: string;
     OPERATOR_NUMBER: string;
     OPERATOR_BOOLEAN: string;

@@ -38,7 +38,7 @@
 		<div ng-include src="'application.html'"/>
     <div ng-include src="'group.html'"/>
     <div ng-include src="'metric.html'"/>
-    <div ng-include src="'websiteLegend.html'"/>
+    <div ng-include src="'applicationLegend.html'"/>
     <div ng-include src="'filters.html'"/>
   </div>
 
@@ -47,7 +47,7 @@
     <div ng-include src="'beacontype.html'"/>
     <div ng-include src="'websiteGroup.html'"/>
     <div ng-include src="'metric.html'"/>
-    <div ng-include src="'applicationLegend.html'"/>
+    <div ng-include src="'websiteLegend.html'"/>
     <div ng-include src="'filters.html'"/>
   </div>
 
@@ -175,13 +175,13 @@
       <label class="gf-form-label width-13 pointer">
         Legend format
         <info-popover position="top center" mode="right-normal">
-          Default: "$label ($metric) - $key"
+          Default: "$label ($website) - $key"
           <ul>
             <li>$label - entity label</li>
             <li>$website - website label</li>
             <li>$type - entity type</li>
             <li>$metric - displayed metric</li>
-            <li>$key - metric with aggregation and rollup</li>
+            <li>$key - metric key with aggregation and rollup</li>
             <li>$index - index in the list</li>
           </ul>
         </info-popover>
@@ -191,7 +191,7 @@
              type="text"
              ng-model="ctrl.target.labelFormat"
              ng-model-options='{ debounce: 300 }'
-             placeholder="$label ($metric) - $key"
+             placeholder="$label ($website) - $key"
              ng-change="ctrl.onChange()"
              spellcheck='false'/>
     </div>
@@ -202,12 +202,12 @@
       <label class="gf-form-label width-13 pointer">
         Legend format
         <info-popover position="top center" mode="right-normal">
-          Default: $label ($metric) - $key
+          Default: $label ($application) - $key
           <ul>
             <li>$label - entity label</li>
-            <li>$website - website label</li>
+            <li>$application - application label</li>
             <li>$metric - displayed metric</li>
-            <li>$key - metric with aggregation and rollup</li>
+            <li>$key - metric key with aggregation and rollup</li>
             <li>$index - index in the list</li>
           </ul>
         </info-popover>
@@ -217,7 +217,7 @@
              type="text"
              ng-model="ctrl.target.labelFormat"
              ng-model-options='{ debounce: 300 }'
-             placeholder="$label ($metric) - $key"
+             placeholder="$label ($application) - $key"
              ng-change="ctrl.onChange()"
              spellcheck='false'/>
     </div>

@@ -7,6 +7,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     applicationsCache: Cache<Promise<Array<Selectable>>>;
     maximumNumberOfUsefulDataPoints: number;
     sensibleGranularities: number[];
+    ALL_APPLICATIONS: string;
     OPERATOR_NUMBER: string;
     OPERATOR_BOOLEAN: string;
     /** @ngInject */

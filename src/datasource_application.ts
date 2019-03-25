@@ -27,6 +27,9 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     10 * 24 * 60 * 60
   ];
 
+  // duplicate to QueryCtrl.ALL_APPLICATIONS
+  ALL_APPLICATIONS = '-- All Applications --';
+
   OPERATOR_NUMBER = 'NUMBER';
   OPERATOR_BOOLEAN = 'BOOLEAN';
 
@@ -59,7 +62,8 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
         aggregation: 'SUM'
       }],
       order: {
-        by: 'calls',
+        // TODO fix api and figure out how to get correct ordering
+        by: 'callsAgg',
         direction: "desc"
       }
     };
@@ -203,11 +207,14 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
-      label = _.replace(label, '$website', target.entity.label);
+      label = _.replace(label, '$application', target.entity.label);
       label = _.replace(label, '$metric', target.metric.label);
       label = _.replace(label, '$key', key);
       label = _.replace(label, '$index', index + 1);
       return label;
+    }
+    if (target.entity.label === this.ALL_APPLICATIONS) {
+      return item.name + ' - ' + key;
     }
     return item.name + ' (' + target.entity.label + ')' + ' - ' + key;
   }

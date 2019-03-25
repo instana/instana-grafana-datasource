@@ -39,6 +39,8 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                         5 * 24 * 60 * 60,
                         10 * 24 * 60 * 60
                     ];
+                    // duplicate to QueryCtrl.ALL_APPLICATIONS
+                    this.ALL_APPLICATIONS = '-- All Applications --';
                     this.OPERATOR_NUMBER = 'NUMBER';
                     this.OPERATOR_BOOLEAN = 'BOOLEAN';
                     this.applicationsCache = new cache_1.default();
@@ -63,7 +65,8 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                                 aggregation: 'SUM'
                             }],
                         order: {
-                            by: 'calls',
+                            // TODO fix api and figure out how to get correct ordering
+                            by: 'callsAgg',
                             direction: "desc"
                         }
                     };
@@ -190,11 +193,14 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     if (target.labelFormat) {
                         var label = target.labelFormat;
                         label = lodash_1.default.replace(label, '$label', item.name);
-                        label = lodash_1.default.replace(label, '$website', target.entity.label);
+                        label = lodash_1.default.replace(label, '$application', target.entity.label);
                         label = lodash_1.default.replace(label, '$metric', target.metric.label);
                         label = lodash_1.default.replace(label, '$key', key);
                         label = lodash_1.default.replace(label, '$index', index + 1);
                         return label;
+                    }
+                    if (target.entity.label === this.ALL_APPLICATIONS) {
+                        return item.name + ' - ' + key;
                     }
                     return item.name + ' (' + target.entity.label + ')' + ' - ' + key;
                 };

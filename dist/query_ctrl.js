@@ -37,6 +37,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.uniqueOperators = operators_1.default;
                     this.uniqueBeaconTypes = beacon_types_1.default;
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
+                    this.ALL_APPLICATIONS = '-- All Applications --';
                     this.OPERATOR_STRING = 'STRING';
                     this.OPERATOR_NUMBER = 'NUMBER';
                     this.OPERATOR_BOOLEAN = 'BOOLEAN';
@@ -138,8 +139,9 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     var _this = this;
                     this.datasource.application.getApplications(this.timeFilter).then(function (applications) {
                         _this.uniqueEntities = applications;
-                        if (_this.uniqueEntities[_this.uniqueEntities.length - 1].key) {
-                            _this.uniqueEntities.push({ key: null, label: "All Applications" });
+                        // if all is not existing, we insert it on top
+                        if (!lodash_1.default.find(_this.uniqueEntities, { 'key': null })) {
+                            _this.uniqueEntities.unshift({ key: null, label: _this.ALL_APPLICATIONS });
                         }
                         // select the most loaded website for default/replacement
                         if (_this.target && !_this.target.entity && applications) {
