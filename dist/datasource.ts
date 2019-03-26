@@ -93,23 +93,16 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   testDatasource() {
-    return this.doRequest('/api/snapshots/non-existing-snapshot-id?time=0').then(
-      // We always expect an error response, either a 404 (Not Found) or a 401 (Unauthorized).
+    return this.doRequest('/api/monitoringState').then(
       result => {
         return {
-          status: 'error',
-          message: 'Error connecting to the Instana API.',
-          title: 'Error'
+          status: 'success',
+          message: 'Successfully connected to the Instana API.',
+          title: 'Success'
         };
       },
       error => {
-        if (error.status === 404) {
-          return {
-            status: 'success',
-            message: 'Successfully connected to the Instana API.',
-            title: 'Success'
-          };
-        } else if (error.status === 401) {
+        if (error.status === 401) {
           return {
             status: 'error',
             message: 'Unauthorized. Please verify the API Token.',

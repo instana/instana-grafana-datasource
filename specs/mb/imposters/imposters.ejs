@@ -37,7 +37,7 @@
       "predicates": [{
         "equals": {
           "method": "GET",
-          "path": "/api/snapshots/non-existing-snapshot-id",
+          "path": "/api/monitoringState",
           "headers": {
             "Authorization": "apiToken valid-api-token"
           }
@@ -45,13 +45,13 @@
       }],
       "responses": [{
         "is": {
-          "statusCode": 404,
+          "statusCode": 200,
           "headers": {
             "Content-Type": "application/json;charset=utf-8",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
           },
-          "body": "{\n    \"error\": \"There is no snapshot for the given id or it can't be found.\"\n}"
+          "body": "{\n    \"hostCount\": 42\n}"
         }
       }]
     },
@@ -59,7 +59,7 @@
       "predicates": [{
         "equals": {
           "method": "GET",
-          "path": "/api/snapshots/non-existing-snapshot-id"
+          "path": "/api/monitoringState"
         }
       }],
       "responses": [{

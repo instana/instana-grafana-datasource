@@ -50,6 +50,7 @@ If your Dynamic Focus query matches, the returned dataset will include metrics p
 #### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
+
 - $label - the entity label
 - $host - the corresponding host
 - $pid - the corresponding PID
@@ -57,14 +58,44 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 - $type - the entity type
 - $service - the service label (for endpoints only)
 - $name - a label alternative
+- $index - index in the list
 
 If no custom format is provided the default '_$label (on host $host)_' will be shown.
 
+
+#### Application metrics
+
+To choose application metrics you need to select "Application metrics" from the category dropdown. This will populate the other dropdown lists.
+
+The "Application" dropdown will contain a list of all applications sorted by their name.
+
+Most metrics will have more than one aggregation type (SUM, MEAN, ...) and you can choose which one to use.
+
+It's also possible to add additional filters via "add Filter". Multiple filters are concatenated using "AND".
+
+If your selection matches, the returned dataset will include metrics providing graphs like the example below.
+
+![application plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application-metrics-sml.png)
+
+If more then 20 metics are fetched, a warning appears that not all results are shown. Add Filter to narrow down the data.
+
+#### Change legend format
+
+To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
+
+- $label - the entity label
+- $application - application label
+- $metric - the displayed metric
+- $key - metric key with aggregation and rollup
+- $index - index in the list
+
+If no custom format is provided the default label '_$label ($application) $metric_' will be shown.
+
 #### Website metrics
 
-To choose EUM website metrics you need to select "Website metrics" from the category dropdown. This will populate the other  dropdown lists. 
+To choose EUM website metrics you need to select "Website metrics" from the category dropdown. This will populate the other dropdown lists.
 
-The "Website" dropdown will contain a list of all websites sorted by their pageloads. 
+The "Website" dropdown will contain a list of all websites sorted by their pageloads.
 
 Most metrics will have more than one aggregation type (SUM, MEAN, ...) and you can choose which one to use.
 
@@ -74,4 +105,17 @@ If your selection matches, the returned dataset will include metrics providing g
 
 ![website plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/website-metrics-sml.png)
 
-A default label '_$name ($website) $metric_' will be shown.
+A default label '_$label ($website) $metric_' will be shown.
+
+#### Change legend format
+
+To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
+
+- $label - the entity label
+- $website - website label
+- $type - entity type
+- $metric - the displayed metric
+- $key - metric key with aggregation and rollup
+- $index - index in the list
+
+If no custom format is provided the default label '_$label ($website) $metric_' will be shown.

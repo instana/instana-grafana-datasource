@@ -56,7 +56,7 @@ describe('Given an InstanaDatasource', function() {
     });
 
     describe('and 404 (Not Found) is returned', function() {
-      const response = {
+      const error = {
         data: {},
         status: 404,
         statusText: 'Not Found'
@@ -64,7 +64,28 @@ describe('Given an InstanaDatasource', function() {
 
       beforeEach(function() {
         ctx.backendSrv.datasourceRequest = function(options) {
-          return ctx.$q.reject(response);
+          return ctx.$q.reject(error);
+        };
+      });
+
+      it('should return success status', function() {
+        return ctx.ds.testDatasource().then(function(results) {
+          expect(results.status).to.equal('error');
+          expect(results.message).to.equal('Error connecting to the Instana API.');
+        });
+      });
+    });
+
+    describe('and 200 (OK) is returned', function() {
+      const response = {
+        data: {"hostCount": 27},
+        status: 200,
+        statusText: 'OK'
+      };
+
+      beforeEach(function() {
+        ctx.backendSrv.datasourceRequest = function(options) {
+          return ctx.$q.resolve(response);
         };
       });
 
@@ -857,14 +878,14 @@ describe('Given an InstanaDatasource without proxy', function() {
 
     beforeEach(function() {
       const response = {
-        data: {},
-        status: 404,
-        statusText: 'Not Found'
+        data: {"hostCount": 27},
+        status: 200,
+        statusText: 'OK'
       };
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "http://localhost:8010/api/snapshots/non-existing-snapshot-id?time=0":
-            return ctx.$q.reject(response);
+          case "http://localhost:8010/api/monitoringState":
+            return ctx.$q.resolve(response);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
         }
