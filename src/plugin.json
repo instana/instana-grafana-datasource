@@ -10,6 +10,8 @@
   "metrics": true,
   "annotations": true,
   "alerting": false,
+  "backend": true,
+  "executable": "simple-plugin",
 
   "info": {
     "description": "Grafana datasource plugin for Instana: Automatic Infrastructure and Application Monitoring",

@@ -69,6 +69,16 @@ System.register(['./proxy_check', './cache'], function(exports_1) {
                     };
                     return this.execute(request, swallowError, maxRetries);
                 };
+                AbstractDatasource.prototype.postRequest2 = function (url, data, swallowError, maxRetries) {
+                    if (swallowError === void 0) { swallowError = false; }
+                    if (maxRetries === void 0) { maxRetries = 0; }
+                    var request = {
+                        method: 'POST',
+                        url: url,
+                        data: data
+                    };
+                    return this.execute(request, swallowError, maxRetries);
+                };
                 AbstractDatasource.prototype.execute = function (request, swallowError, maxRetries) {
                     var _this = this;
                     if (this.apiToken) {

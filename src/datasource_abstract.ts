@@ -77,6 +77,15 @@ export default class AbstractDatasource {
     return this.execute(request, swallowError, maxRetries);
   }
 
+  postRequest2(url: string, data: Object, swallowError = false, maxRetries = 0) {
+    const request = {
+      method: 'POST',
+      url: url,
+      data: data
+    };
+    return this.execute(request, swallowError, maxRetries);
+  }
+
   private execute(request, swallowError, maxRetries) {
     if (this.apiToken) {
       request['headers'] = {

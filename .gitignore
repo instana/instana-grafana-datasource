@@ -4,3 +4,5 @@ npm-debug.log
 .vscode
 *.swp
 results.txt
+vendor
+Gopkg.lock

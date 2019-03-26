@@ -25,5 +25,6 @@ export default class AbstractDatasource {
     private msToMin(time);
     doRequest(url: string, swallowError?: boolean, maxRetries?: number): any;
     postRequest(url: string, data: Object, swallowError?: boolean, maxRetries?: number): any;
+    postRequest2(url: string, data: Object, swallowError?: boolean, maxRetries?: number): any;
     private execute(request, swallowError, maxRetries);
 }

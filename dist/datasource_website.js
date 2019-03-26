@@ -154,7 +154,17 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                         type: target.entityType.key,
                         metrics: [metric]
                     };
-                    return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
+                    return this.backendSrv.datasourceRequest({
+                        url: '/api/tsdb/query',
+                        method: 'POST',
+                        data: {
+                            from: "50",
+                            to: "100",
+                            queries: "asd",
+                        }
+                    });
+                    //return this.postRequest2('/api/tsdb/query', data);
+                    //return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
                 };
                 InstanaWebsiteDataSource.prototype.getChartGranularity = function (windowSize) {
                     var _this = this;

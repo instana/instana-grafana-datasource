@@ -21,6 +21,13 @@ The following yarn run scripts are available. You can also run them via Grunt di
 - `yarn run shutdown` (`grunt shutdown`) stops the containers.
 - `yarn run refresh` (`grunt refresh`) same as default but stops running containers first.
 - `yarn run functional` (`grunt functional`) (also available via ) executes the functional tests. Assumes that the grafana container is running. UI backend and api token are resolved respectively by the INSTANA_UI_BACKEND_URL and the INSTANA_API_TOKEN environment variables.
+- `docker-compose logs -f` to show grafana the logs
+
+DOTO:
+- dep ensure
+- should be in $GOPATH/src/github/instana/instana-grafana-datasource/ folder
+- install go
+- install dep (Ubuntu: sudo apt-get install go-dep)
 
 ## Getting Started
 

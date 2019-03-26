@@ -99,7 +99,7 @@ module.exports = function(grunt) {
     },
 
     watch: {
-      files: ['src/**/*.ts', 'src/**/*.html', 'src/**/*.css', 'src/img/*.*', 'src/plugin.json', 'README.md'],
+      files: ['src/**/*.ts', 'src/**/*.html', 'src/**/*.css', 'src/img/*.*', 'src/plugin.json', 'README.md', '*.go'],
       tasks: ['testAndCopy'],
       options: {
         debounceDelay: 250,
@@ -141,7 +141,31 @@ module.exports = function(grunt) {
         args: [
           'specs/add_datasource_specs.js'
         ]
-      }
+      },
+
+      buildGo_linux_amd64: {
+        cmd: 'go',
+        args: [
+          'build',
+          '-o', './dist/simple-plugin_linux_amd64', '.'
+        ]
+      },
+
+      buildGo_darwin_amd64: {
+        cmd: 'go',
+        args: [
+          'build',
+          '-o', './dist/simple-plugin_darwin_amd64', '.'
+        ]
+      },
+
+      buildGo_windows_amd64: {
+        cmd: 'go',
+        args: [
+          'build',
+          '-o', './dist/simple-plugin_windows_amd64', '.'
+        ]
+      },
     }
   });
 
@@ -176,7 +200,10 @@ module.exports = function(grunt) {
     'copy:dist_html',
     'copy:dist_css',
     'copy:dist_img',
-    'copy:dist_statics'
+    'copy:dist_statics',
+    'run:buildGo_linux_amd64',
+    //'run:buildGo_darwin_amd64',
+    //'run:buildGo_windows_amd64'
   ]);
 
   grunt.registerTask('prepareEnvironment', [
