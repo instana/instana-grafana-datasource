@@ -71,7 +71,7 @@ describe('Given an InstanaDatasource', function() {
       it('should return success status', function() {
         return ctx.ds.testDatasource().then(function(results) {
           expect(results.status).to.equal('error');
-          expect(results.message).to.equal('Error connecting to the Instana API.');
+          expect(results.message).to.equal('Error (404) connecting to the Instana API: Not Found');
         });
       });
     });

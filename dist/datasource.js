@@ -116,7 +116,7 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                         else {
                             return {
                                 status: 'error',
-                                message: 'Error connecting to the Instana API.',
+                                message: 'Error (' + error.status + ') connecting to the Instana API: ' + error.statusText,
                                 title: 'Error'
                             };
                         }
