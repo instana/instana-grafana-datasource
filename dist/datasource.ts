@@ -109,6 +109,7 @@ export default class InstanaDatasource extends AbstractDatasource {
             title: 'Error'
           };
         } else {
+          console.log(error);
           return {
             status: 'error',
             message: 'Error (' + error.status + ') connecting to the Instana API: ' + error.statusText,
