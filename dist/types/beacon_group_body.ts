@@ -25,6 +25,12 @@ export interface Order {
   direction: string;
 }
 
+export interface Pagination {
+  ingestionTime: number;
+  offset: number;
+  retrievalSize: number;
+}
+
 export interface BeaconGroupBody {
   group: Group;
   timeFrame: TimeFrame;
@@ -32,6 +38,7 @@ export interface BeaconGroupBody {
   metrics: Array<Metric>;
   tagFilters?: Array<TagFilter>;
   order?: Order;
+  pagination?: Pagination;
 }
 
 export default BeaconGroupBody;

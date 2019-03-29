@@ -24,12 +24,19 @@ export interface Order {
   direction: string;
 }
 
+export interface Pagination {
+  ingestionTime: number;
+  offset: number;
+  retrievalSize: number;
+}
+
 export interface CallGroupBody {
   group: Group;
   timeFrame: TimeFrame;
   metrics: Array<Metric>;
   tagFilters?: Array<TagFilter>;
   order?: Order;
+  pagination?: Pagination;
 }
 
 export default CallGroupBody;

@@ -68,6 +68,11 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                             // TODO fix api and figure out how to get correct ordering
                             by: 'callsAgg',
                             direction: "desc"
+                        },
+                        pagination: {
+                            ingestionTime: 0,
+                            offset: 0,
+                            retrievalSize: 200
                         }
                     };
                     applications = this.postRequest('/api/application-monitoring/analyze/call-groups', data).then(function (applicationsResponse) {
