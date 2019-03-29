@@ -1,13 +1,13 @@
-System.register(['./cache', 'lodash'], function(exports_1) {
-    var cache_1, lodash_1;
+System.register(['./proxy_check', './cache'], function(exports_1) {
+    var proxy_check_1, cache_1;
     var AbstractDatasource;
     return {
         setters:[
+            function (proxy_check_1_1) {
+                proxy_check_1 = proxy_check_1_1;
+            },
             function (cache_1_1) {
                 cache_1 = cache_1_1;
-            },
-            function (lodash_1_1) {
-                lodash_1 = lodash_1_1;
             }],
         execute: function() {
             AbstractDatasource = (function () {
@@ -28,10 +28,11 @@ System.register(['./cache', 'lodash'], function(exports_1) {
                     this.name = instanceSettings.name;
                     this.id = instanceSettings.id;
                     this.simpleCache = new cache_1.default();
-                    // grafana 5.3+ wanted to resolve dynamic routes in proxy mode
-                    var version = lodash_1.default.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
-                    var versions = lodash_1.default.split(version, '.', 2);
-                    if (version[0] >= 6 || (versions[0] >= 5 && versions[1] >= 3)) {
+                    // old versions have not saved proxy usage, so we switch to the default assumption
+                    if (instanceSettings.jsonData.useProxy === undefined) {
+                        instanceSettings.jsonData.useProxy = proxy_check_1.default();
+                    }
+                    if (instanceSettings.jsonData.useProxy) {
                         this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
                     }
                     else {

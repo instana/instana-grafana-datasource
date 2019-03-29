@@ -25,7 +25,8 @@ describe('Given an InstanaDatasource', function() {
       url: '/api/datasources/proxy/1',
       jsonData: {
         url: 'http://localhost:8010',
-        apiToken: 'valid-api-token'
+        apiToken: 'valid-api-token',
+        useProxy: true
       }
     };
 
