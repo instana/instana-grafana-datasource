@@ -69,11 +69,11 @@ The actual screenshots are from "Quick Check" example below.
 This procedure is used to test the Instana Grafana data source before the version update PR is accepted by Grafana. That is, directory names as `instana-datasource` are valid in a Grafana workspace with this plugin installed, not in this repository. To run this scenario directly in this repository, simply omit `cd instana-datasource` and replace `docker-compose up mountebank` by `docker-compose up`.
 
 * `cd instana-datasource`
-* the grafana server needs to run at `http://localhost:3000` for the the Instana datasource
+* the Grafana server needs to run at `http://localhost:3000` for the the Instana datasource
 * `docker-compose up mountebank`
 * Create a datasource for Instana in Grafana
-    * URL (Grafana 5.3+): `http://mountebank:8010`
-    * URL (Grafana <5.3): `http://localhost:8010`
+    * URL with proxy (Grafana 5.3+): `http://mountebank:8010`
+    * URL with out proxy (Grafana <5.3): `http://localhost:8010`
     * API Token: `valid-api-token`
 * Create a new dashboard with a graph panel
 

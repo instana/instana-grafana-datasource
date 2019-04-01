@@ -67,6 +67,11 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                         order: {
                             by: 'pageLoads',
                             direction: 'desc'
+                        },
+                        pagination: {
+                            ingestionTime: 0,
+                            offset: 0,
+                            retrievalSize: 200
                         }
                     };
                     websites = this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(function (websitesResponse) {

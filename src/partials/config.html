@@ -8,15 +8,24 @@
         <p>Enter the URL of your Instana installation. E.g. https://tools-acme.instana.io</p>
       </info-popover>
     </label>
-    <input class="gf-form-input width-30" id="in-url" type="text" ng-model='ctrl.current.jsonData.url' placeholder="E.g. https://tools-acme.instana.io"></input>
+    <input class="gf-form-input width-30" id="in-url" type="text" ng-model="ctrl.current.jsonData.url" placeholder="E.g. https://tools-acme.instana.io"></input>
   </div>
   <div class="gf-form">
     <label class="gf-form-label width-14 pointer" for="in-api-token">
-      API Token
+      API token
       <info-popover position="top center" mode="right-normal">
-        <p>Enter the API Token to access the data.<br/>You can create API tokens following the instructions at <a href="https://docs.instana.io/quick_start/api/#api-tokens">https://docs.instana.io/quick_start/api/#api-tokens</a></p>
+        <p>Enter the API token to access the data.<br/>You can create API tokens following the instructions at <a href="https://docs.instana.io/quick_start/api/#api-tokens">https://docs.instana.io/quick_start/api/#api-tokens</a></p>
       </info-popover>
     </label>
-    <input class="gf-form-input width-30" id="in-api-token" type="text" ng-model='ctrl.current.jsonData.apiToken' placeholder="Enter your API token."></input>
+    <input class="gf-form-input width-30" id="in-api-token" type="text" ng-model="ctrl.current.jsonData.apiToken" placeholder="Enter your API token."></input>
+  </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-14 pointer" for="in-proxy-mode">
+      Use proxy
+      <info-popover position="top center" mode="right-normal">
+        <p>Use Grafana server as proxy, this adds the Instana API token on the server.<br/>Supported with Grafana 5.3+ and Instana datasource 2.0.0+</p>
+      </info-popover>
+    </label>
+    <gf-form-switch class="gf-form-switch" id="in-proxy-mode" checked="ctrl.current.jsonData.useProxy" ng-disabled="!ctrl.current.jsonData.canUseProxy"/>
   </div>
 </div>

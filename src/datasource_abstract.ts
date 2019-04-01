@@ -1,5 +1,6 @@
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
+import proxy_check from './proxy_check';
 import Cache from './cache';
 
 import _ from 'lodash';
@@ -29,11 +30,12 @@ export default class AbstractDatasource {
 
     this.simpleCache = new Cache<Array<Selectable>>();
 
-    // grafana 5.3+ wanted to resolve dynamic routes in proxy mode
-    const version = _.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
-    const versions = _.split(version, '.', 2);
+    // old versions have not saved proxy usage, so we switch to the default assumption
+    if (instanceSettings.jsonData.useProxy === undefined) {
+      instanceSettings.jsonData.useProxy = proxy_check();
+    }
 
-    if (version[0] >= 6 || (versions[0] >= 5 && versions[1] >= 3)) {
+    if (instanceSettings.jsonData.useProxy) {
       this.url = instanceSettings.url + '/instana'; // to match proxy route in plugin.json
     } else {
       this.url = instanceSettings.jsonData.url;

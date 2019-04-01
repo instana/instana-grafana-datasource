@@ -63,6 +63,11 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       order: {
         by: 'pageLoads',
         direction: 'desc'
+      },
+      pagination: {
+        ingestionTime: 0,
+        offset: 0,
+        retrievalSize: 200
       }
     };
     websites = this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
