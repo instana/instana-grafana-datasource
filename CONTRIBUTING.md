@@ -51,7 +51,10 @@ The actual screenshots are from "Quick Check" example below.
 
 * Run `yarn install`.
 * Run the full build with `yarn build`.
-* Make sure that the quick check scenario described below works locally.
+* Make sure that the quick check scenario described below works against:
+* - mountebank
+* - test-instana (with proxy)
+* - qa-onprem (without proxy)
 * Update `src/plugin.json` with the new version number and the version date.
 * Run the full build again, this should update `dist/plugin.json`.
 * Commit this with a matching commit message (like `Bumped version to x.x.x`) and push this commit.
