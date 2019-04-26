@@ -107,7 +107,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                             'key': entry.metricId,
                             'label': entry.label,
                             'aggregations': entry.aggregations ? entry.aggregations.sort() : [],
-                            'beaconTypes': entry.beaconTypes
+                            'beaconTypes': entry.beaconTypes ? entry.beaconTypes : ['pageLoad', 'resourceLoad', 'httpRequest', 'error']
                         }); });
                     });
                     this.simpleCache.put('websiteCatalog', websiteCatalog);
