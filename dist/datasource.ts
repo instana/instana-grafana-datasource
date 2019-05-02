@@ -32,6 +32,11 @@ export default class InstanaDatasource extends AbstractDatasource {
     return this.$q.all(
       _.map(options.targets, target => {
 
+        // grafana setting to disable query execution
+        if (target.hide) {
+          return { data: [] };
+        }
+
         // target migration for downwards compability
         migrate(target);
 

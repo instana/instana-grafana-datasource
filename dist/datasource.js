@@ -43,6 +43,10 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                     }
                     var timeFilter = this.readTime(options);
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
+                        // grafana setting to disable query execution
+                        if (target.hide) {
+                            return { data: [] };
+                        }
                         // target migration for downwards compability
                         migration_1.default(target);
                         if (target.metricCategory === _this.WEBSITE_METRICS) {
