@@ -54,8 +54,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     var windowSize = this.getWindowSize(timeFilter);
                     var data = {
                         group: {
-                            groupbyTag: 'application.name',
-                            groupbyTagSecondLevelKey: ''
+                            groupbyTag: 'application.name'
                         },
                         timeFrame: {
                             to: timeFilter.to,
@@ -151,15 +150,14 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                     if (target.pluginId !== "singlestat") {
                         metric['granularity'] = this.getChartGranularity(windowSize);
                     }
-                    var groupbyTagSecondLevelKey = "";
-                    if (target.group.key === "call.http.header") {
-                        groupbyTagSecondLevelKey = target.groupbyTagSecondLevelKey;
+                    var group = {
+                        groupbyTag: target.group.key
+                    };
+                    if (target.group.key === "call.http.header" && target.groupbyTagSecondLevelKey) {
+                        group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
                     }
                     var data = {
-                        group: {
-                            groupbyTag: target.group.key,
-                            groupbyTagSecondLevelKey: groupbyTagSecondLevelKey
-                        },
+                        group: group,
                         timeFrame: {
                             to: timeFilter.to,
                             windowSize: windowSize

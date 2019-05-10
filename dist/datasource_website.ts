@@ -48,8 +48,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     const windowSize = this.getWindowSize(timeFilter);
     const data: BeaconGroupBody = {
       group: {
-        groupbyTag: 'beacon.website.name',
-        groupbyTagSecondLevelKey: ""
+        groupbyTag: 'beacon.website.name'
       },
       timeFrame: {
         to: timeFilter.to,
@@ -143,16 +142,15 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       metric['granularity'] = this.getChartGranularity(windowSize);
     }
 
-    let groupbyTagSecondLevelKey = "";
-    if (target.group.key === "beacon.meta"){
-      groupbyTagSecondLevelKey = target.groupbyTagSecondLevelKey;
+    const group = {
+      groupbyTag: target.group.key
+    };
+    if (target.group.key === "beacon.meta" && target.groupbyTagSecondLevelKey) {
+      group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
     }
 
     const data: BeaconGroupBody = {
-      group: {
-        groupbyTag: target.group.key,
-        groupbyTagSecondLevelKey
-      },
+      group: group,
       timeFrame: {
         to: timeFilter.to,
         windowSize: windowSize

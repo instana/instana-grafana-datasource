@@ -304,7 +304,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onWebsiteGroupChange = function () {
-                    this.target.showWebsiteGroupBySecondeLevel = (this.target.group.key === "beacon.meta");
+                    this.target.showWebsiteGroupBySecondLevel = this.target.group.key === "beacon.meta";
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.checkMetricAndRefresh = function (refresh) {
@@ -331,6 +331,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 InstanaQueryCtrl.prototype.resetEntitySelection = function () {
                     this.target.entity = null;
                     this.target.group = null;
+                    this.target.groupbyTagSecondLevelKey = null;
                     this.target.filters = [];
                 };
                 InstanaQueryCtrl.prototype.resetMetricSelection = function () {
@@ -357,7 +358,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     }
                 };
                 InstanaQueryCtrl.prototype.onChange = function () {
-                    this.target.showApplicationGroupBySecondeLevel = (this.target.group.key === "call.http.header");
+                    this.target.showApplicationGroupBySecondLevel = this.target.group.key === "call.http.header";
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {

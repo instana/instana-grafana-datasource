@@ -51,8 +51,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     const windowSize = this.getWindowSize(timeFilter);
     const data: CallGroupBody = {
       group: {
-        groupbyTag: 'application.name',
-        groupbyTagSecondLevelKey: ''
+        groupbyTag: 'application.name'
       },
       timeFrame: {
         to: timeFilter.to,
@@ -152,6 +151,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
         tagFilters.push(this.createTagFilter(filter));
       }
     });
+
     const metric = {
       metric: target.metric.key,
       aggregation: target.aggregation ? target.aggregation : 'SUM'
@@ -160,16 +160,15 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       metric['granularity'] = this.getChartGranularity(windowSize);
     }
 
-    let groupbyTagSecondLevelKey = "";
-    if (target.group.key === "call.http.header"){
-      groupbyTagSecondLevelKey = target.groupbyTagSecondLevelKey;
+    const group = {
+      groupbyTag: target.group.key
+    };
+    if (target.group.key === "call.http.header" && target.groupbyTagSecondLevelKey) {
+      group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
     }
 
     const data: CallGroupBody = {
-      group: {
-        groupbyTag: target.group.key,
-        groupbyTagSecondLevelKey
-      },
+      group: group,
       timeFrame: {
         to: timeFilter.to,
         windowSize: windowSize

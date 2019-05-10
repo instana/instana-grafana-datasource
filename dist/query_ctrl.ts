@@ -356,7 +356,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onWebsiteGroupChange(){
-    this.target.showWebsiteGroupBySecondeLevel = (this.target.group.key === "beacon.meta");
+    this.target.showWebsiteGroupBySecondLevel = this.target.group.key === "beacon.meta";
     this.panelCtrl.refresh();
   }
 
@@ -386,6 +386,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   resetEntitySelection() {
     this.target.entity = null;
     this.target.group = null;
+    this.target.groupbyTagSecondLevelKey = null;
     this.target.filters = [];
   }
 
@@ -415,7 +416,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onChange() {
-    this.target.showApplicationGroupBySecondeLevel = (this.target.group.key === "call.http.header");
+    this.target.showApplicationGroupBySecondLevel = this.target.group.key === "call.http.header";
     this.panelCtrl.refresh();
   }
 
