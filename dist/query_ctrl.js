@@ -357,6 +357,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     }
                 };
                 InstanaQueryCtrl.prototype.onChange = function () {
+                    this.target.showApplicationGroupBySecondeLevel = (this.target.group.key === "call.http.header");
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {
