@@ -296,6 +296,15 @@
                   ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
           </select>
         </div>
+        <input id="group-by-seconde-level-{{ctrl.target.refId}}"
+               ng-hide="!ctrl.target.showApplicationGroupBySecondeLevel"
+               class="gf-form-input width-22"
+               type="text"
+               ng-model='ctrl.target.groupbyTagSecondLevelKey'
+               ng-model-options='{ debounce: 300 }'
+               ng-change="ctrl.onChange()"
+               placeholder="Please Specify"
+               spellcheck='false'/>
       </div>
   </script>
 

@@ -415,6 +415,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onChange() {
+    this.target.showApplicationGroupBySecondeLevel = (this.target.group.key === "call.http.header");
     this.panelCtrl.refresh();
   }
 
