@@ -63,9 +63,9 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 If no custom format is provided the default '_$label (on host $host)_' will be shown.
 
 
-#### Application metrics
+#### Analyze application calls
 
-To choose application metrics you need to select "Application metrics" from the category dropdown. This will populate the other dropdown lists.
+To choose application metrics you need to select "Analyze application calls" from the category dropdown. This will populate the other dropdown lists.
 
 The "Application" dropdown will contain a list of all applications sorted by their name.
 
@@ -91,9 +91,9 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 If no custom format is provided the default label '_$label ($application) $metric_' will be shown.
 
-#### Website metrics
+#### Analyze websites
 
-To choose EUM website metrics you need to select "Website metrics" from the category dropdown. This will populate the other dropdown lists.
+To choose EUM website metrics you need to select "Analyze websites" from the category dropdown. This will populate the other dropdown lists.
 
 The "Website" dropdown will contain a list of all websites sorted by their pageloads.
 
