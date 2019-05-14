@@ -45,7 +45,7 @@
   <div ng-show="ctrl.target.metricCategory === '3'">
 		<div ng-include src="'website.html'"/>
     <div ng-include src="'beacontype.html'"/>
-    <div ng-include src="'websiteGroup.html'"/>
+    <div ng-include src="'group.html'"/>
     <div ng-include src="'metric.html'"/>
     <div ng-include src="'websiteLegend.html'"/>
     <div ng-include src="'filters.html'"/>
@@ -292,12 +292,12 @@
           <select id="in-group-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.group"
-                  ng-change="ctrl.onChange()"
+                  ng-change="ctrl.onGroupChange()"
                   ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
           </select>
         </div>
         <input id="group-by-second-level-{{ctrl.target.refId}}"
-               ng-hide="!ctrl.target.showApplicationGroupBySecondLevel"
+               ng-hide="!ctrl.target.showGroupBySecondLevel"
                class="gf-form-input width-22"
                type="text"
                ng-model='ctrl.target.groupbyTagSecondLevelKey'
@@ -307,34 +307,6 @@
                spellcheck='false'/>
       </div>
   </script>
-
-  <script type="text/ng-template" id="websiteGroup.html">
-    <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-group-{{ctrl.target.refId}}">
-        Group by
-        <info-popover position="top center" mode="right-normal">
-          <p>Group by tag</p>
-        </info-popover>
-      </label>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
-        <select id="in-group-{{ctrl.target.refId}}"
-                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                ng-model="ctrl.target.group"
-                ng-change="ctrl.onWebsiteGroupChange()"
-                ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
-        </select>
-      </div>
-      <input id="group-by-second-level-{{ctrl.target.refId}}"
-             ng-hide="!ctrl.target.showWebsiteGroupBySecondLevel"
-             class="gf-form-input width-22"
-             type="text"
-             ng-model='ctrl.target.groupbyTagSecondLevelKey'
-             ng-model-options='{ debounce: 300 }'
-             ng-change="ctrl.onChange()"
-             placeholder="Please Specify"
-             spellcheck='false'/>
-    </div>
-</script>
 
   <script type="text/ng-template" id="filters.html">
     <div ng-repeat="filter in ctrl.target.filters">
