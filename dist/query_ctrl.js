@@ -327,6 +327,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 InstanaQueryCtrl.prototype.resetEntitySelection = function () {
                     this.target.entity = null;
                     this.target.group = null;
+                    this.target.showGroupBySecondLevel = null;
                     this.target.groupbyTagSecondLevelKey = null;
                     this.target.filters = [];
                 };
@@ -354,11 +355,14 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     }
                 };
                 InstanaQueryCtrl.prototype.onGroupChange = function () {
-                    if (this.target.group && this.target.metricCategory === this.APPLICATION_METRICS) {
-                        this.target.showGroupBySecondLevel = this.target.group.key === "call.http.header";
+                    if (this.target.group && this.isApplication()) {
+                        this.target.showGroupBySecondLevel = this.target.group.key === 'call.http.header';
                     }
-                    else if (this.target.group && this.target.metricCategory === this.WEBSITE_METRICS) {
-                        this.target.showGroupBySecondLevel = this.target.group.key === "beacon.meta";
+                    else if (this.target.group && this.isWebsite()) {
+                        this.target.showGroupBySecondLevel = this.target.group.key === 'beacon.meta';
+                    }
+                    if (!this.target.showGroupBySecondLevel) {
+                        this.target.groupbyTagSecondLevelKey = null;
                     }
                     this.panelCtrl.refresh();
                 };
