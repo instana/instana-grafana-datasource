@@ -303,10 +303,6 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     }
                     this.panelCtrl.refresh();
                 };
-                InstanaQueryCtrl.prototype.onWebsiteGroupChange = function () {
-                    this.target.showWebsiteGroupBySecondLevel = this.target.group.key === "beacon.meta";
-                    this.panelCtrl.refresh();
-                };
                 InstanaQueryCtrl.prototype.checkMetricAndRefresh = function (refresh) {
                     if (this.target.metric && !lodash_1.default.includes(lodash_1.default.map(this.availableMetrics, function (m) { return m.key; }), this.target.metric.key)) {
                         this.resetMetricSelection();
@@ -357,8 +353,16 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                             : this.EMPTY_DROPDOWN_TEXT;
                     }
                 };
+                InstanaQueryCtrl.prototype.onGroupChange = function () {
+                    if (this.target.group && this.target.metricCategory === this.APPLICATION_METRICS) {
+                        this.target.showGroupBySecondLevel = this.target.group.key === "call.http.header";
+                    }
+                    else if (this.target.group && this.target.metricCategory === this.WEBSITE_METRICS) {
+                        this.target.showGroupBySecondLevel = this.target.group.key === "beacon.meta";
+                    }
+                    this.panelCtrl.refresh();
+                };
                 InstanaQueryCtrl.prototype.onChange = function () {
-                    this.target.showApplicationGroupBySecondLevel = this.target.group.key === "call.http.header";
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {

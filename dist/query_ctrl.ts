@@ -355,11 +355,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.panelCtrl.refresh();
   }
 
-  onWebsiteGroupChange(){
-    this.target.showWebsiteGroupBySecondLevel = this.target.group.key === "beacon.meta";
-    this.panelCtrl.refresh();
-  }
-
   checkMetricAndRefresh(refresh: boolean) {
     if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
       this.resetMetricSelection();
@@ -415,8 +410,16 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
   }
 
+  onGroupChange() {
+    if (this.target.group && this.target.metricCategory === this.APPLICATION_METRICS) {
+      this.target.showGroupBySecondLevel =  this.target.group.key === "call.http.header";
+    } else if (this.target.group && this.target.metricCategory === this.WEBSITE_METRICS) {
+      this.target.showGroupBySecondLevel =  this.target.group.key === "beacon.meta";
+    }
+    this.panelCtrl.refresh();
+  }
+
   onChange() {
-    this.target.showApplicationGroupBySecondLevel = this.target.group.key === "call.http.header";
     this.panelCtrl.refresh();
   }
 
