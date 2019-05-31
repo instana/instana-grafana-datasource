@@ -165,7 +165,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                         tagFilters: tagFilters,
                         metrics: [metric]
                     };
-                    return this.postRequest('/api/application-monitoring/analyze/call-groups', data);
+                    return this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
                 };
                 InstanaApplicationDataSource.prototype.getChartGranularity = function (windowSize) {
                     var _this = this;

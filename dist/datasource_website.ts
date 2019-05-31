@@ -159,7 +159,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       type: target.entityType.key,
       metrics: [ metric ]
     };
-    return this.postRequest('/api/website-monitoring/analyze/beacon-groups', data);
+    return this.postRequest('/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
   }
 
   getChartGranularity(windowSize: number): number {
