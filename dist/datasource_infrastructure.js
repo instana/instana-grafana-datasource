@@ -69,8 +69,7 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                         ("?q=" + encodeURIComponent(target.entityQuery)) +
                         ("&from=" + timeFilter.from) +
                         ("&to=" + timeFilter.to) +
-                        ("&time=" + timeFilter.to) +
-                        "&newApplicationModelEnabled=true";
+                        ("&time=" + timeFilter.to);
                     return this.doRequest(fetchSnapshotTypesUrl);
                 };
                 InstanaInfrastructureDataSource.prototype.fetchSnapshotsForTarget = function (target, timeFilter) {
@@ -86,8 +85,7 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                         ("&from=" + timeFilter.from) +
                         ("&to=" + timeFilter.to) +
                         ("&time=" + timeFilter.to) +
-                        "&size=100" +
-                        "&newApplicationModelEnabled=true";
+                        "&size=100";
                     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(function (contextsResponse) {
                         return _this.$q.all(contextsResponse.data.map(function (_a) {
                             var snapshotId = _a.snapshotId, host = _a.host, plugin = _a.plugin;

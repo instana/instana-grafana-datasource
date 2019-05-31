@@ -68,8 +68,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       `?q=${encodeURIComponent(target.entityQuery)}` +
       `&from=${timeFilter.from}` +
       `&to=${timeFilter.to}` +
-      `&time=${timeFilter.to}` +
-      `&newApplicationModelEnabled=true`;
+      `&time=${timeFilter.to}`;
     return this.doRequest(fetchSnapshotTypesUrl);
   }
 
@@ -87,8 +86,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       `&from=${timeFilter.from}` +
       `&to=${timeFilter.to}` +
       `&time=${timeFilter.to}` +
-      `&size=100` +
-      `&newApplicationModelEnabled=true`;
+      `&size=100`;
 
     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(contextsResponse => {
       return this.$q.all(

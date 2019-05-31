@@ -157,9 +157,9 @@ describe('Given an InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1516451043603&to=1516472658604&time=1516472658604&size=100&newApplicationModelEnabled=true":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1516451043603&to=1516472658604&time=1516472658604&size=100":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&size=100&newApplicationModelEnabled=true":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&size=100":
             return ctx.$q.resolve(contextsAfterTenSeconds);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1516451043603":
             return ctx.$q.resolve(snapshotA);
@@ -343,7 +343,7 @@ describe('Given an InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1516451043603&to=1516472658604&time=1516472658604&size=100&newApplicationModelEnabled=true":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1516451043603&to=1516472658604&time=1516472658604&size=100":
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1516451043603":
             return ctx.$q.resolve(snapshotA);
@@ -495,7 +495,7 @@ describe('Given an InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100&newApplicationModelEnabled=true":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524248640603":
             return ctx.$q.resolve(snapshotA);
@@ -604,7 +604,7 @@ describe('Given an InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100&newApplicationModelEnabled=true":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524248640603":
             return ctx.$q.resolve(snapshotA);
@@ -713,7 +713,7 @@ describe('Given an InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100&newApplicationModelEnabled=true":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524248640603":
             return ctx.$q.resolve(snapshotA);
@@ -822,7 +822,7 @@ describe('Given an InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100&newApplicationModelEnabled=true":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524248640603":
             return ctx.$q.resolve(snapshotA);
