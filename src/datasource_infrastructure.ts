@@ -13,12 +13,15 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   snapshotCache: Cache<Promise<Array<Selectable>>>;
   catalogCache: Cache<Promise<Array<Selectable>>>;
   lastFetchedFromAPI: boolean;
+  useTimeRange: boolean;
 
   maximumNumberOfUsefulDataPoints = 800;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
+
+    this.useTimeRange = instanceSettings.jsonData.useTimeRange;
 
     this.snapshotCache = new Cache<Promise<Array<Selectable>>>();
     this.catalogCache = new Cache<Promise<Array<Selectable>>>();
@@ -68,7 +71,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       `?q=${encodeURIComponent(target.entityQuery)}` +
       `&from=${timeFilter.from}` +
       `&to=${timeFilter.to}` +
-      `&time=${timeFilter.to}`;
+      (this.useTimeRange ? `` : `&time=${timeFilter.to}`);
     return this.doRequest(fetchSnapshotTypesUrl);
   }
 
@@ -85,7 +88,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       `?q=${query}` +
       `&from=${timeFilter.from}` +
       `&to=${timeFilter.to}` +
-      `&time=${timeFilter.to}` +
+      (this.useTimeRange ? `` : `&time=${timeFilter.to}`) +
       `&size=100`;
 
     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(contextsResponse => {

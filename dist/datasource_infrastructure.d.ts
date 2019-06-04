@@ -8,6 +8,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     snapshotCache: Cache<Promise<Array<Selectable>>>;
     catalogCache: Cache<Promise<Array<Selectable>>>;
     lastFetchedFromAPI: boolean;
+    useTimeRange: boolean;
     maximumNumberOfUsefulDataPoints: number;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);

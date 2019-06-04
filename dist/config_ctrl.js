@@ -9,14 +9,29 @@ System.register(['./proxy_check'], function(exports_1) {
         execute: function() {
             InstanaConfigCtrl = (function () {
                 /** @ngInject */
-                function InstanaConfigCtrl($scope) {
+                function InstanaConfigCtrl($scope, datasourceSrv) {
+                    this.datasourceSrv = datasourceSrv;
                     // check possibility every time
                     this.current.jsonData.canUseProxy = proxy_check_1.default();
-                    // just execute if the datasource was never saved with proxy info
-                    if (this.current.jsonData.useProxy === undefined) {
-                        this.current.jsonData.useProxy = proxy_check_1.default();
-                    }
+                    this.current.jsonData.useProxy = this.current.jsonData.useProxy || proxy_check_1.default();
+                    this.detectFeatures();
                 }
+                InstanaConfigCtrl.prototype.detectFeatures = function () {
+                    var _this = this;
+                    if (!this.current.id) {
+                        return;
+                    }
+                    this.datasourceSrv.loadDatasource(this.current.name).then(function (datasource) {
+                        return datasource.getVersion();
+                    }).then(function (version) {
+                        _this.current.jsonData.canQueryTimeRangedSnapshots = version >= 1.156;
+                    });
+                };
+                InstanaConfigCtrl.prototype.onAccessChange = function () {
+                    if (this.current.jsonData && this.current.jsonData.url && this.current.jsonData.apiToken) {
+                        this.detectFeatures();
+                    }
+                };
                 InstanaConfigCtrl.templateUrl = 'partials/config.html';
                 return InstanaConfigCtrl;
             })();

@@ -16,5 +16,6 @@ export default class InstanaDatasource extends AbstractDatasource {
     getApplicationMetrics(target: any, timeFilter: any): any;
     annotationQuery(options: any): void;
     metricFindQuery(query: string): void;
+    getVersion(): number;
     testDatasource(): any;
 }

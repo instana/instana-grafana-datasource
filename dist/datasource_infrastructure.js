@@ -28,6 +28,7 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
                     this.rollupDurationThresholds = rollups_1.default;
                     this.maximumNumberOfUsefulDataPoints = 800;
+                    this.useTimeRange = instanceSettings.jsonData.useTimeRange;
                     this.snapshotCache = new cache_1.default();
                     this.catalogCache = new cache_1.default();
                 }
@@ -69,7 +70,7 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                         ("?q=" + encodeURIComponent(target.entityQuery)) +
                         ("&from=" + timeFilter.from) +
                         ("&to=" + timeFilter.to) +
-                        ("&time=" + timeFilter.to);
+                        (this.useTimeRange ? "" : "&time=" + timeFilter.to);
                     return this.doRequest(fetchSnapshotTypesUrl);
                 };
                 InstanaInfrastructureDataSource.prototype.fetchSnapshotsForTarget = function (target, timeFilter) {
@@ -84,7 +85,7 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                         ("?q=" + query) +
                         ("&from=" + timeFilter.from) +
                         ("&to=" + timeFilter.to) +
-                        ("&time=" + timeFilter.to) +
+                        (this.useTimeRange ? "" : "&time=" + timeFilter.to) +
                         "&size=100";
                     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(function (contextsResponse) {
                         return _this.$q.all(contextsResponse.data.map(function (_a) {

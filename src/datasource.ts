@@ -97,6 +97,18 @@ export default class InstanaDatasource extends AbstractDatasource {
     throw new Error('Template Variable Support not implemented yet.');
   }
 
+  getVersion(): number {
+    return this.doRequest('/build.json').then(
+      result => {
+        if (result.data) {
+          return parseFloat(result.data.tag) || null;
+        }
+        return null;
+      }, error => {
+        return null;
+      });
+  }
+
   testDatasource() {
     return this.doRequest('/api/monitoringState').then(
       result => {

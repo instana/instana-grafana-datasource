@@ -102,6 +102,16 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                 InstanaDatasource.prototype.metricFindQuery = function (query) {
                     throw new Error('Template Variable Support not implemented yet.');
                 };
+                InstanaDatasource.prototype.getVersion = function () {
+                    return this.doRequest('/build.json').then(function (result) {
+                        if (result.data) {
+                            return parseFloat(result.data.tag) || null;
+                        }
+                        return null;
+                    }, function (error) {
+                        return null;
+                    });
+                };
                 InstanaDatasource.prototype.testDatasource = function () {
                     return this.doRequest('/api/monitoringState').then(function (result) {
                         return {
