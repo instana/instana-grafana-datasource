@@ -98,10 +98,10 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   getVersion(): number {
-    return this.doRequest('/build.json').then(
+    return this.doRequest('/api/instana/version').then(
       result => {
         if (result.data) {
-          return parseFloat(result.data.tag) || null;
+          return parseFloat(result.data.imageTag) || null;
         }
         return null;
       }, error => {

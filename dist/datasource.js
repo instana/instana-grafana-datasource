@@ -103,9 +103,9 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                     throw new Error('Template Variable Support not implemented yet.');
                 };
                 InstanaDatasource.prototype.getVersion = function () {
-                    return this.doRequest('/build.json').then(function (result) {
+                    return this.doRequest('/api/instana/version').then(function (result) {
                         if (result.data) {
-                            return parseFloat(result.data.tag) || null;
+                            return parseFloat(result.data.imageTag) || null;
                         }
                         return null;
                     }, function (error) {
