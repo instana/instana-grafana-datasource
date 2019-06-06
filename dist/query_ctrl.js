@@ -231,6 +231,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     // workaround as long the api does not support returning plugins with custom metrics only
                     if (this.target.metricCategory === this.BUILT_IN_METRICS ||
                         entityType.key === 'statsd' ||
+                        entityType.key === 'prometheus' ||
                         entityType.key === 'jvmRuntimePlatform' ||
                         entityType.key === 'dropwizardApplicationContainer') {
                         return this.snapshots.find(function (type) { return type === entityType.key; }) && entityType.label != null;
