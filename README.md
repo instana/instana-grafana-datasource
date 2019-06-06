@@ -9,8 +9,9 @@ Attention: For On-premise customers Instana Release 146 is required.
 ## Features
 
 - Dynamic Focus queries
+- Applications and Websites
 - Automatic completion for available types and metrics
-- Utilises Instana REST API
+- Utilizes Instana REST API
 - Security via access token
 
 ## Configuration
@@ -18,6 +19,10 @@ Attention: For On-premise customers Instana Release 146 is required.
 This datasource uses the Instana REST API to query the metric values. First of all you will need to generate an API [token](https://docs.instana.io/quick_start/api/). Use this token along with the URL for your Instana account e.g. *https://prod-acme.instana.io*
 
 ![datasource configuration](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/datasource-sml.png)
+
+To use the Grafana server as a proxy for querying Instana REST API please check `Use proxy`.
+
+To enable metrics for offline snapshots please check `Enable offline snapshots`. For On-premise customers Instana Release 156 is required.
 
 ## Usage
 
@@ -47,7 +52,7 @@ If your Dynamic Focus query matches, the returned dataset will include metrics p
 
 ![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/custom-metrics-sml.png)
 
-#### Change legend format
+##### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -62,6 +67,17 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 If no custom format is provided the default '_$label (on host $host)_' will be shown.
 
+##### Singlestat visualization
+
+While using the "Singlestat" visualization an additional metric aggregation is selectable.
+
+![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat-visualization-sml.png)
+
+##### Table visualization
+
+While using the "Table" visualization an additional metric aggregation is selectable.
+
+![table](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/table-visualization-sml.png)
 
 #### Analyze application calls
 
@@ -79,7 +95,7 @@ If your selection matches, the returned dataset will include metrics providing g
 
 If more then 20 metics are fetched, a warning appears that not all results are shown. Add Filter to narrow down the data.
 
-#### Change legend format
+##### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -107,7 +123,7 @@ If your selection matches, the returned dataset will include metrics providing g
 
 A default label '_$label ($website) $metric_' will be shown.
 
-#### Change legend format
+##### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
