@@ -54,7 +54,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // target migration for downwards compability
     migrate(this.target);
 
-    this.target.pluginId = this.panelCtrl.pluginId;
+    this.target.pluginId = this.panelCtrl.panel.type || this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
 

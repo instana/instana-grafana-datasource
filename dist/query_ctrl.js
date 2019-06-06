@@ -49,7 +49,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.defaults = {};
                     // target migration for downwards compability
                     migration_1.default(this.target);
-                    this.target.pluginId = this.panelCtrl.pluginId;
+                    this.target.pluginId = this.panelCtrl.panel.type || this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                     // can we read the options here ??
