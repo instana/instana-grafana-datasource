@@ -99,7 +99,10 @@ This should render a chart with two datasets (`node (on host "host-1")` and `nod
 
 This should render a chart with one dataset (`host-3 (29042)`).
 
-#### Analyze applications
+##### Aggregation selection for Visualizations
+Switching the Visualization to `Singlestat` and `Table` will additional add an aggregation selection to Metric.
+
+#### Analyze application calls
 * Category: `Analyze application calls`
 * Application: `AWS instances`
 * Group by: `endpoint.name`
