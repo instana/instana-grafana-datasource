@@ -30,11 +30,11 @@
   </div>
   <div class="gf-form">
     <label class="gf-form-label width-14 pointer" for="in-historic-mode">
-      Enable split snapshots
+      Enable offline snapshots
       <info-popover position="top center" mode="right-normal">
-        <p>Enables querying split historical snapshots for given timeranges.<br/>Supported with Instana 1.156+ and Instana datasource 2.3.0+</p>
+        <p>Enables querying offline snapshots for given timeranges.<br/>Supported with Instana 1.156+ and Instana datasource 2.3.0+</p>
       </info-popover>
     </label>
-    <gf-form-switch class="gf-form-switch" id="in-historic-mode" checked="ctrl.current.jsonData.useTimeRange" ng-disabled="!ctrl.current.jsonData.canQueryTimeRangedSnapshots"/>
+    <gf-form-switch class="gf-form-switch" id="in-historic-mode" checked="ctrl.current.jsonData.showOffline" ng-disabled="!ctrl.current.jsonData.canQueryOfflineSnapshots"/>
   </div>
 </div>

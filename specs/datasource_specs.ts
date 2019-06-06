@@ -195,7 +195,7 @@ describe('Given an InstanaDatasource', function() {
     });
 
     xit('should cache snapshot data for a minute', function() {
-      ctx.ds.infrastructure.currentTime = () => { return 1516472658614; };
+      ctx.ds.infrastructure.currentTime = () => { return 1516472658604; };
 
       return ctx.ds.infrastructure.fetchSnapshotsForTarget({
         "entityQuery": "filler",
@@ -209,7 +209,7 @@ describe('Given an InstanaDatasource', function() {
         },
         "snapshotCache": {
           'filler%20AND%20entity.pluginId%3Aprocess': {
-            'time': '1516472658604',
+            'time': '1516472658600',
             'snapshots': [
               {
                 'snapshotId': 'A',
@@ -226,8 +226,8 @@ describe('Given an InstanaDatasource', function() {
       }, timeFilter)
       .then(function(results) {
         expect(results.length).to.equal(2);
-        expect(results[0]).to.eql({ snapshotId: 'A', label: 'label for A (on host "Stans-Macbook-Pro")' });
-        expect(results[1]).to.eql({ snapshotId: 'B', label: 'label for B' });
+        expect(results[0]).to.eql({ snapshotId: 'A', host: 'Stans-Macbook-Pro', response: { status: 200, data: { label: 'label for A (on host "Stans-Macbook-Pro")' }}});
+        expect(results[1]).to.eql({ snapshotId: 'B', host: '', response: { status: 200, data: { label: 'label for B' }}});
       });
     })
   });
@@ -897,6 +897,137 @@ describe('Given an InstanaDatasource without proxy', function() {
       return ctx.ds.testDatasource().then(function(results) {
         expect(results.status).to.equal('success');
         expect(results.message).to.equal('Successfully connected to the Instana API.');
+      });
+    });
+
+  });
+});
+
+describe('Given an InstanaDatasource with offline snapshots', function() {
+  let ctx: any = {
+    backendSrv: {},
+    templateSrv: new TemplateSrvStub()
+  };
+
+  beforeEach(function() {
+    ctx.$q = Q;
+    ctx.instanceSettings = {
+      id: 1,
+      name: 'instana-local-test',
+      url: '/api/datasources/proxy/1',
+      jsonData: {
+        url: 'http://localhost:8010',
+        apiToken: 'valid-api-token',
+        useProxy: true,
+        showOffline: true
+      }
+    };
+
+    ctx.ds = new InstanaDatasource(ctx.instanceSettings, ctx.backendSrv, ctx.templateSrv, ctx.$q);
+  });
+
+  describe('When retrieving metrics for offline snapshots', function() {
+
+    const options = {
+      "timezone": "browser",
+      "panelId": 1,
+      "range": {
+        "from": "2018-04-20T18:24:00.603Z",
+        "to": "2018-04-22T18:24:00.603Z",
+        "raw": {
+          "from": "now-6h",
+          "to": "now"
+        }
+      },
+      "rangeRaw": {
+        "from": "now-2d",
+        "to": "now"
+      },
+      "interval": "20s",
+      "intervalMs": 20000,
+      "targets": [
+        {
+          "entityQuery": "filler",
+          "entityType": {
+            "key": "process",
+            "label": "Process"
+          },
+          "metric": {
+            "key": "mem.virtual",
+            "label": "Virtual",
+          },
+          "refId": "A"
+        }
+      ],
+      "format": "json",
+      "maxDataPoints": 1063,
+      "scopedVars": {
+        "__interval": {
+          "text": "20s",
+          "value": "20s"
+        },
+        "__interval_ms": {
+          "text": 20000,
+          "value": 20000
+        }
+      }
+    };
+
+    const contexts = {
+      status: 200,
+      data: [
+        {
+          "snapshotId": "A",
+          "host": "Stans-Macbook-Pro"
+        }
+      ]
+    }
+
+    const snapshotA = {
+      status: 200,
+      data: {
+        label: 'label for A'
+      }
+    };
+
+    const metricsForA = {
+      status: 200,
+      data: {
+        "values": [
+          {"timestamp":1516451043603,"value":42},
+          {"timestamp":1516451103603,"value":69},
+          {"timestamp":1516451163603,"value":13}
+        ]
+      }
+    };
+
+    beforeEach(function() {
+      ctx.backendSrv.datasourceRequest = function(options) {
+        switch (options.url) {
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&size=100":
+            return ctx.$q.resolve(contexts);
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?from=1524248640603&to=1524421440603":
+            return ctx.$q.resolve(snapshotA);
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
+            return ctx.$q.resolve(metricsForA);
+          default:
+            throw new Error('Unexpected call URL: ' + options.url);
+        }
+      };
+    });
+
+    it('should display offline metrics', function() {
+      const time = 1516472658604;
+
+      ctx.ds.currentTime = () => { return time; };
+
+      return ctx.ds.query(options).then(function(results) {
+        expect(results.data.length).to.equal(1);
+        expect(results.data[0].datapoints).to.eql([
+          [42,1516451043603],
+          [69,1516451103603],
+          [13,1516451163603]
+        ]);
       });
     });
 

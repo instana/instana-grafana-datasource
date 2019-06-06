@@ -13,7 +13,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   snapshotCache: Cache<Promise<Array<Selectable>>>;
   catalogCache: Cache<Promise<Array<Selectable>>>;
   lastFetchedFromAPI: boolean;
-  useTimeRange: boolean;
+  showOffline: boolean;
 
   maximumNumberOfUsefulDataPoints = 800;
 
@@ -21,7 +21,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
 
-    this.useTimeRange = instanceSettings.jsonData.useTimeRange;
+    this.showOffline = instanceSettings.jsonData.showOffline;
 
     this.snapshotCache = new Cache<Promise<Array<Selectable>>>();
     this.catalogCache = new Cache<Promise<Array<Selectable>>>();
@@ -71,7 +71,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       `?q=${encodeURIComponent(target.entityQuery)}` +
       `&from=${timeFilter.from}` +
       `&to=${timeFilter.to}` +
-      (this.useTimeRange ? `` : `&time=${timeFilter.to}`);
+      (this.showOffline ? `` : `&time=${timeFilter.to}`);
     return this.doRequest(fetchSnapshotTypesUrl);
   }
 
@@ -88,13 +88,16 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       `?q=${query}` +
       `&from=${timeFilter.from}` +
       `&to=${timeFilter.to}` +
-      (this.useTimeRange ? `` : `&time=${timeFilter.to}`) +
+      (this.showOffline ? `` : `&time=${timeFilter.to}`) +
       `&size=100`;
 
     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(contextsResponse => {
       return this.$q.all(
         contextsResponse.data.map(({snapshotId, host, plugin}) => {
-          const fetchSnapshotUrl = `/api/snapshots/${snapshotId}?time=${timeFilter.from}`;
+          const fetchSnapshotUrl = `/api/snapshots/${snapshotId}` +
+            (this.showOffline ?
+              `?from=${timeFilter.from}&to=${timeFilter.to}` :
+              `?time=${timeFilter.from}`);
 
           return this.doRequest(fetchSnapshotUrl, true).then(snapshotResponse => {
             // check for undefined because the fetchSnapshotContexts is buggy

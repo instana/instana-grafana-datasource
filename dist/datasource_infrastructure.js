@@ -28,7 +28,7 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
                     this.rollupDurationThresholds = rollups_1.default;
                     this.maximumNumberOfUsefulDataPoints = 800;
-                    this.useTimeRange = instanceSettings.jsonData.useTimeRange;
+                    this.showOffline = instanceSettings.jsonData.showOffline;
                     this.snapshotCache = new cache_1.default();
                     this.catalogCache = new cache_1.default();
                 }
@@ -70,7 +70,7 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                         ("?q=" + encodeURIComponent(target.entityQuery)) +
                         ("&from=" + timeFilter.from) +
                         ("&to=" + timeFilter.to) +
-                        (this.useTimeRange ? "" : "&time=" + timeFilter.to);
+                        (this.showOffline ? "" : "&time=" + timeFilter.to);
                     return this.doRequest(fetchSnapshotTypesUrl);
                 };
                 InstanaInfrastructureDataSource.prototype.fetchSnapshotsForTarget = function (target, timeFilter) {
@@ -85,12 +85,15 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                         ("?q=" + query) +
                         ("&from=" + timeFilter.from) +
                         ("&to=" + timeFilter.to) +
-                        (this.useTimeRange ? "" : "&time=" + timeFilter.to) +
+                        (this.showOffline ? "" : "&time=" + timeFilter.to) +
                         "&size=100";
                     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(function (contextsResponse) {
                         return _this.$q.all(contextsResponse.data.map(function (_a) {
                             var snapshotId = _a.snapshotId, host = _a.host, plugin = _a.plugin;
-                            var fetchSnapshotUrl = "/api/snapshots/" + snapshotId + "?time=" + timeFilter.from;
+                            var fetchSnapshotUrl = ("/api/snapshots/" + snapshotId) +
+                                (_this.showOffline ?
+                                    "?from=" + timeFilter.from + "&to=" + timeFilter.to :
+                                    "?time=" + timeFilter.from);
                             return _this.doRequest(fetchSnapshotUrl, true).then(function (snapshotResponse) {
                                 // check for undefined because the fetchSnapshotContexts is buggy
                                 if (snapshotResponse !== undefined) {
