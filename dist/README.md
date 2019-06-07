@@ -52,7 +52,7 @@ If your Dynamic Focus query matches, the returned dataset will include metrics p
 
 ![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/custom-metrics-sml.png)
 
-##### Change legend format
+#### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -67,13 +67,16 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 If no custom format is provided the default '_$label (on host $host)_' will be shown.
 
-##### Singlestat visualization
+#### Singlestat visualization
 
 While using the "Singlestat" visualization an additional metric aggregation is selectable.
+For showing a correct SUM metric, configuration on two different places is needed:
+- on metric selection: "SUM" to adjust our mean calculated rollup values
+- on Singlestat configuation: "Total" to tell the panel to aggregate all given values
 
 ![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat-visualization-sml.png)
 
-##### Table visualization
+#### Table visualization
 
 While using the "Table" visualization an additional metric aggregation is selectable.
 
@@ -95,7 +98,7 @@ If your selection matches, the returned dataset will include metrics providing g
 
 If more then 20 metics are fetched, a warning appears that not all results are shown. Add Filter to narrow down the data.
 
-##### Change legend format
+#### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -123,7 +126,7 @@ If your selection matches, the returned dataset will include metrics providing g
 
 A default label '_$label ($website) $metric_' will be shown.
 
-##### Change legend format
+#### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
