@@ -74,6 +74,28 @@
         }
       }]
     },
+    {
+      "predicates": [{
+        "equals": {
+          "method": "GET",
+          "path": "/api/instana/version",
+          "headers": {
+            "Authorization": "apiToken valid-api-token"
+          }
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=utf-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+          },
+          "body": "{\"branch\":\"develop\",\"commit\":\"commitHash\",\"imageTag\":\"1.156.1\"}"
+        }
+      }]
+    },
     <%- include('calls_infrastructure.ejs'); -%>
     <%- include('calls_application.ejs'); -%>
     <%- include('calls_website.ejs'); -%>
