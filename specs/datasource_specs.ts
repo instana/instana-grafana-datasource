@@ -1004,7 +1004,7 @@ describe('Given an InstanaDatasource with offline snapshots', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&size=100":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603":
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?from=1524248640603&to=1524421440603":
             return ctx.$q.resolve(snapshotA);

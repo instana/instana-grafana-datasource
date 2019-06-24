@@ -88,8 +88,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       `?q=${query}` +
       `&from=${timeFilter.from}` +
       `&to=${timeFilter.to}` +
-      (this.showOffline ? `` : `&time=${timeFilter.to}`) +
-      `&size=100`;
+      (this.showOffline ? `` : `&time=${timeFilter.to}&size=100`);
 
     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(contextsResponse => {
       return this.$q.all(

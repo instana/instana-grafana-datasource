@@ -85,8 +85,7 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                         ("?q=" + query) +
                         ("&from=" + timeFilter.from) +
                         ("&to=" + timeFilter.to) +
-                        (this.showOffline ? "" : "&time=" + timeFilter.to) +
-                        "&size=100";
+                        (this.showOffline ? "" : "&time=" + timeFilter.to + "&size=100");
                     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(function (contextsResponse) {
                         return _this.$q.all(contextsResponse.data.map(function (_a) {
                             var snapshotId = _a.snapshotId, host = _a.host, plugin = _a.plugin;
