@@ -27,7 +27,6 @@ describe('When adding the Instana datasource to Grafana', function() {
     await page.type('input[name=confirmNew]', 'admin');
     saveNewButton.click();
     await page.waitFor(1000); // don't ask
-    await page.waitForSelector('a.btn.progress-step-cta');
     await page.goto('http://localhost:3000/datasources/new?gettingstarted');
 
     const installButton = await page.waitForXPath('//div//span[contains(text(),"Instana")]');
