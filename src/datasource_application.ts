@@ -204,11 +204,29 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
   readItemMetrics(target, response) {
     // as we map two times we need to flatten the result
+    console.log(response);
+
+    var penis = _.flatten(response.data.items.map((item, index) => {
+      var bla = _.map(item.metrics, (value, key) => {
+        var blub = {
+          'target': this.buildLabel(target, item, key, index),
+          'datapoints': _.map(value, metric => [metric[1], metric[0]])
+        };
+        console.log(blub);
+        return blub;
+      });
+      console.log(bla);
+      return bla;
+    }));
+
+    console.log(penis);
+    return penis;
+
     return _.flatten(response.data.items.map((item, index) => {
       return _.map(item.metrics, (value, key) => {
         return {
           'target': this.buildLabel(target, item, key, index),
-          'datapoints': _.map(value, metric => [metric[1], metric[0]])
+          'datapoints': this.sortByTimestamp(_.map(value, metric => [metric[1], metric[0]]))
         };
       });
     }));
