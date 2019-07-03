@@ -335,7 +335,7 @@
         </div>
         <input id="in-filter-stringValue-{{ctrl.target.refId}}-{{$index}}"
                type="text"
-               ng-show="ctrl.target.filters[$index].tag.type === 'STRING' || ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR'"
+               ng-show="(ctrl.target.filters[$index].tag.type === 'STRING' || ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR') && !ctrl.target.filters[$index].operator.key.includes('EMPTY')"
                class="gf-form-input width-22"
                ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
                ng-model="ctrl.target.filters[$index].stringValue"

@@ -6,6 +6,7 @@ import TagFilter from './types/tag_filter';
 import Cache from './cache';
 
 import _ from 'lodash';
+import {createTagFilter} from "./util/analyze_util";
 
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
   websitesCache: Cache<Promise<Array<Selectable>>>;
@@ -71,8 +72,8 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     };
     websites = this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
       websitesResponse.data.items.map(entry => ({
-        'key' : entry.name,
-        'label' : entry.name
+        'key': entry.name,
+        'label': entry.name
       }))
     );
     this.websitesCache.put(key, websites);
@@ -88,8 +89,8 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
 
     websiteTags = this.doRequest('/api/website-monitoring/catalog/tags').then(tagsResponse =>
       tagsResponse.data.map(entry => ({
-        'key' : entry.name,
-        'type' : entry.type
+        'key': entry.name,
+        'type': entry.type
       }))
     );
     this.simpleCache.put('websiteTags', websiteTags);
@@ -105,10 +106,10 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
 
     websiteCatalog = this.doRequest('/api/website-monitoring/catalog/metrics').then(catalogResponse =>
       catalogResponse.data.map(entry => ({
-        'key' : entry.metricId,
-        'label' : entry.label,
-        'aggregations' : entry.aggregations ? entry.aggregations.sort() : [],
-        'beaconTypes' : entry.beaconTypes ? entry.beaconTypes : ['pageLoad', 'resourceLoad', 'httpRequest', 'error']
+        'key': entry.metricId,
+        'label': entry.label,
+        'aggregations': entry.aggregations ? entry.aggregations.sort() : [],
+        'beaconTypes': entry.beaconTypes ? entry.beaconTypes : ['pageLoad', 'resourceLoad', 'httpRequest', 'error']
       }))
     );
     this.simpleCache.put('websiteCatalog', websiteCatalog);
@@ -116,10 +117,11 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return websiteCatalog;
   }
 
+
   fetchMetricsForWebsite(target, timeFilter: TimeFilter) {
     // avoid invalid calls
-    if (!target || !target.metric || !target.group || !target.entity) {
-      return this.$q.resolve({ data: { items: [] } });
+    if (!target || !target.metric || !target.group || !target.entity) {
+      return this.$q.resolve({data: {items: []}});
     }
 
     const windowSize = this.getWindowSize(timeFilter);
@@ -129,9 +131,10 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       operator: 'EQUALS',
       value: target.entity.key
     }];
+
     _.forEach(target.filters, filter => {
       if (filter.isValid) {
-        tagFilters.push(this.createTagFilter(filter));
+        tagFilters.push(createTagFilter(filter));
       }
     });
     const metric = {
@@ -157,7 +160,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       },
       tagFilters: tagFilters,
       type: target.entityType.key,
-      metrics: [ metric ]
+      metrics: [metric]
     };
     return this.postRequest('/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
   }
@@ -167,22 +170,6 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       granularity => windowSize / 1000 / granularity <= this.maximumNumberOfUsefulDataPoints
     );
     return granularity || this.sensibleGranularities[this.sensibleGranularities.length - 1];
-  }
-
-  createTagFilter(filter: TagFilter) {
-    const tagFilter = {
-      name: filter.tag.key,
-      operator: filter.operator.key,
-      value: filter.stringValue
-    };
-
-    if (this.OPERATOR_NUMBER === filter.tag.type) {
-      tagFilter.value = filter.numberValue.toString();
-    } else if (this.OPERATOR_BOOLEAN === filter.tag.type) {
-      tagFilter.value = filter.booleanValue.toString();
-    }
-
-    return tagFilter;
   }
 
   readItemMetrics(target, response) {

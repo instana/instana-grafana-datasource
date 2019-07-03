@@ -333,13 +333,20 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onTagFilterChange(index: number) {
     let filter: TagFilter = this.target.filters[index];
 
+    console.log(filter);
     // select a matching operator if not provided
     if (filter.tag && (!filter.operator || filter.tag.type !== filter.operator.type)) {
       filter.operator = _.find(this.uniqueOperators, ['type', filter.tag.type]);
     }
     // validate changed filter
     if (filter.tag) {
-      if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
+      if (filter.operator.key.includes("EMPTY")) {
+        filter.isValid = true;
+        // to avoid sending value with filter operators that do not require a value (such as is-present/is-not-present)
+        filter.stringValue = "";
+        filter.numberValue = null;
+        filter.booleanValue = true;
+      } else if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
         filter.isValid = true;
       } else if (this.OPERATOR_KEY_VALUE === filter.tag.type && filter.stringValue && filter.stringValue.includes('=') ) {
         filter.isValid = true;

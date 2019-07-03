@@ -2,10 +2,10 @@ import AbstractDatasource from './datasource_abstract';
 import CallGroupBody from './types/call_group_body';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
-import TagFilter from './types/tag_filter';
 import Cache from './cache';
 
 import _ from 'lodash';
+import {createTagFilter} from "./util/analyze_util";
 
 export default class InstanaApplicationDataSource extends AbstractDatasource {
   applicationsCache: Cache<Promise<Array<Selectable>>>;
@@ -148,7 +148,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
     _.forEach(target.filters, filter => {
       if (filter.isValid) {
-        tagFilters.push(this.createTagFilter(filter));
+        tagFilters.push(createTagFilter(filter));
       }
     });
 
@@ -184,22 +184,6 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       granularity => windowSize / 1000 / granularity <= this.maximumNumberOfUsefulDataPoints
     );
     return granularity || this.sensibleGranularities[this.sensibleGranularities.length - 1];
-  }
-
-  createTagFilter(filter: TagFilter) {
-    const tagFilter = {
-      name: filter.tag.key,
-      operator: filter.operator.key,
-      value: filter.stringValue
-    };
-
-    if (this.OPERATOR_NUMBER === filter.tag.type) {
-      tagFilter.value = filter.numberValue.toString();
-    } else if (this.OPERATOR_BOOLEAN === filter.tag.type) {
-      tagFilter.value = filter.booleanValue.toString();
-    }
-
-    return tagFilter;
   }
 
   readItemMetrics(target, response) {
