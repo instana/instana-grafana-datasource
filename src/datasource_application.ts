@@ -30,9 +30,6 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
   // duplicate to QueryCtrl.ALL_APPLICATIONS
   ALL_APPLICATIONS = '-- All Applications --';
 
-  OPERATOR_NUMBER = 'NUMBER';
-  OPERATOR_BOOLEAN = 'BOOLEAN';
-
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
