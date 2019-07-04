@@ -59,8 +59,7 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                             return _this.getInfrastructureMetrics(target, timeFilter);
                         }
                     })).then(function (results) {
-                        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-                        return { data: [].concat.apply([], results) };
+                        return { data: lodash_1.default.flatten(results) };
                     });
                 };
                 InstanaDatasource.prototype.readTime = function (options) {
