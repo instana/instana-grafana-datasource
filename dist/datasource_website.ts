@@ -71,8 +71,8 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     };
     websites = this.postRequest('/api/website-monitoring/analyze/beacon-groups', data).then(websitesResponse =>
       websitesResponse.data.items.map(entry => ({
-        'key' : entry.name,
-        'label' : entry.name
+        'key': entry.name,
+        'label': entry.name
       }))
     );
     this.websitesCache.put(key, websites);
@@ -88,8 +88,8 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
 
     websiteTags = this.doRequest('/api/website-monitoring/catalog/tags').then(tagsResponse =>
       tagsResponse.data.map(entry => ({
-        'key' : entry.name,
-        'type' : entry.type
+        'key': entry.name,
+        'type': entry.type
       }))
     );
     this.simpleCache.put('websiteTags', websiteTags);
@@ -105,10 +105,10 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
 
     websiteCatalog = this.doRequest('/api/website-monitoring/catalog/metrics').then(catalogResponse =>
       catalogResponse.data.map(entry => ({
-        'key' : entry.metricId,
-        'label' : entry.label,
-        'aggregations' : entry.aggregations ? entry.aggregations.sort() : [],
-        'beaconTypes' : entry.beaconTypes ? entry.beaconTypes : ['pageLoad', 'resourceLoad', 'httpRequest', 'error']
+        'key': entry.metricId,
+        'label': entry.label,
+        'aggregations': entry.aggregations ? entry.aggregations.sort() : [],
+        'beaconTypes': entry.beaconTypes ? entry.beaconTypes : ['pageLoad', 'resourceLoad', 'httpRequest', 'error']
       }))
     );
     this.simpleCache.put('websiteCatalog', websiteCatalog);
@@ -118,8 +118,8 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
 
   fetchMetricsForWebsite(target, timeFilter: TimeFilter) {
     // avoid invalid calls
-    if (!target || !target.metric || !target.group || !target.entity) {
-      return this.$q.resolve({ data: { items: [] } });
+    if (!target || !target.metric || !target.group || !target.entity) {
+      return this.$q.resolve({data: {items: []}});
     }
 
     const windowSize = this.getWindowSize(timeFilter);
@@ -157,7 +157,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       },
       tagFilters: tagFilters,
       type: target.entityType.key,
-      metrics: [ metric ]
+      metrics: [metric]
     };
     return this.postRequest('/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
   }
@@ -191,7 +191,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       return _.map(item.metrics, (value, key) => {
         return {
           'target': this.buildLabel(target, item, key, index),
-          'datapoints': _.map(value, metric => [metric[1], metric[0]])
+          'datapoints': this.sortByTimestamp(_.map(value, metric => [metric[1], metric[0]]))
         };
       });
     }));
