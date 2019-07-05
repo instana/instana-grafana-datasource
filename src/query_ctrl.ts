@@ -326,14 +326,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   removeFilter(index: number) {
     this.target.filters.splice(index, 1);
-
     this.panelCtrl.refresh();
   }
 
   onTagFilterChange(index: number) {
     let filter: TagFilter = this.target.filters[index];
 
-    console.log(filter);
     // select a matching operator if not provided
     if (filter.tag && (!filter.operator || filter.tag.type !== filter.operator.type)) {
       filter.operator = _.find(this.uniqueOperators, ['type', filter.tag.type]);
@@ -391,12 +389,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.group = null;
     this.target.showGroupBySecondLevel = null;
     this.target.groupbyTagSecondLevelKey = null;
+    this.target.granularity = null;
     this.target.filters = [];
   }
 
   resetMetricSelection() {
     this.target.metric = null;
     this.target.filter = null;
+    this.target.granularity = null;
     this.target.labelFormat = null;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
   }
@@ -432,6 +432,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onChange() {
+    console.log("on change invoked");
     this.panelCtrl.refresh();
   }
 
@@ -439,6 +440,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     if (this.target.metric && !_.includes(this.target.metric.aggregations, this.target.aggregation)) {
       this.target.aggregation = this.target.metric.aggregations[0];
     }
+    this.panelCtrl.refresh();
+  }
+
+  onGranularitySelect() {
     this.panelCtrl.refresh();
   }
 }

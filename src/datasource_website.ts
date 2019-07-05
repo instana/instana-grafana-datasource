@@ -6,27 +6,13 @@ import TagFilter from './types/tag_filter';
 import Cache from './cache';
 
 import _ from 'lodash';
-import {createTagFilter} from "./util/analyze_util";
+import {createTagFilter, getChartGranularity, readItemMetrics} from "./util/analyze_util";
 
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
   websitesCache: Cache<Promise<Array<Selectable>>>;
 
   // our ui is limited to 80 results, same logic to stay comparable
   maximumNumberOfUsefulDataPoints = 80;
-  sensibleGranularities = [
-    1, // second
-    5,
-    10,
-    60, // minute
-    5 * 60,
-    10 * 60,
-    60 * 60, // hour
-    5 * 60 * 60,
-    10 * 60 * 60,
-    24 * 60 * 60, // day
-    5 * 24 * 60 * 60,
-    10 * 24 * 60 * 60
-  ];
 
   OPERATOR_NUMBER = 'NUMBER';
   OPERATOR_BOOLEAN = 'BOOLEAN';
@@ -142,7 +128,11 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       aggregation: target.aggregation ? target.aggregation : 'SUM'
     };
     if (target.pluginId !== "singlestat") { // no granularity for singlestat
-      metric['granularity'] = this.getChartGranularity(windowSize);
+      if (target.granularity) {
+        metric['granularity'] = target.granularity;
+      } else {
+        metric['granularity'] = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+      }
     }
 
     const group = {
@@ -165,26 +155,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return this.postRequest('/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
   }
 
-  getChartGranularity(windowSize: number): number {
-    const granularity = this.sensibleGranularities.find(
-      granularity => windowSize / 1000 / granularity <= this.maximumNumberOfUsefulDataPoints
-    );
-    return granularity || this.sensibleGranularities[this.sensibleGranularities.length - 1];
-  }
-
-  readItemMetrics(target, response) {
-    // as we map two times we need to flatten the result
-    return _.flatten(response.data.items.map((item, index) => {
-      return _.map(item.metrics, (value, key) => {
-        return {
-          'target': this.buildLabel(target, item, key, index),
-          'datapoints': _.map(value, metric => [metric[1], metric[0]])
-        };
-      });
-    }));
-  }
-
-  buildLabel(target, item, key, index): string {
+  buildWebsiteLabel(target, item, key, index): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
@@ -197,4 +168,5 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     }
     return item.name + ' (' + target.entity.label + ')' + ' - ' + key;
   }
+
 }

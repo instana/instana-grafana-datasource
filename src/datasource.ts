@@ -7,11 +7,13 @@ import TimeFilter from './types/time_filter';
 import migrate from './migration';
 
 import _ from 'lodash';
+import {readItemMetrics} from "./util/analyze_util";
 
 export default class InstanaDatasource extends AbstractDatasource {
   infrastructure: InstanaInfrastructureDataSource;
   application: InstanaApplicationDataSource;
   website: InstanaWebsiteDataSource;
+  timeFilter: TimeFilter;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -27,7 +29,7 @@ export default class InstanaDatasource extends AbstractDatasource {
       return this.$q.resolve({ data: [] });
     }
 
-    const timeFilter: TimeFilter = this.readTime(options);
+    this.timeFilter = this.readTime(options);
 
     return this.$q.all(
       _.map(options.targets, target => {
@@ -37,15 +39,17 @@ export default class InstanaDatasource extends AbstractDatasource {
           return { data: [] };
         }
 
+        //target.availableGranularities = this.website.getPossibleGranularities(this.timeFilter.windowSize);
+
         // target migration for downwards compability
         migrate(target);
 
         if (target.metricCategory === this.WEBSITE_METRICS) {
-          return this.getWebsiteMetrics(target, timeFilter);
+          return this.getWebsiteMetrics(target, this.timeFilter);
         } else if (target.metricCategory === this.APPLICATION_METRICS) {
-          return this.getApplicationMetrics(target, timeFilter);
+          return this.getApplicationMetrics(target, this.timeFilter);
         } else {
-          return this.getInfrastructureMetrics(target, timeFilter);
+          return this.getInfrastructureMetrics(target, this.timeFilter);
         }
       })
     ).then(results => {
@@ -78,14 +82,14 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   getWebsiteMetrics(target, timeFilter: TimeFilter) {
     return this.website.fetchMetricsForWebsite(target, timeFilter).then(response => {
-      return this.website.readItemMetrics(target, response);
+      return readItemMetrics(target, response, this.website.buildWebsiteLabel);
     });
   }
 
   getApplicationMetrics(target, timeFilter) {
     return this.application.fetchMetricsForApplication(target, timeFilter).then(response => {
       target.showWarningCantShowAllResults = response.data.canLoadMore;
-      return this.application.readItemMetrics(target, response);
+      return readItemMetrics(target, response, this.application.buildApplicationLabel);
     });
   }
 

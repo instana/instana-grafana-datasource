@@ -156,9 +156,9 @@
       <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
         <select id="in-granularity-{{ctrl.target.refId}}"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                ng-model="ctrl.target.entityType"
-                ng-change="ctrl.onEntityTypeSelect(true)"
-                ng-options="f as f.label for f in ctrl.uniqueEntityTypes track by f.key">
+                ng-model="ctrl.target.granularity"
+                ng-change="ctrl.onGranularitySelect()"
+                ng-options="f for f in ctrl.target.availableGranularities">
           <option value="" disabled selected>Default</option>
         </select>
       </div>
