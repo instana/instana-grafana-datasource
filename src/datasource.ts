@@ -7,7 +7,7 @@ import TimeFilter from './types/time_filter';
 import migrate from './migration';
 
 import _ from 'lodash';
-import {readItemMetrics} from "./util/analyze_util";
+import {getChartGranularity, getPossibleGranularities, readItemMetrics} from "./util/analyze_util";
 
 export default class InstanaDatasource extends AbstractDatasource {
   infrastructure: InstanaInfrastructureDataSource;
@@ -26,7 +26,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   query(options) {
     if (Object.keys(options.targets[0]).length === 0) {
-      return this.$q.resolve({ data: [] });
+      return this.$q.resolve({data: []});
     }
 
     this.timeFilter = this.readTime(options);
@@ -36,25 +36,26 @@ export default class InstanaDatasource extends AbstractDatasource {
 
         // grafana setting to disable query execution
         if (target.hide) {
-          return { data: [] };
+          return {data: []};
         }
-
-        //target.availableGranularities = this.website.getPossibleGranularities(this.timeFilter.windowSize);
 
         // target migration for downwards compability
         migrate(target);
 
         if (target.metricCategory === this.WEBSITE_METRICS) {
+          target.availableGranularities = getPossibleGranularities(this.timeFilter.windowSize);
           return this.getWebsiteMetrics(target, this.timeFilter);
         } else if (target.metricCategory === this.APPLICATION_METRICS) {
+          target.availableGranularities = getPossibleGranularities(this.timeFilter.windowSize);
           return this.getApplicationMetrics(target, this.timeFilter);
         } else {
+          target.availableRollUps = this.infrastructure.getPossibleRollups(this.timeFilter);
           return this.getInfrastructureMetrics(target, this.timeFilter);
         }
       })
     ).then(results => {
       // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-      return { data: [].concat.apply([], results) };
+      return {data: [].concat.apply([], results)};
     });
   }
 
@@ -71,7 +72,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   getInfrastructureMetrics(target, timeFilter: TimeFilter) {
     // do not try to retrieve data without selected metric
     if (!target.metric) {
-      return this.$q.resolve({ data: [] });
+      return this.$q.resolve({data: []});
     }
 
     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.

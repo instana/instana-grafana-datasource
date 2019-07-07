@@ -32,7 +32,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   timeFilter: TimeFilter;
 
   EMPTY_DROPDOWN_TEXT = ' - ';
-  ALL_APPLICATIONS = '-- All Applications --';
+  ALL_APPLICATIONS = '-- No Application Filter --';
 
   OPERATOR_STRING = 'STRING';
   OPERATOR_NUMBER = 'NUMBER';
@@ -76,7 +76,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // infrastructure (built-in & custom)
     if (this.isInfrastructure() && this.target.entityQuery) {
       this.onFilterChange(false).then(() => {
-
         // infrastructure metrics support available metrics on a selected entity type
         if (this.target.entityType) {
           this.onEntityTypeSelect(false).then(() => {
@@ -432,7 +431,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onChange() {
-    console.log("on change invoked");
     this.panelCtrl.refresh();
   }
 
@@ -440,10 +438,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     if (this.target.metric && !_.includes(this.target.metric.aggregations, this.target.aggregation)) {
       this.target.aggregation = this.target.metric.aggregations[0];
     }
-    this.panelCtrl.refresh();
-  }
-
-  onGranularitySelect() {
     this.panelCtrl.refresh();
   }
 }

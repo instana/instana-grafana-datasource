@@ -14,7 +14,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
   maximumNumberOfUsefulDataPoints = 80;
 
   // duplicate to QueryCtrl.ALL_APPLICATIONS
-  ALL_APPLICATIONS = '-- All Applications --';
+  ALL_APPLICATIONS = '-- No Application Filter --';
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -139,9 +139,18 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       metric: target.metric.key,
       aggregation: target.aggregation ? target.aggregation : 'SUM'
     };
+
+    let granularity = null;
     if (target.pluginId !== "singlestat") { // no granularity for singlestat
-      metric['granularity'] = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+      if (target.granularity) {
+        granularity = target.granularity;
+      } else {
+        granularity = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+        target.granularity = granularity;
+      }
     }
+
+    metric['granularity'] = granularity.value;
 
     const group = {
       groupbyTag: target.group.key

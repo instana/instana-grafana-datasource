@@ -1,23 +1,9 @@
 import TagFilter from "../types/tag_filter";
 import _ from "lodash";
+import granularities from "../lists/granularities";
+import Granularity from "../types/granularity";
 
-const sensibleGranularities = [
-  1, // second
-  5,
-  10,
-  60, // minute
-  5 * 60,
-  10 * 60,
-  60 * 60, // hour
-  5 * 60 * 60,
-  10 * 60 * 60,
-  24 * 60 * 60, // day
-  5 * 24 * 60 * 60,
-  10 * 24 * 60 * 60
-];
-
-const APPLICATION_METRICS = '2';
-const WEBSITE_METRICS = '3';
+const MAX_ALLOWED_DATA_POINTS = 1000;
 
 export function createTagFilter(filter: TagFilter) {
   const tagFilter = {
@@ -37,11 +23,21 @@ export function createTagFilter(filter: TagFilter) {
   return tagFilter;
 }
 
-export function getChartGranularity(windowSize: number, maximumNumberOfUsefulDataPoints: number): number {
-  const granularity = sensibleGranularities.find(
-    granularity => windowSize / 1000 / granularity <= maximumNumberOfUsefulDataPoints
+export function getChartGranularity(windowSize: number,
+                                    maximumNumberOfUsefulDataPoints: number): Granularity {
+  const granularity = granularities.find(
+    granularity => windowSize / 1000 / granularity.value <= maximumNumberOfUsefulDataPoints
   );
-  return granularity || sensibleGranularities[sensibleGranularities.length - 1];
+  return granularity || granularities[granularities.length - 1];
+}
+
+export function getPossibleGranularities(windowSize: number): Granularity[] {
+  const possibleGranularities = granularities.filter(
+    granularity => windowSize / 1000 / granularity.value <= MAX_ALLOWED_DATA_POINTS &&
+      granularity.value * 1000 <= windowSize
+  );
+
+  return possibleGranularities || [granularities[granularities.length - 1]];
 }
 
 export function readItemMetrics(target, response, getLabel) {

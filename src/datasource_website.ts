@@ -127,13 +127,18 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       metric: target.metric.key,
       aggregation: target.aggregation ? target.aggregation : 'SUM'
     };
+
+    let granularity = null;
     if (target.pluginId !== "singlestat") { // no granularity for singlestat
       if (target.granularity) {
-        metric['granularity'] = target.granularity;
+        granularity = target.granularity;
       } else {
-        metric['granularity'] = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+        granularity = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+        target.granularity = granularity;
       }
     }
+
+    metric['granularity'] = granularity.value;
 
     const group = {
       groupbyTag: target.group.key
