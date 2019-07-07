@@ -54,8 +54,7 @@ export default class InstanaDatasource extends AbstractDatasource {
         }
       })
     ).then(results => {
-      // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-      return {data: [].concat.apply([], results)};
+      return {data: _.flatten(results)};
     });
   }
 

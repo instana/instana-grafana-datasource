@@ -171,7 +171,42 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     return this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
   }
 
-  buildApplicationLabel(target, item, key, index): string {
+  getChartGranularity(windowSize) {
+    const granularity = this.sensibleGranularities.find(
+      granularity => windowSize / 1000 / granularity <= this.maximumNumberOfUsefulDataPoints
+    );
+    return granularity || this.sensibleGranularities[this.sensibleGranularities.length - 1];
+  }
+
+  createTagFilter(filter: TagFilter) {
+    const tagFilter = {
+      name: filter.tag.key,
+      operator: filter.operator.key,
+      value: filter.stringValue
+    };
+
+    if (this.OPERATOR_NUMBER === filter.tag.type) {
+      tagFilter.value = filter.numberValue.toString();
+    } else if (this.OPERATOR_BOOLEAN === filter.tag.type) {
+      tagFilter.value = filter.booleanValue.toString();
+    }
+
+    return tagFilter;
+  }
+
+  readItemMetrics(target, response) {
+    // as we map two times we need to flatten the result
+    return _.flatten(response.data.items.map((item, index) => {
+      return _.map(item.metrics, (value, key) => {
+        return {
+          'target': this.buildLabel(target, item, key, index),
+          'datapoints': this.sortByTimestamp(_.map(value, metric => [metric[1], metric[0]]))
+        };
+      });
+    }));
+  }
+
+  buildLabel(target, item, key, index): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);

@@ -193,7 +193,7 @@ System.register(['./datasource_abstract', './cache', 'lodash'], function(exports
                         return lodash_1.default.map(item.metrics, function (value, key) {
                             return {
                                 'target': _this.buildLabel(target, item, key, index),
-                                'datapoints': lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; })
+                                'datapoints': _this.sortByTimestamp(lodash_1.default.map(value, function (metric) { return [metric[1], metric[0]]; }))
                             };
                         });
                     }));

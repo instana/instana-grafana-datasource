@@ -87,7 +87,7 @@ export default class AbstractDatasource {
     return this.backendSrv
       .datasourceRequest(request)
       .catch(error => {
-        if (swallowError && (error.status >= 400 || error.status < 500)){
+        if (swallowError && (error.status >= 400 || error.status < 500)) {
           console.log(error);
           return;
         }
@@ -97,4 +97,11 @@ export default class AbstractDatasource {
         throw error;
       });
   }
+
+  sortByTimestamp(datapoints) {
+    return _.sortBy(datapoints, [function (o) {
+      return o[1];
+    }]);
+  }
+
 }

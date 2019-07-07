@@ -208,7 +208,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       return _.map(item.metrics, (value, key) => {
         return {
           'target': this.buildLabel(target, item, key, index),
-          'datapoints': _.map(value, metric => [metric[1], metric[0]])
+          'datapoints': this.sortByTimestamp(_.map(value, metric => [metric[1], metric[0]]))
         };
       });
     }));

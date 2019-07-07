@@ -26,4 +26,5 @@ export default class AbstractDatasource {
     doRequest(url: string, swallowError?: boolean, maxRetries?: number): any;
     postRequest(url: string, data: Object, swallowError?: boolean, maxRetries?: number): any;
     private execute(request, swallowError, maxRetries);
+    sortByTimestamp(datapoints: any): any;
 }
