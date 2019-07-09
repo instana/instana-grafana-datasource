@@ -389,6 +389,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.showGroupBySecondLevel = null;
     this.target.groupbyTagSecondLevelKey = null;
     this.target.granularity = null;
+    this.target.rollUp = null;
+    this.target.timeShift = null;
     this.target.filters = [];
   }
 
@@ -396,6 +398,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.metric = null;
     this.target.filter = null;
     this.target.granularity = null;
+    this.target.rollUp = null;
+    this.target.timeShift = null;
     this.target.labelFormat = null;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
   }

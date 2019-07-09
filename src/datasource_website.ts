@@ -129,16 +129,17 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     };
 
     let granularity = null;
-    if (target.pluginId !== "singlestat") { // no granularity for singlestat
+    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
       if (target.granularity) {
         granularity = target.granularity;
       } else {
         granularity = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
         target.granularity = granularity;
       }
+
+      metric['granularity'] = granularity.value;
     }
 
-    metric['granularity'] = granularity.value;
 
     const group = {
       groupbyTag: target.group.key
@@ -169,9 +170,13 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       label = _.replace(label, '$metric', target.metric.label);
       label = _.replace(label, '$key', key);
       label = _.replace(label, '$index', index + 1);
+      label = _.replace(label, '$timeShift', target.timeShift);
       return label;
     }
-    return item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+    return target.timeShift ?
+      item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
+      :
+      item.name + ' (' + target.entity.label + ')' + ' - ' + key;
   }
 
 }

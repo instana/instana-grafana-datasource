@@ -2,18 +2,17 @@ import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import InstanaApplicationDataSource from './datasource_application';
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
-import rollupDurationThresholds from './lists/rollups';
 import TimeFilter from './types/time_filter';
 import migrate from './migration';
 
 import _ from 'lodash';
-import {getChartGranularity, getPossibleGranularities, readItemMetrics} from "./util/analyze_util";
+import {getPossibleGranularities, readItemMetrics} from "./util/analyze_util";
+
 
 export default class InstanaDatasource extends AbstractDatasource {
   infrastructure: InstanaInfrastructureDataSource;
   application: InstanaApplicationDataSource;
   website: InstanaWebsiteDataSource;
-  timeFilter: TimeFilter;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -29,34 +28,63 @@ export default class InstanaDatasource extends AbstractDatasource {
       return this.$q.resolve({data: []});
     }
 
-    this.timeFilter = this.readTime(options);
+    const timeFilters = {};
+    const timeShifts = {};
+    let targetRefId;
+
 
     return this.$q.all(
       _.map(options.targets, target => {
+
+        targetRefId = target.refId;
+        timeFilters[targetRefId] = this.readTime(options);
+        timeShifts[targetRefId] = target.timeShift;
 
         // grafana setting to disable query execution
         if (target.hide) {
           return {data: []};
         }
 
-        // target migration for downwards compability
+        // target migration for downwards compatibility
         migrate(target);
 
+        if (timeShifts[targetRefId]) {
+          timeFilters[targetRefId] = this.applyTimeShiftOnTimeFilter(timeFilters[targetRefId], timeShifts[targetRefId]);
+        }
+
         if (target.metricCategory === this.WEBSITE_METRICS) {
-          target.availableGranularities = getPossibleGranularities(this.timeFilter.windowSize);
-          return this.getWebsiteMetrics(target, this.timeFilter);
+          target.availableGranularities = getPossibleGranularities(timeFilters[targetRefId].windowSize);
+          return this.getWebsiteMetrics(target, timeFilters[targetRefId]);
         } else if (target.metricCategory === this.APPLICATION_METRICS) {
-          target.availableGranularities = getPossibleGranularities(this.timeFilter.windowSize);
-          return this.getApplicationMetrics(target, this.timeFilter);
+          target.availableGranularities = getPossibleGranularities(timeFilters[targetRefId].windowSize);
+          return this.getApplicationMetrics(target, timeFilters[targetRefId]);
         } else {
-          target.availableRollUps = this.infrastructure.getPossibleRollups(this.timeFilter);
-          return this.getInfrastructureMetrics(target, this.timeFilter);
+          target.availableRollUps = this.infrastructure.getPossibleRollups(timeFilters[targetRefId]);
+          return this.getInfrastructureMetrics(target, timeFilters[targetRefId]);
         }
       })
     ).then(results => {
       // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-      return {data: [].concat.apply([], results)};
+      let flatData = {data: [].concat.apply([], results)};
+
+      flatData.data.forEach(data => {
+        if (timeShifts[data.refId]) {
+          data.datapoints.forEach(datapoint => {
+            datapoint[1] = datapoint[1] + (timeShifts[data.refId] * 3600 * 1000);
+          });
+        }
+      });
+
+      return flatData;
     });
+  }
+
+  applyTimeShiftOnTimeFilter(timeFilter: TimeFilter, timeShift: number): TimeFilter {
+    return {
+      from: timeFilter.from - (timeShift * 3600 * 1000),
+      to: timeFilter.to - (timeShift * 3600 * 1000),
+      windowSize: timeFilter.windowSize
+    };
   }
 
   readTime(options): TimeFilter {

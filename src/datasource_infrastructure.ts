@@ -150,9 +150,13 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       label = _.replace(label, '$service', _.get(snapshotResponse.data, ['data', 'service_name'], ''));
       label = _.replace(label, '$metric', _.get(target, ['metric', 'key'], 'n/a'));
       label = _.replace(label, '$index', index + 1);
+      label = _.replace(label, '$timeShift', target.timeShift);
       return label;
     }
-    return snapshotResponse.data.label + this.getHostSuffix(host);
+    return target.timeShift ?
+      snapshotResponse.data.label + this.getHostSuffix(host) + " - " + target.timeShift
+      :
+      snapshotResponse.data.label + this.getHostSuffix(host);
   }
 
   getHostSuffix(host: string): string {
@@ -170,7 +174,8 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
           const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
           var result = {
             'target': this.buildLabel(snapshot.response, snapshot.host, target, index),
-            'datapoints': _.map(timeseries, value => [value.value, value.timestamp])
+            'datapoints': _.map(timeseries, value => [value.value, value.timestamp]),
+            'refId': target.refId
           };
           return result;
         });

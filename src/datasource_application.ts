@@ -57,8 +57,8 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     };
     applications = this.postRequest('/api/application-monitoring/analyze/call-groups', data).then(applicationsResponse =>
       applicationsResponse.data.items.map(entry => ({
-        'key' : entry.name,
-        'label' : entry.name
+        'key': entry.name,
+        'label': entry.name
       }))
     );
     this.applicationsCache.put(key, applications);
@@ -74,8 +74,8 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
     applicationTags = this.doRequest('/api/application-monitoring/catalog/tags').then(tagsResponse =>
       tagsResponse.data.map(entry => ({
-        'key' : entry.name,
-        'type' : entry.type
+        'key': entry.name,
+        'type': entry.type
       }))
     );
     this.simpleCache.put('applicationTags', applicationTags);
@@ -91,9 +91,9 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
     applicationCatalog = this.doRequest('/api/application-monitoring/catalog/metrics').then(catalogResponse =>
       catalogResponse.data.map(entry => ({
-        'key' : entry.metricId,
-        'label' : entry.label,
-        'aggregations' : entry.aggregations ? entry.aggregations.sort() : []
+        'key': entry.metricId,
+        'label': entry.label,
+        'aggregations': entry.aggregations ? entry.aggregations.sort() : []
       }))
     ).then(catalogResponse => {
       // not all metrics in the metric catalog are working right now, so it is hard coded and manually set. Might be needless in the future
@@ -113,7 +113,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
   fetchMetricsForApplication(target, timeFilter: TimeFilter) {
     // avoid invalid calls
     if (!target || !target.metric || !target.group || !target.entity) {
-      return this.$q.resolve({ data: { items: [] } });
+      return this.$q.resolve({data: {items: []}});
     }
 
     // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
@@ -121,7 +121,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
     const tagFilters = [];
 
-    if (target.entity.key){
+    if (target.entity.key) {
       tagFilters.push({
         name: 'application.name',
         operator: 'EQUALS',
@@ -141,16 +141,16 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     };
 
     let granularity = null;
-    if (target.pluginId !== "singlestat") { // no granularity for singlestat
+    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
       if (target.granularity) {
         granularity = target.granularity;
       } else {
         granularity = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
         target.granularity = granularity;
       }
+      metric['granularity'] = granularity.value;
     }
 
-    metric['granularity'] = granularity.value;
 
     const group = {
       groupbyTag: target.group.key
@@ -166,24 +166,31 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
         windowSize: windowSize
       },
       tagFilters: tagFilters,
-      metrics: [ metric ]
+      metrics: [metric]
     };
     return this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
   }
 
   buildApplicationLabel(target, item, key, index): string {
     if (target.labelFormat) {
+      console.log(target.timeShift);
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
       label = _.replace(label, '$application', target.entity.label);
       label = _.replace(label, '$metric', target.metric.label);
       label = _.replace(label, '$key', key);
       label = _.replace(label, '$index', index + 1);
+      label = _.replace(label, '$timeShift', target.timeShift);
       return label;
     }
+
     if (target.entity.label === this.ALL_APPLICATIONS) {
-      return item.name + ' - ' + key;
+      return target.timeShift ? item.name + ' - ' + key + " - " + target.timeShift : item.name + ' - ' + key;
     }
-    return item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+
+    return target.timeShift ?
+      item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
+      :
+      item.name + ' (' + target.entity.label + ')' + ' - ' + key;
   }
 }

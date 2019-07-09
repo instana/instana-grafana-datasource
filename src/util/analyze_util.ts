@@ -32,6 +32,7 @@ export function getChartGranularity(windowSize: number,
 }
 
 export function getPossibleGranularities(windowSize: number): Granularity[] {
+  console.log(windowSize);
   const possibleGranularities = granularities.filter(
     granularity => windowSize / 1000 / granularity.value <= MAX_ALLOWED_DATA_POINTS &&
       granularity.value * 1000 <= windowSize
@@ -46,7 +47,8 @@ export function readItemMetrics(target, response, getLabel) {
     return _.map(item.metrics, (value, key) => {
       return {
         'target': getLabel(target, item, key, index),
-        'datapoints': _.map(value, metric => [metric[1], metric[0]])
+        'datapoints': _.map(value, metric => [metric[1], metric[0]]),
+        'refId': target.refId
       };
     });
   }));
