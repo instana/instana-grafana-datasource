@@ -23,6 +23,7 @@
 		<div ng-include src="'query.html'"/>
 		<div ng-include src="'type.html'"/>
 		<div ng-include src="'metric.html'"/>
+		<div ng-include src="'advanced_settings.html'"/>
 		<div ng-include src="'legend.html'"/>
 		<div ng-include src="'timeshift.html'"/>
   </div>
@@ -32,6 +33,7 @@
 		<div ng-include src="'type.html'"/>
 		<div ng-include src="'filter.html'"/>
 		<div ng-include src="'metric.html'"/>
+    <div ng-include src="'advanced_settings.html'"/>
 		<div ng-include src="'legend.html'"/>
     <div ng-include src="'timeshift.html'"/>
   </div>
@@ -40,8 +42,9 @@
 		<div ng-include src="'application.html'"/>
     <div ng-include src="'group.html'"/>
     <div ng-include src="'metric.html'"/>
-    <div ng-include src="'applicationLegend.html'"/>
     <div ng-include src="'filters.html'"/>
+    <div ng-include src="'advanced_settings.html'"/>
+    <div ng-include src="'applicationLegend.html'"/>
     <div ng-include src="'timeshift.html'"/>
   </div>
 
@@ -50,8 +53,9 @@
     <div ng-include src="'beacontype.html'"/>
     <div ng-include src="'group.html'"/>
     <div ng-include src="'metric.html'"/>
-    <div ng-include src="'websiteLegend.html'"/>
     <div ng-include src="'filters.html'"/>
+    <div ng-include src="'advanced_settings.html'"/>
+    <div ng-include src="'websiteLegend.html'"/>
     <div ng-include src="'timeshift.html'"/>
   </div>
 
@@ -164,7 +168,7 @@
   </script>
 
   <script type="text/ng-template" id="legend.html">
-    <div class="gf-form">
+    <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
       <label class="gf-form-label width-13 pointer">
         Legend format
         <info-popover position="top center" mode="right-normal">
@@ -194,7 +198,7 @@
   </script>
 
   <script type="text/ng-template" id="websiteLegend.html">
-    <div class="gf-form">
+    <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
       <label class="gf-form-label width-13 pointer">
         Legend format
         <info-popover position="top center" mode="right-normal">
@@ -222,7 +226,7 @@
   </script>
 
   <script type="text/ng-template" id="applicationLegend.html">
-    <div class="gf-form">
+    <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
       <label class="gf-form-label width-13 pointer">
         Legend format
         <info-popover position="top center" mode="right-normal">
@@ -413,8 +417,20 @@
     </div>
   </script>
 
-  <script type="text/ng-template" id="timeshift.html">
+  <script type="text/ng-template" id="advanced_settings.html">
     <div class="gf-form">
+      <label class="gf-form-label width-13 pointer" for="in-advancedSettings-{{ctrl.target.refId}}">
+        Advanced Settings
+      </label>
+      <input id="in-advancedSettings-{{ctrl.target.refId}}"
+             class="gf-form-input"
+             type="checkbox"
+             ng-model='ctrl.target.showAdvancedSettings'/>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="timeshift.html">
+    <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
       <label class="gf-form-label width-13 pointer" for="in-timeshift-{{ctrl.target.refId}}">
         Time Shift
         <info-popover position="top center" mode="right-normal">
@@ -423,7 +439,7 @@
         </info-popover>
       </label>
       <input id="in-timeshift-{{ctrl.target.refId}}"
-             class="gf-form-input"
+             class="gf-form-input width-22"
              type="text"
              ng-model='ctrl.target.timeShift'
              ng-model-options='{ debounce: 300 }'

@@ -1,5 +1,5 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
-import { QueryCtrl } from 'app/plugins/sdk';
+import {QueryCtrl} from 'app/plugins/sdk';
 
 import beaconTypes from './lists/beacon_types';
 import TimeFilter from './types/time_filter';
@@ -44,8 +44,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   APPLICATION_METRICS = '2';
   WEBSITE_METRICS = '3';
 
-  defaults = {
-  };
+  defaults = {};
 
   /** @ngInject **/
   constructor($scope, $injector, private templateSrv, private backendSrv, private $q) {
@@ -96,7 +95,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       });
     }
 
-     // applications
+    // applications
     if (this.isApplication()) {
       this.onApplicationChanges(false).then(() => {
         if (this.target.metric) {
@@ -232,7 +231,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.previousMetricCategory = this.target.metricCategory;
   }
 
-  onBeaconTypeSelect(refresh){
+  onBeaconTypeSelect(refresh) {
     this.availableMetrics = _.filter(this.allWebsiteMetrics, m => m.beaconTypes.includes(this.target.entityType.key));
     this.checkMetricAndRefresh(refresh);
     this.adjustMetricSelectionPlaceholder();
@@ -267,10 +266,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
   findMatchingEntityTypes(entityType: Selectable) {
     // workaround as long the api does not support returning plugins with custom metrics only
     if (this.target.metricCategory === this.BUILT_IN_METRICS ||
-        entityType.key === 'statsd' ||
-        entityType.key === 'prometheus' ||
-        entityType.key === 'jvmRuntimePlatform' ||
-        entityType.key === 'dropwizardApplicationContainer') {
+      entityType.key === 'statsd' ||
+      entityType.key === 'prometheus' ||
+      entityType.key === 'jvmRuntimePlatform' ||
+      entityType.key === 'dropwizardApplicationContainer') {
       return this.snapshots.find(type => type === entityType.key) && entityType.label != null;
     }
   }
@@ -279,9 +278,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
     return this.datasource.infrastructure.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(
       metrics => {
         this.availableMetrics =
-        _.sortBy(
-          metrics,
-          'key');
+          _.sortBy(
+            metrics,
+            'key');
 
         // store all metrics in addition for filtering
         if (this.target.metricCategory === this.CUSTOM_METRICS) {
@@ -315,7 +314,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     this.target.filters.push({
       tag: this.target.group,
-      operator: { key: 'EQUALS', type: this.target.group.type },
+      operator: {key: 'EQUALS', type: this.target.group.type},
       stringValue: "",
       numberValue: null,
       booleanValue: "true",
@@ -332,7 +331,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     let filter: TagFilter = this.target.filters[index];
 
     // select a matching operator if not provided
-    if (filter.tag && (!filter.operator || filter.tag.type !== filter.operator.type)) {
+    if (filter.tag && (!filter.operator || filter.tag.type !== filter.operator.type)) {
       filter.operator = _.find(this.uniqueOperators, ['type', filter.tag.type]);
     }
     // validate changed filter
@@ -345,7 +344,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
         filter.booleanValue = true;
       } else if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
         filter.isValid = true;
-      } else if (this.OPERATOR_KEY_VALUE === filter.tag.type && filter.stringValue && filter.stringValue.includes('=') ) {
+      } else if (this.OPERATOR_KEY_VALUE === filter.tag.type && filter.stringValue && filter.stringValue.includes('=')) {
         filter.isValid = true;
       } else if (this.OPERATOR_NUMBER === filter.tag.type && filter.numberValue !== null) {
         filter.isValid = true;
@@ -413,20 +412,20 @@ export class InstanaQueryCtrl extends QueryCtrl {
   adjustMetricSelectionPlaceholder() {
     if (this.target.metricCategory === this.CUSTOM_METRICS) {
       this.metricSelectionText = this.allCustomMetrics.length > 0
-      ? 'Please select (' + this.availableMetrics.length + '/' + this.allCustomMetrics.length + ')'
-      : this.EMPTY_DROPDOWN_TEXT;
+        ? 'Please select (' + this.availableMetrics.length + '/' + this.allCustomMetrics.length + ')'
+        : this.EMPTY_DROPDOWN_TEXT;
     } else {
       this.metricSelectionText = this.availableMetrics.length > 0
-      ? 'Please select (' + this.availableMetrics.length + ')'
-      : this.EMPTY_DROPDOWN_TEXT;
+        ? 'Please select (' + this.availableMetrics.length + ')'
+        : this.EMPTY_DROPDOWN_TEXT;
     }
   }
 
   onGroupChange() {
     if (this.target.group && this.isApplication()) {
-      this.target.showGroupBySecondLevel =  this.target.group.key === 'call.http.header';
+      this.target.showGroupBySecondLevel = this.target.group.key === 'call.http.header';
     } else if (this.target.group && this.isWebsite()) {
-      this.target.showGroupBySecondLevel =  this.target.group.key === 'beacon.meta';
+      this.target.showGroupBySecondLevel = this.target.group.key === 'beacon.meta';
     }
     if (!this.target.showGroupBySecondLevel) {
       this.target.groupbyTagSecondLevelKey = null;
@@ -444,4 +443,5 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
     this.panelCtrl.refresh();
   }
+
 }
