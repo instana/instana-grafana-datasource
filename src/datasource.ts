@@ -38,7 +38,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
         targetRefId = target.refId;
         timeFilters[targetRefId] = this.readTime(options);
-        timeShifts[targetRefId] = target.timeShift;
+        timeShifts[targetRefId] = this.convertTimeShiftToMillis(target.timeShift);
 
         // grafana setting to disable query execution
         if (target.hide) {
@@ -70,7 +70,7 @@ export default class InstanaDatasource extends AbstractDatasource {
       flatData.data.forEach(data => {
         if (timeShifts[data.refId]) {
           data.datapoints.forEach(datapoint => {
-            datapoint[1] = datapoint[1] + (timeShifts[data.refId] * 3600 * 1000);
+            datapoint[1] = datapoint[1] + timeShifts[data.refId];
           });
         }
       });
@@ -79,10 +79,40 @@ export default class InstanaDatasource extends AbstractDatasource {
     });
   }
 
+  convertTimeShiftToMillis(timeShift: string): number {
+    if (!timeShift) {
+      return null;
+    }
+
+    try {
+      return this.parseTimeShift(timeShift);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  parseTimeShift(timeShift: string): number {
+    let milliSeconds = 1000;
+
+    if (timeShift.endsWith('s')) {
+      return parseInt(timeShift.split('s')[0]) * milliSeconds;
+    } else if (timeShift.endsWith('min')) {
+      return parseInt(timeShift.split('min')[0]) * 60 * milliSeconds;
+    } else if (timeShift.endsWith('h')) {
+      return parseInt(timeShift.split('h')[0]) * 60 * 60 * milliSeconds;
+    } else if (timeShift.endsWith('d')) {
+      return parseInt(timeShift.split('d')[0]) * 60 * 60 * 24 * milliSeconds;
+    } else if (timeShift.endsWith('w')) {
+      return parseInt(timeShift.split('w')[0]) * 60 * 60 * 24 * 7 * milliSeconds;
+    }
+
+    return null;
+  }
+
   applyTimeShiftOnTimeFilter(timeFilter: TimeFilter, timeShift: number): TimeFilter {
     return {
-      from: timeFilter.from - (timeShift * 3600 * 1000),
-      to: timeFilter.to - (timeShift * 3600 * 1000),
+      from: timeFilter.from - timeShift,
+      to: timeFilter.to - timeShift,
       windowSize: timeFilter.windowSize
     };
   }
