@@ -23,7 +23,6 @@
 		<div ng-include src="'query.html'"/>
 		<div ng-include src="'type.html'"/>
 		<div ng-include src="'metric.html'"/>
-    <div ng-include src="'rollup.html'"/>
 		<div ng-include src="'legend.html'"/>
 		<div ng-include src="'timeshift.html'"/>
   </div>
@@ -33,7 +32,6 @@
 		<div ng-include src="'type.html'"/>
 		<div ng-include src="'filter.html'"/>
 		<div ng-include src="'metric.html'"/>
-    <div ng-include src="'rollup.html'"/>
 		<div ng-include src="'legend.html'"/>
     <div ng-include src="'timeshift.html'"/>
   </div>
@@ -42,7 +40,6 @@
 		<div ng-include src="'application.html'"/>
     <div ng-include src="'group.html'"/>
     <div ng-include src="'metric.html'"/>
-    <div ng-include src="'granularity.html'"/>
     <div ng-include src="'applicationLegend.html'"/>
     <div ng-include src="'filters.html'"/>
     <div ng-include src="'timeshift.html'"/>
@@ -53,7 +50,6 @@
     <div ng-include src="'beacontype.html'"/>
     <div ng-include src="'group.html'"/>
     <div ng-include src="'metric.html'"/>
-    <div ng-include src="'granularity.html'"/>
     <div ng-include src="'websiteLegend.html'"/>
     <div ng-include src="'filters.html'"/>
     <div ng-include src="'timeshift.html'"/>
@@ -155,38 +151,9 @@
                 ng-options="f.label for f in ctrl.target.availableGranularities">
         </select>
       </div>
-    </div>
-  </script>
-<!--
-  <script type="text/ng-template" id="granularity.html">
-    <div class="gf-form" ng-show="ctrl.target.metric && (ctrl.target.metricCategory === ctrl.APPLICATION_METRICS || ctrl.target.metricCategory === ctrl.WEBSITE_METRICS) && (ctrl.target.pluginId !== 'singlestat' || ctrl.target.pluginId !== 'gauge')">
-      <label class="gf-form-label width-13 pointer" for="in-granularity-{{ctrl.target.refId}}">
-        Granularity
-        <info-popover position="top center" mode="right-normal">
-          <p>Explain granularity. Explain default.</p>
-        </info-popover>
-      </label>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
-        <select id="in-granularity-{{ctrl.target.refId}}"
-                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                ng-model="ctrl.target.granularity"
-                ng-change="ctrl.onChange()"
-                ng-options="f.label for f in ctrl.target.availableGranularities">
-        </select>
-      </div>
-    </div>
-  </script>
--->
-  <script type="text/ng-template" id="rollup.html">
-    <div class="gf-form" ng-show="ctrl.target.metric && (ctrl.target.metricCategory !== ctrl.APPLICATION_METRICS && ctrl.target.metricCategory !== ctrl.WEBSITE_METRICS) && (ctrl.target.pluginId !== 'singlestat' || ctrl.target.pluginId !== 'gauge')">
-      <label class="gf-form-label width-13 pointer" for="in-rollup-{{ctrl.target.refId}}">
-        Roll Up
-        <info-popover position="top center" mode="right-normal">
-          <p>Explain rollup. Explain default.</p>
-        </info-popover>
-      </label>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon" ng-show="ctrl.target.metric && (ctrl.target.metricCategory !== ctrl.APPLICATION_METRICS && ctrl.target.metricCategory !== ctrl.WEBSITE_METRICS) && (ctrl.target.pluginId !== 'singlestat' || ctrl.target.pluginId !== 'gauge')">
         <select id="in-rollup-{{ctrl.target.refId}}"
+                ng-disabled="!ctrl.target.metric || ctrl.target.availableRollUps.length <= 1"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.rollUp"
                 ng-change="ctrl.onChange()"
