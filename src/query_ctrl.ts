@@ -53,6 +53,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // target migration for downwards compability
     migrate(this.target);
 
+    this.target.customFilters = [];
+
     this.target.pluginId = this.panelCtrl.panel.type || this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
@@ -295,13 +297,22 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onMetricsFilter(refresh: boolean) {
-    let filter = this.target.filter ? this.target.filter.toLowerCase() : '';
-    this.availableMetrics =
-      _.sortBy(
-        _.filter(
-          this.allCustomMetrics,
-          metric => metric.key.toLowerCase().includes(filter)),
-        'key');
+    if (this.target.customFilters.length === 0) {
+      //don't do any filtering if no custom filters are set.
+      this.availableMetrics = this.allCustomMetrics;
+    } else {
+      let filteredMetrics = this.allCustomMetrics;
+      _.forEach(this.target.customFilters, filter => {
+        filteredMetrics =
+          _.sortBy(
+            _.filter(
+              filteredMetrics,
+              metric => metric.key.toLowerCase().includes(filter)),
+            'key');
+      });
+
+      this.availableMetrics = filteredMetrics;
+    }
 
     this.checkMetricAndRefresh(refresh);
     this.adjustMetricSelectionPlaceholder();
@@ -446,6 +457,16 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   triggerAdvancedSettings() {
     this.target.showAdvancedSettings = !this.target.showAdvancedSettings;
+  }
+
+  addCustomFilter(filter: string) {
+    this.target.customFilters.push(filter);
+  }
+
+  removeCustomMetricFilter(index: number) {
+    //useless
+    this.target.customFilters.splice(index, 1);
+    this.onMetricsFilter(true);
   }
 
 }
