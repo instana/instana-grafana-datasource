@@ -80,6 +80,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
         // infrastructure metrics support available metrics on a selected entity type
         if (this.target.entityType) {
           this.onEntityTypeSelect(false).then(() => {
+            if (this.target.showAllMetrics) {
+              this.target.allMetrics = this.availableMetrics;
+            }
             if (this.target.metric) {
               this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
             }
