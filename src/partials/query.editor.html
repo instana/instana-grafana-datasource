@@ -419,13 +419,21 @@
 
   <script type="text/ng-template" id="advanced_settings.html">
     <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-advancedSettings-{{ctrl.target.refId}}">
+      <label class="gf-form-label width-13 pointer">
         Advanced Settings
       </label>
-      <input id="in-advancedSettings-{{ctrl.target.refId}}"
-             class="gf-form-input"
-             type="checkbox"
-             ng-model='ctrl.target.showAdvancedSettings'/>
+      <div ng-show="ctrl.target.showAdvancedSettings">
+        <button class="btn btn-inverse"
+                ng-click="ctrl.triggerAdvancedSettings()">
+          <i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <div ng-show="!ctrl.target.showAdvancedSettings">
+        <button class="btn btn-inverse"
+                ng-click="ctrl.triggerAdvancedSettings()">
+          <i class="fa fa-plus"></i>
+        </button>
+      </div>
     </div>
   </script>
 

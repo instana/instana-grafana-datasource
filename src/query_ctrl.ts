@@ -444,4 +444,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.panelCtrl.refresh();
   }
 
+  triggerAdvancedSettings() {
+    this.target.showAdvancedSettings = !this.target.showAdvancedSettings;
+  }
+
 }

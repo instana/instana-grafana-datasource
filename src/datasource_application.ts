@@ -173,7 +173,6 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
   buildApplicationLabel(target, item, key, index): string {
     if (target.labelFormat) {
-      console.log(target.timeShift);
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
       label = _.replace(label, '$application', target.entity.label);
