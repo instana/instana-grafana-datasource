@@ -8,9 +8,9 @@
     </label>
     <div class="gf-form-select-wrapper gf-form-select-wrapper--has-help-icon" style="width: 100%;">
       <select id="in-category-{{ctrl.target.refId}}"
-        class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-        ng-model="ctrl.target.metricCategory"
-        ng-change="ctrl.onMetricCategorySelect()">
+              class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+              ng-model="ctrl.target.metricCategory"
+              ng-change="ctrl.onMetricCategorySelect()">
         <option value="0" selected>Infrastructure built-in metrics</option>
         <option value="1">Infrastructure custom metrics</option>
         <option value="2">Analyze application calls</option>
@@ -20,26 +20,26 @@
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '0'">
-		<div ng-include src="'query.html'"/>
-		<div ng-include src="'type.html'"/>
-		<div ng-include src="'metric.html'"/>
-		<div ng-include src="'advanced_settings.html'"/>
-		<div ng-include src="'legend.html'"/>
-		<div ng-include src="'timeshift.html'"/>
+    <div ng-include src="'query.html'"/>
+    <div ng-include src="'type.html'"/>
+    <div ng-include src="'metric.html'"/>
+    <div ng-include src="'advanced_settings.html'"/>
+    <div ng-include src="'legend.html'"/>
+    <div ng-include src="'timeshift.html'"/>
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '1'">
-		<div ng-include src="'query.html'"/>
-		<div ng-include src="'type.html'"/>
-		<div ng-include src="'filter.html'"/>
-		<div ng-include src="'metric.html'"/>
+    <div ng-include src="'query.html'"/>
+    <div ng-include src="'type.html'"/>
+    <div ng-include src="'filter.html'"/>
+    <div ng-include src="'metric.html'"/>
     <div ng-include src="'advanced_settings.html'"/>
-		<div ng-include src="'legend.html'"/>
+    <div ng-include src="'legend.html'"/>
     <div ng-include src="'timeshift.html'"/>
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '2'">
-		<div ng-include src="'application.html'"/>
+    <div ng-include src="'application.html'"/>
     <div ng-include src="'group.html'"/>
     <div ng-include src="'metric.html'"/>
     <div ng-include src="'filters.html'"/>
@@ -49,7 +49,7 @@
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '3'">
-		<div ng-include src="'website.html'"/>
+    <div ng-include src="'website.html'"/>
     <div ng-include src="'beacontype.html'"/>
     <div ng-include src="'group.html'"/>
     <div ng-include src="'metric.html'"/>
@@ -77,7 +77,7 @@
              ng-model-options='{ debounce: 300 }'
              ng-change="ctrl.onFilterChange(true)"
              placeholder="Please Specify"
-             spellcheck='false'/>
+             spellcheck='false'>
     </div>
   </script>
 
@@ -111,12 +111,17 @@
       </label>
       <input id="in-filter-{{ctrl.target.refId}}"
              class="gf-form-input width-22"
-             type="text"
+             type="search"
              ng-model="ctrl.target.filter"
              ng-model-options='{ debounce: 200 }'
              ng-change="ctrl.onMetricsFilter(true)"
              placeholder="(optional)"
              spellcheck='false'/>
+
+      <button class="btn btn-inverse gf-form-input width-3"
+              ng-click="ctrl.addCustomMetricFilter()">
+        <i class="fa fa-plus"></i>
+      </button>
     </div>
   </script>
 
@@ -137,7 +142,8 @@
           <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
         </select>
       </div>
-      <div class="gf-form-select-wrapper width-6" ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.target.pluginId === 'singlestat' || ctrl.target.pluginId === 'table'">
+      <div class="gf-form-select-wrapper width-6"
+           ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.target.pluginId === 'singlestat' || ctrl.target.pluginId === 'table'">
         <select id="in-aggregation-{{ctrl.target.refId}}"
                 ng-disabled="!ctrl.target.metric || ctrl.target.metric.aggregations.length <= 1"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
@@ -146,7 +152,8 @@
                 ng-options="f for f in ctrl.target.metric.aggregations">
         </select>
       </div>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon0" ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.target.pluginId === 'singlestat' || ctrl.target.pluginId === 'table'">
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon0"
+           ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.target.pluginId === 'singlestat' || ctrl.target.pluginId === 'table'">
         <select id="in-granularity-{{ctrl.target.refId}}"
                 ng-disabled="!ctrl.target.metric || ctrl.target.availableGranularities.length <= 1"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
@@ -155,7 +162,8 @@
                 ng-options="f.label for f in ctrl.target.availableGranularities">
         </select>
       </div>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon" ng-show="ctrl.target.metric && (ctrl.target.metricCategory !== ctrl.APPLICATION_METRICS && ctrl.target.metricCategory !== ctrl.WEBSITE_METRICS) && (ctrl.target.pluginId !== 'singlestat' || ctrl.target.pluginId !== 'gauge')">
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon"
+           ng-show="ctrl.target.metric && (ctrl.target.metricCategory !== ctrl.APPLICATION_METRICS && ctrl.target.metricCategory !== ctrl.WEBSITE_METRICS) && (ctrl.target.pluginId !== 'singlestat' || ctrl.target.pluginId !== 'gauge')">
         <select id="in-rollup-{{ctrl.target.refId}}"
                 ng-disabled="!ctrl.target.metric || ctrl.target.availableRollUps.length <= 1"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
@@ -271,7 +279,7 @@
     </div>
   </script>
 
- <script type="text/ng-template" id="application.html">
+  <script type="text/ng-template" id="application.html">
     <div class="gf-form">
       <label class="gf-form-label width-13 pointer" for="in-application-{{ctrl.target.refId}}">
         Application
@@ -300,41 +308,41 @@
       </label>
       <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
         <select id="in-beacontype-{{ctrl.target.refId}}"
-          class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-          ng-model="ctrl.target.entityType"
-          ng-change="ctrl.onBeaconTypeSelect()"
-          ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.entityType"
+                ng-change="ctrl.onBeaconTypeSelect()"
+                ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
         </select>
       </div>
     </div>
   </script>
 
   <script type="text/ng-template" id="group.html">
-      <div class="gf-form">
-        <label class="gf-form-label width-13 pointer" for="in-group-{{ctrl.target.refId}}">
-          Group by
-          <info-popover position="top center" mode="right-normal">
-            <p>Group by tag</p>
-          </info-popover>
-        </label>
-        <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
-          <select id="in-group-{{ctrl.target.refId}}"
-                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                  ng-model="ctrl.target.group"
-                  ng-change="ctrl.onGroupChange()"
-                  ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
-          </select>
-        </div>
-        <input id="group-by-second-level-{{ctrl.target.refId}}"
-               ng-hide="!ctrl.target.showGroupBySecondLevel"
-               class="gf-form-input width-22"
-               type="text"
-               ng-model='ctrl.target.groupbyTagSecondLevelKey'
-               ng-model-options='{ debounce: 300 }'
-               ng-change="ctrl.onChange()"
-               placeholder="Please Specify"
-               spellcheck='false'/>
+    <div class="gf-form">
+      <label class="gf-form-label width-13 pointer" for="in-group-{{ctrl.target.refId}}">
+        Group by
+        <info-popover position="top center" mode="right-normal">
+          <p>Group by tag</p>
+        </info-popover>
+      </label>
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+        <select id="in-group-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.group"
+                ng-change="ctrl.onGroupChange()"
+                ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
+        </select>
       </div>
+      <input id="group-by-second-level-{{ctrl.target.refId}}"
+             ng-hide="!ctrl.target.showGroupBySecondLevel"
+             class="gf-form-input width-22"
+             type="text"
+             ng-model='ctrl.target.groupbyTagSecondLevelKey'
+             ng-model-options='{ debounce: 300 }'
+             ng-change="ctrl.onChange()"
+             placeholder="Please Specify"
+             spellcheck='false'/>
+    </div>
   </script>
 
   <script type="text/ng-template" id="filters.html">
@@ -392,7 +400,7 @@
           <option value="false">false</option>
         </select>
         <button class="btn btn-inverse" ng-click="ctrl.removeFilter($index)">
-			    <i class="fa fa-minus"></i>
+          <i class="fa fa-minus"></i>
         </button>
       </div>
     </div>
@@ -404,12 +412,12 @@
         </info-popover>
       </label>
       <button class="btn btn-inverse" ng-click="ctrl.addFilter()">
-		    <i class="fa fa-plus"></i>
+        <i class="fa fa-plus"></i>
       </button>
       <label class="gf-form-label width-13 pointer"
              for="in-website-{{ctrl.target.refId}}"
              ng-hide="!ctrl.target.showWarningCantShowAllResults">
-          ⚠️ Can't show all results
+        ⚠️ Can't show all results
         <info-popover position="top center" mode="right-normal">
           <p>Add Filter to narrow down the data</p>
         </info-popover>
@@ -419,21 +427,17 @@
 
   <script type="text/ng-template" id="advanced_settings.html">
     <div class="gf-form">
-      <label class="gf-form-label width-13 pointer">
-        Advanced Settings
-      </label>
-      <div ng-show="ctrl.target.showAdvancedSettings">
-        <button class="btn btn-inverse"
-                ng-click="ctrl.triggerAdvancedSettings()">
-          <i class="fa fa-minus"></i>
-        </button>
-      </div>
-      <div ng-show="!ctrl.target.showAdvancedSettings">
-        <button class="btn btn-inverse"
-                ng-click="ctrl.triggerAdvancedSettings()">
-          <i class="fa fa-plus"></i>
-        </button>
-      </div>
+      <gf-form-switch class="gf-form max-width-12" label="Show Advanced Settings" label-class="width-13" switch-class="max-width-5" checked="ctrl.target.advancedSettingsSwitchChecked" on-change="ctrl.triggerAdvancedSettings()">
+        <label for="check-44" class="gf-form-switch-container">
+          <div class="gf-form-label width-6">
+            Show Advanced Settings
+          </div>
+          <div class="gf-form-switch max-width-5">
+          <input id="check-44" type="checkbox" class="ng-pristine ng-untouched ng-valid ng-empty">
+          <span class="gf-form-switch__slider"></span>
+        </div>
+        </label>
+      </gf-form-switch>
     </div>
   </script>
 
@@ -442,7 +446,8 @@
       <label class="gf-form-label width-13 pointer" for="in-timeshift-{{ctrl.target.refId}}">
         Time Shift
         <info-popover position="top center" mode="right-normal">
-          <p>Specify the amount of hours that shall be used. The time shift function always go back in time, not forward. Accepts values such as 1s, 1min, 1h, 1d, 1w
+          <p>Specify the amount of hours that shall be used. The time shift function always go back in time, not
+            forward. Accepts values such as 1s, 1min, 1h, 1d, 1w
           </p>
         </info-popover>
       </label>
