@@ -404,6 +404,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.granularity = null;
     this.target.rollUp = null;
     this.target.timeShift = null;
+    this.target.showWarningCantShowAllResults = false;
     this.target.filters = [];
   }
 
@@ -413,6 +414,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.granularity = null;
     this.target.rollUp = null;
     this.target.timeShift = null;
+    this.target.showWarningCantShowAllResults = false;
     this.target.labelFormat = null;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
   }
