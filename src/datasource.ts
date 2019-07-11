@@ -35,7 +35,6 @@ export default class InstanaDatasource extends AbstractDatasource {
 
     return this.$q.all(
       _.map(options.targets, target => {
-
         targetRefId = target.refId;
         timeFilters[targetRefId] = this.readTime(options);
         timeShifts[targetRefId] = this.convertTimeShiftToMillis(target.timeShift);
@@ -129,13 +128,26 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   getInfrastructureMetrics(target, timeFilter: TimeFilter) {
     // do not try to retrieve data without selected metric
-    if (!target.metric) {
+    if (!target.metric && !target.showAllMetrics) {
       return this.$q.resolve({data: []});
     }
 
     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
     return this.infrastructure.fetchSnapshotsForTarget(target, timeFilter).then(snapshots => {
-      return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter);
+      if (target.showAllMetrics) {
+        const resultPromises = [];
+        _.forEach(target.allMetrics, metric => {
+          resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
+        });
+
+        return Promise.all(resultPromises).then(allResults => {
+          const allMetrics = [];
+          allResults.forEach(result => result.forEach(s => allMetrics.push(s)));
+          return allMetrics;
+        });
+      } else {
+        return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
+      }
     });
   }
 

@@ -164,17 +164,6 @@
           <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
         </select>
       </div>
-      <gf-form-switch ng-show="ctrl.target.metricCategory === '1' && ctrl.availableMetrics.length > 0 && ctrl.availableMetrics.length <= 5" class="gf-form max-width-12" label="Show all Metrics" label-class="width-13" switch-class="max-width-5" checked="ctrl.target.showAllMetrics" on-change="ctrl.triggerAllMetrics()">
-        <label for="check-44" class="gf-form-switch-container">
-          <div class="gf-form-switch max-width-5">
-            <input id="check-44" type="checkbox" class="ng-pristine ng-untouched ng-valid ng-empty">
-            <span class="gf-form-switch__slider"></span>
-          </div>
-          <div class="gf-form-label width-6">
-            Show all Metrics
-          </div>
-        </label>
-      </gf-form-switch>
       <div class="gf-form-select-wrapper width-6"
            ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.target.pluginId === 'singlestat' || ctrl.target.pluginId === 'table'">
         <select id="in-aggregation-{{ctrl.target.refId}}"
@@ -205,6 +194,17 @@
                 ng-options="f.label for f in ctrl.target.availableRollUps">
         </select>
       </div>
+      <gf-form-switch ng-show="ctrl.target.metricCategory === '1' && ctrl.availableMetrics.length > 0 && ctrl.availableMetrics.length <= 5" class="gf-form max-width-12" label="Show all Metrics" label-class="width-13" switch-class="max-width-5" checked="ctrl.target.showAllMetrics" on-change="ctrl.onAllMetricsSelect()">
+        <label for="check-44" class="gf-form-switch-container">
+          <div class="gf-form-switch max-width-5">
+            <input id="check-44" type="checkbox" class="ng-pristine ng-untouched ng-valid ng-empty">
+            <span class="gf-form-switch__slider"></span>
+          </div>
+          <div class="gf-form-label width-6">
+            Show all Metrics
+          </div>
+        </label>
+      </gf-form-switch>
     </div>
   </script>
 

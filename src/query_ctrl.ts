@@ -80,9 +80,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
         // infrastructure metrics support available metrics on a selected entity type
         if (this.target.entityType) {
           this.onEntityTypeSelect(false).then(() => {
-            if (this.target.showAllMetrics) {
-              this.target.allMetrics = this.availableMetrics;
-            }
             if (this.target.metric) {
               this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
             }
@@ -310,7 +307,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
           _.sortBy(
             _.filter(
               filteredMetrics,
-              metric => metric.key.toLowerCase().includes(filter)),
+              metric => metric.key.toLowerCase().includes(filter.toLowerCase())),
             'key');
       });
 
@@ -405,6 +402,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.rollUp = null;
     this.target.timeShift = null;
     this.target.showWarningCantShowAllResults = false;
+    this.target.showAllMetrics = false;
     this.target.filters = [];
   }
 
@@ -415,6 +413,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.rollUp = null;
     this.target.timeShift = null;
     this.target.showWarningCantShowAllResults = false;
+    this.target.showAllMetrics = false;
     this.target.labelFormat = null;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
   }
@@ -460,18 +459,33 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.panelCtrl.refresh();
   }
 
+  onAllMetricsSelect() {
+    if (this.target.showAllMetrics) {
+      this.target.allMetrics = this.availableMetrics;
+      this.panelCtrl.refresh();
+    }
+  }
+
   triggerAdvancedSettings() {
     this.target.showAdvancedSettings = !this.target.showAdvancedSettings;
+    if (!this.target.showAllMetrics && !this.target.metric) {
+      return this.$q.resolve();
+    }
   }
 
   addCustomFilter(filter: string) {
-    this.target.customFilters.push(filter);
+    if (!_.includes(this.target.customFilters, filter)) {
+      this.target.customFilters.push(filter);
+      if (!this.target.showAllMetrics && !this.target.metric) {
+        return this.$q.resolve();
+      }
+    }
   }
 
   removeCustomMetricFilter(index: number) {
-    //useless
     this.target.customFilters.splice(index, 1);
     this.onMetricsFilter(true);
+    this.panelCtrl.refresh();
   }
 
 }

@@ -166,11 +166,13 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return '';
   }
 
-  fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter) {
+  fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, metric) {
     return this.$q.all(
       _.map(snapshots, (snapshot, index) => {
         // ...fetch the metric data for every snapshot in the results.
-        return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target).then(response => {
+        let rollUp = target.rollUp ? target.rollUp : this.getDefaultMetricRollupDuration(timeFilter);
+        target.rollUp = rollUp;
+        return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, rollUp, metric).then(response => {
           const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
           var result = {
             'target': this.buildLabel(snapshot.response, snapshot.host, target, index),
@@ -200,12 +202,9 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     });
   }
 
-  fetchMetricsForSnapshot(snapshotId: string, timeFilter: TimeFilter, target) {
-    const rollUp = target.rollUp ? target.rollUp : this.getDefaultMetricRollupDuration(timeFilter);
-    target.rollUp = rollUp;
-    const metric = target.metric.key;
-    let url = `/api/metrics?metric=${metric}&from=${timeFilter.from}&to=${timeFilter.to}&rollup=${rollUp.rollup}&snapshotId=${snapshotId}`;
-
+  fetchMetricsForSnapshot(snapshotId: string, timeFilter: TimeFilter, rollUp, metric) {
+    let url =
+      `/api/metrics?metric=${metric.key}&from=${timeFilter.from}&to=${timeFilter.to}&rollup=${rollUp.rollup}&snapshotId=${snapshotId}`;
     return this.doRequest(url);
   }
 
