@@ -158,6 +158,7 @@
       <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
         <select id="in-metric-{{ctrl.target.refId}}"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-disabled="ctrl.target.showAllMetrics"
                 ng-model="ctrl.target.metric"
                 ng-change="ctrl.onMetricSelect()"
                 ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics track by f.key">
@@ -187,7 +188,7 @@
       <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon"
            ng-show="ctrl.target.metric && (ctrl.target.metricCategory !== ctrl.APPLICATION_METRICS && ctrl.target.metricCategory !== ctrl.WEBSITE_METRICS) && (ctrl.target.pluginId !== 'singlestat' || ctrl.target.pluginId !== 'gauge')">
         <select id="in-rollup-{{ctrl.target.refId}}"
-                ng-disabled="!ctrl.target.metric || ctrl.target.availableRollUps.length <= 1"
+                ng-disabled="!ctrl.target.metric || ctrl.target.availableRollUps.length <= 1 || ctrl.target.showAllMetrics"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.rollUp"
                 ng-change="ctrl.onChange()"

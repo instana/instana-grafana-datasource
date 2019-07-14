@@ -462,13 +462,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onAllMetricsSelect() {
     if (this.target.showAllMetrics) {
       this.target.allMetrics = this.availableMetrics;
-      this.panelCtrl.refresh();
     }
+    this.panelCtrl.refresh();
   }
 
   triggerAdvancedSettings() {
-    this.target.showAdvancedSettings = !this.target.showAdvancedSettings;
-    if (!this.target.showAllMetrics && !this.target.metric) {
+    this.target.showAdvancedSettings = !this.target.showAdvancedSettings;if (!this.target.showAllMetrics && !this.target.metric) {
       return this.$q.resolve();
     }
   }
