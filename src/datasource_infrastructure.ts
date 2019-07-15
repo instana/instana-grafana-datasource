@@ -153,7 +153,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       label = _.replace(label, '$timeShift', target.timeShift);
       return label;
     }
-    return target.timeShift ?
+    return target.timeShift && target.timeShiftIsValid ?
       snapshotResponse.data.label + this.getHostSuffix(host) + " - " + target.timeShift
       :
       snapshotResponse.data.label + this.getHostSuffix(host);

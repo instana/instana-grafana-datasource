@@ -173,6 +173,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
   buildApplicationLabel(target, item, key, index): string {
     if (target.labelFormat) {
+      console.log(target.timeShift);
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
       label = _.replace(label, '$application', target.entity.label);
@@ -187,7 +188,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       return target.timeShift ? item.name + ' - ' + key + " - " + target.timeShift : item.name + ' - ' + key;
     }
 
-    return target.timeShift ?
+    return target.timeShift && target.timeShiftIsValid ?
       item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
       :
       item.name + ' (' + target.entity.label + ')' + ' - ' + key;

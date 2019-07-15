@@ -50,6 +50,9 @@ export default class InstanaDatasource extends AbstractDatasource {
 
         if (timeShifts[targetRefId]) {
           timeFilters[targetRefId] = this.applyTimeShiftOnTimeFilter(timeFilters[targetRefId], timeShifts[targetRefId]);
+          target.timeShiftIsValid = true;
+        } else {
+          target.timeShiftIsValid = false;
         }
 
         if (target.metricCategory === this.WEBSITE_METRICS) {
