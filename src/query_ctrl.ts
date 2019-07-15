@@ -395,6 +395,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   resetEntitySelection() {
     this.target.entity = null;
+    this.target.entityQuery = null;
     this.target.group = null;
     this.target.showGroupBySecondLevel = null;
     this.target.groupbyTagSecondLevelKey = null;
@@ -462,12 +463,15 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onAllMetricsSelect() {
     if (this.target.showAllMetrics) {
       this.target.allMetrics = this.availableMetrics;
+    } else {
+      this.target.showAllMetrics = false;
     }
     this.panelCtrl.refresh();
   }
 
   triggerAdvancedSettings() {
-    this.target.showAdvancedSettings = !this.target.showAdvancedSettings;if (!this.target.showAllMetrics && !this.target.metric) {
+    this.target.showAdvancedSettings = !this.target.showAdvancedSettings;
+    if (!this.target.showAllMetrics && !this.target.metric) {
       return this.$q.resolve();
     }
   }
