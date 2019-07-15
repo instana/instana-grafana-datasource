@@ -80,9 +80,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
         // infrastructure metrics support available metrics on a selected entity type
         if (this.target.entityType) {
           this.onEntityTypeSelect(false).then(() => {
-            if (this.target.metric) {
+            if (this.target.metric || this.target.showAllMetrics) {
               this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
             }
+          });
+
+          this.datasource.infrastructure.getDefaultMetricRollupDuration(this.timeFilter).then(rollUp => {
+            console.log("geht rein");
+            this.target.rollUp = rollUp;
           });
         }
       });
@@ -312,6 +317,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
       });
 
       this.availableMetrics = filteredMetrics;
+      this.target.canShowAllMetrics =
+        this.target.metricCategory === '1' && this.availableMetrics.length > 0 && this.availableMetrics.length <= 5;
+
+      if (!this.target.canShowAllMetrics) {
+        this.target.showAllMetrics = false;
+      }
     }
 
     this.checkMetricAndRefresh(refresh);
