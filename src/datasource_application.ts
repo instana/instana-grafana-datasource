@@ -188,7 +188,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       return target.timeShift ? item.name + ' - ' + key + " - " + target.timeShift : item.name + ' - ' + key;
     }
 
-    return target.timeShift ?
+    return target.timeShift && target.timeShiftIsValid ?
       item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
       :
       item.name + ' (' + target.entity.label + ')' + ' - ' + key;

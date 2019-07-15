@@ -173,7 +173,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       label = _.replace(label, '$timeShift', target.timeShift);
       return label;
     }
-    return target.timeShift ?
+    return target.timeShift && target.timeShiftIsValid ?
       item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
       :
       item.name + ' (' + target.entity.label + ')' + ' - ' + key;
