@@ -23,7 +23,9 @@
 		<div ng-include src="'query.html'"/>
 		<div ng-include src="'type.html'"/>
 		<div ng-include src="'metric.html'"/>
+    <div ng-include src="'rollup.html'"/>
 		<div ng-include src="'legend.html'"/>
+		<div ng-include src="'timeshift.html'"/>
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '1'">
@@ -31,15 +33,19 @@
 		<div ng-include src="'type.html'"/>
 		<div ng-include src="'filter.html'"/>
 		<div ng-include src="'metric.html'"/>
+    <div ng-include src="'rollup.html'"/>
 		<div ng-include src="'legend.html'"/>
+    <div ng-include src="'timeshift.html'"/>
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '2'">
 		<div ng-include src="'application.html'"/>
     <div ng-include src="'group.html'"/>
     <div ng-include src="'metric.html'"/>
+    <div ng-include src="'granularity.html'"/>
     <div ng-include src="'applicationLegend.html'"/>
     <div ng-include src="'filters.html'"/>
+    <div ng-include src="'timeshift.html'"/>
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '3'">
@@ -47,8 +53,10 @@
     <div ng-include src="'beacontype.html'"/>
     <div ng-include src="'group.html'"/>
     <div ng-include src="'metric.html'"/>
+    <div ng-include src="'granularity.html'"/>
     <div ng-include src="'websiteLegend.html'"/>
     <div ng-include src="'filters.html'"/>
+    <div ng-include src="'timeshift.html'"/>
   </div>
 
   <script type="text/ng-template" id="query.html">
@@ -141,6 +149,44 @@
     </div>
   </script>
 
+  <script type="text/ng-template" id="granularity.html">
+    <div class="gf-form" ng-show="ctrl.target.metric && (ctrl.target.metricCategory === ctrl.APPLICATION_METRICS || ctrl.target.metricCategory === ctrl.WEBSITE_METRICS) && (ctrl.target.pluginId !== 'singlestat' && ctrl.target.pluginId !== 'gauge')">
+      <label class="gf-form-label width-13 pointer" for="in-granularity-{{ctrl.target.refId}}">
+        Granularity
+        <info-popover position="top center" mode="right-normal">
+          <p>Explain granularity. Explain default.</p>
+        </info-popover>
+      </label>
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+        <select id="in-granularity-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.granularity"
+                ng-change="ctrl.onChange()"
+                ng-options="f.label for f in ctrl.target.availableGranularities">
+        </select>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="rollup.html">
+    <div class="gf-form" ng-show="ctrl.target.metric && (ctrl.target.metricCategory !== ctrl.APPLICATION_METRICS && ctrl.target.metricCategory !== ctrl.WEBSITE_METRICS) && (ctrl.target.pluginId !== 'singlestat' && ctrl.target.pluginId !== 'gauge')">
+      <label class="gf-form-label width-13 pointer" for="in-rollup-{{ctrl.target.refId}}">
+        Roll Up
+        <info-popover position="top center" mode="right-normal">
+          <p>Explain rollup. Explain default.</p>
+        </info-popover>
+      </label>
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+        <select id="in-rollup-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.rollUp"
+                ng-change="ctrl.onChange()"
+                ng-options="f.label for f in ctrl.target.availableRollUps">
+        </select>
+      </div>
+    </div>
+  </script>
+
   <script type="text/ng-template" id="legend.html">
     <div class="gf-form">
       <label class="gf-form-label width-13 pointer">
@@ -151,6 +197,7 @@
             <li>$label - entity label</li>
             <li>$host - corresponding host</li>
             <li>$pid - corresponding PID</li>
+            <li>timeShift - corresponding timeShift</li>
             <li>$metric - displayed metric</li>
             <li>$type - entity type</li>
             <li>$service - service label</li>
@@ -180,6 +227,7 @@
             <li>$label - entity label</li>
             <li>$website - website label</li>
             <li>$type - entity type</li>
+            <li>timeShift - corresponding timeShift</li>
             <li>$metric - displayed metric</li>
             <li>$key - metric key with aggregation and rollup</li>
             <li>$index - index in the list</li>
@@ -206,6 +254,7 @@
           <ul>
             <li>$label - entity label</li>
             <li>$application - application label</li>
+            <li>timeShift - corresponding timeShift</li>
             <li>$metric - displayed metric</li>
             <li>$key - metric key with aggregation and rollup</li>
             <li>$index - index in the list</li>
@@ -335,7 +384,7 @@
         </div>
         <input id="in-filter-stringValue-{{ctrl.target.refId}}-{{$index}}"
                type="text"
-               ng-show="ctrl.target.filters[$index].tag.type === 'STRING' || ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR'"
+               ng-show="(ctrl.target.filters[$index].tag.type === 'STRING' || ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR') && !ctrl.target.filters[$index].operator.key.includes('EMPTY')"
                class="gf-form-input width-22"
                ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
                ng-model="ctrl.target.filters[$index].stringValue"
@@ -385,6 +434,26 @@
           <p>Add Filter to narrow down the data</p>
         </info-popover>
       </label>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="timeshift.html">
+    <div class="gf-form">
+      <label class="gf-form-label width-13 pointer" for="in-timeshift-{{ctrl.target.refId}}">
+        Time Shift
+        <info-popover position="top center" mode="right-normal">
+          <p>Specify the amount of hours that shall be used. The time shift function always go back in time, not forward. Accepts values such as 1s, 1min, 1h, 1d, 1w
+          </p>
+        </info-popover>
+      </label>
+      <input id="in-timeshift-{{ctrl.target.refId}}"
+             class="gf-form-input"
+             type="text"
+             ng-class="ctrl.target.timeShiftIsValid || ctrl.target.timeShift === '' ? 'ng-valid' : 'ng-invalid'"
+             ng-model='ctrl.target.timeShift'
+             ng-model-options='{ debounce: 300 }'
+             ng-change="ctrl.onChange()"
+             placeholder="1h"/>
     </div>
   </script>
 

@@ -6,26 +6,13 @@ import TagFilter from './types/tag_filter';
 import Cache from './cache';
 
 import _ from 'lodash';
+import {createTagFilter, getChartGranularity, readItemMetrics} from "./util/analyze_util";
 
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
   websitesCache: Cache<Promise<Array<Selectable>>>;
 
   // our ui is limited to 80 results, same logic to stay comparable
   maximumNumberOfUsefulDataPoints = 80;
-  sensibleGranularities = [
-    1, // second
-    5,
-    10,
-    60, // minute
-    5 * 60,
-    10 * 60,
-    60 * 60, // hour
-    5 * 60 * 60,
-    10 * 60 * 60,
-    24 * 60 * 60, // day
-    5 * 24 * 60 * 60,
-    10 * 24 * 60 * 60
-  ];
 
   OPERATOR_NUMBER = 'NUMBER';
   OPERATOR_BOOLEAN = 'BOOLEAN';
@@ -116,6 +103,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return websiteCatalog;
   }
 
+
   fetchMetricsForWebsite(target, timeFilter: TimeFilter) {
     // avoid invalid calls
     if (!target || !target.metric || !target.group || !target.entity) {
@@ -129,18 +117,29 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       operator: 'EQUALS',
       value: target.entity.key
     }];
+
     _.forEach(target.filters, filter => {
       if (filter.isValid) {
-        tagFilters.push(this.createTagFilter(filter));
+        tagFilters.push(createTagFilter(filter));
       }
     });
     const metric = {
       metric: target.metric.key,
       aggregation: target.aggregation ? target.aggregation : 'SUM'
     };
-    if (target.pluginId !== "singlestat") { // no granularity for singlestat
-      metric['granularity'] = this.getChartGranularity(windowSize);
+
+    let granularity = null;
+    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
+      if (target.granularity) {
+        granularity = target.granularity;
+      } else {
+        granularity = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+        target.granularity = granularity;
+      }
+
+      metric['granularity'] = granularity.value;
     }
+
 
     const group = {
       groupbyTag: target.group.key
@@ -162,42 +161,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return this.postRequest('/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
   }
 
-  getChartGranularity(windowSize: number): number {
-    const granularity = this.sensibleGranularities.find(
-      granularity => windowSize / 1000 / granularity <= this.maximumNumberOfUsefulDataPoints
-    );
-    return granularity || this.sensibleGranularities[this.sensibleGranularities.length - 1];
-  }
-
-  createTagFilter(filter: TagFilter) {
-    const tagFilter = {
-      name: filter.tag.key,
-      operator: filter.operator.key,
-      value: filter.stringValue
-    };
-
-    if (this.OPERATOR_NUMBER === filter.tag.type) {
-      tagFilter.value = filter.numberValue.toString();
-    } else if (this.OPERATOR_BOOLEAN === filter.tag.type) {
-      tagFilter.value = filter.booleanValue.toString();
-    }
-
-    return tagFilter;
-  }
-
-  readItemMetrics(target, response) {
-    // as we map two times we need to flatten the result
-    return _.flatten(response.data.items.map((item, index) => {
-      return _.map(item.metrics, (value, key) => {
-        return {
-          'target': this.buildLabel(target, item, key, index),
-          'datapoints': this.sortByTimestamp(_.map(value, metric => [metric[1], metric[0]]))
-        };
-      });
-    }));
-  }
-
-  buildLabel(target, item, key, index): string {
+  buildWebsiteLabel(target, item, key, index): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
@@ -206,8 +170,13 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       label = _.replace(label, '$metric', target.metric.label);
       label = _.replace(label, '$key', key);
       label = _.replace(label, '$index', index + 1);
+      label = _.replace(label, '$timeShift', target.timeShift);
       return label;
     }
-    return item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+    return target.timeShift && target.timeShiftIsValid ?
+      item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
+      :
+      item.name + ' (' + target.entity.label + ')' + ' - ' + key;
   }
+
 }
