@@ -2,36 +2,19 @@ import AbstractDatasource from './datasource_abstract';
 import CallGroupBody from './types/call_group_body';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
-import TagFilter from './types/tag_filter';
 import Cache from './cache';
 
 import _ from 'lodash';
+import {createTagFilter, getChartGranularity} from "./util/analyze_util";
 
 export default class InstanaApplicationDataSource extends AbstractDatasource {
   applicationsCache: Cache<Promise<Array<Selectable>>>;
 
   // our ui is limited to 80 results, same logic to stay comparable
   maximumNumberOfUsefulDataPoints = 80;
-  sensibleGranularities = [
-    1, // second
-    5,
-    10,
-    60, // minute
-    5 * 60,
-    10 * 60,
-    60 * 60, // hour
-    5 * 60 * 60,
-    10 * 60 * 60,
-    24 * 60 * 60, // day
-    5 * 24 * 60 * 60,
-    10 * 24 * 60 * 60
-  ];
 
   // duplicate to QueryCtrl.ALL_APPLICATIONS
-  ALL_APPLICATIONS = '-- All Applications --';
-
-  OPERATOR_NUMBER = 'NUMBER';
-  OPERATOR_BOOLEAN = 'BOOLEAN';
+  ALL_APPLICATIONS = '-- No Application Filter --';
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -74,8 +57,8 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     };
     applications = this.postRequest('/api/application-monitoring/analyze/call-groups', data).then(applicationsResponse =>
       applicationsResponse.data.items.map(entry => ({
-        'key' : entry.name,
-        'label' : entry.name
+        'key': entry.name,
+        'label': entry.name
       }))
     );
     this.applicationsCache.put(key, applications);
@@ -91,8 +74,8 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
     applicationTags = this.doRequest('/api/application-monitoring/catalog/tags').then(tagsResponse =>
       tagsResponse.data.map(entry => ({
-        'key' : entry.name,
-        'type' : entry.type
+        'key': entry.name,
+        'type': entry.type
       }))
     );
     this.simpleCache.put('applicationTags', applicationTags);
@@ -108,9 +91,9 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
     applicationCatalog = this.doRequest('/api/application-monitoring/catalog/metrics').then(catalogResponse =>
       catalogResponse.data.map(entry => ({
-        'key' : entry.metricId,
-        'label' : entry.label,
-        'aggregations' : entry.aggregations ? entry.aggregations.sort() : []
+        'key': entry.metricId,
+        'label': entry.label,
+        'aggregations': entry.aggregations ? entry.aggregations.sort() : []
       }))
     ).then(catalogResponse => {
       // not all metrics in the metric catalog are working right now, so it is hard coded and manually set. Might be needless in the future
@@ -130,7 +113,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
   fetchMetricsForApplication(target, timeFilter: TimeFilter) {
     // avoid invalid calls
     if (!target || !target.metric || !target.group || !target.entity) {
-      return this.$q.resolve({ data: { items: [] } });
+      return this.$q.resolve({data: {items: []}});
     }
 
     // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
@@ -138,7 +121,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
     const tagFilters = [];
 
-    if (target.entity.key){
+    if (target.entity.key) {
       tagFilters.push({
         name: 'application.name',
         operator: 'EQUALS',
@@ -148,7 +131,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
     _.forEach(target.filters, filter => {
       if (filter.isValid) {
-        tagFilters.push(this.createTagFilter(filter));
+        tagFilters.push(createTagFilter(filter));
       }
     });
 
@@ -156,9 +139,18 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       metric: target.metric.key,
       aggregation: target.aggregation ? target.aggregation : 'SUM'
     };
-    if (target.pluginId !== "singlestat") { // no granularity for singlestat
-      metric['granularity'] = this.getChartGranularity(windowSize);
+
+    let granularity = null;
+    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
+      if (target.granularity) {
+        granularity = target.granularity;
+      } else {
+        granularity = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+        target.granularity = granularity;
+      }
+      metric['granularity'] = granularity.value;
     }
+
 
     const group = {
       groupbyTag: target.group.key
@@ -174,59 +166,31 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
         windowSize: windowSize
       },
       tagFilters: tagFilters,
-      metrics: [ metric ]
+      metrics: [metric]
     };
     return this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
   }
 
-  getChartGranularity(windowSize) {
-    const granularity = this.sensibleGranularities.find(
-      granularity => windowSize / 1000 / granularity <= this.maximumNumberOfUsefulDataPoints
-    );
-    return granularity || this.sensibleGranularities[this.sensibleGranularities.length - 1];
-  }
-
-  createTagFilter(filter: TagFilter) {
-    const tagFilter = {
-      name: filter.tag.key,
-      operator: filter.operator.key,
-      value: filter.stringValue
-    };
-
-    if (this.OPERATOR_NUMBER === filter.tag.type) {
-      tagFilter.value = filter.numberValue.toString();
-    } else if (this.OPERATOR_BOOLEAN === filter.tag.type) {
-      tagFilter.value = filter.booleanValue.toString();
-    }
-
-    return tagFilter;
-  }
-
-  readItemMetrics(target, response) {
-    // as we map two times we need to flatten the result
-    return _.flatten(response.data.items.map((item, index) => {
-      return _.map(item.metrics, (value, key) => {
-        return {
-          'target': this.buildLabel(target, item, key, index),
-          'datapoints': this.sortByTimestamp(_.map(value, metric => [metric[1], metric[0]]))
-        };
-      });
-    }));
-  }
-
-  buildLabel(target, item, key, index): string {
+  buildApplicationLabel(target, item, key, index): string {
     if (target.labelFormat) {
+      console.log(target.timeShift);
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
       label = _.replace(label, '$application', target.entity.label);
       label = _.replace(label, '$metric', target.metric.label);
       label = _.replace(label, '$key', key);
       label = _.replace(label, '$index', index + 1);
+      label = _.replace(label, '$timeShift', target.timeShift);
       return label;
     }
+
     if (target.entity.label === this.ALL_APPLICATIONS) {
-      return item.name + ' - ' + key;
+      return target.timeShift ? item.name + ' - ' + key + " - " + target.timeShift : item.name + ' - ' + key;
     }
-    return item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+
+    return target.timeShift && target.timeShiftIsValid ?
+      item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
+      :
+      item.name + ' (' + target.entity.label + ')' + ' - ' + key;
   }
 }

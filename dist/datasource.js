@@ -1,10 +1,10 @@
-System.register(['./datasource_infrastructure', './datasource_application', './datasource_website', './datasource_abstract', './migration', 'lodash'], function(exports_1) {
+System.register(['./datasource_infrastructure', './datasource_application', './datasource_website', './datasource_abstract', './migration', 'lodash', "./util/analyze_util"], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var datasource_infrastructure_1, datasource_application_1, datasource_website_1, datasource_abstract_1, migration_1, lodash_1;
+    var datasource_infrastructure_1, datasource_application_1, datasource_website_1, datasource_abstract_1, migration_1, lodash_1, analyze_util_1;
     var InstanaDatasource;
     return {
         setters:[
@@ -25,6 +25,9 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
             },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
+            },
+            function (analyze_util_1_1) {
+                analyze_util_1 = analyze_util_1_1;
             }],
         execute: function() {
             InstanaDatasource = (function (_super) {
@@ -41,26 +44,87 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                     if (Object.keys(options.targets[0]).length === 0) {
                         return this.$q.resolve({ data: [] });
                     }
-                    var timeFilter = this.readTime(options);
+                    var timeFilters = {};
+                    var timeShifts = {};
+                    var targetRefId;
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
+                        targetRefId = target.refId;
+                        timeFilters[targetRefId] = _this.readTime(options);
+                        timeShifts[targetRefId] = _this.convertTimeShiftToMillis(target.timeShift);
                         // grafana setting to disable query execution
                         if (target.hide) {
                             return { data: [] };
                         }
-                        // target migration for downwards compability
+                        // target migration for downwards compatibility
                         migration_1.default(target);
-                        if (target.metricCategory === _this.WEBSITE_METRICS) {
-                            return _this.getWebsiteMetrics(target, timeFilter);
-                        }
-                        else if (target.metricCategory === _this.APPLICATION_METRICS) {
-                            return _this.getApplicationMetrics(target, timeFilter);
+                        if (timeShifts[targetRefId]) {
+                            target.timeShiftIsValid = true;
+                            timeFilters[targetRefId] = _this.applyTimeShiftOnTimeFilter(timeFilters[targetRefId], timeShifts[targetRefId]);
                         }
                         else {
-                            return _this.getInfrastructureMetrics(target, timeFilter);
+                            target.timeShiftIsValid = false;
+                        }
+                        if (target.metricCategory === _this.WEBSITE_METRICS) {
+                            target.availableGranularities = analyze_util_1.getPossibleGranularities(timeFilters[targetRefId].windowSize);
+                            return _this.getWebsiteMetrics(target, timeFilters[targetRefId]);
+                        }
+                        else if (target.metricCategory === _this.APPLICATION_METRICS) {
+                            target.availableGranularities = analyze_util_1.getPossibleGranularities(timeFilters[targetRefId].windowSize);
+                            return _this.getApplicationMetrics(target, timeFilters[targetRefId]);
+                        }
+                        else {
+                            target.availableRollUps = _this.infrastructure.getPossibleRollups(timeFilters[targetRefId]);
+                            return _this.getInfrastructureMetrics(target, timeFilters[targetRefId]);
                         }
                     })).then(function (results) {
-                        return { data: lodash_1.default.flatten(results) };
+                        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+                        var flatData = { data: [].concat.apply([], results) };
+                        flatData.data.forEach(function (data) {
+                            if (timeShifts[data.refId]) {
+                                data.datapoints.forEach(function (datapoint) {
+                                    datapoint[1] = datapoint[1] + timeShifts[data.refId];
+                                });
+                            }
+                        });
+                        return flatData;
                     });
+                };
+                InstanaDatasource.prototype.convertTimeShiftToMillis = function (timeShift) {
+                    if (!timeShift) {
+                        return null;
+                    }
+                    try {
+                        return this.parseTimeShift(timeShift);
+                    }
+                    catch (e) {
+                        return null;
+                    }
+                };
+                InstanaDatasource.prototype.parseTimeShift = function (timeShift) {
+                    var milliSeconds = 1000;
+                    if (timeShift.endsWith('s')) {
+                        return parseInt(timeShift.split('s')[0]) * milliSeconds;
+                    }
+                    else if (timeShift.endsWith('min')) {
+                        return parseInt(timeShift.split('min')[0]) * 60 * milliSeconds;
+                    }
+                    else if (timeShift.endsWith('h')) {
+                        return parseInt(timeShift.split('h')[0]) * 60 * 60 * milliSeconds;
+                    }
+                    else if (timeShift.endsWith('d')) {
+                        return parseInt(timeShift.split('d')[0]) * 60 * 60 * 24 * milliSeconds;
+                    }
+                    else if (timeShift.endsWith('w')) {
+                        return parseInt(timeShift.split('w')[0]) * 60 * 60 * 24 * 7 * milliSeconds;
+                    }
+                    return null;
+                };
+                InstanaDatasource.prototype.applyTimeShiftOnTimeFilter = function (timeFilter, timeShift) {
+                    return {
+                        from: timeFilter.from - timeShift,
+                        to: timeFilter.to - timeShift,
+                        windowSize: timeFilter.windowSize
+                    };
                 };
                 InstanaDatasource.prototype.readTime = function (options) {
                     var from = new Date(options.range.from).getTime();
@@ -85,14 +149,14 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                 InstanaDatasource.prototype.getWebsiteMetrics = function (target, timeFilter) {
                     var _this = this;
                     return this.website.fetchMetricsForWebsite(target, timeFilter).then(function (response) {
-                        return _this.website.readItemMetrics(target, response);
+                        return analyze_util_1.readItemMetrics(target, response, _this.website.buildWebsiteLabel);
                     });
                 };
                 InstanaDatasource.prototype.getApplicationMetrics = function (target, timeFilter) {
                     var _this = this;
                     return this.application.fetchMetricsForApplication(target, timeFilter).then(function (response) {
                         target.showWarningCantShowAllResults = response.data.canLoadMore;
-                        return _this.application.readItemMetrics(target, response);
+                        return analyze_util_1.readItemMetrics(target, response, _this.application.buildApplicationLabel);
                     });
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {

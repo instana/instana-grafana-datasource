@@ -1,6 +1,6 @@
 export default [
   {
-    availableFor: 1000 * 60 * 10 + 3000, // 10m + 3s (to give it some slack when deactivating live mode)
+    availableFor: 1000 * 60 * 60 * 24, // 1d
     rollup: 1000, // 1s
     label: '1s'
   },

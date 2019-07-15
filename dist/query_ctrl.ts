@@ -32,7 +32,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   timeFilter: TimeFilter;
 
   EMPTY_DROPDOWN_TEXT = ' - ';
-  ALL_APPLICATIONS = '-- All Applications --';
+  ALL_APPLICATIONS = '-- No Application Filter --';
 
   OPERATOR_STRING = 'STRING';
   OPERATOR_NUMBER = 'NUMBER';
@@ -76,7 +76,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // infrastructure (built-in & custom)
     if (this.isInfrastructure() && this.target.entityQuery) {
       this.onFilterChange(false).then(() => {
-
         // infrastructure metrics support available metrics on a selected entity type
         if (this.target.entityType) {
           this.onEntityTypeSelect(false).then(() => {
@@ -326,7 +325,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   removeFilter(index: number) {
     this.target.filters.splice(index, 1);
-
     this.panelCtrl.refresh();
   }
 
@@ -339,7 +337,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
     // validate changed filter
     if (filter.tag) {
-      if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
+      if (filter.operator.key.includes("EMPTY")) {
+        filter.isValid = true;
+        // to avoid sending value with filter operators that do not require a value (such as is-present/is-not-present)
+        filter.stringValue = "";
+        filter.numberValue = null;
+        filter.booleanValue = true;
+      } else if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
         filter.isValid = true;
       } else if (this.OPERATOR_KEY_VALUE === filter.tag.type && filter.stringValue && filter.stringValue.includes('=') ) {
         filter.isValid = true;
@@ -384,12 +388,18 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.group = null;
     this.target.showGroupBySecondLevel = null;
     this.target.groupbyTagSecondLevelKey = null;
+    this.target.granularity = null;
+    this.target.rollUp = null;
+    this.target.timeShift = null;
     this.target.filters = [];
   }
 
   resetMetricSelection() {
     this.target.metric = null;
     this.target.filter = null;
+    this.target.granularity = null;
+    this.target.rollUp = null;
+    this.target.timeShift = null;
     this.target.labelFormat = null;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
   }

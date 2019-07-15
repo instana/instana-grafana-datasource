@@ -10,6 +10,9 @@ export default class InstanaDatasource extends AbstractDatasource {
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     query(options: any): any;
+    convertTimeShiftToMillis(timeShift: string): number;
+    parseTimeShift(timeShift: string): number;
+    applyTimeShiftOnTimeFilter(timeFilter: TimeFilter, timeShift: number): TimeFilter;
     readTime(options: any): TimeFilter;
     getInfrastructureMetrics(target: any, timeFilter: TimeFilter): any;
     getWebsiteMetrics(target: any, timeFilter: TimeFilter): any;

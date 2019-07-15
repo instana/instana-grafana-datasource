@@ -4,7 +4,7 @@ System.register([], function(exports_1) {
         execute: function() {
             exports_1("default",[
                 {
-                    availableFor: 1000 * 60 * 10 + 3000,
+                    availableFor: 1000 * 60 * 60 * 24,
                     rollup: 1000,
                     label: '1s'
                 },

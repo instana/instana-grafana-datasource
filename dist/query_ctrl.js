@@ -37,7 +37,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.uniqueOperators = operators_1.default;
                     this.uniqueBeaconTypes = beacon_types_1.default;
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
-                    this.ALL_APPLICATIONS = '-- All Applications --';
+                    this.ALL_APPLICATIONS = '-- No Application Filter --';
                     this.OPERATOR_STRING = 'STRING';
                     this.OPERATOR_NUMBER = 'NUMBER';
                     this.OPERATOR_BOOLEAN = 'BOOLEAN';
@@ -283,7 +283,14 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     }
                     // validate changed filter
                     if (filter.tag) {
-                        if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
+                        if (filter.operator.key.includes("EMPTY")) {
+                            filter.isValid = true;
+                            // to avoid sending value with filter operators that do not require a value (such as is-present/is-not-present)
+                            filter.stringValue = "";
+                            filter.numberValue = null;
+                            filter.booleanValue = true;
+                        }
+                        else if (this.OPERATOR_STRING === filter.tag.type && filter.stringValue) {
                             filter.isValid = true;
                         }
                         else if (this.OPERATOR_KEY_VALUE === filter.tag.type && filter.stringValue && filter.stringValue.includes('=')) {
@@ -330,11 +337,17 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.target.group = null;
                     this.target.showGroupBySecondLevel = null;
                     this.target.groupbyTagSecondLevelKey = null;
+                    this.target.granularity = null;
+                    this.target.rollUp = null;
+                    this.target.timeShift = null;
                     this.target.filters = [];
                 };
                 InstanaQueryCtrl.prototype.resetMetricSelection = function () {
                     this.target.metric = null;
                     this.target.filter = null;
+                    this.target.granularity = null;
+                    this.target.rollUp = null;
+                    this.target.timeShift = null;
                     this.target.labelFormat = null;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                 };

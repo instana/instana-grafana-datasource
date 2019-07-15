@@ -140,9 +140,13 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                         label = lodash_1.default.replace(label, '$service', lodash_1.default.get(snapshotResponse.data, ['data', 'service_name'], ''));
                         label = lodash_1.default.replace(label, '$metric', lodash_1.default.get(target, ['metric', 'key'], 'n/a'));
                         label = lodash_1.default.replace(label, '$index', index + 1);
+                        label = lodash_1.default.replace(label, '$timeShift', target.timeShift);
                         return label;
                     }
-                    return snapshotResponse.data.label + this.getHostSuffix(host);
+                    return target.timeShift && target.timeShiftIsValid ?
+                        snapshotResponse.data.label + this.getHostSuffix(host) + " - " + target.timeShift
+                        :
+                            snapshotResponse.data.label + this.getHostSuffix(host);
                 };
                 InstanaInfrastructureDataSource.prototype.getHostSuffix = function (host) {
                     if (host) {
@@ -154,11 +158,12 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                     var _this = this;
                     return this.$q.all(lodash_1.default.map(snapshots, function (snapshot, index) {
                         // ...fetch the metric data for every snapshot in the results.
-                        return _this.fetchMetricsForSnapshot(snapshot.snapshotId, target.metric.key, timeFilter).then(function (response) {
+                        return _this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target).then(function (response) {
                             var timeseries = _this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
                             var result = {
                                 'target': _this.buildLabel(snapshot.response, snapshot.host, target, index),
-                                'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; })
+                                'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; }),
+                                'refId': target.refId
                             };
                             return result;
                         });
@@ -179,9 +184,11 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                         };
                     });
                 };
-                InstanaInfrastructureDataSource.prototype.fetchMetricsForSnapshot = function (snapshotId, metric, timeFilter) {
-                    var rollup = this.getDefaultMetricRollupDuration(timeFilter).rollup;
-                    var url = "/api/metrics?metric=" + metric + "&from=" + timeFilter.from + "&to=" + timeFilter.to + "&rollup=" + rollup + "&snapshotId=" + snapshotId;
+                InstanaInfrastructureDataSource.prototype.fetchMetricsForSnapshot = function (snapshotId, timeFilter, target) {
+                    var rollUp = target.rollUp ? target.rollUp : this.getDefaultMetricRollupDuration(timeFilter);
+                    target.rollUp = rollUp;
+                    var metric = target.metric.key;
+                    var url = "/api/metrics?metric=" + metric + "&from=" + timeFilter.from + "&to=" + timeFilter.to + "&rollup=" + rollUp.rollup + "&snapshotId=" + snapshotId;
                     return this.doRequest(url);
                 };
                 InstanaInfrastructureDataSource.prototype.getDefaultMetricRollupDuration = function (timeFilter, minRollup) {
@@ -204,6 +211,13 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                         }
                     }
                     return this.rollupDurationThresholds[this.rollupDurationThresholds.length - 1];
+                };
+                InstanaInfrastructureDataSource.prototype.getPossibleRollups = function (timeFilter) {
+                    // Ignoring time differences for now since small time differences
+                    // can be accepted. This time is only used to calculate the rollup.
+                    var now = this.currentTime();
+                    var windowSize = this.getWindowSize(timeFilter);
+                    return this.rollupDurationThresholds.filter(function (rollupDefinition) { return timeFilter.from >= now - rollupDefinition.availableFor; });
                 };
                 return InstanaInfrastructureDataSource;
             })(datasource_abstract_1.default);
