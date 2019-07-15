@@ -1,5 +1,5 @@
-System.register(['./proxy_check', './cache'], function(exports_1) {
-    var proxy_check_1, cache_1;
+System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
+    var proxy_check_1, cache_1, lodash_1;
     var AbstractDatasource;
     return {
         setters:[
@@ -8,6 +8,9 @@ System.register(['./proxy_check', './cache'], function(exports_1) {
             },
             function (cache_1_1) {
                 cache_1 = cache_1_1;
+            },
+            function (lodash_1_1) {
+                lodash_1 = lodash_1_1;
             }],
         execute: function() {
             AbstractDatasource = (function () {
@@ -88,6 +91,11 @@ System.register(['./proxy_check', './cache'], function(exports_1) {
                         }
                         throw error;
                     });
+                };
+                AbstractDatasource.prototype.sortByTimestamp = function (datapoints) {
+                    return lodash_1.default.sortBy(datapoints, [function (o) {
+                            return o[1];
+                        }]);
                 };
                 return AbstractDatasource;
             })();
