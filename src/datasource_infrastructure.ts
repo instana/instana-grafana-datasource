@@ -242,8 +242,8 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     const now = this.currentTime();
     const windowSize = this.getWindowSize(timeFilter);
 
-    return this.rollupDurationThresholds.filter(
-      rollupDefinition => timeFilter.from >= now - rollupDefinition.availableFor
-    );
+    return this.rollupDurationThresholds
+      .filter(rollupDefinition => timeFilter.from >= now - rollupDefinition.availableFor)
+      .filter(rollUp => windowSize / rollUp.rollup <= this.maximumNumberOfUsefulDataPoints);
   }
 }

@@ -67,7 +67,7 @@ export default class InstanaDatasource extends AbstractDatasource {
       })
     ).then(results => {
       // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-      let flatData = {data: [].concat.apply([], results)};
+      let flatData = {data: _.flatten(results)};
 
       flatData.data.forEach(data => {
         if (timeShifts[data.refId]) {
