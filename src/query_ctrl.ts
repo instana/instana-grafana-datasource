@@ -53,8 +53,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // target migration for downwards compability
     migrate(this.target);
 
-    this.target.customFilters = [];
-
     this.target.pluginId = this.panelCtrl.panel.type || this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
@@ -302,8 +300,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onMetricsFilter(refresh: boolean) {
-    if (this.target.customFilters.length === 0) {
-      //don't do any filtering if no custom filters are set.
+    if (!this.target.customFilters || this.target.customFilters.length === 0) {
+      // don't do any filtering if no custom filters are set.
       this.availableMetrics = this.allCustomMetrics;
     } else {
       let filteredMetrics = this.allCustomMetrics;
@@ -312,13 +310,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
           _.sortBy(
             _.filter(
               filteredMetrics,
-              metric => metric.key.toLowerCase().includes(filter.toLowerCase())),
+              metric => metric.key.toLowerCase().includes(filter.value.toLowerCase())),
             'key');
       });
 
       this.availableMetrics = filteredMetrics;
-      this.target.canShowAllMetrics =
-        this.target.metricCategory === '1' && this.availableMetrics.length > 0 && this.availableMetrics.length <= 5;
+      this.target.canShowAllMetrics = this.target.metricCategory === '1'
+        && this.availableMetrics.length > 0
+        && this.availableMetrics.length <= 5;
 
       if (!this.target.canShowAllMetrics) {
         this.target.showAllMetrics = false;
@@ -390,10 +389,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   selectionReset() {
+    if (!this.isInfrastructure()) {
+      this.target.entityQuery = null;
+    }
     this.uniqueEntityTypes = [];
     this.availableMetrics = [];
     this.uniqueEntities = [];
     this.uniqueTags = [];
+    this.target.timeShift = null; // do we want to reset this ?
     this.resetEntityTypeSelection();
     this.resetEntitySelection();
     this.resetMetricSelection();
@@ -401,31 +404,24 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   resetEntityTypeSelection() {
     this.target.entityType = null;
+    this.target.customFilters = [];
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
   }
 
   resetEntitySelection() {
     this.target.entity = null;
-    this.target.entityQuery = null;
     this.target.group = null;
     this.target.showGroupBySecondLevel = null;
     this.target.groupbyTagSecondLevelKey = null;
-    this.target.granularity = null;
-    this.target.rollUp = null;
-    this.target.timeShift = null;
+    this.target.filters = [];
     this.target.showWarningCantShowAllResults = false;
     this.target.showAllMetrics = false;
-    this.target.filters = [];
   }
 
   resetMetricSelection() {
     this.target.metric = null;
-    this.target.filter = null;
     this.target.granularity = null;
     this.target.rollUp = null;
-    this.target.timeShift = null;
-    this.target.showWarningCantShowAllResults = false;
-    this.target.showAllMetrics = false;
     this.target.labelFormat = null;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
   }
@@ -480,26 +476,20 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.panelCtrl.refresh();
   }
 
-  triggerAdvancedSettings() {
+  toggleAdvancedSettings() {
     this.target.showAdvancedSettings = !this.target.showAdvancedSettings;
-    if (!this.target.showAllMetrics && !this.target.metric) {
-      return this.$q.resolve();
-    }
   }
 
-  addCustomFilter(filter: string) {
-    if (!_.includes(this.target.customFilters, filter)) {
-      this.target.customFilters.push(filter);
-      if (!this.target.showAllMetrics && !this.target.metric) {
-        return this.$q.resolve();
-      }
+  addCustomFilter() {
+    if (!this.target.customFilters) {
+      this.target.customFilters = [];
     }
+    this.target.customFilters.push({value: ''});
+    // this can not result in metric changes, we do not need to refresh
   }
 
-  removeCustomMetricFilter(index: number) {
+  removeCustomFilter(index: number) {
     this.target.customFilters.splice(index, 1);
-    this.onMetricsFilter(true);
-    this.panelCtrl.refresh();
+    // this can not result in metric changes, we do not need to refresh
   }
-
 }

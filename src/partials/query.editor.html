@@ -31,8 +31,8 @@
   <div ng-show="ctrl.target.metricCategory === '1'">
     <div ng-include src="'query.html'"/>
     <div ng-include src="'type.html'"/>
-    <div ng-include src="'metric_filters.html'"/>
     <div ng-include src="'metric.html'"/>
+    <div ng-include src="'metric_filters.html'"/>
     <div ng-include src="'advanced_settings.html'"/>
     <div ng-include src="'legend.html'"/>
     <div ng-include src="'timeshift.html'"/>
@@ -74,7 +74,7 @@
              type="text"
              ng-model='ctrl.target.entityQuery'
              ng-class="ctrl.target.queryIsValid ? 'ng-valid' : 'ng-invalid'"
-             ng-model-options='{ debounce: 300 }'
+             ng-model-options='{ debounce: 500 }'
              ng-change="ctrl.onFilterChange(true)"
              placeholder="Please Specify"
              spellcheck='false'>
@@ -104,20 +104,21 @@
   <script type="text/ng-template" id="metric_filters.html">
     <div ng-repeat="filter in ctrl.target.customFilters">
       <div class="gf-form">
-        <label class="gf-form-label width-13 pointer" for="in-metric-filters-{{ctrl.target.refId}}-{{$index}}">
+        <label class="gf-form-label width-13 pointer" for="in-metric-filter-{{ctrl.target.refId}}-{{$index}}">
           {{$index+1}}. Filter metric select
           <info-popover position="top center" mode="right-normal">
             <p>Type to suggest metrics.</p>
           </info-popover>
         </label>
         <input class="gf-form-input width-19"
+               id="in-metric-filter-{{ctrl.target.refId}}-{{$index}}"
                type="text"
-               ng-model="ctrl.target.customFilters[$index]"
+               ng-model="ctrl.target.customFilters[$index].value"
                ng-model-options='{ debounce: 500 }'
                ng-change="ctrl.onMetricsFilter(true)"
                placeholder="Please Specify"
                spellcheck='false'/>
-        <button class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.removeCustomMetricFilter($index)">
+        <button class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.removeCustomFilter($index)">
           <i class="fa fa-minus"></i>
         </button>
       </div>
@@ -129,7 +130,7 @@
           <p>Add an additional metric select filter.</p>
         </info-popover>
       </label>
-      <button class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.addCustomFilter('')">
+      <button class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.addCustomFilter()">
         <i class="fa fa-plus"></i>
       </button>
     </div>
@@ -184,9 +185,9 @@
         </select>
       </div>
       <gf-form-switch ng-show="ctrl.target.canShowAllMetrics" class="gf-form max-width-12" label="Show all Metrics" label-class="width-13" switch-class="max-width-5" checked="ctrl.target.showAllMetrics" on-change="ctrl.onAllMetricsSelect()">
-        <label for="check-44" class="gf-form-switch-container">
+        <label for="in-show-all-metrics" class="gf-form-switch-container">
           <div class="gf-form-switch max-width-5">
-            <input id="check-44" type="checkbox" class="ng-pristine ng-untouched ng-valid ng-empty">
+            <input id="in-show-all-metrics" type="checkbox" class="ng-pristine ng-untouched ng-valid ng-empty">
             <span class="gf-form-switch__slider"></span>
           </div>
           <div class="gf-form-label width-6">
@@ -220,7 +221,7 @@
              class="gf-form-input width-22"
              type="text"
              ng-model="ctrl.target.labelFormat"
-             ng-model-options='{ debounce: 300 }'
+             ng-model-options='{ debounce: 500 }'
              placeholder="$label (on host $host)"
              ng-change="ctrl.onChange()"
              spellcheck='false'/>
@@ -248,7 +249,7 @@
              class="gf-form-input width-22"
              type="text"
              ng-model="ctrl.target.labelFormat"
-             ng-model-options='{ debounce: 300 }'
+             ng-model-options='{ debounce: 500 }'
              placeholder="$label ($website) - $key"
              ng-change="ctrl.onChange()"
              spellcheck='false'/>
@@ -275,7 +276,7 @@
              class="gf-form-input width-22"
              type="text"
              ng-model="ctrl.target.labelFormat"
-             ng-model-options='{ debounce: 300 }'
+             ng-model-options='{ debounce: 500 }'
              placeholder="$label ($application) - $key"
              ng-change="ctrl.onChange()"
              spellcheck='false'/>
@@ -360,7 +361,7 @@
              class="gf-form-input width-22"
              type="text"
              ng-model='ctrl.target.groupbyTagSecondLevelKey'
-             ng-model-options='{ debounce: 300 }'
+             ng-model-options='{ debounce: 500 }'
              ng-change="ctrl.onChange()"
              placeholder="Please Specify"
              spellcheck='false'/>
@@ -398,7 +399,7 @@
                class="gf-form-input width-22"
                ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
                ng-model="ctrl.target.filters[$index].stringValue"
-               ng-model-options='{ debounce: 400 }'
+               ng-model-options='{ debounce: 500 }'
                ng-change="ctrl.onTagFilterChange($index)"
                placeholder="{{ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR' ? 'Key=Value' : 'Please Specify'}}"
                spellcheck='false'/>
@@ -408,7 +409,7 @@
                class="gf-form-input width-22"
                ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
                ng-model="ctrl.target.filters[$index].numberValue"
-               ng-model-options='{ debounce: 400 }'
+               ng-model-options='{ debounce: 500 }'
                ng-change="ctrl.onTagFilterChange($index)"
                placeholder="Please Specify"
                spellcheck='false'/>
@@ -416,7 +417,7 @@
                 ng-show="ctrl.target.filters[$index].tag.type === 'BOOLEAN'"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.filters[$index].booleanValue"
-                ng-model-options='{ debounce: 200 }'
+                ng-model-options='{ debounce: 300 }'
                 ng-change="ctrl.onTagFilterChange($index)">
           <option value="true" selected>true</option>
           <option value="false">false</option>
@@ -455,7 +456,7 @@
           <p>Show all additional settings.</p>
         </info-popover>
       </label>
-      <gf-form-switch class="gf-form-switch" id="in-advanced-settings-{{ctrl.target.refId}}" checked="ctrl.target.advancedSettingsSwitchChecked" on-change="ctrl.triggerAdvancedSettings()"/>
+      <gf-form-switch class="gf-form-switch" id="in-advanced-settings-{{ctrl.target.refId}}" checked="ctrl.target.advancedSettingsSwitchChecked" on-change="ctrl.toggleAdvancedSettings()"/>
     </div>
   </script>
 
@@ -474,7 +475,7 @@
              type="text"
              ng-class="ctrl.target.timeShiftIsValid || ctrl.target.timeShift === '' ? 'ng-valid' : 'ng-invalid'"
              ng-model='ctrl.target.timeShift'
-             ng-model-options='{ debounce: 300 }'
+             ng-model-options='{ debounce: 500 }'
              ng-change="ctrl.onChange()"
              placeholder="1h"/>
     </div>
