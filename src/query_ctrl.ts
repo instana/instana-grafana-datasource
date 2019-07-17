@@ -83,10 +83,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
             }
           });
 
-          this.datasource.infrastructure.getDefaultMetricRollupDuration(this.timeFilter).then(rollUp => {
-            console.log("geht rein");
-            this.target.rollUp = rollUp;
-          });
+          this.target.rollUp = this.datasource.infrastructure.getDefaultMetricRollupDuration(this.timeFilter);
         }
       });
     }
@@ -315,7 +312,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       });
 
       this.availableMetrics = filteredMetrics;
-      this.target.canShowAllMetrics = this.target.metricCategory === '1'
+      this.target.canShowAllMetrics = this.target.metricCategory === this.CUSTOM_METRICS
         && this.availableMetrics.length > 0
         && this.availableMetrics.length <= 5;
 
@@ -383,7 +380,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   checkMetricAndRefresh(refresh: boolean) {
     if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
       this.resetMetricSelection();
-    } else if (this.target.metric && refresh) {
+    } else if (refresh && this.target.metric || this.target.showAllMetrics) {
       this.panelCtrl.refresh();
     }
   }
@@ -488,8 +485,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // this can not result in metric changes, we do not need to refresh
   }
 
-  removeCustomFilter(index: number) {
+  removeCustomFilter(index: number, refresh = true) {
     this.target.customFilters.splice(index, 1);
-    // this can not result in metric changes, we do not need to refresh
+    // removing a filter might result in more than 5 available metrics
+    this.onMetricsFilter(refresh);
   }
 }
