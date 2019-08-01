@@ -415,6 +415,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.filters = [];
     this.target.showWarningCantShowAllResults = false;
     this.target.showAllMetrics = false;
+    this.target.canShowAllMetrics = false;
   }
 
   resetMetricSelection() {
