@@ -166,12 +166,10 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return '';
   }
 
-  fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, metric) {
+  fetchMetricsForSnapshots(target, snapshots, rollUp, timeFilter: TimeFilter, metric) {
     return this.$q.all(
       _.map(snapshots, (snapshot, index) => {
         // ...fetch the metric data for every snapshot in the results.
-        let rollUp = target.rollUp ? target.rollUp : this.getDefaultMetricRollupDuration(timeFilter);
-        target.rollUp = rollUp;
         return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, rollUp, metric).then(response => {
           const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
           var result = {

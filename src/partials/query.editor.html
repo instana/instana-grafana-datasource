@@ -175,24 +175,14 @@
                 ng-options="f for f in ctrl.target.metric.aggregations">
         </select>
       </div>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon0"
-           ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.target.pluginId === 'singlestat' || ctrl.target.pluginId === 'table'">
-        <select id="in-granularity-{{ctrl.target.refId}}"
-                ng-disabled="!ctrl.target.metric || ctrl.target.availableGranularities.length <= 1"
-                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                ng-model="ctrl.target.granularity"
-                ng-change="ctrl.onChange()"
-                ng-options="f.label for f in ctrl.target.availableGranularities">
-        </select>
-      </div>
       <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon"
-           ng-show="(ctrl.target.metric || ctrl.target.showAllMetrics) && (ctrl.target.metricCategory !== ctrl.APPLICATION_METRICS && ctrl.target.metricCategory !== ctrl.WEBSITE_METRICS) && (ctrl.target.pluginId !== 'singlestat' || ctrl.target.pluginId !== 'gauge')">
-        <select id="in-rollup-{{ctrl.target.refId}}"
-                ng-disabled="ctrl.target.availableRollUps.length <= 1 || (!ctrl.target.metric && (!ctrl.target.canShowAllMetrics || !ctrl.target.showAllMetrics))"
+           ng-show="(ctrl.target.metric || ctrl.target.showAllMetrics) && (ctrl.target.pluginId !== 'singlestat' || ctrl.target.pluginId !== 'gauge')">
+        <select id="in-timeInterval-{{ctrl.target.refId}}"
+                ng-disabled="ctrl.target.availableTimeIntervals.length <= 1 || (!ctrl.target.metric && (!ctrl.target.canShowAllMetrics || !ctrl.target.showAllMetrics))"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                ng-model="ctrl.target.rollUp"
+                ng-model="ctrl.target.timeInterval"
                 ng-change="ctrl.onChange()"
-                ng-options="f.label for f in ctrl.target.availableRollUps">
+                ng-options="f.label for f in ctrl.target.availableTimeIntervals">
         </select>
       </div>
       <gf-form-switch ng-show="ctrl.target.canShowAllMetrics" class="gf-form max-width-12" label="Show all Metrics" label-class="width-13" switch-class="max-width-5" checked="ctrl.target.showAllMetrics" on-change="ctrl.onAllMetricsSelect()">

@@ -86,8 +86,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
           });
 
           this.datasource.infrastructure.getDefaultMetricRollupDuration(this.timeFilter).then(rollUp => {
-            console.log("geht rein");
-            this.target.rollUp = rollUp;
+            this.target.timeInterval = rollUp;
           });
         }
       });
@@ -410,8 +409,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.group = null;
     this.target.showGroupBySecondLevel = null;
     this.target.groupbyTagSecondLevelKey = null;
-    this.target.granularity = null;
-    this.target.rollUp = null;
+    this.target.timeInterval = null;
     this.target.timeShift = null;
     this.target.showWarningCantShowAllResults = false;
     this.target.showAllMetrics = false;
@@ -421,8 +419,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   resetMetricSelection() {
     this.target.metric = null;
     this.target.filter = null;
-    this.target.granularity = null;
-    this.target.rollUp = null;
+    this.target.timeInterval = null;
     this.target.timeShift = null;
     this.target.showWarningCantShowAllResults = false;
     this.target.showAllMetrics = false;
