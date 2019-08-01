@@ -473,6 +473,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onAllMetricsSelect() {
     if (this.target.showAllMetrics) {
       this.target.allMetrics = this.availableMetrics;
+      this.target.metric = null;
     } else {
       this.target.showAllMetrics = false;
     }
