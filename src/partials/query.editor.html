@@ -174,7 +174,7 @@
                 ng-options="f.label for f in ctrl.target.availableTimeIntervals">
         </select>
       </div>
-      <gf-form-switch ng-show="ctrl.target.canShowAllMetrics" class="gf-form max-width-12" label="Show all Metrics" label-class="width-13" switch-class="max-width-5" checked="ctrl.target.showAllMetrics" on-change="ctrl.onAllMetricsSelect()">
+      <gf-form-switch ng-show="ctrl.target.canShowAllMetrics && ctrl.target.metricCategory === '1'" class="gf-form max-width-12" label="Show all Metrics" label-class="width-13" switch-class="max-width-5" checked="ctrl.target.showAllMetrics" on-change="ctrl.onAllMetricsSelect()">
         <label for="in-show-all-metrics" class="gf-form-switch-container">
           <div class="gf-form-switch max-width-5">
             <input id="in-show-all-metrics" type="checkbox" class="ng-pristine ng-untouched ng-valid ng-empty">
