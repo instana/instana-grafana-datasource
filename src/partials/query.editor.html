@@ -155,7 +155,7 @@
         </select>
       </div>
       <div class="gf-form-select-wrapper width-6"
-           ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.target.pluginId === 'singlestat' || ctrl.target.pluginId === 'table'">
+           ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.isPluginThatSupportsAggregation()">
         <select id="in-aggregation-{{ctrl.target.refId}}"
                 ng-disabled="!ctrl.target.metric || ctrl.target.metric.aggregations.length <= 1"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
@@ -165,7 +165,7 @@
         </select>
       </div>
       <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon"
-           ng-show="(ctrl.target.metric || ctrl.target.showAllMetrics) && (ctrl.target.pluginId !== 'singlestat' || ctrl.target.pluginId !== 'gauge')">
+           ng-show="(ctrl.target.metric || ctrl.target.showAllMetrics) && ctrl.isNotSingleStatOrGauge()">
         <select id="in-timeInterval-{{ctrl.target.refId}}"
                 ng-disabled="ctrl.target.availableTimeIntervals.length <= 1 || (!ctrl.target.metric && (!ctrl.target.canShowAllMetrics || !ctrl.target.showAllMetrics))"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"

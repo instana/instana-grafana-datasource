@@ -497,4 +497,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // removing a filter might result in more than 5 available metrics
     this.onMetricsFilter(refresh);
   }
+
+  isNotSingleStatOrGauge() {
+    return this.target.pluginId !== 'gauge' && this.target.pluginId !== 'singlestat';
+  }
+
+  isPluginThatSupportsAggregation() {
+    return this.target.pluginId === 'singlestat' || this.target.pluginId === 'gauge' || this.target.pluginId === 'table';
+  }
 }

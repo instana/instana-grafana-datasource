@@ -184,7 +184,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   }
 
   readTimeSeries(values, aggregation: string, pluginId: string, timeFilter: TimeFilter) {
-    if (aggregation === 'SUM' && (pluginId === 'singlestat' || pluginId === 'table')) {
+    if (aggregation === 'SUM' && (pluginId === 'singlestat' || pluginId === 'gauge' || pluginId === 'table')) {
       return this.correctMeanToSum(values, timeFilter);
     }
     return values;
