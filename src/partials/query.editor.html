@@ -1,6 +1,6 @@
 <query-editor-row query-ctrl="ctrl" can-collapse="false">
   <div class="gf-form">
-    <label class="gf-form-label width-13 pointer" for="in-category-{{ctrl.target.refId}}">
+    <label class="gf-form-label query-keyword width-13 pointer" for="in-category-{{ctrl.target.refId}}">
       Category
       <info-popover position="top center" mode="right-normal">
         <p>Select a metric category.</p>
@@ -20,8 +20,9 @@
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '0'">
-    <div ng-include src="'query.html'"/>
-    <div ng-include src="'type.html'"/>
+    <div ng-include src="'queryAndType.html'"/>
+    <!--<div ng-include src="'query.html'"/>
+    <div ng-include src="'type.html'"/>-->
     <div ng-include src="'metric.html'"/>
     <div ng-include src="'advanced_settings.html'"/>
     <div ng-include src="'legend.html'"/>
@@ -29,8 +30,9 @@
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '1'">
-    <div ng-include src="'query.html'"/>
-    <div ng-include src="'type.html'"/>
+    <div ng-include src="'queryAndType.html'"/>
+    <!--<div ng-include src="'query.html'"/>
+    <div ng-include src="'type.html'"/>-->
     <div ng-include src="'metric.html'"/>
     <div ng-include src="'metric_filters.html'"/>
     <div ng-include src="'advanced_settings.html'"/>
@@ -39,8 +41,9 @@
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '2'">
-    <div ng-include src="'application.html'"/>
-    <div ng-include src="'group.html'"/>
+    <div ng-include src="'analyze.html'"/>
+    <!--<div ng-include src="'application.html'"/>-->
+    <!--<div ng-include src="'group.html'"/>-->
     <div ng-include src="'metric.html'"/>
     <div ng-include src="'filters.html'"/>
     <div ng-include src="'advanced_settings.html'"/>
@@ -49,9 +52,10 @@
   </div>
 
   <div ng-show="ctrl.target.metricCategory === '3'">
-    <div ng-include src="'website.html'"/>
-    <div ng-include src="'beacontype.html'"/>
-    <div ng-include src="'group.html'"/>
+    <div ng-include src="'analyze.html'"/>
+    <!-- <div ng-include src="'website.html'"/>
+     <div ng-include src="'beacontype.html'"/>
+     <div ng-include src="'group.html'"/> -->
     <div ng-include src="'metric.html'"/>
     <div ng-include src="'filters.html'"/>
     <div ng-include src="'advanced_settings.html'"/>
@@ -59,9 +63,9 @@
     <div ng-include src="'timeshift.html'"/>
   </div>
 
-  <script type="text/ng-template" id="query.html">
+  <script type="text/ng-template" id="queryAndType.html">
     <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-query-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-query-{{ctrl.target.refId}}">
         Query
         <info-popover position="top center" mode="right-normal">
           <p>Specify a query for the entities you wish to plot. Use the dynamic focus syntax:
@@ -70,7 +74,7 @@
         </info-popover>
       </label>
       <input id="in-query-{{ctrl.target.refId}}"
-             class="gf-form-input"
+             class="gf-form-input width-100"
              type="text"
              ng-model='ctrl.target.entityQuery'
              ng-class="ctrl.target.queryIsValid ? 'ng-valid' : 'ng-invalid'"
@@ -78,18 +82,13 @@
              ng-change="ctrl.onFilterChange(true)"
              placeholder="Please Specify"
              spellcheck='false'>
-    </div>
-  </script>
-
-  <script type="text/ng-template" id="type.html">
-    <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-type-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword pointer min-width-8" for="in-type-{{ctrl.target.refId}}">
         Type
         <info-popover position="top center" mode="right-normal">
           <p>Select an entity type for a list of available metrics.</p>
         </info-popover>
       </label>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+      <div class="gf-form-select-wrapper min-width-24 gf-form-select-wrapper--has-help-icon">
         <select id="in-type-{{ctrl.target.refId}}"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.entityType"
@@ -104,7 +103,8 @@
   <script type="text/ng-template" id="metric_filters.html">
     <div ng-repeat="filter in ctrl.target.customFilters">
       <div class="gf-form">
-        <label class="gf-form-label width-13 pointer" for="in-metric-filter-{{ctrl.target.refId}}-{{$index}}">
+        <label class="gf-form-label width-13 pointer query-keyword"
+               for="in-metric-filter-{{ctrl.target.refId}}-{{$index}}">
           {{$index+1}}. Filter metric select
           <info-popover position="top center" mode="right-normal">
             <p>Type to suggest metrics.</p>
@@ -130,23 +130,23 @@
           <p>Add an additional metric select filter.</p>
         </info-popover>
       </label>
-      <button class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.addCustomFilter()">
+      <button id="in-metric-filter-{{ctrl.target.refId}}" class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.addCustomFilter()">
         <i class="fa fa-plus"></i>
       </button>
     </div>
   </script>
 
   <script type="text/ng-template" id="metric.html">
-    <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-metric-{{ctrl.target.refId}}">
+    <label class="gf-form">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-metric-{{ctrl.target.refId}}">
         Metric
         <info-popover position="top center" mode="right-normal">
           <p>Select the metric you wish to plot.</p>
         </info-popover>
       </label>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+      <div class="gf-form-select-wrapper gf-form-select-wrapper--has-help-icon width-100">
         <select id="in-metric-{{ctrl.target.refId}}"
-                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched "
                 ng-disabled="ctrl.target.canShowAllMetrics && ctrl.target.showAllMetrics"
                 ng-model="ctrl.target.metric"
                 ng-change="ctrl.onMetricSelect()"
@@ -154,7 +154,24 @@
           <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
         </select>
       </div>
-      <div class="gf-form-select-wrapper width-6"
+      <label ng-show="ctrl.target.metricCategory === '1'" class="gf-form-label query-keyword pointer"
+             for="in-timeInterval-{{ctrl.target.refId}}">
+        Show all Metrics
+        <info-popover position="top center" mode="right-normal">
+          <p>Select the {{ctrl.timeIntervalLabel}} value</p>
+        </info-popover>
+      </label>
+      <gf-form-switch
+        ng-show="ctrl.target.metricCategory === '1'"
+        ng-disabled="!ctrl.target.canShowAllMetrics"
+        checked="ctrl.target.showAllMetrics"
+        on-change="ctrl.onAllMetricsSelect()"
+      />
+      <label class="gf-form-label query-keyword pointer" for="in-metric-{{ctrl.target.refId}}"
+             ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.isPluginThatSupportsAggregation()">
+        Aggregation
+      </label>
+      <div class="gf-form-select-wrapper min-width-8"
            ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.isPluginThatSupportsAggregation()">
         <select id="in-aggregation-{{ctrl.target.refId}}"
                 ng-disabled="!ctrl.target.metric || ctrl.target.metric.aggregations.length <= 1"
@@ -164,8 +181,14 @@
                 ng-options="f for f in ctrl.target.metric.aggregations">
         </select>
       </div>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon"
-           ng-show="(ctrl.target.metric || ctrl.target.showAllMetrics) && ctrl.isNotSingleStatOrGauge()">
+      <label class="gf-form-label query-keyword pointer" for="in-timeInterval-{{ctrl.target.refId}}">
+        {{ctrl.timeIntervalLabel}}
+        <info-popover position="top center" mode="right-normal">
+          <p>Select the {{ctrl.timeIntervalLabel}} value</p>
+        </info-popover>
+      </label>
+      <div class="gf-form-select-wrapper min-width-8 gf-form-select-wrapper--has-help-icon">
+        <!--ng-show="(ctrl.target.metric || ctrl.target.showAllMetrics) && ctrl.isNotSingleStatOrGauge()"-->
         <select id="in-timeInterval-{{ctrl.target.refId}}"
                 ng-disabled="ctrl.target.availableTimeIntervals.length <= 1 || (!ctrl.target.metric && (!ctrl.target.canShowAllMetrics || !ctrl.target.showAllMetrics))"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
@@ -174,23 +197,12 @@
                 ng-options="f.label for f in ctrl.target.availableTimeIntervals">
         </select>
       </div>
-      <gf-form-switch ng-show="ctrl.target.canShowAllMetrics && ctrl.target.metricCategory === '1'" class="gf-form max-width-12" label="Show all Metrics" label-class="width-13" switch-class="max-width-5" checked="ctrl.target.showAllMetrics" on-change="ctrl.onAllMetricsSelect()">
-        <label for="in-show-all-metrics" class="gf-form-switch-container">
-          <div class="gf-form-switch max-width-5">
-            <input id="in-show-all-metrics" type="checkbox" class="ng-pristine ng-untouched ng-valid ng-empty">
-            <span class="gf-form-switch__slider"></span>
-          </div>
-          <div class="gf-form-label width-6">
-            Show all Metrics
-          </div>
-        </label>
-      </gf-form-switch>
-    </div>
+    </label>
   </script>
 
   <script type="text/ng-template" id="legend.html">
     <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
-      <label class="gf-form-label width-13 pointer">
+      <label class="gf-form-label query-keyword width-13 pointer">
         Legend format
         <info-popover position="top center" mode="right-normal">
           Default: $label (on host $host)
@@ -220,7 +232,7 @@
 
   <script type="text/ng-template" id="website_legend.html">
     <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
-      <label class="gf-form-label width-13 pointer">
+      <label class="gf-form-label query-keyword width-13 pointer">
         Legend format
         <info-popover position="top center" mode="right-normal">
           Default: "$label ($website) - $key"
@@ -248,7 +260,7 @@
 
   <script type="text/ng-template" id="application_legend.html">
     <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
-      <label class="gf-form-label width-13 pointer">
+      <label class="gf-form-label query-keyword width-13 pointer">
         Legend format
         <info-popover position="top center" mode="right-normal">
           Default: $label ($application) - $key
@@ -275,7 +287,7 @@
 
   <script type="text/ng-template" id="website.html">
     <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-website-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-website-{{ctrl.target.refId}}">
         Website
         <info-popover position="top center" mode="right-normal">
           <p>Select a website.</p>
@@ -292,15 +304,15 @@
     </div>
   </script>
 
-  <script type="text/ng-template" id="application.html">
+  <script type="text/ng-template" id="analyze.html">
     <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-application-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-application-{{ctrl.target.refId}}">
         Application
         <info-popover position="top center" mode="right-normal">
           <p>Select an application.</p>
         </info-popover>
       </label>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+      <div class="gf-form-select-wrapper width-100 min-width-12 gf-form-select-wrapper--has-help-icon">
         <select id="in-application-{{ctrl.target.refId}}"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.entity"
@@ -308,18 +320,15 @@
                 ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
         </select>
       </div>
-    </div>
-  </script>
-
-  <script type="text/ng-template" id="beacontype.html">
-    <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-beacontype-{{ctrl.target.refId}}">
+      <label ng-show="ctrl.target.metricCategory === '3'" class="gf-form-label query-keyword pointer"
+             for="in-beacontype-{{ctrl.target.refId}}">
         Type
         <info-popover position="top center" mode="right-normal">
           <p>Select a beacon type.</p>
         </info-popover>
       </label>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+      <div ng-show="ctrl.target.metricCategory === '3'"
+           class="gf-form-select-wrapper width-100 min-width-12 gf-form-select-wrapper--has-help-icon">
         <select id="in-beacontype-{{ctrl.target.refId}}"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.entityType"
@@ -327,18 +336,13 @@
                 ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
         </select>
       </div>
-    </div>
-  </script>
-
-  <script type="text/ng-template" id="group.html">
-    <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-group-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword pointer" for="in-group-{{ctrl.target.refId}}">
         Group by
         <info-popover position="top center" mode="right-normal">
           <p>Group by tag</p>
         </info-popover>
       </label>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+      <div class="gf-form-select-wrapper width-100 min-width-12 gf-form-select-wrapper--has-help-icon">
         <select id="in-group-{{ctrl.target.refId}}"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.group"
@@ -358,10 +362,75 @@
     </div>
   </script>
 
+  <script type="text/ng-template" id="application.html">
+    <div class="gf-form">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-application-{{ctrl.target.refId}}">
+        Application
+        <info-popover position="top center" mode="right-normal">
+          <p>Select an application.</p>
+        </info-popover>
+      </label>
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+        <select id="in-application-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.entity"
+                ng-change="ctrl.onChange()"
+                ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
+        </select>
+      </div>
+      <div ng-include src="'group.html'"/>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="beacontype.html">
+    <div class="gf-form">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-beacontype-{{ctrl.target.refId}}">
+        Type
+        <info-popover position="top center" mode="right-normal">
+          <p>Select a beacon type.</p>
+        </info-popover>
+      </label>
+      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+        <select id="in-beacontype-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.entityType"
+                ng-change="ctrl.onBeaconTypeSelect()"
+                ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
+        </select>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="group.html">
+    <label class="gf-form-label query-keyword width-13 pointer" for="in-group-{{ctrl.target.refId}}">
+      Group by
+      <info-popover position="top center" mode="right-normal">
+        <p>Group by tag</p>
+      </info-popover>
+    </label>
+    <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
+      <select id="in-group-{{ctrl.target.refId}}"
+              class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+              ng-model="ctrl.target.group"
+              ng-change="ctrl.onGroupChange()"
+              ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
+      </select>
+    </div>
+    <input id="group-by-second-level-{{ctrl.target.refId}}"
+           ng-hide="!ctrl.target.showGroupBySecondLevel"
+           class="gf-form-input width-22"
+           type="text"
+           ng-model='ctrl.target.groupbyTagSecondLevelKey'
+           ng-model-options='{ debounce: 500 }'
+           ng-change="ctrl.onChange()"
+           placeholder="Please Specify"
+           spellcheck='false'/>
+  </script>
+
   <script type="text/ng-template" id="filters.html">
     <div ng-repeat="filter in ctrl.target.filters">
       <div class="gf-form">
-        <label class="gf-form-label width-13 pointer" for="in-filters-{{ctrl.target.refId}}-{{$index}}">
+        <label class="gf-form-label query-keyword width-13 pointer" for="in-filters-{{ctrl.target.refId}}-{{$index}}">
           {{$index+1}}. Filter
           <info-popover position="top center" class="ng-invalid" mode="right-normal">
             <p>Filter by tag</p>
@@ -418,7 +487,7 @@
       </div>
     </div>
     <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-website-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-website-{{ctrl.target.refId}}">
         Add filter
         <info-popover position="top center" mode="right-normal">
           <p>Add an additional tag filter</p>
@@ -427,7 +496,7 @@
       <button class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.addFilter()">
         <i class="fa fa-plus"></i>
       </button>
-      <label class="gf-form-label width-13 pointer"
+      <label class="gf-form-label query-keyword width-13 pointer"
              for="in-website-{{ctrl.target.refId}}"
              ng-hide="!ctrl.target.showWarningCantShowAllResults">
         ⚠️ Can't show all results
@@ -440,23 +509,24 @@
 
   <script type="text/ng-template" id="advanced_settings.html">
     <div class="gf-form">
-      <label class="gf-form-label width-13 pointer" for="in-advanced-settings-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-advanced-settings-{{ctrl.target.refId}}">
         Show Advanced Settings
         <info-popover position="top center" mode="right-normal">
           <p>Show all additional settings.</p>
         </info-popover>
       </label>
-      <gf-form-switch id="in-advanced-settings-{{ctrl.target.refId}}" checked="ctrl.target.advancedSettingsSwitchChecked" on-change="ctrl.toggleAdvancedSettings()"/>
+      <gf-form-switch id="in-advanced-settings-{{ctrl.target.refId}}"
+                      checked="ctrl.target.advancedSettingsSwitchChecked" on-change="ctrl.toggleAdvancedSettings()"/>
     </div>
   </script>
 
   <script type="text/ng-template" id="timeshift.html">
     <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
-      <label class="gf-form-label width-13 pointer" for="in-timeshift-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-timeshift-{{ctrl.target.refId}}">
         Time Shift
         <info-popover position="top center" mode="right-normal">
           <p>Specify the amount of hours that shall be used. The time shift function always go back in time, not
-            forward. Accepts values such as 1s, 1min, 1h, 1d, 1w
+            forward. Accepts values such as 1s, 1m, 1h, 1d, 1w
           </p>
         </info-popover>
       </label>

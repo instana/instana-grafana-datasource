@@ -29,6 +29,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   entitySelectionText: string;
   metricSelectionText: string;
   previousMetricCategory: string;
+  timeIntervalLabel = "Rollup";
   timeFilter: TimeFilter;
 
   EMPTY_DROPDOWN_TEXT = ' - ';
@@ -69,6 +70,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // on new panel creation we default the category selection to built-in
     if (!this.target.metricCategory) {
       this.target.metricCategory = this.BUILT_IN_METRICS;
+      this.target.canShowAllMetrics = false;
     }
     this.previousMetricCategory = this.target.metricCategory;
 
@@ -222,6 +224,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
     } else {
       this.selectionReset();
       // fresh internal used lists without re-rendering
+
+      if (this.target.metricCategory === '0' || this.target.metricCategory === '1') {
+        this.timeIntervalLabel = "Rollup";
+      } else {
+        this.timeIntervalLabel = "Granularity";
+      }
+
       if (this.isInfrastructure()) {
         this.onFilterChange(false);
       } else if (this.isWebsite()) {
@@ -297,9 +306,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onMetricsFilter(refresh: boolean) {
-    if (!this.target.customFilters || this.target.customFilters.length === 0) {
+    if (!this.target.customFilters || this.target.customFilters.length === 0) {
       // don't do any filtering if no custom filters are set.
       this.availableMetrics = this.allCustomMetrics;
+      this.target.canShowAllMetrics = false;
+      this.target.showAllMetrics = false;
+      this.panelCtrl.refresh();
     } else {
       let filteredMetrics = this.allCustomMetrics;
       _.forEach(this.target.customFilters, filter => {
@@ -312,9 +324,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       });
 
       this.availableMetrics = filteredMetrics;
-      this.target.canShowAllMetrics = this.target.metricCategory === this.CUSTOM_METRICS
-        && this.availableMetrics.length > 0
-        && this.availableMetrics.length <= 5;
+      this.target.canShowAllMetrics = this.isAbleToShowAllMetrics();
 
       if (!this.target.canShowAllMetrics) {
         this.target.showAllMetrics = false;
@@ -323,6 +333,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     this.checkMetricAndRefresh(refresh);
     this.adjustMetricSelectionPlaceholder();
+  }
+
+  isAbleToShowAllMetrics() {
+    return this.target.metricCategory === this.CUSTOM_METRICS
+      && this.availableMetrics.length > 0
+      && this.availableMetrics.length <= 5;
   }
 
   addFilter() {
@@ -380,7 +396,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   checkMetricAndRefresh(refresh: boolean) {
     if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
       this.resetMetricSelection();
-    } else if (refresh && this.target.metric || this.target.showAllMetrics) {
+    } else if (refresh && this.target.metric || this.target.showAllMetrics) {
       this.panelCtrl.refresh();
     }
   }
@@ -503,6 +519,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   isPluginThatSupportsAggregation() {
-    return this.target.pluginId === 'singlestat' || this.target.pluginId === 'gauge' || this.target.pluginId === 'table';
+    return this.target.pluginId === 'singlestat' || this.target.pluginId === 'gauge' || this.target.pluginId === 'table';
   }
 }
