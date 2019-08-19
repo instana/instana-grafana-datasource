@@ -234,8 +234,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
       if (this.isInfrastructure()) {
         this.onFilterChange(false);
       } else if (this.isWebsite()) {
+        this.target.analyzeType = "Website";
         this.onWebsiteChanges(false);
       } else if (this.isApplication()) {
+        this.target.analyzeType = "Application";
         this.onApplicationChanges(false);
       }
     }

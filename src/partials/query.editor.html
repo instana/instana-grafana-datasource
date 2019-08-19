@@ -21,8 +21,6 @@
 
   <div ng-show="ctrl.target.metricCategory === '0'">
     <div ng-include src="'queryAndType.html'"/>
-    <!--<div ng-include src="'query.html'"/>
-    <div ng-include src="'type.html'"/>-->
     <div ng-include src="'metric.html'"/>
     <div ng-include src="'advanced_settings.html'"/>
     <div ng-include src="'legend.html'"/>
@@ -31,8 +29,6 @@
 
   <div ng-show="ctrl.target.metricCategory === '1'">
     <div ng-include src="'queryAndType.html'"/>
-    <!--<div ng-include src="'query.html'"/>
-    <div ng-include src="'type.html'"/>-->
     <div ng-include src="'metric.html'"/>
     <div ng-include src="'metric_filters.html'"/>
     <div ng-include src="'advanced_settings.html'"/>
@@ -42,8 +38,6 @@
 
   <div ng-show="ctrl.target.metricCategory === '2'">
     <div ng-include src="'analyze.html'"/>
-    <!--<div ng-include src="'application.html'"/>-->
-    <!--<div ng-include src="'group.html'"/>-->
     <div ng-include src="'metric.html'"/>
     <div ng-include src="'filters.html'"/>
     <div ng-include src="'advanced_settings.html'"/>
@@ -53,9 +47,6 @@
 
   <div ng-show="ctrl.target.metricCategory === '3'">
     <div ng-include src="'analyze.html'"/>
-    <!-- <div ng-include src="'website.html'"/>
-     <div ng-include src="'beacontype.html'"/>
-     <div ng-include src="'group.html'"/> -->
     <div ng-include src="'metric.html'"/>
     <div ng-include src="'filters.html'"/>
     <div ng-include src="'advanced_settings.html'"/>
@@ -285,35 +276,16 @@
     </div>
   </script>
 
-  <script type="text/ng-template" id="website.html">
-    <div class="gf-form">
-      <label class="gf-form-label query-keyword width-13 pointer" for="in-website-{{ctrl.target.refId}}">
-        Website
-        <info-popover position="top center" mode="right-normal">
-          <p>Select a website.</p>
-        </info-popover>
-      </label>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
-        <select id="in-website-{{ctrl.target.refId}}"
-                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                ng-model="ctrl.target.entity"
-                ng-change="ctrl.onChange()"
-                ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
-        </select>
-      </div>
-    </div>
-  </script>
-
   <script type="text/ng-template" id="analyze.html">
     <div class="gf-form">
-      <label class="gf-form-label query-keyword width-13 pointer" for="in-application-{{ctrl.target.refId}}">
-        Application
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-{{ctrl.target.analyzeType}}-{{ctrl.target.refId}}">
+        {{ctrl.target.analyzeType}}
         <info-popover position="top center" mode="right-normal">
-          <p>Select an application.</p>
+          <p>Select your {{ctrl.target.analyzeType}}.</p>
         </info-popover>
       </label>
       <div class="gf-form-select-wrapper width-100 min-width-12 gf-form-select-wrapper--has-help-icon">
-        <select id="in-application-{{ctrl.target.refId}}"
+        <select id="in-{{ctrl.target.analyzeType}}-{{ctrl.target.refId}}"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.entity"
                 ng-change="ctrl.onChange()"
@@ -360,71 +332,6 @@
              placeholder="Please Specify"
              spellcheck='false'/>
     </div>
-  </script>
-
-  <script type="text/ng-template" id="application.html">
-    <div class="gf-form">
-      <label class="gf-form-label query-keyword width-13 pointer" for="in-application-{{ctrl.target.refId}}">
-        Application
-        <info-popover position="top center" mode="right-normal">
-          <p>Select an application.</p>
-        </info-popover>
-      </label>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
-        <select id="in-application-{{ctrl.target.refId}}"
-                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                ng-model="ctrl.target.entity"
-                ng-change="ctrl.onChange()"
-                ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
-        </select>
-      </div>
-      <div ng-include src="'group.html'"/>
-    </div>
-  </script>
-
-  <script type="text/ng-template" id="beacontype.html">
-    <div class="gf-form">
-      <label class="gf-form-label query-keyword width-13 pointer" for="in-beacontype-{{ctrl.target.refId}}">
-        Type
-        <info-popover position="top center" mode="right-normal">
-          <p>Select a beacon type.</p>
-        </info-popover>
-      </label>
-      <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
-        <select id="in-beacontype-{{ctrl.target.refId}}"
-                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                ng-model="ctrl.target.entityType"
-                ng-change="ctrl.onBeaconTypeSelect()"
-                ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
-        </select>
-      </div>
-    </div>
-  </script>
-
-  <script type="text/ng-template" id="group.html">
-    <label class="gf-form-label query-keyword width-13 pointer" for="in-group-{{ctrl.target.refId}}">
-      Group by
-      <info-popover position="top center" mode="right-normal">
-        <p>Group by tag</p>
-      </info-popover>
-    </label>
-    <div class="gf-form-select-wrapper width-22 gf-form-select-wrapper--has-help-icon">
-      <select id="in-group-{{ctrl.target.refId}}"
-              class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-              ng-model="ctrl.target.group"
-              ng-change="ctrl.onGroupChange()"
-              ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
-      </select>
-    </div>
-    <input id="group-by-second-level-{{ctrl.target.refId}}"
-           ng-hide="!ctrl.target.showGroupBySecondLevel"
-           class="gf-form-input width-22"
-           type="text"
-           ng-model='ctrl.target.groupbyTagSecondLevelKey'
-           ng-model-options='{ debounce: 500 }'
-           ng-change="ctrl.onChange()"
-           placeholder="Please Specify"
-           spellcheck='false'/>
   </script>
 
   <script type="text/ng-template" id="filters.html">
@@ -487,7 +394,7 @@
       </div>
     </div>
     <div class="gf-form">
-      <label class="gf-form-label query-keyword width-13 pointer" for="in-website-{{ctrl.target.refId}}">
+      <label class="gf-form-label width-13 pointer" for="in-website-{{ctrl.target.refId}}">
         Add filter
         <info-popover position="top center" mode="right-normal">
           <p>Add an additional tag filter</p>
