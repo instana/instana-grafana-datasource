@@ -30,7 +30,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
   metricSelectionText: string;
   previousMetricCategory: string;
   timeIntervalLabel = "Rollup";
+  analyzeLabel = "Test";
   timeFilter: TimeFilter;
+  customFilters = [];
 
   EMPTY_DROPDOWN_TEXT = ' - ';
   ALL_APPLICATIONS = '-- No Application Filter --';
@@ -50,7 +52,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   /** @ngInject **/
   constructor($scope, $injector, private templateSrv, private backendSrv, private $q) {
     super($scope, $injector);
-
     // target migration for downwards compability
     migrate(this.target);
 
@@ -76,6 +77,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // infrastructure (built-in & custom)
     if (this.isInfrastructure() && this.target.entityQuery) {
+      this.timeIntervalLabel = "Rollup";
       this.onFilterChange(false).then(() => {
         // infrastructure metrics support available metrics on a selected entity type
         if (this.target.entityType) {
@@ -92,6 +94,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // websites
     if (this.isWebsite()) {
+      this.analyzeLabel = "Website";
+      this.timeIntervalLabel = "Granularity";
       this.onWebsiteChanges(false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -101,6 +105,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // applications
     if (this.isApplication()) {
+      this.analyzeLabel = "Application";
+      this.timeIntervalLabel = "Granularity";
       this.onApplicationChanges(false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -234,10 +240,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
       if (this.isInfrastructure()) {
         this.onFilterChange(false);
       } else if (this.isWebsite()) {
-        this.target.analyzeType = "Website";
+        this.analyzeLabel = "Website";
         this.onWebsiteChanges(false);
       } else if (this.isApplication()) {
-        this.target.analyzeType = "Application";
+        this.analyzeLabel = "Application";
         this.onApplicationChanges(false);
       }
     }
