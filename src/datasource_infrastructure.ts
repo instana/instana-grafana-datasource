@@ -96,7 +96,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
           const fetchSnapshotUrl = `/api/snapshots/${snapshotId}` +
             (this.showOffline ?
               `?from=${timeFilter.from}&to=${timeFilter.to}` :
-              `?time=${timeFilter.from}`);
+              `?time=${timeFilter.to}`); // @see SnapshotApiResource#getSnapshot
 
           return this.doRequest(fetchSnapshotUrl, true).then(snapshotResponse => {
             // check for undefined because the fetchSnapshotContexts is buggy
