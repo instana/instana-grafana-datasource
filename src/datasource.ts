@@ -101,8 +101,8 @@ export default class InstanaDatasource extends AbstractDatasource {
 
     if (timeShift.endsWith('s')) {
       return parseInt(timeShift.split('s')[0]) * milliSeconds;
-    } else if (timeShift.endsWith('min')) {
-      return parseInt(timeShift.split('min')[0]) * 60 * milliSeconds;
+    } else if (timeShift.endsWith('m')) {
+      return parseInt(timeShift.split('m')[0]) * 60 * milliSeconds;
     } else if (timeShift.endsWith('h')) {
       return parseInt(timeShift.split('h')[0]) * 60 * 60 * milliSeconds;
     } else if (timeShift.endsWith('d')) {
