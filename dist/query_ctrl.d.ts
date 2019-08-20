@@ -19,7 +19,10 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     entitySelectionText: string;
     metricSelectionText: string;
     previousMetricCategory: string;
+    timeIntervalLabel: string;
+    analyzeLabel: string;
     timeFilter: TimeFilter;
+    customFilters: any[];
     EMPTY_DROPDOWN_TEXT: string;
     ALL_APPLICATIONS: string;
     OPERATOR_STRING: string;
@@ -46,6 +49,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     findMatchingEntityTypes(entityType: Selectable): boolean;
     onEntityTypeSelect(refresh: boolean): any;
     onMetricsFilter(refresh: boolean): void;
+    isAbleToShowAllMetrics(): boolean;
     addFilter(): void;
     removeFilter(index: number): void;
     onTagFilterChange(index: number): void;
@@ -59,4 +63,10 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     onGroupChange(): void;
     onChange(): void;
     onMetricSelect(): void;
+    onAllMetricsSelect(): void;
+    toggleAdvancedSettings(): void;
+    addCustomFilter(): void;
+    removeCustomFilter(index: number, refresh?: boolean): void;
+    isNotSingleStatOrGauge(): boolean;
+    isPluginThatSupportsAggregation(): boolean;
 }

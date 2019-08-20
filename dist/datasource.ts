@@ -35,7 +35,6 @@ export default class InstanaDatasource extends AbstractDatasource {
 
     return this.$q.all(
       _.map(options.targets, target => {
-
         targetRefId = target.refId;
         timeFilters[targetRefId] = this.readTime(options);
         timeShifts[targetRefId] = this.convertTimeShiftToMillis(target.timeShift);
@@ -49,26 +48,29 @@ export default class InstanaDatasource extends AbstractDatasource {
         migrate(target);
 
         if (timeShifts[targetRefId]) {
-          target.timeShiftIsValid = true;
           timeFilters[targetRefId] = this.applyTimeShiftOnTimeFilter(timeFilters[targetRefId], timeShifts[targetRefId]);
+          target.timeShiftIsValid = true;
         } else {
           target.timeShiftIsValid = false;
         }
 
         if (target.metricCategory === this.WEBSITE_METRICS) {
-          target.availableGranularities = getPossibleGranularities(timeFilters[targetRefId].windowSize);
+          target.availableTimeIntervals = getPossibleGranularities(timeFilters[targetRefId].windowSize);
           return this.getWebsiteMetrics(target, timeFilters[targetRefId]);
         } else if (target.metricCategory === this.APPLICATION_METRICS) {
-          target.availableGranularities = getPossibleGranularities(timeFilters[targetRefId].windowSize);
+          target.availableTimeIntervals = getPossibleGranularities(timeFilters[targetRefId].windowSize);
           return this.getApplicationMetrics(target, timeFilters[targetRefId]);
         } else {
-          target.availableRollUps = this.infrastructure.getPossibleRollups(timeFilters[targetRefId]);
-          return this.getInfrastructureMetrics(target, timeFilters[targetRefId]);
+          target.availableTimeIntervals = this.infrastructure.getPossibleRollups(timeFilters[targetRefId]);
+          if (!target.timeInterval) {
+            target.timeInterval = this.infrastructure.getDefaultMetricRollupDuration(timeFilters[targetRefId]);
+          }
+          return this.getInfrastructureMetrics(target, target.timeInterval, timeFilters[targetRefId]);
         }
       })
     ).then(results => {
       // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-      let flatData = {data: [].concat.apply([], results)};
+      let flatData = {data: _.flatten(results)};
 
       flatData.data.forEach(data => {
         if (timeShifts[data.refId]) {
@@ -99,8 +101,8 @@ export default class InstanaDatasource extends AbstractDatasource {
 
     if (timeShift.endsWith('s')) {
       return parseInt(timeShift.split('s')[0]) * milliSeconds;
-    } else if (timeShift.endsWith('min')) {
-      return parseInt(timeShift.split('min')[0]) * 60 * milliSeconds;
+    } else if (timeShift.endsWith('m')) {
+      return parseInt(timeShift.split('m')[0]) * 60 * milliSeconds;
     } else if (timeShift.endsWith('h')) {
       return parseInt(timeShift.split('h')[0]) * 60 * 60 * milliSeconds;
     } else if (timeShift.endsWith('d')) {
@@ -130,15 +132,28 @@ export default class InstanaDatasource extends AbstractDatasource {
     };
   }
 
-  getInfrastructureMetrics(target, timeFilter: TimeFilter) {
+  getInfrastructureMetrics(target, rollUp, timeFilter: TimeFilter) {
     // do not try to retrieve data without selected metric
-    if (!target.metric) {
+    if (!target.metric && !target.showAllMetrics) {
       return this.$q.resolve({data: []});
     }
 
     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
     return this.infrastructure.fetchSnapshotsForTarget(target, timeFilter).then(snapshots => {
-      return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter);
+      if (target.showAllMetrics) {
+        const resultPromises = [];
+        _.forEach(target.allMetrics, metric => {
+          resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, rollUp, timeFilter, metric));
+        });
+
+        return Promise.all(resultPromises).then(allResults => {
+          const allMetrics = [];
+          allResults.forEach(result => result.forEach(s => allMetrics.push(s)));
+          return allMetrics;
+        });
+      } else {
+        return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, rollUp, timeFilter, target.metric);
+      }
     });
   }
 

@@ -28,7 +28,7 @@ To enable metrics for offline snapshots please check `Enable offline snapshots`.
 
 ### Query Editor
 
-![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/empty-query-sml.png)
+![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/empty-query.png)
 
 To start, enter the [Dynamic Focus](https://docs.instana.io/core_concepts/dynamic_focus/) query. This is exactly the same as used in the Instana dashboard; you can test your queries in Instana and then copy and paste them into Grafana. *NOTE* Saved filters are not currently supported by the Grafana datasource plugin.
 
@@ -40,7 +40,7 @@ As you select the type, the available metrics dropdown will be automatically pop
 
 If your Dynamic Focus query matches multiple instances then, the returned dataset will include metrics from all those matching instances, providing graphs with multiple plots like the example below.
 
-![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/complete-query-sml.png)
+![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/built-in-metrics.gif)
 
 #### Infrastructure custom metrics
 
@@ -50,7 +50,7 @@ As you select the type, the available metrics dropdown will be automatically pop
 
 If your Dynamic Focus query matches, the returned dataset will include metrics providing graphs like the example below.
 
-![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/custom-metrics-sml.png)
+![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/custom-metrics.gif)
 
 #### Change legend format
 
@@ -59,6 +59,7 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 - $label - the entity label
 - $host - the corresponding host
 - $pid - the corresponding PID
+- $timeShift - corresponding timeShift
 - $metric - the displayed metric
 - $type - the entity type
 - $service - the service label (for endpoints only)
@@ -74,13 +75,13 @@ For showing a correct SUM metric, configuration on two different places is neede
 - on metric selection: "SUM" to adjust our mean calculated rollup values
 - on Singlestat configuation: "Total" to tell the panel to aggregate all given values
 
-![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat-visualization-sml.png)
+![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat-visualization.png)
 
 #### Table visualization
 
 While using the "Table" visualization an additional metric aggregation is selectable.
 
-![table](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/table-visualization-sml.png)
+![table](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/table-visualization.png)
 
 #### Analyze application calls
 
@@ -94,7 +95,7 @@ It's also possible to add additional filters via "add Filter". Multiple filters 
 
 If your selection matches, the returned dataset will include metrics providing graphs like the example below.
 
-![application plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application-metrics-sml.png)
+![application plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application.gif)
 
 If more then 20 metics are fetched, a warning appears that not all results are shown. Add Filter to narrow down the data.
 
@@ -104,6 +105,7 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 - $label - the entity label
 - $application - application label
+- $timeShift - corresponding timeShift
 - $metric - the displayed metric
 - $key - metric key with aggregation and rollup
 - $index - index in the list
@@ -122,7 +124,7 @@ It's also possible to add additional filters via "add Filter". Multiple filters 
 
 If your selection matches, the returned dataset will include metrics providing graphs like the example below.
 
-![website plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/website-metrics-sml.png)
+![website plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/website.gif)
 
 A default label '_$label ($website) $metric_' will be shown.
 
@@ -133,8 +135,23 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 - $label - the entity label
 - $website - website label
 - $type - entity type
+- $timeShift - corresponding timeShift
 - $metric - the displayed metric
 - $key - metric key with aggregation and rollup
 - $index - index in the list
 
 If no custom format is provided the default label '_$label ($website) $metric_' will be shown.
+
+#### Use time shift option
+
+The time shift option introduced in version 2.4.0 allows going back in different points of time for each query.
+
+This new feature can be used to compare two identical queries while one shows the query's outcome of a day earlier.
+
+![time shift](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/timeshift.gif)
+
+#### Custom Granularity
+
+Since version 2.4.0 this plugin also supports the ability to select different granularity values to provide a even deeper look into metrics.
+
+![Granularity Support](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/granularity.gif)

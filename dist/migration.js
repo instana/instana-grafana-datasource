@@ -5,6 +5,13 @@ System.register([], function(exports_1) {
         if (target.entityType && typeof target.entityType === 'string') {
             target.entityType = { key: target.entityType, label: target.entityType };
         }
+        // 2.3.1 towards 2.4.0
+        if (target.filter && target.filter !== '') {
+            if (!target.customFilters) {
+                target.customFilters = [];
+                target.customFilters.push({ value: target.filter });
+            }
+        }
     }
     exports_1("default", default_1);
     return {

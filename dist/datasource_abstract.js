@@ -82,6 +82,10 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
                     return this.backendSrv
                         .datasourceRequest(request)
                         .catch(function (error) {
+                        if (error.status === 429) {
+                            throw new Error("API limit is reached.");
+                            return;
+                        }
                         if (swallowError && (error.status >= 400 || error.status < 500)) {
                             console.log(error);
                             return;

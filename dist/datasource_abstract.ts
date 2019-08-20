@@ -87,6 +87,11 @@ export default class AbstractDatasource {
     return this.backendSrv
       .datasourceRequest(request)
       .catch(error => {
+        if (error.status === 429) {
+          throw new Error("API limit is reached.");
+          return;
+        }
+
         if (swallowError && (error.status >= 400 || error.status < 500)) {
           console.log(error);
           return;

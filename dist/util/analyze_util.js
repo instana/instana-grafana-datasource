@@ -24,7 +24,6 @@ System.register(["lodash", "../lists/granularities"], function(exports_1) {
     }
     exports_1("getChartGranularity", getChartGranularity);
     function getPossibleGranularities(windowSize) {
-        console.log(windowSize);
         var possibleGranularities = granularities_1.default.filter(function (granularity) { return windowSize / 1000 / granularity.value <= MAX_ALLOWED_DATA_POINTS &&
             granularity.value * 1000 <= windowSize; });
         return possibleGranularities || [granularities_1.default[granularities_1.default.length - 1]];

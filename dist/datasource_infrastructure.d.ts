@@ -21,10 +21,10 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     buildSnapshotCacheKey(query: string, timeFilter: TimeFilter): string;
     buildLabel(snapshotResponse: any, host: any, target: any, index: any): string;
     getHostSuffix(host: string): string;
-    fetchMetricsForSnapshots(target: any, snapshots: any, timeFilter: TimeFilter): any;
+    fetchMetricsForSnapshots(target: any, snapshots: any, rollUp: any, timeFilter: TimeFilter, metric: any): any;
     readTimeSeries(values: any, aggregation: string, pluginId: string, timeFilter: TimeFilter): any;
     correctMeanToSum(values: any, timeFilter: TimeFilter): any;
-    fetchMetricsForSnapshot(snapshotId: string, timeFilter: TimeFilter, target: any): any;
+    fetchMetricsForSnapshot(snapshotId: string, timeFilter: TimeFilter, rollUp: any, metric: any): any;
     getDefaultMetricRollupDuration(timeFilter: TimeFilter, minRollup?: number): Rollup;
     getPossibleRollups(timeFilter: TimeFilter): Rollup[];
 }

@@ -133,16 +133,11 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                         metric: target.metric.key,
                         aggregation: target.aggregation ? target.aggregation : 'SUM'
                     };
-                    var granularity = null;
                     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") {
-                        if (target.granularity) {
-                            granularity = target.granularity;
+                        if (!target.timeInterval) {
+                            target.timeInterval = analyze_util_1.getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
                         }
-                        else {
-                            granularity = analyze_util_1.getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
-                            target.granularity = granularity;
-                        }
-                        metric['granularity'] = granularity.value;
+                        metric['granularity'] = target.timeInterval.value;
                     }
                     var group = {
                         groupbyTag: target.group.key
@@ -163,7 +158,6 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                 };
                 InstanaApplicationDataSource.prototype.buildApplicationLabel = function (target, item, key, index) {
                     if (target.labelFormat) {
-                        console.log(target.timeShift);
                         var label = target.labelFormat;
                         label = lodash_1.default.replace(label, '$label', item.name);
                         label = lodash_1.default.replace(label, '$application', target.entity.label);
