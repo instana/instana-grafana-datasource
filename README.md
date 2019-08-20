@@ -141,3 +141,17 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 - $index - index in the list
 
 If no custom format is provided the default label '_$label ($website) $metric_' will be shown.
+
+#### Use time shift option
+
+The time shift option introduced in version 2.4.0 allows going back in different points of time for each query.
+
+This new feature can be used to compare two identical queries while one shows the query's outcome of a day earlier.
+
+![time shift](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/timeshift.gif)
+
+#### Custom Granularity
+
+Since version 2.4.0 this plugin also supports the ability to select different granularity values to provide a even deeper look into metrics.
+
+![Granularity Support](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/granularity.gif)
