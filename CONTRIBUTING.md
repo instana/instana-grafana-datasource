@@ -45,7 +45,7 @@ The settings for Karma are in the karma.conf.js file in the root. If you add any
 
 ## Screenshots
 
-The actual screenshots are from "Quick Check" example below.
+The actual screenshots are from "Quick Check" example below. Do not delete old screenshots. Grafana uses those in order to display older README versions (hardcoded links).
 
 ## Publishing a New Version
 
