@@ -28,7 +28,7 @@ To enable metrics for offline snapshots please check `Enable offline snapshots`.
 
 ### Query Editor
 
-![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/empty-query-sml.png)
+![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/empty-query.png)
 
 To start, enter the [Dynamic Focus](https://docs.instana.io/core_concepts/dynamic_focus/) query. This is exactly the same as used in the Instana dashboard; you can test your queries in Instana and then copy and paste them into Grafana. *NOTE* Saved filters are not currently supported by the Grafana datasource plugin.
 
@@ -74,13 +74,13 @@ For showing a correct SUM metric, configuration on two different places is neede
 - on metric selection: "SUM" to adjust our mean calculated rollup values
 - on Singlestat configuation: "Total" to tell the panel to aggregate all given values
 
-![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat-visualization-sml.png)
+![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat-visualization.png)
 
 #### Table visualization
 
 While using the "Table" visualization an additional metric aggregation is selectable.
 
-![table](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/table-visualization-sml.png)
+![table](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/table-visualization.png)
 
 #### Analyze application calls
 
