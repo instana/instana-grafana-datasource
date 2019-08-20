@@ -59,6 +59,7 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 - $label - the entity label
 - $host - the corresponding host
 - $pid - the corresponding PID
+- $timeShift - corresponding timeShift
 - $metric - the displayed metric
 - $type - the entity type
 - $service - the service label (for endpoints only)
@@ -104,6 +105,7 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 - $label - the entity label
 - $application - application label
+- $timeShift - corresponding timeShift
 - $metric - the displayed metric
 - $key - metric key with aggregation and rollup
 - $index - index in the list
@@ -133,6 +135,7 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 - $label - the entity label
 - $website - website label
 - $type - entity type
+- $timeShift - corresponding timeShift
 - $metric - the displayed metric
 - $key - metric key with aggregation and rollup
 - $index - index in the list
