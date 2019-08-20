@@ -75,7 +75,7 @@ For showing a correct SUM metric, configuration on two different places is neede
 - on metric selection: "SUM" to adjust our mean calculated rollup values
 - on Singlestat configuation: "Total" to tell the panel to aggregate all given values
 
-![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat-visualization.png)
+![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat.png)
 
 #### Table visualization
 
