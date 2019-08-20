@@ -18,6 +18,10 @@
   min-width: 24rem;
 }
 
+.min-width-56 {
+  min-width: 56rem;
+}
+
 .gf-form-select-wrapper select.gf-form-input, input.gf-form-input {
   height: 2.64rem;
 }
