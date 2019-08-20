@@ -75,7 +75,7 @@ For showing a correct SUM metric, configuration on two different places is neede
 - on metric selection: "SUM" to adjust our mean calculated rollup values
 - on Singlestat configuation: "Total" to tell the panel to aggregate all given values
 
-![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat-visualization.png)
+![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat.png)
 
 #### Table visualization
 
@@ -144,7 +144,7 @@ If no custom format is provided the default label '_$label ($website) $metric_' 
 
 #### Use time shift option
 
-The time shift option introduced in version 2.4.0 allows going back in different points of time for each query.
+The time shift option allows going back in different points of time for each query.
 
 This new feature can be used to compare two identical queries while one shows the query's outcome of a day earlier.
 
@@ -152,6 +152,6 @@ This new feature can be used to compare two identical queries while one shows th
 
 #### Custom Granularity
 
-Since version 2.4.0 this plugin also supports the ability to select different granularity values to provide a even deeper look into metrics.
+This plugin also supports the ability to select different granularity values to provide a even deeper look into metrics.
 
 ![Granularity Support](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/granularity.gif)
