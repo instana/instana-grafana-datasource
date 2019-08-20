@@ -40,7 +40,7 @@ As you select the type, the available metrics dropdown will be automatically pop
 
 If your Dynamic Focus query matches multiple instances then, the returned dataset will include metrics from all those matching instances, providing graphs with multiple plots like the example below.
 
-![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/complete-query-sml.png)
+![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/built-in-metrics.gif)
 
 #### Infrastructure custom metrics
 
@@ -50,7 +50,7 @@ As you select the type, the available metrics dropdown will be automatically pop
 
 If your Dynamic Focus query matches, the returned dataset will include metrics providing graphs like the example below.
 
-![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/custom-metrics-sml.png)
+![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/custom-metrics.gif)
 
 #### Change legend format
 
@@ -94,7 +94,7 @@ It's also possible to add additional filters via "add Filter". Multiple filters 
 
 If your selection matches, the returned dataset will include metrics providing graphs like the example below.
 
-![application plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application-metrics-sml.png)
+![application plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application.gif)
 
 If more then 20 metics are fetched, a warning appears that not all results are shown. Add Filter to narrow down the data.
 
@@ -122,7 +122,7 @@ It's also possible to add additional filters via "add Filter". Multiple filters 
 
 If your selection matches, the returned dataset will include metrics providing graphs like the example below.
 
-![website plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/website-metrics-sml.png)
+![website plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/website.gif)
 
 A default label '_$label ($website) $metric_' will be shown.
 
