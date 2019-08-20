@@ -100,13 +100,13 @@ This should render a chart with two datasets (`node (on host "host-1")` and `nod
 This should render a chart with one dataset (`host-3 (29042)`).
 
 ##### Aggregation selection for Visualizations
-Switching the Visualization for the custom metric above to `Singlestat` or `Table` will additional add an aggregation selection to Metric dropdown. Switch back to "Graph" visualization to continue.
+Switching the Visualization for the custom metric above to `Singlestat` and `Gauge` or `Table` will additional add an aggregation selection to Metric dropdown. Switch back to "Graph" visualization to continue.
 
 #### Analyze application calls
 * Category: `Analyze application calls`
 * Application: `AWS instances`
 * Group by: `endpoint.name`
-* Metric: `Call latency (latency)` `MEAN
+* Metric: `Call latency (latency)` `MEAN`
 * Legend format: ``
 
 This should render a chart with one dataset (`GET (AWS instances) latency.mean`).

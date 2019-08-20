@@ -32,7 +32,6 @@ export function getChartGranularity(windowSize: number,
 }
 
 export function getPossibleGranularities(windowSize: number): Granularity[] {
-  console.log(windowSize);
   const possibleGranularities = granularities.filter(
     granularity => windowSize / 1000 / granularity.value <= MAX_ALLOWED_DATA_POINTS &&
       granularity.value * 1000 <= windowSize

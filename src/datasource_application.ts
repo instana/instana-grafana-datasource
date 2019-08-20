@@ -140,15 +140,11 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       aggregation: target.aggregation ? target.aggregation : 'SUM'
     };
 
-    let granularity = null;
     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
-      if (target.granularity) {
-        granularity = target.granularity;
-      } else {
-        granularity = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
-        target.granularity = granularity;
+      if (!target.timeInterval) {
+        target.timeInterval = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
       }
-      metric['granularity'] = granularity.value;
+      metric['granularity'] = target.timeInterval.value;
     }
 
 
@@ -173,7 +169,6 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
   buildApplicationLabel(target, item, key, index): string {
     if (target.labelFormat) {
-      console.log(target.timeShift);
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
       label = _.replace(label, '$application', target.entity.label);

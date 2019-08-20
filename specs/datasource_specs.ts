@@ -161,11 +161,11 @@ describe('Given an InstanaDatasource', function() {
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&size=100":
             return ctx.$q.resolve(contextsAfterTenSeconds);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1516451043603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1516472658604":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/snapshots/B?time=1516451043603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/B?time=1516472658604":
             return ctx.$q.resolve(snapshotB);
-          case "/api/datasources/proxy/1/instana/api/snapshots/C?time=1516451043603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/C?time=1516472658604":
             return ctx.$q.resolve(snapshotC);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -345,9 +345,9 @@ describe('Given an InstanaDatasource', function() {
         switch (options.url) {
           case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1516451043603&to=1516472658604&time=1516472658604&size=100":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1516451043603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1516472658604":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/snapshots/B?time=1516451043603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/B?time=1516472658604":
             return ctx.$q.resolve(snapshotB);
           case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
@@ -497,7 +497,7 @@ describe('Given an InstanaDatasource', function() {
         switch (options.url) {
           case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524248640603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
           case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
@@ -606,7 +606,7 @@ describe('Given an InstanaDatasource', function() {
         switch (options.url) {
           case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524248640603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
           case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
@@ -715,7 +715,7 @@ describe('Given an InstanaDatasource', function() {
         switch (options.url) {
           case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524248640603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
           case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
@@ -824,7 +824,7 @@ describe('Given an InstanaDatasource', function() {
         switch (options.url) {
           case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524248640603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
           case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
