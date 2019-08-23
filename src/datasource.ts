@@ -31,15 +31,14 @@ export default class InstanaDatasource extends AbstractDatasource {
     const timeFilters = {};
     const timeShifts = {};
     const applyGraphAggregation = [];
-    let targetRefId;
-
+    const targetAggregationFunction = [];
 
     return this.$q.all(
       _.map(options.targets, target => {
-        targetRefId = target.refId;
-        timeFilters[targetRefId] = this.readTime(options);
-        timeShifts[targetRefId] = this.convertTimeShiftToMillis(target.timeShift);
-        applyGraphAggregation[targetRefId] = target.aggregateGraphs;
+        timeFilters[target.refId] = this.readTime(options);
+        timeShifts[target.refId] = this.convertTimeShiftToMillis(target.timeShift);
+        applyGraphAggregation[target.refId] = target.aggregateGraphs;
+        targetAggregationFunction[target.refId] = target.aggregationFunction;
 
         // grafana setting to disable query execution
         if (target.hide) {
@@ -49,25 +48,25 @@ export default class InstanaDatasource extends AbstractDatasource {
         // target migration for downwards compatibility
         migrate(target);
 
-        if (timeShifts[targetRefId]) {
-          timeFilters[targetRefId] = this.applyTimeShiftOnTimeFilter(timeFilters[targetRefId], timeShifts[targetRefId]);
+        if (timeShifts[target.refId]) {
+          timeFilters[target.refId] = this.applyTimeShiftOnTimeFilter(timeFilters[target.refId], timeShifts[target.refId]);
           target.timeShiftIsValid = true;
         } else {
           target.timeShiftIsValid = false;
         }
 
         if (target.metricCategory === this.WEBSITE_METRICS) {
-          target.availableTimeIntervals = getPossibleGranularities(timeFilters[targetRefId].windowSize);
-          return this.getWebsiteMetrics(target, timeFilters[targetRefId]);
+          target.availableTimeIntervals = getPossibleGranularities(timeFilters[target.refId].windowSize);
+          return this.getWebsiteMetrics(target, timeFilters[target.refId]);
         } else if (target.metricCategory === this.APPLICATION_METRICS) {
-          target.availableTimeIntervals = getPossibleGranularities(timeFilters[targetRefId].windowSize);
-          return this.getApplicationMetrics(target, timeFilters[targetRefId]);
+          target.availableTimeIntervals = getPossibleGranularities(timeFilters[target.refId].windowSize);
+          return this.getApplicationMetrics(target, timeFilters[target.refId]);
         } else {
-          target.availableTimeIntervals = this.infrastructure.getPossibleRollups(timeFilters[targetRefId]);
+          target.availableTimeIntervals = this.infrastructure.getPossibleRollups(timeFilters[target.refId]);
           if (!target.timeInterval) {
-            target.timeInterval = this.infrastructure.getDefaultMetricRollupDuration(timeFilters[targetRefId]);
+            target.timeInterval = this.infrastructure.getDefaultMetricRollupDuration(timeFilters[target.refId]);
           }
-          return this.getInfrastructureMetrics(target, target.timeInterval, timeFilters[targetRefId]);
+          return this.getInfrastructureMetrics(target, target.timeInterval, timeFilters[target.refId]);
         }
       })
     ).then(results => {
@@ -93,11 +92,13 @@ export default class InstanaDatasource extends AbstractDatasource {
       _.each(dataGroupedByRefId, (data, index) => {
         var refId = data[0].refId;
         if (applyGraphAggregation[refId]) {
-          let aggregatedData;
+          var aggregatedData = [];
 
           _.range(0, data[0].datapoints.length).forEach((current, index, range) => {
             if (data[0].datapoints[current]) {
-              aggregatedData = this.applyAggregationOfDatapointsWithSameTimestamp(data, current);
+              aggregatedData.push(
+                this.applyAggregationOfDatapointsWithSameTimestamp(data, current, targetAggregationFunction[refId].calculate)
+              );
             }
           });
 
@@ -111,15 +112,14 @@ export default class InstanaDatasource extends AbstractDatasource {
     });
   }
 
-  applyAggregationOfDatapointsWithSameTimestamp(data, current) {
-    var aggregatedData = [];
+  applyAggregationOfDatapointsWithSameTimestamp(data, current, calculationFunction) {
     var timestamp = data[0].datapoints[current][1];
     var datapointsOfTimestamp = this.getAllDatapointsOfTimestamp(data, current);
     var valuesOfDatapoints = _.map(datapointsOfTimestamp, (values, index) => {
       return values[0];
     });
-    var aggregatedValue = _.sum(valuesOfDatapoints);
-    aggregatedData.push([aggregatedValue, timestamp]);
+    var aggregatedValue = calculationFunction(valuesOfDatapoints);
+    return [aggregatedValue, timestamp];
   }
 
   buildResult(aggregatedData, refId, target) {

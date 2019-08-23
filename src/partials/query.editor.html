@@ -468,6 +468,14 @@
         </label>
         <gf-form-switch id="in-aggregate-graphs-{{ctrl.target.refId}}"
                         checked="ctrl.target.aggregateGraphs" on-change="ctrl.toggleGraphAggregation()"/>
+        <select id="in-aggregation-function-{{ctrl.target.refId}}"
+                ng-disabled="!ctrl.target.aggregateGraphs"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched width-8"
+                ng-model="ctrl.target.aggregationFunction"
+                ng-model-options='{ debounce: 300 }'
+                ng-change="ctrl.onChange()"
+                ng-options="f as f.label for f in ctrl.aggregationFunctions track by f.label">
+        </select>
       </div>
     </script>
   </div>

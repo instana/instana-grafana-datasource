@@ -6,6 +6,7 @@ import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import TagFilter from './types/tag_filter';
 import operators from './lists/operators';
+import aggregation_functions from './lists/aggregation_function';
 import migrate from './migration';
 
 import _ from 'lodash';
@@ -17,6 +18,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   uniqueOperators: Array<Selectable> = operators;
   uniqueBeaconTypes: Array<Selectable> = beaconTypes;
+  aggregationFunctions = aggregation_functions;
 
   uniqueEntityTypes: Array<Selectable>; // subset of allEntityTypes filtered by DF
   allCustomMetrics: Array<Selectable>; // internal reference only to speed up filtering // TODO needed ?
@@ -72,6 +74,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     if (!this.target.metricCategory) {
       this.target.metricCategory = this.BUILT_IN_METRICS;
       this.target.canShowAllMetrics = false;
+      this.target.aggregationFunction = this.aggregationFunctions[0];
     }
     this.previousMetricCategory = this.target.metricCategory;
 
