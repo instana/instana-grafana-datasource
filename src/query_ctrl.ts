@@ -508,6 +508,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.showAdvancedSettings = !this.target.showAdvancedSettings;
   }
 
+  toggleGraphAggregation() {
+    this.target.aggregatGraphs = !this.target.aggregateGraphs;
+    this.panelCtrl.refresh();
+  }
+
   addCustomFilter() {
     if (!this.target.customFilters) {
       this.target.customFilters = [];

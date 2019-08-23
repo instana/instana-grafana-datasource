@@ -30,6 +30,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
     const timeFilters = {};
     const timeShifts = {};
+    const applyGraphAggregation = [];
     let targetRefId;
 
 
@@ -38,6 +39,7 @@ export default class InstanaDatasource extends AbstractDatasource {
         targetRefId = target.refId;
         timeFilters[targetRefId] = this.readTime(options);
         timeShifts[targetRefId] = this.convertTimeShiftToMillis(target.timeShift);
+        applyGraphAggregation[targetRefId] = target.aggregateGraphs;
 
         // grafana setting to disable query execution
         if (target.hide) {
@@ -81,7 +83,63 @@ export default class InstanaDatasource extends AbstractDatasource {
       });
 
       return flatData;
+    }).then(flatData => {
+      var dataGroupedByRefId = _.groupBy(flatData.data, function (data) {
+        return data.refId;
+      });
+
+      var newData = [];
+
+      _.each(dataGroupedByRefId, (data, index) => {
+        var refId = data[0].refId;
+        if (applyGraphAggregation[refId]) {
+          let aggregatedData;
+
+          _.range(0, data[0].datapoints.length).forEach((current, index, range) => {
+            if (data[0].datapoints[current]) {
+              aggregatedData = this.applyAggregationOfDatapointsWithSameTimestamp(data, current);
+            }
+          });
+
+          newData.push(this.buildResult(aggregatedData, refId, refId));
+        } else {
+          newData.push(data);
+        }
+      });
+
+      return {data: _.flatten(newData)};
     });
+  }
+
+  applyAggregationOfDatapointsWithSameTimestamp(data, current) {
+    var aggregatedData = [];
+    var timestamp = data[0].datapoints[current][1];
+    var datapointsOfTimestamp = this.getAllDatapointsOfTimestamp(data, current);
+    var valuesOfDatapoints = _.map(datapointsOfTimestamp, (values, index) => {
+      return values[0];
+    });
+    var aggregatedValue = _.sum(valuesOfDatapoints);
+    aggregatedData.push([aggregatedValue, timestamp]);
+  }
+
+  buildResult(aggregatedData, refId, target) {
+    return {
+      datapoints: aggregatedData,
+      refId: refId,
+      target: target
+    };
+  }
+
+  getAllDatapointsOfTimestamp(data, index) {
+    var valuesForSameTimestamp = [];
+    _.each(data, (graph, i) => {
+      var datapointValue = graph.datapoints[index];
+      if (datapointValue && datapointValue[0] > 0) {
+        valuesForSameTimestamp.push(datapointValue);
+      }
+    });
+
+    return valuesForSameTimestamp;
   }
 
   convertTimeShiftToMillis(timeShift: string): number {

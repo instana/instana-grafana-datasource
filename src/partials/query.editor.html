@@ -27,6 +27,7 @@
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '1'">
@@ -36,6 +37,7 @@
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '2'">
@@ -45,6 +47,7 @@
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'application_legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '3'">
@@ -54,6 +57,7 @@
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'website_legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
     </div>
 
     <script type="text/ng-template" id="queryAndType.html">
@@ -451,6 +455,19 @@
                ng-model-options='{ debounce: 500 }'
                ng-change="ctrl.onChange()"
                placeholder="1h"/>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="aggregate_graphs.html">
+      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings && ctrl.isInfrastructure()">
+        <label class="gf-form-label query-keyword width-13 pointer" for="in-aggregate-graphs-{{ctrl.target.refId}}">
+          Aggregate Query Graphs
+          <info-popover position="top center" mode="right-normal">
+            <p>Aggregate all graphs of a query.</p>
+          </info-popover>
+        </label>
+        <gf-form-switch id="in-aggregate-graphs-{{ctrl.target.refId}}"
+                        checked="ctrl.target.aggregateGraphs" on-change="ctrl.toggleGraphAggregation()"/>
       </div>
     </script>
   </div>
