@@ -74,7 +74,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     if (!this.target.metricCategory) {
       this.target.metricCategory = this.BUILT_IN_METRICS;
       this.target.canShowAllMetrics = false;
-      this.target.aggregationFunction = this.aggregationFunctions[0];
     }
     this.previousMetricCategory = this.target.metricCategory;
 
@@ -513,6 +512,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   toggleGraphAggregation() {
     this.target.aggregatGraphs = !this.target.aggregateGraphs;
+    if (!this.target.aggregationFunction) {
+      this.target.aggregationFunction = this.aggregationFunctions[0];
+    }
     this.panelCtrl.refresh();
   }
 
