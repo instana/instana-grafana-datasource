@@ -83,43 +83,41 @@ export default class InstanaDatasource extends AbstractDatasource {
 
       return flatData;
     }).then(flatData => {
-      var dataGroupedByRefId = _.groupBy(flatData.data, function (data) {
+      var targetsGroupedByRefId = _.groupBy(flatData.data, function (data) {
         return data.refId;
       });
 
       var newData = [];
 
-      _.each(dataGroupedByRefId, (data, index) => {
-        var refId = data[0].refId;
+      _.each(targetsGroupedByRefId, (target, index) => {
+        var refId = target[0].refId;
         if (applyGraphAggregation[refId]) {
-          var aggregatedData = [];
+          var concatedTargetData = [];
+          _.each(target, (data, index) => {
+            concatedTargetData = _.concat(concatedTargetData, data.datapoints);
+          });
 
-          _.range(0, data[0].datapoints.length).forEach((current, index, range) => {
-            if (data[0].datapoints[current]) {
-              aggregatedData.push(
-                this.applyAggregationOfDatapointsWithSameTimestamp(data, current, targetAggregationFunction[refId].calculate)
-              );
-            }
+          var dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (data) {
+            return data[1];
+          });
+
+          var aggregatedData = [];
+          _.each(dataGroupedByTimestamp, (timestampData, timestamp) => {
+            var valuesOfTimestamp = _.map(timestampData, (datapoint, index) => {
+              return datapoint[0];
+            });
+            var aggregatedValue = targetAggregationFunction[refId].calculate(valuesOfTimestamp);
+            aggregatedData.push([aggregatedValue, timestamp]);
           });
 
           newData.push(this.buildResult(aggregatedData, refId, refId));
         } else {
-          newData.push(data);
+          newData.push(target);
         }
       });
 
       return {data: _.flatten(newData)};
     });
-  }
-
-  applyAggregationOfDatapointsWithSameTimestamp(data, current, calculationFunction) {
-    var timestamp = data[0].datapoints[current][1];
-    var datapointsOfTimestamp = this.getAllDatapointsOfTimestamp(data, current);
-    var valuesOfDatapoints = _.map(datapointsOfTimestamp, (values, index) => {
-      return values[0];
-    });
-    var aggregatedValue = calculationFunction(valuesOfDatapoints);
-    return [aggregatedValue, timestamp];
   }
 
   buildResult(aggregatedData, refId, target) {

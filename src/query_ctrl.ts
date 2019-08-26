@@ -438,6 +438,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.groupbyTagSecondLevelKey = null;
     this.target.timeInterval = null;
     this.target.timeShift = null;
+    this.target.aggregateGraphs = false;
+    this.target.aggregationFunction = null;
     this.target.filters = [];
     this.target.showWarningCantShowAllResults = false;
     this.target.showAllMetrics = false;
