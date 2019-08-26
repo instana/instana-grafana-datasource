@@ -75,9 +75,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
       flatData.data.forEach(data => {
         if (timeShifts[data.refId]) {
-          data.datapoints.forEach(datapoint => {
-            datapoint[1] = datapoint[1] + timeShifts[data.refId];
-          });
+          this.applyTimeShiftOnData(data, timeShifts[data.refId]);
         }
       });
 
@@ -107,7 +105,7 @@ export default class InstanaDatasource extends AbstractDatasource {
               return datapoint[0];
             });
             var aggregatedValue = targetAggregationFunction[refId].calculate(valuesOfTimestamp);
-            aggregatedData.push([aggregatedValue, timestamp]);
+            aggregatedData.push([aggregatedValue, parseInt(timestamp)]);
           });
 
           newData.push(this.buildResult(aggregatedData, refId, refId));
@@ -116,7 +114,14 @@ export default class InstanaDatasource extends AbstractDatasource {
         }
       });
 
+      console.log(newData);
       return {data: _.flatten(newData)};
+    });
+  }
+
+  applyTimeShiftOnData(data, timeshift) {
+    data.datapoints.forEach(datapoint => {
+      datapoint[1] = datapoint[1] + timeshift;
     });
   }
 
