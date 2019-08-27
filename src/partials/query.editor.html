@@ -221,6 +221,7 @@
         <input id="in-legend-{{ctrl.target.refId}}"
                class="gf-form-input width-22"
                type="text"
+               ng-disabled="ctrl.target.aggregateGraphs"
                ng-model="ctrl.target.labelFormat"
                ng-model-options='{ debounce: 500 }'
                placeholder="$label (on host $host)"

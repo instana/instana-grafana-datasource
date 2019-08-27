@@ -7,6 +7,7 @@ import migrate from './migration';
 
 import _ from 'lodash';
 import {getPossibleGranularities, readItemMetrics} from "./util/analyze_util";
+import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
 
 
 export default class InstanaDatasource extends AbstractDatasource {
@@ -28,17 +29,12 @@ export default class InstanaDatasource extends AbstractDatasource {
       return this.$q.resolve({data: []});
     }
 
-    const timeFilters = {};
-    const timeShifts = {};
-    const applyGraphAggregation = [];
-    const targetAggregationFunction = [];
+    const targets = [];
 
     return this.$q.all(
       _.map(options.targets, target => {
-        timeFilters[target.refId] = this.readTime(options);
-        timeShifts[target.refId] = this.convertTimeShiftToMillis(target.timeShift);
-        applyGraphAggregation[target.refId] = target.aggregateGraphs;
-        targetAggregationFunction[target.refId] = target.aggregationFunction;
+        var timeFilter: TimeFilter = this.readTime(options);
+        targets[target.refId] = target;
 
         // grafana setting to disable query execution
         if (target.hide) {
@@ -48,25 +44,25 @@ export default class InstanaDatasource extends AbstractDatasource {
         // target migration for downwards compatibility
         migrate(target);
 
-        if (timeShifts[target.refId]) {
-          timeFilters[target.refId] = this.applyTimeShiftOnTimeFilter(timeFilters[target.refId], timeShifts[target.refId]);
+        if (target.timeShift) {
+          timeFilter = this.applyTimeShiftOnTimeFilter(timeFilter, this.convertTimeShiftToMillis(target.timeShift));
           target.timeShiftIsValid = true;
         } else {
           target.timeShiftIsValid = false;
         }
 
         if (target.metricCategory === this.WEBSITE_METRICS) {
-          target.availableTimeIntervals = getPossibleGranularities(timeFilters[target.refId].windowSize);
-          return this.getWebsiteMetrics(target, timeFilters[target.refId]);
+          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
+          return this.getWebsiteMetrics(target, timeFilter);
         } else if (target.metricCategory === this.APPLICATION_METRICS) {
-          target.availableTimeIntervals = getPossibleGranularities(timeFilters[target.refId].windowSize);
-          return this.getApplicationMetrics(target, timeFilters[target.refId]);
+          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
+          return this.getApplicationMetrics(target, timeFilter);
         } else {
-          target.availableTimeIntervals = this.infrastructure.getPossibleRollups(timeFilters[target.refId]);
+          target.availableTimeIntervals = this.infrastructure.getPossibleRollups(timeFilter);
           if (!target.timeInterval) {
-            target.timeInterval = this.infrastructure.getDefaultMetricRollupDuration(timeFilters[target.refId]);
+            target.timeInterval = this.infrastructure.getDefaultMetricRollupDuration(timeFilter);
           }
-          return this.getInfrastructureMetrics(target, target.timeInterval, timeFilters[target.refId]);
+          return this.getInfrastructureMetrics(target, target.timeInterval, timeFilter);
         }
       })
     ).then(results => {
@@ -74,13 +70,11 @@ export default class InstanaDatasource extends AbstractDatasource {
       let flatData = {data: _.flatten(results)};
 
       flatData.data.forEach(data => {
-        if (timeShifts[data.refId]) {
-          this.applyTimeShiftOnData(data, timeShifts[data.refId]);
+        if (targets[data.refId] && targets[data.refId].timeShift) {
+          this.applyTimeShiftOnData(data, this.convertTimeShiftToMillis(targets[data.refId].timeShift));
         }
       });
 
-      return flatData;
-    }).then(flatData => {
       var targetsGroupedByRefId = _.groupBy(flatData.data, function (data) {
         return data.refId;
       });
@@ -89,34 +83,51 @@ export default class InstanaDatasource extends AbstractDatasource {
 
       _.each(targetsGroupedByRefId, (target, index) => {
         var refId = target[0].refId;
-        if (applyGraphAggregation[refId]) {
-          var concatedTargetData = [];
-          _.each(target, (data, index) => {
-            concatedTargetData = _.concat(concatedTargetData, data.datapoints);
-          });
-
-          var dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (data) {
-            return data[1];
-          });
-
-          var aggregatedData = [];
-          _.each(dataGroupedByTimestamp, (timestampData, timestamp) => {
-            var valuesOfTimestamp = _.map(timestampData, (datapoint, index) => {
-              return datapoint[0];
-            });
-            var aggregatedValue = targetAggregationFunction[refId].calculate(valuesOfTimestamp);
-            aggregatedData.push([aggregatedValue, parseInt(timestamp)]);
-          });
-
-          newData.push(this.buildResult(aggregatedData, refId, refId));
+        if (targets[refId] && targets[refId].aggregateGraphs) {
+          newData.push(this.aggregateTarget(target, targets[refId]));
         } else {
           newData.push(target);
         }
       });
 
-      console.log(newData);
       return {data: _.flatten(newData)};
     });
+  }
+
+  aggregateTarget(target, targetMetaData) {
+    var refId = target[0].refId;
+    var concatedTargetData = this.concatTargetData(target);
+    var dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (data) {
+      return data[1];
+    });
+
+    var aggregatedData = this.aggregateDataOfTimestamp(dataGroupedByTimestamp, targetMetaData.aggregationFunction.label);
+    aggregatedData = _.sortBy(aggregatedData, [function (datapoint) {
+      return datapoint[1];
+    }]);
+    return this.buildResult(aggregatedData, refId, buildAggregationLabel(targetMetaData));
+    //if !hideResults {
+    //newData.push(target);
+  }
+
+  aggregateDataOfTimestamp(dataGroupedByTimestamp, aggregationLabel: string) {
+    var result = [];
+    _.each(dataGroupedByTimestamp, (timestampData, timestamp) => {
+      var valuesOfTimestamp = _.map(timestampData, (datapoint, index) => {
+        return datapoint[0];
+      });
+      var aggregatedValue = aggregate(aggregationLabel, valuesOfTimestamp);
+      result.push([aggregatedValue, parseInt(timestamp)]);
+    });
+    return result;
+  }
+
+  concatTargetData(target) {
+    var result = [];
+    _.each(target, (data, index) => {
+      result = _.concat(result, data.datapoints);
+    });
+    return result;
   }
 
   applyTimeShiftOnData(data, timeshift) {

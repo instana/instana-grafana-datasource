@@ -513,10 +513,17 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   toggleGraphAggregation() {
-    this.target.aggregatGraphs = !this.target.aggregateGraphs;
     if (!this.target.aggregationFunction) {
       this.target.aggregationFunction = this.aggregationFunctions[0];
+      this.target.labelFormat = "";
     }
+
+    if (this.target.aggregateGraphs) {
+      this.target.labelFormat = "$metric ($aggregation)";
+    } else {
+      this.target.labelFormat = "";
+    }
+
     this.panelCtrl.refresh();
   }
 
