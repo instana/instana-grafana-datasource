@@ -85,6 +85,12 @@ export default class InstanaDatasource extends AbstractDatasource {
         var refId = target[0].refId;
         if (targets[refId] && targets[refId].aggregateGraphs) {
           newData.push(this.aggregateTarget(target, targets[refId]));
+          console.log(newData);
+          console.log(targets[refId]);
+          console.log(target);
+          if (!targets[refId].hideOriginalGraphs) {
+            newData.push(target);
+          }
         } else {
           newData.push(target);
         }

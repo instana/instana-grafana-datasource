@@ -21,7 +21,10 @@ export function buildAggregationLabel(target) {
       if (target.customFilters && target.customFilters.length > 0) {
         let label = "";
         _.each(target.customFilters, (filter, index) => {
-          label += filter.value + ".";
+          label += filter.value;
+          if (index !== target.customFilters.length - 1) {
+            label += ".";
+          }
         });
         label = label + " (" + target.aggregationFunction.label + ")";
         return label;

@@ -518,12 +518,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.target.labelFormat = "";
     }
 
-    if (this.target.aggregateGraphs) {
-      this.target.labelFormat = "$metric ($aggregation)";
-    } else {
-      this.target.labelFormat = "";
-    }
-
     this.panelCtrl.refresh();
   }
 
