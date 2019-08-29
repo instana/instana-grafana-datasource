@@ -31,7 +31,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   entitySelectionText: string;
   metricSelectionText: string;
   previousMetricCategory: string;
-  timeIntervalLabel = "Rollup";
   analyzeLabel = "Test";
   timeFilter: TimeFilter;
   customFilters = [];
@@ -79,7 +78,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // infrastructure (built-in & custom)
     if (this.isInfrastructure() && this.target.entityQuery) {
-      this.timeIntervalLabel = "Rollup";
       this.onFilterChange(false).then(() => {
         // infrastructure metrics support available metrics on a selected entity type
         if (this.target.entityType) {
@@ -97,7 +95,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // websites
     if (this.isWebsite()) {
       this.analyzeLabel = "Website";
-      this.timeIntervalLabel = "Granularity";
       this.onWebsiteChanges(false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -108,7 +105,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // applications
     if (this.isApplication()) {
       this.analyzeLabel = "Application";
-      this.timeIntervalLabel = "Granularity";
       this.onApplicationChanges(false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -232,13 +228,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     } else {
       this.selectionReset();
       // fresh internal used lists without re-rendering
-
-      if (this.target.metricCategory === '0' || this.target.metricCategory === '1') {
-        this.timeIntervalLabel = "Rollup";
-      } else {
-        this.timeIntervalLabel = "Granularity";
-      }
-
       if (this.isInfrastructure()) {
         this.onFilterChange(false);
       } else if (this.isWebsite()) {
