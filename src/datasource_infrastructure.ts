@@ -194,7 +194,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     const secondMultiplier = this.getDefaultMetricRollupDuration(timeFilter).rollup / 1000;
     return _.map(values, value => {
       return {
-        'value': value.value * secondMultiplier,
+        'value': value.value ? value.value * secondMultiplier : null,
         'timestamp': value.timestamp
       };
     });
@@ -202,7 +202,12 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   fetchMetricsForSnapshot(snapshotId: string, timeFilter: TimeFilter, rollUp, metric) {
     let url =
-      `/api/metrics?metric=${metric.key}&from=${timeFilter.from}&to=${timeFilter.to}&rollup=${rollUp.rollup}&snapshotId=${snapshotId}`;
+      `/api/metrics?metric=${metric.key}`
+      + `&from=${timeFilter.from}`
+      + `&to=${timeFilter.to}`
+      + `&rollup=${rollUp.rollup}`
+      + `&fillTimeSeries=true`
+      + `&snapshotId=${snapshotId}`;
     return this.doRequest(url);
   }
 
