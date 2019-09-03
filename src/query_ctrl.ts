@@ -45,8 +45,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   BUILT_IN_METRICS = '0';
   CUSTOM_METRICS = '1';
-  APPLICATION_METRICS = '2';
-  WEBSITE_METRICS = '3';
+  ANALYZE_APPLICATION_METRICS = '2';
+  ANALYZE_WEBSITE_METRICS = '3';
+  APPLICATION_METRICS = '4';
 
   defaults = {};
 
@@ -92,7 +93,17 @@ export class InstanaQueryCtrl extends QueryCtrl {
       });
     }
 
-    // websites
+    // analyze applications
+    if (this.isApplication()) {
+      this.analyzeLabel = "Application";
+      this.onApplicationChanges(false, true).then(() => {
+        if (this.target.metric) {
+          this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+        }
+      });
+    }
+
+    // analyze websites
     if (this.isWebsite()) {
       this.analyzeLabel = "Website";
       this.onWebsiteChanges(false).then(() => {
@@ -102,10 +113,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
       });
     }
 
-    // applications
-    if (this.isApplication()) {
+    // applications metric
+    if (this.isApplicationMetric()) {
       this.analyzeLabel = "Application";
-      this.onApplicationChanges(false).then(() => {
+      this.onApplicationChanges(false, false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
         }
@@ -118,10 +129,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   isWebsite() {
-    return this.target.metricCategory === this.WEBSITE_METRICS;
+    return this.target.metricCategory === this.ANALYZE_WEBSITE_METRICS;
   }
 
   isApplication() {
+    return this.target.metricCategory === this.ANALYZE_APPLICATION_METRICS;
+  }
+
+  isApplicationMetric() {
     return this.target.metricCategory === this.APPLICATION_METRICS;
   }
 
@@ -165,7 +180,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
   }
 
-  onApplicationChanges(refresh) {
+  onApplicationChanges(refresh, isAnalyze: boolean) {
     this.datasource.application.getApplications(this.timeFilter).then(
       applications => {
         this.uniqueEntities = applications;
@@ -181,18 +196,22 @@ export class InstanaQueryCtrl extends QueryCtrl {
         }
       }
     );
-    this.datasource.application.getApplicastionTags().then(
-      applicationTags => {
-        this.uniqueTags =
-          _.sortBy(
-            applicationTags,
-            'key');
-        // select a meaningful default group
-        if (this.target && !this.target.group) {
-          this.target.group = _.find(applicationTags, ['key', 'endpoint.name']);
+
+    if (isAnalyze) {
+      this.datasource.application.getApplicastionTags().then(
+        applicationTags => {
+          this.uniqueTags =
+            _.sortBy(
+              applicationTags,
+              'key');
+          // select a meaningful default group
+          if (this.target && !this.target.group) {
+            this.target.group = _.find(applicationTags, ['key', 'endpoint.name']);
+          }
         }
-      }
-    );
+      );
+    }
+
     return this.datasource.application.getApplicationMetricsCatalog().then(
       metrics => {
         this.availableMetrics = metrics;
@@ -230,12 +249,15 @@ export class InstanaQueryCtrl extends QueryCtrl {
       // fresh internal used lists without re-rendering
       if (this.isInfrastructure()) {
         this.onFilterChange(false);
+      } else if (this.isApplication()) {
+        this.analyzeLabel = "Application";
+        this.onApplicationChanges(false, true);
       } else if (this.isWebsite()) {
         this.analyzeLabel = "Website";
         this.onWebsiteChanges(false);
-      } else if (this.isApplication()) {
+      } else if (this.isApplicationMetric()) {
         this.analyzeLabel = "Application";
-        this.onApplicationChanges(false);
+        this.onApplicationChanges(false, false);
       }
     }
     this.previousMetricCategory = this.target.metricCategory;
@@ -530,5 +552,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   isPluginThatSupportsAggregation() {
     return this.target.pluginId === 'singlestat' || this.target.pluginId === 'gauge' || this.target.pluginId === 'table';
+  }
+
+  isAnalyzeCategory() {
+    return this.isApplication() || this.isWebsite();
   }
 }

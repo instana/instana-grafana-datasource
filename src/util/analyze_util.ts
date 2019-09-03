@@ -42,6 +42,7 @@ export function getPossibleGranularities(windowSize: number): Granularity[] {
 
 export function readItemMetrics(target, response, getLabel) {
   // as we map two times we need to flatten the result
+  console.log(response.data.items);
   return _.flatten(response.data.items.map((item, index) => {
     return _.map(item.metrics, (value, key) => {
       return {

@@ -51,9 +51,12 @@ export default class InstanaDatasource extends AbstractDatasource {
           target.timeShiftIsValid = false;
         }
 
-        if (target.metricCategory === this.WEBSITE_METRICS) {
+        if (target.metricCategory === this.ANALYZE_WEBSITE_METRICS) {
           target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
           return this.getWebsiteMetrics(target, timeFilter);
+        } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
+          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
+          return this.getAnalyzeApplicationMetrics(target, timeFilter);
         } else if (target.metricCategory === this.APPLICATION_METRICS) {
           target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
           return this.getApplicationMetrics(target, timeFilter);
@@ -236,10 +239,17 @@ export default class InstanaDatasource extends AbstractDatasource {
     });
   }
 
-  getApplicationMetrics(target, timeFilter) {
-    return this.application.fetchMetricsForApplication(target, timeFilter).then(response => {
+  getAnalyzeApplicationMetrics(target, timeFilter) {
+    return this.application.fetchAnalyzeMetricsForApplication(target, timeFilter).then(response => {
       target.showWarningCantShowAllResults = response.data.canLoadMore;
       return readItemMetrics(target, response, this.application.buildApplicationLabel);
+    });
+  }
+
+  getApplicationMetrics(target, timeFilter) {
+    return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
+      target.showWarningCantShowAllResults = response.data.canLoadMore;
+      return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
     });
   }
 

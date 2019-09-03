@@ -16,7 +16,11 @@
           <option value="0" selected>Infrastructure built-in metrics</option>
           <option value="1">Infrastructure custom metrics</option>
           <option value="2">Analyze application calls</option>
-          <option value="3">Analyze websitess</option>
+          <option value="3">Analyze websites</option>
+          <option value="4">Application Metrics</option>
+          <option value="5">Service Metrics</option>
+          <option value="6">Endpoint Metrics</option>
+          <option value="7">Website Metrics</option>
         </select>
       </div>
     </div>
@@ -60,6 +64,15 @@
       <div ng-include src="'aggregate_graphs.html'"/>
     </div>
 
+    <div ng-show="ctrl.target.metricCategory === '4'">
+      <div ng-include src="'analyze.html'"/>
+      <div ng-include src="'metric.html'"/>
+      <div ng-include src="'advanced_settings.html'"/>
+      <div ng-include src="'application_legend.html'"/>
+      <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
+    </div>
+
     <script type="text/ng-template" id="queryAndType.html">
       <div class="gf-form">
         <label class="gf-form-label query-keyword width-13 pointer" for="in-query-{{ctrl.target.refId}}">
@@ -71,7 +84,7 @@
           </info-popover>
         </label>
         <input id="in-query-{{ctrl.target.refId}}"
-               class="gf-form-input width-100"
+               class="gf-form-input full-width"
                type="text"
                ng-model='ctrl.target.entityQuery'
                ng-class="ctrl.target.queryIsValid ? 'ng-valid' : 'ng-invalid'"
@@ -142,7 +155,7 @@
             <p>Select the metric you wish to plot.</p>
           </info-popover>
         </label>
-        <div class="gf-form-select-wrapper gf-form-select-wrapper--has-help-icon width-100">
+        <div class="gf-form-select-wrapper gf-form-select-wrapper--has-help-icon full-width">
           <select id="in-metric-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched "
                   ng-disabled="ctrl.target.canShowAllMetrics && ctrl.target.showAllMetrics"
@@ -293,7 +306,7 @@
             <p>Select your {{ctrl.analyzeLabel}}.</p>
           </info-popover>
         </label>
-        <div class="gf-form-select-wrapper width-100 min-width-12 gf-form-select-wrapper--has-help-icon">
+        <div class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
           <select id="in-{{ctrl.analyzeLabel}}-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.entity"
@@ -309,7 +322,7 @@
           </info-popover>
         </label>
         <div ng-show="ctrl.target.metricCategory === '3'"
-             class="gf-form-select-wrapper width-100 min-width-12 gf-form-select-wrapper--has-help-icon">
+             class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
           <select id="in-beacontype-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.entityType"
@@ -317,13 +330,13 @@
                   ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
           </select>
         </div>
-        <label class="gf-form-label query-keyword pointer" for="in-group-{{ctrl.target.refId}}">
+        <label ng-show="ctrl.isAnalyzeCategory()" class="gf-form-label query-keyword pointer" for="in-group-{{ctrl.target.refId}}">
           Group by
           <info-popover position="top center" mode="right-normal">
             <p>Group by tag</p>
           </info-popover>
         </label>
-        <div class="gf-form-select-wrapper width-100 min-width-12 gf-form-select-wrapper--has-help-icon">
+        <div ng-show="ctrl.isAnalyzeCategory()" class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
           <select id="in-group-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.group"

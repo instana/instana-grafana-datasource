@@ -20,8 +20,9 @@ export default class AbstractDatasource {
 
   BUILT_IN_METRICS = '0';
   CUSTOM_METRICS = '1';
-  APPLICATION_METRICS = '2';
-  WEBSITE_METRICS = '3';
+  ANALYZE_APPLICATION_METRICS = '2';
+  ANALYZE_WEBSITE_METRICS = '3';
+  APPLICATION_METRICS = '4';
 
   /** @ngInject */
   constructor(instanceSettings, public backendSrv, public templateSrv, public $q) {
