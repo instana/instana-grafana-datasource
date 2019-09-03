@@ -16,7 +16,7 @@
           <option value="0" selected>Infrastructure built-in metrics</option>
           <option value="1">Infrastructure custom metrics</option>
           <option value="2">Analyze application calls</option>
-          <option value="3">Analyze websites</option>
+          <option value="3">Analyze websitess</option>
         </select>
       </div>
     </div>
@@ -27,6 +27,7 @@
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '1'">
@@ -36,6 +37,7 @@
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '2'">
@@ -45,6 +47,7 @@
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'application_legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '3'">
@@ -54,6 +57,7 @@
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'website_legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
     </div>
 
     <script type="text/ng-template" id="queryAndType.html">
@@ -177,9 +181,9 @@
           </select>
         </div>
         <label class="gf-form-label query-keyword pointer" for="in-timeInterval-{{ctrl.target.refId}}">
-          {{ctrl.timeIntervalLabel}}
+          Rollup
           <info-popover position="top center" mode="right-normal">
-            <p>Select the {{ctrl.timeIntervalLabel}} value</p>
+            <p>Select the Rollup value</p>
           </info-popover>
         </label>
         <div class="gf-form-select-wrapper min-width-8 gf-form-select-wrapper--has-help-icon">
@@ -451,6 +455,35 @@
                ng-model-options='{ debounce: 500 }'
                ng-change="ctrl.onChange()"
                placeholder="1h"/>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="aggregate_graphs.html">
+      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings && ctrl.isInfrastructure()">
+        <label class="gf-form-label query-keyword width-13 pointer" for="in-aggregate-graphs-{{ctrl.target.refId}}">
+          Aggregate Query Graphs
+          <info-popover position="top center" mode="right-normal">
+            <p>Aggregate all graphs of a query.</p>
+          </info-popover>
+        </label>
+        <gf-form-switch id="in-aggregate-graphs-{{ctrl.target.refId}}"
+                        checked="ctrl.target.aggregateGraphs" on-change="ctrl.toggleGraphAggregation()"/>
+        <select id="in-aggregation-function-{{ctrl.target.refId}}"
+                ng-disabled="!ctrl.target.aggregateGraphs"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched width-8"
+                ng-model="ctrl.target.aggregationFunction"
+                ng-model-options='{ debounce: 300 }'
+                ng-change="ctrl.onChange()"
+                ng-options="f as f.label for f in ctrl.aggregationFunctions track by f.label">
+        </select>
+        <label class="gf-form-label query-keyword width-13 pointer" for="in-hide-graphs-{{ctrl.target.refId}}">
+          Hide Original Graphs
+          <info-popover position="top center" mode="right-normal">
+            <p>Removes the original graphs resulted from the query and only shows the aggregated graph.</p>
+          </info-popover>
+        </label>
+        <gf-form-switch ng-disabled="!ctrl.target.aggregateGraphs" id="in-hide-graphs-{{ctrl.target.refId}}"
+                        checked="ctrl.target.hideOriginalGraphs" on-change="ctrl.onChange()"/>
       </div>
     </script>
   </div>

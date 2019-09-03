@@ -6,6 +6,7 @@ import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import TagFilter from './types/tag_filter';
 import operators from './lists/operators';
+import aggregation_functions from './lists/aggregation_function';
 import migrate from './migration';
 
 import _ from 'lodash';
@@ -17,6 +18,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   uniqueOperators: Array<Selectable> = operators;
   uniqueBeaconTypes: Array<Selectable> = beaconTypes;
+  aggregationFunctions = aggregation_functions;
 
   uniqueEntityTypes: Array<Selectable>; // subset of allEntityTypes filtered by DF
   allCustomMetrics: Array<Selectable>; // internal reference only to speed up filtering // TODO needed ?
@@ -29,7 +31,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   entitySelectionText: string;
   metricSelectionText: string;
   previousMetricCategory: string;
-  timeIntervalLabel = "Rollup";
   analyzeLabel = "Test";
   timeFilter: TimeFilter;
   customFilters = [];
@@ -77,7 +78,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // infrastructure (built-in & custom)
     if (this.isInfrastructure() && this.target.entityQuery) {
-      this.timeIntervalLabel = "Rollup";
       this.onFilterChange(false).then(() => {
         // infrastructure metrics support available metrics on a selected entity type
         if (this.target.entityType) {
@@ -95,7 +95,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // websites
     if (this.isWebsite()) {
       this.analyzeLabel = "Website";
-      this.timeIntervalLabel = "Granularity";
       this.onWebsiteChanges(false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -106,7 +105,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // applications
     if (this.isApplication()) {
       this.analyzeLabel = "Application";
-      this.timeIntervalLabel = "Granularity";
       this.onApplicationChanges(false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -230,13 +228,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     } else {
       this.selectionReset();
       // fresh internal used lists without re-rendering
-
-      if (this.target.metricCategory === '0' || this.target.metricCategory === '1') {
-        this.timeIntervalLabel = "Rollup";
-      } else {
-        this.timeIntervalLabel = "Granularity";
-      }
-
       if (this.isInfrastructure()) {
         this.onFilterChange(false);
       } else if (this.isWebsite()) {
@@ -436,6 +427,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.groupbyTagSecondLevelKey = null;
     this.target.timeInterval = null;
     this.target.timeShift = null;
+    this.target.aggregateGraphs = false;
+    this.target.aggregationFunction = null;
     this.target.filters = [];
     this.target.showWarningCantShowAllResults = false;
     this.target.showAllMetrics = false;
@@ -506,6 +499,15 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   toggleAdvancedSettings() {
     this.target.showAdvancedSettings = !this.target.showAdvancedSettings;
+  }
+
+  toggleGraphAggregation() {
+    if (!this.target.aggregationFunction) {
+      this.target.aggregationFunction = this.aggregationFunctions[0];
+      this.target.labelFormat = "";
+    }
+
+    this.panelCtrl.refresh();
   }
 
   addCustomFilter() {

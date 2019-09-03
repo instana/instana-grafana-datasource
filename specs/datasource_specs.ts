@@ -349,9 +349,9 @@ describe('Given an InstanaDatasource', function() {
             return ctx.$q.resolve(snapshotA);
           case "/api/datasources/proxy/1/instana/api/snapshots/B?time=1516472658604":
             return ctx.$q.resolve(snapshotB);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&snapshotId=B":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&fillTimeSeries=true&snapshotId=B":
             return ctx.$q.resolve(metricsForB);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -499,7 +499,7 @@ describe('Given an InstanaDatasource', function() {
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -608,7 +608,7 @@ describe('Given an InstanaDatasource', function() {
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -717,7 +717,7 @@ describe('Given an InstanaDatasource', function() {
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -826,7 +826,7 @@ describe('Given an InstanaDatasource', function() {
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -1008,7 +1008,7 @@ describe('Given an InstanaDatasource with offline snapshots', function() {
             return ctx.$q.resolve(contexts);
           case "/api/datasources/proxy/1/instana/api/snapshots/A?from=1524248640603&to=1524421440603":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
