@@ -72,6 +72,14 @@
       <div ng-include src="'timeshift.html'"/>
       <div ng-include src="'aggregate_graphs.html'"/>
     </div>
+    <div ng-show="ctrl.target.metricCategory === '5'">
+      <div ng-include src="'service.html'"/>
+      <div ng-include src="'metric.html'"/>
+      <div ng-include src="'advanced_settings.html'"/>
+      <div ng-include src="'application_legend.html'"/>
+      <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
+    </div>
 
     <script type="text/ng-template" id="queryAndType.html">
       <div class="gf-form">
@@ -330,13 +338,15 @@
                   ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
           </select>
         </div>
-        <label ng-show="ctrl.isAnalyzeCategory()" class="gf-form-label query-keyword pointer" for="in-group-{{ctrl.target.refId}}">
+        <label ng-show="ctrl.isAnalyzeCategory()" class="gf-form-label query-keyword pointer"
+               for="in-group-{{ctrl.target.refId}}">
           Group by
           <info-popover position="top center" mode="right-normal">
             <p>Group by tag</p>
           </info-popover>
         </label>
-        <div ng-show="ctrl.isAnalyzeCategory()" class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
+        <div ng-show="ctrl.isAnalyzeCategory()"
+             class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
           <select id="in-group-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.group"
@@ -497,6 +507,42 @@
         </label>
         <gf-form-switch ng-disabled="!ctrl.target.aggregateGraphs" id="in-hide-graphs-{{ctrl.target.refId}}"
                         checked="ctrl.target.hideOriginalGraphs" on-change="ctrl.onChange()"/>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="service.html">
+      <div class="gf-form">
+        <label class="gf-form-label query-keyword width-13 pointer"
+               for="in-service-{{ctrl.target.refId}}">
+          Services
+          <info-popover position="top center" mode="right-normal">
+            <p>Select your Service.</p>
+          </info-popover>
+        </label>
+
+        <div class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
+        <select id="in-service-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.entity"
+                ng-change="ctrl.onChange()"
+                ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
+        </select>
+      </div>
+        <label class="gf-form-label query-keyword pointer width-13" for="in-technology-{{ctrl.target.refId}}">
+          Technology
+          <info-popover position="top center" mode="right-normal">
+            <p>Select a technology to filter the list of services.</p>
+          </info-popover>
+        </label>
+        <div class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
+          <select id="in-technology-{{ctrl.target.refId}}"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                  ng-model="ctrl.target.entityType"
+                  ng-change="ctrl.onEntityTypeSelect(true)"
+                  ng-options="f as f.label for f in ctrl.uniqueEntityTypes track by f.key">
+            <option value="" disabled selected>{{ctrl.entitySelectionText}}</option>
+          </select>
+        </div>
       </div>
     </script>
   </div>
