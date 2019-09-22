@@ -15,12 +15,12 @@
                 ng-change="ctrl.onMetricCategorySelect()">
           <option value="0" selected>Infrastructure built-in metrics</option>
           <option value="1">Infrastructure custom metrics</option>
-          <option value="2">Analyze application calls</option>
-          <option value="3">Analyze websites</option>
           <option value="4">Application Metrics</option>
           <option value="5">Service Metrics</option>
           <option value="6">Endpoint Metrics</option>
           <option value="7">Website Metrics</option>
+          <option value="2">Analyze application calls</option>
+          <option value="3">Analyze websites</option>
         </select>
       </div>
     </div>
@@ -73,7 +73,15 @@
       <div ng-include src="'aggregate_graphs.html'"/>
     </div>
     <div ng-show="ctrl.target.metricCategory === '5'">
-      <div ng-include src="'service.html'"/>
+      <div ng-include src="'serviceEndpoint.html'"/>
+      <div ng-include src="'metric.html'"/>
+      <div ng-include src="'advanced_settings.html'"/>
+      <div ng-include src="'application_legend.html'"/>
+      <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
+    </div>
+    <div ng-show="ctrl.target.metricCategory === '6'">
+      <div ng-include src="'serviceEndpoint.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'application_legend.html'"/>
@@ -188,11 +196,11 @@
           on-change="ctrl.onAllMetricsSelect()"
         />
         <label class="gf-form-label query-keyword pointer" for="in-metric-{{ctrl.target.refId}}"
-               ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.isPluginThatSupportsAggregation()">
+               ng-show="ctrl.canShowAggregation()">
           Aggregation
         </label>
         <div class="gf-form-select-wrapper min-width-8"
-             ng-show="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3' || ctrl.isPluginThatSupportsAggregation()">
+             ng-show="ctrl.canShowAggregation()">
           <select id="in-aggregation-{{ctrl.target.refId}}"
                   ng-disabled="!ctrl.target.metric || ctrl.target.metric.aggregations.length <= 1"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
@@ -510,39 +518,49 @@
       </div>
     </script>
 
-    <script type="text/ng-template" id="service.html">
+    <script type="text/ng-template" id="serviceEndpoint.html">
       <div class="gf-form">
+        <label class="gf-form-label query-keyword pointer width-13" for="in-serviceEndpoint-namefilter-{{ctrl.target.refId}}">
+          Filter {{ctrl.target.serviceEndpointTitle}}
+          <info-popover position="top center" mode="right-normal">
+            <p>Filters the list of Services/Endpoints to only show the ones that contain the given input.</p>
+          </info-popover>
+        </label>
+        <input id="in-serviceEndpoint-namefilter-{{ctrl.target.refId}}"
+               class="gf-form-input"
+               type="text"
+               ng-model='ctrl.target.serviceNamefilter'
+               ng-model-options='{ debounce: 500 }'
+               ng-change="ctrl.onNamefilterChanges()"
+               placeholder="Please Specify"
+               spellcheck='false'>
         <label class="gf-form-label query-keyword width-13 pointer"
                for="in-service-{{ctrl.target.refId}}">
-          Services
+          {{ctrl.target.serviceEndpointTitle}}
           <info-popover position="top center" mode="right-normal">
-            <p>Select your Service.</p>
+            <p>Select your Service/Endpoint.</p>
           </info-popover>
         </label>
-
-        <div class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
         <select id="in-service-{{ctrl.target.refId}}"
-                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                class="gf-form-input ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.entity"
-                ng-change="ctrl.onChange()"
-                ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
+                ng-change="ctrl.onServiceEndpointSelected()"
+                ng-options="f as f.label for f in ctrl.target.availableServicesEndpoints track by f.key">
+          <option value="" disabled selected>{{ctrl.target.serviceEndpointSelectionText}}</option>
         </select>
-      </div>
-        <label class="gf-form-label query-keyword pointer width-13" for="in-technology-{{ctrl.target.refId}}">
-          Technology
+        <label class="gf-form-label query-keyword width-13 pointer"
+               for="in-application-{{ctrl.target.refId}}">
+          Application Context
           <info-popover position="top center" mode="right-normal">
-            <p>Select a technology to filter the list of services.</p>
+            <p>This will filter your selected Service/Endpoint and show only metrics related to this application perspective.</p>
           </info-popover>
         </label>
-        <div class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
-          <select id="in-technology-{{ctrl.target.refId}}"
-                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                  ng-model="ctrl.target.entityType"
-                  ng-change="ctrl.onEntityTypeSelect(true)"
-                  ng-options="f as f.label for f in ctrl.uniqueEntityTypes track by f.key">
-            <option value="" disabled selected>{{ctrl.entitySelectionText}}</option>
-          </select>
-        </div>
+        <select id="in-application-{{ctrl.target.refId}}"
+                class="gf-form-input ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.selectedApplication"
+                ng-change="ctrl.onChange()"
+                ng-options="f as f.label for f in ctrl.target.relatedApplications track by f.key">
+        </select>
       </div>
     </script>
   </div>

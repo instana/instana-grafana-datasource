@@ -33,34 +33,15 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-    const data: CallGroupBody = {
-      group: {
-        groupbyTag: 'application.name'
-      },
-      timeFrame: {
-        to: timeFilter.to,
-        windowSize: windowSize
-      },
-      metrics: [{
-        metric: 'calls',
-        aggregation: 'SUM'
-      }],
-      order: {
-        // TODO fix api and figure out how to get correct ordering
-        by: 'callsAgg',
-        direction: "desc"
-      },
-      pagination: {
-        ingestionTime: 0,
-        offset: 0,
-        retrievalSize: 200
-      }
-    };
-    applications = this.postRequest('/api/application-monitoring/analyze/call-groups', data).then(applicationsResponse =>
-      applicationsResponse.data.items.map(entry => ({
-        'key': entry.name,
-        'label': entry.name
-      }))
+
+    applications = this.doRequest('/api/application-monitoring/applications?windowSize=' + windowSize + '&to=' + timeFilter.to)
+      .then(applicationsResponse =>
+      applicationsResponse.data.items.map(entry => {
+        return {
+          'key': entry.id,
+          'label': entry.label
+        };
+      })
     );
     this.applicationsCache.put(key, applications);
 
@@ -126,7 +107,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       tagFilters.push({
         name: 'application.name',
         operator: 'EQUALS',
-        value: target.entity.key
+        value: target.entity.label
       });
     }
 
@@ -195,6 +176,11 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       },
       metrics: [metric]
     };
+
+    if (target.entity.key !== null) {
+      data['applicationId'] = target.entity.key;
+    }
+
     return this.postRequest('/api/application-monitoring/metrics/applications', data);
   }
 

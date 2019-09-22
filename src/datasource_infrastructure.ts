@@ -27,7 +27,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     this.catalogCache = new Cache<Promise<Array<Selectable>>>();
   }
 
-  getEntityTypes(metricCategory: string) {
+  getEntityTypes() {
     let entityTypes = this.simpleCache.get('entityTypes');
     if (entityTypes) {
       return entityTypes;
