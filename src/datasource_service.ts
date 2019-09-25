@@ -28,18 +28,41 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-    var queryParameters = 'windowSize=' + windowSize + '&to=' + timeFilter.to;
+    let page = 1;
+    let pageSize = 200;
 
-    services = this.doRequest('/api/application-monitoring/applications/services?' + queryParameters)
-      .then(servicesResponse =>
-        servicesResponse.data.items.map(entry => ({
+    services = this.paginateServices([], windowSize, timeFilter.to, page, pageSize).then(response => {
+      let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
+        return pageSet.items;
+      }));
+
+      return allResults.map(entry => {
+        return {
           'key': entry.id,
           'label': entry.label
-        }))
-      );
+        };
+      });
+    });
     this.servicesCache.put(key, services);
 
     return services;
+  }
+
+  paginateServices(results, windowSize: number, to: number, page: number, pageSize: number) {
+    var queryParameters = "windowSize=" + windowSize
+      + "&to=" + to
+      + "&page=" + page
+      + "&pageSize=" + pageSize;
+
+    return this.doRequest('/api/application-monitoring/applications/services?' + queryParameters).then(response => {
+      results.push(response.data);
+      if (page * pageSize < response.data.totalHits) {
+        page++;
+        return this.paginateServices(results, windowSize, to, page, pageSize);
+      } else {
+        return results;
+      }
+    });
   }
 
   getApplicationsUsingService(target, timeFilter: TimeFilter) {

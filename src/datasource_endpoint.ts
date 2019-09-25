@@ -28,19 +28,43 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-    var queryParameters = 'windowSize=' + windowSize + '&to=' + timeFilter.to;
+    let page = 1;
+    let pageSize = 200;
 
-    endpoints = this.doRequest('/api/application-monitoring/applications/services/endpoints?' + queryParameters)
-      .then(endpointsResponse =>
-        endpointsResponse.data.items.map(entry => ({
+    endpoints = this.paginateEndpoints([], windowSize, timeFilter.to, page, pageSize).then(response => {
+      let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
+        return pageSet.items;
+      }));
+
+      return allResults.map(entry => {
+        return {
           'key': entry.id,
           'label': entry.label
-        }))
-      );
-    this.endpointsCache.put(key, endpoints);
+        };
+      });
+    });
 
+    this.endpointsCache.put(key, endpoints);
     return endpoints;
   }
+
+  paginateEndpoints(results, windowSize: number, to: number, page: number, pageSize: number) {
+    var queryParameters = "windowSize=" + windowSize
+      + "&to=" + to
+      + "&page=" + page
+      + "&pageSize=" + pageSize;
+
+    return this.doRequest('/api/application-monitoring/applications/services/endpoints?' + queryParameters).then(response => {
+      results.push(response.data);
+      if (page * pageSize < response.data.totalHits) {
+        page++;
+        return this.paginateEndpoints(results, windowSize, to, page, pageSize);
+      } else {
+        return results;
+      }
+    });
+  }
+
 
   getApplicationsUsingEndpoint(target, timeFilter: TimeFilter) {
     const windowSize = this.getWindowSize(timeFilter);

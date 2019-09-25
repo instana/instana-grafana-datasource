@@ -45,7 +45,7 @@
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '2'">
-      <div ng-include src="'analyze.html'"/>
+      <div ng-include src="'website_application.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'filters.html'"/>
       <div ng-include src="'advanced_settings.html'"/>
@@ -55,7 +55,7 @@
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '3'">
-      <div ng-include src="'analyze.html'"/>
+      <div ng-include src="'website_application.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'filters.html'"/>
       <div ng-include src="'advanced_settings.html'"/>
@@ -65,13 +65,14 @@
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '4'">
-      <div ng-include src="'analyze.html'"/>
+      <div ng-include src="'website_application.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'application_legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
       <div ng-include src="'aggregate_graphs.html'"/>
     </div>
+
     <div ng-show="ctrl.target.metricCategory === '5'">
       <div ng-include src="'serviceEndpoint.html'"/>
       <div ng-include src="'metric.html'"/>
@@ -80,11 +81,21 @@
       <div ng-include src="'timeshift.html'"/>
       <div ng-include src="'aggregate_graphs.html'"/>
     </div>
+
     <div ng-show="ctrl.target.metricCategory === '6'">
       <div ng-include src="'serviceEndpoint.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'application_legend.html'"/>
+      <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'aggregate_graphs.html'"/>
+    </div>
+
+    <div ng-show="ctrl.target.metricCategory === '7'">
+      <div ng-include src="'website_application.html'"/>
+      <div ng-include src="'metric.html'"/>
+      <div ng-include src="'advanced_settings.html'"/>
+      <div ng-include src="'website_legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
       <div ng-include src="'aggregate_graphs.html'"/>
     </div>
@@ -313,17 +324,17 @@
       </div>
     </script>
 
-    <script type="text/ng-template" id="analyze.html">
+    <script type="text/ng-template" id="website_application.html">
       <div class="gf-form">
         <label class="gf-form-label query-keyword width-13 pointer"
-               for="in-{{ctrl.analyzeLabel}}-{{ctrl.target.refId}}">
-          {{ctrl.analyzeLabel}}
+               for="in-{{ctrl.websiteApplicationLabel}}-{{ctrl.target.refId}}">
+          {{ctrl.websiteApplicationLabel}}
           <info-popover position="top center" mode="right-normal">
-            <p>Select your {{ctrl.analyzeLabel}}.</p>
+            <p>Select your {{ctrl.websiteApplicationLabel}}.</p>
           </info-popover>
         </label>
         <div class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
-          <select id="in-{{ctrl.analyzeLabel}}-{{ctrl.target.refId}}"
+          <select id="in-{{ctrl.websiteApplicationLabel}}-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.entity"
                   ng-change="ctrl.onChange()"
@@ -563,5 +574,7 @@
         </select>
       </div>
     </script>
+
+    <
   </div>
 </query-editor-row>

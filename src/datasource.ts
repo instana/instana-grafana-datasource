@@ -2,14 +2,15 @@ import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import InstanaApplicationDataSource from './datasource_application';
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
+import InstanaServiceDataSource from "./datasource_service";
+import InstanaEndpointDataSource from "./datasource_endpoint";
 import TimeFilter from './types/time_filter';
 import migrate from './migration';
 
 import _ from 'lodash';
 import {getPossibleGranularities, readItemMetrics} from "./util/analyze_util";
 import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
-import InstanaServiceDataSource from "./datasource_service";
-import InstanaEndpointDataSource from "./datasource_endpoint";
+
 
 
 export default class InstanaDatasource extends AbstractDatasource {
@@ -59,7 +60,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
         if (target.metricCategory === this.ANALYZE_WEBSITE_METRICS) {
           target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
-          return this.getWebsiteMetrics(target, timeFilter);
+          return this.getAnalyzeWebsiteMetrics(target, timeFilter);
         } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
           target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
           return this.getAnalyzeApplicationMetrics(target, timeFilter);
@@ -72,6 +73,9 @@ export default class InstanaDatasource extends AbstractDatasource {
         } else if (target.metricCategory === this.ENDPOINT_METRICS) {
           target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
           return this.getEndpointMetrics(target, timeFilter);
+        } else if (target.metricCategory === this.WEBSITE_METRICS) {
+          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
+          return this.getWebsiteMetrics(target, timeFilter);
         } else {
           target.availableTimeIntervals = this.infrastructure.getPossibleRollups(timeFilter);
           if (!target.timeInterval) {
@@ -245,32 +249,39 @@ export default class InstanaDatasource extends AbstractDatasource {
     });
   }
 
+  getAnalyzeWebsiteMetrics(target, timeFilter: TimeFilter) {
+    return this.website.fetchAnalyzeMetricsForWebsite(target, timeFilter).then(response => {
+      return readItemMetrics(target, response, this.website.buildAnalyzeWebsiteLabel);
+    });
+  }
+
   getWebsiteMetrics(target, timeFilter: TimeFilter) {
     return this.website.fetchMetricsForWebsite(target, timeFilter).then(response => {
-      return readItemMetrics(target, response, this.website.buildWebsiteLabel);
+      return readItemMetrics(target, response, this.website.buildWebsiteMetricLabel);
     });
   }
 
-  getAnalyzeApplicationMetrics(target, timeFilter) {
+  getAnalyzeApplicationMetrics(target, timeFilter: TimeFilter) {
     return this.application.fetchAnalyzeMetricsForApplication(target, timeFilter).then(response => {
       target.showWarningCantShowAllResults = response.data.canLoadMore;
-      return readItemMetrics(target, response, this.application.buildApplicationLabel);
+      return readItemMetrics(target, response, this.application.buildAnalyzeApplicationLabel);
     });
   }
 
-  getApplicationMetrics(target, timeFilter) {
+  getApplicationMetrics(target, timeFilter: TimeFilter) {
     return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
       target.showWarningCantShowAllResults = response.data.canLoadMore;
       return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
     });
   }
 
-  getServiceMetrics(target, timeFilter) {
+  getServiceMetrics(target, timeFilter: TimeFilter) {
     return this.service.fetchServiceMetrics(target, timeFilter).then(response => {
       return readItemMetrics(target, response, this.service.buildServiceMetricLabel);
     });
   }
-  getEndpointMetrics(target, timeFilter) {
+
+  getEndpointMetrics(target, timeFilter: TimeFilter) {
     return this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
       return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
     });

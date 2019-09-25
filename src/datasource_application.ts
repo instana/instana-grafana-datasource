@@ -33,19 +33,41 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
+    let page = 1;
+    let pageSize = 200;
 
-    applications = this.doRequest('/api/application-monitoring/applications?windowSize=' + windowSize + '&to=' + timeFilter.to)
-      .then(applicationsResponse =>
-      applicationsResponse.data.items.map(entry => {
+    applications = this.paginateApplications([], windowSize, timeFilter.to, page, pageSize).then(response => {
+      let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
+        return pageSet.items;
+      }));
+
+      return allResults.map(entry => {
         return {
           'key': entry.id,
           'label': entry.label
         };
-      })
-    );
-    this.applicationsCache.put(key, applications);
+      });
+    });
 
+    this.applicationsCache.put(key, applications);
     return applications;
+  }
+
+  paginateApplications(results, windowSize: number, to: number, page: number, pageSize: number) {
+    var queryParameters = "windowSize=" + windowSize
+      + "&to=" + to
+      + "&page=" + page
+      + "&pageSize=" + pageSize;
+
+    return this.doRequest('/api/application-monitoring/applications?' + queryParameters).then(response => {
+      results.push(response.data);
+      if (page * pageSize < response.data.totalHits) {
+        page++;
+        return this.paginateApplications(results, windowSize, to, page, pageSize);
+      } else {
+        return results;
+      }
+    });
   }
 
   getApplicastionTags() {
@@ -184,7 +206,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     return this.postRequest('/api/application-monitoring/metrics/applications', data);
   }
 
-  buildApplicationLabel(target, item, key, index): string {
+  buildAnalyzeApplicationLabel(target, item, key, index): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);

@@ -31,7 +31,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   entitySelectionText: string;
   metricSelectionText: string;
   previousMetricCategory: string;
-  analyzeLabel = "Test";
+  websiteApplicationLabel = "Test";
   timeFilter: TimeFilter;
   customFilters = [];
 
@@ -39,6 +39,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   ALL_APPLICATIONS = '-- No Application Filter --';
   ALL_SERVICES = '-- No Service Filter --';
   ALL_ENDPOINTS = '-- No Endpoint Filter --';
+  ALL_WEBSITES = '-- No Website Filter --';
 
   OPERATOR_STRING = 'STRING';
   OPERATOR_NUMBER = 'NUMBER';
@@ -52,6 +53,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   APPLICATION_METRICS = '4';
   SERVICE_METRICS = '5';
   ENDPOINT_METRICS = '6';
+  WEBSITE_METRICS = '7';
 
   defaults = {};
 
@@ -98,8 +100,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
 
     // analyze applications
-    if (this.isApplication()) {
-      this.analyzeLabel = "Application";
+    if (this.isAnalyzeApplication()) {
+      this.websiteApplicationLabel = "Application";
       this.onApplicationChanges(false, true).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -108,9 +110,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
 
     // analyze websites
-    if (this.isWebsite()) {
-      this.analyzeLabel = "Website";
-      this.onWebsiteChanges(false).then(() => {
+    if (this.isAnalyzeWebsite()) {
+      this.websiteApplicationLabel = "Website";
+      this.onWebsiteChanges(false, true).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
         }
@@ -119,7 +121,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // applications metric
     if (this.isApplicationMetric()) {
-      this.analyzeLabel = "Application";
+      this.websiteApplicationLabel = "Application";
       this.onApplicationChanges(false, false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -146,17 +148,27 @@ export class InstanaQueryCtrl extends QueryCtrl {
         }
       });
     }
+
+    // websites metric
+    if (this.isWebsiteMetric()) {
+      this.websiteApplicationLabel = "Website";
+      this.onWebsiteChanges(false, false).then(() => {
+        if (this.target.metric) {
+          this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+        }
+      });
+    }
   }
 
   isInfrastructure() {
     return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
   }
 
-  isWebsite() {
+  isAnalyzeWebsite() {
     return this.target.metricCategory === this.ANALYZE_WEBSITE_METRICS;
   }
 
-  isApplication() {
+  isAnalyzeApplication() {
     return this.target.metricCategory === this.ANALYZE_APPLICATION_METRICS;
   }
 
@@ -172,7 +184,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
     return this.target.metricCategory === this.ENDPOINT_METRICS;
   }
 
-  onWebsiteChanges(refresh) {
+  isWebsiteMetric() {
+    return this.target.metricCategory === this.WEBSITE_METRICS;
+  }
+
+  onWebsiteChanges(refresh, isAnalyze: boolean) {
     // select a meaningful default group
     if (this.target && !this.target.entityType) {
       this.target.entityType = _.find(this.uniqueBeaconTypes, ['key', 'pageLoad']);
@@ -189,18 +205,21 @@ export class InstanaQueryCtrl extends QueryCtrl {
         }
       }
     );
-    this.datasource.website.getWebsiteTags().then(
-      websiteTags => {
-        this.uniqueTags =
-          _.sortBy(
-            websiteTags,
-            'key');
-        // select a meaningful default group
-        if (this.target && !this.target.group) {
-          this.target.group = _.find(websiteTags, ['key', 'beacon.page.name']);
+
+    if (isAnalyze) {
+      this.datasource.website.getWebsiteTags().then(
+        websiteTags => {
+          this.uniqueTags =
+            _.sortBy(
+              websiteTags,
+              'key');
+          // select a meaningful default group
+          if (this.target && !this.target.group) {
+            this.target.group = _.find(websiteTags, ['key', 'beacon.page.name']);
+          }
         }
-      }
-    );
+      );
+    }
 
     return this.datasource.website.getWebsiteMetricsCatalog().then(
       metrics => {
@@ -333,14 +352,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
       // fresh internal used lists without re-rendering
       if (this.isInfrastructure()) {
         this.onFilterChange(false);
-      } else if (this.isApplication()) {
-        this.analyzeLabel = "Application";
+      } else if (this.isAnalyzeApplication()) {
+        this.websiteApplicationLabel = "Application";
         this.onApplicationChanges(false, true);
-      } else if (this.isWebsite()) {
-        this.analyzeLabel = "Website";
-        this.onWebsiteChanges(false);
+      } else if (this.isAnalyzeWebsite()) {
+        this.websiteApplicationLabel = "Website";
+        this.onWebsiteChanges(false, true);
       } else if (this.isApplicationMetric()) {
-        this.analyzeLabel = "Application";
+        this.websiteApplicationLabel = "Application";
         this.onApplicationChanges(false, false);
       } else if (this.isServiceMetric()) {
         this.target.serviceEndpointTitle = "Service";
@@ -350,6 +369,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
         this.target.serviceEndpointTitle = "Endpoint";
         this.onFilterChange(false);
         this.onEndpointChanges(false);
+      } else if (this.isWebsiteMetric()) {
+        this.websiteApplicationLabel = "Website";
+        this.onWebsiteChanges(false, true);
       }
     }
     this.previousMetricCategory = this.target.metricCategory;
@@ -599,9 +621,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onGroupChange() {
-    if (this.target.group && this.isApplication()) {
+    if (this.target.group && this.isAnalyzeApplication()) {
       this.target.showGroupBySecondLevel = this.target.group.key === 'call.http.header';
-    } else if (this.target.group && this.isWebsite()) {
+    } else if (this.target.group && this.isAnalyzeWebsite()) {
       this.target.showGroupBySecondLevel = this.target.group.key === 'beacon.meta';
     }
     if (!this.target.showGroupBySecondLevel) {
@@ -693,6 +715,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   isAnalyzeCategory() {
-    return this.isApplication() || this.isWebsite();
+    return this.isAnalyzeApplication() || this.isAnalyzeWebsite();
   }
 }
