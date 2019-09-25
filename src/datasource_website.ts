@@ -157,47 +157,6 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return this.postRequest('/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
   }
 
-  fetchMetricsForWebsite(target, timeFilter: TimeFilter) {
-    // avoid invalid calls
-    if (!target || !target.metric) {
-      return this.$q.resolve({data: {items: []}});
-    }
-
-    const windowSize = this.getWindowSize(timeFilter);
-
-    const metric = {
-      metric: target.metric.key,
-      aggregation: target.aggregation ? target.aggregation : 'SUM',
-    };
-
-    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
-      if (!target.timeInterval) {
-        target.timeInterval = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
-      }
-      metric['granularity'] = target.timeInterval.value;
-    }
-
-    const data = {
-      timeFrame: {
-        to: timeFilter.to,
-        windowSize: windowSize
-      },
-      type: "PAGELOAD",
-      metrics: [metric]
-    };
-
-    if (target.entity.key !== null) {
-      const tagFilters = [{
-        name: 'beacon.website.id',
-        operator: 'EQUALS',
-        value: target.entity.key
-      }];
-
-      data['tagFilters'] = tagFilters;
-    }
-
-    return this.postRequest('/api/website-monitoring/metrics', data);
-  }
 
   buildAnalyzeWebsiteLabel(target, item, key, index): string {
     if (target.labelFormat) {
@@ -217,26 +176,5 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       item.name + ' (' + target.entity.label + ')' + ' - ' + key;
   }
 
-  buildWebsiteMetricLabel(target, item, key, index): string {
-    if (target.labelFormat) {
-      let label = target.labelFormat;
-      label = _.replace(label, '$label', item.website.label);
-      label = _.replace(label, '$application', target.entity.label);
-      label = _.replace(label, '$metric', target.metric.label);
-      label = _.replace(label, '$key', key);
-      label = _.replace(label, '$index', index + 1);
-      label = _.replace(label, '$timeShift', target.timeShift);
-      return label;
-    }
-
-    if (target.entity.label === this.ALL_WEBSITES) {
-      return target.timeShift ? item.website.label + ' - ' + key + " - " + target.timeShift : item.application.label + ' - ' + key;
-    }
-
-    return target.timeShift && target.timeShiftIsValid ?
-      item.website.label + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
-      :
-      item.website.label + ' (' + target.entity.label + ')' + ' - ' + key;
-  }
 
 }

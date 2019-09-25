@@ -73,9 +73,6 @@ export default class InstanaDatasource extends AbstractDatasource {
         } else if (target.metricCategory === this.ENDPOINT_METRICS) {
           target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
           return this.getEndpointMetrics(target, timeFilter);
-        } else if (target.metricCategory === this.WEBSITE_METRICS) {
-          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
-          return this.getWebsiteMetrics(target, timeFilter);
         } else {
           target.availableTimeIntervals = this.infrastructure.getPossibleRollups(timeFilter);
           if (!target.timeInterval) {
@@ -252,12 +249,6 @@ export default class InstanaDatasource extends AbstractDatasource {
   getAnalyzeWebsiteMetrics(target, timeFilter: TimeFilter) {
     return this.website.fetchAnalyzeMetricsForWebsite(target, timeFilter).then(response => {
       return readItemMetrics(target, response, this.website.buildAnalyzeWebsiteLabel);
-    });
-  }
-
-  getWebsiteMetrics(target, timeFilter: TimeFilter) {
-    return this.website.fetchMetricsForWebsite(target, timeFilter).then(response => {
-      return readItemMetrics(target, response, this.website.buildWebsiteMetricLabel);
     });
   }
 

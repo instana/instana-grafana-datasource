@@ -18,7 +18,6 @@
           <option value="4">Application Metrics</option>
           <option value="5">Service Metrics</option>
           <option value="6">Endpoint Metrics</option>
-          <option value="7">Website Metrics</option>
           <option value="2">Analyze application calls</option>
           <option value="3">Analyze websites</option>
         </select>
@@ -87,15 +86,6 @@
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'application_legend.html'"/>
-      <div ng-include src="'timeshift.html'"/>
-      <div ng-include src="'aggregate_graphs.html'"/>
-    </div>
-
-    <div ng-show="ctrl.target.metricCategory === '7'">
-      <div ng-include src="'website_application.html'"/>
-      <div ng-include src="'metric.html'"/>
-      <div ng-include src="'advanced_settings.html'"/>
-      <div ng-include src="'website_legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
       <div ng-include src="'aggregate_graphs.html'"/>
     </div>

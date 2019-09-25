@@ -53,7 +53,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   APPLICATION_METRICS = '4';
   SERVICE_METRICS = '5';
   ENDPOINT_METRICS = '6';
-  WEBSITE_METRICS = '7';
 
   defaults = {};
 
@@ -148,16 +147,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
         }
       });
     }
-
-    // websites metric
-    if (this.isWebsiteMetric()) {
-      this.websiteApplicationLabel = "Website";
-      this.onWebsiteChanges(false, false).then(() => {
-        if (this.target.metric) {
-          this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
-        }
-      });
-    }
   }
 
   isInfrastructure() {
@@ -182,10 +171,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   isEndpointMetric() {
     return this.target.metricCategory === this.ENDPOINT_METRICS;
-  }
-
-  isWebsiteMetric() {
-    return this.target.metricCategory === this.WEBSITE_METRICS;
   }
 
   onWebsiteChanges(refresh, isAnalyze: boolean) {
@@ -369,9 +354,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
         this.target.serviceEndpointTitle = "Endpoint";
         this.onFilterChange(false);
         this.onEndpointChanges(false);
-      } else if (this.isWebsiteMetric()) {
-        this.websiteApplicationLabel = "Website";
-        this.onWebsiteChanges(false, true);
       }
     }
     this.previousMetricCategory = this.target.metricCategory;
