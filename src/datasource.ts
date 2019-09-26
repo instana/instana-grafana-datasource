@@ -28,7 +28,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.application = new InstanaApplicationDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.service = new InstanaServiceDataSource(instanceSettings, backendSrv, templateSrv, $q);
-    this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q);
+    this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q, this.service);
   }
 
   query(options) {

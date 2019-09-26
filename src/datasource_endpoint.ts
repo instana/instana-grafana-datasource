@@ -4,18 +4,20 @@ import Cache from './cache';
 import TimeFilter from "./types/time_filter";
 import {getChartGranularity} from "./util/analyze_util";
 import _ from "lodash";
+import InstanaServiceDataSource from "./datasource_service";
 
 export default class InstanaEndpointDataSource extends AbstractDatasource {
   endpointsCache: Cache<Promise<Array<Selectable>>>;
-
+  serviceDataSource: InstanaServiceDataSource;
   maximumNumberOfUsefulDataPoints = 80;
 
   ALL_ENDPOINTS = '-- No Endpoint Filter --';
 
   /** @ngInject */
-  constructor(instanceSettings, backendSrv, templateSrv, $q) {
+  constructor(instanceSettings, backendSrv, templateSrv, $q, serviceDataSource: InstanaServiceDataSource) {
     super(instanceSettings, backendSrv, templateSrv, $q);
 
+    this.serviceDataSource = serviceDataSource;
     this.endpointsCache = new Cache<Promise<Array<Selectable>>>();
   }
 
@@ -31,18 +33,28 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     let page = 1;
     let pageSize = 200;
 
-    endpoints = this.paginateEndpoints([], windowSize, timeFilter.to, page, pageSize).then(response => {
-      let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
-        return pageSet.items;
-      }));
 
-      return allResults.map(entry => {
-        return {
-          'key': entry.id,
-          'label': entry.label
-        };
+    endpoints = this.serviceDataSource.getServices(target, timeFilter).then(services => {
+      return this.paginateEndpoints([], windowSize, timeFilter.to, page, pageSize).then(response => {
+        let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
+          return pageSet.items;
+        }));
+
+        console.log(services);
+
+        return allResults.map(entry => {
+          var serviceName = _.find(services, function (service) {
+            return service.key === entry.serviceId;
+          });
+
+          return {
+            'key': entry.id,
+            'label': serviceName ? entry.label + ' (' + serviceName.label + ')' : entry.label
+          };
+        });
       });
     });
+
 
     this.endpointsCache.put(key, endpoints);
     return endpoints;
@@ -138,7 +150,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
       data['applicationId'] = target.selectedApplication.key;
     }
 
-    return this.postRequest('/api/application-monitoring/metrics/endpoints', data);
+    return this.postRequest('/api/application-monitoring/metrics/endpoints?fillTimeSeries=true', data);
   }
 
   buildEndpointMetricLabel(target, item, key, index): string {

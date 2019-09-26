@@ -203,7 +203,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       data['applicationId'] = target.entity.key;
     }
 
-    return this.postRequest('/api/application-monitoring/metrics/applications', data);
+    return this.postRequest('/api/application-monitoring/metrics/applications?fillTimeSeries=true', data);
   }
 
   buildAnalyzeApplicationLabel(target, item, key, index): string {

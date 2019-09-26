@@ -137,7 +137,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
       data['applicationId'] = target.selectedApplication.key;
     }
 
-    return this.postRequest('/api/application-monitoring/metrics/services', data);
+    return this.postRequest('/api/application-monitoring/metrics/services?fillTimeSeries=true', data);
   }
 
   buildServiceMetricLabel(target, item, key, index)
