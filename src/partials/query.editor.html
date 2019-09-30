@@ -76,7 +76,7 @@
       <div ng-include src="'serviceEndpoint.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'advanced_settings.html'"/>
-      <div ng-include src="'application_legend.html'"/>
+      <div ng-include src="'service_legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
       <div ng-include src="'aggregate_graphs.html'"/>
     </div>
@@ -85,7 +85,7 @@
       <div ng-include src="'serviceEndpoint.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'advanced_settings.html'"/>
-      <div ng-include src="'application_legend.html'"/>
+      <div ng-include src="'endpoint_legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
       <div ng-include src="'aggregate_graphs.html'"/>
     </div>
@@ -276,7 +276,7 @@
             </ul>
           </info-popover>
         </label>
-        <input id="in-legend-{{ctrl.target.refId}}"
+        <input id="in-website-legend-{{ctrl.target.refId}}"
                class="gf-form-input width-22"
                type="text"
                ng-model="ctrl.target.labelFormat"
@@ -303,12 +303,68 @@
             </ul>
           </info-popover>
         </label>
-        <input id="in-legend-{{ctrl.target.refId}}"
+        <input id="in-application-legend-{{ctrl.target.refId}}"
                class="gf-form-input width-22"
                type="text"
                ng-model="ctrl.target.labelFormat"
                ng-model-options='{ debounce: 500 }'
                placeholder="$label ($application) - $key"
+               ng-change="ctrl.onChange()"
+               spellcheck='false'/>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="endpoint_legend.html">
+      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
+        <label class="gf-form-label query-keyword width-13 pointer">
+          Legend format
+          <info-popover position="top center" mode="right-normal">
+            Default: $label ($endpoint) - $key
+            <ul>
+              <li>$label - entity label</li>
+              <li>$endpoint - endpoint label</li>
+              <li>$application - application context (if selected)</li>
+              <li>$timeShift - corresponding timeShift</li>
+              <li>$metric - displayed metric</li>
+              <li>$key - metric key with aggregation and rollup</li>
+              <li>$index - index in the list</li>
+            </ul>
+          </info-popover>
+        </label>
+        <input id="in-endpoint-legend-{{ctrl.target.refId}}"
+               class="gf-form-input width-22"
+               type="text"
+               ng-model="ctrl.target.labelFormat"
+               ng-model-options='{ debounce: 500 }'
+               placeholder="$label ($endpoint) - $key"
+               ng-change="ctrl.onChange()"
+               spellcheck='false'/>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="service_legend.html">
+      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
+        <label class="gf-form-label query-keyword width-13 pointer">
+          Legend format
+          <info-popover position="top center" mode="right-normal">
+            Default: $label ($service) - $key
+            <ul>
+              <li>$label - entity label</li>
+              <li>$service - endpoint label</li>
+              <li>$application - application context (if selected)</li>
+              <li>$timeShift - corresponding timeShift</li>
+              <li>$metric - displayed metric</li>
+              <li>$key - metric key with aggregation and rollup</li>
+              <li>$index - index in the list</li>
+            </ul>
+          </info-popover>
+        </label>
+        <input id="in-service-legend-{{ctrl.target.refId}}"
+               class="gf-form-input width-22"
+               type="text"
+               ng-model="ctrl.target.labelFormat"
+               ng-model-options='{ debounce: 500 }'
+               placeholder="$label ($service) - $key"
                ng-change="ctrl.onChange()"
                spellcheck='false'/>
       </div>

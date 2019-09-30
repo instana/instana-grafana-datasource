@@ -140,13 +140,12 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
     return this.postRequest('/api/application-monitoring/metrics/services?fillTimeSeries=true', data);
   }
 
-  buildServiceMetricLabel(target, item, key, index)
-    :
-    string {
+  buildServiceMetricLabel(target, item, key, index): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.service.label);
       label = _.replace(label, '$service', target.entity.label);
+      label = _.replace(label, '$application', target.selectedApplication.label);
       label = _.replace(label, '$metric', target.metric.label);
       label = _.replace(label, '$key', key);
       label = _.replace(label, '$index', index + 1);

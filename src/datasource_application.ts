@@ -151,7 +151,6 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       metric['granularity'] = target.timeInterval.value;
     }
 
-
     const group = {
       groupbyTag: target.group.key
     };

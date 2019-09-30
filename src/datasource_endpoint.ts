@@ -158,6 +158,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.endpoint.label);
       label = _.replace(label, 'endpoint', target.entity.label);
+      label = _.replace(label, '$application', target.selectedApplication.label);
       label = _.replace(label, '$metric', target.metric.label);
       label = _.replace(label, '$key', key);
       label = _.replace(label, '$index', index + 1);
