@@ -182,8 +182,7 @@
             <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
           </select>
         </div>
-        <label ng-show="ctrl.target.metricCategory === '1'" class="gf-form-label query-keyword pointer"
-               for="in-timeInterval-{{ctrl.target.refId}}">
+        <label ng-show="ctrl.target.metricCategory === '1'" class="gf-form-label query-keyword pointer">
           Show all Metrics
           <info-popover position="top center" mode="right-normal">
             <p>You have the option to show all metrics in the graph once the amount of possible, selectable metrics is
@@ -223,7 +222,7 @@
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.timeInterval"
                   ng-change="ctrl.onChange()"
-                  ng-options="f.label for f in ctrl.target.availableTimeIntervals">
+                  ng-options="f.label for f in ctrl.target.availableTimeIntervals track by f.label">
           </select>
         </div>
       </label>
@@ -606,13 +605,15 @@
           <option value="" disabled selected>{{ctrl.target.serviceEndpointSelectionText}}</option>
         </select>
         <label class="gf-form-label query-keyword width-13 pointer"
-               for="in-application-{{ctrl.target.refId}}">
+               for="in-application-{{ctrl.target.refId}}"
+               ng-show="ctrl.isFilterServicesOrEndpointsByApplicationContext()">
           Application Context
           <info-popover position="top center" mode="right-normal">
             <p>This will filter your selected Service/Endpoint and show only metrics related to this application perspective.</p>
           </info-popover>
         </label>
-        <select id="in-application-{{ctrl.target.refId}}"
+        <select ng-show="ctrl.isFilterServicesOrEndpointsByApplicationContext()",
+                id="in-application-{{ctrl.target.refId}}"
                 class="gf-form-input ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.selectedApplication"
                 ng-change="ctrl.onChange()"

@@ -12,18 +12,18 @@ import {getPossibleGranularities, readItemMetrics} from "./util/analyze_util";
 import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
 
 
-
 export default class InstanaDatasource extends AbstractDatasource {
   infrastructure: InstanaInfrastructureDataSource;
   application: InstanaApplicationDataSource;
   website: InstanaWebsiteDataSource;
   service: InstanaServiceDataSource;
   endpoint: InstanaEndpointDataSource;
+  settings;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
-
+    this.settings = instanceSettings;
     this.infrastructure = new InstanaInfrastructureDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.application = new InstanaApplicationDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);

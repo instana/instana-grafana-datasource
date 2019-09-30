@@ -15,9 +15,6 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
   // our ui is limited to 80 results, same logic to stay comparable
   maximumNumberOfUsefulDataPoints = 80;
 
-  // duplicate to QueryCtrl.ALL_APPLICATIONS
-  ALL_WEBSITES = '-- No Website Filter --';
-
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);

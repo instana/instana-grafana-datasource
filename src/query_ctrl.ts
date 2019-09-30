@@ -12,9 +12,11 @@ import migrate from './migration';
 import _ from 'lodash';
 
 import './css/query_editor.css!';
+import {getPossibleGranularities} from "./util/analyze_util";
 
 export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
+  version: number;
 
   uniqueOperators: Array<Selectable> = operators;
   uniqueBeaconTypes: Array<Selectable> = beaconTypes;
@@ -39,7 +41,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   ALL_APPLICATIONS = '-- No Application Filter --';
   ALL_SERVICES = '-- No Service Filter --';
   ALL_ENDPOINTS = '-- No Endpoint Filter --';
-  ALL_WEBSITES = '-- No Website Filter --';
 
   OPERATOR_STRING = 'STRING';
   OPERATOR_NUMBER = 'NUMBER';
@@ -83,19 +84,21 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.previousMetricCategory = this.target.metricCategory;
 
     // infrastructure (built-in & custom)
-    if (this.isInfrastructure() && this.target.entityQuery) {
-      this.onFilterChange(false).then(() => {
-        // infrastructure metrics support available metrics on a selected entity type
-        if (this.target.entityType) {
-          this.onEntityTypeSelect(false).then(() => {
-            if (this.target.metric || this.target.showAllMetrics) {
-              this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
-            }
-          });
+    if (this.isInfrastructure()) {
+      if (this.target.entityQuery) {
+        this.onFilterChange(false).then(() => {
+          // infrastructure metrics support available metrics on a selected entity type
+          if (this.target.entityType) {
+            this.onEntityTypeSelect(false).then(() => {
+              if (this.target.metric || this.target.showAllMetrics) {
+                this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+              }
+            });
 
-          this.target.timeInterval = this.datasource.infrastructure.getDefaultMetricRollupDuration(this.timeFilter);
-        }
-      });
+            this.target.timeInterval = this.datasource.infrastructure.getDefaultMetricRollupDuration(this.timeFilter);
+          }
+        });
+      }
     }
 
     // analyze applications
@@ -140,6 +143,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // endpoint metric
     if (this.isEndpointMetric()) {
+      this.target.availableTimeIntervals = getPossibleGranularities(this.timeFilter.windowSize);
       this.target.serviceEndpointTitle = "Endpoint";
       this.onEndpointChanges(false).then(() => {
         if (this.target.metric) {
@@ -675,10 +679,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // this can not result in metric changes, we do not need to refresh
   }
 
-  removeCustomFilter(index
-                       :
-                       number, refresh = true
-  ) {
+  removeCustomFilter(index: number, refresh = true) {
     this.target.customFilters.splice(index, 1);
     // removing a filter might result in more than 5 available metrics
     this.onMetricsFilter(refresh);
@@ -698,5 +699,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   isAnalyzeCategory() {
     return this.isAnalyzeApplication() || this.isAnalyzeWebsite();
+  }
+
+  isFilterServicesOrEndpointsByApplicationContext() {
+    if (!this.version) {
+      this.version = this.datasource.getVersion();
+    }
+    return this.version >= 1.163;
   }
 }
