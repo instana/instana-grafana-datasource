@@ -12,7 +12,6 @@ import migrate from './migration';
 import _ from 'lodash';
 
 import './css/query_editor.css!';
-import {getPossibleGranularities} from "./util/analyze_util";
 
 export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
@@ -143,7 +142,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // endpoint metric
     if (this.isEndpointMetric()) {
-      this.target.availableTimeIntervals = getPossibleGranularities(this.timeFilter.windowSize);
       this.target.serviceEndpointTitle = "Endpoint";
       this.onEndpointChanges(false).then(() => {
         if (this.target.metric) {

@@ -18,12 +18,10 @@ export default class InstanaDatasource extends AbstractDatasource {
   website: InstanaWebsiteDataSource;
   service: InstanaServiceDataSource;
   endpoint: InstanaEndpointDataSource;
-  settings;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
-    this.settings = instanceSettings;
     this.infrastructure = new InstanaInfrastructureDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.application = new InstanaApplicationDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);

@@ -40,8 +40,6 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
           return pageSet.items;
         }));
 
-        console.log(services);
-
         return allResults.map(entry => {
           var serviceName = _.find(services, function (service) {
             return service.key === entry.serviceId;
@@ -106,7 +104,6 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
 
     return this.postRequest('/api/application-monitoring/metrics/applications', data).then(response => {
       let filteredData = _.filter(response.data.items, item => item.metrics['calls.sum'][0][0] > 0);
-      console.log(filteredData);
       return filteredData.map(entry => ({
         'key': entry.application.id,
         'label': entry.application.label
