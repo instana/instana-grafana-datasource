@@ -30,7 +30,6 @@ describe('When adding the Instana datasource to Grafana', function() {
     await page.goto('http://localhost:3000/datasources/new?gettingstarted');
 
     const installButton = await page.waitForXPath('//div//span[contains(text(),"Instana")]');
-    //console.log(installButton);
     installButton.click();
     await page.waitFor(1000); // don't ask
 
@@ -41,7 +40,6 @@ describe('When adding the Instana datasource to Grafana', function() {
     await page.type('input[ng-model="ctrl.current.jsonData.apiToken"]', instanaApiToken);
     const saveAndTestButton = await page.waitForXPath('//button[contains(text(),"Save & Test")]');
     saveAndTestButton.click();
-    //console.log(saveAndTestButton);
 
     // waitForSelector doesn't work for some reason so we'll do with a sleep for now
     await page.waitFor(2500);

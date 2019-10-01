@@ -2,6 +2,8 @@ import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import InstanaApplicationDataSource from './datasource_application';
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
+import InstanaServiceDataSource from "./datasource_service";
+import InstanaEndpointDataSource from "./datasource_endpoint";
 import TimeFilter from './types/time_filter';
 import migrate from './migration';
 
@@ -14,14 +16,17 @@ export default class InstanaDatasource extends AbstractDatasource {
   infrastructure: InstanaInfrastructureDataSource;
   application: InstanaApplicationDataSource;
   website: InstanaWebsiteDataSource;
+  service: InstanaServiceDataSource;
+  endpoint: InstanaEndpointDataSource;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
-
     this.infrastructure = new InstanaInfrastructureDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.application = new InstanaApplicationDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);
+    this.service = new InstanaServiceDataSource(instanceSettings, backendSrv, templateSrv, $q);
+    this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q, this.service);
   }
 
   query(options) {
@@ -51,12 +56,21 @@ export default class InstanaDatasource extends AbstractDatasource {
           target.timeShiftIsValid = false;
         }
 
-        if (target.metricCategory === this.WEBSITE_METRICS) {
+        if (target.metricCategory === this.ANALYZE_WEBSITE_METRICS) {
           target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
-          return this.getWebsiteMetrics(target, timeFilter);
+          return this.getAnalyzeWebsiteMetrics(target, timeFilter);
+        } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
+          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
+          return this.getAnalyzeApplicationMetrics(target, timeFilter);
         } else if (target.metricCategory === this.APPLICATION_METRICS) {
           target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
           return this.getApplicationMetrics(target, timeFilter);
+        } else if (target.metricCategory === this.SERVICE_METRICS) {
+          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
+          return this.getServiceMetrics(target, timeFilter);
+        } else if (target.metricCategory === this.ENDPOINT_METRICS) {
+          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
+          return this.getEndpointMetrics(target, timeFilter);
         } else {
           target.availableTimeIntervals = this.infrastructure.getPossibleRollups(timeFilter);
           if (!target.timeInterval) {
@@ -230,16 +244,35 @@ export default class InstanaDatasource extends AbstractDatasource {
     });
   }
 
-  getWebsiteMetrics(target, timeFilter: TimeFilter) {
-    return this.website.fetchMetricsForWebsite(target, timeFilter).then(response => {
-      return readItemMetrics(target, response, this.website.buildWebsiteLabel);
+  getAnalyzeWebsiteMetrics(target, timeFilter: TimeFilter) {
+    return this.website.fetchAnalyzeMetricsForWebsite(target, timeFilter).then(response => {
+      return readItemMetrics(target, response, this.website.buildAnalyzeWebsiteLabel);
     });
   }
 
-  getApplicationMetrics(target, timeFilter) {
-    return this.application.fetchMetricsForApplication(target, timeFilter).then(response => {
+  getAnalyzeApplicationMetrics(target, timeFilter: TimeFilter) {
+    return this.application.fetchAnalyzeMetricsForApplication(target, timeFilter).then(response => {
       target.showWarningCantShowAllResults = response.data.canLoadMore;
-      return readItemMetrics(target, response, this.application.buildApplicationLabel);
+      return readItemMetrics(target, response, this.application.buildAnalyzeApplicationLabel);
+    });
+  }
+
+  getApplicationMetrics(target, timeFilter: TimeFilter) {
+    return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
+      target.showWarningCantShowAllResults = response.data.canLoadMore;
+      return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
+    });
+  }
+
+  getServiceMetrics(target, timeFilter: TimeFilter) {
+    return this.service.fetchServiceMetrics(target, timeFilter).then(response => {
+      return readItemMetrics(target, response, this.service.buildServiceMetricLabel);
+    });
+  }
+
+  getEndpointMetrics(target, timeFilter: TimeFilter) {
+    return this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
+      return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
     });
   }
 

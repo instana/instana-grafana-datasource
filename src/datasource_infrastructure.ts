@@ -11,11 +11,13 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   rollupDurationThresholds: Array<Rollup> = rollupDurationThresholds;
 
   snapshotCache: Cache<Promise<Array<Selectable>>>;
+  snapshotInfoCache: Cache<Promise<Array<Selectable>>>;
   catalogCache: Cache<Promise<Array<Selectable>>>;
   lastFetchedFromAPI: boolean;
   showOffline: boolean;
 
   maximumNumberOfUsefulDataPoints = 800;
+  timeToLiveSnapshotInfoCache = 60*60*1000;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -24,10 +26,11 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     this.showOffline = instanceSettings.jsonData.showOffline;
 
     this.snapshotCache = new Cache<Promise<Array<Selectable>>>();
+    this.snapshotInfoCache = new Cache<Promise<Array<Selectable>>>();
     this.catalogCache = new Cache<Promise<Array<Selectable>>>();
   }
 
-  getEntityTypes(metricCategory: string) {
+  getEntityTypes() {
     let entityTypes = this.simpleCache.get('entityTypes');
     if (entityTypes) {
       return entityTypes;
@@ -93,12 +96,17 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(contextsResponse => {
       return this.$q.all(
         contextsResponse.data.map(({snapshotId, host, plugin}) => {
+          let snapshotInfo = this.snapshotInfoCache.get(snapshotId);
+          if (snapshotInfo) {
+            return snapshotInfo;
+          }
+
           const fetchSnapshotUrl = `/api/snapshots/${snapshotId}` +
             (this.showOffline ?
               `?from=${timeFilter.from}&to=${timeFilter.to}` :
               `?time=${timeFilter.to}`); // @see SnapshotApiResource#getSnapshot
 
-          return this.doRequest(fetchSnapshotUrl, true).then(snapshotResponse => {
+          snapshotInfo = this.doRequest(fetchSnapshotUrl, true).then(snapshotResponse => {
             // check for undefined because the fetchSnapshotContexts is buggy
             if (snapshotResponse !== undefined) {
               return {
@@ -107,6 +115,9 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
               };
             }
           });
+
+          this.snapshotInfoCache.put(snapshotId, snapshotInfo, this.timeToLiveSnapshotInfoCache);
+          return snapshotInfo;
         })
       );
     }).then(response => {
