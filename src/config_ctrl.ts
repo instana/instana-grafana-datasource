@@ -25,7 +25,6 @@ export class InstanaConfigCtrl {
       return datasource.getVersion();
     }).then(version => {
       this.current.jsonData.canQueryOfflineSnapshots = version >= 1.156;
-      this.current.jsonData.canFilterServicesOrEndpointsByApplicationContext = version >= 1.163;
     });
   }
 

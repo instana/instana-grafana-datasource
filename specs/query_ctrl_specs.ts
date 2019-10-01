@@ -19,7 +19,7 @@ describe("Given an InstanaQueryCtrl", function () {
     queryCtrl = new InstanaQueryCtrl(
       {},
       {},
-      new TemplateSrvStub(),
+      ctx.templateSrv,
       ctx.backendSrv,
       Q
     );

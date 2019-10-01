@@ -11,6 +11,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
   serviceDataSource: InstanaServiceDataSource;
   maximumNumberOfUsefulDataPoints = 80;
 
+  // duplicate to QueryCtrl.ALL_ENDPOINTS
   ALL_ENDPOINTS = '-- No Endpoint Filter --';
 
   /** @ngInject */

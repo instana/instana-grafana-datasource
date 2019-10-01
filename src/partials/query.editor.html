@@ -577,9 +577,9 @@
     <script type="text/ng-template" id="serviceEndpoint.html">
       <div class="gf-form">
         <label class="gf-form-label query-keyword pointer width-13" for="in-serviceEndpoint-namefilter-{{ctrl.target.refId}}">
-          Filter {{ctrl.target.serviceEndpointTitle}}
+          Filter {{ctrl.serviceEndpointTitle}}
           <info-popover position="top center" mode="right-normal">
-            <p>Filters the list of Services/Endpoints to only show the ones that contain the given input.</p>
+            <p>Filters the list of {{ctrl.serviceEndpointTitle}}s to only show the ones that contain the given input.</p>
           </info-popover>
         </label>
         <input id="in-serviceEndpoint-namefilter-{{ctrl.target.refId}}"
@@ -592,9 +592,9 @@
                spellcheck='false'>
         <label class="gf-form-label query-keyword width-13 pointer"
                for="in-service-{{ctrl.target.refId}}">
-          {{ctrl.target.serviceEndpointTitle}}
+          {{ctrl.serviceEndpointTitle}}
           <info-popover position="top center" mode="right-normal">
-            <p>Select your Service/Endpoint.</p>
+            <p>Select your {{ctrl.serviceEndpointTitle}}.</p>
           </info-popover>
         </label>
         <select id="in-service-{{ctrl.target.refId}}"
@@ -602,14 +602,14 @@
                 ng-model="ctrl.target.entity"
                 ng-change="ctrl.onServiceEndpointSelected()"
                 ng-options="f as f.label for f in ctrl.target.availableServicesEndpoints track by f.key">
-          <option value="" disabled selected>{{ctrl.target.serviceEndpointSelectionText}}</option>
+          <option value="" disabled selected>{{ctrl.serviceEndpointSelectionText}}</option>
         </select>
         <label class="gf-form-label query-keyword width-13 pointer"
                for="in-application-{{ctrl.target.refId}}"
                ng-show="ctrl.isFilterServicesOrEndpointsByApplicationContext()">
           Application Context
           <info-popover position="top center" mode="right-normal">
-            <p>This will filter your selected Service/Endpoint and show only metrics related to this application perspective.</p>
+            <p>This will filter your selected {{ctrl.serviceEndpointTitle}} and show only metrics related to this application perspective.</p>
           </info-popover>
         </label>
         <select ng-show="ctrl.isFilterServicesOrEndpointsByApplicationContext()",
