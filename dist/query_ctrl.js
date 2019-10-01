@@ -1,10 +1,10 @@
-System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators', './lists/aggregation_function', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, beacon_types_1, operators_1, migration_1, lodash_1;
+    var sdk_1, beacon_types_1, operators_1, aggregation_function_1, migration_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
@@ -16,6 +16,9 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
             },
             function (operators_1_1) {
                 operators_1 = operators_1_1;
+            },
+            function (aggregation_function_1_1) {
+                aggregation_function_1 = aggregation_function_1_1;
             },
             function (migration_1_1) {
                 migration_1 = migration_1_1;
@@ -36,19 +39,25 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.$q = $q;
                     this.uniqueOperators = operators_1.default;
                     this.uniqueBeaconTypes = beacon_types_1.default;
-                    this.timeIntervalLabel = "Rollup";
-                    this.analyzeLabel = "Test";
+                    this.aggregationFunctions = aggregation_function_1.default;
+                    this.websiteApplicationLabel = "";
+                    this.serviceEndpointTitle = "";
                     this.customFilters = [];
                     this.EMPTY_DROPDOWN_TEXT = ' - ';
                     this.ALL_APPLICATIONS = '-- No Application Filter --';
+                    this.ALL_SERVICES = '-- No Service Filter --';
+                    this.ALL_ENDPOINTS = '-- No Endpoint Filter --';
                     this.OPERATOR_STRING = 'STRING';
                     this.OPERATOR_NUMBER = 'NUMBER';
                     this.OPERATOR_BOOLEAN = 'BOOLEAN';
                     this.OPERATOR_KEY_VALUE = 'KEY_VALUE_PAIR';
                     this.BUILT_IN_METRICS = '0';
                     this.CUSTOM_METRICS = '1';
-                    this.APPLICATION_METRICS = '2';
-                    this.WEBSITE_METRICS = '3';
+                    this.ANALYZE_APPLICATION_METRICS = '2';
+                    this.ANALYZE_WEBSITE_METRICS = '3';
+                    this.APPLICATION_METRICS = '4';
+                    this.SERVICE_METRICS = '5';
+                    this.ENDPOINT_METRICS = '6';
                     this.defaults = {};
                     // target migration for downwards compability
                     migration_1.default(this.target);
@@ -70,35 +79,61 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     }
                     this.previousMetricCategory = this.target.metricCategory;
                     // infrastructure (built-in & custom)
-                    if (this.isInfrastructure() && this.target.entityQuery) {
-                        this.timeIntervalLabel = "Rollup";
-                        this.onFilterChange(false).then(function () {
-                            // infrastructure metrics support available metrics on a selected entity type
-                            if (_this.target.entityType) {
-                                _this.onEntityTypeSelect(false).then(function () {
-                                    if (_this.target.metric || _this.target.showAllMetrics) {
-                                        _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
-                                    }
-                                });
-                                _this.target.timeInterval = _this.datasource.infrastructure.getDefaultMetricRollupDuration(_this.timeFilter);
-                            }
-                        });
+                    if (this.isInfrastructure()) {
+                        if (this.target.entityQuery) {
+                            this.onFilterChange(false).then(function () {
+                                // infrastructure metrics support available metrics on a selected entity type
+                                if (_this.target.entityType) {
+                                    _this.onEntityTypeSelect(false).then(function () {
+                                        if (_this.target.metric || _this.target.showAllMetrics) {
+                                            _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
+                                        }
+                                    });
+                                    _this.target.timeInterval = _this.datasource.infrastructure.getDefaultMetricRollupDuration(_this.timeFilter);
+                                }
+                            });
+                        }
                     }
-                    // websites
-                    if (this.isWebsite()) {
-                        this.analyzeLabel = "Website";
-                        this.timeIntervalLabel = "Granularity";
-                        this.onWebsiteChanges(false).then(function () {
+                    // analyze applications
+                    if (this.isAnalyzeApplication()) {
+                        this.websiteApplicationLabel = "Application";
+                        this.onApplicationChanges(false, true).then(function () {
                             if (_this.target.metric) {
                                 _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                             }
                         });
                     }
-                    // applications
-                    if (this.isApplication()) {
-                        this.analyzeLabel = "Application";
-                        this.timeIntervalLabel = "Granularity";
-                        this.onApplicationChanges(false).then(function () {
+                    // analyze websites
+                    if (this.isAnalyzeWebsite()) {
+                        this.websiteApplicationLabel = "Website";
+                        this.onWebsiteChanges(false, true).then(function () {
+                            if (_this.target.metric) {
+                                _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
+                            }
+                        });
+                    }
+                    // applications metric
+                    if (this.isApplicationMetric()) {
+                        this.websiteApplicationLabel = "Application";
+                        this.onApplicationChanges(false, false).then(function () {
+                            if (_this.target.metric) {
+                                _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
+                            }
+                        });
+                    }
+                    // service metric
+                    if (this.isServiceMetric()) {
+                        this.serviceEndpointTitle = "Service";
+                        this.onServiceChanges(false).then(function () {
+                            if (_this.target.metric) {
+                                _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
+                            }
+                        });
+                    }
+                    // endpoint metric
+                    if (this.isEndpointMetric()) {
+                        this.serviceEndpointTitle = "Endpoint";
+                        this.onEndpointChanges(false).then(function () {
                             if (_this.target.metric) {
                                 _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                             }
@@ -108,13 +143,22 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 InstanaQueryCtrl.prototype.isInfrastructure = function () {
                     return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
                 };
-                InstanaQueryCtrl.prototype.isWebsite = function () {
-                    return this.target.metricCategory === this.WEBSITE_METRICS;
+                InstanaQueryCtrl.prototype.isAnalyzeWebsite = function () {
+                    return this.target.metricCategory === this.ANALYZE_WEBSITE_METRICS;
                 };
-                InstanaQueryCtrl.prototype.isApplication = function () {
+                InstanaQueryCtrl.prototype.isAnalyzeApplication = function () {
+                    return this.target.metricCategory === this.ANALYZE_APPLICATION_METRICS;
+                };
+                InstanaQueryCtrl.prototype.isApplicationMetric = function () {
                     return this.target.metricCategory === this.APPLICATION_METRICS;
                 };
-                InstanaQueryCtrl.prototype.onWebsiteChanges = function (refresh) {
+                InstanaQueryCtrl.prototype.isServiceMetric = function () {
+                    return this.target.metricCategory === this.SERVICE_METRICS;
+                };
+                InstanaQueryCtrl.prototype.isEndpointMetric = function () {
+                    return this.target.metricCategory === this.ENDPOINT_METRICS;
+                };
+                InstanaQueryCtrl.prototype.onWebsiteChanges = function (refresh, isAnalyze) {
                     var _this = this;
                     // select a meaningful default group
                     if (this.target && !this.target.entityType) {
@@ -130,14 +174,16 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                             _this.target.entity = websites[0];
                         }
                     });
-                    this.datasource.website.getWebsiteTags().then(function (websiteTags) {
-                        _this.uniqueTags =
-                            lodash_1.default.sortBy(websiteTags, 'key');
-                        // select a meaningful default group
-                        if (_this.target && !_this.target.group) {
-                            _this.target.group = lodash_1.default.find(websiteTags, ['key', 'beacon.page.name']);
-                        }
-                    });
+                    if (isAnalyze) {
+                        this.datasource.website.getWebsiteTags().then(function (websiteTags) {
+                            _this.uniqueTags =
+                                lodash_1.default.sortBy(websiteTags, 'key');
+                            // select a meaningful default group
+                            if (_this.target && !_this.target.group) {
+                                _this.target.group = lodash_1.default.find(websiteTags, ['key', 'beacon.page.name']);
+                            }
+                        });
+                    }
                     return this.datasource.website.getWebsiteMetricsCatalog().then(function (metrics) {
                         _this.allWebsiteMetrics = metrics;
                         _this.availableMetrics = lodash_1.default.filter(_this.allWebsiteMetrics, function (m) { return m.beaconTypes.includes(_this.target.entityType.key); });
@@ -145,7 +191,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                         _this.adjustMetricSelectionPlaceholder();
                     });
                 };
-                InstanaQueryCtrl.prototype.onApplicationChanges = function (refresh) {
+                InstanaQueryCtrl.prototype.onApplicationChanges = function (refresh, isAnalyze) {
                     var _this = this;
                     this.datasource.application.getApplications(this.timeFilter).then(function (applications) {
                         _this.uniqueEntities = applications;
@@ -161,12 +207,52 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                             _this.target.entity = applications[0];
                         }
                     });
-                    this.datasource.application.getApplicastionTags().then(function (applicationTags) {
-                        _this.uniqueTags =
-                            lodash_1.default.sortBy(applicationTags, 'key');
-                        // select a meaningful default group
-                        if (_this.target && !_this.target.group) {
-                            _this.target.group = lodash_1.default.find(applicationTags, ['key', 'endpoint.name']);
+                    if (isAnalyze) {
+                        this.datasource.application.getApplicastionTags().then(function (applicationTags) {
+                            _this.uniqueTags =
+                                lodash_1.default.sortBy(applicationTags, 'key');
+                            // select a meaningful default group
+                            if (_this.target && !_this.target.group) {
+                                _this.target.group = lodash_1.default.find(applicationTags, ['key', 'endpoint.name']);
+                            }
+                        });
+                    }
+                    return this.datasource.application.getApplicationMetricsCatalog().then(function (metrics) {
+                        _this.availableMetrics = metrics;
+                        _this.checkMetricAndRefresh(refresh);
+                        _this.adjustMetricSelectionPlaceholder();
+                    });
+                };
+                InstanaQueryCtrl.prototype.onServiceChanges = function (refresh) {
+                    var _this = this;
+                    this.datasource.service.getServices(this.target, this.timeFilter).then(function (services) {
+                        _this.uniqueEntities = services;
+                        // if all is not existing, we insert it on top
+                        if (!lodash_1.default.find(_this.uniqueEntities, { 'key': null })) {
+                            _this.uniqueEntities.unshift({ key: null, label: _this.ALL_SERVICES });
+                        }
+                        _this.onNamefilterChanges();
+                        if (_this.target && !_this.target.entity && services) {
+                            _this.target.entity = _this.uniqueEntities[0];
+                        }
+                    });
+                    return this.datasource.application.getApplicationMetricsCatalog().then(function (metrics) {
+                        _this.availableMetrics = metrics;
+                        _this.checkMetricAndRefresh(refresh);
+                        _this.adjustMetricSelectionPlaceholder();
+                    });
+                };
+                InstanaQueryCtrl.prototype.onEndpointChanges = function (refresh) {
+                    var _this = this;
+                    this.datasource.endpoint.getEndpoints(this.target, this.timeFilter).then(function (endpoints) {
+                        _this.uniqueEntities = endpoints;
+                        // if all is not existing, we insert it on top
+                        if (!lodash_1.default.find(_this.uniqueEntities, { 'key': null })) {
+                            _this.uniqueEntities.unshift({ key: null, label: _this.ALL_ENDPOINTS });
+                        }
+                        _this.onNamefilterChanges();
+                        if (_this.target && !_this.target.entity && endpoints) {
+                            _this.target.entity = _this.uniqueEntities[0];
                         }
                     });
                     return this.datasource.application.getApplicationMetricsCatalog().then(function (metrics) {
@@ -199,22 +285,30 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     else {
                         this.selectionReset();
                         // fresh internal used lists without re-rendering
-                        if (this.target.metricCategory === '0' || this.target.metricCategory === '1') {
-                            this.timeIntervalLabel = "Rollup";
-                        }
-                        else {
-                            this.timeIntervalLabel = "Granularity";
-                        }
                         if (this.isInfrastructure()) {
                             this.onFilterChange(false);
                         }
-                        else if (this.isWebsite()) {
-                            this.analyzeLabel = "Website";
-                            this.onWebsiteChanges(false);
+                        else if (this.isAnalyzeApplication()) {
+                            this.websiteApplicationLabel = "Application";
+                            this.onApplicationChanges(false, true);
                         }
-                        else if (this.isApplication()) {
-                            this.analyzeLabel = "Application";
-                            this.onApplicationChanges(false);
+                        else if (this.isAnalyzeWebsite()) {
+                            this.websiteApplicationLabel = "Website";
+                            this.onWebsiteChanges(false, true);
+                        }
+                        else if (this.isApplicationMetric()) {
+                            this.websiteApplicationLabel = "Application";
+                            this.onApplicationChanges(false, false);
+                        }
+                        else if (this.isServiceMetric()) {
+                            this.serviceEndpointTitle = "Service";
+                            this.onFilterChange(false);
+                            this.onServiceChanges(false);
+                        }
+                        else if (this.isEndpointMetric()) {
+                            this.serviceEndpointTitle = "Endpoint";
+                            this.onFilterChange(false);
+                            this.onEndpointChanges(false);
                         }
                     }
                     this.previousMetricCategory = this.target.metricCategory;
@@ -240,7 +334,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 };
                 InstanaQueryCtrl.prototype.filterEntityTypes = function () {
                     var _this = this;
-                    return this.datasource.infrastructure.getEntityTypes(this.target.metricCategory).then(function (entityTypes) {
+                    return this.datasource.infrastructure.getEntityTypes().then(function (entityTypes) {
                         _this.uniqueEntityTypes =
                             lodash_1.default.sortBy(lodash_1.default.filter(entityTypes, function (entityType) { return _this.findMatchingEntityTypes(entityType); }), 'label');
                     });
@@ -382,11 +476,14 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.target.showGroupBySecondLevel = null;
                     this.target.groupbyTagSecondLevelKey = null;
                     this.target.timeInterval = null;
-                    this.target.timeShift = null;
+                    this.target.aggregateGraphs = false;
+                    this.target.aggregationFunction = null;
                     this.target.filters = [];
+                    this.target.serviceNamefilter = null;
                     this.target.showWarningCantShowAllResults = false;
                     this.target.showAllMetrics = false;
                     this.target.canShowAllMetrics = false;
+                    this.serviceEndpointSelectionText = this.EMPTY_DROPDOWN_TEXT;
                 };
                 InstanaQueryCtrl.prototype.resetMetricSelection = function () {
                     this.target.metric = null;
@@ -415,11 +512,28 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                             : this.EMPTY_DROPDOWN_TEXT;
                     }
                 };
+                InstanaQueryCtrl.prototype.adjustServiceEndpointSelectionPlaceholder = function () {
+                    this.serviceEndpointSelectionText = this.uniqueEntities.length > 0
+                        ? 'Please select (' + this.target.availableServicesEndpoints.length + '/' + this.uniqueEntities.length + ')'
+                        : this.EMPTY_DROPDOWN_TEXT;
+                };
+                InstanaQueryCtrl.prototype.onNamefilterChanges = function () {
+                    var _this = this;
+                    if (!this.target.serviceNamefilter) {
+                        this.target.availableServicesEndpoints = this.uniqueEntities;
+                    }
+                    else {
+                        this.target.availableServicesEndpoints =
+                            lodash_1.default.filter(this.uniqueEntities, function (entity) { return entity.label.includes(_this.target.serviceNamefilter); });
+                    }
+                    this.adjustServiceEndpointSelectionPlaceholder();
+                    this.panelCtrl.refresh();
+                };
                 InstanaQueryCtrl.prototype.onGroupChange = function () {
-                    if (this.target.group && this.isApplication()) {
+                    if (this.target.group && this.isAnalyzeApplication()) {
                         this.target.showGroupBySecondLevel = this.target.group.key === 'call.http.header';
                     }
-                    else if (this.target.group && this.isWebsite()) {
+                    else if (this.target.group && this.isAnalyzeWebsite()) {
                         this.target.showGroupBySecondLevel = this.target.group.key === 'beacon.meta';
                     }
                     if (!this.target.showGroupBySecondLevel) {
@@ -428,6 +542,24 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onChange = function () {
+                    this.panelCtrl.refresh();
+                };
+                InstanaQueryCtrl.prototype.onServiceEndpointSelected = function () {
+                    var _this = this;
+                    if (this.isServiceMetric()) {
+                        this.datasource.service.getApplicationsUsingService(this.target, this.timeFilter).then(function (applications) {
+                            _this.target.relatedApplications = applications;
+                            _this.target.relatedApplications.unshift({ key: null, label: "No Application Selected" });
+                            _this.target.selectedApplication = _this.target.relatedApplications[0];
+                        });
+                    }
+                    else {
+                        this.datasource.endpoint.getApplicationsUsingEndpoint(this.target, this.timeFilter).then(function (applications) {
+                            _this.target.relatedApplications = applications;
+                            _this.target.relatedApplications.unshift({ key: null, label: "No Application Selected" });
+                            _this.target.selectedApplication = _this.target.relatedApplications[0];
+                        });
+                    }
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {
@@ -449,6 +581,13 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 InstanaQueryCtrl.prototype.toggleAdvancedSettings = function () {
                     this.target.showAdvancedSettings = !this.target.showAdvancedSettings;
                 };
+                InstanaQueryCtrl.prototype.toggleGraphAggregation = function () {
+                    if (!this.target.aggregationFunction) {
+                        this.target.aggregationFunction = this.aggregationFunctions[0];
+                        this.target.labelFormat = "";
+                    }
+                    this.panelCtrl.refresh();
+                };
                 InstanaQueryCtrl.prototype.addCustomFilter = function () {
                     if (!this.target.customFilters) {
                         this.target.customFilters = [];
@@ -465,8 +604,20 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 InstanaQueryCtrl.prototype.isNotSingleStatOrGauge = function () {
                     return this.target.pluginId !== 'gauge' && this.target.pluginId !== 'singlestat';
                 };
+                InstanaQueryCtrl.prototype.canShowAggregation = function () {
+                    return this.target.metricCategory >= '2' || this.isPluginThatSupportsAggregation();
+                };
                 InstanaQueryCtrl.prototype.isPluginThatSupportsAggregation = function () {
                     return this.target.pluginId === 'singlestat' || this.target.pluginId === 'gauge' || this.target.pluginId === 'table';
+                };
+                InstanaQueryCtrl.prototype.isAnalyzeCategory = function () {
+                    return this.isAnalyzeApplication() || this.isAnalyzeWebsite();
+                };
+                InstanaQueryCtrl.prototype.isFilterServicesOrEndpointsByApplicationContext = function () {
+                    if (!this.version) {
+                        this.version = this.datasource.getVersion();
+                    }
+                    return this.version >= 1.163;
                 };
                 InstanaQueryCtrl.templateUrl = 'partials/query.editor.html';
                 return InstanaQueryCtrl;

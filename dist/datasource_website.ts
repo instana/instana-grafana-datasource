@@ -7,15 +7,13 @@ import Cache from './cache';
 
 import _ from 'lodash';
 import {createTagFilter, getChartGranularity, readItemMetrics} from "./util/analyze_util";
+import ApplicationMetricsBody from "./types/application_metrics_body";
 
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
   websitesCache: Cache<Promise<Array<Selectable>>>;
 
   // our ui is limited to 80 results, same logic to stay comparable
   maximumNumberOfUsefulDataPoints = 80;
-
-  OPERATOR_NUMBER = 'NUMBER';
-  OPERATOR_BOOLEAN = 'BOOLEAN';
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -104,7 +102,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
   }
 
 
-  fetchMetricsForWebsite(target, timeFilter: TimeFilter) {
+  fetchAnalyzeMetricsForWebsite(target, timeFilter: TimeFilter) {
     // avoid invalid calls
     if (!target || !target.metric || !target.group || !target.entity) {
       return this.$q.resolve({data: {items: []}});
@@ -130,7 +128,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
 
     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
       if (!target.timeInterval) {
-        target.timeInterval  = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+        target.timeInterval = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
       }
       metric['granularity'] = target.timeInterval.value;
     }
@@ -156,7 +154,8 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     return this.postRequest('/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
   }
 
-  buildWebsiteLabel(target, item, key, index): string {
+
+  buildAnalyzeWebsiteLabel(target, item, key, index): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
@@ -173,5 +172,6 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
       :
       item.name + ' (' + target.entity.label + ')' + ' - ' + key;
   }
+
 
 }

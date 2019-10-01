@@ -9,8 +9,11 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     getApplications(timeFilter: TimeFilter): Promise<Selectable[]>;
+    paginateApplications(results: any, windowSize: number, to: number, page: number, pageSize: number): any;
     getApplicastionTags(): Selectable[];
     getApplicationMetricsCatalog(): Selectable[];
-    fetchMetricsForApplication(target: any, timeFilter: TimeFilter): any;
-    buildApplicationLabel(target: any, item: any, key: any, index: any): string;
+    fetchAnalyzeMetricsForApplication(target: any, timeFilter: TimeFilter): any;
+    fetchApplicationMetrics(target: any, timeFilter: TimeFilter): any;
+    buildAnalyzeApplicationLabel(target: any, item: any, key: any, index: any): string;
+    buildApplicationMetricLabel(target: any, item: any, key: any, index: any): string;
 }

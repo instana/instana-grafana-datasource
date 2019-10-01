@@ -6,6 +6,7 @@ import Cache from './cache';
 
 import _ from 'lodash';
 import {createTagFilter, getChartGranularity} from "./util/analyze_util";
+import ApplicationMetricsBody from "./types/application_metrics_body";
 
 export default class InstanaApplicationDataSource extends AbstractDatasource {
   applicationsCache: Cache<Promise<Array<Selectable>>>;
@@ -32,38 +33,41 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-    const data: CallGroupBody = {
-      group: {
-        groupbyTag: 'application.name'
-      },
-      timeFrame: {
-        to: timeFilter.to,
-        windowSize: windowSize
-      },
-      metrics: [{
-        metric: 'calls',
-        aggregation: 'SUM'
-      }],
-      order: {
-        // TODO fix api and figure out how to get correct ordering
-        by: 'callsAgg',
-        direction: "desc"
-      },
-      pagination: {
-        ingestionTime: 0,
-        offset: 0,
-        retrievalSize: 200
-      }
-    };
-    applications = this.postRequest('/api/application-monitoring/analyze/call-groups', data).then(applicationsResponse =>
-      applicationsResponse.data.items.map(entry => ({
-        'key': entry.name,
-        'label': entry.name
-      }))
-    );
-    this.applicationsCache.put(key, applications);
+    let page = 1;
+    let pageSize = 200;
 
+    applications = this.paginateApplications([], windowSize, timeFilter.to, page, pageSize).then(response => {
+      let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
+        return pageSet.items;
+      }));
+
+      return allResults.map(entry => {
+        return {
+          'key': entry.id,
+          'label': entry.label
+        };
+      });
+    });
+
+    this.applicationsCache.put(key, applications);
     return applications;
+  }
+
+  paginateApplications(results, windowSize: number, to: number, page: number, pageSize: number) {
+    var queryParameters = "windowSize=" + windowSize
+      + "&to=" + to
+      + "&page=" + page
+      + "&pageSize=" + pageSize;
+
+    return this.doRequest('/api/application-monitoring/applications?' + queryParameters).then(response => {
+      results.push(response.data);
+      if (page * pageSize < response.data.totalHits) {
+        page++;
+        return this.paginateApplications(results, windowSize, to, page, pageSize);
+      } else {
+        return results;
+      }
+    });
   }
 
   getApplicastionTags() {
@@ -110,7 +114,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     return applicationCatalog;
   }
 
-  fetchMetricsForApplication(target, timeFilter: TimeFilter) {
+  fetchAnalyzeMetricsForApplication(target, timeFilter: TimeFilter) {
     // avoid invalid calls
     if (!target || !target.metric || !target.group || !target.entity) {
       return this.$q.resolve({data: {items: []}});
@@ -125,7 +129,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       tagFilters.push({
         name: 'application.name',
         operator: 'EQUALS',
-        value: target.entity.key
+        value: target.entity.label
       });
     }
 
@@ -147,7 +151,6 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       metric['granularity'] = target.timeInterval.value;
     }
 
-
     const group = {
       groupbyTag: target.group.key
     };
@@ -167,7 +170,42 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     return this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
   }
 
-  buildApplicationLabel(target, item, key, index): string {
+  fetchApplicationMetrics(target, timeFilter: TimeFilter) {
+    // avoid invalid calls
+    if (!target || !target.metric) {
+      return this.$q.resolve({data: {items: []}});
+    }
+
+    const windowSize = this.getWindowSize(timeFilter);
+
+    const metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation ? target.aggregation : 'SUM',
+    };
+
+    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
+      if (!target.timeInterval) {
+        target.timeInterval = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+      }
+      metric['granularity'] = target.timeInterval.value;
+    }
+
+    const data: ApplicationMetricsBody = {
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: windowSize
+      },
+      metrics: [metric]
+    };
+
+    if (target.entity.key !== null) {
+      data['applicationId'] = target.entity.key;
+    }
+
+    return this.postRequest('/api/application-monitoring/metrics/applications?fillTimeSeries=true', data);
+  }
+
+  buildAnalyzeApplicationLabel(target, item, key, index): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
@@ -187,5 +225,27 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
       :
       item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+  }
+
+  buildApplicationMetricLabel(target, item, key, index): string {
+    if (target.labelFormat) {
+      let label = target.labelFormat;
+      label = _.replace(label, '$label', item.application.label);
+      label = _.replace(label, '$application', target.entity.label);
+      label = _.replace(label, '$metric', target.metric.label);
+      label = _.replace(label, '$key', key);
+      label = _.replace(label, '$index', index + 1);
+      label = _.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    if (target.entity.label === this.ALL_APPLICATIONS) {
+      return target.timeShift ? item.application.label + ' - ' + key + " - " + target.timeShift : item.application.label + ' - ' + key;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ?
+      item.application.label + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
+      :
+      item.application.label + ' (' + target.entity.label + ')' + ' - ' + key;
   }
 }

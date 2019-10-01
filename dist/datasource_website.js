@@ -28,8 +28,6 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
                     // our ui is limited to 80 results, same logic to stay comparable
                     this.maximumNumberOfUsefulDataPoints = 80;
-                    this.OPERATOR_NUMBER = 'NUMBER';
-                    this.OPERATOR_BOOLEAN = 'BOOLEAN';
                     this.websitesCache = new cache_1.default();
                 }
                 InstanaWebsiteDataSource.prototype.getWebsites = function (timeFilter) {
@@ -101,7 +99,7 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                     this.simpleCache.put('websiteCatalog', websiteCatalog);
                     return websiteCatalog;
                 };
-                InstanaWebsiteDataSource.prototype.fetchMetricsForWebsite = function (target, timeFilter) {
+                InstanaWebsiteDataSource.prototype.fetchAnalyzeMetricsForWebsite = function (target, timeFilter) {
                     // avoid invalid calls
                     if (!target || !target.metric || !target.group || !target.entity) {
                         return this.$q.resolve({ data: { items: [] } });
@@ -145,7 +143,7 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                     };
                     return this.postRequest('/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
                 };
-                InstanaWebsiteDataSource.prototype.buildWebsiteLabel = function (target, item, key, index) {
+                InstanaWebsiteDataSource.prototype.buildAnalyzeWebsiteLabel = function (target, item, key, index) {
                     if (target.labelFormat) {
                         var label = target.labelFormat;
                         label = lodash_1.default.replace(label, '$label', item.name);

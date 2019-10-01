@@ -39,37 +39,38 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                         return applications;
                     }
                     var windowSize = this.getWindowSize(timeFilter);
-                    var data = {
-                        group: {
-                            groupbyTag: 'application.name'
-                        },
-                        timeFrame: {
-                            to: timeFilter.to,
-                            windowSize: windowSize
-                        },
-                        metrics: [{
-                                metric: 'calls',
-                                aggregation: 'SUM'
-                            }],
-                        order: {
-                            // TODO fix api and figure out how to get correct ordering
-                            by: 'callsAgg',
-                            direction: "desc"
-                        },
-                        pagination: {
-                            ingestionTime: 0,
-                            offset: 0,
-                            retrievalSize: 200
-                        }
-                    };
-                    applications = this.postRequest('/api/application-monitoring/analyze/call-groups', data).then(function (applicationsResponse) {
-                        return applicationsResponse.data.items.map(function (entry) { return ({
-                            'key': entry.name,
-                            'label': entry.name
-                        }); });
+                    var page = 1;
+                    var pageSize = 200;
+                    applications = this.paginateApplications([], windowSize, timeFilter.to, page, pageSize).then(function (response) {
+                        var allResults = lodash_1.default.flattenDeep(lodash_1.default.map(response, function (pageSet, index) {
+                            return pageSet.items;
+                        }));
+                        return allResults.map(function (entry) {
+                            return {
+                                'key': entry.id,
+                                'label': entry.label
+                            };
+                        });
                     });
                     this.applicationsCache.put(key, applications);
                     return applications;
+                };
+                InstanaApplicationDataSource.prototype.paginateApplications = function (results, windowSize, to, page, pageSize) {
+                    var _this = this;
+                    var queryParameters = "windowSize=" + windowSize
+                        + "&to=" + to
+                        + "&page=" + page
+                        + "&pageSize=" + pageSize;
+                    return this.doRequest('/api/application-monitoring/applications?' + queryParameters).then(function (response) {
+                        results.push(response.data);
+                        if (page * pageSize < response.data.totalHits) {
+                            page++;
+                            return _this.paginateApplications(results, windowSize, to, page, pageSize);
+                        }
+                        else {
+                            return results;
+                        }
+                    });
                 };
                 InstanaApplicationDataSource.prototype.getApplicastionTags = function () {
                     var applicationTags = this.simpleCache.get('applicationTags');
@@ -109,7 +110,7 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                     this.simpleCache.put('applicationCatalog', applicationCatalog);
                     return applicationCatalog;
                 };
-                InstanaApplicationDataSource.prototype.fetchMetricsForApplication = function (target, timeFilter) {
+                InstanaApplicationDataSource.prototype.fetchAnalyzeMetricsForApplication = function (target, timeFilter) {
                     // avoid invalid calls
                     if (!target || !target.metric || !target.group || !target.entity) {
                         return this.$q.resolve({ data: { items: [] } });
@@ -121,7 +122,7 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                         tagFilters.push({
                             name: 'application.name',
                             operator: 'EQUALS',
-                            value: target.entity.key
+                            value: target.entity.label
                         });
                     }
                     lodash_1.default.forEach(target.filters, function (filter) {
@@ -156,7 +157,35 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                     };
                     return this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
                 };
-                InstanaApplicationDataSource.prototype.buildApplicationLabel = function (target, item, key, index) {
+                InstanaApplicationDataSource.prototype.fetchApplicationMetrics = function (target, timeFilter) {
+                    // avoid invalid calls
+                    if (!target || !target.metric) {
+                        return this.$q.resolve({ data: { items: [] } });
+                    }
+                    var windowSize = this.getWindowSize(timeFilter);
+                    var metric = {
+                        metric: target.metric.key,
+                        aggregation: target.aggregation ? target.aggregation : 'SUM',
+                    };
+                    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") {
+                        if (!target.timeInterval) {
+                            target.timeInterval = analyze_util_1.getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+                        }
+                        metric['granularity'] = target.timeInterval.value;
+                    }
+                    var data = {
+                        timeFrame: {
+                            to: timeFilter.to,
+                            windowSize: windowSize
+                        },
+                        metrics: [metric]
+                    };
+                    if (target.entity.key !== null) {
+                        data['applicationId'] = target.entity.key;
+                    }
+                    return this.postRequest('/api/application-monitoring/metrics/applications?fillTimeSeries=true', data);
+                };
+                InstanaApplicationDataSource.prototype.buildAnalyzeApplicationLabel = function (target, item, key, index) {
                     if (target.labelFormat) {
                         var label = target.labelFormat;
                         label = lodash_1.default.replace(label, '$label', item.name);
@@ -174,6 +203,25 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                         item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
                         :
                             item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+                };
+                InstanaApplicationDataSource.prototype.buildApplicationMetricLabel = function (target, item, key, index) {
+                    if (target.labelFormat) {
+                        var label = target.labelFormat;
+                        label = lodash_1.default.replace(label, '$label', item.application.label);
+                        label = lodash_1.default.replace(label, '$application', target.entity.label);
+                        label = lodash_1.default.replace(label, '$metric', target.metric.label);
+                        label = lodash_1.default.replace(label, '$key', key);
+                        label = lodash_1.default.replace(label, '$index', index + 1);
+                        label = lodash_1.default.replace(label, '$timeShift', target.timeShift);
+                        return label;
+                    }
+                    if (target.entity.label === this.ALL_APPLICATIONS) {
+                        return target.timeShift ? item.application.label + ' - ' + key + " - " + target.timeShift : item.application.label + ' - ' + key;
+                    }
+                    return target.timeShift && target.timeShiftIsValid ?
+                        item.application.label + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
+                        :
+                            item.application.label + ' (' + target.entity.label + ')' + ' - ' + key;
                 };
                 return InstanaApplicationDataSource;
             })(datasource_abstract_1.default);

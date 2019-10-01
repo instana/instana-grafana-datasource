@@ -27,8 +27,8 @@
       {"name": "GitHub", "url": "https://github.com/instana/instana-grafana-datasource" },
       {"name": "Apache License 2.0", "url": "https://github.com/instana/instana-grafana-datasource/blob/master/LICENSE" }
     ],
-    "version": "2.4.0",
-    "updated": "2019-08-20"
+    "version": "2.4.1",
+    "updated": "2019-10-01"
   },
 
   "routes": [

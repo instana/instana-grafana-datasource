@@ -23,8 +23,11 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
                     this.SEPARATOR = '|';
                     this.BUILT_IN_METRICS = '0';
                     this.CUSTOM_METRICS = '1';
-                    this.APPLICATION_METRICS = '2';
-                    this.WEBSITE_METRICS = '3';
+                    this.ANALYZE_APPLICATION_METRICS = '2';
+                    this.ANALYZE_WEBSITE_METRICS = '3';
+                    this.APPLICATION_METRICS = '4';
+                    this.SERVICE_METRICS = '5';
+                    this.ENDPOINT_METRICS = '6';
                     this.currentTime = function () {
                         return Date.now();
                     };

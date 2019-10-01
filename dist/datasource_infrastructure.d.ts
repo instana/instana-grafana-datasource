@@ -6,13 +6,15 @@ import Cache from './cache';
 export default class InstanaInfrastructureDataSource extends AbstractDatasource {
     rollupDurationThresholds: Array<Rollup>;
     snapshotCache: Cache<Promise<Array<Selectable>>>;
+    snapshotInfoCache: Cache<Promise<Array<Selectable>>>;
     catalogCache: Cache<Promise<Array<Selectable>>>;
     lastFetchedFromAPI: boolean;
     showOffline: boolean;
     maximumNumberOfUsefulDataPoints: number;
+    timeToLiveSnapshotInfoCache: number;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
-    getEntityTypes(metricCategory: string): Selectable[];
+    getEntityTypes(): Selectable[];
     getMetricsCatalog(plugin: Selectable, metricCategory: string): Promise<Selectable[]>;
     fetchTypesForTarget(target: any, timeFilter: TimeFilter): any;
     fetchSnapshotsForTarget(target: any, timeFilter: TimeFilter): Promise<Selectable[]>;

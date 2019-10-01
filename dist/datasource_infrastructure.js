@@ -28,11 +28,13 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
                     this.rollupDurationThresholds = rollups_1.default;
                     this.maximumNumberOfUsefulDataPoints = 800;
+                    this.timeToLiveSnapshotInfoCache = 60 * 60 * 1000;
                     this.showOffline = instanceSettings.jsonData.showOffline;
                     this.snapshotCache = new cache_1.default();
+                    this.snapshotInfoCache = new cache_1.default();
                     this.catalogCache = new cache_1.default();
                 }
-                InstanaInfrastructureDataSource.prototype.getEntityTypes = function (metricCategory) {
+                InstanaInfrastructureDataSource.prototype.getEntityTypes = function () {
                     var entityTypes = this.simpleCache.get('entityTypes');
                     if (entityTypes) {
                         return entityTypes;
@@ -89,11 +91,15 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                     snapshots = this.doRequest(fetchSnapshotContextsUrl).then(function (contextsResponse) {
                         return _this.$q.all(contextsResponse.data.map(function (_a) {
                             var snapshotId = _a.snapshotId, host = _a.host, plugin = _a.plugin;
+                            var snapshotInfo = _this.snapshotInfoCache.get(snapshotId);
+                            if (snapshotInfo) {
+                                return snapshotInfo;
+                            }
                             var fetchSnapshotUrl = ("/api/snapshots/" + snapshotId) +
                                 (_this.showOffline ?
                                     "?from=" + timeFilter.from + "&to=" + timeFilter.to :
                                     "?time=" + timeFilter.to); // @see SnapshotApiResource#getSnapshot
-                            return _this.doRequest(fetchSnapshotUrl, true).then(function (snapshotResponse) {
+                            snapshotInfo = _this.doRequest(fetchSnapshotUrl, true).then(function (snapshotResponse) {
                                 // check for undefined because the fetchSnapshotContexts is buggy
                                 if (snapshotResponse !== undefined) {
                                     return {
@@ -102,6 +108,8 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                                     };
                                 }
                             });
+                            _this.snapshotInfoCache.put(snapshotId, snapshotInfo, _this.timeToLiveSnapshotInfoCache);
+                            return snapshotInfo;
                         }));
                     }).then(function (response) {
                         // undefined items need to be removed, because the fetchSnapshotContexts is buggy in the backend, maybe can be removed in the future
@@ -179,13 +187,18 @@ System.register(['./lists/rollups', './datasource_abstract', './cache', 'lodash'
                     var secondMultiplier = this.getDefaultMetricRollupDuration(timeFilter).rollup / 1000;
                     return lodash_1.default.map(values, function (value) {
                         return {
-                            'value': value.value * secondMultiplier,
+                            'value': value.value ? value.value * secondMultiplier : null,
                             'timestamp': value.timestamp
                         };
                     });
                 };
                 InstanaInfrastructureDataSource.prototype.fetchMetricsForSnapshot = function (snapshotId, timeFilter, rollUp, metric) {
-                    var url = "/api/metrics?metric=" + metric.key + "&from=" + timeFilter.from + "&to=" + timeFilter.to + "&rollup=" + rollUp.rollup + "&snapshotId=" + snapshotId;
+                    var url = ("/api/metrics?metric=" + metric.key)
+                        + ("&from=" + timeFilter.from)
+                        + ("&to=" + timeFilter.to)
+                        + ("&rollup=" + rollUp.rollup)
+                        + "&fillTimeSeries=true"
+                        + ("&snapshotId=" + snapshotId);
                     return this.doRequest(url);
                 };
                 InstanaInfrastructureDataSource.prototype.getDefaultMetricRollupDuration = function (timeFilter, minRollup) {
