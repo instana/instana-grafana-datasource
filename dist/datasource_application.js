@@ -62,6 +62,7 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                         + "&page=" + page
                         + "&pageSize=" + pageSize;
                     return this.doRequest('/api/application-monitoring/applications?' + queryParameters).then(function (response) {
+                        console.log(response.data);
                         results.push(response.data);
                         if (page * pageSize < response.data.totalHits) {
                             page++;

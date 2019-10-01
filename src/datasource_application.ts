@@ -60,6 +60,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       + "&pageSize=" + pageSize;
 
     return this.doRequest('/api/application-monitoring/applications?' + queryParameters).then(response => {
+console.log(response.data);
       results.push(response.data);
       if (page * pageSize < response.data.totalHits) {
         page++;

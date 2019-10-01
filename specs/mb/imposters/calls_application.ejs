@@ -22,6 +22,25 @@
 {
   "predicates": [{
     "equals": {
+      "method": "GET",
+      "path": "/api/application-monitoring/applications"
+    }
+  }],
+  "responses": [{
+    "is": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json;charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+      },
+      "body": "{\"items\": [{\"label\": \"All\", \"id\": \"3paufjUFS5-0QU3Pmj8KwQ\"}, {\"label\": \"AWS instances\", \"id\": \"3paufjUFS5-0QU3Pmj8KwW\"}],\"totalHits\": 2,\"totalRepresentedItemCount\": 2}"
+    }
+  }]
+},
+{
+  "predicates": [{
+    "equals": {
       "method": "POST",
       "path": "/api/application-monitoring/analyze/call-groups"
     }
