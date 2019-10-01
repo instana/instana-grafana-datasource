@@ -61,9 +61,9 @@ The actual screenshots are from "Quick Check" example below. Do not delete old s
 * Note the commit hash of this commit (to extend repo.json in plugin-repository).
 * Tag your version with `git tag -a vx.x.x -m "plugin x.x.x" $commit && git push origin vx.x.x`
 * If you haven't already, `git clone github.com:instana/grafana-plugin-repository.git`
-* `cd grafana-plugin-repository`
+* `cd ../grafana-plugin-repository`
 * If you haven't already, `git remote add grafana git@github.com:grafana/grafana-plugin-repository.git`.
-* `git checkout master && git pull && git fetch grafana && git merge grafana/master --ff`
+* `git checkout master && git fetch && git pull && git fetch grafana && git merge grafana/master --ff`
 * Create a branch for the new release (`instana-datasource-plugin-x.x.x`) and add the new version to `repo.json`.
 * Commit, push and create a PR `Instana datasource plugin x.x.x` at <https://github.com/grafana/grafana-plugin-repository>
 
