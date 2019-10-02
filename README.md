@@ -155,3 +155,9 @@ This new feature can be used to compare two identical queries while one shows th
 This plugin also supports the ability to select different granularity values to provide a even deeper look into metrics.
 
 ![Granularity Support](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/granularity.gif)
+
+#### Aggregation support
+
+Aggregate graphs on query level and choose to show everything or only the aggregated graph.
+
+![Aggregation Support](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/aggregation.gif)
