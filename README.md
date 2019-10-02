@@ -70,7 +70,7 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 A simple version of getting metrics related to one or multiple applications. Once an application and a metric are selected, the graphs will be drawn (see example below).
 
-![application metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application-metrics.gif)
+![application metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application_metrics.gif)
 
 ### Change legend format
 
@@ -89,7 +89,7 @@ If no custom format is provided the default label '_$label ($application) $metri
 
 Allows to show metrics related to a service. Services can either be selected as standalone or in combination with an Application Perspective to show more detailed metric data. The latter is only possible with an Instana version of at least than 1.163.
 
-![service metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/service-metrics.gif)
+![service metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/service_metrics.gif)
 
 ### Change legend format
 
@@ -109,7 +109,7 @@ If no custom format is provided the default label '_$label ($service) $metric_' 
 
 Allows to show metrics related to an endpoint. Endpoint can either be selected as standalone or in combination with an Application Perspective to show more detailed metric data. The latter is only possible with an Instana version of at least than 1.163.
 
-![endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/endpoint-metrics.gif)
+![endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/endpoint_metrics.gif)
 
 ### Change legend format
 
