@@ -52,7 +52,7 @@ If your Dynamic Focus query matches, the returned dataset will include metrics p
 
 ![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/custom-metrics.gif)
 
-#### Change legend format
+### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -66,22 +66,64 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 - $name - a label alternative
 - $index - index in the list
 
-If no custom format is provided the default '_$label (on host $host)_' will be shown.
+#### Application metrics
 
-#### Singlestat visualization
+A simple version of getting metrics related to one or multiple applications. Once an application and a metric are selected, the graphs will be drawn (see example below).
 
-While using the "Singlestat" visualization an additional metric aggregation is selectable.
-For showing a correct SUM metric, configuration on two different places is needed:
-- on metric selection: "SUM" to adjust our mean calculated rollup values
-- on Singlestat configuation: "Total" to tell the panel to aggregate all given values
+![application metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application-metrics.gif)
 
-![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat.png)
+### Change legend format
 
-#### Table visualization
+To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
-While using the "Table" visualization an additional metric aggregation is selectable.
+- $label - the entity label
+- $application - application label
+- $timeShift - corresponding timeShift
+- $metric - the displayed metric
+- $key - metric key with aggregation and rollup
+- $index - index in the list
 
-![table](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/table-visualization.png)
+If no custom format is provided the default label '_$label ($application) $metric_' will be shown.
+
+#### Service metrics
+
+Allows to show metrics related to a service. Services can either be selected as standalone or in combination with an Application Perspective to show more detailed metric data. The latter is only possible with an Instana version of at least than 1.163.
+
+![service metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/service-metrics.gif)
+
+### Change legend format
+
+To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
+
+- $label - the entity label
+- $service - service label
+- $application - application label
+- $timeShift - corresponding timeShift
+- $metric - the displayed metric
+- $key - metric key with aggregation and rollup
+- $index - index in the list
+
+If no custom format is provided the default label '_$label ($service) $metric_' will be shown.
+
+#### Endpoint metrics
+
+Allows to show metrics related to an endpoint. Endpoint can either be selected as standalone or in combination with an Application Perspective to show more detailed metric data. The latter is only possible with an Instana version of at least than 1.163.
+
+![endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/endpoint-metrics.gif)
+
+### Change legend format
+
+To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
+
+- $label - the entity label
+- $endpoint - endpoint label
+- $application - application label
+- $timeShift - corresponding timeShift
+- $metric - the displayed metric
+- $key - metric key with aggregation and rollup
+- $index - index in the list
+
+If no custom format is provided the default label '_$label ($endpoint) $metric_' will be shown.
 
 #### Analyze application calls
 
@@ -99,7 +141,7 @@ If your selection matches, the returned dataset will include metrics providing g
 
 If more then 20 metics are fetched, a warning appears that not all results are shown. Add Filter to narrow down the data.
 
-#### Change legend format
+### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -128,7 +170,7 @@ If your selection matches, the returned dataset will include metrics providing g
 
 A default label '_$label ($website) $metric_' will be shown.
 
-#### Change legend format
+### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -141,6 +183,21 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 - $index - index in the list
 
 If no custom format is provided the default label '_$label ($website) $metric_' will be shown.
+
+#### Singlestat visualization
+
+While using the "Singlestat" visualization an additional metric aggregation is selectable.
+For showing a correct SUM metric, configuration on two different places is needed:
+- on metric selection: "SUM" to adjust our mean calculated rollup values
+- on Singlestat configuation: "Total" to tell the panel to aggregate all given values
+
+![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat.png)
+
+#### Table visualization
+
+While using the "Table" visualization an additional metric aggregation is selectable.
+
+![table](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/table-visualization.png)
 
 #### Use time shift option
 
