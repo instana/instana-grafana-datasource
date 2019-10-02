@@ -107,7 +107,9 @@ If no custom format is provided the default label '_$label ($service) $metric_' 
 
 #### Endpoint metrics
 
-Allows to show metrics related to an endpoint. Endpoint can either be selected as standalone or in combination with an Application Perspective to show more detailed metric data. The latter is only possible with an Instana version of at least than 1.163.
+Allows to show metrics related to an endpoint. Endpoint can either be selected as standalone or in combination with an Application Perspective to show more detailed metric data. Since multiple endpoints can have the same name, the service name is shown in brackets after each endpoint to make the selection more clear.
+
+The latter is only possible with an Instana version of at least than 1.163.
 
 ![endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/endpoint_metrics.gif)
 
