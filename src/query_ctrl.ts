@@ -223,7 +223,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onApplicationChanges(refresh, isAnalyze: boolean) {
     this.datasource.application.getApplications(this.timeFilter).then(
       applications => {
-        this.uniqueEntities = applications;
+        this.uniqueEntities = _.orderBy(applications, [application => application.label.toLowerCase()], ['asc']);
         // if all is not existing, we insert it on top
         if (!_.find(this.uniqueEntities, {'key': null})) {
           this.uniqueEntities.unshift({key: null, label: this.ALL_APPLICATIONS});
@@ -264,7 +264,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onServiceChanges(refresh) {
     this.datasource.service.getServices(this.target, this.timeFilter).then(
       services => {
-        this.uniqueEntities = services;
+        this.uniqueEntities = _.orderBy(services, [service => service.label.toLowerCase()], ['asc']);
         // if all is not existing, we insert it on top
         if (!_.find(this.uniqueEntities, {'key': null})) {
           this.uniqueEntities.unshift({key: null, label: this.ALL_SERVICES});
@@ -290,7 +290,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onEndpointChanges(refresh) {
     this.datasource.endpoint.getEndpoints(this.target, this.timeFilter).then(
       endpoints => {
-        this.uniqueEntities = endpoints;
+        this.uniqueEntities = _.orderBy(endpoints, [endpoint => endpoint.label.toLowerCase()], ['asc']);
         // if all is not existing, we insert it on top
         if (!_.find(this.uniqueEntities, {'key': null})) {
           this.uniqueEntities.unshift({key: null, label: this.ALL_ENDPOINTS});
