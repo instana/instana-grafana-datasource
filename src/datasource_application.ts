@@ -154,7 +154,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     const group = {
       groupbyTag: target.group.key
     };
-    if (target.group.key === "call.http.header" && target.groupbyTagSecondLevelKey) {
+    if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
       group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
     }
 
