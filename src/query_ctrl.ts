@@ -609,12 +609,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onGroupChange() {
-    if (this.target.group && this.isAnalyzeApplication()) {
-      //this.target.showGroupBySecondLevel = this.target.group.key === 'call.http.header';
+    if (this.target.group && (this.isAnalyzeApplication() || this.isAnalyzeWebsite())) {
       this.target.showGroupBySecondLevel = this.target.group.type === 'KEY_VALUE_PAIR';
-    } else if (this.target.group && this.isAnalyzeWebsite()) {
-      this.target.showGroupBySecondLevel = this.target.group.key === 'beacon.meta';
     }
+
     if (!this.target.showGroupBySecondLevel) {
       this.target.groupbyTagSecondLevelKey = null;
     }
