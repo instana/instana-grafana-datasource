@@ -137,7 +137,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     const group = {
       groupbyTag: target.group.key
     };
-    if (target.group.key === "beacon.meta" && target.groupbyTagSecondLevelKey) {
+    if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
       group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
     }
 
