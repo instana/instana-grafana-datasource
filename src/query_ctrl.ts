@@ -12,6 +12,7 @@ import migrate from './migration';
 import _ from 'lodash';
 
 import './css/query_editor.css!';
+import InstanaDatasource from "./datasource";
 
 export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
@@ -37,6 +38,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   serviceEndpointTitle = "";
   timeFilter: TimeFilter;
   customFilters = [];
+  versionIsLoading: boolean;
 
   EMPTY_DROPDOWN_TEXT = ' - ';
   ALL_APPLICATIONS = '-- No Application Filter --';
@@ -61,14 +63,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
   /** @ngInject **/
   constructor($scope, $injector, private templateSrv, private backendSrv, private $q) {
     super($scope, $injector);
-    // target migration for downwards compability
+    // target migration for downwards compatibility
     migrate(this.target);
+    this.loadVersion();
 
     this.target.pluginId = this.panelCtrl.panel.type || this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
 
-    // can we read the options here ??
     const now = Date.now();
     const windowSize = 6 * 60 * 60 * 1000; // 6h
     this.timeFilter = {
@@ -395,10 +397,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
   }
 
-  findMatchingEntityTypes(entityType
-                            :
-                            Selectable
-  ) {
+  findMatchingEntityTypes(entityType: Selectable) {
     // workaround as long the api does not support returning plugins with custom metrics only
     if (this.target.metricCategory === this.BUILT_IN_METRICS ||
       entityType.key === 'statsd' ||
@@ -700,10 +699,23 @@ export class InstanaQueryCtrl extends QueryCtrl {
     return this.isAnalyzeApplication() || this.isAnalyzeWebsite();
   }
 
-  isFilterServicesOrEndpointsByApplicationContext() {
-    if (!this.version) {
-      this.version = this.datasource.getVersion();
+  loadVersion() {
+    if (this.datasource) {
+      this.datasource.getVersion().then(version => {
+        this.version = version;
+      });
     }
-    return this.version >= 1.163;
+  }
+
+  supportsApplicationPerspective() {
+    if (!this.target.entity || !this.target.entity.key) {
+      return false;
+    }
+
+    if (!this.version) {
+      return false;
+    } else {
+      return this.version >= 1.163;
+    }
   }
 }
