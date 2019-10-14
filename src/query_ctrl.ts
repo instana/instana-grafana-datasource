@@ -38,7 +38,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   serviceEndpointTitle = "";
   timeFilter: TimeFilter;
   customFilters = [];
-  versionIsLoading: boolean;
 
   EMPTY_DROPDOWN_TEXT = ' - ';
   ALL_APPLICATIONS = '-- No Application Filter --';
