@@ -11,6 +11,11 @@ export class InstanaConfigCtrl {
 
     // check possibility every time
     this.current.jsonData.canUseProxy = proxy_check();
+
+    if (this.current.jsonData.useProxy === undefined) {
+      this.current.jsonData.useProxy = proxy_check();
+    }
+
     this.detectFeatures();
   }
 
