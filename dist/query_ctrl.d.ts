@@ -90,5 +90,6 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     canShowAggregation(): boolean;
     isPluginThatSupportsAggregation(): boolean;
     isAnalyzeCategory(): boolean;
-    isFilterServicesOrEndpointsByApplicationContext(): boolean;
+    loadVersion(): void;
+    supportsApplicationPerspective(): boolean;
 }

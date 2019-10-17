@@ -60,7 +60,6 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       + "&pageSize=" + pageSize;
 
     return this.doRequest('/api/application-monitoring/applications?' + queryParameters).then(response => {
-console.log(response.data);
       results.push(response.data);
       if (page * pageSize < response.data.totalHits) {
         page++;
@@ -155,7 +154,7 @@ console.log(response.data);
     const group = {
       groupbyTag: target.group.key
     };
-    if (target.group.key === "call.http.header" && target.groupbyTagSecondLevelKey) {
+    if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
       group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
     }
 

@@ -128,7 +128,7 @@ System.register(['./datasource_abstract', './cache', 'lodash', "./util/analyze_u
                     var group = {
                         groupbyTag: target.group.key
                     };
-                    if (target.group.key === "beacon.meta" && target.groupbyTagSecondLevelKey) {
+                    if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
                         group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
                     }
                     var data = {

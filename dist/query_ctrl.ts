@@ -12,6 +12,7 @@ import migrate from './migration';
 import _ from 'lodash';
 
 import './css/query_editor.css!';
+import InstanaDatasource from "./datasource";
 
 export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
@@ -61,14 +62,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
   /** @ngInject **/
   constructor($scope, $injector, private templateSrv, private backendSrv, private $q) {
     super($scope, $injector);
-    // target migration for downwards compability
+    // target migration for downwards compatibility
     migrate(this.target);
+    this.loadVersion();
 
     this.target.pluginId = this.panelCtrl.panel.type || this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
 
-    // can we read the options here ??
     const now = Date.now();
     const windowSize = 6 * 60 * 60 * 1000; // 6h
     this.timeFilter = {
@@ -223,7 +224,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onApplicationChanges(refresh, isAnalyze: boolean) {
     this.datasource.application.getApplications(this.timeFilter).then(
       applications => {
-        this.uniqueEntities = applications;
+        this.uniqueEntities = _.orderBy(applications, [application => application.label.toLowerCase()], ['asc']);
         // if all is not existing, we insert it on top
         if (!_.find(this.uniqueEntities, {'key': null})) {
           this.uniqueEntities.unshift({key: null, label: this.ALL_APPLICATIONS});
@@ -264,7 +265,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onServiceChanges(refresh) {
     this.datasource.service.getServices(this.target, this.timeFilter).then(
       services => {
-        this.uniqueEntities = services;
+        this.uniqueEntities = _.orderBy(services, [service => service.label.toLowerCase()], ['asc']);
         // if all is not existing, we insert it on top
         if (!_.find(this.uniqueEntities, {'key': null})) {
           this.uniqueEntities.unshift({key: null, label: this.ALL_SERVICES});
@@ -290,7 +291,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onEndpointChanges(refresh) {
     this.datasource.endpoint.getEndpoints(this.target, this.timeFilter).then(
       endpoints => {
-        this.uniqueEntities = endpoints;
+        this.uniqueEntities = _.orderBy(endpoints, [endpoint => endpoint.label.toLowerCase()], ['asc']);
         // if all is not existing, we insert it on top
         if (!_.find(this.uniqueEntities, {'key': null})) {
           this.uniqueEntities.unshift({key: null, label: this.ALL_ENDPOINTS});
@@ -395,10 +396,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
   }
 
-  findMatchingEntityTypes(entityType
-                            :
-                            Selectable
-  ) {
+  findMatchingEntityTypes(entityType: Selectable) {
     // workaround as long the api does not support returning plugins with custom metrics only
     if (this.target.metricCategory === this.BUILT_IN_METRICS ||
       entityType.key === 'statsd' ||
@@ -609,11 +607,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onGroupChange() {
-    if (this.target.group && this.isAnalyzeApplication()) {
-      this.target.showGroupBySecondLevel = this.target.group.key === 'call.http.header';
-    } else if (this.target.group && this.isAnalyzeWebsite()) {
-      this.target.showGroupBySecondLevel = this.target.group.key === 'beacon.meta';
+    if (this.target.group && (this.isAnalyzeApplication() || this.isAnalyzeWebsite())) {
+      this.target.showGroupBySecondLevel = this.target.group.type === 'KEY_VALUE_PAIR';
     }
+
     if (!this.target.showGroupBySecondLevel) {
       this.target.groupbyTagSecondLevelKey = null;
     }
@@ -701,10 +698,23 @@ export class InstanaQueryCtrl extends QueryCtrl {
     return this.isAnalyzeApplication() || this.isAnalyzeWebsite();
   }
 
-  isFilterServicesOrEndpointsByApplicationContext() {
-    if (!this.version) {
-      this.version = this.datasource.getVersion();
+  loadVersion() {
+    if (this.datasource) {
+      this.datasource.getVersion().then(version => {
+        this.version = version;
+      });
     }
-    return this.version >= 1.163;
+  }
+
+  supportsApplicationPerspective() {
+    if (!this.target.entity || !this.target.entity.key) {
+      return false;
+    }
+
+    if (!this.version) {
+      return false;
+    } else {
+      return this.version >= 1.163;
+    }
   }
 }

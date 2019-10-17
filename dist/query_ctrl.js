@@ -59,12 +59,12 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.SERVICE_METRICS = '5';
                     this.ENDPOINT_METRICS = '6';
                     this.defaults = {};
-                    // target migration for downwards compability
+                    // target migration for downwards compatibility
                     migration_1.default(this.target);
+                    this.loadVersion();
                     this.target.pluginId = this.panelCtrl.panel.type || this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-                    // can we read the options here ??
                     var now = Date.now();
                     var windowSize = 6 * 60 * 60 * 1000; // 6h
                     this.timeFilter = {
@@ -194,7 +194,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 InstanaQueryCtrl.prototype.onApplicationChanges = function (refresh, isAnalyze) {
                     var _this = this;
                     this.datasource.application.getApplications(this.timeFilter).then(function (applications) {
-                        _this.uniqueEntities = applications;
+                        _this.uniqueEntities = lodash_1.default.orderBy(applications, [function (application) { return application.label.toLowerCase(); }], ['asc']);
                         // if all is not existing, we insert it on top
                         if (!lodash_1.default.find(_this.uniqueEntities, { 'key': null })) {
                             _this.uniqueEntities.unshift({ key: null, label: _this.ALL_APPLICATIONS });
@@ -226,7 +226,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 InstanaQueryCtrl.prototype.onServiceChanges = function (refresh) {
                     var _this = this;
                     this.datasource.service.getServices(this.target, this.timeFilter).then(function (services) {
-                        _this.uniqueEntities = services;
+                        _this.uniqueEntities = lodash_1.default.orderBy(services, [function (service) { return service.label.toLowerCase(); }], ['asc']);
                         // if all is not existing, we insert it on top
                         if (!lodash_1.default.find(_this.uniqueEntities, { 'key': null })) {
                             _this.uniqueEntities.unshift({ key: null, label: _this.ALL_SERVICES });
@@ -245,7 +245,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 InstanaQueryCtrl.prototype.onEndpointChanges = function (refresh) {
                     var _this = this;
                     this.datasource.endpoint.getEndpoints(this.target, this.timeFilter).then(function (endpoints) {
-                        _this.uniqueEntities = endpoints;
+                        _this.uniqueEntities = lodash_1.default.orderBy(endpoints, [function (endpoint) { return endpoint.label.toLowerCase(); }], ['asc']);
                         // if all is not existing, we insert it on top
                         if (!lodash_1.default.find(_this.uniqueEntities, { 'key': null })) {
                             _this.uniqueEntities.unshift({ key: null, label: _this.ALL_ENDPOINTS });
@@ -530,11 +530,8 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onGroupChange = function () {
-                    if (this.target.group && this.isAnalyzeApplication()) {
-                        this.target.showGroupBySecondLevel = this.target.group.key === 'call.http.header';
-                    }
-                    else if (this.target.group && this.isAnalyzeWebsite()) {
-                        this.target.showGroupBySecondLevel = this.target.group.key === 'beacon.meta';
+                    if (this.target.group && (this.isAnalyzeApplication() || this.isAnalyzeWebsite())) {
+                        this.target.showGroupBySecondLevel = this.target.group.type === 'KEY_VALUE_PAIR';
                     }
                     if (!this.target.showGroupBySecondLevel) {
                         this.target.groupbyTagSecondLevelKey = null;
@@ -613,11 +610,24 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 InstanaQueryCtrl.prototype.isAnalyzeCategory = function () {
                     return this.isAnalyzeApplication() || this.isAnalyzeWebsite();
                 };
-                InstanaQueryCtrl.prototype.isFilterServicesOrEndpointsByApplicationContext = function () {
-                    if (!this.version) {
-                        this.version = this.datasource.getVersion();
+                InstanaQueryCtrl.prototype.loadVersion = function () {
+                    var _this = this;
+                    if (this.datasource) {
+                        this.datasource.getVersion().then(function (version) {
+                            _this.version = version;
+                        });
                     }
-                    return this.version >= 1.163;
+                };
+                InstanaQueryCtrl.prototype.supportsApplicationPerspective = function () {
+                    if (!this.target.entity || !this.target.entity.key) {
+                        return false;
+                    }
+                    if (!this.version) {
+                        return false;
+                    }
+                    else {
+                        return this.version >= 1.163;
+                    }
                 };
                 InstanaQueryCtrl.templateUrl = 'partials/query.editor.html';
                 return InstanaQueryCtrl;

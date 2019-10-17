@@ -13,7 +13,9 @@ System.register(['./proxy_check'], function(exports_1) {
                     this.datasourceSrv = datasourceSrv;
                     // check possibility every time
                     this.current.jsonData.canUseProxy = proxy_check_1.default();
-                    this.current.jsonData.useProxy = this.current.jsonData.useProxy || proxy_check_1.default();
+                    if (this.current.jsonData.useProxy === undefined) {
+                        this.current.jsonData.useProxy = proxy_check_1.default();
+                    }
                     this.detectFeatures();
                 }
                 InstanaConfigCtrl.prototype.detectFeatures = function () {

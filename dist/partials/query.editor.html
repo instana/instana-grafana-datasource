@@ -420,7 +420,7 @@
         </div>
         <input id="group-by-second-level-{{ctrl.target.refId}}"
                ng-hide="!ctrl.target.showGroupBySecondLevel"
-               class="gf-form-input width-22"
+               class="gf-form-input min-width-12"
                type="text"
                ng-model='ctrl.target.groupbyTagSecondLevelKey'
                ng-model-options='{ debounce: 500 }'
@@ -606,13 +606,13 @@
         </select>
         <label class="gf-form-label query-keyword width-13 pointer"
                for="in-application-{{ctrl.target.refId}}"
-               ng-show="ctrl.isFilterServicesOrEndpointsByApplicationContext()">
+               ng-show="ctrl.supportsApplicationPerspective()">
           Application Context
           <info-popover position="top center" mode="right-normal">
             <p>This will filter your selected {{ctrl.serviceEndpointTitle}} and show only metrics related to this application perspective.</p>
           </info-popover>
         </label>
-        <select ng-show="ctrl.isFilterServicesOrEndpointsByApplicationContext()",
+        <select ng-show="ctrl.supportsApplicationPerspective()"
                 id="in-application-{{ctrl.target.refId}}"
                 class="gf-form-input ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.selectedApplication"
