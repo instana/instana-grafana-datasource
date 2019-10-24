@@ -127,10 +127,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     };
 
     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
-      if (!target.timeInterval) {
-        target.timeInterval = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
-      }
-      metric['granularity'] = target.timeInterval.value;
+      //TODO
     }
 
 

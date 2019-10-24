@@ -145,10 +145,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     };
 
     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
-      if (!target.timeInterval) {
-        target.timeInterval = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
-      }
-      metric['granularity'] = target.timeInterval.value;
+      //TODO
     }
 
     const group = {
@@ -184,10 +181,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     };
 
     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
-      if (!target.timeInterval) {
-        target.timeInterval = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
-      }
-      metric['granularity'] = target.timeInterval.value;
+      //TODO
     }
 
     const data: ApplicationMetricsBody = {

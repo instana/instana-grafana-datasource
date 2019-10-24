@@ -177,11 +177,11 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return '';
   }
 
-  fetchMetricsForSnapshots(target, snapshots, rollUp, timeFilter: TimeFilter, metric) {
+  fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, metric) {
     return this.$q.all(
       _.map(snapshots, (snapshot, index) => {
         // ...fetch the metric data for every snapshot in the results.
-        return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, rollUp, metric).then(response => {
+        return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, metric).then(response => {
           const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
           var result = {
             'target': this.buildLabel(snapshot.response, snapshot.host, target, index),
@@ -211,12 +211,11 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     });
   }
 
-  fetchMetricsForSnapshot(snapshotId: string, timeFilter: TimeFilter, rollUp, metric) {
+  fetchMetricsForSnapshot(snapshotId: string, timeFilter: TimeFilter, metric) {
     let url =
       `/api/metrics?metric=${metric.key}`
       + `&from=${timeFilter.from}`
       + `&to=${timeFilter.to}`
-      + `&rollup=${rollUp.rollup}`
       + `&fillTimeSeries=true`
       + `&snapshotId=${snapshotId}`;
     return this.doRequest(url);

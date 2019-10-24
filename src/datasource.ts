@@ -57,26 +57,17 @@ export default class InstanaDatasource extends AbstractDatasource {
         }
 
         if (target.metricCategory === this.ANALYZE_WEBSITE_METRICS) {
-          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
           return this.getAnalyzeWebsiteMetrics(target, timeFilter);
         } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
-          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
           return this.getAnalyzeApplicationMetrics(target, timeFilter);
         } else if (target.metricCategory === this.APPLICATION_METRICS) {
-          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
           return this.getApplicationMetrics(target, timeFilter);
         } else if (target.metricCategory === this.SERVICE_METRICS) {
-          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
           return this.getServiceMetrics(target, timeFilter);
         } else if (target.metricCategory === this.ENDPOINT_METRICS) {
-          target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
           return this.getEndpointMetrics(target, timeFilter);
         } else {
-          target.availableTimeIntervals = this.infrastructure.getPossibleRollups(timeFilter);
-          if (!target.timeInterval) {
-            target.timeInterval = this.infrastructure.getDefaultMetricRollupDuration(timeFilter);
-          }
-          return this.getInfrastructureMetrics(target, target.timeInterval, timeFilter);
+          return this.getInfrastructureMetrics(target, timeFilter);
         }
       })
     ).then(results => {
@@ -219,7 +210,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     };
   }
 
-  getInfrastructureMetrics(target, rollUp, timeFilter: TimeFilter) {
+  getInfrastructureMetrics(target, timeFilter: TimeFilter) {
     // do not try to retrieve data without selected metric
     if (!target.metric && !target.showAllMetrics) {
       return this.$q.resolve({data: []});
@@ -230,7 +221,7 @@ export default class InstanaDatasource extends AbstractDatasource {
       if (target.showAllMetrics) {
         const resultPromises = [];
         _.forEach(target.allMetrics, metric => {
-          resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, rollUp, timeFilter, metric));
+          resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
         });
 
         return Promise.all(resultPromises).then(allResults => {
@@ -239,7 +230,7 @@ export default class InstanaDatasource extends AbstractDatasource {
           return allMetrics;
         });
       } else {
-        return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, rollUp, timeFilter, target.metric);
+        return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
       }
     });
   }

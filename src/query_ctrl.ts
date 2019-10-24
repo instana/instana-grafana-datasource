@@ -96,8 +96,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
                 this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
               }
             });
-
-            this.target.timeInterval = this.datasource.infrastructure.getDefaultMetricRollupDuration(this.timeFilter);
           }
         });
       }
@@ -548,7 +546,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.group = null;
     this.target.showGroupBySecondLevel = null;
     this.target.groupbyTagSecondLevelKey = null;
-    this.target.timeInterval = null;
     this.target.aggregateGraphs = false;
     this.target.aggregationFunction = null;
     this.target.filters = [];
@@ -562,7 +559,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   resetMetricSelection() {
     this.target.metric = null;
     this.target.filter = null;
-    this.target.timeInterval = null;
     this.target.timeShift = null;
     this.target.showWarningCantShowAllResults = false;
     this.target.showAllMetrics = false;
