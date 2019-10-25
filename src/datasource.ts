@@ -1,17 +1,16 @@
+import {setGranularityValues, setRollUpValues} from "./util/rollup_granularity_util";
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
+import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
 import InstanaApplicationDataSource from './datasource_application';
+import InstanaEndpointDataSource from "./datasource_endpoint";
+import InstanaServiceDataSource from "./datasource_service";
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
-import InstanaServiceDataSource from "./datasource_service";
-import InstanaEndpointDataSource from "./datasource_endpoint";
+import {readItemMetrics} from "./util/analyze_util";
 import TimeFilter from './types/time_filter';
 import migrate from './migration';
 
 import _ from 'lodash';
-import {readItemMetrics} from "./util/analyze_util";
-import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
-import {setGranularityValues, setRollUpValues} from "./util/rollup_granularity_util";
-
 
 export default class InstanaDatasource extends AbstractDatasource {
   infrastructure: InstanaInfrastructureDataSource;
@@ -226,7 +225,7 @@ export default class InstanaDatasource extends AbstractDatasource {
       if (target.showAllMetrics) {
         const resultPromises = [];
         _.forEach(target.allMetrics, metric => {
-          resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.timeInterval.key, metric));
+          resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
         });
 
         return Promise.all(resultPromises).then(allResults => {
@@ -235,7 +234,7 @@ export default class InstanaDatasource extends AbstractDatasource {
           return allMetrics;
         });
       } else {
-        return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.timeInterval.key, target.metric);
+        return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
       }
     });
   }

@@ -1,10 +1,11 @@
+import {getDefaultChartGranularity} from "./util/rollup_granularity_util";
+import InstanaServiceDataSource from "./datasource_service";
 import AbstractDatasource from "./datasource_abstract";
 import Selectable from "./types/selectable";
 import Cache from './cache';
 import TimeFilter from "./types/time_filter";
+
 import _ from "lodash";
-import InstanaServiceDataSource from "./datasource_service";
-import {getDefaultChartGranularity} from "./util/rollup_granularity_util";
 
 export default class InstanaEndpointDataSource extends AbstractDatasource {
   endpointsCache: Cache<Promise<Array<Selectable>>>;

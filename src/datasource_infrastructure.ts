@@ -1,10 +1,10 @@
+import {getDefaultMetricRollupDuration} from "./util/rollup_granularity_util";
 import AbstractDatasource from './datasource_abstract';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import Cache from './cache';
 
 import _ from 'lodash';
-import {getDefaultMetricRollupDuration} from "./util/rollup_granularity_util";
 
 export default class InstanaInfrastructureDataSource extends AbstractDatasource {
   snapshotCache: Cache<Promise<Array<Selectable>>>;
@@ -172,11 +172,11 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return '';
   }
 
-  fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, rollup: number, metric) {
+  fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, metric) {
     return this.$q.all(
       _.map(snapshots, (snapshot, index) => {
         // ...fetch the metric data for every snapshot in the results.
-        return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, rollup, metric).then(response => {
+        return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then(response => {
           const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
           var result = {
             'target': this.buildLabel(snapshot.response, snapshot.host, target, index),
