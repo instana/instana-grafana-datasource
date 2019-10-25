@@ -20,7 +20,7 @@ export default [
     label: '5min'
   },
   {
-    availableFor: Number.MAX_VALUE, // forever
+    availableFor: 1000 * 60 * 60 * 24 * 31 * 12, // 1 year aka forever
     rollup: 1000 * 60 * 60, // 1h
     label: '1h'
   }
