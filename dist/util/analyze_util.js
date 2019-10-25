@@ -1,5 +1,5 @@
-System.register(["lodash", "../lists/granularities"], function(exports_1) {
-    var lodash_1, granularities_1;
+System.register(["lodash"], function(exports_1) {
+    var lodash_1;
     var MAX_ALLOWED_DATA_POINTS;
     function createTagFilter(filter) {
         var tagFilter = {
@@ -18,17 +18,6 @@ System.register(["lodash", "../lists/granularities"], function(exports_1) {
         return tagFilter;
     }
     exports_1("createTagFilter", createTagFilter);
-    function getChartGranularity(windowSize, maximumNumberOfUsefulDataPoints) {
-        var granularity = granularities_1.default.find(function (granularity) { return windowSize / 1000 / granularity.value <= maximumNumberOfUsefulDataPoints; });
-        return granularity || granularities_1.default[granularities_1.default.length - 1];
-    }
-    exports_1("getChartGranularity", getChartGranularity);
-    function getPossibleGranularities(windowSize) {
-        var possibleGranularities = granularities_1.default.filter(function (granularity) { return windowSize / 1000 / granularity.value <= MAX_ALLOWED_DATA_POINTS &&
-            granularity.value * 1000 <= windowSize; });
-        return possibleGranularities || [granularities_1.default[granularities_1.default.length - 1]];
-    }
-    exports_1("getPossibleGranularities", getPossibleGranularities);
     function readItemMetrics(target, response, getLabel) {
         // as we map two times we need to flatten the result
         return lodash_1.default.flatten(response.data.items.map(function (item, index) {
@@ -46,9 +35,6 @@ System.register(["lodash", "../lists/granularities"], function(exports_1) {
         setters:[
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
-            },
-            function (granularities_1_1) {
-                granularities_1 = granularities_1_1;
             }],
         execute: function() {
             MAX_ALLOWED_DATA_POINTS = 1000;

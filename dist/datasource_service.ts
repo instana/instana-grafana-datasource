@@ -1,8 +1,9 @@
+import {getDefaultChartGranularity} from "./util/rollup_granularity_util";
 import AbstractDatasource from "./datasource_abstract";
+import TimeFilter from "./types/time_filter";
 import Selectable from "./types/selectable";
 import Cache from './cache';
-import TimeFilter from "./types/time_filter";
-import {getChartGranularity} from "./util/analyze_util";
+
 import _ from "lodash";
 
 export default class InstanaServiceDataSource extends AbstractDatasource {
@@ -116,9 +117,9 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
 
     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
       if (!target.timeInterval) {
-        target.timeInterval = getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+        target.timeInterval = getDefaultChartGranularity(windowSize);
       }
-      metric['granularity'] = target.timeInterval.value;
+      metric['granularity'] = target.timeInterval.key;
     }
 
     const data = {

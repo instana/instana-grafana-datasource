@@ -24,7 +24,7 @@ System.register([], function(exports_1) {
                     label: '5min'
                 },
                 {
-                    availableFor: Number.MAX_VALUE,
+                    availableFor: 1000 * 60 * 60 * 24 * 31 * 12,
                     rollup: 1000 * 60 * 60,
                     label: '1h'
                 }

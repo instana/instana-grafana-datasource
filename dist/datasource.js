@@ -1,18 +1,30 @@
-System.register(['./datasource_infrastructure', './datasource_application', './datasource_website', './datasource_abstract', "./datasource_service", "./datasource_endpoint", './migration', 'lodash', "./util/analyze_util", "./util/aggregation_util"], function(exports_1) {
+System.register(["./util/rollup_granularity_util", './datasource_infrastructure', "./util/aggregation_util", './datasource_application', "./datasource_endpoint", "./datasource_service", './datasource_website', './datasource_abstract', "./util/analyze_util", './migration', 'lodash'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var datasource_infrastructure_1, datasource_application_1, datasource_website_1, datasource_abstract_1, datasource_service_1, datasource_endpoint_1, migration_1, lodash_1, analyze_util_1, aggregation_util_1;
+    var rollup_granularity_util_1, datasource_infrastructure_1, aggregation_util_1, datasource_application_1, datasource_endpoint_1, datasource_service_1, datasource_website_1, datasource_abstract_1, analyze_util_1, migration_1, lodash_1;
     var InstanaDatasource;
     return {
         setters:[
+            function (rollup_granularity_util_1_1) {
+                rollup_granularity_util_1 = rollup_granularity_util_1_1;
+            },
             function (datasource_infrastructure_1_1) {
                 datasource_infrastructure_1 = datasource_infrastructure_1_1;
             },
+            function (aggregation_util_1_1) {
+                aggregation_util_1 = aggregation_util_1_1;
+            },
             function (datasource_application_1_1) {
                 datasource_application_1 = datasource_application_1_1;
+            },
+            function (datasource_endpoint_1_1) {
+                datasource_endpoint_1 = datasource_endpoint_1_1;
+            },
+            function (datasource_service_1_1) {
+                datasource_service_1 = datasource_service_1_1;
             },
             function (datasource_website_1_1) {
                 datasource_website_1 = datasource_website_1_1;
@@ -20,23 +32,14 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
             function (datasource_abstract_1_1) {
                 datasource_abstract_1 = datasource_abstract_1_1;
             },
-            function (datasource_service_1_1) {
-                datasource_service_1 = datasource_service_1_1;
-            },
-            function (datasource_endpoint_1_1) {
-                datasource_endpoint_1 = datasource_endpoint_1_1;
+            function (analyze_util_1_1) {
+                analyze_util_1 = analyze_util_1_1;
             },
             function (migration_1_1) {
                 migration_1 = migration_1_1;
             },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
-            },
-            function (analyze_util_1_1) {
-                analyze_util_1 = analyze_util_1_1;
-            },
-            function (aggregation_util_1_1) {
-                aggregation_util_1 = aggregation_util_1_1;
             }],
         execute: function() {
             InstanaDatasource = (function (_super) {
@@ -72,32 +75,27 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                         else {
                             target.timeShiftIsValid = false;
                         }
-                        if (target.metricCategory === _this.ANALYZE_WEBSITE_METRICS) {
-                            target.availableTimeIntervals = analyze_util_1.getPossibleGranularities(timeFilter.windowSize);
-                            return _this.getAnalyzeWebsiteMetrics(target, timeFilter);
+                        if (target.metricCategory === _this.BUILT_IN_METRICS || target.metricCategory === _this.CUSTOM_METRICS) {
+                            rollup_granularity_util_1.setRollUpValues(target, timeFilter);
+                            return _this.getInfrastructureMetrics(target, timeFilter);
                         }
-                        else if (target.metricCategory === _this.ANALYZE_APPLICATION_METRICS) {
-                            target.availableTimeIntervals = analyze_util_1.getPossibleGranularities(timeFilter.windowSize);
-                            return _this.getAnalyzeApplicationMetrics(target, timeFilter);
-                        }
-                        else if (target.metricCategory === _this.APPLICATION_METRICS) {
-                            target.availableTimeIntervals = analyze_util_1.getPossibleGranularities(timeFilter.windowSize);
-                            return _this.getApplicationMetrics(target, timeFilter);
-                        }
-                        else if (target.metricCategory === _this.SERVICE_METRICS) {
-                            target.availableTimeIntervals = analyze_util_1.getPossibleGranularities(timeFilter.windowSize);
-                            return _this.getServiceMetrics(target, timeFilter);
-                        }
-                        else if (target.metricCategory === _this.ENDPOINT_METRICS) {
-                            target.availableTimeIntervals = analyze_util_1.getPossibleGranularities(timeFilter.windowSize);
-                            return _this.getEndpointMetrics(target, timeFilter);
-                        }
-                        else {
-                            target.availableTimeIntervals = _this.infrastructure.getPossibleRollups(timeFilter);
-                            if (!target.timeInterval) {
-                                target.timeInterval = _this.infrastructure.getDefaultMetricRollupDuration(timeFilter);
+                        else if (target.metricCategory) {
+                            rollup_granularity_util_1.setGranularityValues(target, timeFilter);
+                            if (target.metricCategory === _this.ANALYZE_WEBSITE_METRICS) {
+                                return _this.getAnalyzeWebsiteMetrics(target, timeFilter);
                             }
-                            return _this.getInfrastructureMetrics(target, target.timeInterval, timeFilter);
+                            else if (target.metricCategory === _this.ANALYZE_APPLICATION_METRICS) {
+                                return _this.getAnalyzeApplicationMetrics(target, timeFilter);
+                            }
+                            else if (target.metricCategory === _this.APPLICATION_METRICS) {
+                                return _this.getApplicationMetrics(target, timeFilter);
+                            }
+                            else if (target.metricCategory === _this.SERVICE_METRICS) {
+                                return _this.getServiceMetrics(target, timeFilter);
+                            }
+                            else if (target.metricCategory === _this.ENDPOINT_METRICS) {
+                                return _this.getEndpointMetrics(target, timeFilter);
+                            }
                         }
                     })).then(function (results) {
                         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
@@ -224,7 +222,7 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                         windowSize: to - from
                     };
                 };
-                InstanaDatasource.prototype.getInfrastructureMetrics = function (target, rollUp, timeFilter) {
+                InstanaDatasource.prototype.getInfrastructureMetrics = function (target, timeFilter) {
                     var _this = this;
                     // do not try to retrieve data without selected metric
                     if (!target.metric && !target.showAllMetrics) {
@@ -235,7 +233,7 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                         if (target.showAllMetrics) {
                             var resultPromises = [];
                             lodash_1.default.forEach(target.allMetrics, function (metric) {
-                                resultPromises.push(_this.infrastructure.fetchMetricsForSnapshots(target, snapshots, rollUp, timeFilter, metric));
+                                resultPromises.push(_this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
                             });
                             return Promise.all(resultPromises).then(function (allResults) {
                                 var allMetrics = [];
@@ -244,7 +242,7 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                             });
                         }
                         else {
-                            return _this.infrastructure.fetchMetricsForSnapshots(target, snapshots, rollUp, timeFilter, target.metric);
+                            return _this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
                         }
                     });
                 };

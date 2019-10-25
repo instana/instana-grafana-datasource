@@ -23,23 +23,6 @@ export function createTagFilter(filter: TagFilter) {
   return tagFilter;
 }
 
-export function getChartGranularity(windowSize: number,
-                                    maximumNumberOfUsefulDataPoints: number): Granularity {
-  const granularity = granularities.find(
-    granularity => windowSize / 1000 / granularity.value <= maximumNumberOfUsefulDataPoints
-  );
-  return granularity || granularities[granularities.length - 1];
-}
-
-export function getPossibleGranularities(windowSize: number): Granularity[] {
-  const possibleGranularities = granularities.filter(
-    granularity => windowSize / 1000 / granularity.value <= MAX_ALLOWED_DATA_POINTS &&
-      granularity.value * 1000 <= windowSize
-  );
-
-  return possibleGranularities || [granularities[granularities.length - 1]];
-}
-
 export function readItemMetrics(target, response, getLabel) {
   // as we map two times we need to flatten the result
   return _.flatten(response.data.items.map((item, index) => {

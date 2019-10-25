@@ -216,13 +216,12 @@
           </info-popover>
         </label>
         <div class="gf-form-select-wrapper min-width-8 gf-form-select-wrapper--has-help-icon">
-          <!--ng-show="(ctrl.target.metric || ctrl.target.showAllMetrics) && ctrl.isNotSingleStatOrGauge()"-->
           <select id="in-timeInterval-{{ctrl.target.refId}}"
-                  ng-disabled="ctrl.target.availableTimeIntervals.length <= 1 || (!ctrl.target.metric && (!ctrl.target.canShowAllMetrics || !ctrl.target.showAllMetrics))"
+                  ng-disabled="ctrl.target.availableTimeIntervals.length <= 1"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.timeInterval"
                   ng-change="ctrl.onChange()"
-                  ng-options="f.label for f in ctrl.target.availableTimeIntervals track by f.label">
+                  ng-options="f as f.label for f in ctrl.target.availableTimeIntervals track by f.key">
           </select>
         </div>
       </label>

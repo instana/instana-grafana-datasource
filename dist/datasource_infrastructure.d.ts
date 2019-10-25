@@ -1,16 +1,12 @@
 import AbstractDatasource from './datasource_abstract';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
-import Rollup from './types/rollup';
 import Cache from './cache';
 export default class InstanaInfrastructureDataSource extends AbstractDatasource {
-    rollupDurationThresholds: Array<Rollup>;
     snapshotCache: Cache<Promise<Array<Selectable>>>;
     snapshotInfoCache: Cache<Promise<Array<Selectable>>>;
     catalogCache: Cache<Promise<Array<Selectable>>>;
-    lastFetchedFromAPI: boolean;
     showOffline: boolean;
-    maximumNumberOfUsefulDataPoints: number;
     timeToLiveSnapshotInfoCache: number;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
@@ -23,10 +19,8 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     buildSnapshotCacheKey(query: string, timeFilter: TimeFilter): string;
     buildLabel(snapshotResponse: any, host: any, target: any, index: any): string;
     getHostSuffix(host: string): string;
-    fetchMetricsForSnapshots(target: any, snapshots: any, rollUp: any, timeFilter: TimeFilter, metric: any): any;
+    fetchMetricsForSnapshots(target: any, snapshots: any, timeFilter: TimeFilter, metric: any): any;
     readTimeSeries(values: any, aggregation: string, pluginId: string, timeFilter: TimeFilter): any;
     correctMeanToSum(values: any, timeFilter: TimeFilter): any;
-    fetchMetricsForSnapshot(snapshotId: string, timeFilter: TimeFilter, rollUp: any, metric: any): any;
-    getDefaultMetricRollupDuration(timeFilter: TimeFilter, minRollup?: number): Rollup;
-    getPossibleRollups(timeFilter: TimeFilter): Rollup[];
+    fetchMetricsForSnapshot(snapshotId: string, timeFilter: TimeFilter, rollup: number, metric: any): any;
 }

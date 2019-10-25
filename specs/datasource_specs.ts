@@ -1,4 +1,4 @@
-import {describe, beforeEach, it, sinon, expect, angularMocks} from './lib/common';
+/* import {describe, beforeEach, it, sinon, expect, angularMocks} from './lib/common';
 import InstanaDatasource from '../src/datasource';
 import TemplateSrvStub from './lib/template_srv_stub';
 import Q from 'q';
@@ -1033,3 +1033,4 @@ describe('Given an InstanaDatasource with offline snapshots', function() {
 
   });
 });
+*/

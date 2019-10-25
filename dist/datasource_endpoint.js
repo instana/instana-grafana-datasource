@@ -1,21 +1,21 @@
-System.register(["./datasource_abstract", './cache', "./util/analyze_util", "lodash"], function(exports_1) {
+System.register(["./util/rollup_granularity_util", "./datasource_abstract", './cache', "lodash"], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var datasource_abstract_1, cache_1, analyze_util_1, lodash_1;
+    var rollup_granularity_util_1, datasource_abstract_1, cache_1, lodash_1;
     var InstanaEndpointDataSource;
     return {
         setters:[
+            function (rollup_granularity_util_1_1) {
+                rollup_granularity_util_1 = rollup_granularity_util_1_1;
+            },
             function (datasource_abstract_1_1) {
                 datasource_abstract_1 = datasource_abstract_1_1;
             },
             function (cache_1_1) {
                 cache_1 = cache_1_1;
-            },
-            function (analyze_util_1_1) {
-                analyze_util_1 = analyze_util_1_1;
             },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
@@ -119,9 +119,9 @@ System.register(["./datasource_abstract", './cache', "./util/analyze_util", "lod
                     };
                     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") {
                         if (!target.timeInterval) {
-                            target.timeInterval = analyze_util_1.getChartGranularity(windowSize, this.maximumNumberOfUsefulDataPoints);
+                            target.timeInterval = rollup_granularity_util_1.getDefaultChartGranularity(windowSize);
                         }
-                        metric['granularity'] = target.timeInterval.value;
+                        metric['granularity'] = target.timeInterval.key;
                     }
                     var data = {
                         timeFrame: {

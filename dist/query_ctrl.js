@@ -1,24 +1,27 @@
-System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators', './lists/aggregation_function', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/aggregation_function', './lists/beacon_types', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, beacon_types_1, operators_1, aggregation_function_1, migration_1, lodash_1;
+    var sdk_1, rollup_granularity_util_1, aggregation_function_1, beacon_types_1, operators_1, migration_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
             function (sdk_1_1) {
                 sdk_1 = sdk_1_1;
             },
+            function (rollup_granularity_util_1_1) {
+                rollup_granularity_util_1 = rollup_granularity_util_1_1;
+            },
+            function (aggregation_function_1_1) {
+                aggregation_function_1 = aggregation_function_1_1;
+            },
             function (beacon_types_1_1) {
                 beacon_types_1 = beacon_types_1_1;
             },
             function (operators_1_1) {
                 operators_1 = operators_1_1;
-            },
-            function (aggregation_function_1_1) {
-                aggregation_function_1 = aggregation_function_1_1;
             },
             function (migration_1_1) {
                 migration_1 = migration_1_1;
@@ -80,6 +83,7 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.previousMetricCategory = this.target.metricCategory;
                     // infrastructure (built-in & custom)
                     if (this.isInfrastructure()) {
+                        rollup_granularity_util_1.setRollUpValues(this.target, this.timeFilter);
                         if (this.target.entityQuery) {
                             this.onFilterChange(false).then(function () {
                                 // infrastructure metrics support available metrics on a selected entity type
@@ -89,10 +93,12 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                                             _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                                         }
                                     });
-                                    _this.target.timeInterval = _this.datasource.infrastructure.getDefaultMetricRollupDuration(_this.timeFilter);
                                 }
                             });
                         }
+                    }
+                    else {
+                        rollup_granularity_util_1.setGranularityValues(this.target, this.timeFilter);
                     }
                     // analyze applications
                     if (this.isAnalyzeApplication()) {
@@ -286,29 +292,33 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                         this.selectionReset();
                         // fresh internal used lists without re-rendering
                         if (this.isInfrastructure()) {
+                            rollup_granularity_util_1.setRollUpValues(this.target, this.timeFilter);
                             this.onFilterChange(false);
                         }
-                        else if (this.isAnalyzeApplication()) {
-                            this.websiteApplicationLabel = "Application";
-                            this.onApplicationChanges(false, true);
-                        }
-                        else if (this.isAnalyzeWebsite()) {
-                            this.websiteApplicationLabel = "Website";
-                            this.onWebsiteChanges(false, true);
-                        }
-                        else if (this.isApplicationMetric()) {
-                            this.websiteApplicationLabel = "Application";
-                            this.onApplicationChanges(false, false);
-                        }
-                        else if (this.isServiceMetric()) {
-                            this.serviceEndpointTitle = "Service";
-                            this.onFilterChange(false);
-                            this.onServiceChanges(false);
-                        }
-                        else if (this.isEndpointMetric()) {
-                            this.serviceEndpointTitle = "Endpoint";
-                            this.onFilterChange(false);
-                            this.onEndpointChanges(false);
+                        else {
+                            rollup_granularity_util_1.setGranularityValues(this.target, this.timeFilter);
+                            if (this.isAnalyzeApplication()) {
+                                this.websiteApplicationLabel = "Application";
+                                this.onApplicationChanges(false, true);
+                            }
+                            else if (this.isAnalyzeWebsite()) {
+                                this.websiteApplicationLabel = "Website";
+                                this.onWebsiteChanges(false, true);
+                            }
+                            else if (this.isApplicationMetric()) {
+                                this.websiteApplicationLabel = "Application";
+                                this.onApplicationChanges(false, false);
+                            }
+                            else if (this.isServiceMetric()) {
+                                this.serviceEndpointTitle = "Service";
+                                this.onFilterChange(false);
+                                this.onServiceChanges(false);
+                            }
+                            else if (this.isEndpointMetric()) {
+                                this.serviceEndpointTitle = "Endpoint";
+                                this.onFilterChange(false);
+                                this.onEndpointChanges(false);
+                            }
                         }
                     }
                     this.previousMetricCategory = this.target.metricCategory;
@@ -460,6 +470,8 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.availableMetrics = [];
                     this.uniqueEntities = [];
                     this.uniqueTags = [];
+                    this.target.availableTimeIntervals = [];
+                    this.target.timeInterval = null;
                     this.target.timeShift = null; // do we want to reset this ?
                     this.resetEntityTypeSelection();
                     this.resetEntitySelection();
@@ -475,7 +487,6 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                     this.target.group = null;
                     this.target.showGroupBySecondLevel = null;
                     this.target.groupbyTagSecondLevelKey = null;
-                    this.target.timeInterval = null;
                     this.target.aggregateGraphs = false;
                     this.target.aggregationFunction = null;
                     this.target.filters = [];
@@ -488,7 +499,6 @@ System.register(['app/plugins/sdk', './lists/beacon_types', './lists/operators',
                 InstanaQueryCtrl.prototype.resetMetricSelection = function () {
                     this.target.metric = null;
                     this.target.filter = null;
-                    this.target.timeInterval = null;
                     this.target.timeShift = null;
                     this.target.showWarningCantShowAllResults = false;
                     this.target.showAllMetrics = false;

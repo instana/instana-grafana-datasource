@@ -1,9 +1,9 @@
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import InstanaApplicationDataSource from './datasource_application';
+import InstanaEndpointDataSource from "./datasource_endpoint";
+import InstanaServiceDataSource from "./datasource_service";
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
-import InstanaServiceDataSource from "./datasource_service";
-import InstanaEndpointDataSource from "./datasource_endpoint";
 import TimeFilter from './types/time_filter';
 export default class InstanaDatasource extends AbstractDatasource {
     infrastructure: InstanaInfrastructureDataSource;
@@ -32,7 +32,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     parseTimeShift(timeShift: string): number;
     applyTimeShiftOnTimeFilter(timeFilter: TimeFilter, timeShift: number): TimeFilter;
     readTime(options: any): TimeFilter;
-    getInfrastructureMetrics(target: any, rollUp: any, timeFilter: TimeFilter): any;
+    getInfrastructureMetrics(target: any, timeFilter: TimeFilter): any;
     getAnalyzeWebsiteMetrics(target: any, timeFilter: TimeFilter): any;
     getAnalyzeApplicationMetrics(target: any, timeFilter: TimeFilter): any;
     getApplicationMetrics(target: any, timeFilter: TimeFilter): any;
