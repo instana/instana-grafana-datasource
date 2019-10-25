@@ -1,12 +1,12 @@
+import {getDefaultChartGranularity} from "./util/rollup_granularity_util";
 import BeaconGroupBody from './types/beacon_group_body';
 import AbstractDatasource from './datasource_abstract';
+import {createTagFilter} from "./util/analyze_util";
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import Cache from './cache';
 
 import _ from 'lodash';
-import {createTagFilter} from "./util/analyze_util";
-import {getDefaultChartGranularity} from "./util/rollup_granularity_util";
 
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
   websitesCache: Cache<Promise<Array<Selectable>>>;

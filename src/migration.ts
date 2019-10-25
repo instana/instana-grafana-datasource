@@ -15,7 +15,7 @@ export default function (target) {
 
   // 2.4.2 towards 2.4.3
   if (target.timeInterval) {
-    if target.timeInterval.value) {
+    if (target.timeInterval.value) {
       target.timeInterval = {key: target.timeInterval.value, label: target.timeInterval.label};
     } else if (target.timeInterval.rollup) {
       target.timeInterval = {key: target.timeInterval.rollup, label: target.timeInterval.label};

@@ -1,13 +1,13 @@
+import {getDefaultChartGranularity, getPossibleGranularities} from "./util/rollup_granularity_util";
+import ApplicationMetricsBody from "./types/application_metrics_body";
 import AbstractDatasource from './datasource_abstract';
+import {createTagFilter} from "./util/analyze_util";
 import CallGroupBody from './types/call_group_body';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import Cache from './cache';
 
 import _ from 'lodash';
-import ApplicationMetricsBody from "./types/application_metrics_body";
-import {createTagFilter} from "./util/analyze_util";
-import {getDefaultChartGranularity, getPossibleGranularities} from "./util/rollup_granularity_util";
 
 export default class InstanaApplicationDataSource extends AbstractDatasource {
   applicationsCache: Cache<Promise<Array<Selectable>>>;
