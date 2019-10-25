@@ -1,18 +1,18 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import {QueryCtrl} from 'app/plugins/sdk';
 
+import aggregation_functions from './lists/aggregation_function';
 import beaconTypes from './lists/beacon_types';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import TagFilter from './types/tag_filter';
 import operators from './lists/operators';
-import aggregation_functions from './lists/aggregation_function';
 import migrate from './migration';
 
 import _ from 'lodash';
 
 import './css/query_editor.css!';
-import InstanaDatasource from "./datasource";
+import {setGranularityValues, setRollUpValues} from "./util/rollup_granularity_util";
 
 export class InstanaQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
@@ -87,6 +87,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // infrastructure (built-in & custom)
     if (this.isInfrastructure()) {
+      setRollUpValues(this.target, this.timeFilter);
+
       if (this.target.entityQuery) {
         this.onFilterChange(false).then(() => {
           // infrastructure metrics support available metrics on a selected entity type
@@ -99,6 +101,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
           }
         });
       }
+    } else {
+      setGranularityValues(this.target, this.timeFilter);
     }
 
     // analyze applications
@@ -339,24 +343,29 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.selectionReset();
       // fresh internal used lists without re-rendering
       if (this.isInfrastructure()) {
+        setRollUpValues(this.target, this.timeFilter);
         this.onFilterChange(false);
-      } else if (this.isAnalyzeApplication()) {
-        this.websiteApplicationLabel = "Application";
-        this.onApplicationChanges(false, true);
-      } else if (this.isAnalyzeWebsite()) {
-        this.websiteApplicationLabel = "Website";
-        this.onWebsiteChanges(false, true);
-      } else if (this.isApplicationMetric()) {
-        this.websiteApplicationLabel = "Application";
-        this.onApplicationChanges(false, false);
-      } else if (this.isServiceMetric()) {
-        this.serviceEndpointTitle = "Service";
-        this.onFilterChange(false);
-        this.onServiceChanges(false);
-      } else if (this.isEndpointMetric()) {
-        this.serviceEndpointTitle = "Endpoint";
-        this.onFilterChange(false);
-        this.onEndpointChanges(false);
+      } else {
+        setGranularityValues(this.target, this.timeFilter);
+
+        if (this.isAnalyzeApplication()) {
+          this.websiteApplicationLabel = "Application";
+          this.onApplicationChanges(false, true);
+        } else if (this.isAnalyzeWebsite()) {
+          this.websiteApplicationLabel = "Website";
+          this.onWebsiteChanges(false, true);
+        } else if (this.isApplicationMetric()) {
+          this.websiteApplicationLabel = "Application";
+          this.onApplicationChanges(false, false);
+        } else if (this.isServiceMetric()) {
+          this.serviceEndpointTitle = "Service";
+          this.onFilterChange(false);
+          this.onServiceChanges(false);
+        } else if (this.isEndpointMetric()) {
+          this.serviceEndpointTitle = "Endpoint";
+          this.onFilterChange(false);
+          this.onEndpointChanges(false);
+        }
       }
     }
     this.previousMetricCategory = this.target.metricCategory;
@@ -368,7 +377,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.adjustMetricSelectionPlaceholder();
   }
 
-  filterForEntityType(refresh: boolean) {
+  filterForEntityType(refresh
+                        :
+                        boolean
+  ) {
     this.filterEntityTypes().then(() => {
       this.adjustEntitySelectionPlaceholder();
 
@@ -394,7 +406,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
   }
 
-  findMatchingEntityTypes(entityType: Selectable) {
+  findMatchingEntityTypes(entityType
+                            :
+                            Selectable
+  ) {
     // workaround as long the api does not support returning plugins with custom metrics only
     if (this.target.metricCategory === this.BUILT_IN_METRICS ||
       entityType.key === 'statsd' ||
@@ -405,7 +420,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
   }
 
-  onEntityTypeSelect(refresh: boolean) {
+  onEntityTypeSelect(refresh
+                       :
+                       boolean
+  ) {
     return this.datasource.infrastructure.getMetricsCatalog(this.target.entityType, this.target.metricCategory).then(
       metrics => {
         this.availableMetrics =
@@ -425,7 +443,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
   }
 
-  onMetricsFilter(refresh: boolean) {
+  onMetricsFilter(refresh
+                    :
+                    boolean
+  ) {
     if (!this.target.customFilters || this.target.customFilters.length === 0) {
       // don't do any filtering if no custom filters are set.
       this.availableMetrics = this.allCustomMetrics;
@@ -476,12 +497,18 @@ export class InstanaQueryCtrl extends QueryCtrl {
     });
   }
 
-  removeFilter(index: number) {
+  removeFilter(index
+                 :
+                 number
+  ) {
     this.target.filters.splice(index, 1);
     this.panelCtrl.refresh();
   }
 
-  onTagFilterChange(index: number) {
+  onTagFilterChange(index
+                      :
+                      number
+  ) {
     let filter: TagFilter = this.target.filters[index];
 
     // select a matching operator if not provided
@@ -529,6 +556,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.availableMetrics = [];
     this.uniqueEntities = [];
     this.uniqueTags = [];
+    this.target.availableTimeIntervals = [];
+    this.target.timeInterval = null;
     this.target.timeShift = null; // do we want to reset this ?
     this.resetEntityTypeSelection();
     this.resetEntitySelection();
@@ -672,7 +701,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // this can not result in metric changes, we do not need to refresh
   }
 
-  removeCustomFilter(index: number, refresh = true) {
+  removeCustomFilter(index
+                       :
+                       number, refresh = true
+  ) {
     this.target.customFilters.splice(index, 1);
     // removing a filter might result in more than 5 available metrics
     this.onMetricsFilter(refresh);

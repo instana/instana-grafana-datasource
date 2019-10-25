@@ -8,8 +8,9 @@ import TimeFilter from './types/time_filter';
 import migrate from './migration';
 
 import _ from 'lodash';
-import {getPossibleGranularities, readItemMetrics} from "./util/analyze_util";
+import {readItemMetrics} from "./util/analyze_util";
 import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
+import {setGranularityValues, setRollUpValues} from "./util/rollup_granularity_util";
 
 
 export default class InstanaDatasource extends AbstractDatasource {
@@ -35,10 +36,10 @@ export default class InstanaDatasource extends AbstractDatasource {
     }
 
     const targets = [];
+    const timeFilter: TimeFilter = this.readTime(options);
 
     return this.$q.all(
       _.map(options.targets, target => {
-        var timeFilter: TimeFilter = this.readTime(options);
         targets[target.refId] = target;
 
         // grafana setting to disable query execution
@@ -50,24 +51,28 @@ export default class InstanaDatasource extends AbstractDatasource {
         migrate(target);
 
         if (target.timeShift) {
-          timeFilter = this.applyTimeShiftOnTimeFilter(timeFilter, this.convertTimeShiftToMillis(target.timeShift));
+          //timeFilter = this.applyTimeShiftOnTimeFilter(timeFilter, this.convertTimeShiftToMillis(target.timeShift));
           target.timeShiftIsValid = true;
         } else {
           target.timeShiftIsValid = false;
         }
 
-        if (target.metricCategory === this.ANALYZE_WEBSITE_METRICS) {
-          return this.getAnalyzeWebsiteMetrics(target, timeFilter);
-        } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
-          return this.getAnalyzeApplicationMetrics(target, timeFilter);
-        } else if (target.metricCategory === this.APPLICATION_METRICS) {
-          return this.getApplicationMetrics(target, timeFilter);
-        } else if (target.metricCategory === this.SERVICE_METRICS) {
-          return this.getServiceMetrics(target, timeFilter);
-        } else if (target.metricCategory === this.ENDPOINT_METRICS) {
-          return this.getEndpointMetrics(target, timeFilter);
-        } else {
+        if (target.metricCategory === this.BUILT_IN_METRICS || target.metricCategory === this.CUSTOM_METRICS) {
+          setRollUpValues(target, timeFilter);
           return this.getInfrastructureMetrics(target, timeFilter);
+        } else if (target.metricCategory){
+          setGranularityValues(target, timeFilter);
+          if (target.metricCategory === this.ANALYZE_WEBSITE_METRICS) {
+            return this.getAnalyzeWebsiteMetrics(target, timeFilter);
+          } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
+            return this.getAnalyzeApplicationMetrics(target, timeFilter);
+          } else if (target.metricCategory === this.APPLICATION_METRICS) {
+            return this.getApplicationMetrics(target, timeFilter);
+          } else if (target.metricCategory === this.SERVICE_METRICS) {
+            return this.getServiceMetrics(target, timeFilter);
+          } else if (target.metricCategory === this.ENDPOINT_METRICS) {
+            return this.getEndpointMetrics(target, timeFilter);
+          }
         }
       })
     ).then(results => {
@@ -221,7 +226,7 @@ export default class InstanaDatasource extends AbstractDatasource {
       if (target.showAllMetrics) {
         const resultPromises = [];
         _.forEach(target.allMetrics, metric => {
-          resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
+          resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.timeInterval.key, metric));
         });
 
         return Promise.all(resultPromises).then(allResults => {
@@ -230,7 +235,7 @@ export default class InstanaDatasource extends AbstractDatasource {
           return allMetrics;
         });
       } else {
-        return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
+        return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.timeInterval.key, target.metric);
       }
     });
   }

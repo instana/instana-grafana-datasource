@@ -5,8 +5,9 @@ import Selectable from './types/selectable';
 import Cache from './cache';
 
 import _ from 'lodash';
-import {createTagFilter, getChartGranularity} from "./util/analyze_util";
 import ApplicationMetricsBody from "./types/application_metrics_body";
+import {createTagFilter} from "./util/analyze_util";
+import {getDefaultChartGranularity, getPossibleGranularities} from "./util/rollup_granularity_util";
 
 export default class InstanaApplicationDataSource extends AbstractDatasource {
   applicationsCache: Cache<Promise<Array<Selectable>>>;
@@ -145,7 +146,10 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     };
 
     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
-      //TODO
+      if (!target.timeInterval) {
+        target.timeInterval = getDefaultChartGranularity(windowSize);
+      }
+      metric['granularity'] = target.timeInterval.key;
     }
 
     const group = {
@@ -181,7 +185,10 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     };
 
     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
-      //TODO
+      if (!target.timeInterval) {
+        target.timeInterval = getDefaultChartGranularity(windowSize);
+      }
+      metric['granularity'] = target.timeInterval.key;
     }
 
     const data: ApplicationMetricsBody = {

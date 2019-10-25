@@ -2,12 +2,11 @@ import BeaconGroupBody from './types/beacon_group_body';
 import AbstractDatasource from './datasource_abstract';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
-import TagFilter from './types/tag_filter';
 import Cache from './cache';
 
 import _ from 'lodash';
-import {createTagFilter, getChartGranularity, readItemMetrics} from "./util/analyze_util";
-import ApplicationMetricsBody from "./types/application_metrics_body";
+import {createTagFilter} from "./util/analyze_util";
+import {getDefaultChartGranularity} from "./util/rollup_granularity_util";
 
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
   websitesCache: Cache<Promise<Array<Selectable>>>;
@@ -127,7 +126,10 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     };
 
     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
-      //TODO
+      if (!target.timeInterval) {
+        target.timeInterval = getDefaultChartGranularity(windowSize);
+      }
+      metric['granularity'] = target.timeInterval.key;
     }
 
 
