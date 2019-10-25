@@ -1,18 +1,30 @@
-System.register(['./datasource_infrastructure', './datasource_application', './datasource_website', './datasource_abstract', "./datasource_service", "./datasource_endpoint", './migration', 'lodash', "./util/analyze_util", "./util/aggregation_util", "./util/rollup_granularity_util"], function(exports_1) {
+System.register(["./util/rollup_granularity_util", './datasource_infrastructure', "./util/aggregation_util", './datasource_application', "./datasource_endpoint", "./datasource_service", './datasource_website', './datasource_abstract', "./util/analyze_util", './migration', 'lodash'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var datasource_infrastructure_1, datasource_application_1, datasource_website_1, datasource_abstract_1, datasource_service_1, datasource_endpoint_1, migration_1, lodash_1, analyze_util_1, aggregation_util_1, rollup_granularity_util_1;
+    var rollup_granularity_util_1, datasource_infrastructure_1, aggregation_util_1, datasource_application_1, datasource_endpoint_1, datasource_service_1, datasource_website_1, datasource_abstract_1, analyze_util_1, migration_1, lodash_1;
     var InstanaDatasource;
     return {
         setters:[
+            function (rollup_granularity_util_1_1) {
+                rollup_granularity_util_1 = rollup_granularity_util_1_1;
+            },
             function (datasource_infrastructure_1_1) {
                 datasource_infrastructure_1 = datasource_infrastructure_1_1;
             },
+            function (aggregation_util_1_1) {
+                aggregation_util_1 = aggregation_util_1_1;
+            },
             function (datasource_application_1_1) {
                 datasource_application_1 = datasource_application_1_1;
+            },
+            function (datasource_endpoint_1_1) {
+                datasource_endpoint_1 = datasource_endpoint_1_1;
+            },
+            function (datasource_service_1_1) {
+                datasource_service_1 = datasource_service_1_1;
             },
             function (datasource_website_1_1) {
                 datasource_website_1 = datasource_website_1_1;
@@ -20,26 +32,14 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
             function (datasource_abstract_1_1) {
                 datasource_abstract_1 = datasource_abstract_1_1;
             },
-            function (datasource_service_1_1) {
-                datasource_service_1 = datasource_service_1_1;
-            },
-            function (datasource_endpoint_1_1) {
-                datasource_endpoint_1 = datasource_endpoint_1_1;
+            function (analyze_util_1_1) {
+                analyze_util_1 = analyze_util_1_1;
             },
             function (migration_1_1) {
                 migration_1 = migration_1_1;
             },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
-            },
-            function (analyze_util_1_1) {
-                analyze_util_1 = analyze_util_1_1;
-            },
-            function (aggregation_util_1_1) {
-                aggregation_util_1 = aggregation_util_1_1;
-            },
-            function (rollup_granularity_util_1_1) {
-                rollup_granularity_util_1 = rollup_granularity_util_1_1;
             }],
         execute: function() {
             InstanaDatasource = (function (_super) {
@@ -59,8 +59,8 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                         return this.$q.resolve({ data: [] });
                     }
                     var targets = [];
-                    var timeFilter = this.readTime(options);
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
+                        var timeFilter = _this.readTime(options);
                         targets[target.refId] = target;
                         // grafana setting to disable query execution
                         if (target.hide) {
@@ -69,7 +69,7 @@ System.register(['./datasource_infrastructure', './datasource_application', './d
                         // target migration for downwards compatibility
                         migration_1.default(target);
                         if (target.timeShift) {
-                            //timeFilter = this.applyTimeShiftOnTimeFilter(timeFilter, this.convertTimeShiftToMillis(target.timeShift));
+                            timeFilter = _this.applyTimeShiftOnTimeFilter(timeFilter, _this.convertTimeShiftToMillis(target.timeShift));
                             target.timeShiftIsValid = true;
                         }
                         else {

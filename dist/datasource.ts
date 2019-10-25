@@ -35,10 +35,10 @@ export default class InstanaDatasource extends AbstractDatasource {
     }
 
     const targets = [];
-    const timeFilter: TimeFilter = this.readTime(options);
 
     return this.$q.all(
       _.map(options.targets, target => {
+        let timeFilter: TimeFilter = this.readTime(options);
         targets[target.refId] = target;
 
         // grafana setting to disable query execution

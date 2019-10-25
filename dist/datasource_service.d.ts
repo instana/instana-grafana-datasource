@@ -1,7 +1,7 @@
 import AbstractDatasource from "./datasource_abstract";
+import TimeFilter from "./types/time_filter";
 import Selectable from "./types/selectable";
 import Cache from './cache';
-import TimeFilter from "./types/time_filter";
 export default class InstanaServiceDataSource extends AbstractDatasource {
     servicesCache: Cache<Promise<Array<Selectable>>>;
     maximumNumberOfUsefulDataPoints: number;

@@ -54,11 +54,11 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     isEndpointMetric(): boolean;
     onWebsiteChanges(refresh: any, isAnalyze: boolean): any;
     onApplicationChanges(refresh: any, isAnalyze: boolean): any;
-    onServiceChanges(refresh: any): any;
-    onEndpointChanges(refresh: any): any;
+    onServiceChanges(refresh: boolean): any;
+    onEndpointChanges(refresh: boolean): any;
     onFilterChange(refresh: boolean): any;
     onMetricCategorySelect(): void;
-    onBeaconTypeSelect(refresh: any): void;
+    onBeaconTypeSelect(refresh: boolean): void;
     filterForEntityType(refresh: boolean): void;
     filterEntityTypes(): any;
     findMatchingEntityTypes(entityType: Selectable): boolean;

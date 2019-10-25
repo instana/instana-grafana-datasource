@@ -1,15 +1,18 @@
-System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/beacon_types', './lists/operators', './migration', 'lodash', './css/query_editor.css!', "./util/rollup_granularity_util"], function(exports_1) {
+System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/aggregation_function', './lists/beacon_types', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, aggregation_function_1, beacon_types_1, operators_1, migration_1, lodash_1, rollup_granularity_util_1;
+    var sdk_1, rollup_granularity_util_1, aggregation_function_1, beacon_types_1, operators_1, migration_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
             function (sdk_1_1) {
                 sdk_1 = sdk_1_1;
+            },
+            function (rollup_granularity_util_1_1) {
+                rollup_granularity_util_1 = rollup_granularity_util_1_1;
             },
             function (aggregation_function_1_1) {
                 aggregation_function_1 = aggregation_function_1_1;
@@ -26,10 +29,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
             },
-            function (_1) {},
-            function (rollup_granularity_util_1_1) {
-                rollup_granularity_util_1 = rollup_granularity_util_1_1;
-            }],
+            function (_1) {}],
         execute: function() {
             InstanaQueryCtrl = (function (_super) {
                 __extends(InstanaQueryCtrl, _super);

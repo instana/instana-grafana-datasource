@@ -1,9 +1,9 @@
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import InstanaApplicationDataSource from './datasource_application';
+import InstanaEndpointDataSource from "./datasource_endpoint";
+import InstanaServiceDataSource from "./datasource_service";
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
-import InstanaServiceDataSource from "./datasource_service";
-import InstanaEndpointDataSource from "./datasource_endpoint";
 import TimeFilter from './types/time_filter';
 export default class InstanaDatasource extends AbstractDatasource {
     infrastructure: InstanaInfrastructureDataSource;
