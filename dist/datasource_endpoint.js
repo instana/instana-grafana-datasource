@@ -58,7 +58,7 @@ System.register(["./util/rollup_granularity_util", "./datasource_abstract", './c
                             });
                         });
                     });
-                    this.endpointsCache.put(key, endpoints);
+                    this.endpointsCache.put(key, endpoints, 600000);
                     return endpoints;
                 };
                 InstanaEndpointDataSource.prototype.paginateEndpoints = function (results, windowSize, to, page, pageSize) {

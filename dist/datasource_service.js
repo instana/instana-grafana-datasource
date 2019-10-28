@@ -51,7 +51,7 @@ System.register(["./util/rollup_granularity_util", "./datasource_abstract", './c
                             };
                         });
                     });
-                    this.servicesCache.put(key, services);
+                    this.servicesCache.put(key, services, 600000);
                     return services;
                 };
                 InstanaServiceDataSource.prototype.paginateServices = function (results, windowSize, to, page, pageSize) {

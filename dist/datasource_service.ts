@@ -45,7 +45,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
         };
       });
     });
-    this.servicesCache.put(key, services);
+    this.servicesCache.put(key, services, 600000);
 
     return services;
   }

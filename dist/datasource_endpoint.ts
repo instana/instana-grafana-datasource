@@ -56,7 +56,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     });
 
 
-    this.endpointsCache.put(key, endpoints);
+    this.endpointsCache.put(key, endpoints, 600000);
     return endpoints;
   }
 

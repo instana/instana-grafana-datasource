@@ -50,7 +50,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       });
     });
 
-    this.applicationsCache.put(key, applications);
+    this.applicationsCache.put(key, applications, 600000);
     return applications;
   }
 
