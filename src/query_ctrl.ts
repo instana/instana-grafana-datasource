@@ -540,7 +540,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.uniqueTags = [];
     this.target.availableTimeIntervals = [];
     this.target.timeInterval = null;
-    this.target.timeShift = null; // do we want to reset this ?
     this.resetEntityTypeSelection();
     this.resetEntitySelection();
     this.resetMetricSelection();
@@ -571,6 +570,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.metric = null;
     this.target.filter = null;
     this.target.timeShift = null;
+    this.target.timeShiftIsValid = true;
     this.target.showWarningCantShowAllResults = false;
     this.target.showAllMetrics = false;
     this.target.labelFormat = null;
@@ -660,6 +660,15 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.target.showAllMetrics = false;
     }
     this.panelCtrl.refresh();
+  }
+
+  onTimeShiftChange() {
+    if (this.target.timeShift) {
+      this.target.timeShiftIsValid = this.target.timeShift.match(/\d+[m,s,h,d,w]{1}/);
+      this.panelCtrl.refresh();
+    } else {
+      this.target.timeShiftIsValid = true;
+    }
   }
 
   toggleAdvancedSettings() {
