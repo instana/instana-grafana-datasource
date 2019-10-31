@@ -1,4 +1,4 @@
-import {getDefaultChartGranularity, getPossibleGranularities} from "./util/rollup_granularity_util";
+import {getDefaultChartGranularity} from "./util/rollup_granularity_util";
 import ApplicationMetricsBody from "./types/application_metrics_body";
 import AbstractDatasource from './datasource_abstract';
 import {createTagFilter} from "./util/analyze_util";

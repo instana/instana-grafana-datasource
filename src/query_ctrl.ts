@@ -1,7 +1,6 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import {QueryCtrl} from 'app/plugins/sdk';
 
-import {setGranularityValues, setRollUpValues} from "./util/rollup_granularity_util";
 import aggregation_functions from './lists/aggregation_function';
 import beaconTypes from './lists/beacon_types';
 import TimeFilter from './types/time_filter';
@@ -87,8 +86,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // infrastructure (built-in & custom)
     if (this.isInfrastructure()) {
-      setRollUpValues(this.target, this.timeFilter);
-
       if (this.target.entityQuery) {
         this.onFilterChange(false).then(() => {
           // infrastructure metrics support available metrics on a selected entity type
@@ -101,8 +98,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
           }
         });
       }
-    } else {
-      setGranularityValues(this.target, this.timeFilter);
     }
 
     // analyze applications
@@ -343,10 +338,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.selectionReset();
       // fresh internal used lists without re-rendering
       if (this.isInfrastructure()) {
-        setRollUpValues(this.target, this.timeFilter);
+        this.datasource.setRollUpValues(this.target, this.timeFilter);
         this.onFilterChange(false);
       } else {
-        setGranularityValues(this.target, this.timeFilter);
+        this.datasource.setGranularityValues(this.target, this.timeFilter);
 
         if (this.isAnalyzeApplication()) {
           this.websiteApplicationLabel = "Application";
@@ -703,6 +698,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   isAnalyzeCategory() {
     return this.isAnalyzeApplication() || this.isAnalyzeWebsite();
+  }
+
+  getAvailableTimeIntervals() {
+    if (this.isInfrastructure()) {
+      return this.datasource.availableRollups;
+    }
+
+    return this.datasource.availableGranularities;
   }
 
   loadVersion() {

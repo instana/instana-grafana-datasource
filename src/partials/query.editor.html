@@ -217,11 +217,11 @@
         </label>
         <div class="gf-form-select-wrapper min-width-8 gf-form-select-wrapper--has-help-icon">
           <select id="in-timeInterval-{{ctrl.target.refId}}"
-                  ng-disabled="ctrl.target.availableTimeIntervals.length <= 1"
+                  ng-disabled="ctrl.datasource.availableTimeIntervals.length <= 1"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.timeInterval"
                   ng-change="ctrl.onChange()"
-                  ng-options="f as f.label for f in ctrl.target.availableTimeIntervals track by f.key">
+                  ng-options="f as f.label for f in ctrl.getAvailableTimeIntervals() track by f.key">
           </select>
         </div>
       </label>
@@ -575,10 +575,12 @@
 
     <script type="text/ng-template" id="serviceEndpoint.html">
       <div class="gf-form">
-        <label class="gf-form-label query-keyword pointer width-13" for="in-serviceEndpoint-namefilter-{{ctrl.target.refId}}">
+        <label class="gf-form-label query-keyword pointer width-13"
+               for="in-serviceEndpoint-namefilter-{{ctrl.target.refId}}">
           Filter {{ctrl.serviceEndpointTitle}}
           <info-popover position="top center" mode="right-normal">
-            <p>Filters the list of {{ctrl.serviceEndpointTitle}}s to only show the ones that contain the given input.</p>
+            <p>Filters the list of {{ctrl.serviceEndpointTitle}}s to only show the ones that contain the given
+              input.</p>
           </info-popover>
         </label>
         <input id="in-serviceEndpoint-namefilter-{{ctrl.target.refId}}"
@@ -608,7 +610,8 @@
                ng-show="ctrl.supportsApplicationPerspective()">
           Application Context
           <info-popover position="top center" mode="right-normal">
-            <p>This will filter your selected {{ctrl.serviceEndpointTitle}} and show only metrics related to this application perspective.</p>
+            <p>This will filter your selected {{ctrl.serviceEndpointTitle}} and show only metrics related to this
+              application perspective.</p>
           </info-popover>
         </label>
         <select ng-show="ctrl.supportsApplicationPerspective()"
