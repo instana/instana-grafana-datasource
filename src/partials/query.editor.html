@@ -217,7 +217,7 @@
         </label>
         <div class="gf-form-select-wrapper min-width-8 gf-form-select-wrapper--has-help-icon">
           <select id="in-timeInterval-{{ctrl.target.refId}}"
-                  ng-disabled="ctrl.datasource.availableTimeIntervals.length <= 1"
+                  ng-disabled="ctrl.getAvailableTimeIntervals().length <= 1"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.timeInterval"
                   ng-change="ctrl.onChange()"
