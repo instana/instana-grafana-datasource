@@ -68,17 +68,3 @@ export function getPossibleRollups(timeFilter: TimeFilter): Selectable[] {
     label: rollups[rollups.length - 1].label
   }];
 }
-
-export function setRollUpValues(target, timeFilter: TimeFilter) {
-  target.availableTimeIntervals = getPossibleRollups(timeFilter);
-  if (!target.timeInterval || !_.find(target.availableTimeIntervals, ['key', target.timeInterval.key])) {
-    target.timeInterval = getDefaultMetricRollupDuration(timeFilter);
-  }
-}
-
-export function setGranularityValues(target, timeFilter: TimeFilter) {
-  target.availableTimeIntervals = getPossibleGranularities(timeFilter.windowSize);
-  if (!target.timeInterval || !_.find(target.availableTimeIntervals, ['key', target.timeInterval.key])) {
-    target.timeInterval = getDefaultChartGranularity(timeFilter.windowSize);
-  }
-}

@@ -1,4 +1,9 @@
-import {setGranularityValues, setRollUpValues} from "./util/rollup_granularity_util";
+import {
+  getDefaultChartGranularity,
+  getDefaultMetricRollupDuration,
+  getPossibleGranularities,
+  getPossibleRollups
+} from "./util/rollup_granularity_util";
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
 import InstanaApplicationDataSource from './datasource_application';
@@ -11,6 +16,7 @@ import TimeFilter from './types/time_filter';
 import migrate from './migration';
 
 import _ from 'lodash';
+import Selectable from "./types/selectable";
 
 export default class InstanaDatasource extends AbstractDatasource {
   infrastructure: InstanaInfrastructureDataSource;
@@ -18,6 +24,8 @@ export default class InstanaDatasource extends AbstractDatasource {
   website: InstanaWebsiteDataSource;
   service: InstanaServiceDataSource;
   endpoint: InstanaEndpointDataSource;
+  availableGranularities: Array<Selectable>;
+  availableRollups: Array<Selectable>;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -27,12 +35,19 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.service = new InstanaServiceDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q, this.service);
+    this.availableGranularities = [];
+    this.availableRollups = [];
   }
 
   query(options) {
     if (Object.keys(options.targets[0]).length === 0) {
       return this.$q.resolve({data: []});
     }
+
+    const panelTimeFilter: TimeFilter = this.readTime(options);
+
+    this.availableRollups = getPossibleRollups(panelTimeFilter);
+    this.availableGranularities = getPossibleGranularities(panelTimeFilter.windowSize);
 
     const targets = [];
 
@@ -57,10 +72,10 @@ export default class InstanaDatasource extends AbstractDatasource {
         }
 
         if (target.metricCategory === this.BUILT_IN_METRICS || target.metricCategory === this.CUSTOM_METRICS) {
-          setRollUpValues(target, timeFilter);
+          this.setRollupTimeInterval(target, timeFilter);
           return this.getInfrastructureMetrics(target, timeFilter);
-        } else if (target.metricCategory){
-          setGranularityValues(target, timeFilter);
+        } else if (target.metricCategory) {
+          this.setGranularityTimeInterval(target, timeFilter);
           if (target.metricCategory === this.ANALYZE_WEBSITE_METRICS) {
             return this.getAnalyzeWebsiteMetrics(target, timeFilter);
           } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
@@ -104,6 +119,18 @@ export default class InstanaDatasource extends AbstractDatasource {
 
       return {data: _.flatten(newData)};
     });
+  }
+
+  setRollupTimeInterval(target, timeFilter: TimeFilter) {
+    if (!target.timeInterval || !_.find(this.availableRollups, ['key', target.timeInterval.key])) {
+      target.timeInterval = getDefaultMetricRollupDuration(timeFilter);
+    }
+  }
+
+  setGranularityTimeInterval(target, timeFilter: TimeFilter) {
+    if (!target.timeInterval || !_.find(this.availableGranularities, ['key', target.timeInterval.key])) {
+      target.timeInterval = getDefaultChartGranularity(timeFilter.windowSize);
+    }
   }
 
   aggregateTarget(target, targetMetaData) {
