@@ -539,7 +539,7 @@
                ng-class="ctrl.target.timeShiftIsValid || ctrl.target.timeShift === '' ? 'ng-valid' : 'ng-invalid'"
                ng-model='ctrl.target.timeShift'
                ng-model-options='{ debounce: 500 }'
-               ng-change="ctrl.onChange()"
+               ng-change="ctrl.onTimeShiftChange()"
                placeholder="1h"/>
       </div>
     </script>
