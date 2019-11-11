@@ -226,11 +226,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
         if (!_.find(this.uniqueEntities, {'key': null})) {
           this.uniqueEntities.unshift({key: null, label: this.ALL_APPLICATIONS});
         }
-        // select the most loaded website for default/replacement
-        if (this.target && !this.target.entity && applications) {
-          this.target.entity = applications[0];
-        } else if (this.target && this.target.entity && !_.find(applications, ['key', this.target.entity.key])) {
-          this.target.entity = applications[0];
+        // replace removed application
+        if (this.target && this.target.entity && !_.find(applications, ['key', this.target.entity.key])) {
+          this.target.entity = this.uniqueEntities[0];
+        } else if (this.target && !this.target.entity && applications) {
+          this.target.entity = this.uniqueEntities[0];
         }
       }
     );
@@ -270,7 +270,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
         this.onNamefilterChanges();
 
-        if (this.target && !this.target.entity && services) {
+        // replace removed service
+        if (this.target && this.target.entity && !_.find(services, ['key', this.target.entity.key])) {
+          this.target.entity = this.uniqueEntities[0];
+        } else if (this.target && !this.target.entity && services) {
           this.target.entity = this.uniqueEntities[0];
         }
       }
@@ -296,7 +299,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
         this.onNamefilterChanges();
 
-        if (this.target && !this.target.entity && endpoints) {
+        // replace removed endpoint
+        if (this.target && this.target.entity && !_.find(endpoints, ['key', this.target.entity.key])) {
+          this.target.entity = this.uniqueEntities[0];
+        } else if (this.target && !this.target.entity && endpoints) {
           this.target.entity = this.uniqueEntities[0];
         }
       }
@@ -338,11 +344,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.selectionReset();
       // fresh internal used lists without re-rendering
       if (this.isInfrastructure()) {
-        this.datasource.setRollUpValues(this.target, this.timeFilter);
+        this.datasource.setRollupTimeInterval(this.target, this.timeFilter);
         this.onFilterChange(false);
       } else {
-        this.datasource.setGranularityValues(this.target, this.timeFilter);
-
+        this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
         if (this.isAnalyzeApplication()) {
           this.websiteApplicationLabel = "Application";
           this.onApplicationChanges(false, true);
