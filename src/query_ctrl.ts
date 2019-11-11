@@ -533,7 +533,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.availableMetrics = [];
     this.uniqueEntities = [];
     this.uniqueTags = [];
-    this.target.availableTimeIntervals = [];
     this.target.timeInterval = null;
     this.target.timeShift = null; // do we want to reset this ?
     this.resetEntityTypeSelection();
