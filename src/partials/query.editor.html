@@ -40,6 +40,7 @@
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
+      <div ng-include src="'freeTextMetrics.html'"/>
       <div ng-include src="'aggregate_graphs.html'"/>
     </div>
 
@@ -119,6 +120,7 @@
           <select id="in-type-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.entityType"
+                  ng-disabled="ctrl.target.freeTextMetrics"
                   ng-change="ctrl.onEntityTypeSelect(true)"
                   ng-options="f as f.label for f in ctrl.uniqueEntityTypes track by f.key">
             <option value="" disabled selected>{{ctrl.entitySelectionText}}</option>
@@ -175,7 +177,7 @@
         <div class="gf-form-select-wrapper gf-form-select-wrapper--has-help-icon full-width">
           <select id="in-metric-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched "
-                  ng-disabled="ctrl.target.canShowAllMetrics && ctrl.target.showAllMetrics"
+                  ng-disabled="(ctrl.target.canShowAllMetrics && ctrl.target.showAllMetrics) || ctrl.target.freeTextMetrics"
                   ng-model="ctrl.target.metric"
                   ng-change="ctrl.onMetricSelect()"
                   ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics track by f.key">
@@ -541,6 +543,41 @@
                ng-model-options='{ debounce: 500 }'
                ng-change="ctrl.onTimeShiftChange()"
                placeholder="1h"/>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="freeTextMetrics.html">
+      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings && ctrl.target.metricCategory === '1'">
+        <label class="gf-form-label query-keyword width-13 pointer" for="in-free-text-metrics-{{ctrl.target.refId}}">
+          Free Text Metrics
+          <info-popover position="top center" mode="right-normal">
+            <p>Specify comma separated metrics directly in this text field. Once this field has a value, selected
+              metrics from
+              above will be ignored. Max 4 metrics supported.
+            </p>
+          </info-popover>
+        </label>
+        <input id="in-free-text-metrics-{{ctrl.target.refId}}"
+               class="gf-form-input"
+               type="text"
+               ng-model='ctrl.target.freeTextMetrics'
+               ng-model-options='{ debounce: 500 }'
+               ng-change="ctrl.onFreeTextMetricChange()"
+               placeholder="metric.one,metric.two,metric.three"/>
+        <label class="gf-form-label query-keyword pointer min-width-8" for="in-type-{{ctrl.target.refId}}">
+          Type
+          <info-popover position="top center" mode="right-normal">
+            <p>Select an entity type for a list of available metrics.</p>
+          </info-popover>
+        </label>
+        <select id="in-type-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.unfilteredEntityType"
+                ng-change="ctrl.onChange()"
+                ng-disabled="!ctrl.target.freeTextMetrics"
+                ng-options="f for f in ctrl.snapshots">
+          <option value="" disabled selected>Select type</option>
+        </select>
       </div>
     </script>
 

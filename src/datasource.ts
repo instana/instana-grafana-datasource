@@ -240,26 +240,36 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   getInfrastructureMetrics(target, timeFilter: TimeFilter) {
     // do not try to retrieve data without selected metric
-    if (!target.metric && !target.showAllMetrics) {
+    if (!target.metric && !target.showAllMetrics && !target.freeTextMetrics) {
       return this.$q.resolve({data: []});
     }
 
     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
     return this.infrastructure.fetchSnapshotsForTarget(target, timeFilter).then(snapshots => {
       if (target.showAllMetrics) {
-        const resultPromises = [];
-        _.forEach(target.allMetrics, metric => {
-          resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
-        });
+        return this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, target.allMetrics);
+      } else if (target.freeTextMetrics) {
+        const metricsString = target.freeTextMetrics.replace(/\s/g, '').split(',');
+        const metrics = [];
+        _.each(metricsString, (metricString) => metrics.push(JSON.parse('{ "key": "' + metricString + '"}')));
 
-        return Promise.all(resultPromises).then(allResults => {
-          const allMetrics = [];
-          allResults.forEach(result => result.forEach(s => allMetrics.push(s)));
-          return allMetrics;
-        });
+        return this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics);
       } else {
         return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
       }
+    });
+  }
+
+  fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics) {
+    const resultPromises = [];
+    _.forEach(metrics, metric => {
+      resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
+    });
+
+    return Promise.all(resultPromises).then(allResults => {
+      const allMetrics = [];
+      allResults.forEach(result => result.forEach(s => allMetrics.push(s)));
+      return allMetrics;
     });
   }
 

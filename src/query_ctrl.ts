@@ -27,6 +27,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   uniqueEntities: Array<Selectable>;
   uniqueTags: Array<Selectable>;
   allWebsiteMetrics: Array<Selectable>;
+  allTypes: Array<Selectable>;
 
   snapshots: Array<string>;
   entitySelectionText: string;
@@ -658,6 +659,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     } else {
       this.target.showAllMetrics = false;
     }
+    this.panelCtrl.refresh();
+  }
+
+  onFreeTextMetricChange() {
     this.panelCtrl.refresh();
   }
 
