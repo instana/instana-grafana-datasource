@@ -253,6 +253,10 @@ export default class InstanaDatasource extends AbstractDatasource {
         const metrics = [];
         _.each(metricsString, (metricString) => metrics.push(JSON.parse('{ "key": "' + metricString + '"}')));
 
+        if (metrics.length > 4) {
+          metrics.slice(0, 3); //API supports up to 4 metrics at once
+        }
+
         return this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics);
       } else {
         return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
