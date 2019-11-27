@@ -156,6 +156,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
     return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
   }
 
+  isBuiltInInfrastructure() {
+    return this.target.metricCategory === this.BUILT_IN_METRICS;
+  }
+
+  isCustomInfrastructure() {
+      return this.target.metricCategory === this.CUSTOM_METRICS;
+    }
+
   isAnalyzeWebsite() {
     return this.target.metricCategory === this.ANALYZE_WEBSITE_METRICS;
   }
