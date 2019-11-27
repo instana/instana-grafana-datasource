@@ -37,4 +37,67 @@
     </label>
     <gf-form-switch class="gf-form-switch" id="in-historic-mode" checked="ctrl.current.jsonData.showOffline" ng-disabled="!ctrl.current.jsonData.canQueryOfflineSnapshots"/>
   </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-14 pointer">
+      Max. query-interval in hours
+      <info-popover position="top center" mode="right-normal">
+        <p>This Settings are optional values to control the load of data queries, by defining the maximum allowed query intervals on a Instana Server.</p>
+      </info-popover>
+    </label>
+  </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-14 pointer" for="in-queryinterval-infra">
+      Infrastructure metrics
+      <info-popover position="top center" mode="right-normal">
+        <p>Limit for max. query interval in hours for Category: Infrastructure metrics</p>
+      </info-popover>
+    </label>
+    <input class="gf-form-input width-30" id="in-queryinterval-infra" type="text" ng-model="ctrl.current.jsonData.queryinterval_limit_infra" ng-change="ctrl.onAccessChange()" placeholder="optional: interval limit in hours"></input>
+  </div>
+
+  <div class="gf-form">
+    <label class="gf-form-label width-14 pointer" for="in-queryinterval-app-metrics">
+      Application metrics
+      <info-popover position="top center" mode="right-normal">
+        <p>Limit for max. query interval in hours for Category: Application metrics</p>
+      </info-popover>
+    </label>
+    <input class="gf-form-input width-30" id="in-queryinterval-app-metrics" type="text" ng-model="ctrl.current.jsonData.queryinterval_limit_app_metrics" ng-change="ctrl.onAccessChange()" placeholder="optional: interval limit in hours"></input>
+  </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-14 pointer" for="in-queryinterval-service-metrics">
+      Service metrics
+      <info-popover position="top center" mode="right-normal">
+        <p>Limit for max. query interval in hours for Category: Service metrics</p>
+      </info-popover>
+    </label>
+    <input class="gf-form-input width-30" id="in-queryinterval-service-metrics" type="text" ng-model="ctrl.current.jsonData.queryinterval_limit_service_metrics" ng-change="ctrl.onAccessChange()" placeholder="optional: interval limit in hours"></input>
+  </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-14 pointer" for="in-queryinterval-endpoint-metrics">
+      Endpoint metrics
+      <info-popover position="top center" mode="right-normal">
+        <p>Limit for max. query interval in hours for Category: Endpoint metrics</p>
+      </info-popover>
+    </label>
+    <input class="gf-form-input width-30" id="in-queryinterval-endpoint-metrics" type="text" ng-model="ctrl.current.jsonData.queryinterval_limit_endpoint_metrics" ng-change="ctrl.onAccessChange()" placeholder="optional: interval limit in hours"></input>
+  </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-14 pointer" for="in-queryinterval-app-calls">
+      Analyze application calls
+      <info-popover position="top center" mode="right-normal">
+        <p>Limit for max. query interval in hours for Category: Infrastructure custom metrics</p>
+      </info-popover>
+    </label>
+    <input class="gf-form-input width-30" id="in-queryinterval-app-calls" type="text" ng-model="ctrl.current.jsonData.queryinterval_limit_app_calls" ng-change="ctrl.onAccessChange()" placeholder="optional: interval limit in hours"></input>
+  </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-14 pointer" for="in-queryinterval-website">
+      Website Metrics
+      <info-popover position="top center" mode="right-normal">
+        <p>Limit for max. query interval in hours for Category: Website metrics</p>
+      </info-popover>
+    </label>
+    <input class="gf-form-input width-30" id="in-queryinterval-website" type="text" ng-model="ctrl.current.jsonData.queryinterval_limit_website_metrics" ng-change="ctrl.onAccessChange()" placeholder="optional: interval limit in hours"></input>
+  </div>
 </div>

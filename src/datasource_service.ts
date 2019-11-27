@@ -10,6 +10,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
   servicesCache: Cache<Promise<Array<Selectable>>>;
 
   maximumNumberOfUsefulDataPoints = 80;
+  queryInvervallLimit: number;
 
   // duplicate to QueryCtrl.ALL_SERVICES
   ALL_SERVICES = '-- No Service Filter --';
@@ -19,6 +20,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
     super(instanceSettings, backendSrv, templateSrv, $q);
 
     this.servicesCache = new Cache<Promise<Array<Selectable>>>();
+    this.queryInvervallLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_service_metrics);
   }
 
   getServices(target, timeFilter: TimeFilter) {
@@ -109,6 +111,8 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
+    // check if valid Query Interval
+    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervallLimit);
 
     const metric = {
       metric: target.metric.key,
