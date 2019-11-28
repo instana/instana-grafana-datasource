@@ -548,13 +548,13 @@
              ng-model-options='{ debounce: 500 }'
              ng-change="ctrl.onFreeTextMetricChange()"
              placeholder="metric.one,metric.two,metric.three"/>
-      <label class="gf-form-label query-keyword pointer min-width-8" for="in-type-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword pointer min-width-8" for="in-unfilteredEntityType-{{ctrl.target.refId}}">
         Type
         <info-popover position="top center" mode="right-normal">
           <p>Select an entity type for a list of available metrics.</p>
         </info-popover>
       </label>
-      <select id="in-type-{{ctrl.target.refId}}"
+      <select id="in-unfilteredEntityType-{{ctrl.target.refId}}"
               class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched width-24"
               ng-model="ctrl.target.unfilteredEntityType"
               ng-change="ctrl.onChange()"

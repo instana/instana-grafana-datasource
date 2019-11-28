@@ -671,7 +671,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onFreeTextMetricChange() {
-    this.panelCtrl.refresh();
+    if (this.target.unfilteredEntityType) {
+      this.panelCtrl.refresh();
+    }
   }
 
   onTimeShiftChange() {
