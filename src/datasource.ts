@@ -4,6 +4,7 @@ import {
   getPossibleGranularities,
   getPossibleRollups
 } from "./util/rollup_granularity_util";
+import {extractMetricsFromText} from './util/infrastructure_util';
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
 import InstanaApplicationDataSource from './datasource_application';
@@ -249,19 +250,24 @@ export default class InstanaDatasource extends AbstractDatasource {
       if (target.showAllMetrics) {
         return this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, target.allMetrics);
       } else if (target.freeTextMetrics) {
-        const metricsString = target.freeTextMetrics.replace(/\s/g, '').split(',');
-        const metrics = [];
-        _.each(metricsString, (metricString) => metrics.push(JSON.parse('{ "key": "' + metricString + '"}')));
-
-        if (metrics.length > 4) {
-          metrics.slice(0, 3); //API supports up to 4 metrics at once
-        }
-
+        const metrics = this.extractMetricsFromText(target.freeTextMetrics);
         return this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics);
       } else {
         return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
       }
     });
+  }
+
+  extractMetricsFromText(freeText: string) {
+    const metricsString = freeText.replace(/\s/g, '').split(',');
+    let metrics = [];
+    _.each(metricsString, (metricString) => metrics.push(JSON.parse('{ "key": "' + metricString + '"}')));
+
+    if (metrics.length > 4) {
+      metrics.slice(0, 3); //API supports up to 4 metrics at once
+    }
+
+    return metrics;
   }
 
   fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics) {
