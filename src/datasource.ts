@@ -4,7 +4,6 @@ import {
   getPossibleGranularities,
   getPossibleRollups
 } from "./util/rollup_granularity_util";
-import {extractMetricsFromText} from './util/infrastructure_util';
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
 import InstanaApplicationDataSource from './datasource_application';
