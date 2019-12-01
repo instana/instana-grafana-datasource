@@ -587,6 +587,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.showAllMetrics = false;
     this.target.labelFormat = null;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
+    this.target.freeTextMetrics = null;
+    this.target.useFreeTextMetrics = false;
   }
 
   adjustEntitySelectionPlaceholder() {
