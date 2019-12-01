@@ -25,16 +25,20 @@ export class InstanaQueryCtrl extends QueryCtrl {
   allCustomMetrics: Array<Selectable>; // internal reference only to speed up filtering // TODO needed ?
   availableMetrics: Array<Selectable>; // subset of allCustomMetrics for display only
   uniqueEntities: Array<Selectable>;
+  uniqueServices: Array<Selectable>;
+  uniqueEndpoints: Array<Selectable>;
   uniqueTags: Array<Selectable>;
   allWebsiteMetrics: Array<Selectable>;
 
   snapshots: Array<string>;
   entitySelectionText: string;
+  serviceSelectionText: string;
+  endpointSelectionText: string;
   metricSelectionText: string;
   serviceEndpointSelectionText: string;
   previousMetricCategory: string;
   websiteApplicationLabel = "";
-  serviceEndpointTitle = "";
+  serviceEndpointTitle: string;
   timeFilter: TimeFilter;
   customFilters = [];
 
@@ -55,6 +59,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   APPLICATION_METRICS = '4';
   SERVICE_METRICS = '5';
   ENDPOINT_METRICS = '6';
+  APPLICATION_SERVICE_ENDPOINT_METRICS = '4';
 
   defaults = {};
 
@@ -120,36 +125,34 @@ export class InstanaQueryCtrl extends QueryCtrl {
       });
     }
 
-    // applications metric
-    if (this.isApplicationMetric()) {
-      this.websiteApplicationLabel = "Application";
+    // application/service/endpoint metric
+    if (this.isApplicationServiceEndpointMetric()) {
       this.onApplicationChanges(false, false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
         }
       });
-    }
-
-    // service metric
-    if (this.isServiceMetric()) {
-      this.serviceEndpointTitle = "Service";
-      this.onServiceChanges(false).then(() => {
-        if (this.target.metric) {
-          this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
-        }
-      });
-    }
-
-    // endpoint metric
-    if (this.isEndpointMetric()) {
-      this.serviceEndpointTitle = "Endpoint";
-      this.onEndpointChanges(false).then(() => {
-        if (this.target.metric) {
-          this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
-        }
-      });
+      this.loadServices();
+      this.loadEndpoints();
     }
   }
+
+  loadServices() {
+    this.onServiceChanges(false).then(() => {
+      if (this.target.metric) {
+        this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+      }
+    });
+  }
+
+  loadEndpoints() {
+    this.onEndpointChanges(false).then(() => {
+      if (this.target.metric) {
+        this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
+      }
+    });
+  }
+
 
   isInfrastructure() {
     return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
@@ -161,6 +164,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   isAnalyzeApplication() {
     return this.target.metricCategory === this.ANALYZE_APPLICATION_METRICS;
+  }
+
+  isApplicationServiceEndpointMetric() {
+    return this.target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS;
   }
 
   isApplicationMetric() {
@@ -262,20 +269,18 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onServiceChanges(refresh: boolean) {
     this.datasource.service.getServices(this.target, this.timeFilter).then(
       services => {
-        this.uniqueEntities = _.orderBy(services, [service => service.label.toLowerCase()], ['asc']);
+        this.uniqueServices = _.orderBy(services, [service => service.label.toLowerCase()], ['asc']);
         // if all is not existing, we insert it on top
-        if (!_.find(this.uniqueEntities, {'key': null})) {
-          this.uniqueEntities.unshift({key: null, label: this.ALL_SERVICES});
-        }
-
-        this.onNamefilterChanges();
-
+        //if (!_.find(this.uniqueServices, {'key': null})) {
+        //  this.uniqueServices.unshift({key: null, label: this.ALL_SERVICES});
+        //}
+        this.serviceSelectionText = this.buildSelectionPlaceholderText(this.uniqueServices);
         // replace removed service
-        if (this.target && this.target.entity && !_.find(services, ['key', this.target.entity.key])) {
-          this.target.entity = this.uniqueEntities[0];
-        } else if (this.target && !this.target.entity && services) {
-          this.target.entity = this.uniqueEntities[0];
-        }
+        //if (this.target && this.target.service && !_.find(services, ['key', this.target.service.key])) {
+        //  this.target.service = this.uniqueServices[0];
+        //} else if (this.target && !this.target.service && services) {
+        //  this.target.service = this.uniqueServices[0];
+        //}
       }
     );
 
@@ -291,20 +296,18 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onEndpointChanges(refresh: boolean) {
     this.datasource.endpoint.getEndpoints(this.target, this.timeFilter).then(
       endpoints => {
-        this.uniqueEntities = _.orderBy(endpoints, [endpoint => endpoint.label.toLowerCase()], ['asc']);
+        this.uniqueEndpoints = _.orderBy(endpoints, [endpoint => endpoint.label.toLowerCase()], ['asc']);
         // if all is not existing, we insert it on top
-        if (!_.find(this.uniqueEntities, {'key': null})) {
-          this.uniqueEntities.unshift({key: null, label: this.ALL_ENDPOINTS});
-        }
-
-        this.onNamefilterChanges();
-
+        //if (!_.find(this.uniqueEndpoints, {'key': null})) {
+        //  this.uniqueEndpoints.unshift({key: null, label: this.ALL_ENDPOINTS});
+        //}
+        this.endpointSelectionText = this.buildSelectionPlaceholderText(this.uniqueEndpoints);
         // replace removed endpoint
-        if (this.target && this.target.entity && !_.find(endpoints, ['key', this.target.entity.key])) {
-          this.target.entity = this.uniqueEntities[0];
-        } else if (this.target && !this.target.entity && endpoints) {
-          this.target.entity = this.uniqueEntities[0];
-        }
+        //if (this.target && this.target.endpoint && !_.find(endpoints, ['key', this.target.endpoint.key])) {
+        //  this.target.endpoint = this.uniqueEndpoints[0];
+        //} else if (this.target && !this.target.entity && endpoints) {
+        //  this.target.endpoint = this.uniqueEndpoints[0];
+        //}
       }
     );
 
@@ -598,6 +601,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.serviceEndpointSelectionText = this.uniqueEntities.length > 0
       ? 'Please select (' + this.target.availableServicesEndpoints.length + '/' + this.uniqueEntities.length + ')'
       : this.EMPTY_DROPDOWN_TEXT;
+  }
+
+  buildSelectionPlaceholderText(selectableValues) {
+    if (selectableValues.length > 0) {
+      return 'Please select (' + selectableValues.length + ')';
+    }
+    return this.EMPTY_DROPDOWN_TEXT;
   }
 
   onNamefilterChanges() {

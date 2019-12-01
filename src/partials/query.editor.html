@@ -15,9 +15,7 @@
                 ng-change="ctrl.onMetricCategorySelect()">
           <option value="0" selected>Infrastructure built-in metrics</option>
           <option value="1">Infrastructure custom metrics</option>
-          <option value="4">Application Metrics</option>
-          <option value="5">Service Metrics</option>
-          <option value="6">Endpoint Metrics</option>
+          <option value="4">Application/Service/Metrics Metrics</option>
           <option value="2">Analyze application calls</option>
           <option value="3">Analyze websites</option>
         </select>
@@ -64,7 +62,7 @@
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '4'">
-      <div ng-include src="'website_application.html'"/>
+      <div ng-include src="'application_service_endpoint.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'advanced_settings.html'"/>
       <div ng-include src="'application_legend.html'"/>
@@ -426,6 +424,54 @@
                ng-change="ctrl.onChange()"
                placeholder="Please Specify"
                spellcheck='false'/>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="application_service_endpoint.html">
+      <div class="gf-form">
+        <label class="gf-form-label query-keyword pointer width-13"
+               for="select-application-{{ctrl.target.refId}}">
+          Application
+          <info-popover position="top center" mode="right-normal">
+            <p>Select your application.</p>
+          </info-popover>
+        </label>
+        <select id="select-application-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.entity"
+                ng-change="ctrl.loadServices()"
+                ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
+        </select>
+        <label class="gf-form-label query-keyword pointer width-13"
+               for="select-service-{{ctrl.target.refId}}">
+           Service
+           <info-popover position="top center" mode="right-normal">
+             <p>Select your service.</p>
+           </info-popover>
+        </label>
+        <select id="select-service-{{ctrl.target.refId}}"
+                ng-disabled="!ctrl.target.entity.key"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.service"
+                ng-change="ctrl.loadEndpoints()"
+                ng-options="f as f.label for f in ctrl.uniqueServices track by f.key">
+          <option value="" disabled selected>{{ctrl.serviceSelectionText}}</option>
+        </select>
+        <label class="gf-form-label query-keyword pointer width-13"
+               for="select-endpoint-{{ctrl.target.refId}}">
+          Endpoint
+          <info-popover position="top center" mode="right-normal">
+            <p>Select your endpoint.</p>
+          </info-popover>
+        </label>
+        <select id="select-endpoint-{{ctrl.target.refId}}"
+                ng-disabled="!ctrl.target.service.key"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.endpoint"
+                ng-change="ctrl.onChange()"
+                ng-options="f as f.label for f in ctrl.uniqueEndpoints track by f.key">
+          <option value="" disabled selected>{{ctrl.endpointSelectionText}}</option>
+        </select>
       </div>
     </script>
 
