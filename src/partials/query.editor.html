@@ -439,7 +439,7 @@
         <select id="select-application-{{ctrl.target.refId}}"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.entity"
-                ng-change="ctrl.loadServices()"
+                ng-change="ctrl.onApplicationSelect()"
                 ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
         </select>
         <label class="gf-form-label query-keyword pointer width-13"
@@ -453,7 +453,7 @@
                 ng-disabled="!ctrl.target.entity.key"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.service"
-                ng-change="ctrl.loadEndpoints()"
+                ng-change="ctrl.onServiceSelect()"
                 ng-options="f as f.label for f in ctrl.uniqueServices track by f.key">
           <option value="" disabled selected>{{ctrl.serviceSelectionText}}</option>
         </select>

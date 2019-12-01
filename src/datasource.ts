@@ -77,6 +77,8 @@ export default class InstanaDatasource extends AbstractDatasource {
             return this.getAnalyzeWebsiteMetrics(target, timeFilter);
           } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
             return this.getAnalyzeApplicationMetrics(target, timeFilter);
+          } else if (target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
+             return this.getApplicationServiceEndpointMetrics(target, timeFilter);
           } else if (target.metricCategory === this.APPLICATION_METRICS) {
             return this.getApplicationMetrics(target, timeFilter);
           } else if (target.metricCategory === this.SERVICE_METRICS) {
@@ -293,6 +295,19 @@ export default class InstanaDatasource extends AbstractDatasource {
     return this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
       return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
     });
+  }
+
+  getApplicationServiceEndpointMetrics(target, timeFilter: TimeFilter) {
+    if (target.entity && !target.service && !target.endpoint) {
+      return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
+        target.showWarningCantShowAllResults = response.data.canLoadMore;
+        return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
+      });
+    } else if (target.entity && target.service && !target.endpoint) {
+      console.log("applicaton and service");
+    } else if (target.entity && target.service && target.endpoint) {
+      console.log("application and service and endpoint");
+    }
   }
 
   annotationQuery(options) {

@@ -680,6 +680,16 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
   }
 
+  onApplicationSelect() {
+    this.loadServices();
+    this.panelCtrl.refresh();
+  }
+
+  onServiceSelect() {
+    this.loadEndpoints();
+    this.panelCtrl.refresh();
+  }
+
   toggleAdvancedSettings() {
     this.target.showAdvancedSettings = !this.target.showAdvancedSettings;
   }
