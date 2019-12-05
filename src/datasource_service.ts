@@ -21,9 +21,13 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
     this.servicesCache = new Cache<Promise<Array<Selectable>>>();
   }
 
-  getServices(target, timeFilter: TimeFilter) {
-    const key = this.getTimeKey(timeFilter);
+  getServicesOfApplication(target, timeFilter: TimeFilter) {
+    let applicationId = target.entity.key;
+    if (!applicationId) {
+      return null;
+    }
 
+    const key = this.getTimeKey(timeFilter) + applicationId;
     let services = this.servicesCache.get(key);
     if (services) {
       return services;
@@ -33,7 +37,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
     let page = 1;
     let pageSize = 200;
 
-    services = this.paginateServices([], windowSize, timeFilter.to, page, pageSize).then(response => {
+    services = this.paginateServices([], applicationId, windowSize, timeFilter.to, page, pageSize).then(response => {
       let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
         return pageSet.items;
       }));
@@ -50,17 +54,22 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
     return services;
   }
 
-  paginateServices(results, windowSize: number, to: number, page: number, pageSize: number) {
+  paginateServices(results, applicationId, windowSize: number, to: number, page: number, pageSize: number) {
     var queryParameters = "windowSize=" + windowSize
       + "&to=" + to
       + "&page=" + page
       + "&pageSize=" + pageSize;
 
-    return this.doRequest('/api/application-monitoring/applications/services?' + queryParameters).then(response => {
+    var url = '/api/application-monitoring/applications;id='
+      + applicationId
+      + '/services?'
+      + queryParameters;
+
+    return this.doRequest(url).then(response => {
       results.push(response.data);
       if (page * pageSize < response.data.totalHits) {
         page++;
-        return this.paginateServices(results, windowSize, to, page, pageSize);
+        return this.paginateServices(applicationId, results, windowSize, to, page, pageSize);
       } else {
         return results;
       }
@@ -104,7 +113,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
 
   fetchServiceMetrics(target, timeFilter: TimeFilter) {
     // avoid invalid calls
-    if (!target || !target.metric || !target.entity) {
+    if (!target || !target.metric || !target.entity || !target.service) {
       return this.$q.resolve({data: {items: []}});
     }
 
@@ -130,13 +139,8 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
       metrics: [metric]
     };
 
-    if (target.entity.key !== null) {
-      data['serviceId'] = target.entity.key;
-    }
-
-    if (target.selectedApplication && target.selectedApplication.key) {
-      data['applicationId'] = target.selectedApplication.key;
-    }
+    data['applicationId'] = target.entity.key;
+    data['serviceId'] = target.service.key;
 
     return this.postRequest('/api/application-monitoring/metrics/services?fillTimeSeries=true', data);
   }

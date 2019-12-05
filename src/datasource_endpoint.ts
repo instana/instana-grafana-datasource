@@ -16,16 +16,19 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
   ALL_ENDPOINTS = '-- No Endpoint Filter --';
 
   /** @ngInject */
-  constructor(instanceSettings, backendSrv, templateSrv, $q, serviceDataSource: InstanaServiceDataSource) {
+  constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
-
-    this.serviceDataSource = serviceDataSource;
     this.endpointsCache = new Cache<Promise<Array<Selectable>>>();
   }
 
-  getEndpoints(target, timeFilter: TimeFilter) {
-    const key = this.getTimeKey(timeFilter);
+  getEndpointsOfService(target, timeFilter: TimeFilter) {
+    const applicationId = target.entity.key;
+    const serviceId = target.service.key;
+    if (!serviceId || !applicationId) {
+      return null;
+    }
 
+    const key = this.getTimeKey(timeFilter) + serviceId;
     let endpoints = this.endpointsCache.get(key);
     if (endpoints) {
       return endpoints;
@@ -36,47 +39,38 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     let pageSize = 200;
 
 
-    endpoints = this.serviceDataSource.getServices(target, timeFilter).then(services => {
-      return this.paginateEndpoints([], windowSize, timeFilter.to, page, pageSize).then(response => {
-        let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
-          return pageSet.items;
-        }));
-
-        return allResults.map(entry => {
-          var serviceName = _.find(services, function (service) {
-            return service.key === entry.serviceId;
-          });
-
-          return {
-            'key': entry.id,
-            'label': serviceName ? entry.label + ' (' + serviceName.label + ')' : entry.label
-          };
-        });
-      });
+    endpoints = this.paginateEndpoints([], applicationId, serviceId, windowSize, timeFilter.to, page, pageSize).then(response => {
+      return _.flattenDeep(_.map(response, (pageSet, index) => {
+        return pageSet.items;
+      }));
     });
-
 
     this.endpointsCache.put(key, endpoints, 600000);
     return endpoints;
   }
 
-  paginateEndpoints(results, windowSize: number, to: number, page: number, pageSize: number) {
+  paginateEndpoints(results, applicationId, serviceId, windowSize: number, to: number, page: number, pageSize: number) {
     var queryParameters = "windowSize=" + windowSize
       + "&to=" + to
       + "&page=" + page
       + "&pageSize=" + pageSize;
 
-    return this.doRequest('/api/application-monitoring/applications/services/endpoints?' + queryParameters).then(response => {
+    var url = '/api/application-monitoring/applications;id='
+      + applicationId
+      + '/services;id='
+      + serviceId
+      + '/endpoints?' + queryParameters;
+
+    return this.doRequest(url).then(response => {
       results.push(response.data);
       if (page * pageSize < response.data.totalHits) {
         page++;
-        return this.paginateEndpoints(results, windowSize, to, page, pageSize);
+        return this.paginateEndpoints(results, applicationId, serviceId, windowSize, to, page, pageSize);
       } else {
         return results;
       }
     });
   }
-
 
   getApplicationsUsingEndpoint(target, timeFilter: TimeFilter) {
     const windowSize = this.getWindowSize(timeFilter);
@@ -115,7 +109,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
 
   fetchEndpointMetrics(target, timeFilter: TimeFilter) {
     // avoid invalid calls
-    if (!target || !target.metric || !target.entity) {
+    if (!target || !target.metric || !target.entity || !target.service || !target.endpoint) {
       return this.$q.resolve({data: {items: []}});
     }
 
@@ -141,13 +135,9 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
       metrics: [metric]
     };
 
-    if (target.entity.key !== null) {
-      data['endpointId'] = target.entity.key;
-    }
-
-    if (target.selectedApplication && target.selectedApplication.key) {
-      data['applicationId'] = target.selectedApplication.key;
-    }
+    data['applicationId'] = target.entity.key;
+    data['serviceId'] = target.service.key;
+    data['endpointId'] = target.endpoint.key;
 
     return this.postRequest('/api/application-monitoring/metrics/endpoints?fillTimeSeries=true', data);
   }

@@ -34,7 +34,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.application = new InstanaApplicationDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.service = new InstanaServiceDataSource(instanceSettings, backendSrv, templateSrv, $q);
-    this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q, this.service);
+    this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.availableGranularities = [];
     this.availableRollups = [];
   }
@@ -292,21 +292,26 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   getEndpointMetrics(target, timeFilter: TimeFilter) {
-    return this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
-      return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
-    });
+
   }
 
   getApplicationServiceEndpointMetrics(target, timeFilter: TimeFilter) {
     if (target.entity && !target.service && !target.endpoint) {
+      console.log("application");
       return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
         target.showWarningCantShowAllResults = response.data.canLoadMore;
         return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
       });
     } else if (target.entity && target.service && !target.endpoint) {
-      console.log("applicaton and service");
+      console.log("application and service");
+      return this.service.fetchServiceMetrics(target, timeFilter).then(response => {
+        return readItemMetrics(target, response, this.service.buildServiceMetricLabel);
+      });
     } else if (target.entity && target.service && target.endpoint) {
       console.log("application and service and endpoint");
+      return  this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
+        return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
+      });
     }
   }
 

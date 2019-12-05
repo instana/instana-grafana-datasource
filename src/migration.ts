@@ -21,4 +21,23 @@ export default function (target) {
       target.timeInterval = {key: target.timeInterval.rollup, label: target.timeInterval.label};
     }
   }
+
+  //2.4.3 towards 2.5.0
+  if (target.metricCategory === '5') {
+    //old service metric view
+    target.metricCategory = '4';
+    target.service = target.entity;
+    if (target.selectedApplication) {
+      target.entity = target.selectedApplication;
+    }
+  }
+
+  if (target.metricCategory === '6') {
+    //old service metric view
+    target.metricCategory = '4';
+    target.endpoint = target.entity;
+    if (target.selectedApplication) {
+      target.entity = target.selectedApplication;
+    }
+  }
 }
