@@ -293,7 +293,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.datasource.endpoint.getEndpointsOfService(this.target, this.timeFilter).then(
       endpoints => {
         this.uniqueEndpoints = _.orderBy(endpoints, [endpoint => endpoint.label.toLowerCase()], ['asc']);
-        console.log(this.uniqueEndpoints);
         if (!_.find(this.uniqueEndpoints, {'key': null})) {
           this.uniqueEndpoints.unshift({key: null, label: this.NO_ENDPOINT_FILTER});
           if (!this.target.endpoint) {

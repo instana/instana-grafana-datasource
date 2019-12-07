@@ -150,9 +150,6 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     data['applicationId'] = target.entity.key;
     data['serviceId'] = target.service.key;
 
-    console.log(target.endpoint);
-    console.log(data);
-
     return this.postRequest('/api/application-monitoring/metrics/endpoints?fillTimeSeries=true', data);
   }
 
