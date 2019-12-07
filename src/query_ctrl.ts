@@ -696,6 +696,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.resetServices();
     this.resetEndpoints();
     this.loadServices();
+    this.loadEndpoints();
     this.panelCtrl.refresh();
   }
 

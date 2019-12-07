@@ -450,7 +450,6 @@
            </info-popover>
         </label>
         <select id="select-service-{{ctrl.target.refId}}"
-                ng-disabled="!ctrl.target.entity.key"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.service"
                 ng-change="ctrl.onServiceSelect()"
@@ -464,7 +463,6 @@
           </info-popover>
         </label>
         <select id="select-endpoint-{{ctrl.target.refId}}"
-                ng-disabled="!ctrl.target.service.key"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.endpoint"
                 ng-change="ctrl.onChange()"

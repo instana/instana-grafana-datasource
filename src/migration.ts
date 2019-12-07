@@ -43,9 +43,15 @@ export default function (target) {
   if (target.metricCategory === '6') {
     //old endpoint metric view
     target.metricCategory = '4';
-    target.endpoint = target.entity;
-    if (target.selectedApplication) {
-      target.entity = target.selectedApplication;
+    target.endpoint.key = target.entity.key;
+    target.endpoint.label = target.entity.label;
+    target.service.key = null;
+    target.service.label = "-- No Service Filter --";
+    if (target.selectedApplication && target.selectedApplication.key) {
+      target.entity.key = target.selectedApplication.key;
+      target.entity.label = target.selectedApplication.label;
+    } else {
+      target.entity.key = "ALL_SERVICES";
     }
   }
 }
