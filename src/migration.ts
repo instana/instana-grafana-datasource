@@ -35,7 +35,8 @@ export default function (target) {
     } else {
       // this will be recognized by query control and later on be changed to the "All Services"
       // application that is always present with proper id.
-      target.entity.key = "ALL_SERVICES";
+      target.entity.key = null;
+      target.entity.label = "Test";
     }
   }
 
@@ -49,7 +50,8 @@ export default function (target) {
       target.entity.key = target.selectedApplication.key;
       target.entity.label = target.selectedApplication.label;
     } else {
-      target.entity.key = "ALL_SERVICES";
+      target.entity.key = null;
+      target.entity.label = "Test";
     }
   }
 }

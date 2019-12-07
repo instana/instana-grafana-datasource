@@ -23,7 +23,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
 
   getServicesOfApplication(target, timeFilter: TimeFilter) {
     let applicationId = "";
-    if (target.entity && target.entity.key !== "ALL_SERVICES") {
+    if (target.entity && target.entity.key) {
       applicationId = target.entity.key;
     }
 
@@ -139,7 +139,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
       metrics: [metric]
     };
 
-    if (target.entity && target.entity.key && target.entity.key !== "ALL_SERVICES") { //see migration.ts why "ALL_SERVICES"
+    if (target.entity && target.entity.key) { //see migration.ts why "ALL_SERVICES"
       data['applicationId'] = target.entity.key;
     }
 

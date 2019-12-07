@@ -23,7 +23,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
 
   getEndpointsOfService(target, timeFilter: TimeFilter) {
     let applicationId = "";
-    if (target.entity && target.entity.key !== "ALL_SERVICES") { //see migration.ts why "ALL SERVICES"
+    if (target.entity && target.entity.key) {
       applicationId = target.entity.key;
     }
 
@@ -120,7 +120,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
 
   fetchEndpointMetrics(target, timeFilter: TimeFilter) {
     // avoid invalid calls
-    if (!target || !target.metric || !target.entity || !target.service || !target.endpoint) {
+    if (!target || !target.metric) {
       return this.$q.resolve({data: {items: []}});
     }
 
@@ -147,7 +147,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
       metrics: [metric]
     };
 
-    if (target.entity && target.entity.key && target.entity.key !== "ALL_SERVICES") { //see migration.ts why "ALL_SERVICES"
+    if (target.entity && target.entity.key) { //see migration.ts why "ALL_SERVICES"
       data['applicationId'] = target.entity.key;
     }
 

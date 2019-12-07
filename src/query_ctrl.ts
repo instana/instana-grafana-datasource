@@ -236,11 +236,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
           this.uniqueEntities.unshift({key: null, label: this.NO_APPLICATION_FILTER});
         }
 
-        //migrate old application
-        if (this.target.entity && this.target.entity.key === "ALL_SERVICES") { //see migration.ts
-          this.target.entity = this.uniqueEntities[1];
-        }
-
         // replace removed application
         if (this.target && this.target.entity && !_.find(applications, ['key', this.target.entity.key])) {
           this.target.entity = this.uniqueEntities[0];
