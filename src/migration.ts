@@ -33,7 +33,11 @@ export default function (target) {
     if (target.selectedApplication) {
       console.log("old selected application:");
       console.log(target.selectedApplication);
-      target.entity = target.selectedApplication;
+      if (target.selectedApplication.key) {
+        target.entity = target.selectedApplication;
+      } else {
+        target.entity.key = null;
+      }
     }
   }
 
