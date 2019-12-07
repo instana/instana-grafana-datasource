@@ -27,25 +27,16 @@ export default function (target) {
   if (target.metricCategory === '5') {
     //old service metric view
     target.metricCategory = '4';
-    console.log("old service entity:");
-    console.log(target.entity);
     target.service.key = target.entity.key;
     target.service.label = target.entity.label;
-    if (target.selectedApplication) {
-      console.log("old selected application:");
-      console.log(target.selectedApplication);
-      if (target.selectedApplication.key) {
-        target.entity.key = target.selectedApplication.key;
-        target.entity.label = target.selectedApplication.label;
-      } else {
-        target.entity.key = null;
-      }
+    if (target.selectedApplication && target.selectedApplication.key) {
+      target.entity.key = target.selectedApplication.key;
+      target.entity.label = target.selectedApplication.label;
+    } else {
+      // this will be recognized by query control and later on be changed to the "All Services"
+      // application that is always present with proper id.
+      target.entity.key = "ALL_SERVICES";
     }
-
-    console.log("new service:");
-    console.log(target.service);
-    console.log("old application entity");
-    console.log(target.entity);
   }
 
   //2.4.3 towards 2.5.0

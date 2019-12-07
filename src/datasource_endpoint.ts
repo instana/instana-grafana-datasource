@@ -23,7 +23,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
 
   getEndpointsOfService(target, timeFilter: TimeFilter) {
     let applicationId = "";
-    if (target.entity) {
+    if (target.entity && target.entity.key !== "ALL_SERVICES") { //see migration.ts why "ALL SERVICES"
       applicationId = target.entity.key;
     }
 

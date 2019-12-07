@@ -296,20 +296,44 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   getApplicationServiceEndpointMetrics(target, timeFilter: TimeFilter) {
-    if (target.entity && !target.service && !target.endpoint) {
+    if (this.isApplicationSet(target.entity) && !this.isServiceSet(target.service) && !this.isEndpointSet(target.endpoint)) {
+      console.log("application");
       return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
         target.showWarningCantShowAllResults = response.data.canLoadMore;
         return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
       });
-    } else if (target.entity && target.service && !target.endpoint) {
+    } else if (this.isApplicationSet(target.entity) && this.isServiceSet(target.service) && !this.isEndpointSet(target.endpoint)) {
+      console.log("application and service");
       return this.service.fetchServiceMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.service.buildServiceMetricLabel);
       });
-    } else if (target.entity && target.service && target.endpoint) {
+    } else if (this.isApplicationSet(target.entity) && this.isServiceSet(target.service) && this.isEndpointSet(target.endpoint)) {
+      console.log("application and service and endpoint");
       return  this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
       });
     }
+  }
+
+  isApplicationSet(application) {
+    if (application && application.key) {
+      return true;
+    }
+    return false;
+  }
+
+  isServiceSet(service) {
+    if (service && service.key) {
+      return true;
+    }
+    return false;
+  }
+
+  isEndpointSet(endpoint) {
+    if (endpoint && endpoint.key) {
+      return true;
+    }
+    return false;
   }
 
   annotationQuery(options) {

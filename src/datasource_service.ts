@@ -23,7 +23,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
 
   getServicesOfApplication(target, timeFilter: TimeFilter) {
     let applicationId = "";
-    if (target.entity) {
+    if (target.entity && target.entity.key !== "ALL_SERVICES") {
       applicationId = target.entity.key;
     }
 
@@ -113,7 +113,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
 
   fetchServiceMetrics(target, timeFilter: TimeFilter) {
     // avoid invalid calls
-    if (!target || !target.metric || !target.entity || !target.service) {
+    if (!target || !target.metric) {
       return this.$q.resolve({data: {items: []}});
     }
 
@@ -139,8 +139,13 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
       metrics: [metric]
     };
 
-    data['applicationId'] = target.entity.key;
-    data['serviceId'] = target.service.key;
+    if (target.entity && target.entity.key && target.entity.key !== "ALL_SERVICES") { //see migration.ts why "ALL_SERVICES"
+      data['applicationId'] = target.entity.key;
+    }
+
+    if (target.service && target.service.key) {
+      data['serviceId'] = target.service.key;
+    }
 
     return this.postRequest('/api/application-monitoring/metrics/services?fillTimeSeries=true', data);
   }
