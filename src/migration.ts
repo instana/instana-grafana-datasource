@@ -29,12 +29,14 @@ export default function (target) {
     target.metricCategory = '4';
     console.log("old service entity:");
     console.log(target.entity);
-    target.service = target.entity;
+    target.service.key = target.entity.key;
+    target.service.label = target.entity.label;
     if (target.selectedApplication) {
       console.log("old selected application:");
       console.log(target.selectedApplication);
       if (target.selectedApplication.key) {
-        target.entity = target.selectedApplication;
+        target.entity.key = target.selectedApplication.key;
+        target.entity.label = target.selectedApplication.label;
       } else {
         target.entity.key = null;
       }
