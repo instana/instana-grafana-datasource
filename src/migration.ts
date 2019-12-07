@@ -39,6 +39,11 @@ export default function (target) {
         target.entity.key = null;
       }
     }
+
+    console.log("new service:");
+    console.log(target.service);
+    console.log("old application entity");
+    console.log(target.entity);
   }
 
   //2.4.3 towards 2.5.0
