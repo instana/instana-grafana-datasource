@@ -27,8 +27,12 @@ export default function (target) {
   if (target.metricCategory === '5') {
     //old service metric view
     target.metricCategory = '4';
+    console.log("old service entity:");
+    console.log(target.entity);
     target.service = target.entity;
     if (target.selectedApplication) {
+      console.log("old selected application:");
+      console.log(target.selectedApplication);
       target.entity = target.selectedApplication;
     }
   }
