@@ -35,7 +35,7 @@ export default function (target) {
 
   //2.4.3 towards 2.5.0
   if (target.metricCategory === '6') {
-    //old service metric view
+    //old endpoint metric view
     target.metricCategory = '4';
     target.endpoint = target.entity;
     if (target.selectedApplication) {

@@ -22,9 +22,9 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
   }
 
   getServicesOfApplication(target, timeFilter: TimeFilter) {
-    let applicationId = target.entity.key;
-    if (!applicationId) {
-      return null;
+    let applicationId = "";
+    if (target.entity) {
+      applicationId = target.entity.key;
     }
 
     const key = this.getTimeKey(timeFilter) + applicationId;

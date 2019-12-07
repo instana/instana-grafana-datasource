@@ -22,13 +22,17 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
   }
 
   getEndpointsOfService(target, timeFilter: TimeFilter) {
-    const applicationId = target.entity.key;
-    const serviceId = target.service.key;
-    if (!serviceId || !applicationId) {
-      return null;
+    let applicationId = "";
+    if (target.entity) {
+      applicationId = target.entity.key;
     }
 
-    const key = this.getTimeKey(timeFilter) + serviceId;
+    let serviceId = "";
+    if (target.service) {
+      serviceId = target.service.key;
+    }
+
+    const key = this.getTimeKey(timeFilter) + applicationId + serviceId;
     let endpoints = this.endpointsCache.get(key);
     if (endpoints) {
       return endpoints;
@@ -40,9 +44,16 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
 
 
     endpoints = this.paginateEndpoints([], applicationId, serviceId, windowSize, timeFilter.to, page, pageSize).then(response => {
-      return _.flattenDeep(_.map(response, (pageSet, index) => {
+      let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
         return pageSet.items;
       }));
+
+      return allResults.map(entry => {
+        return {
+          'key': entry.id,
+          'label': entry.label
+        };
+      });
     });
 
     this.endpointsCache.put(key, endpoints, 600000);
@@ -128,6 +139,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     }
 
     const data = {
+      endpointId: target.endpoint.key,
       timeFrame: {
         to: timeFilter.to,
         windowSize: windowSize
@@ -137,7 +149,9 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
 
     data['applicationId'] = target.entity.key;
     data['serviceId'] = target.service.key;
-    data['endpointId'] = target.endpoint.key;
+
+    console.log(target.endpoint);
+    console.log(data);
 
     return this.postRequest('/api/application-monitoring/metrics/endpoints?fillTimeSeries=true', data);
   }

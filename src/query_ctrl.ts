@@ -32,8 +32,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   snapshots: Array<string>;
   entitySelectionText: string;
-  serviceSelectionText: string;
-  endpointSelectionText: string;
+  //serviceSelectionText: string;
+  //endpointSelectionText: string;
   metricSelectionText: string;
   serviceEndpointSelectionText: string;
   previousMetricCategory: string;
@@ -43,9 +43,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
   customFilters = [];
 
   EMPTY_DROPDOWN_TEXT = ' - ';
-  ALL_APPLICATIONS = '-- No Application Filter --';
-  ALL_SERVICES = '-- No Service Filter --';
-  ALL_ENDPOINTS = '-- No Endpoint Filter --';
+  NO_APPLICATION_FILTER = '-- No Application Filter --';
+  NO_SERVICE_FILTER = '-- No Service Filter --';
+  NO_ENDPOINT_FILTER = '-- No Endpoint Filter --';
 
   OPERATOR_STRING = 'STRING';
   OPERATOR_NUMBER = 'NUMBER';
@@ -151,7 +151,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
         this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
       }
     });
-    console.log(this.target);
   }
 
 
@@ -232,7 +231,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
         this.uniqueEntities = _.orderBy(applications, [application => application.label.toLowerCase()], ['asc']);
         // if all is not existing, we insert it on top
         if (!_.find(this.uniqueEntities, {'key': null})) {
-          this.uniqueEntities.unshift({key: null, label: this.ALL_APPLICATIONS});
+          this.uniqueEntities.unshift({key: null, label: this.NO_APPLICATION_FILTER});
         }
         // replace removed application
         if (this.target && this.target.entity && !_.find(applications, ['key', this.target.entity.key])) {
@@ -271,7 +270,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.datasource.service.getServicesOfApplication(this.target, this.timeFilter).then(
       services => {
         this.uniqueServices = _.orderBy(services, [service => service.label.toLowerCase()], ['asc']);
-        this.serviceSelectionText = this.buildSelectionPlaceholderText(this.uniqueServices);
+        if (!_.find(this.uniqueServices, {'key': null})) {
+          this.uniqueServices.unshift({key: null, label: this.NO_SERVICE_FILTER});
+          if (!this.target.service) {
+            this.target.service = this.uniqueServices[0];
+          }
+        }
+        //this.serviceSelectionText = this.buildSelectionPlaceholderText(this.uniqueServices);
       }
     );
 
@@ -289,7 +294,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
       endpoints => {
         this.uniqueEndpoints = _.orderBy(endpoints, [endpoint => endpoint.label.toLowerCase()], ['asc']);
         console.log(this.uniqueEndpoints);
-        this.endpointSelectionText = this.buildSelectionPlaceholderText(this.uniqueEndpoints);
+        if (!_.find(this.uniqueEndpoints, {'key': null})) {
+          this.uniqueEndpoints.unshift({key: null, label: this.NO_ENDPOINT_FILTER});
+          if (!this.target.endpoint) {
+            this.target.endpoint = this.uniqueEndpoints[0];
+          }
+        }
+        //this.endpointSelectionText = this.buildSelectionPlaceholderText(this.uniqueEndpoints);
       }
     );
 
