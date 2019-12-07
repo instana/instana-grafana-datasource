@@ -43,10 +43,8 @@ export default function (target) {
   if (target.metricCategory === '6') {
     //old endpoint metric view
     target.metricCategory = '4';
+    target.endpoint = {}; //because target.endpoint does not exist yet.
     target.endpoint.key = target.entity.key;
-    target.endpoint.label = target.entity.label;
-    target.service.key = null;
-    target.service.label = "-- No Service Filter --";
     if (target.selectedApplication && target.selectedApplication.key) {
       target.entity.key = target.selectedApplication.key;
       target.entity.label = target.selectedApplication.label;
