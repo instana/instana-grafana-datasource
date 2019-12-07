@@ -296,21 +296,20 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   getApplicationServiceEndpointMetrics(target, timeFilter: TimeFilter) {
-    if (this.isApplicationSet(target.entity) && !this.isServiceSet(target.service) && !this.isEndpointSet(target.endpoint)) {
-      console.log("application");
-      return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
-        target.showWarningCantShowAllResults = response.data.canLoadMore;
-        return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
+    if (this.isEndpointSet(target.endpoint)) {
+      //endpoint metrics
+      return  this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
+        return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
       });
-    } else if (this.isApplicationSet(target.entity) && this.isServiceSet(target.service) && !this.isEndpointSet(target.endpoint)) {
-      console.log("application and service");
+    } else if (this.isServiceSet(target.service)) {
+      //service metrics
       return this.service.fetchServiceMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.service.buildServiceMetricLabel);
       });
-    } else if (this.isApplicationSet(target.entity) && this.isServiceSet(target.service) && this.isEndpointSet(target.endpoint)) {
-      console.log("application and service and endpoint");
-      return  this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
-        return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
+    } else if (this.isApplicationSet(target.entity)) {
+      return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
+        target.showWarningCantShowAllResults = response.data.canLoadMore;
+        return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
       });
     }
   }

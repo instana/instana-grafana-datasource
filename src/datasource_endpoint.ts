@@ -147,8 +147,13 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
       metrics: [metric]
     };
 
-    data['applicationId'] = target.entity.key;
-    data['serviceId'] = target.service.key;
+    if (target.entity && target.entity.key && target.entity.key !== "ALL_SERVICES") { //see migration.ts why "ALL_SERVICES"
+      data['applicationId'] = target.entity.key;
+    }
+
+    if (target.service && target.service.key) {
+      data['serviceId'] = target.service.key;
+    }
 
     return this.postRequest('/api/application-monitoring/metrics/endpoints?fillTimeSeries=true', data);
   }
