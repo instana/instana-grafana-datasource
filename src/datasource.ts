@@ -296,21 +296,17 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   getApplicationServiceEndpointMetrics(target, timeFilter: TimeFilter) {
-    console.log("wants to fetch metrics");
     if (this.isEndpointSet(target.endpoint)) {
       //endpoint metrics
-      console.log("wants to fetch endpoint metrics");
       return  this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
       });
     } else if (this.isServiceSet(target.service)) {
-      //service metrics
-      console.log("wants to fetch service metrics");
+      //service
       return this.service.fetchServiceMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.service.buildServiceMetricLabel);
       });
     } else if (this.isApplicationSet(target.entity)) {
-      console.log("wants to fetch application metrics");
       return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
         target.showWarningCantShowAllResults = response.data.canLoadMore;
         return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);

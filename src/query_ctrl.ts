@@ -131,11 +131,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
         }
-      }).then(() => {
-        this.loadServices();
-      }).then(() => {
-        this.loadEndpoints();
       });
+      this.loadServices();
+      this.loadEndpoints();
     }
   }
 
@@ -352,17 +350,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
         } else if (this.isAnalyzeWebsite()) {
           this.websiteApplicationLabel = "Website";
           this.onWebsiteChanges(false, true);
-        } else if (this.isApplicationMetric()) {
+        } else if (this.isApplicationServiceEndpointMetric()) {
           this.websiteApplicationLabel = "Application";
           this.onApplicationChanges(false, false);
-        } else if (this.isServiceMetric()) {
-          this.serviceEndpointTitle = "Service";
-          this.onFilterChange(false);
-          this.onServiceChanges(false);
-        } else if (this.isEndpointMetric()) {
-          this.serviceEndpointTitle = "Endpoint";
-          this.onFilterChange(false);
-          this.onEndpointChanges(false);
+          this.loadServices();
+          this.loadEndpoints();
         }
       }
     }
