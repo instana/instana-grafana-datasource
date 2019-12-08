@@ -65,25 +65,7 @@
       <div ng-include src="'application_service_endpoint.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'advanced_settings.html'"/>
-      <div ng-include src="'application_legend.html'"/>
-      <div ng-include src="'timeshift.html'"/>
-      <div ng-include src="'aggregate_graphs.html'"/>
-    </div>
-
-    <div ng-show="ctrl.target.metricCategory === '5'">
-      <div ng-include src="'serviceEndpoint.html'"/>
-      <div ng-include src="'metric.html'"/>
-      <div ng-include src="'advanced_settings.html'"/>
-      <div ng-include src="'service_legend.html'"/>
-      <div ng-include src="'timeshift.html'"/>
-      <div ng-include src="'aggregate_graphs.html'"/>
-    </div>
-
-    <div ng-show="ctrl.target.metricCategory === '6'">
-      <div ng-include src="'serviceEndpoint.html'"/>
-      <div ng-include src="'metric.html'"/>
-      <div ng-include src="'advanced_settings.html'"/>
-      <div ng-include src="'endpoint_legend.html'"/>
+      <div ng-include src="'application_service_endpoint_legend.html'"/>
       <div ng-include src="'timeshift.html'"/>
       <div ng-include src="'aggregate_graphs.html'"/>
     </div>
@@ -310,16 +292,17 @@
       </div>
     </script>
 
-    <script type="text/ng-template" id="endpoint_legend.html">
+    <script type="text/ng-template" id="application_service_endpoint_legend.html">
       <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
         <label class="gf-form-label query-keyword width-13 pointer">
           Legend format
           <info-popover position="top center" mode="right-normal">
-            Default: $label ($endpoint) - $key
+            Default: $label ($application) - $key
             <ul>
               <li>$label - entity label</li>
+              <li>$application - application label</li>
+              <li>$service - service label</li>
               <li>$endpoint - endpoint label</li>
-              <li>$application - application context (if selected)</li>
               <li>$timeShift - corresponding timeShift</li>
               <li>$metric - displayed metric</li>
               <li>$key - metric key with aggregation and rollup</li>
@@ -327,40 +310,12 @@
             </ul>
           </info-popover>
         </label>
-        <input id="in-endpoint-legend-{{ctrl.target.refId}}"
+        <input id="in-application-service-endpoint-legend-{{ctrl.target.refId}}"
                class="gf-form-input width-22"
                type="text"
                ng-model="ctrl.target.labelFormat"
                ng-model-options='{ debounce: 500 }'
-               placeholder="$label ($endpoint) - $key"
-               ng-change="ctrl.onChange()"
-               spellcheck='false'/>
-      </div>
-    </script>
-
-    <script type="text/ng-template" id="service_legend.html">
-      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
-        <label class="gf-form-label query-keyword width-13 pointer">
-          Legend format
-          <info-popover position="top center" mode="right-normal">
-            Default: $label ($service) - $key
-            <ul>
-              <li>$label - entity label</li>
-              <li>$service - endpoint label</li>
-              <li>$application - application context (if selected)</li>
-              <li>$timeShift - corresponding timeShift</li>
-              <li>$metric - displayed metric</li>
-              <li>$key - metric key with aggregation and rollup</li>
-              <li>$index - index in the list</li>
-            </ul>
-          </info-popover>
-        </label>
-        <input id="in-service-legend-{{ctrl.target.refId}}"
-               class="gf-form-input width-22"
-               type="text"
-               ng-model="ctrl.target.labelFormat"
-               ng-model-options='{ debounce: 500 }'
-               placeholder="$label ($service) - $key"
+               placeholder="$label ($application) - $key"
                ng-change="ctrl.onChange()"
                spellcheck='false'/>
       </div>
@@ -612,57 +567,6 @@
         </label>
         <gf-form-switch ng-disabled="!ctrl.target.aggregateGraphs" id="in-hide-graphs-{{ctrl.target.refId}}"
                         checked="ctrl.target.hideOriginalGraphs" on-change="ctrl.onChange()"/>
-      </div>
-    </script>
-
-    <script type="text/ng-template" id="serviceEndpoint.html">
-      <div class="gf-form">
-        <label class="gf-form-label query-keyword pointer width-13"
-               for="in-serviceEndpoint-namefilter-{{ctrl.target.refId}}">
-          Filter {{ctrl.serviceEndpointTitle}}
-          <info-popover position="top center" mode="right-normal">
-            <p>Filters the list of {{ctrl.serviceEndpointTitle}}s to only show the ones that contain the given
-              input.</p>
-          </info-popover>
-        </label>
-        <input id="in-serviceEndpoint-namefilter-{{ctrl.target.refId}}"
-               class="gf-form-input"
-               type="text"
-               ng-model='ctrl.target.serviceNamefilter'
-               ng-model-options='{ debounce: 500 }'
-               ng-change="ctrl.onNamefilterChanges()"
-               placeholder="Please Specify"
-               spellcheck='false'>
-        <label class="gf-form-label query-keyword width-13 pointer"
-               for="in-service-{{ctrl.target.refId}}">
-          {{ctrl.serviceEndpointTitle}}
-          <info-popover position="top center" mode="right-normal">
-            <p>Select your {{ctrl.serviceEndpointTitle}}.</p>
-          </info-popover>
-        </label>
-        <select id="in-service-{{ctrl.target.refId}}"
-                class="gf-form-input ng-valid ng-not-empty ng-touched"
-                ng-model="ctrl.target.entity"
-                ng-change="ctrl.onServiceEndpointSelected()"
-                ng-options="f as f.label for f in ctrl.target.availableServicesEndpoints track by f.key">
-          <option value="" disabled selected>{{ctrl.serviceEndpointSelectionText}}</option>
-        </select>
-        <label class="gf-form-label query-keyword width-13 pointer"
-               for="in-application-{{ctrl.target.refId}}"
-               ng-show="ctrl.supportsApplicationPerspective()">
-          Application Context
-          <info-popover position="top center" mode="right-normal">
-            <p>This will filter your selected {{ctrl.serviceEndpointTitle}} and show only metrics related to this
-              application perspective.</p>
-          </info-popover>
-        </label>
-        <select ng-show="ctrl.supportsApplicationPerspective()"
-                id="in-application-{{ctrl.target.refId}}"
-                class="gf-form-input ng-valid ng-not-empty ng-touched"
-                ng-model="ctrl.target.selectedApplication"
-                ng-change="ctrl.onChange()"
-                ng-options="f as f.label for f in ctrl.target.relatedApplications track by f.key">
-        </select>
       </div>
     </script>
   </div>

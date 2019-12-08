@@ -32,8 +32,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   snapshots: Array<string>;
   entitySelectionText: string;
-  //serviceSelectionText: string;
-  //endpointSelectionText: string;
   metricSelectionText: string;
   serviceEndpointSelectionText: string;
   previousMetricCategory: string;
@@ -152,7 +150,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
       }
     });
   }
-
 
   isInfrastructure() {
     return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
@@ -277,7 +274,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
             this.target.service = this.uniqueServices[0];
           }
         }
-        //this.serviceSelectionText = this.buildSelectionPlaceholderText(this.uniqueServices);
       }
     );
 
@@ -300,7 +296,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
             this.target.endpoint = this.uniqueEndpoints[0];
           }
         }
-        //this.endpointSelectionText = this.buildSelectionPlaceholderText(this.uniqueEndpoints);
       }
     );
 
@@ -351,7 +346,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
           this.websiteApplicationLabel = "Website";
           this.onWebsiteChanges(false, true);
         } else if (this.isApplicationServiceEndpointMetric()) {
-          this.websiteApplicationLabel = "Application";
           this.onApplicationChanges(false, false);
           this.loadServices();
           this.loadEndpoints();
@@ -633,23 +627,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   onChange() {
-    this.panelCtrl.refresh();
-  }
-
-  onServiceEndpointSelected() {
-    if (this.isServiceMetric()) {
-      this.datasource.service.getApplicationsUsingService(this.target, this.timeFilter).then(applications => {
-        this.target.relatedApplications = applications;
-        this.target.relatedApplications.unshift({key: null, label: "No Application Selected"});
-        this.target.selectedApplication = this.target.relatedApplications[0];
-      });
-    } else {
-      this.datasource.endpoint.getApplicationsUsingEndpoint(this.target, this.timeFilter).then(applications => {
-        this.target.relatedApplications = applications;
-        this.target.relatedApplications.unshift({key: null, label: "No Application Selected"});
-        this.target.selectedApplication = this.target.relatedApplications[0];
-      });
-    }
     this.panelCtrl.refresh();
   }
 

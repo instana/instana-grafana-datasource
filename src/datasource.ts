@@ -79,12 +79,6 @@ export default class InstanaDatasource extends AbstractDatasource {
             return this.getAnalyzeApplicationMetrics(target, timeFilter);
           } else if (target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
              return this.getApplicationServiceEndpointMetrics(target, timeFilter);
-          } else if (target.metricCategory === this.APPLICATION_METRICS) {
-            return this.getApplicationMetrics(target, timeFilter);
-          } else if (target.metricCategory === this.SERVICE_METRICS) {
-            return this.getServiceMetrics(target, timeFilter);
-          } else if (target.metricCategory === this.ENDPOINT_METRICS) {
-            return this.getEndpointMetrics(target, timeFilter);
           }
         }
       })
@@ -276,23 +270,6 @@ export default class InstanaDatasource extends AbstractDatasource {
       target.showWarningCantShowAllResults = response.data.canLoadMore;
       return readItemMetrics(target, response, this.application.buildAnalyzeApplicationLabel);
     });
-  }
-
-  getApplicationMetrics(target, timeFilter: TimeFilter) {
-    return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
-      target.showWarningCantShowAllResults = response.data.canLoadMore;
-      return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
-    });
-  }
-
-  getServiceMetrics(target, timeFilter: TimeFilter) {
-    return this.service.fetchServiceMetrics(target, timeFilter).then(response => {
-      return readItemMetrics(target, response, this.service.buildServiceMetricLabel);
-    });
-  }
-
-  getEndpointMetrics(target, timeFilter: TimeFilter) {
-
   }
 
   getApplicationServiceEndpointMetrics(target, timeFilter: TimeFilter) {
