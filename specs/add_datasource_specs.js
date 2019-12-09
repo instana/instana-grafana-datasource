@@ -17,7 +17,7 @@ describe('When adding the Instana datasource to Grafana', function() {
     await page.waitFor(500);
 
     await page.goto('http://localhost:3000/login');
-    await page.type('input[name=username]', 'admin');
+    await page.type('input[name=user]', 'admin');
     await page.type('input[name=password]', 'admin');
     const logInButton = await page.waitForXPath('//button[contains(text(),"Log In")]');
     logInButton.click();
