@@ -22,10 +22,11 @@ export default function (target) {
     }
   }
 
-  //2.4.3 towards 2.5.0
+  //2.4.4 towards 2.5.0
   if (target.metricCategory === '5') {
     //old service metric view
     target.metricCategory = '4';
+    target.service = {}; //because target.endpoint does not exist yet.
     target.service.key = target.entity.key;
     target.service.label = target.entity.label;
     if (target.selectedApplication && target.selectedApplication.key) {
@@ -39,7 +40,7 @@ export default function (target) {
     }
   }
 
-  //2.4.3 towards 2.5.0
+  //2.4.4 towards 2.5.0
   if (target.metricCategory === '6') {
     //old endpoint metric view
     target.metricCategory = '4';
