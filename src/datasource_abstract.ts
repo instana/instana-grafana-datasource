@@ -15,6 +15,7 @@ export default class AbstractDatasource {
 
   simpleCache: Cache<Array<Selectable>>;
 
+  PAGINATION_LIMIT = 50;
   CACHE_MAX_AGE = 60000;
   SEPARATOR = '|';
 

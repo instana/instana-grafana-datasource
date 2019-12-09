@@ -35,7 +35,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
     let page = 1;
     let pageSize = 200;
 
-    services = this.paginateServices([], applicationId, windowSize, timeFilter.to, page, pageSize).then(response => {
+    services = this.paginateServices([], applicationId, windowSize, timeFilter.to, page, pageSize, this.PAGINATION_LIMIT).then(response => {
       let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
         return pageSet.items;
       }));
@@ -52,7 +52,11 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
     return services;
   }
 
-  paginateServices(results, applicationId, windowSize: number, to: number, page: number, pageSize: number) {
+  paginateServices(results, applicationId, windowSize: number, to: number, page: number, pageSize: number, pageLimit: number) {
+    if (page > pageLimit) {
+      return results;
+    }
+
     var queryParameters = "windowSize=" + windowSize
       + "&to=" + to
       + "&page=" + page
@@ -67,7 +71,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
       results.push(response.data);
       if (page * pageSize < response.data.totalHits) {
         page++;
-        return this.paginateServices(applicationId, results, windowSize, to, page, pageSize);
+        return this.paginateServices(applicationId, results, windowSize, to, page, pageSize, pageLimit);
       } else {
         return results;
       }
