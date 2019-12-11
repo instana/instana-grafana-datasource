@@ -28,6 +28,7 @@ describe('When adding the Instana datasource to Grafana', function() {
     saveNewButton.click();
     await page.waitFor(1000); // don't ask
     await page.goto('http://localhost:3000/datasources/new?gettingstarted');
+    await page.waitFor(1000); // don't ask
 
     const installButton = await page.waitForXPath('//div//span[contains(text(),"Instana")]');
     installButton.click();
@@ -36,7 +37,10 @@ describe('When adding the Instana datasource to Grafana', function() {
     // Generate random datasource name to allow for multiple runs without refreshing Grafana.
     let runId = randomString(6);
     // await page.type('input[ng-model="ctrl.current.name"]', instanaUiBackendUrl + "-" + runId);
-    await page.type('input[ng-model="ctrl.current.jsonData.url"]', instanaUiBackendUrl);
+    console.log(page.content().then(content => {
+      return content
+    }));
+    await page.type('input[id=in-url]', instanaUiBackendUrl);
     await page.type('input[ng-model="ctrl.current.jsonData.apiToken"]', instanaApiToken);
     const saveAndTestButton = await page.waitForXPath('//button[contains(text(),"Save & Test")]');
     saveAndTestButton.click();
