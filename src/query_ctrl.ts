@@ -27,6 +27,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   uniqueEntities: Array<Selectable>;
   uniqueTags: Array<Selectable>;
   allWebsiteMetrics: Array<Selectable>;
+  allTypes: Array<Selectable>;
 
   snapshots: Array<string>;
   entitySelectionText: string;
@@ -154,6 +155,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
   isInfrastructure() {
     return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
   }
+
+  isBuiltInInfrastructure() {
+    return this.target.metricCategory === this.BUILT_IN_METRICS;
+  }
+
+  isCustomInfrastructure() {
+      return this.target.metricCategory === this.CUSTOM_METRICS;
+    }
 
   isAnalyzeWebsite() {
     return this.target.metricCategory === this.ANALYZE_WEBSITE_METRICS;
@@ -317,7 +326,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
   }
 
-  onFilterChange(refresh: boolean) {
+  onFilterChange(refresh: boolean, findMatchingEntityTypes = true) {
     if (!this.target.entityQuery) {
       this.selectionReset();
       return this.$q.resolve();
@@ -328,7 +337,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
             this.target.queryIsValid = true;
             this.snapshots = response.data;
 
-            this.filterForEntityType(refresh);
+            this.filterForEntityType(refresh, findMatchingEntityTypes);
           },
           error => {
             this.target.queryIsValid = false;
@@ -377,8 +386,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.adjustMetricSelectionPlaceholder();
   }
 
-  filterForEntityType(refresh: boolean) {
-    this.filterEntityTypes().then(() => {
+  filterForEntityType(refresh: boolean, findMatchingEntityTypes: boolean) {
+    this.filterEntityTypes(findMatchingEntityTypes).then(() => {
       this.adjustEntitySelectionPlaceholder();
 
       if (this.target.entityType && !_.find(this.uniqueEntityTypes, ['key', this.target.entityType.key])) {
@@ -390,15 +399,19 @@ export class InstanaQueryCtrl extends QueryCtrl {
     });
   }
 
-  filterEntityTypes() {
+  filterEntityTypes(findMatchingEntityTypes: boolean) {
     return this.datasource.infrastructure.getEntityTypes().then(
       entityTypes => {
-        this.uniqueEntityTypes =
-          _.sortBy(
-            _.filter(
-              entityTypes,
-              entityType => this.findMatchingEntityTypes(entityType)),
-            'label');
+        if (findMatchingEntityTypes) {
+          this.uniqueEntityTypes =
+            _.sortBy(
+              _.filter(
+                entityTypes,
+                entityType => this.findMatchingEntityTypes(entityType)),
+              'label');
+        } else {
+          this.uniqueEntityTypes = _.sortBy(entityTypes, 'label');
+        }
       }
     );
   }
@@ -574,6 +587,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.showAllMetrics = false;
     this.target.labelFormat = null;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
+    this.target.freeTextMetrics = null;
+    this.target.useFreeTextMetrics = false;
   }
 
   adjustEntitySelectionPlaceholder() {
@@ -661,6 +676,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.panelCtrl.refresh();
   }
 
+  onFreeTextMetricChange() {
+    this.panelCtrl.refresh();
+  }
+
   onTimeShiftChange() {
     if (this.target.timeShift) {
       this.target.timeShiftIsValid = this.target.timeShift.match(/\d+[m,s,h,d,w]{1}/);
@@ -668,6 +687,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     } else {
       this.target.timeShiftIsValid = true;
     }
+  }
+
+  toggleFreeTextMetrics() {
+    this.onFilterChange(true, false);
   }
 
   toggleAdvancedSettings() {
