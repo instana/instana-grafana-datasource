@@ -11,8 +11,8 @@ import _ from 'lodash';
 
 export default class InstanaApplicationDataSource extends AbstractDatasource {
   applicationsCache: Cache<Promise<Array<Selectable>>>;
-  queryInvervallAppCallsLimit: number;
-  queryInvervallAppMetricLimit: number;
+  queryInvervalAppCallsLimit: number;
+  queryInvervalAppMetricLimit: number;
 
   // our ui is limited to 80 results, same logic to stay comparable
   maximumNumberOfUsefulDataPoints = 80;
@@ -24,8 +24,8 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
     this.applicationsCache = new Cache<Promise<Array<Selectable>>>();
-    this.queryInvervallAppCallsLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_app_calls);
-    this.queryInvervallAppMetricLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_app_metrics);
+    this.queryInvervalAppCallsLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_app_calls);
+    this.queryInvervalAppMetricLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_app_metrics);
   }
 
   getApplications(timeFilter: TimeFilter) {
@@ -123,15 +123,13 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
   }
 
   fetchAnalyzeMetricsForApplication(target, timeFilter: TimeFilter) {
-    // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
-    const windowSize = this.getWindowSize(timeFilter);
-
-    // check if valid Query Interval
-    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervallAppCallsLimit);
-
+    // avoid invalid calls
     if (!target || !target.metric || !target.group || !target.entity ) {
       return this.$q.resolve({data: {items: []}});
     }
+
+    const windowSize = this.getWindowSize(timeFilter);
+    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervalAppCallsLimit);
 
     const tagFilters = [];
 
@@ -187,9 +185,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-
-    // check if valid Query Interval
-    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervallAppMetricLimit);
+    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervalAppMetricLimit);
 
     const metric = {
       metric: target.metric.key,

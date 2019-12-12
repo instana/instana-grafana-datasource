@@ -10,17 +10,16 @@ import _ from 'lodash';
 
 export default class InstanaWebsiteDataSource extends AbstractDatasource {
   websitesCache: Cache<Promise<Array<Selectable>>>;
+  queryInvervalLimit: number;
 
   // our ui is limited to 80 results, same logic to stay comparable
   maximumNumberOfUsefulDataPoints = 80;
-  queryInvervallLimit: number;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
-
     this.websitesCache = new Cache<Promise<Array<Selectable>>>();
-    this.queryInvervallLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_website_metrics);
+    this.queryInvervalLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_website_metrics);
   }
 
   getWebsites(timeFilter: TimeFilter) {
@@ -111,7 +110,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
 
     const windowSize = this.getWindowSize(timeFilter);
     // check if valid Query Interval
-    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervallLimit);
+    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervalLimit);
 
     const tagFilters = [{
       name: 'beacon.website.name',

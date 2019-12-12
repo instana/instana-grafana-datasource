@@ -10,8 +10,10 @@ import _ from "lodash";
 export default class InstanaEndpointDataSource extends AbstractDatasource {
   endpointsCache: Cache<Promise<Array<Selectable>>>;
   serviceDataSource: InstanaServiceDataSource;
+  queryInvervalAppMetricLimit: number;
+
+  // our ui is limited to 80 results, same logic to stay comparable
   maximumNumberOfUsefulDataPoints = 80;
-  queryInvervallLimit: number;
 
   // duplicate to QueryCtrl.NO_ENDPOINT_FILTER
   NO_ENDPOINT_FILTER = '-- No Endpoint Filter --';
@@ -20,7 +22,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
     this.endpointsCache = new Cache<Promise<Array<Selectable>>>();
-    this.queryInvervallLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_endpoint_metrics);
+    this.queryInvervalAppMetricLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_app_metrics);
   }
 
   getEndpointsOfService(target, timeFilter: TimeFilter) {
@@ -43,7 +45,6 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     const windowSize = this.getWindowSize(timeFilter);
     let page = 1;
     let pageSize = 200;
-
 
     endpoints = this.paginateEndpoints([], applicationId, serviceId, windowSize, timeFilter.to, page, pageSize, this.PAGINATION_LIMIT)
       .then(response => {
@@ -97,8 +98,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-    // check if valid Query Interval
-    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervallLimit);
+    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervalAppMetricLimit);
 
     const metric = {
       metric: target.metric.key,

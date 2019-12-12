@@ -12,18 +12,16 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   catalogCache: Cache<Promise<Array<Selectable>>>;
   showOffline: boolean;
   timeToLiveSnapshotInfoCache = 60*60*1000;
-  queryInvervallLimit: number;
+  queryInvervalLimit: number;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
-
     this.showOffline = instanceSettings.jsonData.showOffline;
-
     this.snapshotCache = new Cache<Promise<Array<Selectable>>>();
     this.snapshotInfoCache = new Cache<Promise<Array<Selectable>>>();
     this.catalogCache = new Cache<Promise<Array<Selectable>>>();
-    this.queryInvervallLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_infra);
+    this.queryInvervalLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_infra);
   }
 
   getEntityTypes() {
@@ -84,8 +82,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-    // check if valid Query Interval
-    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervallLimit);
+    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervalLimit);
 
     const fetchSnapshotContextsUrl = `/api/snapshots/context` +
       `?q=${query}` +
@@ -188,7 +185,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, metric) {
     const windowSize = this.getWindowSize(timeFilter);
     // check if valid Query Interval
-    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervallLimit);
+    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervalLimit);
 
     return this.$q.all(
       _.map(snapshots, (snapshot, index) => {
