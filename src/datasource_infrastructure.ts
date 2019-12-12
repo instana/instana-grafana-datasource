@@ -184,7 +184,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, metric) {
     const windowSize = this.getWindowSize(timeFilter);
-    // check if valid Query Interval
     super.checkValidQueryIntervalWithException(windowSize, this.queryInvervalLimit);
 
     return this.$q.all(

@@ -114,7 +114,7 @@ export default class AbstractDatasource {
   }
 
   isValidQueryInterval(windowSizeForQuery: number, queryintervalLimit: number): boolean {
-    if (!(queryintervalLimit === undefined || queryintervalLimit == null || queryintervalLimit <= 0)) {
+    if (queryintervalLimit > 0) {
       return windowSizeForQuery <= queryintervalLimit;
     }
     return true;
@@ -122,13 +122,13 @@ export default class AbstractDatasource {
 
   checkValidQueryIntervalWithException(windowSizeForQuery: number, queryintervalLimit: number) {
     if (!this.isValidQueryInterval(windowSizeForQuery, queryintervalLimit)) {
-      throw new Error("Limit for query time windowsize exceeded. Maximum is defined in config as: " + queryintervalLimit + " / requested windowsize: " + windowSizeForQuery);
+      throw new Error("Limit for query time windowsize exceeded. " +
+        "Maximum is defined as: " + (queryintervalLimit / 60 / 60 / 1000) + "hours");
     }
   }
 
-
   fromHourToMS(queryintervalLimitInHours: any): number {
-    if (!(queryintervalLimitInHours === undefined || queryintervalLimitInHours == null || queryintervalLimitInHours <= 0)) {
+    if (queryintervalLimitInHours > 0) {
       return queryintervalLimitInHours * 60 * 60 * 1000;
     }
     return 0;

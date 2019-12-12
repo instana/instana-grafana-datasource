@@ -78,7 +78,7 @@ export default class InstanaDatasource extends AbstractDatasource {
           } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
             return this.getAnalyzeApplicationMetrics(target, timeFilter);
           } else if (target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
-             return this.getApplicationServiceEndpointMetrics(target, timeFilter);
+            return this.getApplicationServiceEndpointMetrics(target, timeFilter);
           }
         }
       })
@@ -293,12 +293,10 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   getApplicationServiceEndpointMetrics(target, timeFilter: TimeFilter) {
     if (this.isEndpointSet(target.endpoint)) {
-      //endpoint metrics
       return  this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
       });
     } else if (this.isServiceSet(target.service)) {
-      //service
       return this.service.fetchServiceMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.service.buildServiceMetricLabel);
       });
@@ -311,24 +309,15 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   isApplicationSet(application) {
-    if (application && application.key) {
-      return true;
-    }
-    return false;
+    return application && application.key;
   }
 
   isServiceSet(service) {
-    if (service && service.key) {
-      return true;
-    }
-    return false;
+    return service && service.key;
   }
 
   isEndpointSet(endpoint) {
-    if (endpoint && endpoint.key) {
-      return true;
-    }
-    return false;
+    return endpoint && endpoint.key;
   }
 
   annotationQuery(options) {
