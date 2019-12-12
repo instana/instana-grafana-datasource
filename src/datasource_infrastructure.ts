@@ -12,7 +12,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   catalogCache: Cache<Promise<Array<Selectable>>>;
   showOffline: boolean;
   timeToLiveSnapshotInfoCache = 60*60*1000;
-  queryInvervalLimit: number;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -21,7 +20,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     this.snapshotCache = new Cache<Promise<Array<Selectable>>>();
     this.snapshotInfoCache = new Cache<Promise<Array<Selectable>>>();
     this.catalogCache = new Cache<Promise<Array<Selectable>>>();
-    this.queryInvervalLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_infra);
   }
 
   getEntityTypes() {
@@ -82,8 +80,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervalLimit);
-
     const fetchSnapshotContextsUrl = `/api/snapshots/context` +
       `?q=${query}` +
       `&from=${timeFilter.from}` +
@@ -184,8 +180,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, metric) {
     const windowSize = this.getWindowSize(timeFilter);
-    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervalLimit);
-
     return this.$q.all(
       _.map(snapshots, (snapshot, index) => {
         // ...fetch the metric data for every snapshot in the results.

@@ -64,6 +64,13 @@ export default class AbstractDatasource {
     return Math.round(time / 60000);
   }
 
+  hoursToMs(hours: any): number {
+    if (hours > 0) {
+      return hours * 60 * 60 * 1000;
+    }
+    return 0;
+  }
+
   doRequest(url: string, swallowError = false, maxRetries = 1) {
     const request = {
       method: 'GET',
@@ -111,26 +118,5 @@ export default class AbstractDatasource {
     return _.sortBy(datapoints, [function (o) {
       return o[1];
     }]);
-  }
-
-  isValidQueryInterval(windowSizeForQuery: number, queryintervalLimit: number): boolean {
-    if (queryintervalLimit > 0) {
-      return windowSizeForQuery <= queryintervalLimit;
-    }
-    return true;
-  }
-
-  checkValidQueryIntervalWithException(windowSizeForQuery: number, queryintervalLimit: number) {
-    if (!this.isValidQueryInterval(windowSizeForQuery, queryintervalLimit)) {
-      throw new Error("Limit for query time windowsize exceeded. " +
-        "Maximum is defined as: " + (queryintervalLimit / 60 / 60 / 1000) + "hours");
-    }
-  }
-
-  fromHourToMS(queryintervalLimitInHours: any): number {
-    if (queryintervalLimitInHours > 0) {
-      return queryintervalLimitInHours * 60 * 60 * 1000;
-    }
-    return 0;
   }
 }

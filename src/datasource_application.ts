@@ -11,8 +11,6 @@ import _ from 'lodash';
 
 export default class InstanaApplicationDataSource extends AbstractDatasource {
   applicationsCache: Cache<Promise<Array<Selectable>>>;
-  queryInvervalAppCallsLimit: number;
-  queryInvervalAppMetricLimit: number;
 
   // our ui is limited to 80 results, same logic to stay comparable
   maximumNumberOfUsefulDataPoints = 80;
@@ -24,8 +22,6 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
     this.applicationsCache = new Cache<Promise<Array<Selectable>>>();
-    this.queryInvervalAppCallsLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_app_calls);
-    this.queryInvervalAppMetricLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_app_metrics);
   }
 
   getApplications(timeFilter: TimeFilter) {
@@ -129,8 +125,6 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervalAppCallsLimit);
-
     const tagFilters = [];
 
     if (target.entity.key) {
@@ -185,8 +179,6 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervalAppMetricLimit);
-
     const metric = {
       metric: target.metric.key,
       aggregation: target.aggregation ? target.aggregation : 'SUM',
