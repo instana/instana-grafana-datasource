@@ -163,6 +163,9 @@
         <label class="gf-form-label query-keyword pointer" for="in-metric-{{ctrl.target.refId}}"
                ng-show="ctrl.canShowAggregation()">
           Aggregation
+          <info-popover position="top center" mode="right-normal">
+            <p>Select a metric aggretion.</p>
+          </info-popover>
         </label>
         <div class="gf-form-select-wrapper min-width-8"
              ng-show="ctrl.canShowAggregation()">
