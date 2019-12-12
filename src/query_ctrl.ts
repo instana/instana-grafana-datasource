@@ -176,18 +176,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     return this.target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS;
   }
 
-  isApplicationMetric() {
-    return this.target.metricCategory === this.APPLICATION_METRICS;
-  }
-
-  isServiceMetric() {
-    return this.target.metricCategory === this.SERVICE_METRICS;
-  }
-
-  isEndpointMetric() {
-    return this.target.metricCategory === this.ENDPOINT_METRICS;
-  }
-
   onWebsiteChanges(refresh, isAnalyze: boolean) {
     // select a meaningful default group
     if (this.target && !this.target.entityType) {
