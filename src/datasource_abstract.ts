@@ -15,7 +15,7 @@ export default class AbstractDatasource {
 
   simpleCache: Cache<Array<Selectable>>;
 
-  PAGINATION_LIMIT = 50;
+  PAGINATION_LIMIT = 15; // pagesize=200 => 3000 results in dropdown (~30sec.)
   CACHE_MAX_AGE = 60000;
   SEPARATOR = '|';
 
