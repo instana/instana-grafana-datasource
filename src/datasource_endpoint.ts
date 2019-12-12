@@ -12,20 +12,27 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
   serviceDataSource: InstanaServiceDataSource;
   maximumNumberOfUsefulDataPoints = 80;
 
-  // duplicate to QueryCtrl.ALL_ENDPOINTS
-  ALL_ENDPOINTS = '-- No Endpoint Filter --';
+  // duplicate to QueryCtrl.NO_ENDPOINT_FILTER
+  NO_ENDPOINT_FILTER = '-- No Endpoint Filter --';
 
   /** @ngInject */
-  constructor(instanceSettings, backendSrv, templateSrv, $q, serviceDataSource: InstanaServiceDataSource) {
+  constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
-
-    this.serviceDataSource = serviceDataSource;
     this.endpointsCache = new Cache<Promise<Array<Selectable>>>();
   }
 
-  getEndpoints(target, timeFilter: TimeFilter) {
-    const key = this.getTimeKey(timeFilter);
+  getEndpointsOfService(target, timeFilter: TimeFilter) {
+    let applicationId = "";
+    if (target.entity && target.entity.key) {
+      applicationId = target.entity.key;
+    }
 
+    let serviceId = "";
+    if (target.service) {
+      serviceId = target.service.key;
+    }
+
+    const key = this.getTimeKey(timeFilter) + applicationId + serviceId;
     let endpoints = this.endpointsCache.get(key);
     if (endpoints) {
       return endpoints;
@@ -36,86 +43,54 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     let pageSize = 200;
 
 
-    endpoints = this.serviceDataSource.getServices(target, timeFilter).then(services => {
-      return this.paginateEndpoints([], windowSize, timeFilter.to, page, pageSize).then(response => {
-        let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
-          return pageSet.items;
-        }));
+    endpoints = this.paginateEndpoints([], applicationId, serviceId, windowSize, timeFilter.to, page, pageSize, this.PAGINATION_LIMIT)
+      .then(response => {
+      let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
+        return pageSet.items;
+      }));
 
-        return allResults.map(entry => {
-          var serviceName = _.find(services, function (service) {
-            return service.key === entry.serviceId;
-          });
-
-          return {
-            'key': entry.id,
-            'label': serviceName ? entry.label + ' (' + serviceName.label + ')' : entry.label
-          };
-        });
+      return allResults.map(entry => {
+        return {
+          'key': entry.id,
+          'label': entry.label
+        };
       });
     });
-
 
     this.endpointsCache.put(key, endpoints, 600000);
     return endpoints;
   }
 
-  paginateEndpoints(results, windowSize: number, to: number, page: number, pageSize: number) {
+  paginateEndpoints(results, applicationId, serviceId, windowSize: number, to: number, page: number, pageSize: number, pageLimit: number) {
+    if (page > pageLimit) {
+      return results;
+    }
+
     var queryParameters = "windowSize=" + windowSize
       + "&to=" + to
       + "&page=" + page
       + "&pageSize=" + pageSize;
 
-    return this.doRequest('/api/application-monitoring/applications/services/endpoints?' + queryParameters).then(response => {
+    var url = '/api/application-monitoring/applications;id='
+      + applicationId
+      + '/services;id='
+      + serviceId
+      + '/endpoints?' + queryParameters;
+
+    return this.doRequest(url).then(response => {
       results.push(response.data);
       if (page * pageSize < response.data.totalHits) {
         page++;
-        return this.paginateEndpoints(results, windowSize, to, page, pageSize);
+        return this.paginateEndpoints(results, applicationId, serviceId, windowSize, to, page, pageSize, pageLimit);
       } else {
         return results;
       }
     });
   }
 
-
-  getApplicationsUsingEndpoint(target, timeFilter: TimeFilter) {
-    const windowSize = this.getWindowSize(timeFilter);
-
-    const metric = {
-      metric: "calls",
-      aggregation: "SUM"
-    };
-
-    const data = {
-      timeFrame: {
-        to: timeFilter.to,
-        windowSize: windowSize
-      },
-      metrics: [metric],
-      endpointId: target.entity.key
-    };
-
-    let page = 1;
-    let pageSize = 200;
-    let pagination = {
-      page: page,
-      pageSize: pageSize
-    };
-
-    data['pagination'] = pagination;
-
-    return this.postRequest('/api/application-monitoring/metrics/applications', data).then(response => {
-      let filteredData = _.filter(response.data.items, item => item.metrics['calls.sum'][0][0] > 0);
-      return filteredData.map(entry => ({
-        'key': entry.application.id,
-        'label': entry.application.label
-      }));
-    });
-  }
-
   fetchEndpointMetrics(target, timeFilter: TimeFilter) {
     // avoid invalid calls
-    if (!target || !target.metric || !target.entity) {
+    if (!target || !target.metric) {
       return this.$q.resolve({data: {items: []}});
     }
 
@@ -134,6 +109,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     }
 
     const data = {
+      endpointId: target.endpoint.key,
       timeFrame: {
         to: timeFilter.to,
         windowSize: windowSize
@@ -141,12 +117,12 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
       metrics: [metric]
     };
 
-    if (target.entity.key !== null) {
-      data['endpointId'] = target.entity.key;
+    if (target.entity && target.entity.key) { //see migration.ts why "ALL_SERVICES"
+      data['applicationId'] = target.entity.key;
     }
 
-    if (target.selectedApplication && target.selectedApplication.key) {
-      data['applicationId'] = target.selectedApplication.key;
+    if (target.service && target.service.key) {
+      data['serviceId'] = target.service.key;
     }
 
     return this.postRequest('/api/application-monitoring/metrics/endpoints?fillTimeSeries=true', data);
@@ -156,8 +132,9 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.endpoint.label);
-      label = _.replace(label, 'endpoint', target.entity.label);
-      label = _.replace(label, '$application', target.selectedApplication.label);
+      label = _.replace(label, '$endpoint', target.endpoint.label);
+      label = _.replace(label, '$service', target.service.label);
+      label = _.replace(label, '$application', target.entity.label);
       label = _.replace(label, '$metric', target.metric.label);
       label = _.replace(label, '$key', key);
       label = _.replace(label, '$index', index + 1);
@@ -165,14 +142,14 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
       return label;
     }
 
-    if (target.entity.label === this.ALL_ENDPOINTS) {
+    if (target.endpoint.label === this.NO_ENDPOINT_FILTER) {
       return target.timeShift ? item.endpoint.label + ' - ' + key + " - " + target.timeShift : item.endpoint.label + ' - ' + key;
     }
 
     return target.timeShift && target.timeShiftIsValid ?
-      item.endpoint.label + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
+      item.endpoint.label + ' (' + target.endpoint.label + ')' + ' - ' + key + " - " + target.timeShift
       :
-      item.endpoint.label + ' (' + target.entity.label + ')' + ' - ' + key;
+      item.endpoint.label + ' (' + target.endpoint.label + ')' + ' - ' + key;
   }
 
 }

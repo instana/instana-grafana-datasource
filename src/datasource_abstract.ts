@@ -15,6 +15,7 @@ export default class AbstractDatasource {
 
   simpleCache: Cache<Array<Selectable>>;
 
+  PAGINATION_LIMIT = 15; // pagesize=200 => 3000 results in dropdown (~30sec.)
   CACHE_MAX_AGE = 60000;
   SEPARATOR = '|';
 
@@ -22,9 +23,10 @@ export default class AbstractDatasource {
   CUSTOM_METRICS = '1';
   ANALYZE_APPLICATION_METRICS = '2';
   ANALYZE_WEBSITE_METRICS = '3';
-  APPLICATION_METRICS = '4';
-  SERVICE_METRICS = '5';
-  ENDPOINT_METRICS = '6';
+  APPLICATION_SERVICE_ENDPOINT_METRICS = '4'; // replaces previous
+  // APPLICATION_METRICS = '4';
+  // SERVICE_METRICS = '5';
+  // ENDPOINT_METRICS = '6';
 
   /** @ngInject */
   constructor(instanceSettings, public backendSrv, public templateSrv, public $q) {
