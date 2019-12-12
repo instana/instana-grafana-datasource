@@ -11,6 +11,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
   endpointsCache: Cache<Promise<Array<Selectable>>>;
   serviceDataSource: InstanaServiceDataSource;
   maximumNumberOfUsefulDataPoints = 80;
+  queryInvervallLimit: number;
 
   // duplicate to QueryCtrl.NO_ENDPOINT_FILTER
   NO_ENDPOINT_FILTER = '-- No Endpoint Filter --';
@@ -19,6 +20,7 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
     this.endpointsCache = new Cache<Promise<Array<Selectable>>>();
+    this.queryInvervallLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_endpoint_metrics);
   }
 
   getEndpointsOfService(target, timeFilter: TimeFilter) {
@@ -95,6 +97,8 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
+    // check if valid Query Interval
+    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervallLimit);
 
     const metric = {
       metric: target.metric.key,

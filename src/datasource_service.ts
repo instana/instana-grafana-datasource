@@ -9,6 +9,7 @@ import _ from "lodash";
 export default class InstanaServiceDataSource extends AbstractDatasource {
   servicesCache: Cache<Promise<Array<Selectable>>>;
   maximumNumberOfUsefulDataPoints = 80;
+  queryInvervallLimit: number;
 
   // duplicate to QueryCtrl.NO_SERVICE_FILTER
   NO_SERVICE_FILTER = '-- No Service Filter --';
@@ -17,6 +18,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
     this.servicesCache = new Cache<Promise<Array<Selectable>>>();
+    this.queryInvervallLimit = super.fromHourToMS(instanceSettings.jsonData.queryinterval_limit_service_metrics);
   }
 
   getServicesOfApplication(target, timeFilter: TimeFilter) {
@@ -85,6 +87,8 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
+    // check if valid Query Interval
+    super.checkValidQueryIntervalWithException(windowSize, this.queryInvervallLimit);
 
     const metric = {
       metric: target.metric.key,

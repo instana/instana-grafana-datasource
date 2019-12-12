@@ -32,7 +32,6 @@ export default class AbstractDatasource {
   constructor(instanceSettings, public backendSrv, public templateSrv, public $q) {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
-
     this.simpleCache = new Cache<Array<Selectable>>();
 
     // old versions have not saved proxy usage, so we switch to the default assumption
@@ -114,4 +113,25 @@ export default class AbstractDatasource {
     }]);
   }
 
+  isValidQueryInterval(windowSizeForQuery: number, queryintervalLimit: number ): boolean {
+    if (!((queryintervalLimit === undefined || queryintervalLimit == null || queryintervalLimit <= 0))){
+      return windowSizeForQuery <= queryintervalLimit;
+    }
+    return true;
+  }
+
+  checkValidQueryIntervalWithException(windowSizeForQuery: number, queryintervalLimit: number ) {
+    if (!this.isValidQueryInterval(windowSizeForQuery,queryintervalLimit)){
+        throw new Error("Limit for query time windowsize exceeded. Maximum is defined in config as: "+
+          queryintervalLimit+" / requested Windowsize: "+windowSizeForQuery);
+    }
+  }
+
+
+  fromHourToMS(queryintervalLimitInHours: any) {
+    if (!((queryintervalLimitInHours === undefined || queryintervalLimitInHours == null || queryintervalLimitInHours <= 0))){
+      return queryintervalLimitInHours * 60 * 60 * 1000;
+    }
+    return 0;
+  }
 }
