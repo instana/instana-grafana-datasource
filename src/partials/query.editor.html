@@ -244,32 +244,30 @@
     </script>
 
     <script type="text/ng-template" id="application_service_endpoint_legend.html">
-      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
-        <label class="gf-form-label query-keyword width-13 pointer">
-          Legend format
-          <info-popover position="top center" mode="right-normal">
-            Default: $label ($application) - $key
-            <ul>
-              <li>$label - entity label</li>
-              <li>$application - application label</li>
-              <li>$service - service label</li>
-              <li>$endpoint - endpoint label</li>
-              <li>$timeShift - corresponding timeShift</li>
-              <li>$metric - displayed metric</li>
-              <li>$key - metric key with aggregation and rollup</li>
-              <li>$index - index in the list</li>
-            </ul>
-          </info-popover>
-        </label>
-        <input id="in-application-service-endpoint-legend-{{ctrl.target.refId}}"
-               class="gf-form-input width-22"
-               type="text"
-               ng-model="ctrl.target.labelFormat"
-               ng-model-options='{ debounce: 500 }'
-               placeholder="$label ($application) - $key"
-               ng-change="ctrl.onChange()"
-               spellcheck='false'/>
-      </div>
+      <label class="gf-form-label query-keyword width-13 pointer">
+        Legend format
+        <info-popover position="top center" mode="right-normal">
+          Default: $label ($application) - $key
+          <ul>
+            <li>$label - entity label</li>
+            <li>$application - application label</li>
+            <li>$service - service label</li>
+            <li>$endpoint - endpoint label</li>
+            <li>$timeShift - corresponding timeShift</li>
+            <li>$metric - displayed metric</li>
+            <li>$key - metric key with aggregation and rollup</li>
+            <li>$index - index in the list</li>
+          </ul>
+        </info-popover>
+      </label>
+      <input id="in-application-service-endpoint-legend-{{ctrl.target.refId}}"
+             class="gf-form-input full-width"
+             type="text"
+             ng-model="ctrl.target.labelFormat"
+             ng-model-options='{ debounce: 500 }'
+             placeholder="$label ($application) - $key"
+             ng-change="ctrl.onChange()"
+             spellcheck='false'/>
     </script>
 
     <script type="text/ng-template" id="website_application.html">
@@ -473,7 +471,7 @@
       <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
         <div class="gf-form full-width" ng-show="ctrl.isInfrastructure()" ng-include src="'legend.html'"/>
         <div class="gf-form full-width" ng-show="ctrl.isAnalyzeApplication()" ng-include src="'application_legend.html'"/>
-        <div class="gf-form full-width" ng-show="ctrl.isApplicationMetric()" ng-include src="'application_service_endpoint_legend.html'"/>
+        <div class="gf-form full-width" ng-show="ctrl.isApplicationServiceEndpointMetric()" ng-include src="'application_service_endpoint_legend.html'"/>
         <div class="gf-form full-width" ng-show="ctrl.isAnalyzeWebsite()" ng-include src="'website_legend.html'"/>
         <div class="gf-form full-width" ng-include src="'timeshift.html'"/>
       </div>
