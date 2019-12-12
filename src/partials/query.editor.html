@@ -177,7 +177,7 @@
         <label class="gf-form-label query-keyword pointer" for="in-timeInterval-{{ctrl.target.refId}}">
           Rollup
           <info-popover position="top center" mode="right-normal">
-            <p>Select the Rollup value</p>
+            <p>Select the rollup value.</p>
           </info-popover>
         </label>
         <div class="gf-form-select-wrapper min-width-8 gf-form-select-wrapper--has-help-icon">
@@ -309,7 +309,7 @@
                for="in-group-{{ctrl.target.refId}}">
           Group by
           <info-popover position="top center" mode="right-normal">
-            <p>Group by tag</p>
+            <p>Group by tag.</p>
           </info-popover>
         </label>
         <div ng-show="ctrl.isAnalyzeCategory()"
@@ -348,7 +348,7 @@
                 ng-change="ctrl.onApplicationSelect()"
                 ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
         </select>
-        <label class="gf-form-label query-keyword pointer width-13"
+        <label class="gf-form-label query-keyword pointer"
                for="select-service-{{ctrl.target.refId}}">
            Service
            <info-popover position="top center" mode="right-normal">
@@ -361,7 +361,7 @@
                 ng-change="ctrl.onServiceSelect()"
                 ng-options="f as f.label for f in ctrl.uniqueServices track by f.key">
         </select>
-        <label class="gf-form-label query-keyword pointer width-13"
+        <label class="gf-form-label query-keyword pointer"
                for="select-endpoint-{{ctrl.target.refId}}">
           Endpoint
           <info-popover position="top center" mode="right-normal">
@@ -384,7 +384,7 @@
                  for="in-filter-name-{{ctrl.target.refId}}-{{$index}}">
             {{$index+1}}. Filter
             <info-popover position="top center" class="ng-invalid" mode="right-normal">
-              <p>Filter by tag</p>
+              <p>Filter by tag.</p>
             </info-popover>
           </label>
           <div class="gf-form-select-wrapper width-14 gf-form-select-wrapper--has-help-icon">
@@ -441,7 +441,7 @@
         <label class="gf-form-label width-13 pointer" for="in-{{ctrl.target.analyzeType}}-{{ctrl.target.refId}}">
           Add filter
           <info-popover position="top center" mode="right-normal">
-            <p>Add an additional tag filter</p>
+            <p>Add an additional tag filter.</p>
           </info-popover>
         </label>
         <button class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.addFilter()">
@@ -452,7 +452,7 @@
                ng-hide="!ctrl.target.showWarningCantShowAllResults">
           ⚠️ Can't show all results
           <info-popover position="top center" mode="right-normal">
-            <p>Add Filter to narrow down the data</p>
+            <p>Add Filter to narrow down the data.</p>
           </info-popover>
         </label>
       </div>
