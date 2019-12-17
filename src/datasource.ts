@@ -92,33 +92,47 @@ export default class InstanaDatasource extends AbstractDatasource {
       })
     ).then(results => {
       // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-      let flatData = {data: _.flatten(results)};
+      var flatData = {data: _.flatten(results)};
+      this.applyTimeShiftIfNecessary(flatData, targets);
+      var newData = this.aggregateDataIfNecessary(flatData, targets);
+      return {data: _.flatten(newData)};
+    });
+  }
 
-      flatData.data.forEach(data => {
-        if (targets[data.refId] && targets[data.refId].timeShift) {
-          this.applyTimeShiftOnData(data, this.convertTimeShiftToMillis(targets[data.refId].timeShift));
-        }
-      });
+  removeEmptyTargetsFromResultData(data) {
+    return _.filter(data.data, d => d && d.refId);
+  }
 
-      var targetsGroupedByRefId = _.groupBy(flatData.data, function (data) {
-        return data.refId;
-      });
+  applyTimeShiftIfNecessary(data, targets) {
+    data.data.forEach(data => {
+      if (targets[data.refId] && targets[data.refId].timeShift) {
+        this.applyTimeShiftOnData(data, this.convertTimeShiftToMillis(targets[data.refId].timeShift));
+      }
+    });
+  }
 
-      var newData = [];
+  aggregateDataIfNecessary(data, targets) {
+    var targetsGroupedByRefId = this.groupTargetsByRefId(data);
+    var newData = [];
 
-      _.each(targetsGroupedByRefId, (target, index) => {
-        var refId = target[0].refId;
-        if (targets[refId] && targets[refId].aggregateGraphs) {
-          newData.push(this.aggregateTarget(target, targets[refId]));
-          if (!targets[refId].hideOriginalGraphs) {
-            newData.push(target);
-          }
-        } else {
+    _.each(targetsGroupedByRefId, (target, index) => {
+      var refId = target[0].refId;
+      if (targets[refId] && targets[refId].aggregateGraphs) {
+        newData.push(this.aggregateTarget(target, targets[refId]));
+        if (!targets[refId].hideOriginalGraphs) {
           newData.push(target);
         }
-      });
+      } else {
+        newData.push(target);
+      }
+    });
 
-      return {data: _.flatten(newData)};
+    return newData;
+  }
+
+  groupTargetsByRefId(data) {
+    return _.groupBy(data.data, function (target) {
+      return target.refId;
     });
   }
 

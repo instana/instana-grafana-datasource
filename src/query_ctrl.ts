@@ -657,9 +657,12 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onTimeShiftChange() {
     if (this.target.timeShift) {
       this.target.timeShiftIsValid = this.target.timeShift.match(/\d+[m,s,h,d,w]{1}/);
-      this.panelCtrl.refresh();
     } else {
       this.target.timeShiftIsValid = true;
+    }
+
+    if (this.target.timeShiftIsValid) {
+      this.panelCtrl.refresh();
     }
   }
 
