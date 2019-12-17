@@ -86,7 +86,6 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-
     const metric = {
       metric: target.metric.key,
       aggregation: target.aggregation ? target.aggregation : 'SUM',

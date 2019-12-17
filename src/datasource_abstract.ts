@@ -32,7 +32,6 @@ export default class AbstractDatasource {
   constructor(instanceSettings, public backendSrv, public templateSrv, public $q) {
     this.name = instanceSettings.name;
     this.id = instanceSettings.id;
-
     this.simpleCache = new Cache<Array<Selectable>>();
 
     // old versions have not saved proxy usage, so we switch to the default assumption
@@ -63,6 +62,13 @@ export default class AbstractDatasource {
 
   private msToMin(time: number): number {
     return Math.round(time / 60000);
+  }
+
+  hoursToMs(hours: any): number {
+    if (hours > 0) {
+      return hours * 60 * 60 * 1000;
+    }
+    return 0;
   }
 
   doRequest(url: string, swallowError = false, maxRetries = 1) {
@@ -113,5 +119,4 @@ export default class AbstractDatasource {
       return o[1];
     }]);
   }
-
 }

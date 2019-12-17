@@ -11,15 +11,12 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   snapshotInfoCache: Cache<Promise<Array<Selectable>>>;
   catalogCache: Cache<Promise<Array<Selectable>>>;
   showOffline: boolean;
-
   timeToLiveSnapshotInfoCache = 60*60*1000;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
-
     this.showOffline = instanceSettings.jsonData.showOffline;
-
     this.snapshotCache = new Cache<Promise<Array<Selectable>>>();
     this.snapshotInfoCache = new Cache<Promise<Array<Selectable>>>();
     this.catalogCache = new Cache<Promise<Array<Selectable>>>();
@@ -82,6 +79,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       return snapshots;
     }
 
+    const windowSize = this.getWindowSize(timeFilter);
     const fetchSnapshotContextsUrl = `/api/snapshots/context` +
       `?q=${query}` +
       `&from=${timeFilter.from}` +
@@ -181,6 +179,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   }
 
   fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, metric) {
+    const windowSize = this.getWindowSize(timeFilter);
     return this.$q.all(
       _.map(snapshots, (snapshot, index) => {
         // ...fetch the metric data for every snapshot in the results.

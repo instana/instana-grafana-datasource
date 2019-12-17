@@ -26,6 +26,10 @@ export default class InstanaDatasource extends AbstractDatasource {
   endpoint: InstanaEndpointDataSource;
   availableGranularities: Array<Selectable>;
   availableRollups: Array<Selectable>;
+  maxWindowSizeInfrastructure: number;
+  maxWindowSizeAnalyzeWebsites: number;
+  maxWindowSizeAnalyzeApplications: number;
+  maxWindowSizeAnalyzeMetrics: number;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -37,6 +41,10 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.availableGranularities = [];
     this.availableRollups = [];
+    this.maxWindowSizeInfrastructure = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_infra);
+    this.maxWindowSizeAnalyzeWebsites = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_website_metrics);
+    this.maxWindowSizeAnalyzeApplications = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_calls);
+    this.maxWindowSizeAnalyzeMetrics = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_metrics);
   }
 
   query(options) {
@@ -78,7 +86,7 @@ export default class InstanaDatasource extends AbstractDatasource {
           } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
             return this.getAnalyzeApplicationMetrics(target, timeFilter);
           } else if (target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
-             return this.getApplicationServiceEndpointMetrics(target, timeFilter);
+            return this.getApplicationServiceEndpointMetrics(target, timeFilter);
           }
         }
       })
@@ -235,6 +243,11 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   getInfrastructureMetrics(target, timeFilter: TimeFilter) {
+    // do not try to execute to big queries
+    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeInfrastructure)) {
+      return this.rejectLargeTimeWindow(this.maxWindowSizeInfrastructure);
+    }
+
     // do not try to retrieve data without selected metric
     if (!target.metric && !target.showAllMetrics && !target.freeTextMetrics) {
       return this.$q.resolve({data: []});
@@ -259,7 +272,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     _.each(metricsString, (metricString) => metrics.push(JSON.parse('{ "key": "' + metricString + '"}')));
 
     if (metrics.length > 4) {
-      metrics.slice(0, 3); //API supports up to 4 metrics at once
+      metrics.slice(0, 3); // API supports up to 4 metrics at once
     }
 
     return metrics;
@@ -279,12 +292,22 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   getAnalyzeWebsiteMetrics(target, timeFilter: TimeFilter) {
+    // do not try to execute to big queries
+    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeWebsites)) {
+      return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeWebsites);
+    }
+
     return this.website.fetchAnalyzeMetricsForWebsite(target, timeFilter).then(response => {
       return readItemMetrics(target, response, this.website.buildAnalyzeWebsiteLabel);
     });
   }
 
   getAnalyzeApplicationMetrics(target, timeFilter: TimeFilter) {
+    // do not try to execute to big queries
+    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeApplications)) {
+      return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeApplications);
+    }
+
     return this.application.fetchAnalyzeMetricsForApplication(target, timeFilter).then(response => {
       target.showWarningCantShowAllResults = response.data.canLoadMore;
       return readItemMetrics(target, response, this.application.buildAnalyzeApplicationLabel);
@@ -292,13 +315,16 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   getApplicationServiceEndpointMetrics(target, timeFilter: TimeFilter) {
+    // do not try to execute to big queries
+    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeMetrics)) {
+      return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeMetrics);
+    }
+
     if (this.isEndpointSet(target.endpoint)) {
-      //endpoint metrics
       return  this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
       });
     } else if (this.isServiceSet(target.service)) {
-      //service
       return this.service.fetchServiceMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.service.buildServiceMetricLabel);
       });
@@ -310,25 +336,28 @@ export default class InstanaDatasource extends AbstractDatasource {
     }
   }
 
-  isApplicationSet(application) {
-    if (application && application.key) {
-      return true;
+  isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean {
+    if (queryIntervalLimit > 0) {
+      return windowSize > queryIntervalLimit;
     }
     return false;
+  }
+
+  rejectLargeTimeWindow(maxWindowSize: number) {
+    return this.$q.reject("Limit for maximum selectable windowsize exceeded, " +
+      "max is: " + (maxWindowSize / 60 / 60 / 1000) + " hours");
+  }
+
+  isApplicationSet(application) {
+    return application && application.key;
   }
 
   isServiceSet(service) {
-    if (service && service.key) {
-      return true;
-    }
-    return false;
+    return service && service.key;
   }
 
   isEndpointSet(endpoint) {
-    if (endpoint && endpoint.key) {
-      return true;
-    }
-    return false;
+    return endpoint && endpoint.key;
   }
 
   annotationQuery(options) {
