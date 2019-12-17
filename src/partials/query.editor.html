@@ -25,35 +25,32 @@
     <div ng-show="ctrl.target.metricCategory === '0'">
       <div ng-include src="'queryAndType.html'"/>
       <div ng-include src="'metric.html'"/>
-      <div ng-include src="'advanced_settings.html'"/>
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '1'">
       <div ng-include src="'queryAndType.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'metric_filters.html'"/>
-      <div ng-include src="'advanced_settings.html'"/>
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '2'">
       <div ng-include src="'website_application.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'filters.html'"/>
-      <div ng-include src="'advanced_settings.html'"/>
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '3'">
       <div ng-include src="'website_application.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'filters.html'"/>
-      <div ng-include src="'advanced_settings.html'"/>
     </div>
 
     <div ng-show="ctrl.target.metricCategory === '4'">
       <div ng-include src="'application_service_endpoint.html'"/>
       <div ng-include src="'metric.html'"/>
-      <div ng-include src="'advanced_settings.html'"/>
     </div>
+
+    <div ng-include src="'advanced_settings.html'"/>
 
     <script type="text/ng-template" id="queryAndType.html">
       <div class="gf-form">
