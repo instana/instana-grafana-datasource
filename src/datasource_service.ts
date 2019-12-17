@@ -53,6 +53,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
   }
 
   paginateServices(results, applicationId, windowSize: number, to: number, page: number, pageSize: number, pageLimit: number) {
+    console.log(applicationId);
     if (page > pageLimit) {
       return results;
     }
@@ -71,7 +72,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
       results.push(response.data);
       if (page * pageSize < response.data.totalHits) {
         page++;
-        return this.paginateServices(applicationId, results, windowSize, to, page, pageSize, pageLimit);
+        return this.paginateServices(results, applicationId, windowSize, to, page, pageSize, pageLimit);
       } else {
         return results;
       }
