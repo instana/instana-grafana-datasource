@@ -18,11 +18,13 @@ Attention: For On-premise customers Instana Release 146 is required.
 
 This datasource uses the Instana REST API to query the metric values. First of all you will need to generate an API [token](https://docs.instana.io/quick_start/api/). Use this token along with the URL for your Instana account e.g. *https://prod-acme.instana.io*
 
-![datasource configuration](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/datasource-sml.png)
-
 To use the Grafana server as a proxy for querying Instana REST API please check `Use proxy`.
 
 To enable metrics for offline snapshots please check `Enable offline snapshots`. For On-premise customers Instana Release 156 is required.
+
+The configuration allows the setting of a limit for the different categories that this plugin offers. Numeric values can be entered in order to make sure that queries do not exceed a certain amount of window size that they query. This can be useful when experiencing Grafana performance issues. See the gif below on how this limit exactly works.
+
+![datasource configuration](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/limit_configuration.gif)
 
 ## Usage
 
@@ -113,7 +115,7 @@ Allows to show metrics related to an endpoint. Endpoints can either be selected 
 
 ![endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/endpoint_metrics.gif)
 
-![application service endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/applicaiton_service_endpoint_metrics.gif)
+![application service endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application_service_endpoint_metrics.gif)
 
 ### Change legend format
 
