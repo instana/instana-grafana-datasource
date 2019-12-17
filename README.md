@@ -87,9 +87,11 @@ If no custom format is provided the default label '_$label ($application) $metri
 
 #### Service metrics
 
-Allows to show metrics related to a service. Services can either be selected as standalone or in combination with an Application Perspective to show more detailed metric data. The latter is only possible with an Instana version of at least than 1.163.
+Allows to show metrics related to a service. Services can either be selected as standalone (first gif) or in combination with an Application Perspective (second gif) to show more detailed metric data. As soon as an application is selected the dropdown menu of possible services reloads and only shows services that are actually being used by the selected application.
 
 ![service metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/service_metrics.gif)
+
+![application service metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application_service_metrics.gif)
 
 ### Change legend format
 
@@ -97,7 +99,7 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 - $label - the entity label
 - $service - service label
-- $application - application label
+- $application - application label (if selected)
 - $timeShift - corresponding timeShift
 - $metric - the displayed metric
 - $key - metric key with aggregation and rollup
@@ -107,19 +109,20 @@ If no custom format is provided the default label '_$label ($service) $metric_' 
 
 #### Endpoint metrics
 
-Allows to show metrics related to an endpoint. Endpoint can either be selected as standalone or in combination with an Application Perspective to show more detailed metric data. Since multiple endpoints can have the same name, the service name is shown in brackets after each endpoint to make the selection more clear.
-
-The latter is only possible with an Instana version of at least than 1.163.
+Allows to show metrics related to an endpoint. Endpoints can either be selected as standalone or in combination with an Application Perspective and service to show more detailed metric data. Since multiple endpoints can have the same name, it is recommended to select an application, then a service, and finally an endpoint in order to be sure to select the correct endpoint. Possible selectable items are reloaded and cached each time a service and an application is changed.
 
 ![endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/endpoint_metrics.gif)
+
+![application service endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/applicaiton_service_endpoint_metrics.gif)
 
 ### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
 - $label - the entity label
+- $application - application label (if selected)
+- $service - service label (if selected)
 - $endpoint - endpoint label
-- $application - application label
 - $timeShift - corresponding timeShift
 - $metric - the displayed metric
 - $key - metric key with aggregation and rollup
