@@ -133,11 +133,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     if (`${target.entityQuery}`.includes("entity.pluginId:") || `${target.entityQuery}`.includes("entity.selfType:")) {
       return encodeURIComponent(`${target.entityQuery}`);
     } else {
-      if (target.freeTextMetrics) {
-        return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.unfilteredEntityType}`);
-      } else {
-        return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType.key}`);
-      }
+      return encodeURIComponent(`${target.entityQuery} AND entity.pluginId:${target.entityType.key}`);
     }
   }
 

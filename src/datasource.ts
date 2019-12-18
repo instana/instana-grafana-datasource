@@ -93,6 +93,8 @@ export default class InstanaDatasource extends AbstractDatasource {
     ).then(results => {
       // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
       var flatData = {data: _.flatten(results)};
+      // Remove empty data items
+      flatData.data = _.compact(flatData.data);
       this.applyTimeShiftIfNecessary(flatData, targets);
       var newData = this.aggregateDataIfNecessary(flatData, targets);
       return {data: _.flatten(newData)};
