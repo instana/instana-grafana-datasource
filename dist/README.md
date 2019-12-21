@@ -18,11 +18,13 @@ Attention: For On-premise customers Instana Release 146 is required.
 
 This datasource uses the Instana REST API to query the metric values. First of all you will need to generate an API [token](https://docs.instana.io/quick_start/api/). Use this token along with the URL for your Instana account e.g. *https://prod-acme.instana.io*
 
-![datasource configuration](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/datasource-sml.png)
-
 To use the Grafana server as a proxy for querying Instana REST API please check `Use proxy`.
 
 To enable metrics for offline snapshots please check `Enable offline snapshots`. For On-premise customers Instana Release 156 is required.
+
+The configuration allows the setting of a limit for the different categories that this plugin offers. Numeric values can be entered in order to make sure that queries do not exceed a certain amount of window size that they query. This can be useful when experiencing Grafana performance issues. See the gif below on how this limit exactly works.
+
+![datasource configuration](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/limit_configuration.gif)
 
 ## Usage
 
@@ -87,9 +89,11 @@ If no custom format is provided the default label '_$label ($application) $metri
 
 #### Service metrics
 
-Allows to show metrics related to a service. Services can either be selected as standalone or in combination with an Application Perspective to show more detailed metric data. The latter is only possible with an Instana version of at least than 1.163.
+Allows to show metrics related to a service. Services can either be selected as standalone (first gif) or in combination with an Application Perspective (second gif) to show more detailed metric data. As soon as an application is selected the dropdown menu of possible services reloads and only shows services that are actually being used by the selected application.
 
 ![service metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/service_metrics.gif)
+
+![application service metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application_service_metrics.gif)
 
 ### Change legend format
 
@@ -97,7 +101,7 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 - $label - the entity label
 - $service - service label
-- $application - application label
+- $application - application label (if selected)
 - $timeShift - corresponding timeShift
 - $metric - the displayed metric
 - $key - metric key with aggregation and rollup
@@ -107,19 +111,20 @@ If no custom format is provided the default label '_$label ($service) $metric_' 
 
 #### Endpoint metrics
 
-Allows to show metrics related to an endpoint. Endpoint can either be selected as standalone or in combination with an Application Perspective to show more detailed metric data. Since multiple endpoints can have the same name, the service name is shown in brackets after each endpoint to make the selection more clear.
-
-The latter is only possible with an Instana version of at least than 1.163.
+Allows to show metrics related to an endpoint. Endpoints can either be selected as standalone or in combination with an Application Perspective and service to show more detailed metric data. Since multiple endpoints can have the same name, it is recommended to select an application, then a service, and finally an endpoint in order to be sure to select the correct endpoint. Possible selectable items are reloaded and cached each time a service and an application is changed.
 
 ![endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/endpoint_metrics.gif)
+
+![application service endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application_service_endpoint_metrics.gif)
 
 ### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
 - $label - the entity label
+- $application - application label (if selected)
+- $service - service label (if selected)
 - $endpoint - endpoint label
-- $application - application label
 - $timeShift - corresponding timeShift
 - $metric - the displayed metric
 - $key - metric key with aggregation and rollup

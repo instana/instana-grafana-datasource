@@ -21,6 +21,39 @@ System.register([], function(exports_1) {
                 target.timeInterval = { key: target.timeInterval.rollup, label: target.timeInterval.label };
             }
         }
+        //2.4.4 towards 2.5.0
+        if (target.metricCategory === '5') {
+            //old service metric view
+            target.metricCategory = '4';
+            target.service = {}; //because target.endpoint does not exist yet.
+            target.service.key = target.entity.key;
+            target.service.label = target.entity.label;
+            if (target.selectedApplication && target.selectedApplication.key) {
+                target.entity.key = target.selectedApplication.key;
+                target.entity.label = target.selectedApplication.label;
+            }
+            else {
+                // this will be recognized by query control and later on be changed to the "All Services"
+                // application that is always present with proper id.
+                target.entity.key = null;
+                target.entity.label = "Test";
+            }
+        }
+        //2.4.4 towards 2.5.0
+        if (target.metricCategory === '6') {
+            //old endpoint metric view
+            target.metricCategory = '4';
+            target.endpoint = {}; //because target.endpoint does not exist yet.
+            target.endpoint.key = target.entity.key;
+            if (target.selectedApplication && target.selectedApplication.key) {
+                target.entity.key = target.selectedApplication.key;
+                target.entity.label = target.selectedApplication.label;
+            }
+            else {
+                target.entity.key = null;
+                target.entity.label = "Test";
+            }
+        }
     }
     exports_1("default", default_1);
     return {

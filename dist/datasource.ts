@@ -26,6 +26,10 @@ export default class InstanaDatasource extends AbstractDatasource {
   endpoint: InstanaEndpointDataSource;
   availableGranularities: Array<Selectable>;
   availableRollups: Array<Selectable>;
+  maxWindowSizeInfrastructure: number;
+  maxWindowSizeAnalyzeWebsites: number;
+  maxWindowSizeAnalyzeApplications: number;
+  maxWindowSizeAnalyzeMetrics: number;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -34,9 +38,13 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.application = new InstanaApplicationDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.service = new InstanaServiceDataSource(instanceSettings, backendSrv, templateSrv, $q);
-    this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q, this.service);
+    this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.availableGranularities = [];
     this.availableRollups = [];
+    this.maxWindowSizeInfrastructure = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_infra);
+    this.maxWindowSizeAnalyzeWebsites = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_website_metrics);
+    this.maxWindowSizeAnalyzeApplications = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_calls);
+    this.maxWindowSizeAnalyzeMetrics = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_metrics);
   }
 
   query(options) {
@@ -77,44 +85,56 @@ export default class InstanaDatasource extends AbstractDatasource {
             return this.getAnalyzeWebsiteMetrics(target, timeFilter);
           } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
             return this.getAnalyzeApplicationMetrics(target, timeFilter);
-          } else if (target.metricCategory === this.APPLICATION_METRICS) {
-            return this.getApplicationMetrics(target, timeFilter);
-          } else if (target.metricCategory === this.SERVICE_METRICS) {
-            return this.getServiceMetrics(target, timeFilter);
-          } else if (target.metricCategory === this.ENDPOINT_METRICS) {
-            return this.getEndpointMetrics(target, timeFilter);
+          } else if (target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
+            return this.getApplicationServiceEndpointMetrics(target, timeFilter);
           }
         }
       })
     ).then(results => {
       // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-      let flatData = {data: _.flatten(results)};
+      var flatData = {data: _.flatten(results)};
+      // Remove empty data items
+      flatData.data = _.compact(flatData.data);
+      this.applyTimeShiftIfNecessary(flatData, targets);
+      var newData = this.aggregateDataIfNecessary(flatData, targets);
+      return {data: _.flatten(newData)};
+    });
+  }
 
-      flatData.data.forEach(data => {
-        if (targets[data.refId] && targets[data.refId].timeShift) {
-          this.applyTimeShiftOnData(data, this.convertTimeShiftToMillis(targets[data.refId].timeShift));
-        }
-      });
+  removeEmptyTargetsFromResultData(data) {
+    return _.filter(data.data, d => d && d.refId);
+  }
 
-      var targetsGroupedByRefId = _.groupBy(flatData.data, function (data) {
-        return data.refId;
-      });
+  applyTimeShiftIfNecessary(data, targets) {
+    data.data.forEach(data => {
+      if (targets[data.refId] && targets[data.refId].timeShift) {
+        this.applyTimeShiftOnData(data, this.convertTimeShiftToMillis(targets[data.refId].timeShift));
+      }
+    });
+  }
 
-      var newData = [];
+  aggregateDataIfNecessary(data, targets) {
+    var targetsGroupedByRefId = this.groupTargetsByRefId(data);
+    var newData = [];
 
-      _.each(targetsGroupedByRefId, (target, index) => {
-        var refId = target[0].refId;
-        if (targets[refId] && targets[refId].aggregateGraphs) {
-          newData.push(this.aggregateTarget(target, targets[refId]));
-          if (!targets[refId].hideOriginalGraphs) {
-            newData.push(target);
-          }
-        } else {
+    _.each(targetsGroupedByRefId, (target, index) => {
+      var refId = target[0].refId;
+      if (targets[refId] && targets[refId].aggregateGraphs) {
+        newData.push(this.aggregateTarget(target, targets[refId]));
+        if (!targets[refId].hideOriginalGraphs) {
           newData.push(target);
         }
-      });
+      } else {
+        newData.push(target);
+      }
+    });
 
-      return {data: _.flatten(newData)};
+    return newData;
+  }
+
+  groupTargetsByRefId(data) {
+    return _.groupBy(data.data, function (target) {
+      return target.refId;
     });
   }
 
@@ -239,60 +259,121 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   getInfrastructureMetrics(target, timeFilter: TimeFilter) {
+    // do not try to execute to big queries
+    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeInfrastructure)) {
+      return this.rejectLargeTimeWindow(this.maxWindowSizeInfrastructure);
+    }
+
     // do not try to retrieve data without selected metric
-    if (!target.metric && !target.showAllMetrics) {
+    if (!target.metric && !target.showAllMetrics && !target.freeTextMetrics) {
       return this.$q.resolve({data: []});
     }
 
     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
     return this.infrastructure.fetchSnapshotsForTarget(target, timeFilter).then(snapshots => {
       if (target.showAllMetrics) {
-        const resultPromises = [];
-        _.forEach(target.allMetrics, metric => {
-          resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
-        });
-
-        return Promise.all(resultPromises).then(allResults => {
-          const allMetrics = [];
-          allResults.forEach(result => result.forEach(s => allMetrics.push(s)));
-          return allMetrics;
-        });
+        return this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, target.allMetrics);
+      } else if (target.freeTextMetrics) {
+        const metrics = this.extractMetricsFromText(target.freeTextMetrics);
+        return this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics);
       } else {
         return this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
       }
     });
   }
 
+  extractMetricsFromText(freeText: string) {
+    const metricsString = freeText.replace(/\s/g, '').split(',');
+    let metrics = [];
+    _.each(metricsString, (metricString) => metrics.push(JSON.parse('{ "key": "' + metricString + '"}')));
+
+    if (metrics.length > 4) {
+      metrics.slice(0, 3); // API supports up to 4 metrics at once
+    }
+
+    return metrics;
+  }
+
+  fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics) {
+    const resultPromises = [];
+    _.forEach(metrics, metric => {
+      resultPromises.push(this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
+    });
+
+    return Promise.all(resultPromises).then(allResults => {
+      const allMetrics = [];
+      allResults.forEach(result => result.forEach(s => allMetrics.push(s)));
+      return allMetrics;
+    });
+  }
+
   getAnalyzeWebsiteMetrics(target, timeFilter: TimeFilter) {
+    // do not try to execute to big queries
+    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeWebsites)) {
+      return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeWebsites);
+    }
+
     return this.website.fetchAnalyzeMetricsForWebsite(target, timeFilter).then(response => {
       return readItemMetrics(target, response, this.website.buildAnalyzeWebsiteLabel);
     });
   }
 
   getAnalyzeApplicationMetrics(target, timeFilter: TimeFilter) {
+    // do not try to execute to big queries
+    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeApplications)) {
+      return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeApplications);
+    }
+
     return this.application.fetchAnalyzeMetricsForApplication(target, timeFilter).then(response => {
       target.showWarningCantShowAllResults = response.data.canLoadMore;
       return readItemMetrics(target, response, this.application.buildAnalyzeApplicationLabel);
     });
   }
 
-  getApplicationMetrics(target, timeFilter: TimeFilter) {
-    return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
-      target.showWarningCantShowAllResults = response.data.canLoadMore;
-      return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
-    });
+  getApplicationServiceEndpointMetrics(target, timeFilter: TimeFilter) {
+    // do not try to execute to big queries
+    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeMetrics)) {
+      return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeMetrics);
+    }
+
+    if (this.isEndpointSet(target.endpoint)) {
+      return  this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
+        return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
+      });
+    } else if (this.isServiceSet(target.service)) {
+      return this.service.fetchServiceMetrics(target, timeFilter).then(response => {
+        return readItemMetrics(target, response, this.service.buildServiceMetricLabel);
+      });
+    } else if (this.isApplicationSet(target.entity)) {
+      return this.application.fetchApplicationMetrics(target, timeFilter).then(response => {
+        target.showWarningCantShowAllResults = response.data.canLoadMore;
+        return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
+      });
+    }
   }
 
-  getServiceMetrics(target, timeFilter: TimeFilter) {
-    return this.service.fetchServiceMetrics(target, timeFilter).then(response => {
-      return readItemMetrics(target, response, this.service.buildServiceMetricLabel);
-    });
+  isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean {
+    if (queryIntervalLimit > 0) {
+      return windowSize > queryIntervalLimit;
+    }
+    return false;
   }
 
-  getEndpointMetrics(target, timeFilter: TimeFilter) {
-    return this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
-      return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
-    });
+  rejectLargeTimeWindow(maxWindowSize: number) {
+    return this.$q.reject("Limit for maximum selectable windowsize exceeded, " +
+      "max is: " + (maxWindowSize / 60 / 60 / 1000) + " hours");
+  }
+
+  isApplicationSet(application) {
+    return application && application.key;
+  }
+
+  isServiceSet(service) {
+    return service && service.key;
+  }
+
+  isEndpointSet(endpoint) {
+    return endpoint && endpoint.key;
   }
 
   annotationQuery(options) {

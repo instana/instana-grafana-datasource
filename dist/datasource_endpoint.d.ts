@@ -7,12 +7,11 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
     endpointsCache: Cache<Promise<Array<Selectable>>>;
     serviceDataSource: InstanaServiceDataSource;
     maximumNumberOfUsefulDataPoints: number;
-    ALL_ENDPOINTS: string;
+    NO_ENDPOINT_FILTER: string;
     /** @ngInject */
-    constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any, serviceDataSource: InstanaServiceDataSource);
-    getEndpoints(target: any, timeFilter: TimeFilter): Promise<Selectable[]>;
-    paginateEndpoints(results: any, windowSize: number, to: number, page: number, pageSize: number): any;
-    getApplicationsUsingEndpoint(target: any, timeFilter: TimeFilter): any;
+    constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
+    getEndpointsOfService(target: any, timeFilter: TimeFilter): Promise<Selectable[]>;
+    paginateEndpoints(results: any, applicationId: any, serviceId: any, windowSize: number, to: number, page: number, pageSize: number, pageLimit: number): any;
     fetchEndpointMetrics(target: any, timeFilter: TimeFilter): any;
     buildEndpointMetricLabel(target: any, item: any, key: any, index: any): string;
 }

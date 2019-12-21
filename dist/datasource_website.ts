@@ -17,7 +17,6 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
-
     this.websitesCache = new Cache<Promise<Array<Selectable>>>();
   }
 
@@ -108,7 +107,6 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
-
     const tagFilters = [{
       name: 'beacon.website.name',
       operator: 'EQUALS',

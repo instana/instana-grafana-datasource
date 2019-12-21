@@ -11,15 +11,12 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   snapshotInfoCache: Cache<Promise<Array<Selectable>>>;
   catalogCache: Cache<Promise<Array<Selectable>>>;
   showOffline: boolean;
-
   timeToLiveSnapshotInfoCache = 60*60*1000;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
     super(instanceSettings, backendSrv, templateSrv, $q);
-
     this.showOffline = instanceSettings.jsonData.showOffline;
-
     this.snapshotCache = new Cache<Promise<Array<Selectable>>>();
     this.snapshotInfoCache = new Cache<Promise<Array<Selectable>>>();
     this.catalogCache = new Cache<Promise<Array<Selectable>>>();
@@ -82,6 +79,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       return snapshots;
     }
 
+    const windowSize = this.getWindowSize(timeFilter);
     const fetchSnapshotContextsUrl = `/api/snapshots/context` +
       `?q=${query}` +
       `&from=${timeFilter.from}` +
@@ -143,7 +141,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     return query + this.SEPARATOR + this.getTimeKey(timeFilter);
   }
 
-  buildLabel(snapshotResponse, host, target, index): string {
+  buildLabel(snapshotResponse, host, target, index, metric): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', snapshotResponse.data.label);
@@ -154,7 +152,11 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       label = _.replace(label, '$type', _.get(snapshotResponse.data, ['data', 'type'], ''));
       label = _.replace(label, '$name', _.get(snapshotResponse.data, ['data', 'name'], ''));
       label = _.replace(label, '$service', _.get(snapshotResponse.data, ['data', 'service_name'], ''));
-      label = _.replace(label, '$metric', _.get(target, ['metric', 'key'], 'n/a'));
+      if (target.freeTextMetrics) {
+        label = _.replace(label, '$metric', metric.key);
+      } else {
+        label = _.replace(label, '$metric', _.get(target, ['metric', 'key'], 'n/a'));
+      }
       label = _.replace(label, '$index', index + 1);
       label = _.replace(label, '$timeShift', target.timeShift);
       return label;
@@ -173,13 +175,14 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   }
 
   fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, metric) {
+    const windowSize = this.getWindowSize(timeFilter);
     return this.$q.all(
       _.map(snapshots, (snapshot, index) => {
         // ...fetch the metric data for every snapshot in the results.
         return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then(response => {
           const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
           var result = {
-            'target': this.buildLabel(snapshot.response, snapshot.host, target, index),
+            'target': this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
             'datapoints': _.map(timeseries, value => [value.value, value.timestamp]),
             'refId': target.refId
           };

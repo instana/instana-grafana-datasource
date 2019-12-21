@@ -14,9 +14,17 @@ export default class InstanaDatasource extends AbstractDatasource {
     endpoint: InstanaEndpointDataSource;
     availableGranularities: Array<Selectable>;
     availableRollups: Array<Selectable>;
+    maxWindowSizeInfrastructure: number;
+    maxWindowSizeAnalyzeWebsites: number;
+    maxWindowSizeAnalyzeApplications: number;
+    maxWindowSizeAnalyzeMetrics: number;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     query(options: any): any;
+    removeEmptyTargetsFromResultData(data: any): any;
+    applyTimeShiftIfNecessary(data: any, targets: any): void;
+    aggregateDataIfNecessary(data: any, targets: any): any[];
+    groupTargetsByRefId(data: any): any;
     setRollupTimeInterval(target: any, timeFilter: TimeFilter): void;
     setGranularityTimeInterval(target: any, timeFilter: TimeFilter): void;
     aggregateTarget(target: any, targetMetaData: any): {
@@ -38,11 +46,16 @@ export default class InstanaDatasource extends AbstractDatasource {
     applyTimeShiftOnTimeFilter(timeFilter: TimeFilter, timeShift: number): TimeFilter;
     readTime(options: any): TimeFilter;
     getInfrastructureMetrics(target: any, timeFilter: TimeFilter): any;
+    extractMetricsFromText(freeText: string): any[];
+    fetchMultipleMetricsForSnapshots(target: any, snapshots: any, timeFilter: any, metrics: any): Promise<any[]>;
     getAnalyzeWebsiteMetrics(target: any, timeFilter: TimeFilter): any;
     getAnalyzeApplicationMetrics(target: any, timeFilter: TimeFilter): any;
-    getApplicationMetrics(target: any, timeFilter: TimeFilter): any;
-    getServiceMetrics(target: any, timeFilter: TimeFilter): any;
-    getEndpointMetrics(target: any, timeFilter: TimeFilter): any;
+    getApplicationServiceEndpointMetrics(target: any, timeFilter: TimeFilter): any;
+    isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean;
+    rejectLargeTimeWindow(maxWindowSize: number): any;
+    isApplicationSet(application: any): any;
+    isServiceSet(service: any): any;
+    isEndpointSet(endpoint: any): any;
     annotationQuery(options: any): void;
     metricFindQuery(query: string): void;
     getVersion(): number;

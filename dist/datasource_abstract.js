@@ -14,20 +14,22 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
             }],
         execute: function() {
             AbstractDatasource = (function () {
+                // APPLICATION_METRICS = '4';
+                // SERVICE_METRICS = '5';
+                // ENDPOINT_METRICS = '6';
                 /** @ngInject */
                 function AbstractDatasource(instanceSettings, backendSrv, templateSrv, $q) {
                     this.backendSrv = backendSrv;
                     this.templateSrv = templateSrv;
                     this.$q = $q;
+                    this.PAGINATION_LIMIT = 15; // pagesize=200 => 3000 results in dropdown (~30sec.)
                     this.CACHE_MAX_AGE = 60000;
                     this.SEPARATOR = '|';
                     this.BUILT_IN_METRICS = '0';
                     this.CUSTOM_METRICS = '1';
                     this.ANALYZE_APPLICATION_METRICS = '2';
                     this.ANALYZE_WEBSITE_METRICS = '3';
-                    this.APPLICATION_METRICS = '4';
-                    this.SERVICE_METRICS = '5';
-                    this.ENDPOINT_METRICS = '6';
+                    this.APPLICATION_SERVICE_ENDPOINT_METRICS = '4'; // replaces previous
                     this.currentTime = function () {
                         return Date.now();
                     };
@@ -55,6 +57,12 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
                 };
                 AbstractDatasource.prototype.msToMin = function (time) {
                     return Math.round(time / 60000);
+                };
+                AbstractDatasource.prototype.hoursToMs = function (hours) {
+                    if (hours > 0) {
+                        return hours * 60 * 60 * 1000;
+                    }
+                    return 0;
                 };
                 AbstractDatasource.prototype.doRequest = function (url, swallowError, maxRetries) {
                     if (swallowError === void 0) { swallowError = false; }

@@ -81,6 +81,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './c
                     if (snapshots) {
                         return snapshots;
                     }
+                    var windowSize = this.getWindowSize(timeFilter);
                     var fetchSnapshotContextsUrl = "/api/snapshots/context" +
                         ("?q=" + query) +
                         ("&from=" + timeFilter.from) +
@@ -133,7 +134,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './c
                 InstanaInfrastructureDataSource.prototype.buildSnapshotCacheKey = function (query, timeFilter) {
                     return query + this.SEPARATOR + this.getTimeKey(timeFilter);
                 };
-                InstanaInfrastructureDataSource.prototype.buildLabel = function (snapshotResponse, host, target, index) {
+                InstanaInfrastructureDataSource.prototype.buildLabel = function (snapshotResponse, host, target, index, metric) {
                     if (target.labelFormat) {
                         var label = target.labelFormat;
                         label = lodash_1.default.replace(label, '$label', snapshotResponse.data.label);
@@ -144,7 +145,12 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './c
                         label = lodash_1.default.replace(label, '$type', lodash_1.default.get(snapshotResponse.data, ['data', 'type'], ''));
                         label = lodash_1.default.replace(label, '$name', lodash_1.default.get(snapshotResponse.data, ['data', 'name'], ''));
                         label = lodash_1.default.replace(label, '$service', lodash_1.default.get(snapshotResponse.data, ['data', 'service_name'], ''));
-                        label = lodash_1.default.replace(label, '$metric', lodash_1.default.get(target, ['metric', 'key'], 'n/a'));
+                        if (target.freeTextMetrics) {
+                            label = lodash_1.default.replace(label, '$metric', metric.key);
+                        }
+                        else {
+                            label = lodash_1.default.replace(label, '$metric', lodash_1.default.get(target, ['metric', 'key'], 'n/a'));
+                        }
                         label = lodash_1.default.replace(label, '$index', index + 1);
                         label = lodash_1.default.replace(label, '$timeShift', target.timeShift);
                         return label;
@@ -162,12 +168,13 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './c
                 };
                 InstanaInfrastructureDataSource.prototype.fetchMetricsForSnapshots = function (target, snapshots, timeFilter, metric) {
                     var _this = this;
+                    var windowSize = this.getWindowSize(timeFilter);
                     return this.$q.all(lodash_1.default.map(snapshots, function (snapshot, index) {
                         // ...fetch the metric data for every snapshot in the results.
                         return _this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then(function (response) {
                             var timeseries = _this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
                             var result = {
-                                'target': _this.buildLabel(snapshot.response, snapshot.host, target, index),
+                                'target': _this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
                                 'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; }),
                                 'refId': target.refId
                             };

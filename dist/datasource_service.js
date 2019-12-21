@@ -27,12 +27,16 @@ System.register(["./util/rollup_granularity_util", "./datasource_abstract", './c
                 function InstanaServiceDataSource(instanceSettings, backendSrv, templateSrv, $q) {
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
                     this.maximumNumberOfUsefulDataPoints = 80;
-                    // duplicate to QueryCtrl.ALL_SERVICES
-                    this.ALL_SERVICES = '-- No Service Filter --';
+                    // duplicate to QueryCtrl.NO_SERVICE_FILTER
+                    this.NO_SERVICE_FILTER = '-- No Service Filter --';
                     this.servicesCache = new cache_1.default();
                 }
-                InstanaServiceDataSource.prototype.getServices = function (target, timeFilter) {
-                    var key = this.getTimeKey(timeFilter);
+                InstanaServiceDataSource.prototype.getServicesOfApplication = function (target, timeFilter) {
+                    var applicationId = "";
+                    if (target.entity && target.entity.key) {
+                        applicationId = target.entity.key;
+                    }
+                    var key = this.getTimeKey(timeFilter) + applicationId;
                     var services = this.servicesCache.get(key);
                     if (services) {
                         return services;
@@ -40,7 +44,7 @@ System.register(["./util/rollup_granularity_util", "./datasource_abstract", './c
                     var windowSize = this.getWindowSize(timeFilter);
                     var page = 1;
                     var pageSize = 200;
-                    services = this.paginateServices([], windowSize, timeFilter.to, page, pageSize).then(function (response) {
+                    services = this.paginateServices([], applicationId, windowSize, timeFilter.to, page, pageSize, this.PAGINATION_LIMIT).then(function (response) {
                         var allResults = lodash_1.default.flattenDeep(lodash_1.default.map(response, function (pageSet, index) {
                             return pageSet.items;
                         }));
@@ -54,55 +58,33 @@ System.register(["./util/rollup_granularity_util", "./datasource_abstract", './c
                     this.servicesCache.put(key, services, 600000);
                     return services;
                 };
-                InstanaServiceDataSource.prototype.paginateServices = function (results, windowSize, to, page, pageSize) {
+                InstanaServiceDataSource.prototype.paginateServices = function (results, applicationId, windowSize, to, page, pageSize, pageLimit) {
                     var _this = this;
+                    if (page > pageLimit) {
+                        return results;
+                    }
                     var queryParameters = "windowSize=" + windowSize
                         + "&to=" + to
                         + "&page=" + page
                         + "&pageSize=" + pageSize;
-                    return this.doRequest('/api/application-monitoring/applications/services?' + queryParameters).then(function (response) {
+                    var url = '/api/application-monitoring/applications;id='
+                        + applicationId
+                        + '/services?'
+                        + queryParameters;
+                    return this.doRequest(url).then(function (response) {
                         results.push(response.data);
                         if (page * pageSize < response.data.totalHits) {
                             page++;
-                            return _this.paginateServices(results, windowSize, to, page, pageSize);
+                            return _this.paginateServices(results, applicationId, windowSize, to, page, pageSize, pageLimit);
                         }
                         else {
                             return results;
                         }
                     });
                 };
-                InstanaServiceDataSource.prototype.getApplicationsUsingService = function (target, timeFilter) {
-                    var windowSize = this.getWindowSize(timeFilter);
-                    var metric = {
-                        metric: "calls",
-                        aggregation: "SUM"
-                    };
-                    var data = {
-                        timeFrame: {
-                            to: timeFilter.to,
-                            windowSize: windowSize
-                        },
-                        metrics: [metric],
-                        serviceId: target.entity.key
-                    };
-                    var page = 1;
-                    var pageSize = 200;
-                    var pagination = {
-                        page: page,
-                        pageSize: pageSize
-                    };
-                    data['pagination'] = pagination;
-                    return this.postRequest('/api/application-monitoring/metrics/applications', data).then(function (response) {
-                        var filteredData = lodash_1.default.filter(response.data.items, function (item) { return item.metrics['calls.sum'][0][0] > 0; });
-                        return filteredData.map(function (entry) { return ({
-                            'key': entry.application.id,
-                            'label': entry.application.label
-                        }); });
-                    });
-                };
                 InstanaServiceDataSource.prototype.fetchServiceMetrics = function (target, timeFilter) {
                     // avoid invalid calls
-                    if (!target || !target.metric || !target.entity) {
+                    if (!target || !target.metric) {
                         return this.$q.resolve({ data: { items: [] } });
                     }
                     var windowSize = this.getWindowSize(timeFilter);
@@ -123,11 +105,11 @@ System.register(["./util/rollup_granularity_util", "./datasource_abstract", './c
                         },
                         metrics: [metric]
                     };
-                    if (target.entity.key !== null) {
-                        data['serviceId'] = target.entity.key;
+                    if (target.entity && target.entity.key) {
+                        data['applicationId'] = target.entity.key;
                     }
-                    if (target.selectedApplication && target.selectedApplication.key) {
-                        data['applicationId'] = target.selectedApplication.key;
+                    if (target.service && target.service.key) {
+                        data['serviceId'] = target.service.key;
                     }
                     return this.postRequest('/api/application-monitoring/metrics/services?fillTimeSeries=true', data);
                 };
@@ -135,21 +117,21 @@ System.register(["./util/rollup_granularity_util", "./datasource_abstract", './c
                     if (target.labelFormat) {
                         var label = target.labelFormat;
                         label = lodash_1.default.replace(label, '$label', item.service.label);
-                        label = lodash_1.default.replace(label, '$service', target.entity.label);
-                        label = lodash_1.default.replace(label, '$application', target.selectedApplication.label);
+                        label = lodash_1.default.replace(label, '$service', target.service.label);
+                        label = lodash_1.default.replace(label, '$application', target.entity.label);
                         label = lodash_1.default.replace(label, '$metric', target.metric.label);
                         label = lodash_1.default.replace(label, '$key', key);
                         label = lodash_1.default.replace(label, '$index', index + 1);
                         label = lodash_1.default.replace(label, '$timeShift', target.timeShift);
                         return label;
                     }
-                    if (target.entity.label === this.ALL_SERVICES) {
+                    if (target.service.label === this.NO_SERVICE_FILTER) {
                         return target.timeShift ? item.service.label + ' - ' + key + " - " + target.timeShift : item.service.label + ' - ' + key;
                     }
                     return target.timeShift && target.timeShiftIsValid ?
-                        item.service.label + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
+                        item.service.label + ' (' + target.service.label + ')' + ' - ' + key + " - " + target.timeShift
                         :
-                            item.service.label + ' (' + target.entity.label + ')' + ' - ' + key;
+                            item.service.label + ' (' + target.service.label + ')' + ' - ' + key;
                 };
                 return InstanaServiceDataSource;
             })(datasource_abstract_1.default);

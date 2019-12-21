@@ -44,7 +44,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                     var windowSize = this.getWindowSize(timeFilter);
                     var page = 1;
                     var pageSize = 200;
-                    applications = this.paginateApplications([], windowSize, timeFilter.to, page, pageSize).then(function (response) {
+                    applications = this.paginateApplications([], windowSize, timeFilter.to, page, pageSize, this.PAGINATION_LIMIT).then(function (response) {
                         var allResults = lodash_1.default.flattenDeep(lodash_1.default.map(response, function (pageSet, index) {
                             return pageSet.items;
                         }));
@@ -58,8 +58,11 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                     this.applicationsCache.put(key, applications, 600000);
                     return applications;
                 };
-                InstanaApplicationDataSource.prototype.paginateApplications = function (results, windowSize, to, page, pageSize) {
+                InstanaApplicationDataSource.prototype.paginateApplications = function (results, windowSize, to, page, pageSize, pageLimit) {
                     var _this = this;
+                    if (page > pageLimit) {
+                        return results;
+                    }
                     var queryParameters = "windowSize=" + windowSize
                         + "&to=" + to
                         + "&page=" + page
@@ -68,7 +71,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                         results.push(response.data);
                         if (page * pageSize < response.data.totalHits) {
                             page++;
-                            return _this.paginateApplications(results, windowSize, to, page, pageSize);
+                            return _this.paginateApplications(results, windowSize, to, page, pageSize, pageLimit);
                         }
                         else {
                             return results;
@@ -118,7 +121,6 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                     if (!target || !target.metric || !target.group || !target.entity) {
                         return this.$q.resolve({ data: { items: [] } });
                     }
-                    // our is limited to maximumNumberOfUsefulDataPoints results, to stay comparable
                     var windowSize = this.getWindowSize(timeFilter);
                     var tagFilters = [];
                     if (target.entity.key) {

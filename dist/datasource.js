@@ -51,9 +51,13 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
                     this.application = new datasource_application_1.default(instanceSettings, backendSrv, templateSrv, $q);
                     this.website = new datasource_website_1.default(instanceSettings, backendSrv, templateSrv, $q);
                     this.service = new datasource_service_1.default(instanceSettings, backendSrv, templateSrv, $q);
-                    this.endpoint = new datasource_endpoint_1.default(instanceSettings, backendSrv, templateSrv, $q, this.service);
+                    this.endpoint = new datasource_endpoint_1.default(instanceSettings, backendSrv, templateSrv, $q);
                     this.availableGranularities = [];
                     this.availableRollups = [];
+                    this.maxWindowSizeInfrastructure = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_infra);
+                    this.maxWindowSizeAnalyzeWebsites = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_website_metrics);
+                    this.maxWindowSizeAnalyzeApplications = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_calls);
+                    this.maxWindowSizeAnalyzeMetrics = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_metrics);
                 }
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;
@@ -88,41 +92,52 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
                             else if (target.metricCategory === _this.ANALYZE_APPLICATION_METRICS) {
                                 return _this.getAnalyzeApplicationMetrics(target, timeFilter);
                             }
-                            else if (target.metricCategory === _this.APPLICATION_METRICS) {
-                                return _this.getApplicationMetrics(target, timeFilter);
-                            }
-                            else if (target.metricCategory === _this.SERVICE_METRICS) {
-                                return _this.getServiceMetrics(target, timeFilter);
-                            }
-                            else if (target.metricCategory === _this.ENDPOINT_METRICS) {
-                                return _this.getEndpointMetrics(target, timeFilter);
+                            else if (target.metricCategory === _this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
+                                return _this.getApplicationServiceEndpointMetrics(target, timeFilter);
                             }
                         }
                     })).then(function (results) {
                         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
                         var flatData = { data: lodash_1.default.flatten(results) };
-                        flatData.data.forEach(function (data) {
-                            if (targets[data.refId] && targets[data.refId].timeShift) {
-                                _this.applyTimeShiftOnData(data, _this.convertTimeShiftToMillis(targets[data.refId].timeShift));
-                            }
-                        });
-                        var targetsGroupedByRefId = lodash_1.default.groupBy(flatData.data, function (data) {
-                            return data.refId;
-                        });
-                        var newData = [];
-                        lodash_1.default.each(targetsGroupedByRefId, function (target, index) {
-                            var refId = target[0].refId;
-                            if (targets[refId] && targets[refId].aggregateGraphs) {
-                                newData.push(_this.aggregateTarget(target, targets[refId]));
-                                if (!targets[refId].hideOriginalGraphs) {
-                                    newData.push(target);
-                                }
-                            }
-                            else {
+                        // Remove empty data items
+                        flatData.data = lodash_1.default.compact(flatData.data);
+                        _this.applyTimeShiftIfNecessary(flatData, targets);
+                        var newData = _this.aggregateDataIfNecessary(flatData, targets);
+                        return { data: lodash_1.default.flatten(newData) };
+                    });
+                };
+                InstanaDatasource.prototype.removeEmptyTargetsFromResultData = function (data) {
+                    return lodash_1.default.filter(data.data, function (d) { return d && d.refId; });
+                };
+                InstanaDatasource.prototype.applyTimeShiftIfNecessary = function (data, targets) {
+                    var _this = this;
+                    data.data.forEach(function (data) {
+                        if (targets[data.refId] && targets[data.refId].timeShift) {
+                            _this.applyTimeShiftOnData(data, _this.convertTimeShiftToMillis(targets[data.refId].timeShift));
+                        }
+                    });
+                };
+                InstanaDatasource.prototype.aggregateDataIfNecessary = function (data, targets) {
+                    var _this = this;
+                    var targetsGroupedByRefId = this.groupTargetsByRefId(data);
+                    var newData = [];
+                    lodash_1.default.each(targetsGroupedByRefId, function (target, index) {
+                        var refId = target[0].refId;
+                        if (targets[refId] && targets[refId].aggregateGraphs) {
+                            newData.push(_this.aggregateTarget(target, targets[refId]));
+                            if (!targets[refId].hideOriginalGraphs) {
                                 newData.push(target);
                             }
-                        });
-                        return { data: lodash_1.default.flatten(newData) };
+                        }
+                        else {
+                            newData.push(target);
+                        }
+                    });
+                    return newData;
+                };
+                InstanaDatasource.prototype.groupTargetsByRefId = function (data) {
+                    return lodash_1.default.groupBy(data.data, function (target) {
+                        return target.refId;
                     });
                 };
                 InstanaDatasource.prototype.setRollupTimeInterval = function (target, timeFilter) {
@@ -235,59 +250,111 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
                 };
                 InstanaDatasource.prototype.getInfrastructureMetrics = function (target, timeFilter) {
                     var _this = this;
+                    // do not try to execute to big queries
+                    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeInfrastructure)) {
+                        return this.rejectLargeTimeWindow(this.maxWindowSizeInfrastructure);
+                    }
                     // do not try to retrieve data without selected metric
-                    if (!target.metric && !target.showAllMetrics) {
+                    if (!target.metric && !target.showAllMetrics && !target.freeTextMetrics) {
                         return this.$q.resolve({ data: [] });
                     }
                     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
                     return this.infrastructure.fetchSnapshotsForTarget(target, timeFilter).then(function (snapshots) {
                         if (target.showAllMetrics) {
-                            var resultPromises = [];
-                            lodash_1.default.forEach(target.allMetrics, function (metric) {
-                                resultPromises.push(_this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
-                            });
-                            return Promise.all(resultPromises).then(function (allResults) {
-                                var allMetrics = [];
-                                allResults.forEach(function (result) { return result.forEach(function (s) { return allMetrics.push(s); }); });
-                                return allMetrics;
-                            });
+                            return _this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, target.allMetrics);
+                        }
+                        else if (target.freeTextMetrics) {
+                            var metrics = _this.extractMetricsFromText(target.freeTextMetrics);
+                            return _this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics);
                         }
                         else {
                             return _this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
                         }
                     });
                 };
+                InstanaDatasource.prototype.extractMetricsFromText = function (freeText) {
+                    var metricsString = freeText.replace(/\s/g, '').split(',');
+                    var metrics = [];
+                    lodash_1.default.each(metricsString, function (metricString) { return metrics.push(JSON.parse('{ "key": "' + metricString + '"}')); });
+                    if (metrics.length > 4) {
+                        metrics.slice(0, 3); // API supports up to 4 metrics at once
+                    }
+                    return metrics;
+                };
+                InstanaDatasource.prototype.fetchMultipleMetricsForSnapshots = function (target, snapshots, timeFilter, metrics) {
+                    var _this = this;
+                    var resultPromises = [];
+                    lodash_1.default.forEach(metrics, function (metric) {
+                        resultPromises.push(_this.infrastructure.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
+                    });
+                    return Promise.all(resultPromises).then(function (allResults) {
+                        var allMetrics = [];
+                        allResults.forEach(function (result) { return result.forEach(function (s) { return allMetrics.push(s); }); });
+                        return allMetrics;
+                    });
+                };
                 InstanaDatasource.prototype.getAnalyzeWebsiteMetrics = function (target, timeFilter) {
                     var _this = this;
+                    // do not try to execute to big queries
+                    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeWebsites)) {
+                        return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeWebsites);
+                    }
                     return this.website.fetchAnalyzeMetricsForWebsite(target, timeFilter).then(function (response) {
                         return analyze_util_1.readItemMetrics(target, response, _this.website.buildAnalyzeWebsiteLabel);
                     });
                 };
                 InstanaDatasource.prototype.getAnalyzeApplicationMetrics = function (target, timeFilter) {
                     var _this = this;
+                    // do not try to execute to big queries
+                    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeApplications)) {
+                        return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeApplications);
+                    }
                     return this.application.fetchAnalyzeMetricsForApplication(target, timeFilter).then(function (response) {
                         target.showWarningCantShowAllResults = response.data.canLoadMore;
                         return analyze_util_1.readItemMetrics(target, response, _this.application.buildAnalyzeApplicationLabel);
                     });
                 };
-                InstanaDatasource.prototype.getApplicationMetrics = function (target, timeFilter) {
+                InstanaDatasource.prototype.getApplicationServiceEndpointMetrics = function (target, timeFilter) {
                     var _this = this;
-                    return this.application.fetchApplicationMetrics(target, timeFilter).then(function (response) {
-                        target.showWarningCantShowAllResults = response.data.canLoadMore;
-                        return analyze_util_1.readItemMetrics(target, response, _this.application.buildApplicationMetricLabel);
-                    });
+                    // do not try to execute to big queries
+                    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeMetrics)) {
+                        return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeMetrics);
+                    }
+                    if (this.isEndpointSet(target.endpoint)) {
+                        return this.endpoint.fetchEndpointMetrics(target, timeFilter).then(function (response) {
+                            return analyze_util_1.readItemMetrics(target, response, _this.endpoint.buildEndpointMetricLabel);
+                        });
+                    }
+                    else if (this.isServiceSet(target.service)) {
+                        return this.service.fetchServiceMetrics(target, timeFilter).then(function (response) {
+                            return analyze_util_1.readItemMetrics(target, response, _this.service.buildServiceMetricLabel);
+                        });
+                    }
+                    else if (this.isApplicationSet(target.entity)) {
+                        return this.application.fetchApplicationMetrics(target, timeFilter).then(function (response) {
+                            target.showWarningCantShowAllResults = response.data.canLoadMore;
+                            return analyze_util_1.readItemMetrics(target, response, _this.application.buildApplicationMetricLabel);
+                        });
+                    }
                 };
-                InstanaDatasource.prototype.getServiceMetrics = function (target, timeFilter) {
-                    var _this = this;
-                    return this.service.fetchServiceMetrics(target, timeFilter).then(function (response) {
-                        return analyze_util_1.readItemMetrics(target, response, _this.service.buildServiceMetricLabel);
-                    });
+                InstanaDatasource.prototype.isInvalidQueryInterval = function (windowSize, queryIntervalLimit) {
+                    if (queryIntervalLimit > 0) {
+                        return windowSize > queryIntervalLimit;
+                    }
+                    return false;
                 };
-                InstanaDatasource.prototype.getEndpointMetrics = function (target, timeFilter) {
-                    var _this = this;
-                    return this.endpoint.fetchEndpointMetrics(target, timeFilter).then(function (response) {
-                        return analyze_util_1.readItemMetrics(target, response, _this.endpoint.buildEndpointMetricLabel);
-                    });
+                InstanaDatasource.prototype.rejectLargeTimeWindow = function (maxWindowSize) {
+                    return this.$q.reject("Limit for maximum selectable windowsize exceeded, " +
+                        "max is: " + (maxWindowSize / 60 / 60 / 1000) + " hours");
+                };
+                InstanaDatasource.prototype.isApplicationSet = function (application) {
+                    return application && application.key;
+                };
+                InstanaDatasource.prototype.isServiceSet = function (service) {
+                    return service && service.key;
+                };
+                InstanaDatasource.prototype.isEndpointSet = function (endpoint) {
+                    return endpoint && endpoint.key;
                 };
                 InstanaDatasource.prototype.annotationQuery = function (options) {
                     throw new Error('Annotation Support not implemented yet.');
