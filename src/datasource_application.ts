@@ -84,7 +84,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       tagsResponse.data.map(entry => ({
         'key': entry.name,
         'type': entry.type,
-        'canApplyToDestination': entry.canApplyToDestination
+        'tagEntity': entry.canApplyToDestination ? 'DESTINATION' : 'NOT_APPLICABLE'
       }))
     );
     this.simpleCache.put('applicationTags', applicationTags);
@@ -133,14 +133,14 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
         name: 'application.name',
         operator: 'EQUALS',
         value: target.entity.label,
-        entity: "DESTINATION"
+        entity: 'DESTINATION'
       });
     }
 
     _.forEach(target.filters, filter => {
       if (filter.isValid) {
         let tagFilter = createTagFilter(filter);
-        tagFilter['groupbyTagEntity'] = filter.tag.canApplyToDestination ? "DESTINATION" : "NOT_APPLICABLE";
+        tagFilter['groupbyTagEntity'] = filter.tag.tagEntity;
         tagFilters.push(tagFilter);
       }
     });
@@ -161,7 +161,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       groupbyTag: target.group.key
     };
 
-    group['groupbyTagEntity'] = target.group.canApplyToDestination ? "DESTINATION" : "NOT_APPLICABLE";
+    group['groupbyTagEntity'] = target.group.tagEntity;
 
     if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
       group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
