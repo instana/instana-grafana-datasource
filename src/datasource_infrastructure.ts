@@ -1,5 +1,6 @@
 import {getDefaultMetricRollupDuration} from "./util/rollup_granularity_util";
 import AbstractDatasource from './datasource_abstract';
+import max_metrics from './lists/max_metrics';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import Cache from './cache';
@@ -176,20 +177,47 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, metric) {
     const windowSize = this.getWindowSize(timeFilter);
-    return this.$q.all(
-      _.map(snapshots, (snapshot, index) => {
+    let maxValues = [];
+    let res = _.map(snapshots, (snapshot, index) => {
         // ...fetch the metric data for every snapshot in the results.
-        return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then(response => {
-          const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
-          var result = {
-            'target': this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
-            'datapoints': _.map(timeseries, value => [value.value, value.timestamp]),
+      return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then(response => {
+        const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
+        var result = {
+          'target': this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
+          'datapoints': _.map(timeseries, value => [value.value, value.timestamp]),
+          'refId': target.refId
+        };
+
+        if (target.displayMaxMetricValue) {
+          maxValues.push({
+            'target': result.target + ' ' + this.convertMetricNameToMaxLabel(target.metric),
+            // {value, timestamp}
+            'datapoints': [
+              [this.getMaxMetricValue(target.metric, snapshot), timeseries[0].timestamp],
+              [this.getMaxMetricValue(target.metric, snapshot), timeseries[timeseries.length - 1].timestamp]
+            ],
             'refId': target.refId
-          };
-          return result;
-        });
-      })
-    );
+          });
+        }
+
+        return result;
+      });
+    });
+
+    return Promise.all(res).then(allResults => {
+      if (target.displayMaxMetricValue) {
+        allResults = _.concat(res,maxValues);
+      }
+      return this.$q.all(allResults);
+    });
+  }
+
+  convertMetricNameToMaxLabel(metric): string {
+    return _.find(max_metrics, m => m.key === metric.key).label;
+  }
+
+  getMaxMetricValue(metric, snapshot): number {
+    return snapshot.response.data.data[_.find(max_metrics, m => m.key === metric.key).value];
   }
 
   readTimeSeries(values, aggregation: string, pluginId: string, timeFilter: TimeFilter) {

@@ -3,10 +3,12 @@ import {QueryCtrl} from 'app/plugins/sdk';
 
 import aggregation_functions from './lists/aggregation_function';
 import beaconTypes from './lists/beacon_types';
+import max_metrics from './lists/max_metrics';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import TagFilter from './types/tag_filter';
 import operators from './lists/operators';
+
 import migrate from './migration';
 
 import _ from 'lodash';
@@ -695,6 +697,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
 
     this.panelCtrl.refresh();
+  }
+
+  canShowMaxMetricValue() {
+    return this.target.entityType &&
+      this.target.entityType.key === 'host' &&
+      this.target.metric &&
+      _.find(max_metrics, m => m.key === this.target.metric.key);
   }
 
   addCustomFilter() {
