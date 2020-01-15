@@ -140,10 +140,6 @@ describe('Given a timeInterval', function () {
     it('should allow 10s, 1min, 5min, 10min, 1h analyze granularity', function () {
       const expected = [
         {
-          key: '10',
-          label: '10s'
-        },
-        {
           key: '60',
           label: '1min'
         },
@@ -282,14 +278,6 @@ describe('Given a timeInterval', function () {
     it('should allow 5min, 10min, 1h, 5h, 10h, 1d analyze granularity', function () {
       const expected = [
         {
-          key: '300',
-          label: '5min'
-        },
-        {
-          key: '600',
-          label: '10min'
-        },
-        {
           key: '3600',
           label: '1h'
         },
@@ -350,14 +338,6 @@ describe('Given a timeInterval', function () {
     };
     it('should allow 5min, 10min, 1h, 5h, 10h, 1d analyze granularity', function () {
       const expected = [
-        {
-          key: '300',
-          label: '5min'
-        },
-        {
-          key: '600',
-          label: '10min'
-        },
         {
           key: '3600',
           label: '1h'
