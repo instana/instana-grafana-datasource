@@ -137,7 +137,7 @@ describe('Given a timeInterval', function () {
       to: Date.now(),
       windowSize: windowSize
     };
-    it('should allow 10s, 1min, 5min, 10min, 1h analyze granularity', function () {
+    it('should allow 1min, 5min, 10min, 1h analyze granularity', function () {
       const expected = [
         {
           key: '60',
@@ -275,7 +275,7 @@ describe('Given a timeInterval', function () {
       to: Date.now(),
       windowSize: windowSize
     };
-    it('should allow 5min, 10min, 1h, 5h, 10h, 1d analyze granularity', function () {
+    it('should allow 1h, 5h, 10h, 1d analyze granularity', function () {
       const expected = [
         {
           key: '3600',
@@ -336,7 +336,7 @@ describe('Given a timeInterval', function () {
       to: Date.now(),
       windowSize: windowSize
     };
-    it('should allow 5min, 10min, 1h, 5h, 10h, 1d analyze granularity', function () {
+    it('should allow 1h, 5h, 10h, 1d analyze granularity', function () {
       const expected = [
         {
           key: '3600',
