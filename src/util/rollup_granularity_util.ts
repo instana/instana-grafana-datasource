@@ -24,10 +24,19 @@ export function getDefaultChartGranularity(windowSize: number): Selectable {
 }
 
 export function getPossibleGranularities(windowSize: number, maxValues = MAX_DATAPOINTS_ANALYZE): Selectable[] {
-  const possibleGranularities = granularities.filter(
+  let possibleGranularities = granularities.filter(
     granularity => windowSize / 1000 / granularity.value <= maxValues &&
       granularity.value * 1000 <= windowSize
   );
+
+  // window sizes of this length and up have a granularity of at least 1h
+  if (windowSize > 48000001) {
+    possibleGranularities = possibleGranularities.filter(granularity => granularity.value >= 3600);
+  }
+
+  if (windowSize >= 1800000) {
+    possibleGranularities = possibleGranularities.filter(granularity => granularity.value >= 60);
+  }
 
   if (possibleGranularities.length > 0) {
     return possibleGranularities.map(granularity => ({
