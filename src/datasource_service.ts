@@ -63,7 +63,7 @@ export default class InstanaServiceDataSource extends AbstractDatasource {
       + "&pageSize=" + pageSize;
 
     var url = '/api/application-monitoring/applications;id='
-      + applicationId
+      + (applicationId ? applicationId : '')
       + '/services?'
       + queryParameters;
 

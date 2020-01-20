@@ -100,23 +100,29 @@ This should render a chart with two datasets (`node (on host "host-1")` and `nod
 This should render a chart with one dataset (`host-3 (29042)`).
 
 #### Application metrics
-* Category: `Application metrics`
+* Category: `Application/Service/Endpoint metrics`
 * Application: `AWS instances`
+* Service: `-- No Service Filter --`
+* Endpoint: `-- No Endpoint Filter --`
 * Metric: `Call latency (latency)`
 * Legend format: ``
 
 This should render a chart with one dataset (`AWS instances (AWS instances) - latency.mean`).
 
 #### Service metrics
-* Category: `Service metrics`
-* Application: `AWS Lambda Service`
+* Category: `Application/Service/Endpoint metrics`
+* Application: `-- No Application Filter --`
+* Service: `AWS Lambda Service`
+* Endpoint: `-- No Endpoint Filter --`
 * Metric: `Call latency (latency)`
 * Legend format: ``
 
 This should render a chart with one dataset (`AWS Lambda Service (AWS Lambda Service) - latency.mean`).
 
 #### Endpoint metrics
-* Category: `Endpoint metrics`
+* Category: `Application/Service/Endpoint metrics`
+* Application: `-- No Application Filter --`
+* Service: `-- No Service Filter --`
 * Endpoint: `GET /api`
 * Metric: `Call latency (latency)`
 * Legend format: ``

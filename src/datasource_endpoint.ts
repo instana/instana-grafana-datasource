@@ -72,10 +72,11 @@ export default class InstanaEndpointDataSource extends AbstractDatasource {
       + "&page=" + page
       + "&pageSize=" + pageSize;
 
+
     var url = '/api/application-monitoring/applications;id='
-      + applicationId
+      + (applicationId ? applicationId : '')
       + '/services;id='
-      + serviceId
+      + (serviceId ? serviceId : '')
       + '/endpoints?' + queryParameters;
 
     return this.doRequest(url).then(response => {
