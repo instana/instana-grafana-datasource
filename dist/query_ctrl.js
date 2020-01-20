@@ -206,7 +206,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                         }
                     });
                     if (isAnalyze) {
-                        this.datasource.application.getApplicastionTags().then(function (applicationTags) {
+                        this.datasource.application.getApplicationTags().then(function (applicationTags) {
                             _this.uniqueTags =
                                 lodash_1.default.sortBy(applicationTags, 'key');
                             // select a meaningful default group

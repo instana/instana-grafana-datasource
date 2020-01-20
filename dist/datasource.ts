@@ -354,7 +354,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean {
     if (queryIntervalLimit > 0) {
-      return windowSize > queryIntervalLimit;
+      return Math.round(windowSize/1000)*1000 > queryIntervalLimit;
     }
     return false;
   }

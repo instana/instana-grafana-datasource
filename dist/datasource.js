@@ -339,7 +339,7 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
                 };
                 InstanaDatasource.prototype.isInvalidQueryInterval = function (windowSize, queryIntervalLimit) {
                     if (queryIntervalLimit > 0) {
-                        return windowSize > queryIntervalLimit;
+                        return Math.round(windowSize / 1000) * 1000 > queryIntervalLimit;
                     }
                     return false;
                 };

@@ -15,6 +15,13 @@ System.register(["../lists/granularities", "../lists/rollups"], function(exports
         if (maxValues === void 0) { maxValues = MAX_DATAPOINTS_ANALYZE; }
         var possibleGranularities = granularities_1.default.filter(function (granularity) { return windowSize / 1000 / granularity.value <= maxValues &&
             granularity.value * 1000 <= windowSize; });
+        // window sizes of this length and up have a granularity of at least 1h
+        if (windowSize > 48000001) {
+            possibleGranularities = possibleGranularities.filter(function (granularity) { return granularity.value >= 3600; });
+        }
+        if (windowSize >= 1800000) {
+            possibleGranularities = possibleGranularities.filter(function (granularity) { return granularity.value >= 60; });
+        }
         if (possibleGranularities.length > 0) {
             return possibleGranularities.map(function (granularity) { return ({
                 key: granularity.value.toString(),
