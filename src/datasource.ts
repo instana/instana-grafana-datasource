@@ -7,13 +7,15 @@ import {
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
 import InstanaApplicationDataSource from './datasource_application';
+import {generateStableHash, isOverlapping} from './util/delta_util';
 import InstanaEndpointDataSource from "./datasource_endpoint";
 import InstanaServiceDataSource from "./datasource_service";
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
-import {readItemMetrics} from "./util/analyze_util";
+import {readItemMetrics} from './util/analyze_util';
 import TimeFilter from './types/time_filter';
 import migrate from './migration';
+import Cache from './cache';
 
 import _ from 'lodash';
 import Selectable from "./types/selectable";
@@ -30,6 +32,8 @@ export default class InstanaDatasource extends AbstractDatasource {
   maxWindowSizeAnalyzeWebsites: number;
   maxWindowSizeAnalyzeApplications: number;
   maxWindowSizeAnalyzeMetrics: number;
+  resultCache: Cache<any>;
+  currentTimeFilter: TimeFilter;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -45,6 +49,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.maxWindowSizeAnalyzeWebsites = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_website_metrics);
     this.maxWindowSizeAnalyzeApplications = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_calls);
     this.maxWindowSizeAnalyzeMetrics = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_metrics);
+    this.resultCache = new Cache<any>();
   }
 
   query(options) {
@@ -76,58 +81,152 @@ export default class InstanaDatasource extends AbstractDatasource {
           timeFilter = this.applyTimeShiftOnTimeFilter(timeFilter, this.convertTimeShiftToMillis(target.timeShift));
         }
 
+        this.currentTimeFilter = timeFilter;
+        timeFilter = this.adjustTimeFilterIfCached(timeFilter, target);
+
         if (target.metricCategory === this.BUILT_IN_METRICS || target.metricCategory === this.CUSTOM_METRICS) {
           this.setRollupTimeInterval(target, timeFilter);
-          return this.getInfrastructureMetrics(target, timeFilter);
+          return this.getInfrastructureMetrics(target, timeFilter).then(data => {
+            if (timeFilter.from !== this.currentTimeFilter.from) {
+              //this was a delta request, thus append the result to the already cached one
+              data = this.appendResult(data, target);
+            }
+            return this.buildTargetDataResult(target, data);
+          });
         } else if (target.metricCategory) {
           this.setGranularityTimeInterval(target, timeFilter);
           if (target.metricCategory === this.ANALYZE_WEBSITE_METRICS) {
-            return this.getAnalyzeWebsiteMetrics(target, timeFilter);
+            return this.getAnalyzeWebsiteMetrics(target, timeFilter).then(data => {
+              if (timeFilter.from !== this.currentTimeFilter.from) {
+                data = this.appendResult(data, target);
+              }
+              return this.buildTargetDataResult(target, data);
+            });
           } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
-            return this.getAnalyzeApplicationMetrics(target, timeFilter);
+            return this.getAnalyzeApplicationMetrics(target, timeFilter).then(data => {
+              if (timeFilter.from !== this.currentTimeFilter.from) {
+                data = this.appendResult(data, target);
+              }
+              return this.buildTargetDataResult(target, data);
+            });
           } else if (target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
-            return this.getApplicationServiceEndpointMetrics(target, timeFilter);
+            return this.getApplicationServiceEndpointMetrics(target, timeFilter).then(data => {
+              if (timeFilter.from !== this.currentTimeFilter.from) {
+                data = this.appendResult(data, target);
+              }
+              return this.buildTargetDataResult(target, data);
+            });
           }
         }
       })
-    ).then(results => {
-      // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-      var flatData = {data: _.flatten(results)};
-      // Remove empty data items
-      flatData.data = _.compact(flatData.data);
-      this.applyTimeShiftIfNecessary(flatData, targets);
-      var newData = this.aggregateDataIfNecessary(flatData, targets);
-      return {data: _.flatten(newData)};
+    ).then(targetData => {
+      var result = [];
+      _.each(targetData, (targetAndData, index) => {
+        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+        var resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
+        this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
+        //resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
+        this.cacheResult(resultData, targetAndData.target);
+        result.push(resultData);
+      });
+
+      return {data: _.flatten(result)};
     });
+  }
+
+  appendResult(newData, target) {
+    var cachedResult = this.resultCache.get(generateStableHash(target));
+    if (cachedResult) {
+      _.each(newData, (targetData, index) => {
+        //find targetData in cache with same target label
+        //take that targetData and append new data to its existing datapoints
+        //remove newData.size in the beginning of our appended data
+        var cachedTargetData = _.find(cachedResult.results, ['target', targetData.target]);
+        if (cachedTargetData) {
+          var appendedData = cachedTargetData.datapoints;
+          _.each(targetData.datapoints, (datapoint, index) => {
+            //add or replace value for timestamp
+            var d = _.find(appendedData, function(o) { return o[1] === datapoint[1]; });
+            d ? d[0] = datapoint[0] : appendedData.push(datapoint);
+          });
+          //remove as many entries as were added
+          appendedData = _.slice(appendedData, targetData.datapoints.length - 1, appendedData.length - 1);
+          console.log(appendedData);
+          newData[index].datapoints = appendedData;
+        }
+      });
+    }
+    return newData;
+  }
+
+  adjustTimeFilterIfCached(timeFilter, target) {
+    var cachedResult = this.resultCache.get(generateStableHash(target));
+    if (cachedResult && isOverlapping(timeFilter, cachedResult.timeFilter)) {
+      var newFrom = this.getLastTimestampOfSeries(cachedResult.results);
+      return {
+        from: newFrom,
+        to: timeFilter.to,
+        windowSize: Math.round((timeFilter.to - newFrom)/1000)*1000
+      };
+    }
+
+    return timeFilter;
+  }
+
+  getLastTimestampOfSeries(series) {
+    return series[0].datapoints[series[0].datapoints.length - 1][1];
+  }
+
+  buildTargetDataResult(target, data) {
+    return {
+      target: target,
+      data: data
+    };
+  }
+
+  cacheResult(result, target) {
+    if (!this.isEmptyResult(result)) {
+      var cachedObj = {
+        timeFilter: this.currentTimeFilter,
+        results: result
+      };
+      this.resultCache.put(generateStableHash(target), cachedObj);
+    }
+  }
+
+  isEmptyResult(result) {
+    if (result) {
+      if (result.length > 0) {
+        return false;
+      }
+    }
+    return true;
   }
 
   removeEmptyTargetsFromResultData(data) {
     return _.filter(data.data, d => d && d.refId);
   }
 
-  applyTimeShiftIfNecessary(data, targets) {
-    data.data.forEach(data => {
-      if (targets[data.refId] && targets[data.refId].timeShift) {
-        this.applyTimeShiftOnData(data, this.convertTimeShiftToMillis(targets[data.refId].timeShift));
+  applyTimeShiftIfNecessary(data, target) {
+    data.forEach(data => {
+      if (target.timeShift) {
+        this.applyTimeShiftOnData(data, this.convertTimeShiftToMillis(target.timeShift));
       }
     });
   }
 
-  aggregateDataIfNecessary(data, targets) {
-    var targetsGroupedByRefId = this.groupTargetsByRefId(data);
+  aggregateDataIfNecessary(data, target) {
+    //var targetsGroupedByRefId = this.groupTargetsByRefId(data);
     var newData = [];
 
-    _.each(targetsGroupedByRefId, (target, index) => {
-      var refId = target[0].refId;
-      if (targets[refId] && targets[refId].aggregateGraphs) {
-        newData.push(this.aggregateTarget(target, targets[refId]));
-        if (!targets[refId].hideOriginalGraphs) {
-          newData.push(target);
-        }
-      } else {
-        newData.push(target);
+    if (target.aggregateGraphs) {
+      newData.push(this.aggregateTarget(data, target));
+      if (!target.hideOriginalGraphs) {
+        newData.push(data);
       }
-    });
+    } else {
+      newData.push(data);
+    }
 
     return newData;
   }
@@ -150,18 +249,19 @@ export default class InstanaDatasource extends AbstractDatasource {
     }
   }
 
-  aggregateTarget(target, targetMetaData) {
-    var refId = target[0].refId;
-    var concatedTargetData = this.concatTargetData(target);
+  aggregateTarget(data, target) {
+    var refId = "A";
+    var concatedTargetData = this.concatTargetData(data);
     var dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (data) {
       return data[1];
     });
 
-    var aggregatedData = this.aggregateDataOfTimestamp(dataGroupedByTimestamp, targetMetaData.aggregationFunction.label);
+    var aggregatedData = this.aggregateDataOfTimestamp(dataGroupedByTimestamp, target.aggregationFunction.label);
     aggregatedData = _.sortBy(aggregatedData, [function (datapoint) {
       return datapoint[1];
     }]);
-    return this.buildResult(aggregatedData, refId, buildAggregationLabel(targetMetaData));
+
+    return this.buildResult(aggregatedData, refId, buildAggregationLabel(target));
   }
 
   aggregateDataOfTimestamp(dataGroupedByTimestamp, aggregationLabel: string) {
@@ -176,11 +276,12 @@ export default class InstanaDatasource extends AbstractDatasource {
     return result;
   }
 
-  concatTargetData(target) {
+  concatTargetData(data) {
     var result = [];
-    _.each(target, (data, index) => {
-      result = _.concat(result, data.datapoints);
+    _.each(data, (entry, index) => {
+      result = _.concat(result, entry.datapoints);
     });
+
     return result;
   }
 
