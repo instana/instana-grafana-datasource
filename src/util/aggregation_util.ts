@@ -1,11 +1,10 @@
 import _ from 'lodash';
 
 export function aggregateTarget(data, target) {
-  var refId = target.refId;
   var concatedTargetData = concatTargetData(data);
 
-  var dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (data) {
-    return data[1];
+  var dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (d) {
+    return d[1];
   });
 
   var aggregatedData = aggregateDataOfTimestamp(dataGroupedByTimestamp, target.aggregationFunction.label);
@@ -13,7 +12,7 @@ export function aggregateTarget(data, target) {
     return datapoint[1];
   }]);
 
-  return buildResult(aggregatedData, refId, buildAggregationLabel(target));
+  return buildResult(aggregatedData, target.refId, buildAggregationLabel(target));
 }
 
 function concatTargetData(data) {
