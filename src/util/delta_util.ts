@@ -1,22 +1,10 @@
 import _ from 'lodash';
 
 export function generateStableHash(obj) {
-  if (obj === undefined) {
-    return 'undefined';
-  } else if (obj == null) {
-    return 'null';
-  } else if (obj instanceof Array) {
-    return '[' + obj.map(v => (v === undefined ? 'null' : generateStableHash(v))).join(',') + ']';
-  } else if (typeof obj === 'object') {
-    const values = Object.keys(obj)
-      .sort()
-      .filter(k => obj[k] !== undefined)
-      .map(k => `"${k}":${generateStableHash(obj[k])}`)
-      .join(',');
-
-    return `{${values}}`;
-  }
-  return JSON.stringify(obj);
+  //var bla = JSON.stringify(obj);
+  //console.log(bla);
+  return "test";
+  //return bla;
 }
 
 /*

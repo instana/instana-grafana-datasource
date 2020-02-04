@@ -5,7 +5,7 @@ import {
   getPossibleRollups
 } from "./util/rollup_granularity_util";
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
-import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
+import {aggregateTarget} from "./util/aggregation_util";
 import InstanaApplicationDataSource from './datasource_application';
 import {generateStableHash, isOverlapping} from './util/delta_util';
 import InstanaEndpointDataSource from "./datasource_endpoint";
@@ -125,8 +125,8 @@ export default class InstanaDatasource extends AbstractDatasource {
         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
         var resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
         this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
-        //resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
-        this.cacheResult(resultData, targetAndData.target);
+        resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
+        //this.cacheResult(resultData, targetAndData.target);
         result.push(resultData);
       });
 
@@ -135,7 +135,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   appendResult(newData, target) {
-    var cachedResult = this.resultCache.get(generateStableHash(target));
+    /*var cachedResult = this.resultCache.get(generateStableHash(target));
     if (cachedResult) {
       _.each(newData, (targetData, index) => {
         //find targetData in cache with same target label
@@ -150,12 +150,11 @@ export default class InstanaDatasource extends AbstractDatasource {
             d ? d[0] = datapoint[0] : appendedData.push(datapoint);
           });
           //remove as many entries as were added
-          appendedData = _.slice(appendedData, targetData.datapoints.length - 1, appendedData.length - 1);
-          console.log(appendedData);
+          //appendedData = _.slice(appendedData, targetData.datapoints.length - 1, appendedData.length - 1);
           newData[index].datapoints = appendedData;
         }
       });
-    }
+    }*/
     return newData;
   }
 
@@ -165,8 +164,8 @@ export default class InstanaDatasource extends AbstractDatasource {
       var newFrom = this.getLastTimestampOfSeries(cachedResult.results);
       return {
         from: newFrom,
-        to: timeFilter.to,
-        windowSize: Math.round((timeFilter.to - newFrom)/1000)*1000
+        to: Math.round(timeFilter.to/1000)*1000,
+        windowSize: Math.round((timeFilter.to - newFrom)/target.timeInterval)*1000
       };
     }
 
@@ -216,19 +215,17 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   aggregateDataIfNecessary(data, target) {
-    //var targetsGroupedByRefId = this.groupTargetsByRefId(data);
     var newData = [];
 
     if (target.aggregateGraphs) {
-      newData.push(this.aggregateTarget(data, target));
+      newData.push(aggregateTarget(data, target));
       if (!target.hideOriginalGraphs) {
-        newData.push(data);
+        _.each(data, (dt, index) => newData.push(dt));
       }
-    } else {
-      newData.push(data);
+      return newData;
     }
 
-    return newData;
+    return data;
   }
 
   groupTargetsByRefId(data) {
@@ -249,54 +246,10 @@ export default class InstanaDatasource extends AbstractDatasource {
     }
   }
 
-  aggregateTarget(data, target) {
-    var refId = "A";
-    var concatedTargetData = this.concatTargetData(data);
-    var dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (data) {
-      return data[1];
-    });
-
-    var aggregatedData = this.aggregateDataOfTimestamp(dataGroupedByTimestamp, target.aggregationFunction.label);
-    aggregatedData = _.sortBy(aggregatedData, [function (datapoint) {
-      return datapoint[1];
-    }]);
-
-    return this.buildResult(aggregatedData, refId, buildAggregationLabel(target));
-  }
-
-  aggregateDataOfTimestamp(dataGroupedByTimestamp, aggregationLabel: string) {
-    var result = [];
-    _.each(dataGroupedByTimestamp, (timestampData, timestamp) => {
-      var valuesOfTimestamp = _.map(timestampData, (datapoint, index) => {
-        return datapoint[0];
-      });
-      var aggregatedValue = aggregate(aggregationLabel, valuesOfTimestamp);
-      result.push([aggregatedValue, parseInt(timestamp)]);
-    });
-    return result;
-  }
-
-  concatTargetData(data) {
-    var result = [];
-    _.each(data, (entry, index) => {
-      result = _.concat(result, entry.datapoints);
-    });
-
-    return result;
-  }
-
   applyTimeShiftOnData(data, timeshift) {
     data.datapoints.forEach(datapoint => {
       datapoint[1] = datapoint[1] + timeshift;
     });
-  }
-
-  buildResult(aggregatedData, refId, target) {
-    return {
-      datapoints: aggregatedData,
-      refId: refId,
-      target: target
-    };
   }
 
   getAllDatapointsOfTimestamp(data, index) {
