@@ -3,31 +3,6 @@ import { aggregateTarget } from "../src/util/aggregation_util";
 
 describe('Given a dataset', function() {
   describe('with 3 entries', function() {
-    /*
-      [
-        {
-          datapoints: [
-            [0, 0],
-            [1, 100000000],
-            [2, 200000000]
-          ]
-        },
-        {
-          datapoints: [
-            [1, 0],
-            [2, 100000000],
-            [3, 200000000]
-          ]
-        },
-        {
-          datapoints: [
-            [2, 0],
-            [3, 100000000],
-            [4, 200000000]
-          ]
-        }
-      ]
-    */
     let data = generateTestData(3, 3);
 
     it('should aggregate correctly to SUM', function() {
@@ -80,7 +55,7 @@ describe('Given a dataset', function() {
 
     it('should aggregate correctly to MAX', function() {
       let target = buildTestTarget("MAX", "D");
-      
+
       const expected = {
         datapoints: [
           [2, 0],
@@ -97,6 +72,31 @@ describe('Given a dataset', function() {
 
 });
 
+/*
+  [
+    {
+      datapoints: [
+        [0, 0],
+        [1, 100000000],
+        [2, 200000000]
+      ]
+    },
+    {
+      datapoints: [
+        [1, 0],
+        [2, 100000000],
+        [3, 200000000]
+      ]
+    },
+    {
+      datapoints: [
+        [2, 0],
+        [3, 100000000],
+        [4, 200000000]
+      ]
+    }
+  ]
+*/
 function generateTestData(amountOfTimeseries, numberOfEntries) {
   var data = [];
   for (let i = 0; i < amountOfTimeseries; i++) {

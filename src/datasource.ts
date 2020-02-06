@@ -4,15 +4,15 @@ import {
   getPossibleGranularities,
   getPossibleRollups
 } from "./util/rollup_granularity_util";
+import { generateStableHash, isOverlapping, appendData} from './util/delta_util';
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
-import {aggregateTarget} from "./util/aggregation_util";
 import InstanaApplicationDataSource from './datasource_application';
-import {generateStableHash, isOverlapping} from './util/delta_util';
 import InstanaEndpointDataSource from "./datasource_endpoint";
 import InstanaServiceDataSource from "./datasource_service";
 import InstanaWebsiteDataSource from './datasource_website';
+import { aggregateTarget } from "./util/aggregation_util";
 import AbstractDatasource from './datasource_abstract';
-import {readItemMetrics} from './util/analyze_util';
+import { readItemMetrics } from './util/analyze_util';
 import TimeFilter from './types/time_filter';
 import migrate from './migration';
 import Cache from './cache';
@@ -32,8 +32,8 @@ export default class InstanaDatasource extends AbstractDatasource {
   maxWindowSizeAnalyzeWebsites: number;
   maxWindowSizeAnalyzeApplications: number;
   maxWindowSizeAnalyzeMetrics: number;
-  resultCache: Cache<any>;
   currentTimeFilter: TimeFilter;
+  resultCache: Cache<any>;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -54,7 +54,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   query(options) {
     if (Object.keys(options.targets[0]).length === 0) {
-      return this.$q.resolve({data: []});
+      return this.$q.resolve({ data: [] });
     }
 
     const panelTimeFilter: TimeFilter = this.readTime(options);
@@ -71,7 +71,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
         // grafana setting to disable query execution
         if (target.hide) {
-          return {data: []};
+          return { data: [] };
         }
 
         // target migration for downwards compatibility
@@ -126,35 +126,19 @@ export default class InstanaDatasource extends AbstractDatasource {
         var resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
         this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
         resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
-        //this.cacheResult(resultData, targetAndData.target);
+        this.cacheResult(resultData, targetAndData.target);
         result.push(resultData);
       });
 
-      return {data: _.flatten(result)};
+      return { data: _.flatten(result) };
     });
   }
 
   appendResult(newData, target) {
-    /*var cachedResult = this.resultCache.get(generateStableHash(target));
-    if (cachedResult) {
-      _.each(newData, (targetData, index) => {
-        //find targetData in cache with same target label
-        //take that targetData and append new data to its existing datapoints
-        //remove newData.size in the beginning of our appended data
-        var cachedTargetData = _.find(cachedResult.results, ['target', targetData.target]);
-        if (cachedTargetData) {
-          var appendedData = cachedTargetData.datapoints;
-          _.each(targetData.datapoints, (datapoint, index) => {
-            //add or replace value for timestamp
-            var d = _.find(appendedData, function(o) { return o[1] === datapoint[1]; });
-            d ? d[0] = datapoint[0] : appendedData.push(datapoint);
-          });
-          //remove as many entries as were added
-          //appendedData = _.slice(appendedData, targetData.datapoints.length - 1, appendedData.length - 1);
-          newData[index].datapoints = appendedData;
-        }
-      });
-    }*/
+    var cachedResult = this.resultCache.get(generateStableHash(target));
+    if (cachedResult && cachedResult.results[0]) {
+      newData = appendData(newData, cachedResult.results[0].datapoints);
+    }
     return newData;
   }
 
@@ -164,8 +148,8 @@ export default class InstanaDatasource extends AbstractDatasource {
       var newFrom = this.getLastTimestampOfSeries(cachedResult.results);
       return {
         from: newFrom,
-        to: Math.round(timeFilter.to/1000)*1000,
-        windowSize: Math.round((timeFilter.to - newFrom)/target.timeInterval)*1000
+        to: timeFilter.to,
+        windowSize: timeFilter.to - newFrom
       };
     }
 
@@ -189,7 +173,7 @@ export default class InstanaDatasource extends AbstractDatasource {
         timeFilter: this.currentTimeFilter,
         results: result
       };
-      this.resultCache.put(generateStableHash(target), cachedObj);
+      this.resultCache.put(generateStableHash(target), cachedObj, 150000);
     }
   }
 
@@ -229,7 +213,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   groupTargetsByRefId(data) {
-    return _.groupBy(data.data, function (target) {
+    return _.groupBy(data.data, function(target) {
       return target.refId;
     });
   }
@@ -320,7 +304,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
     // do not try to retrieve data without selected metric
     if (!target.metric && !target.showAllMetrics && !target.freeTextMetrics) {
-      return this.$q.resolve({data: []});
+      return this.$q.resolve({ data: [] });
     }
 
     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
@@ -391,7 +375,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     }
 
     if (this.isEndpointSet(target.endpoint)) {
-      return  this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
+      return this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
       });
     } else if (this.isServiceSet(target.service)) {
@@ -408,7 +392,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean {
     if (queryIntervalLimit > 0) {
-      return Math.round(windowSize/1000)*1000 > queryIntervalLimit;
+      return Math.round(windowSize / 1000) * 1000 > queryIntervalLimit;
     }
     return false;
   }
