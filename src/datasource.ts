@@ -123,9 +123,8 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   appendResult(data, target) {
     var cachedResult = this.resultCache.get(target.stableHash);
-    if (cachedResult && cachedResult.results && cachedResult.results.length > 0) {
-      // TODO this is broken as we can have mulitple results for one query
-      data = appendData(data, cachedResult.results[0].datapoints);
+    if (cachedResult && cachedResult.results) {
+      data = appendData(data, cachedResult.results);
     }
     return data;
   }

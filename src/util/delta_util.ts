@@ -17,7 +17,7 @@ const omitLabels = [
 export function generateStableHash(obj) {
   let pseudoHash = _.omit(obj, omitLabels);
   pseudoHash = _.mapValues(pseudoHash, value => {
-      // to reduce weight of interface Selectable
+      // to reduce overhead of interface Selectable
       if (value != null && typeof value === 'object' && 'key' in value) {
         value = value.key;
       }
@@ -53,23 +53,24 @@ export function isOverlapping(t1, t2) {
   Also removes old data accordingly (e.g. if 4 new datapoints were added,
   the corresponding oldest four datapoints are removed).
 */
-export function appendData(newData, cachedDatapoints) {
+export function appendData(newData, cachedData) {
   _.each(newData, (targetData, index) => {
-    var appendedData = cachedDatapoints;
-    var numberOfNewPoints = 0;
+    var appendedData = _.find(cachedData, function(o) { return o.target === targetData.target; });
+    if (appendedData) {
+      var numberOfNewPoints = 0;
+      _.each(targetData.datapoints, (datapoint, index) => {
+        //add or replace value for timestamp
+        var d = _.find(appendedData.datapoints, function(o)  {  return  o[1] === datapoint[1];  });
+        if (d) {
+          d[0] = datapoint[0];
+        } else {
+          appendedData.datapoints.push(datapoint);
+          numberOfNewPoints++;
+        }
+      });
 
-    _.each(targetData.datapoints, (datapoint, index) => {
-      //add or replace value for timestamp
-      var d = _.find(appendedData, function(o)  {  return  o[1] === datapoint[1];  });
-      if (d) {
-        d[0] = datapoint[0];
-      } else {
-        appendedData.push(datapoint);
-        numberOfNewPoints++;
-      }
-    });
-
-    newData[index].datapoints = _.slice(appendedData, numberOfNewPoints, appendedData.length);
+      newData[index].datapoints = _.slice(.datapoints, numberOfNewPoints, appendedData.datapoints.length);
+    }
   });
 
   return newData;
