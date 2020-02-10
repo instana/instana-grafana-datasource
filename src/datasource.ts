@@ -132,7 +132,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   adjustTimeFilterIfCached(timeFilter, target) {
     var cachedResult = this.resultCache.get(target.stableHash);
     if (cachedResult && isOverlapping(timeFilter, cachedResult.timeFilter)) {
-      var newFrom = (this.getLastTimestampOfSeries(cachedResult.results) / 1000) * 1000;
+      var newFrom = Math.round(this.getLastTimestampOfSeries(cachedResult.results) / 1000) * 1000;
       return {
         from: newFrom,
         to: timeFilter.to,
