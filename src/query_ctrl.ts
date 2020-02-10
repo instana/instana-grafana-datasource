@@ -549,6 +549,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.showWarningCantShowAllResults = false;
     this.target.showAllMetrics = false;
     this.target.canShowAllMetrics = false;
+    this.target.displayMaxMetricValue = false;
     this.serviceEndpointSelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.resetServices();
     this.resetEndpoints();
@@ -638,6 +639,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onMetricSelect() {
     if (this.target.metric && !_.includes(this.target.metric.aggregations, this.target.aggregation)) {
       this.target.aggregation = this.target.metric.aggregations[0];
+    }
+
+    if (this.target.displayMaxMetricValue && !this.canShowMaxMetricValue()) {
+      this.target.displayMaxMetricValue = false;
     }
     this.panelCtrl.refresh();
   }

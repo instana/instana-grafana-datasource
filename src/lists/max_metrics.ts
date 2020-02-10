@@ -8,5 +8,10 @@ export default [
     'key': 'memory.used',
     'value': 'memory.total',
     'label': 'memory.max'
+  },
+  {
+    'key': 'openFiles.used',
+    'value': 'openFiles.max',
+    'label': 'openFiles.max'
   }
 ];
