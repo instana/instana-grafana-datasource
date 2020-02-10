@@ -32,7 +32,6 @@ export default class InstanaDatasource extends AbstractDatasource {
   maxWindowSizeAnalyzeWebsites: number;
   maxWindowSizeAnalyzeApplications: number;
   maxWindowSizeAnalyzeMetrics: number;
-  currentTimeFilter: TimeFilter;
   resultCache: Cache<any>;
 
   /** @ngInject */
@@ -81,40 +80,28 @@ export default class InstanaDatasource extends AbstractDatasource {
           timeFilter = this.applyTimeShiftOnTimeFilter(timeFilter, this.convertTimeShiftToMillis(target.timeShift));
         }
 
-        this.currentTimeFilter = timeFilter;
+        target['timeFilter'] = timeFilter;
+        target['stableHash'] = generateStableHash(target);
         timeFilter = this.adjustTimeFilterIfCached(timeFilter, target);
 
         if (target.metricCategory === this.BUILT_IN_METRICS || target.metricCategory === this.CUSTOM_METRICS) {
           this.setRollupTimeInterval(target, timeFilter);
           return this.getInfrastructureMetrics(target, timeFilter).then(data => {
-            if (timeFilter.from !== this.currentTimeFilter.from) {
-              //this was a delta request, thus append the result to the already cached one
-              data = this.appendResult(data, target);
-            }
-            return this.buildTargetDataResult(target, data);
+            return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
           });
         } else if (target.metricCategory) {
           this.setGranularityTimeInterval(target, timeFilter);
           if (target.metricCategory === this.ANALYZE_WEBSITE_METRICS) {
             return this.getAnalyzeWebsiteMetrics(target, timeFilter).then(data => {
-              if (timeFilter.from !== this.currentTimeFilter.from) {
-                data = this.appendResult(data, target);
-              }
-              return this.buildTargetDataResult(target, data);
+              return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
             });
           } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
             return this.getAnalyzeApplicationMetrics(target, timeFilter).then(data => {
-              if (timeFilter.from !== this.currentTimeFilter.from) {
-                data = this.appendResult(data, target);
-              }
-              return this.buildTargetDataResult(target, data);
+              return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
             });
           } else if (target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
             return this.getApplicationServiceEndpointMetrics(target, timeFilter).then(data => {
-              if (timeFilter.from !== this.currentTimeFilter.from) {
-                data = this.appendResult(data, target);
-              }
-              return this.buildTargetDataResult(target, data);
+              return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
             });
           }
         }
@@ -134,25 +121,25 @@ export default class InstanaDatasource extends AbstractDatasource {
     });
   }
 
-  appendResult(newData, target) {
-    var cachedResult = this.resultCache.get(generateStableHash(target));
-    if (cachedResult && cachedResult.results[0]) {
-      newData = appendData(newData, cachedResult.results[0].datapoints);
+  appendResult(data, target) {
+    var cachedResult = this.resultCache.get(target.stableHash);
+    if (cachedResult && cachedResult.results && cachedResult.results.length > 0) {
+      // TODO this is broken as we can have mulitple results for one query
+      data = appendData(data, cachedResult.results[0].datapoints);
     }
-    return newData;
+    return data;
   }
 
   adjustTimeFilterIfCached(timeFilter, target) {
-    var cachedResult = this.resultCache.get(generateStableHash(target));
+    var cachedResult = this.resultCache.get(target.stableHash);
     if (cachedResult && isOverlapping(timeFilter, cachedResult.timeFilter)) {
-      var newFrom = this.getLastTimestampOfSeries(cachedResult.results);
+      var newFrom = (this.getLastTimestampOfSeries(cachedResult.results) / 1000) * 1000;
       return {
         from: newFrom,
         to: timeFilter.to,
         windowSize: timeFilter.to - newFrom
       };
     }
-
     return timeFilter;
   }
 
@@ -160,7 +147,10 @@ export default class InstanaDatasource extends AbstractDatasource {
     return series[0].datapoints[series[0].datapoints.length - 1][1];
   }
 
-  buildTargetDataResult(target, data) {
+  buildTargetWithAppendedDataResult(target, timeFilter: TimeFilter, data) {
+    if (timeFilter.from !== target.timeFilter.from) {
+      data = this.appendResult(data, target);
+    }
     return {
       target: target,
       data: data
@@ -170,10 +160,10 @@ export default class InstanaDatasource extends AbstractDatasource {
   cacheResult(result, target) {
     if (!this.isEmptyResult(result)) {
       var cachedObj = {
-        timeFilter: this.currentTimeFilter,
+        timeFilter: target.timeFilter,
         results: result
       };
-      this.resultCache.put(generateStableHash(target), cachedObj, 150000);
+      this.resultCache.put(target.stableHash, cachedObj, 400000); // to cover up to 5 min refreshs
     }
   }
 
@@ -290,8 +280,8 @@ export default class InstanaDatasource extends AbstractDatasource {
     const from = new Date(options.range.from).getTime();
     const to = new Date(options.range.to).getTime();
     return {
-      from: from,
-      to: to,
+      from: (from / 1000) * 1000,
+      to: (to / 1000) * 1000,
       windowSize: to - from
     };
   }
