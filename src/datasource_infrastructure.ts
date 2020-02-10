@@ -181,7 +181,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     let res = _.map(snapshots, (snapshot, index) => {
         // ...fetch the metric data for every snapshot in the results.
       return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then(response => {
-        const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
+        let timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
         var result = {
           'target': this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
           'datapoints': _.map(timeseries, value => [value.value, value.timestamp]),
@@ -189,15 +189,9 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
         };
 
         if (target.displayMaxMetricValue) {
-          maxValues.push({
-            'target': result.target + ' ' + this.convertMetricNameToMaxLabel(target.metric),
-            // {value, timestamp}
-            'datapoints': [
-              [this.getMaxMetricValue(target.metric, snapshot), timeseries[0].timestamp],
-              [this.getMaxMetricValue(target.metric, snapshot), timeseries[timeseries.length - 1].timestamp]
-            ],
-            'refId': target.refId
-          });
+          const maxValue = this.getMaxMetricValue(target.metric, snapshot);
+          maxValues.push(this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
+          result.datapoints = this.convertRelativeToAbsolute(result.datapoints, maxValue);
         }
 
         return result;
@@ -209,6 +203,23 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
         allResults = _.concat(res,maxValues);
       }
       return this.$q.all(allResults);
+    });
+  }
+
+  buildMaxMetricTarget(target, timeseries, maxValue, resultLabel) {
+    return {
+      'target': resultLabel + ' ' + this.convertMetricNameToMaxLabel(target.metric),
+      'datapoints': [
+        [maxValue, timeseries[0].timestamp],
+        [maxValue, timeseries[timeseries.length - 1].timestamp]
+      ],
+      'refId': target.refId
+    };
+  }
+
+  convertRelativeToAbsolute(datapoints, maxValue) {
+    return _.map(datapoints, (datapoint, index) => {
+      return [datapoint[0] * maxValue, datapoint[1]];
     });
   }
 
