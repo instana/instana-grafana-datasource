@@ -69,7 +69,7 @@ export function appendData(newData, cachedData) {
         }
       });
 
-      newData[index].datapoints = _.slice(.datapoints, numberOfNewPoints, appendedData.datapoints.length);
+      newData[index].datapoints = _.slice(appendedData.datapoints, numberOfNewPoints, appendedData.datapoints.length);
     }
   });
 
