@@ -8,11 +8,21 @@ const omitLabels = [
   'timeShiftIsValid',
   'useFreeTextMetrics',
   'showGroupBySecondLevel',
-  'aggregateGraphs'
+  'aggregateGraphs',
+  'canShowAllMetrics',
+  'timeFilter',
+  'stableHash'
 ];
 
 export function generateStableHash(obj) {
-  var pseudoHash = _.omit(obj, omitLabels);
+  let pseudoHash = _.omit(obj, omitLabels);
+  pseudoHash = _.mapValues(pseudoHash, value => {
+      // to reduce weight of interface Selectable
+      if (value != null && typeof value === 'object' && 'key' in value) {
+        value = value.key;
+      }
+      return value;
+  });
   return JSON.stringify(pseudoHash);
 }
 
