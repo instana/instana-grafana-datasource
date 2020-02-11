@@ -133,10 +133,11 @@ export default class InstanaDatasource extends AbstractDatasource {
     var cachedResult = this.resultCache.get(target.stableHash);
     if (cachedResult && hasIntersection(timeFilter, cachedResult.timeFilter)) {
       var newFrom = this.getDeltaRequestTimestamp(cachedResult.results, cachedResult.timeFilter.from);
+      var newTo = Math.round(timeFilter.to / 10000) * 10000;
       return {
         from: newFrom,
-        to: timeFilter.to,
-        windowSize: timeFilter.to - newFrom
+        to: newTo,
+        windowSize: newTo - newFrom
       };
     }
     return timeFilter;
