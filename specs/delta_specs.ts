@@ -96,51 +96,65 @@ describe('Given a delta', function() {
       let deltaData = generateTestData(2, 2);
       let cachedData = generateTestData(2, 20);
 
-      let result = appendData(deltaData, cachedData);
+      let result = appendData(_.cloneDeep(deltaData), _.cloneDeep(cachedData));
 
       expect(result[0].datapoints.length).to.equal(20);
-      expect(result[0].datapoints[0]).to.equal(deltaData[0].datapoints[0]);
-      expect(result[0].datapoints[1]).to.equal(deltaData[0].datapoints[1]);
-      expect(result[0].datapoints[2]).to.equal(cachedData[0].datapoints[2]); // ...
+      expect(result[0].datapoints[19]).to.equal(deltaData[0].datapoints[1]);
+      expect(result[0].datapoints[18]).to.equal(deltaData[0].datapoints[0]);
+      expect(result[0].datapoints[17]).to.equal(cachedData[0].datapoints[17]); // ...
 
       expect(result[1].datapoints.length).to.equal(20);
-      expect(result[1].datapoints[0]).to.equal(deltaData[0].datapoints[0]);
-      expect(result[1].datapoints[1]).to.equal(deltaData[0].datapoints[1]);
-      expect(result[1].datapoints[2]).to.equal(cachedData[0].datapoints[2]); // ...
+      expect(result[1].datapoints[19]).to.equal(deltaData[1].datapoints[1]);
+      expect(result[1].datapoints[18]).to.equal(deltaData[1].datapoints[0]);
+      expect(result[1].datapoints[17]).to.equal(cachedData[1].datapoints[17]); // ...
     });
 
-    it('should add new data to cache', function() {
+    it('should add completly new data to cache', function() {
       let deltaData = generateTestData(2, 2);
       let cachedData = generateTestData(1, 20);
 
-      let result = appendData(deltaData, cachedData);
+      let result = appendData(_.cloneDeep(deltaData), _.cloneDeep(cachedData));
 
       expect(result[0].datapoints.length).to.equal(20);
-      expect(result[0].datapoints[0]).to.equal(deltaData[0].datapoints[0]);
-      expect(result[0].datapoints[1]).to.equal(deltaData[0].datapoints[1]);
-      expect(result[0].datapoints[2]).to.equal(cachedData[0].datapoints[2]); // ...
+      expect(result[0].datapoints[19]).to.equal(deltaData[0].datapoints[1]);
+      expect(result[0].datapoints[18]).to.equal(deltaData[0].datapoints[0]);
+      expect(result[0].datapoints[17]).to.equal(cachedData[0].datapoints[17]); // ...
 
       expect(result[1].datapoints.length).to.equal(2);
-      expect(result[1].datapoints[0]).to.equal(deltaData[0].datapoints[0]);
-      expect(result[1].datapoints[1]).to.equal(deltaData[0].datapoints[1]);
+      expect(result[1].datapoints[1]).to.equal(deltaData[1].datapoints[1]);
+      expect(result[1].datapoints[0]).to.equal(deltaData[1].datapoints[0]);
     });
 
-    it('should remain cached data if not updated', function() {
+    it('should still contain cached data if not updated', function() {
       let deltaData = generateTestData(1, 2);
       let cachedData = generateTestData(2, 20);
 
-      let result = appendData(deltaData, cachedData);
+      let result = appendData(_.cloneDeep(deltaData), _.cloneDeep(cachedData));
 
       expect(result[0].datapoints.length).to.equal(20);
-      expect(result[0].datapoints[0]).to.equal(deltaData[0].datapoints[0]);
-      expect(result[0].datapoints[1]).to.equal(deltaData[0].datapoints[1]);
-      expect(result[0].datapoints[2]).to.equal(cachedData[0].datapoints[2]); // ...
+      expect(result[0].datapoints[19]).to.equal(deltaData[0].datapoints[1]);
+      expect(result[0].datapoints[18]).to.equal(deltaData[0].datapoints[0]);
+      expect(result[0].datapoints[17]).to.equal(cachedData[0].datapoints[17]); // ...
 
       expect(result[1].datapoints.length).to.equal(20);
-      expect(result[1].datapoints[0]).to.equal(cachedData[0].datapoints[0]);
-      expect(result[1].datapoints[1]).to.equal(cachedData[0].datapoints[1]);
-      expect(result[1].datapoints[2]).to.equal(cachedData[0].datapoints[2]); // ...
+      expect(result[1].datapoints[19]).to.equal(cachedData[1].datapoints[19]);
+      expect(result[1].datapoints[18]).to.equal(cachedData[1].datapoints[18]);
+      expect(result[1].datapoints[17]).to.equal(cachedData[1].datapoints[17]); // ...
     });
+
+    it('should dropp old cached data when new data was added', function() {
+      let deltaData = generateTestData(1, 2);
+      let cachedData = generateTestData(1, 21);
+      cachedData = _.takeRight(cachedData[0].datapoints, 20)
+
+      let result = appendData(_.cloneDeep(deltaData), _.cloneDeep(cachedData));
+
+      expect(result[0].datapoints.length).to.equal(20);
+      expect(result[0].datapoints[19]).to.equal(deltaData[0].datapoints[1]);
+      expect(result[0].datapoints[18]).to.equal(deltaData[0].datapoints[0]);
+      expect(result[0].datapoints[17]).to.equal(cachedData[0].datapoints[17]); // ...
+    });
+
   });
 });
 
@@ -152,7 +166,7 @@ function generateTestData(amountOfTimeseries, numberOfEntries) {
   for (let i = 1; i <= amountOfTimeseries; i++) {
     var timeseries = [];
     for (let j = 1; j <= numberOfEntries; j++) {
-      timeseries.push([getRandomValue(), 10900000 - (j * 100000)]);
+      timeseries.unshift([getRandomValue(), 10900000 - (j * 100000)]);
     }
     data.push({
       target: "Metrics for " + amountOfTimeseries,
