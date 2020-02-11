@@ -4,7 +4,7 @@ import {
   getPossibleGranularities,
   getPossibleRollups
 } from "./util/rollup_granularity_util";
-import { generateStableHash, isOverlapping, appendData} from './util/delta_util';
+import { generateStableHash, hasIntersection, appendData} from './util/delta_util';
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
 import InstanaApplicationDataSource from './datasource_application';
 import InstanaEndpointDataSource from "./datasource_endpoint";
@@ -129,10 +129,10 @@ export default class InstanaDatasource extends AbstractDatasource {
     return data;
   }
 
-  adjustTimeFilterIfCached(timeFilter, target) {
+  adjustTimeFilterIfCached(timeFilter: TimeFilter, target): TimeFilter {
     var cachedResult = this.resultCache.get(target.stableHash);
-    if (cachedResult && isOverlapping(timeFilter, cachedResult.timeFilter)) {
-      var newFrom = Math.round(this.getLastTimestampOfSeries(cachedResult.results) / 1000) * 1000;
+    if (cachedResult && hasIntersection(timeFilter, cachedResult.timeFilter)) {
+      var newFrom = this.getDeltaRequestTimestamp(cachedResult.results, cachedResult.timeFilter.from);
       return {
         from: newFrom,
         to: timeFilter.to,
@@ -142,8 +142,13 @@ export default class InstanaDatasource extends AbstractDatasource {
     return timeFilter;
   }
 
-  getLastTimestampOfSeries(series) {
-    return series[0].datapoints[series[0].datapoints.length - 1][1];
+  getDeltaRequestTimestamp(series, fromDefault: number): number {
+    const length = series[0].datapoints.length;
+    if (length === 0) {
+      return fromDefault;
+    }
+    const penultimate = length > 1 ? length - 2 : 1;
+    return series[0].datapoints[penultimate][1];
   }
 
   buildTargetWithAppendedDataResult(target, timeFilter: TimeFilter, data) {

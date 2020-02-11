@@ -45,7 +45,7 @@ from |----------------------------------------| to (t1)
   from |-------------------| to (t2)
                         from |-------------------| to (t1)
 */
-export function isOverlapping(t1: TimeFilter, t2: TimeFilter): boolean {
+export function hasIntersection(t1: TimeFilter, t2: TimeFilter): boolean {
   return t1.from < t2.to && t1.from > t2.from; // t1.windowSize === t2.windowSize
 }
 

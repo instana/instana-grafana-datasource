@@ -1,5 +1,5 @@
 import { describe, it, expect } from './lib/common';
-import { appendData, generateStableHash, isOverlapping } from "../src/util/delta_util";
+import { appendData, generateStableHash, hasIntersection } from "../src/util/delta_util";
 import TimeFilter from '../src/types/time_filter';
 
 describe('Given a delta', function() {
@@ -17,7 +17,7 @@ describe('Given a delta', function() {
         windowSize: 200000
       };
 
-      let result = isOverlapping(newTimeFilter, preTimeFilter);
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
       expect(result).to.equal(true);
     });
 
@@ -28,7 +28,7 @@ describe('Given a delta', function() {
         windowSize: 200000
       };
 
-      let result = isOverlapping(newTimeFilter, preTimeFilter);
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
       expect(result).to.equal(false);
     });
 
@@ -39,7 +39,7 @@ describe('Given a delta', function() {
         windowSize: 100000
       };
 
-      let result = isOverlapping(newTimeFilter, preTimeFilter);
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
       expect(result).to.equal(true); // TODO false ? as seen in description
     });
 
@@ -50,7 +50,7 @@ describe('Given a delta', function() {
         windowSize: 100000
       };
 
-      let result = isOverlapping(newTimeFilter, preTimeFilter);
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
       expect(result).to.equal(false);
     });
 
@@ -61,7 +61,7 @@ describe('Given a delta', function() {
         windowSize: 100000
       };
 
-      let result = isOverlapping(newTimeFilter, preTimeFilter);
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
       expect(result).to.equal(false);
     });
   });
