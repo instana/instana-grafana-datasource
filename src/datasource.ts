@@ -279,8 +279,8 @@ export default class InstanaDatasource extends AbstractDatasource {
     const from = new Date(options.range.from).getTime();
     const to = new Date(options.range.to).getTime();
     return {
-      from: (from / 1000) * 1000,
-      to: (to / 1000) * 1000,
+      from: Math.round(from / 1000) * 1000,
+      to: Math.round(to / 1000) * 1000,
       windowSize: to - from
     };
   }

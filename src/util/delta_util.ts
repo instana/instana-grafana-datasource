@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+import TimeFilter from '../types/time_filter';
+
 const omitLabels = [
   'refId',
   'pluginId',
@@ -10,11 +12,12 @@ const omitLabels = [
   'showGroupBySecondLevel',
   'aggregateGraphs',
   'canShowAllMetrics',
+  'aggregationFunction',
   'timeFilter',
   'stableHash'
 ];
 
-export function generateStableHash(obj) {
+export function generateStableHash(obj): string {
   let pseudoHash = _.omit(obj, omitLabels);
   pseudoHash = _.mapValues(pseudoHash, value => {
       // to reduce overhead of interface Selectable
@@ -42,10 +45,8 @@ from |----------------------------------------| to (t1)
   from |-------------------| to (t2)
                         from |-------------------| to (t1)
 */
-export function isOverlapping(t1, t2) {
-  return t1.windowSize === t2.windowSize
-        && t1.from < t2.to
-        && t1.from > t2.from;
+export function isOverlapping(t1: TimeFilter, t2: TimeFilter): boolean {
+  return t1.from < t2.to && t1.from > t2.from; // t1.windowSize === t2.windowSize
 }
 
 /*
@@ -53,7 +54,7 @@ export function isOverlapping(t1, t2) {
   Also removes old data accordingly (e.g. if 4 new datapoints were added,
   the corresponding oldest four datapoints are removed).
 */
-export function appendData(newData, cachedData) {
+export function appendData(newData, cachedData): any {
   _.each(newData, (targetData, index) => {
     var appendedData = _.find(cachedData, function(o) { return o.target === targetData.target; });
     if (appendedData) {
@@ -72,6 +73,5 @@ export function appendData(newData, cachedData) {
       newData[index].datapoints = _.slice(appendedData.datapoints, numberOfNewPoints, appendedData.datapoints.length);
     }
   });
-
   return newData;
 }
