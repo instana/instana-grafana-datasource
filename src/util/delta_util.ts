@@ -54,24 +54,17 @@ export function isOverlapping(t1: TimeFilter, t2: TimeFilter): boolean {
   Also removes old data accordingly (e.g. if 4 new datapoints were added,
   the corresponding oldest four datapoints are removed).
 */
-export function appendData(newData, cachedData): any {
-  _.each(newData, (targetData, index) => {
-    var appendedData = _.find(cachedData, function(o) { return o.target === targetData.target; });
-    if (appendedData) {
-      var numberOfNewPoints = 0;
-      _.each(targetData.datapoints, (datapoint, index) => {
-        //add or replace value for timestamp
-        var d = _.find(appendedData.datapoints, function(o)  {  return  o[1] === datapoint[1];  });
-        if (d) {
-          d[0] = datapoint[0];
-        } else {
-          appendedData.datapoints.push(datapoint);
-          numberOfNewPoints++;
-        }
-      });
-
-      newData[index].datapoints = _.slice(appendedData.datapoints, numberOfNewPoints, appendedData.datapoints.length);
+export function appendData(newDeltaData, cachedData): any {
+  _.each(newDeltaData, (deltaData, index) => {
+    var matchingCachedData = _.find(cachedData, o => o.target === deltaData.target);
+    if (matchingCachedData && deltaData.datapoints) {
+      const size = matchingCachedData.datapoints.length;
+      let datapoints = deltaData.datapoints.concat(matchingCachedData.datapoints);
+      datapoints = _.sortedUniqBy(datapoints.sort((a, b) => a[1] - b[1]), a => a[1]);
+      matchingCachedData.datapoints = _.takeRight(datapoints, size);
+    } else {
+      cachedData.push(deltaData);
     }
   });
-  return newData;
+  return cachedData;
 }
