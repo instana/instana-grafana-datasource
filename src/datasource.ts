@@ -76,6 +76,10 @@ export default class InstanaDatasource extends AbstractDatasource {
         // target migration for downwards compatibility
         migrate(target);
 
+        if (!target.metricCategory) {
+          target.metricCategory = this.BUILT_IN_METRICS;
+        }
+
         if (target.timeShift) {
           timeFilter = this.applyTimeShiftOnTimeFilter(timeFilter, this.convertTimeShiftToMillis(target.timeShift));
         }
