@@ -76,12 +76,12 @@ export default class InstanaDatasource extends AbstractDatasource {
         // target migration for downwards compatibility
         migrate(target);
 
-        if (!target.metricCategory) {
-          target.metricCategory = this.BUILT_IN_METRICS;
-        }
-
         if (target.timeShift) {
           timeFilter = this.applyTimeShiftOnTimeFilter(timeFilter, this.convertTimeShiftToMillis(target.timeShift));
+        }
+
+        if (!target.metricCategory) {
+          target.metricCategory = this.BUILT_IN_METRICS;
         }
 
         target['timeFilter'] = timeFilter;
@@ -157,7 +157,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   buildTargetWithAppendedDataResult(target, timeFilter: TimeFilter, data) {
-    if (timeFilter.from !== target.timeFilter.from) {
+    if (timeFilter.from !== target.timeFilter.from && data) {
       data = this.appendResult(data, target);
     }
     return {
@@ -387,6 +387,8 @@ export default class InstanaDatasource extends AbstractDatasource {
         return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
       });
     }
+
+    return this.$q.resolve({data: {items: []}});
   }
 
   isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean {
