@@ -61,12 +61,9 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.availableRollups = getPossibleRollups(panelTimeFilter);
     this.availableGranularities = getPossibleGranularities(panelTimeFilter.windowSize);
 
-    const targets = [];
-
     return this.$q.all(
       _.map(options.targets, target => {
         let timeFilter: TimeFilter = this.readTime(options);
-        targets[target.refId] = target;
 
         // grafana setting to disable query execution
         if (target.hide) {
