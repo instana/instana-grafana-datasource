@@ -2,6 +2,7 @@
 import {QueryCtrl} from 'app/plugins/sdk';
 
 import aggregation_functions from './lists/aggregation_function';
+import sloInfo from './lists/slo_specifics';
 import beaconTypes from './lists/beacon_types';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
@@ -20,6 +21,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   uniqueOperators: Array<Selectable> = operators;
   uniqueBeaconTypes: Array<Selectable> = beaconTypes;
   aggregationFunctions = aggregation_functions;
+  sloSpecifics: Array<Selectable> = sloInfo;
 
   uniqueEntityTypes: Array<Selectable>; // subset of allEntityTypes filtered by DF
   allCustomMetrics: Array<Selectable>; // internal reference only to speed up filtering // TODO needed ?
@@ -30,6 +32,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   uniqueTags: Array<Selectable>;
   allWebsiteMetrics: Array<Selectable>;
   allTypes: Array<Selectable>;
+  configuredReports: Array<Selectable>;
 
   snapshots: Array<string>;
   entitySelectionText: string;
@@ -59,6 +62,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   // APPLICATION_METRICS = '4';
   // SERVICE_METRICS = '5';
   // ENDPOINT_METRICS = '6';
+  SLO_INFORMATION = '7';
 
   defaults = {};
 
@@ -134,6 +138,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.loadServices();
       this.loadEndpoints();
     }
+
+    if (this.isSLORequest()) {
+      if (!this.target.sloSpecific) {
+        this.target.sloSpecific = this.sloSpecifics[0]; //set default value
+      }
+
+      this.loadConfiguredSLOs();
+    }
   }
 
   loadServices() {
@@ -174,6 +186,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   isApplicationServiceEndpointMetric() {
     return this.target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS;
+  }
+
+  isSLORequest() {
+    return this.target.metricCategory === this.SLO_INFORMATION;
   }
 
   onWebsiteChanges(refresh, isAnalyze: boolean) {
@@ -305,6 +321,19 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
   }
 
+  loadConfiguredSLOs() {
+    this.datasource.slo.getConfiguredSLOs().then(reports => {
+      this.configuredReports = reports;
+      if (!this.target.sloReport) {
+        if (this.configuredReports.length >= 1) {
+          this.target.sloReport = this.configuredReports[0];
+        } else {
+          this.target.sloReport === this.EMPTY_DROPDOWN_TEXT;
+        }
+      }
+    });
+  }
+
   onFilterChange(refresh: boolean, findMatchingEntityTypes = true) {
     if (!this.target.entityQuery) {
       this.selectionReset();
@@ -346,6 +375,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
           this.onApplicationChanges(false, false);
           this.loadServices();
           this.loadEndpoints();
+        } else if (this.isSLORequest()) {
+          this.loadConfiguredSLOs();
         }
       }
     }

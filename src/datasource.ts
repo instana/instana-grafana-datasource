@@ -9,6 +9,7 @@ import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
 import InstanaApplicationDataSource from './datasource_application';
 import InstanaEndpointDataSource from "./datasource_endpoint";
 import InstanaServiceDataSource from "./datasource_service";
+import InstanaSLODataSource from "./datasource_slo";
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
 import {readItemMetrics} from "./util/analyze_util";
@@ -24,6 +25,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   website: InstanaWebsiteDataSource;
   service: InstanaServiceDataSource;
   endpoint: InstanaEndpointDataSource;
+  slo: InstanaSLODataSource;
   availableGranularities: Array<Selectable>;
   availableRollups: Array<Selectable>;
   maxWindowSizeInfrastructure: number;
@@ -39,6 +41,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.service = new InstanaServiceDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q);
+    this.slo = new InstanaSLODataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.availableGranularities = [];
     this.availableRollups = [];
     this.maxWindowSizeInfrastructure = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_infra);
@@ -87,18 +90,84 @@ export default class InstanaDatasource extends AbstractDatasource {
             return this.getAnalyzeApplicationMetrics(target, timeFilter);
           } else if (target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
             return this.getApplicationServiceEndpointMetrics(target, timeFilter);
+          } else if (target.metricCategory === this.SLO_INFORMATION) {
+            return this.getSLOReport(target, timeFilter);
           }
         }
       })
     ).then(results => {
-      // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+      //console.log(results[0].data[0]);
+    /*  if (results[0].data && results[0].data[0] === 12) {
+        return {data: [
+          {
+            target: "SLI",
+            datapoints: [[99,1582175100000]],
+            refId: "A"
+          }
+        ]};
+      } else {*/
+        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
       var flatData = {data: _.flatten(results)};
       // Remove empty data items
-      flatData.data = _.compact(flatData.data);
+      //flatData.data = _.compact(flatData.data);
       this.applyTimeShiftIfNecessary(flatData, targets);
       var newData = this.aggregateDataIfNecessary(flatData, targets);
+      this.splitAndPopulate(newData);
       return {data: _.flatten(newData)};
     });
+  }
+
+  splitAndPopulate(series) {
+    //if the timeseries is actually requested then you separate the "good"
+    //points with the "bad" ones through separate arrays
+    //put the good ones into the first array
+    //add three empty targets
+    //put the bad ones into the fifth array
+    //return that shit
+
+    //series[0][0].datapoints = this.normalize(series[0][0]);
+    series[0].push(this.createEmptyTarget());
+    series[0].push(this.createEmptyTarget());
+    series[0].push(this.createEmptyTarget());
+
+    series[0].push(this.mock(series));
+    series[0][4].datapoints = _.takeRight(series[0][0].datapoints, 6);
+
+    series[0][0].datapoints = _.map(series[0][0].datapoints, (d, index) => {
+      return [1 + 1, d[1]];
+    });
+
+    series[0][4].datapoints = _.map(series[0][4].datapoints, (d, index) => {
+      return [1 + 1, d[1]];
+    });
+  }
+
+  createEmptyTarget() {
+    return {
+      target: "",
+      datapoints: [[]],
+      refId: ""
+    };
+  }
+
+  normalize(series) {
+    return _.map(series, (d, index) => {
+      return [1, d[1]];
+    });
+  }
+
+  mock(series) {
+    let datapoints = series[0][0].datapoints;
+    console.log(series);
+    datapoints = _.map(datapoints, d => {
+      return [d[0] + 1, d[1]];
+    });
+
+    return {
+      target: "",
+      datapoints: datapoints,
+      refId: ""
+    };
   }
 
   removeEmptyTargetsFromResultData(data) {
@@ -337,7 +406,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     }
 
     if (this.isEndpointSet(target.endpoint)) {
-      return  this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
+      return this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
       });
     } else if (this.isServiceSet(target.service)) {
@@ -350,6 +419,15 @@ export default class InstanaDatasource extends AbstractDatasource {
         return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
       });
     }
+  }
+
+  getSLOReport(target, timeFilter: TimeFilter) {
+    // do not try to execute to big queries
+    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeMetrics)) {
+      return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeMetrics);
+    }
+
+    return this.slo.fetchSLOReport(target, timeFilter);
   }
 
   isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean {

@@ -23,10 +23,11 @@ export default class AbstractDatasource {
   CUSTOM_METRICS = '1';
   ANALYZE_APPLICATION_METRICS = '2';
   ANALYZE_WEBSITE_METRICS = '3';
-  APPLICATION_SERVICE_ENDPOINT_METRICS = '4'; // replaces previous
+  APPLICATION_SERVICE_ENDPOINT_METRICS = '4';// replaces previous
   // APPLICATION_METRICS = '4';
   // SERVICE_METRICS = '5';
   // ENDPOINT_METRICS = '6';
+  SLO_INFORMATION = '7';
 
   /** @ngInject */
   constructor(instanceSettings, public backendSrv, public templateSrv, public $q) {
