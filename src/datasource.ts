@@ -114,7 +114,7 @@ export default class InstanaDatasource extends AbstractDatasource {
         var resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
         this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
         resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
-        this.cacheResult(resultData, targetAndData.target);
+        this.cacheResultIfNecessary(resultData, targetAndData.target);
         result.push(resultData);
       });
 
@@ -163,23 +163,19 @@ export default class InstanaDatasource extends AbstractDatasource {
     };
   }
 
-  cacheResult(result, target) {
-    if (!this.isEmptyResult(result)) {
+  cacheResultIfNecessary(result, target) {
+    if (this.supportsDeltaRequests() && this.hasResult(result)) {
+
       var cachedObj = {
         timeFilter: target.timeFilter,
         results: result
       };
-      this.resultCache.put(target.stableHash, cachedObj, 400000); // to cover up to 5 min refreshs
+      this.resultCache.put(target.stableHash, cachedObj, 400000); // to cover at least 5 min refreshs
     }
   }
 
-  isEmptyResult(result) {
-    if (result) {
-      if (result.length > 0) {
-        return false;
-      }
-    }
-    return true;
+  hasResult(result) {
+    return result && result.length > 0;
   }
 
   removeEmptyTargetsFromResultData(data) {
@@ -420,7 +416,18 @@ export default class InstanaDatasource extends AbstractDatasource {
     throw new Error('Template Variable Support not implemented yet.');
   }
 
-  getVersion(): number {
+  supportsDeltaRequests() {
+    let version = this.resultCache.get('version');
+    if (!version) {
+        return this.getVersion().then(version => {
+          this.resultCache.put('version', version, 3600000); // one hour
+          return version >= 1.171;
+        });
+    }
+    return version >= 1.171;
+  }
+
+  getVersion() {
     return this.doRequest('/api/instana/version').then(
       result => {
         if (result.data) {
