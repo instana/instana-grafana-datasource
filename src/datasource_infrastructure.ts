@@ -1,5 +1,6 @@
 import {getDefaultMetricRollupDuration} from "./util/rollup_granularity_util";
 import AbstractDatasource from './datasource_abstract';
+import max_metrics from './lists/max_metrics';
 import TimeFilter from './types/time_filter';
 import Selectable from './types/selectable';
 import Cache from './cache';
@@ -176,20 +177,61 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   fetchMetricsForSnapshots(target, snapshots, timeFilter: TimeFilter, metric) {
     const windowSize = this.getWindowSize(timeFilter);
-    return this.$q.all(
-      _.map(snapshots, (snapshot, index) => {
+    let maxValues = [];
+    let res = _.map(snapshots, (snapshot, index) => {
         // ...fetch the metric data for every snapshot in the results.
-        return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then(response => {
-          const timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
-          var result = {
-            'target': this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
-            'datapoints': _.map(timeseries, value => [value.value, value.timestamp]),
-            'refId': target.refId
-          };
-          return result;
-        });
-      })
-    );
+      return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then(response => {
+        let timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
+        var result = {
+          'target': this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
+          'datapoints': _.map(timeseries, value => [value.value, value.timestamp]),
+          'refId': target.refId
+        };
+
+        if (target.displayMaxMetricValue) {
+          const maxValue = this.getMaxMetricValue(target.metric, snapshot);
+          maxValues.push(this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
+          result.datapoints = this.convertRelativeToAbsolute(result.datapoints, maxValue);
+        }
+
+        return result;
+      });
+    });
+
+    return Promise.all(res).then(allResults => {
+      if (target.displayMaxMetricValue) {
+        allResults = _.concat(res,maxValues);
+      }
+      return this.$q.all(allResults);
+    });
+  }
+
+  buildMaxMetricTarget(target, timeseries, maxValue, resultLabel) {
+    return {
+      'target': resultLabel + ' ' + this.convertMetricNameToMaxLabel(target.metric),
+      'datapoints': [
+        [maxValue, timeseries[0].timestamp],
+        [maxValue, timeseries[timeseries.length - 1].timestamp]
+      ],
+      'refId': target.refId
+    };
+  }
+
+  convertRelativeToAbsolute(datapoints, maxValue) {
+    return _.map(datapoints, (datapoint, index) => {
+      if (datapoint[0]) {
+        return [datapoint[0] * maxValue, datapoint[1]];
+      }
+      return [null, datapoint[1]];
+    });
+  }
+
+  convertMetricNameToMaxLabel(metric): string {
+    return _.find(max_metrics, m => m.key === metric.key).label;
+  }
+
+  getMaxMetricValue(metric, snapshot): number {
+    return snapshot.response.data.data[_.find(max_metrics, m => m.key === metric.key).value];
   }
 
   readTimeSeries(values, aggregation: string, pluginId: string, timeFilter: TimeFilter) {

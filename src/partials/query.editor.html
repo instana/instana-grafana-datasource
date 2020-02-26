@@ -144,6 +144,19 @@
             <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
           </select>
         </div>
+        <label ng-show="ctrl.isBuiltInInfrastructure()"
+               class="gf-form-label query-keyword width-13 pointer"
+               for="in-aggregate-graphs-{{ctrl.target.refId}}">
+          Show max value
+          <info-popover position="top center" mode="right-normal">
+            <p>Displays the maximal value of current metric. Works only with cpu.used, memory.used, and openFiles.used.</p>
+          </info-popover>
+        </label>
+        <gf-form-switch ng-show="ctrl.isBuiltInInfrastructure()"
+                        ng-disabled="!ctrl.canShowMaxMetricValue()"
+                        id="in-max-value-{{ctrl.target.refId}}"
+                        checked="ctrl.target.displayMaxMetricValue"
+                        on-change="ctrl.onChange()"/>
         <label ng-show="ctrl.target.metricCategory === '1'" class="gf-form-label query-keyword pointer">
           Show all Metrics
           <info-popover position="top center" mode="right-normal">
@@ -468,20 +481,15 @@
                         checked="ctrl.target.advancedSettingsSwitchChecked" on-change="ctrl.toggleAdvancedSettings()"/>
       </div>
 
-      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings">
-        <div class="gf-form full-width" ng-show="ctrl.isInfrastructure()" ng-include src="'legend.html'"/>
-        <div class="gf-form full-width" ng-show="ctrl.isAnalyzeApplication()" ng-include src="'application_legend.html'"/>
-        <div class="gf-form full-width" ng-show="ctrl.isApplicationServiceEndpointMetric()" ng-include src="'application_service_endpoint_legend.html'"/>
-        <div class="gf-form full-width" ng-show="ctrl.isAnalyzeWebsite()" ng-include src="'website_legend.html'"/>
-        <div class="gf-form full-width" ng-include src="'timeshift.html'"/>
-      </div>
-      <div class="gf-form"
-           ng-show="ctrl.target.showAdvancedSettings && ctrl.isCustomInfrastructure()"
-           ng-include src="'freeTextMetrics.html'"/>
+      <div class="gf-form full-width" ng-show="ctrl.target.showAdvancedSettings && ctrl.isInfrastructure()" ng-include src="'legend.html'"/>
+      <div class="gf-form full-width" ng-show="ctrl.target.showAdvancedSettings && ctrl.isAnalyzeApplication()" ng-include src="'application_legend.html'"/>
+      <div class="gf-form full-width" ng-show="ctrl.target.showAdvancedSettings && ctrl.isApplicationServiceEndpointMetric()" ng-include src="'application_service_endpoint_legend.html'"/>
+      <div class="gf-form full-width" ng-show="ctrl.target.showAdvancedSettings && ctrl.isAnalyzeWebsite()" ng-include src="'website_legend.html'"/>
 
-      <div class="gf-form"
-           ng-show="ctrl.target.showAdvancedSettings && ctrl.isInfrastructure()"
-           ng-include src="'aggregate_graphs.html'"/>
+      <div class="gf-form full-width" ng-show="ctrl.target.showAdvancedSettings" ng-include src="'timeshift.html'"/>
+
+      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings && ctrl.isCustomInfrastructure()" ng-include src="'freeTextMetrics.html'"/>
+      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings && ctrl.isInfrastructure()" ng-include src="'aggregate_graphs.html'" />
     </script>
 
     <script type="text/ng-template" id="legend.html">

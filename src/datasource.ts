@@ -298,8 +298,10 @@ export default class InstanaDatasource extends AbstractDatasource {
     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
     return this.infrastructure.fetchSnapshotsForTarget(target, timeFilter).then(snapshots => {
       if (target.showAllMetrics) {
+        // only available for custom metrics
         return this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, target.allMetrics);
       } else if (target.freeTextMetrics) {
+        // only available for custom metrics
         const metrics = this.extractMetricsFromText(target.freeTextMetrics);
         return this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics);
       } else {
