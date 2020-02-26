@@ -105,7 +105,6 @@ export default class InstanaDatasource extends AbstractDatasource {
       })
     ).then(targetData => {
       var result = [];
-      // console.log(JSON.stringify(targetData));
       _.each(targetData, (targetAndData, index) => {
         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
         var resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
