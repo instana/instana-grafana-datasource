@@ -275,11 +275,11 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   readTime(options): TimeFilter {
-    const from = new Date(options.range.from).getTime();
-    const to = new Date(options.range.to).getTime();
+    const from = Math.floor(new Date(options.range.from).getTime() / 1000) * 1000;
+    const to = Math.floor(new Date(options.range.to).getTime() / 1000) * 1000;
     return {
-      from: Math.floor(from / 1000) * 1000,
-      to: Math.floor(to / 1000) * 1000,
+      from: from,
+      to: to,
       windowSize: to - from
     };
   }
