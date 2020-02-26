@@ -74,9 +74,9 @@ System.register(["./util/rollup_granularity_util", "./datasource_abstract", './c
                         + "&page=" + page
                         + "&pageSize=" + pageSize;
                     var url = '/api/application-monitoring/applications;id='
-                        + applicationId
+                        + (applicationId ? applicationId : '')
                         + '/services;id='
-                        + serviceId
+                        + (serviceId ? serviceId : '')
                         + '/endpoints?' + queryParameters;
                     return this.doRequest(url).then(function (response) {
                         results.push(response.data);

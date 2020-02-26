@@ -35,5 +35,3 @@ export function readItemMetrics(target, response, getLabel) {
     });
   }));
 }
-
-

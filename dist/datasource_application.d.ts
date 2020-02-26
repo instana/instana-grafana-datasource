@@ -10,7 +10,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     getApplications(timeFilter: TimeFilter): Promise<Selectable[]>;
     paginateApplications(results: any, windowSize: number, to: number, page: number, pageSize: number, pageLimit: number): any;
-    getApplicastionTags(): Selectable[];
+    getApplicationTags(): Selectable[];
     getApplicationMetricsCatalog(): Selectable[];
     fetchAnalyzeMetricsForApplication(target: any, timeFilter: TimeFilter): any;
     fetchApplicationMetrics(target: any, timeFilter: TimeFilter): any;

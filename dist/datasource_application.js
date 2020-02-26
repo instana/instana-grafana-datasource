@@ -78,7 +78,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                         }
                     });
                 };
-                InstanaApplicationDataSource.prototype.getApplicastionTags = function () {
+                InstanaApplicationDataSource.prototype.getApplicationTags = function () {
                     var applicationTags = this.simpleCache.get('applicationTags');
                     if (applicationTags) {
                         return applicationTags;
@@ -86,7 +86,8 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                     applicationTags = this.doRequest('/api/application-monitoring/catalog/tags').then(function (tagsResponse) {
                         return tagsResponse.data.map(function (entry) { return ({
                             'key': entry.name,
-                            'type': entry.type
+                            'type': entry.type,
+                            'tagEntity': entry.canApplyToDestination ? 'DESTINATION' : 'NOT_APPLICABLE'
                         }); });
                     });
                     this.simpleCache.put('applicationTags', applicationTags);
@@ -127,12 +128,15 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                         tagFilters.push({
                             name: 'application.name',
                             operator: 'EQUALS',
-                            value: target.entity.label
+                            value: target.entity.label,
+                            entity: 'DESTINATION'
                         });
                     }
                     lodash_1.default.forEach(target.filters, function (filter) {
                         if (filter.isValid) {
-                            tagFilters.push(analyze_util_1.createTagFilter(filter));
+                            var tagFilter = analyze_util_1.createTagFilter(filter);
+                            tagFilter['groupbyTagEntity'] = filter.tag.tagEntity;
+                            tagFilters.push(tagFilter);
                         }
                     });
                     var metric = {
@@ -148,6 +152,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                     var group = {
                         groupbyTag: target.group.key
                     };
+                    group['groupbyTagEntity'] = target.group.tagEntity;
                     if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
                         group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
                     }

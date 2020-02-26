@@ -238,7 +238,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
 
     if (isAnalyze) {
-      this.datasource.application.getApplicastionTags().then(
+      this.datasource.application.getApplicationTags().then(
         applicationTags => {
           this.uniqueTags =
             _.sortBy(

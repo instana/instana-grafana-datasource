@@ -1,6 +1,41 @@
 import _ from 'lodash';
 
-export function aggregate(aggregation: string, data) {
+export function aggregateTarget(data, target) {
+  var concatedTargetData = concatTargetData(data);
+
+  var dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (d) {
+    return d[1];
+  });
+
+  var aggregatedData = aggregateDataOfTimestamp(dataGroupedByTimestamp, target.aggregationFunction.label);
+  aggregatedData = _.sortBy(aggregatedData, [function (datapoint) {
+    return datapoint[1];
+  }]);
+
+  return buildResult(aggregatedData, target.refId, buildAggregationLabel(target));
+}
+
+function concatTargetData(data) {
+  var result = [];
+  _.each(data, (entry, index) => {
+    result = _.concat(result, entry.datapoints);
+  });
+  return result;
+}
+
+function aggregateDataOfTimestamp(dataGroupedByTimestamp, aggregationLabel: string) {
+  var result = [];
+  _.each(dataGroupedByTimestamp, (timestampData, timestamp) => {
+    var valuesOfTimestamp = _.map(timestampData, (datapoint, index) => {
+      return datapoint[0];
+    });
+    var aggregatedValue = aggregate(aggregationLabel, valuesOfTimestamp);
+    result.push([aggregatedValue, parseInt(timestamp)]);
+  });
+  return result;
+}
+
+function aggregate(aggregation: string, data) {
   if (aggregation.toLowerCase() === "sum") {
     return _.sum(data);
   } else if (aggregation.toLowerCase() === "mean") {
@@ -15,7 +50,15 @@ export function aggregate(aggregation: string, data) {
   }
 }
 
-export function buildAggregationLabel(target) {
+function buildResult(aggregatedData, refId, target) {
+  return {
+    datapoints: aggregatedData,
+    refId: refId,
+    target: target
+  };
+}
+
+function buildAggregationLabel(target) {
   if (target.showAllMetrics) {
     if (target.allMetrics.length > 1) {
       if (target.customFilters && target.customFilters.length > 0) {
