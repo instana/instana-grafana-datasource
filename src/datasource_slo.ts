@@ -16,8 +16,8 @@ export default class InstanaSLODataSource extends AbstractDatasource {
   }
 
   getConfiguredSLOs(target, timeFilter: TimeFilter) {
-    let url = '/api/events/settings/slo';
-    /*return this.doRequest(url).then(response => {
+    let url = '/api/events/settings/slo'; //TODO verify endpoint
+    return this.doRequest(url).then(response => {
       return _.map(response, (r, index) => {
         return {
           //TODO this might change
@@ -25,19 +25,7 @@ export default class InstanaSLODataSource extends AbstractDatasource {
           'label': r.name
         };
       });
-    });*/
-    let bla = [
-      {
-      'key': 'nbu293jab20as',
-      'label': 'Robotshop Latency SLO'
-      },
-      {
-      'key': 'nbuasdas293jab20as',
-      'label': 'All Services Latency SLO'
-      }
-    ];
-
-    return Promise.resolve(bla);
+    });
   }
 
   fetchSLOReport(target, timeFilter) {
@@ -47,12 +35,29 @@ export default class InstanaSLODataSource extends AbstractDatasource {
     }
 
     const windowSize = this.getWindowSize(timeFilter);
+    let url = 'api/slo/sli' + target.sloReport.id; //TODO verify endpoint
+    return this.doRequest(url);
+  }
 
-    //do the request
+  extractSpecifcValueFromSLI(sliResult, sloSpecific) {
+    if (sloSpecific.key === 'SLI') {
+      return this.buildResultArray(sliResult.sliValue);
+    } else if (sloSpecific.key === 'Remaining Error Budget') {
+      return this.buildResultArray(sliResult.errorBudgetRemaining);
+    } else if (sloSpecific.key === 'Timeseries') {
+      //do some transformation with sliResult.metricResults
+      var seperatedArray = this.splitAndPopulate(sliResult.metricResults);
+      return this.buildResultArray(seperatedArray);
+    }
 
-    //extract the data which is actually wanted (target.sloSpecific)
+    return this.$q.resolve({data: {items: []}});
+  }
 
-    //put the value into proper formatting
+  //Grafana expects the result to be an array and does not allow to return single numbers.
+  //An array consisting of one tuple {value, timetamp} is expected. Therefore, we use
+  //the actual value along with the current timestamp.
+  buildResultArray(result) {
+    return [result, Date.now()];
   }
 
   splitAndPopulate(series) {
@@ -63,25 +68,21 @@ export default class InstanaSLODataSource extends AbstractDatasource {
     //put the bad ones into the fifth array
     //return that shit
 
-    series[0].push(this.createEmptyTarget());
-    series[0].push(this.createEmptyTarget());
-    series[0].push(this.createEmptyTarget());
-
-    series[0].push(this.mock(series));
-    series[0][4].datapoints = _.takeRight(series[0][0].datapoints, 6);
+    //series[0].push(this.createEmptyTarget());
+    //series[0].push(this.mock(series));
+    //series[0][4].datapoints = _.takeRight(series[0][0].datapoints, 6);
   }
 
   createEmptyTarget() {
     return {
       target: "",
       datapoints: [[]],
-      refId: "FAKE"
+      refId: "A"
     };
   }
 
   mock(series) {
     let datapoints = series[0][0].datapoints;
-    console.log(series);
     datapoints = _.map(datapoints, d => {
       return [d[0] + d[0], d[1]];
     });

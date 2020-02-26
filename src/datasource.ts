@@ -427,7 +427,14 @@ export default class InstanaDatasource extends AbstractDatasource {
       return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeMetrics);
     }
 
-    return this.slo.fetchSLOReport(target, timeFilter);
+    return this.slo.fetchSLOReport(target, timeFilter).then(sloReport => {
+      var datapoints = this.slo.extractSpecifcValueFromSLI(sloReport, target.sloSpecific);
+      return {
+        'target': target.sloReport.name, //TODO is that correct?
+        'datapoints': datapoints,
+        'refId': target.refId
+      };
+    });
   }
 
   isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean {
