@@ -219,7 +219,10 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
 
   convertRelativeToAbsolute(datapoints, maxValue) {
     return _.map(datapoints, (datapoint, index) => {
-      return [datapoint[0] * maxValue, datapoint[1]];
+      if (datapoint[0]) {
+        return [datapoint[0] * maxValue, datapoint[1]];
+      }
+      return [null, datapoint[1]];
     });
   }
 
