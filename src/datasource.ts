@@ -130,7 +130,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     var cachedResult = this.resultCache.get(target.stableHash);
     if (cachedResult && hasIntersection(timeFilter, cachedResult.timeFilter)) {
       var newFrom = this.getDeltaRequestTimestamp(cachedResult.results, cachedResult.timeFilter.from);
-      var newTo = Math.round(timeFilter.to / 10000) * 10000;
+      var newTo = Math.floor(timeFilter.to / 10000) * 10000;
       return {
         from: newFrom,
         to: newTo,
@@ -278,8 +278,8 @@ export default class InstanaDatasource extends AbstractDatasource {
     const from = new Date(options.range.from).getTime();
     const to = new Date(options.range.to).getTime();
     return {
-      from: Math.round(from / 1000) * 1000,
-      to: Math.round(to / 1000) * 1000,
+      from: Math.floor(from / 1000) * 1000,
+      to: Math.floor(to / 1000) * 1000,
       windowSize: to - from
     };
   }
@@ -382,7 +382,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
   isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean {
     if (queryIntervalLimit > 0) {
-      return Math.round(windowSize / 1000) * 1000 > queryIntervalLimit;
+      return Math.floor(windowSize / 1000) * 1000 > queryIntervalLimit;
     }
     return false;
   }
