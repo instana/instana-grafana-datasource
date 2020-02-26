@@ -65,7 +65,7 @@ export default class InstanaDatasource extends AbstractDatasource {
       _.map(options.targets, target => {
         let timeFilter: TimeFilter = this.readTime(options);
 
-        // grafana setting to disable query execution OR still invalid
+        // grafana setting to disable query execution
         if (target.hide || !target.metricCategory) {
           return { data: [] };
         }
@@ -105,6 +105,7 @@ export default class InstanaDatasource extends AbstractDatasource {
       })
     ).then(targetData => {
       var result = [];
+      // console.log(JSON.stringify(targetData));
       _.each(targetData, (targetAndData, index) => {
         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
         var resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
@@ -417,17 +418,17 @@ export default class InstanaDatasource extends AbstractDatasource {
     if (!version) {
         return this.getVersion().then(version => {
           this.resultCache.put('version', version, 3600000); // one hour
-          return version >= 1.171;
+          return version >= 171;
         });
     }
-    return version >= 1.171;
+    return version >= 171;
   }
 
-  getVersion() {
+  getVersion(): number {
     return this.doRequest('/api/instana/version').then(
       result => {
-        if (result.data) {
-          return parseFloat(result.data.imageTag) || null;
+        if (result.data && result.data.imageTag) {
+          return parseInt(result.data.imageTag.split('.', 2)[1], 10) || null;
         }
         return null;
       }, error => {

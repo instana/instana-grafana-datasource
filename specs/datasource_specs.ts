@@ -1,4 +1,4 @@
-/* import {describe, beforeEach, it, sinon, expect, angularMocks} from './lib/common';
+import {describe, beforeEach, it, sinon, expect, angularMocks} from './lib/common';
 import InstanaDatasource from '../src/datasource';
 import TemplateSrvStub from './lib/template_srv_stub';
 import Q from 'q';
@@ -32,6 +32,7 @@ describe('Given an InstanaDatasource', function() {
 
     ctx.ds = new InstanaDatasource(ctx.instanceSettings, ctx.backendSrv, ctx.templateSrv, ctx.$q);
     ctx.ds.timeFilter = timeFilter;
+    ctx.ds.resultCache.put('version', 172, 3600000);
   });
 
   describe('When performing testDatasource', function() {
@@ -252,6 +253,8 @@ describe('Given an InstanaDatasource', function() {
       "intervalMs": 20000,
       "targets": [
         {
+          "refId": "A",
+          "metricCategory": '0',
           "entityQuery": "filler",
           "entityType": {
             "key": "process",
@@ -261,10 +264,12 @@ describe('Given an InstanaDatasource', function() {
             "key": "mem.virtual",
             "label": "Virtual",
           },
-          "refId": "A"
+          "snapshotCache": {},
+          "hide": false
         },
         {
           "refId": "B",
+          "metricCategory": '0',
           "entityQuery": "filler",
           "entityType": {
             "key": "process",
@@ -274,6 +279,7 @@ describe('Given an InstanaDatasource', function() {
             "key": "mem.virtual",
             "label": "Virtual",
           },
+          "snapshotCache": {},
           "hide": false
         }
       ],
@@ -343,15 +349,15 @@ describe('Given an InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1516451043603&to=1516472658604&time=1516472658604&size=100":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1516451044000&to=1516472659000&time=1516472659000&size=100":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1516472658604":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1516472659000":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/snapshots/B?time=1516472658604":
+          case "/api/datasources/proxy/1/instana/api/snapshots/B?time=1516472659000":
             return ctx.$q.resolve(snapshotB);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&fillTimeSeries=true&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1516451044000&to=1516472659000&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1516451043603&to=1516472658604&rollup=3600000&fillTimeSeries=true&snapshotId=B":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1516451044000&to=1516472659000&rollup=3600000&fillTimeSeries=true&snapshotId=B":
             return ctx.$q.resolve(metricsForB);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -435,7 +441,9 @@ describe('Given an InstanaDatasource', function() {
       "intervalMs": 20000,
       "targets": [
         {
+          "refId": "A",
           "pluginId": "singlestat",
+          "metricCategory": '0',
           "entityQuery": "filler",
           "entityType": {
             "key": "process",
@@ -446,8 +454,7 @@ describe('Given an InstanaDatasource', function() {
             "label": "Virtual"
           },
           "aggregation" : "MEAN",
-          "snapshotCache": {},
-          "refId": "A"
+          "snapshotCache": {}
         }
       ],
       "format": "json",
@@ -495,11 +502,11 @@ describe('Given an InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248641000&to=1524421441000&time=1524421441000&size=100":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421441000":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&fillTimeSeries=true&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248641000&to=1524421441000&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -544,7 +551,9 @@ describe('Given an InstanaDatasource', function() {
       "intervalMs": 20000,
       "targets": [
         {
+          "refId": "A",
           "pluginId": "table",
+          "metricCategory": '0',
           "entityQuery": "filler",
           "entityType": {
             "key": "process",
@@ -555,8 +564,7 @@ describe('Given an InstanaDatasource', function() {
             "label": "Virtual"
           },
           "aggregation": "MEAN",
-          "snapshotCache": {},
-          "refId": "A"
+          "snapshotCache": {}
         }
       ],
       "format": "json",
@@ -604,11 +612,11 @@ describe('Given an InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248641000&to=1524421441000&time=1524421441000&size=100":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421441000":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&fillTimeSeries=true&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248641000&to=1524421441000&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -653,7 +661,9 @@ describe('Given an InstanaDatasource', function() {
       "intervalMs": 20000,
       "targets": [
         {
+          "refId": "A",
           "pluginId": "singlestat",
+          "metricCategory": '0',
           "entityQuery": "filler",
           "entityType": {
             "key": "process",
@@ -664,8 +674,7 @@ describe('Given an InstanaDatasource', function() {
             "label": "Virtual"
           },
           "aggregation": "SUM",
-          "snapshotCache": {},
-          "refId": "A"
+          "snapshotCache": {}
         }
       ],
       "format": "json",
@@ -713,11 +722,11 @@ describe('Given an InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248641000&to=1524421441000&time=1524421441000&size=100":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421441000":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&fillTimeSeries=true&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248641000&to=1524421441000&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -762,7 +771,9 @@ describe('Given an InstanaDatasource', function() {
       "intervalMs": 20000,
       "targets": [
         {
+          "refId": "A",
           "pluginId": "table",
+          "metricCategory": '0',
           "entityQuery": "filler",
           "entityType": {
             "key": "process",
@@ -773,8 +784,7 @@ describe('Given an InstanaDatasource', function() {
             "label": "Virtual"
           },
           "aggregation": "SUM",
-          "snapshotCache": {},
-          "refId": "A"
+          "snapshotCache": {}
         }
       ],
       "format": "json",
@@ -822,11 +832,11 @@ describe('Given an InstanaDatasource', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603&time=1524421440603&size=100":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248641000&to=1524421441000&time=1524421441000&size=100":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421440603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?time=1524421441000":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&fillTimeSeries=true&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248641000&to=1524421441000&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -924,6 +934,7 @@ describe('Given an InstanaDatasource with offline snapshots', function() {
     };
 
     ctx.ds = new InstanaDatasource(ctx.instanceSettings, ctx.backendSrv, ctx.templateSrv, ctx.$q);
+    ctx.ds.resultCache.put('version', 172, 3600000);
   });
 
   describe('When retrieving metrics for offline snapshots', function() {
@@ -947,6 +958,8 @@ describe('Given an InstanaDatasource with offline snapshots', function() {
       "intervalMs": 20000,
       "targets": [
         {
+          "refId": "A",
+          "metricCategory": '0',
           "entityQuery": "filler",
           "entityType": {
             "key": "process",
@@ -955,8 +968,7 @@ describe('Given an InstanaDatasource with offline snapshots', function() {
           "metric": {
             "key": "mem.virtual",
             "label": "Virtual",
-          },
-          "refId": "A"
+          }
         }
       ],
       "format": "json",
@@ -1004,11 +1016,11 @@ describe('Given an InstanaDatasource with offline snapshots', function() {
     beforeEach(function() {
       ctx.backendSrv.datasourceRequest = function(options) {
         switch (options.url) {
-          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248640603&to=1524421440603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/context?q=filler%20AND%20entity.pluginId%3Aprocess&from=1524248641000&to=1524421441000":
             return ctx.$q.resolve(contexts);
-          case "/api/datasources/proxy/1/instana/api/snapshots/A?from=1524248640603&to=1524421440603":
+          case "/api/datasources/proxy/1/instana/api/snapshots/A?from=1524248641000&to=1524421441000":
             return ctx.$q.resolve(snapshotA);
-          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248640603&to=1524421440603&rollup=3600000&fillTimeSeries=true&snapshotId=A":
+          case "/api/datasources/proxy/1/instana/api/metrics?metric=mem.virtual&from=1524248641000&to=1524421441000&rollup=3600000&fillTimeSeries=true&snapshotId=A":
             return ctx.$q.resolve(metricsForA);
           default:
             throw new Error('Unexpected call URL: ' + options.url);
@@ -1032,5 +1044,24 @@ describe('Given an InstanaDatasource with offline snapshots', function() {
     });
 
   });
+
+  describe('When performing getVersion', function() {
+    const version = {
+      status: 200,
+      data: {
+        "imageTag":"2.172.9-0"
+      }
+    };
+    beforeEach(function() {
+      ctx.backendSrv.datasourceRequest = function(options) {
+        return ctx.$q.resolve(version);
+      };
+    });
+
+    it('should return a correct version.', function() {
+      return ctx.ds.getVersion().then(function(results) {
+        expect(results).to.equal(172);
+      });
+    });
+  });
 });
-*/

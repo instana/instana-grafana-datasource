@@ -751,7 +751,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     if (!this.version) {
       return false;
     } else {
-      return this.version >= 1.163;
+      return this.version >= 163;
     }
   }
 }
