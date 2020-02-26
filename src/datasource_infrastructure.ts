@@ -207,12 +207,13 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   }
 
   buildMaxMetricTarget(target, timeseries, maxValue, resultLabel) {
+    let datapoints = _.map(timeseries, (series, index) => {
+      return [maxValue, series.timestamp];
+    });
+
     return {
       'target': resultLabel + ' ' + this.convertMetricNameToMaxLabel(target.metric),
-      'datapoints': [
-        [maxValue, timeseries[0].timestamp],
-        [maxValue, timeseries[timeseries.length - 1].timestamp]
-      ],
+      'datapoints': datapoints,
       'refId': target.refId
     };
   }
