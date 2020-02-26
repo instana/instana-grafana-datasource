@@ -65,8 +65,8 @@ export default class InstanaDatasource extends AbstractDatasource {
       _.map(options.targets, target => {
         let timeFilter: TimeFilter = this.readTime(options);
 
-        // grafana setting to disable query execution
-        if (target.hide) {
+        // grafana setting to disable query execution OR still invalid
+        if (target.hide || !target.metricCategory) {
           return { data: [] };
         }
 
@@ -77,21 +77,17 @@ export default class InstanaDatasource extends AbstractDatasource {
           timeFilter = this.applyTimeShiftOnTimeFilter(timeFilter, this.convertTimeShiftToMillis(target.timeShift));
         }
 
-        if (!target.metricCategory) {
-          target.metricCategory = this.BUILT_IN_METRICS;
-        }
-
         target['timeFilter'] = timeFilter;
         target['stableHash'] = generateStableHash(target);
         timeFilter = this.adjustTimeFilterIfCached(timeFilter, target);
 
         if (target.metricCategory === this.BUILT_IN_METRICS || target.metricCategory === this.CUSTOM_METRICS) {
-          this.setRollupTimeInterval(target, timeFilter);
+          this.setRollupTimeInterval(target);
           return this.getInfrastructureMetrics(target, timeFilter).then(data => {
             return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
           });
         } else if (target.metricCategory) {
-          this.setGranularityTimeInterval(target, timeFilter);
+          this.setGranularityTimeInterval(target);
           if (target.metricCategory === this.ANALYZE_WEBSITE_METRICS) {
             return this.getAnalyzeWebsiteMetrics(target, timeFilter).then(data => {
               return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
@@ -210,15 +206,15 @@ export default class InstanaDatasource extends AbstractDatasource {
     });
   }
 
-  setRollupTimeInterval(target, timeFilter: TimeFilter) {
+  setRollupTimeInterval(target) {
     if (!target.timeInterval || !_.find(this.availableRollups, ['key', target.timeInterval.key])) {
-      target.timeInterval = getDefaultMetricRollupDuration(timeFilter);
+      target.timeInterval = getDefaultMetricRollupDuration(target.timeFilter);
     }
   }
 
-  setGranularityTimeInterval(target, timeFilter: TimeFilter) {
+  setGranularityTimeInterval(target) {
     if (!target.timeInterval || !_.find(this.availableGranularities, ['key', target.timeInterval.key])) {
-      target.timeInterval = getDefaultChartGranularity(timeFilter.windowSize);
+      target.timeInterval = getDefaultChartGranularity(target.timeFilter.windowSize);
     }
   }
 
