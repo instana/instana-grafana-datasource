@@ -61,7 +61,7 @@ export default class AbstractDatasource {
   }
 
   private msToMin(time: number): number {
-    return Math.round(time / 60000);
+    return Math.floor(time / 60000);
   }
 
   hoursToMs(hours: any): number {

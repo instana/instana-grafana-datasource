@@ -4,16 +4,18 @@ import {
   getPossibleGranularities,
   getPossibleRollups
 } from "./util/rollup_granularity_util";
+import { generateStableHash, hasIntersection, appendData} from './util/delta_util';
 import InstanaInfrastructureDataSource from './datasource_infrastructure';
-import {aggregate, buildAggregationLabel} from "./util/aggregation_util";
 import InstanaApplicationDataSource from './datasource_application';
 import InstanaEndpointDataSource from "./datasource_endpoint";
 import InstanaServiceDataSource from "./datasource_service";
 import InstanaWebsiteDataSource from './datasource_website';
+import { aggregateTarget } from "./util/aggregation_util";
 import AbstractDatasource from './datasource_abstract';
-import {readItemMetrics} from "./util/analyze_util";
+import { readItemMetrics } from './util/analyze_util';
 import TimeFilter from './types/time_filter';
 import migrate from './migration';
+import Cache from './cache';
 
 import _ from 'lodash';
 import Selectable from "./types/selectable";
@@ -30,6 +32,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   maxWindowSizeAnalyzeWebsites: number;
   maxWindowSizeAnalyzeApplications: number;
   maxWindowSizeAnalyzeMetrics: number;
+  resultCache: Cache<any>;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -45,11 +48,12 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.maxWindowSizeAnalyzeWebsites = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_website_metrics);
     this.maxWindowSizeAnalyzeApplications = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_calls);
     this.maxWindowSizeAnalyzeMetrics = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_metrics);
+    this.resultCache = new Cache<any>();
   }
 
   query(options) {
     if (Object.keys(options.targets[0]).length === 0) {
-      return this.$q.resolve({data: []});
+      return this.$q.resolve({ data: [] });
     }
 
     const panelTimeFilter: TimeFilter = this.readTime(options);
@@ -57,16 +61,13 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.availableRollups = getPossibleRollups(panelTimeFilter);
     this.availableGranularities = getPossibleGranularities(panelTimeFilter.windowSize);
 
-    const targets = [];
-
     return this.$q.all(
       _.map(options.targets, target => {
         let timeFilter: TimeFilter = this.readTime(options);
-        targets[target.refId] = target;
 
         // grafana setting to disable query execution
-        if (target.hide) {
-          return {data: []};
+        if (target.hide || !target.metricCategory) {
+          return { data: [] };
         }
 
         // target migration for downwards compatibility
@@ -76,126 +77,151 @@ export default class InstanaDatasource extends AbstractDatasource {
           timeFilter = this.applyTimeShiftOnTimeFilter(timeFilter, this.convertTimeShiftToMillis(target.timeShift));
         }
 
+        target['timeFilter'] = timeFilter;
+        target['stableHash'] = generateStableHash(target);
+        timeFilter = this.adjustTimeFilterIfCached(timeFilter, target);
+
         if (target.metricCategory === this.BUILT_IN_METRICS || target.metricCategory === this.CUSTOM_METRICS) {
-          this.setRollupTimeInterval(target, timeFilter);
-          return this.getInfrastructureMetrics(target, timeFilter);
+          this.setRollupTimeInterval(target);
+          return this.getInfrastructureMetrics(target, timeFilter).then(data => {
+            return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
+          });
         } else if (target.metricCategory) {
-          this.setGranularityTimeInterval(target, timeFilter);
+          this.setGranularityTimeInterval(target);
           if (target.metricCategory === this.ANALYZE_WEBSITE_METRICS) {
-            return this.getAnalyzeWebsiteMetrics(target, timeFilter);
+            return this.getAnalyzeWebsiteMetrics(target, timeFilter).then(data => {
+              return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
+            });
           } else if (target.metricCategory === this.ANALYZE_APPLICATION_METRICS) {
-            return this.getAnalyzeApplicationMetrics(target, timeFilter);
+            return this.getAnalyzeApplicationMetrics(target, timeFilter).then(data => {
+              return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
+            });
           } else if (target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
-            return this.getApplicationServiceEndpointMetrics(target, timeFilter);
+            return this.getApplicationServiceEndpointMetrics(target, timeFilter).then(data => {
+              return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
+            });
           }
         }
       })
-    ).then(results => {
-      // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-      var flatData = {data: _.flatten(results)};
-      // Remove empty data items
-      flatData.data = _.compact(flatData.data);
-      this.applyTimeShiftIfNecessary(flatData, targets);
-      var newData = this.aggregateDataIfNecessary(flatData, targets);
-      return {data: _.flatten(newData)};
+    ).then(targetData => {
+      var result = [];
+      _.each(targetData, (targetAndData, index) => {
+        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+        var resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
+        this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
+        resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
+        this.cacheResultIfNecessary(resultData, targetAndData.target);
+        result.push(resultData);
+      });
+
+      return { data: _.flatten(result) };
     });
+  }
+
+  appendResult(data, target) {
+    var cachedResult = this.resultCache.get(target.stableHash);
+    if (cachedResult && cachedResult.results) {
+      data = appendData(data, cachedResult.results);
+    }
+    return data;
+  }
+
+  adjustTimeFilterIfCached(timeFilter: TimeFilter, target): TimeFilter {
+    var cachedResult = this.resultCache.get(target.stableHash);
+    if (cachedResult && hasIntersection(timeFilter, cachedResult.timeFilter)) {
+      var newFrom = this.getDeltaRequestTimestamp(cachedResult.results, cachedResult.timeFilter.from);
+      var newTo = Math.floor(timeFilter.to / 10000) * 10000;
+      return {
+        from: newFrom,
+        to: newTo,
+        windowSize: newTo - newFrom
+      };
+    }
+    return timeFilter;
+  }
+
+  getDeltaRequestTimestamp(series, fromDefault: number): number {
+    const length = series[0].datapoints.length;
+    if (length === 0) {
+      return fromDefault;
+    }
+    const penultimate = length > 1 ? length - 2 : 1;
+    return series[0].datapoints[penultimate][1];
+  }
+
+  buildTargetWithAppendedDataResult(target, timeFilter: TimeFilter, data) {
+    if (timeFilter.from !== target.timeFilter.from && data) {
+      data = this.appendResult(data, target);
+    }
+    return {
+      target: target,
+      data: data
+    };
+  }
+
+  cacheResultIfNecessary(result, target) {
+    if (this.supportsDeltaRequests() && this.hasResult(result)) {
+
+      var cachedObj = {
+        timeFilter: target.timeFilter,
+        results: result
+      };
+      this.resultCache.put(target.stableHash, cachedObj, 400000); // to cover at least 5 min refreshs
+    }
+  }
+
+  hasResult(result) {
+    return result && result.length > 0;
   }
 
   removeEmptyTargetsFromResultData(data) {
     return _.filter(data.data, d => d && d.refId);
   }
 
-  applyTimeShiftIfNecessary(data, targets) {
-    data.data.forEach(data => {
-      if (targets[data.refId] && targets[data.refId].timeShift) {
-        this.applyTimeShiftOnData(data, this.convertTimeShiftToMillis(targets[data.refId].timeShift));
+  applyTimeShiftIfNecessary(data, target) {
+    data.forEach(data => {
+      if (target.timeShift) {
+        this.applyTimeShiftOnData(data, this.convertTimeShiftToMillis(target.timeShift));
       }
     });
   }
 
-  aggregateDataIfNecessary(data, targets) {
-    var targetsGroupedByRefId = this.groupTargetsByRefId(data);
+  aggregateDataIfNecessary(data, target) {
     var newData = [];
 
-    _.each(targetsGroupedByRefId, (target, index) => {
-      var refId = target[0].refId;
-      if (targets[refId] && targets[refId].aggregateGraphs) {
-        newData.push(this.aggregateTarget(target, targets[refId]));
-        if (!targets[refId].hideOriginalGraphs) {
-          newData.push(target);
-        }
-      } else {
-        newData.push(target);
+    if (target.aggregateGraphs) {
+      newData.push(aggregateTarget(data, target));
+      if (!target.hideOriginalGraphs) {
+        _.each(data, (dt, index) => newData.push(dt));
       }
-    });
+      return newData;
+    }
 
-    return newData;
+    return data;
   }
 
   groupTargetsByRefId(data) {
-    return _.groupBy(data.data, function (target) {
+    return _.groupBy(data.data, function(target) {
       return target.refId;
     });
   }
 
-  setRollupTimeInterval(target, timeFilter: TimeFilter) {
+  setRollupTimeInterval(target) {
     if (!target.timeInterval || !_.find(this.availableRollups, ['key', target.timeInterval.key])) {
-      target.timeInterval = getDefaultMetricRollupDuration(timeFilter);
+      target.timeInterval = getDefaultMetricRollupDuration(target.timeFilter);
     }
   }
 
-  setGranularityTimeInterval(target, timeFilter: TimeFilter) {
+  setGranularityTimeInterval(target) {
     if (!target.timeInterval || !_.find(this.availableGranularities, ['key', target.timeInterval.key])) {
-      target.timeInterval = getDefaultChartGranularity(timeFilter.windowSize);
+      target.timeInterval = getDefaultChartGranularity(target.timeFilter.windowSize);
     }
-  }
-
-  aggregateTarget(target, targetMetaData) {
-    var refId = target[0].refId;
-    var concatedTargetData = this.concatTargetData(target);
-    var dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (data) {
-      return data[1];
-    });
-
-    var aggregatedData = this.aggregateDataOfTimestamp(dataGroupedByTimestamp, targetMetaData.aggregationFunction.label);
-    aggregatedData = _.sortBy(aggregatedData, [function (datapoint) {
-      return datapoint[1];
-    }]);
-    return this.buildResult(aggregatedData, refId, buildAggregationLabel(targetMetaData));
-  }
-
-  aggregateDataOfTimestamp(dataGroupedByTimestamp, aggregationLabel: string) {
-    var result = [];
-    _.each(dataGroupedByTimestamp, (timestampData, timestamp) => {
-      var valuesOfTimestamp = _.map(timestampData, (datapoint, index) => {
-        return datapoint[0];
-      });
-      var aggregatedValue = aggregate(aggregationLabel, valuesOfTimestamp);
-      result.push([aggregatedValue, parseInt(timestamp)]);
-    });
-    return result;
-  }
-
-  concatTargetData(target) {
-    var result = [];
-    _.each(target, (data, index) => {
-      result = _.concat(result, data.datapoints);
-    });
-    return result;
   }
 
   applyTimeShiftOnData(data, timeshift) {
     data.datapoints.forEach(datapoint => {
       datapoint[1] = datapoint[1] + timeshift;
     });
-  }
-
-  buildResult(aggregatedData, refId, target) {
-    return {
-      datapoints: aggregatedData,
-      refId: refId,
-      target: target
-    };
   }
 
   getAllDatapointsOfTimestamp(data, index) {
@@ -252,8 +278,8 @@ export default class InstanaDatasource extends AbstractDatasource {
     const from = new Date(options.range.from).getTime();
     const to = new Date(options.range.to).getTime();
     return {
-      from: from,
-      to: to,
+      from: Math.floor(from / 1000) * 1000,
+      to: Math.floor(to / 1000) * 1000,
       windowSize: to - from
     };
   }
@@ -266,7 +292,7 @@ export default class InstanaDatasource extends AbstractDatasource {
 
     // do not try to retrieve data without selected metric
     if (!target.metric && !target.showAllMetrics && !target.freeTextMetrics) {
-      return this.$q.resolve({data: []});
+      return this.$q.resolve({ data: [] });
     }
 
     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
@@ -337,7 +363,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     }
 
     if (this.isEndpointSet(target.endpoint)) {
-      return  this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
+      return this.endpoint.fetchEndpointMetrics(target, timeFilter).then(response => {
         return readItemMetrics(target, response, this.endpoint.buildEndpointMetricLabel);
       });
     } else if (this.isServiceSet(target.service)) {
@@ -350,11 +376,13 @@ export default class InstanaDatasource extends AbstractDatasource {
         return readItemMetrics(target, response, this.application.buildApplicationMetricLabel);
       });
     }
+
+    return this.$q.resolve({data: {items: []}});
   }
 
   isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean {
     if (queryIntervalLimit > 0) {
-      return Math.round(windowSize/1000)*1000 > queryIntervalLimit;
+      return Math.floor(windowSize / 1000) * 1000 > queryIntervalLimit;
     }
     return false;
   }
@@ -384,11 +412,22 @@ export default class InstanaDatasource extends AbstractDatasource {
     throw new Error('Template Variable Support not implemented yet.');
   }
 
+  supportsDeltaRequests() {
+    let version = this.resultCache.get('version');
+    if (!version) {
+        return this.getVersion().then(version => {
+          this.resultCache.put('version', version, 3600000); // one hour
+          return version >= 171;
+        });
+    }
+    return version >= 171;
+  }
+
   getVersion(): number {
     return this.doRequest('/api/instana/version').then(
       result => {
-        if (result.data) {
-          return parseFloat(result.data.imageTag) || null;
+        if (result.data && result.data.imageTag) {
+          return parseInt(result.data.imageTag.split('.', 2)[1], 10) || null;
         }
         return null;
       }, error => {
