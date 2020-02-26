@@ -425,7 +425,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     return version >= 171;
   }
 
-  getVersion(): number {
+  getVersion() {
     return this.doRequest('/api/instana/version').then(
       result => {
         if (result.data && result.data.imageTag) {
