@@ -26,7 +26,7 @@ System.register(['./proxy_check'], function(exports_1) {
                     this.datasourceSrv.loadDatasource(this.current.name).then(function (datasource) {
                         return datasource.getVersion();
                     }).then(function (version) {
-                        _this.current.jsonData.canQueryOfflineSnapshots = version >= 1.156;
+                        _this.current.jsonData.canQueryOfflineSnapshots = version >= 156;
                     });
                 };
                 InstanaConfigCtrl.prototype.onAccessChange = function () {

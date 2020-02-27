@@ -56,7 +56,7 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
                     return this.msToMin(timeFilter.from) + this.SEPARATOR + this.msToMin(timeFilter.to);
                 };
                 AbstractDatasource.prototype.msToMin = function (time) {
-                    return Math.round(time / 60000);
+                    return Math.floor(time / 60000);
                 };
                 AbstractDatasource.prototype.hoursToMs = function (hours) {
                     if (hours > 0) {

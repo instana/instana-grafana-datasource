@@ -1,10 +1,10 @@
-System.register(["./util/rollup_granularity_util", './datasource_abstract', './cache', 'lodash'], function(exports_1) {
+System.register(["./util/rollup_granularity_util", './datasource_abstract', './lists/max_metrics', './cache', 'lodash'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var rollup_granularity_util_1, datasource_abstract_1, cache_1, lodash_1;
+    var rollup_granularity_util_1, datasource_abstract_1, max_metrics_1, cache_1, lodash_1;
     var InstanaInfrastructureDataSource;
     return {
         setters:[
@@ -13,6 +13,9 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './c
             },
             function (datasource_abstract_1_1) {
                 datasource_abstract_1 = datasource_abstract_1_1;
+            },
+            function (max_metrics_1_1) {
+                max_metrics_1 = max_metrics_1_1;
             },
             function (cache_1_1) {
                 cache_1 = cache_1_1;
@@ -169,7 +172,8 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './c
                 InstanaInfrastructureDataSource.prototype.fetchMetricsForSnapshots = function (target, snapshots, timeFilter, metric) {
                     var _this = this;
                     var windowSize = this.getWindowSize(timeFilter);
-                    return this.$q.all(lodash_1.default.map(snapshots, function (snapshot, index) {
+                    var maxValues = [];
+                    var res = lodash_1.default.map(snapshots, function (snapshot, index) {
                         // ...fetch the metric data for every snapshot in the results.
                         return _this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then(function (response) {
                             var timeseries = _this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
@@ -178,9 +182,44 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './c
                                 'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; }),
                                 'refId': target.refId
                             };
+                            if (target.displayMaxMetricValue) {
+                                var maxValue = _this.getMaxMetricValue(target.metric, snapshot);
+                                maxValues.push(_this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
+                                result.datapoints = _this.convertRelativeToAbsolute(result.datapoints, maxValue);
+                            }
                             return result;
                         });
-                    }));
+                    });
+                    return Promise.all(res).then(function (allResults) {
+                        if (target.displayMaxMetricValue) {
+                            allResults = lodash_1.default.concat(res, maxValues);
+                        }
+                        return _this.$q.all(allResults);
+                    });
+                };
+                InstanaInfrastructureDataSource.prototype.buildMaxMetricTarget = function (target, timeseries, maxValue, resultLabel) {
+                    var datapoints = lodash_1.default.map(timeseries, function (series, index) {
+                        return [maxValue, series.timestamp];
+                    });
+                    return {
+                        'target': resultLabel + ' ' + this.convertMetricNameToMaxLabel(target.metric),
+                        'datapoints': datapoints,
+                        'refId': target.refId
+                    };
+                };
+                InstanaInfrastructureDataSource.prototype.convertRelativeToAbsolute = function (datapoints, maxValue) {
+                    return lodash_1.default.map(datapoints, function (datapoint, index) {
+                        if (datapoint[0]) {
+                            return [datapoint[0] * maxValue, datapoint[1]];
+                        }
+                        return [null, datapoint[1]];
+                    });
+                };
+                InstanaInfrastructureDataSource.prototype.convertMetricNameToMaxLabel = function (metric) {
+                    return lodash_1.default.find(max_metrics_1.default, function (m) { return m.key === metric.key; }).label;
+                };
+                InstanaInfrastructureDataSource.prototype.getMaxMetricValue = function (metric, snapshot) {
+                    return snapshot.response.data.data[lodash_1.default.find(max_metrics_1.default, function (m) { return m.key === metric.key; }).value];
                 };
                 InstanaInfrastructureDataSource.prototype.readTimeSeries = function (values, aggregation, pluginId, timeFilter) {
                     if (aggregation === 'SUM' && (pluginId === 'singlestat' || pluginId === 'gauge' || pluginId === 'table')) {

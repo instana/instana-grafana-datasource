@@ -1,21 +1,21 @@
-System.register(["./util/rollup_granularity_util", './datasource_infrastructure', "./util/aggregation_util", './datasource_application', "./datasource_endpoint", "./datasource_service", './datasource_website', './datasource_abstract', "./util/analyze_util", './migration', 'lodash'], function(exports_1) {
+System.register(["./util/rollup_granularity_util", './util/delta_util', './datasource_infrastructure', './datasource_application', "./datasource_endpoint", "./datasource_service", './datasource_website', "./util/aggregation_util", './datasource_abstract', './util/analyze_util', './migration', './cache', 'lodash'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var rollup_granularity_util_1, datasource_infrastructure_1, aggregation_util_1, datasource_application_1, datasource_endpoint_1, datasource_service_1, datasource_website_1, datasource_abstract_1, analyze_util_1, migration_1, lodash_1;
+    var rollup_granularity_util_1, delta_util_1, datasource_infrastructure_1, datasource_application_1, datasource_endpoint_1, datasource_service_1, datasource_website_1, aggregation_util_1, datasource_abstract_1, analyze_util_1, migration_1, cache_1, lodash_1;
     var InstanaDatasource;
     return {
         setters:[
             function (rollup_granularity_util_1_1) {
                 rollup_granularity_util_1 = rollup_granularity_util_1_1;
             },
+            function (delta_util_1_1) {
+                delta_util_1 = delta_util_1_1;
+            },
             function (datasource_infrastructure_1_1) {
                 datasource_infrastructure_1 = datasource_infrastructure_1_1;
-            },
-            function (aggregation_util_1_1) {
-                aggregation_util_1 = aggregation_util_1_1;
             },
             function (datasource_application_1_1) {
                 datasource_application_1 = datasource_application_1_1;
@@ -29,6 +29,9 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
             function (datasource_website_1_1) {
                 datasource_website_1 = datasource_website_1_1;
             },
+            function (aggregation_util_1_1) {
+                aggregation_util_1 = aggregation_util_1_1;
+            },
             function (datasource_abstract_1_1) {
                 datasource_abstract_1 = datasource_abstract_1_1;
             },
@@ -37,6 +40,9 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
             },
             function (migration_1_1) {
                 migration_1 = migration_1_1;
+            },
+            function (cache_1_1) {
+                cache_1 = cache_1_1;
             },
             function (lodash_1_1) {
                 lodash_1 = lodash_1_1;
@@ -58,6 +64,7 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
                     this.maxWindowSizeAnalyzeWebsites = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_website_metrics);
                     this.maxWindowSizeAnalyzeApplications = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_calls);
                     this.maxWindowSizeAnalyzeMetrics = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_metrics);
+                    this.resultCache = new cache_1.default();
                 }
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;
@@ -67,12 +74,10 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
                     var panelTimeFilter = this.readTime(options);
                     this.availableRollups = rollup_granularity_util_1.getPossibleRollups(panelTimeFilter);
                     this.availableGranularities = rollup_granularity_util_1.getPossibleGranularities(panelTimeFilter.windowSize);
-                    var targets = [];
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
                         var timeFilter = _this.readTime(options);
-                        targets[target.refId] = target;
                         // grafana setting to disable query execution
-                        if (target.hide) {
+                        if (target.hide || !target.metricCategory) {
                             return { data: [] };
                         }
                         // target migration for downwards compatibility
@@ -80,117 +85,136 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
                         if (target.timeShift) {
                             timeFilter = _this.applyTimeShiftOnTimeFilter(timeFilter, _this.convertTimeShiftToMillis(target.timeShift));
                         }
+                        target['timeFilter'] = timeFilter;
+                        target['stableHash'] = delta_util_1.generateStableHash(target);
+                        timeFilter = _this.adjustTimeFilterIfCached(timeFilter, target);
                         if (target.metricCategory === _this.BUILT_IN_METRICS || target.metricCategory === _this.CUSTOM_METRICS) {
-                            _this.setRollupTimeInterval(target, timeFilter);
-                            return _this.getInfrastructureMetrics(target, timeFilter);
+                            _this.setRollupTimeInterval(target);
+                            return _this.getInfrastructureMetrics(target, timeFilter).then(function (data) {
+                                return _this.buildTargetWithAppendedDataResult(target, timeFilter, data);
+                            });
                         }
                         else if (target.metricCategory) {
-                            _this.setGranularityTimeInterval(target, timeFilter);
+                            _this.setGranularityTimeInterval(target);
                             if (target.metricCategory === _this.ANALYZE_WEBSITE_METRICS) {
-                                return _this.getAnalyzeWebsiteMetrics(target, timeFilter);
+                                return _this.getAnalyzeWebsiteMetrics(target, timeFilter).then(function (data) {
+                                    return _this.buildTargetWithAppendedDataResult(target, timeFilter, data);
+                                });
                             }
                             else if (target.metricCategory === _this.ANALYZE_APPLICATION_METRICS) {
-                                return _this.getAnalyzeApplicationMetrics(target, timeFilter);
+                                return _this.getAnalyzeApplicationMetrics(target, timeFilter).then(function (data) {
+                                    return _this.buildTargetWithAppendedDataResult(target, timeFilter, data);
+                                });
                             }
                             else if (target.metricCategory === _this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
-                                return _this.getApplicationServiceEndpointMetrics(target, timeFilter);
+                                return _this.getApplicationServiceEndpointMetrics(target, timeFilter).then(function (data) {
+                                    return _this.buildTargetWithAppendedDataResult(target, timeFilter, data);
+                                });
                             }
                         }
-                    })).then(function (results) {
-                        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-                        var flatData = { data: lodash_1.default.flatten(results) };
-                        // Remove empty data items
-                        flatData.data = lodash_1.default.compact(flatData.data);
-                        _this.applyTimeShiftIfNecessary(flatData, targets);
-                        var newData = _this.aggregateDataIfNecessary(flatData, targets);
-                        return { data: lodash_1.default.flatten(newData) };
+                    })).then(function (targetData) {
+                        var result = [];
+                        lodash_1.default.each(targetData, function (targetAndData, index) {
+                            // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+                            var resultData = lodash_1.default.compact(lodash_1.default.flatten(targetAndData.data)); // Also remove empty data items
+                            _this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
+                            resultData = _this.aggregateDataIfNecessary(resultData, targetAndData.target);
+                            _this.cacheResultIfNecessary(resultData, targetAndData.target);
+                            result.push(resultData);
+                        });
+                        return { data: lodash_1.default.flatten(result) };
                     });
+                };
+                InstanaDatasource.prototype.appendResult = function (data, target) {
+                    var cachedResult = this.resultCache.get(target.stableHash);
+                    if (cachedResult && cachedResult.results) {
+                        data = delta_util_1.appendData(data, cachedResult.results);
+                    }
+                    return data;
+                };
+                InstanaDatasource.prototype.adjustTimeFilterIfCached = function (timeFilter, target) {
+                    var cachedResult = this.resultCache.get(target.stableHash);
+                    if (cachedResult && delta_util_1.hasIntersection(timeFilter, cachedResult.timeFilter)) {
+                        var newFrom = this.getDeltaRequestTimestamp(cachedResult.results, cachedResult.timeFilter.from);
+                        var newTo = Math.floor(timeFilter.to / 10000) * 10000;
+                        return {
+                            from: newFrom,
+                            to: newTo,
+                            windowSize: newTo - newFrom
+                        };
+                    }
+                    return timeFilter;
+                };
+                InstanaDatasource.prototype.getDeltaRequestTimestamp = function (series, fromDefault) {
+                    var length = series[0].datapoints.length;
+                    if (length === 0) {
+                        return fromDefault;
+                    }
+                    var penultimate = length > 1 ? length - 2 : 1;
+                    return series[0].datapoints[penultimate][1];
+                };
+                InstanaDatasource.prototype.buildTargetWithAppendedDataResult = function (target, timeFilter, data) {
+                    if (timeFilter.from !== target.timeFilter.from && data) {
+                        data = this.appendResult(data, target);
+                    }
+                    return {
+                        target: target,
+                        data: data
+                    };
+                };
+                InstanaDatasource.prototype.cacheResultIfNecessary = function (result, target) {
+                    if (this.supportsDeltaRequests() && this.hasResult(result)) {
+                        var cachedObj = {
+                            timeFilter: target.timeFilter,
+                            results: result
+                        };
+                        this.resultCache.put(target.stableHash, cachedObj, 400000); // to cover at least 5 min refreshs
+                    }
+                };
+                InstanaDatasource.prototype.hasResult = function (result) {
+                    return result && result.length > 0;
                 };
                 InstanaDatasource.prototype.removeEmptyTargetsFromResultData = function (data) {
                     return lodash_1.default.filter(data.data, function (d) { return d && d.refId; });
                 };
-                InstanaDatasource.prototype.applyTimeShiftIfNecessary = function (data, targets) {
+                InstanaDatasource.prototype.applyTimeShiftIfNecessary = function (data, target) {
                     var _this = this;
-                    data.data.forEach(function (data) {
-                        if (targets[data.refId] && targets[data.refId].timeShift) {
-                            _this.applyTimeShiftOnData(data, _this.convertTimeShiftToMillis(targets[data.refId].timeShift));
+                    data.forEach(function (data) {
+                        if (target.timeShift) {
+                            _this.applyTimeShiftOnData(data, _this.convertTimeShiftToMillis(target.timeShift));
                         }
                     });
                 };
-                InstanaDatasource.prototype.aggregateDataIfNecessary = function (data, targets) {
-                    var _this = this;
-                    var targetsGroupedByRefId = this.groupTargetsByRefId(data);
+                InstanaDatasource.prototype.aggregateDataIfNecessary = function (data, target) {
                     var newData = [];
-                    lodash_1.default.each(targetsGroupedByRefId, function (target, index) {
-                        var refId = target[0].refId;
-                        if (targets[refId] && targets[refId].aggregateGraphs) {
-                            newData.push(_this.aggregateTarget(target, targets[refId]));
-                            if (!targets[refId].hideOriginalGraphs) {
-                                newData.push(target);
-                            }
+                    if (target.aggregateGraphs) {
+                        newData.push(aggregation_util_1.aggregateTarget(data, target));
+                        if (!target.hideOriginalGraphs) {
+                            lodash_1.default.each(data, function (dt, index) { return newData.push(dt); });
                         }
-                        else {
-                            newData.push(target);
-                        }
-                    });
-                    return newData;
+                        return newData;
+                    }
+                    return data;
                 };
                 InstanaDatasource.prototype.groupTargetsByRefId = function (data) {
                     return lodash_1.default.groupBy(data.data, function (target) {
                         return target.refId;
                     });
                 };
-                InstanaDatasource.prototype.setRollupTimeInterval = function (target, timeFilter) {
+                InstanaDatasource.prototype.setRollupTimeInterval = function (target) {
                     if (!target.timeInterval || !lodash_1.default.find(this.availableRollups, ['key', target.timeInterval.key])) {
-                        target.timeInterval = rollup_granularity_util_1.getDefaultMetricRollupDuration(timeFilter);
+                        target.timeInterval = rollup_granularity_util_1.getDefaultMetricRollupDuration(target.timeFilter);
                     }
                 };
-                InstanaDatasource.prototype.setGranularityTimeInterval = function (target, timeFilter) {
+                InstanaDatasource.prototype.setGranularityTimeInterval = function (target) {
                     if (!target.timeInterval || !lodash_1.default.find(this.availableGranularities, ['key', target.timeInterval.key])) {
-                        target.timeInterval = rollup_granularity_util_1.getDefaultChartGranularity(timeFilter.windowSize);
+                        target.timeInterval = rollup_granularity_util_1.getDefaultChartGranularity(target.timeFilter.windowSize);
                     }
-                };
-                InstanaDatasource.prototype.aggregateTarget = function (target, targetMetaData) {
-                    var refId = target[0].refId;
-                    var concatedTargetData = this.concatTargetData(target);
-                    var dataGroupedByTimestamp = lodash_1.default.groupBy(concatedTargetData, function (data) {
-                        return data[1];
-                    });
-                    var aggregatedData = this.aggregateDataOfTimestamp(dataGroupedByTimestamp, targetMetaData.aggregationFunction.label);
-                    aggregatedData = lodash_1.default.sortBy(aggregatedData, [function (datapoint) {
-                            return datapoint[1];
-                        }]);
-                    return this.buildResult(aggregatedData, refId, aggregation_util_1.buildAggregationLabel(targetMetaData));
-                };
-                InstanaDatasource.prototype.aggregateDataOfTimestamp = function (dataGroupedByTimestamp, aggregationLabel) {
-                    var result = [];
-                    lodash_1.default.each(dataGroupedByTimestamp, function (timestampData, timestamp) {
-                        var valuesOfTimestamp = lodash_1.default.map(timestampData, function (datapoint, index) {
-                            return datapoint[0];
-                        });
-                        var aggregatedValue = aggregation_util_1.aggregate(aggregationLabel, valuesOfTimestamp);
-                        result.push([aggregatedValue, parseInt(timestamp)]);
-                    });
-                    return result;
-                };
-                InstanaDatasource.prototype.concatTargetData = function (target) {
-                    var result = [];
-                    lodash_1.default.each(target, function (data, index) {
-                        result = lodash_1.default.concat(result, data.datapoints);
-                    });
-                    return result;
                 };
                 InstanaDatasource.prototype.applyTimeShiftOnData = function (data, timeshift) {
                     data.datapoints.forEach(function (datapoint) {
                         datapoint[1] = datapoint[1] + timeshift;
                     });
-                };
-                InstanaDatasource.prototype.buildResult = function (aggregatedData, refId, target) {
-                    return {
-                        datapoints: aggregatedData,
-                        refId: refId,
-                        target: target
-                    };
                 };
                 InstanaDatasource.prototype.getAllDatapointsOfTimestamp = function (data, index) {
                     var valuesForSameTimestamp = [];
@@ -240,8 +264,8 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
                     };
                 };
                 InstanaDatasource.prototype.readTime = function (options) {
-                    var from = new Date(options.range.from).getTime();
-                    var to = new Date(options.range.to).getTime();
+                    var from = Math.floor(new Date(options.range.from).getTime() / 1000) * 1000;
+                    var to = Math.floor(new Date(options.range.to).getTime() / 1000) * 1000;
                     return {
                         from: from,
                         to: to,
@@ -261,9 +285,11 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
                     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
                     return this.infrastructure.fetchSnapshotsForTarget(target, timeFilter).then(function (snapshots) {
                         if (target.showAllMetrics) {
+                            // only available for custom metrics
                             return _this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, target.allMetrics);
                         }
                         else if (target.freeTextMetrics) {
+                            // only available for custom metrics
                             var metrics = _this.extractMetricsFromText(target.freeTextMetrics);
                             return _this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics);
                         }
@@ -336,10 +362,11 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
                             return analyze_util_1.readItemMetrics(target, response, _this.application.buildApplicationMetricLabel);
                         });
                     }
+                    return this.$q.resolve({ data: { items: [] } });
                 };
                 InstanaDatasource.prototype.isInvalidQueryInterval = function (windowSize, queryIntervalLimit) {
                     if (queryIntervalLimit > 0) {
-                        return Math.round(windowSize / 1000) * 1000 > queryIntervalLimit;
+                        return Math.floor(windowSize / 1000) * 1000 > queryIntervalLimit;
                     }
                     return false;
                 };
@@ -362,10 +389,21 @@ System.register(["./util/rollup_granularity_util", './datasource_infrastructure'
                 InstanaDatasource.prototype.metricFindQuery = function (query) {
                     throw new Error('Template Variable Support not implemented yet.');
                 };
+                InstanaDatasource.prototype.supportsDeltaRequests = function () {
+                    var _this = this;
+                    var version = this.resultCache.get('version');
+                    if (!version) {
+                        return this.getVersion().then(function (version) {
+                            _this.resultCache.put('version', version, 3600000); // one hour
+                            return version >= 171;
+                        });
+                    }
+                    return version >= 171;
+                };
                 InstanaDatasource.prototype.getVersion = function () {
                     return this.doRequest('/api/instana/version').then(function (result) {
-                        if (result.data) {
-                            return parseFloat(result.data.imageTag) || null;
+                        if (result.data && result.data.imageTag) {
+                            return parseInt(result.data.imageTag.split('.', 2)[1], 10) || null;
                         }
                         return null;
                     }, function (error) {

@@ -189,7 +189,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   aggregateDataIfNecessary(data, target) {
     var newData = [];
 
-    if (target && target.aggregateGraphs) {
+    if (target.aggregateGraphs) {
       newData.push(aggregateTarget(data, target));
       if (!target.hideOriginalGraphs) {
         _.each(data, (dt, index) => newData.push(dt));

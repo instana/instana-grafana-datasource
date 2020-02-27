@@ -1,10 +1,10 @@
-System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/beacon_types', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/beacon_types', './lists/max_metrics', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, aggregation_function_1, beacon_types_1, operators_1, migration_1, lodash_1;
+    var sdk_1, aggregation_function_1, beacon_types_1, max_metrics_1, operators_1, migration_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
@@ -16,6 +16,9 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
             },
             function (beacon_types_1_1) {
                 beacon_types_1 = beacon_types_1_1;
+            },
+            function (max_metrics_1_1) {
+                max_metrics_1 = max_metrics_1_1;
             },
             function (operators_1_1) {
                 operators_1 = operators_1_1;
@@ -477,6 +480,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     this.target.showWarningCantShowAllResults = false;
                     this.target.showAllMetrics = false;
                     this.target.canShowAllMetrics = false;
+                    this.target.displayMaxMetricValue = false;
                     this.serviceEndpointSelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.resetServices();
                     this.resetEndpoints();
@@ -557,6 +561,9 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     if (this.target.metric && !lodash_1.default.includes(this.target.metric.aggregations, this.target.aggregation)) {
                         this.target.aggregation = this.target.metric.aggregations[0];
                     }
+                    if (this.target.displayMaxMetricValue && !this.canShowMaxMetricValue()) {
+                        this.target.displayMaxMetricValue = false;
+                    }
                     this.panelCtrl.refresh();
                 };
                 InstanaQueryCtrl.prototype.onAllMetricsSelect = function () {
@@ -608,6 +615,13 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     }
                     this.panelCtrl.refresh();
                 };
+                InstanaQueryCtrl.prototype.canShowMaxMetricValue = function () {
+                    var _this = this;
+                    return this.target.entityType &&
+                        this.target.entityType.key === 'host' &&
+                        this.target.metric &&
+                        lodash_1.default.find(max_metrics_1.default, function (m) { return m.key === _this.target.metric.key; });
+                };
                 InstanaQueryCtrl.prototype.addCustomFilter = function () {
                     if (!this.target.customFilters) {
                         this.target.customFilters = [];
@@ -655,7 +669,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                         return false;
                     }
                     else {
-                        return this.version >= 1.163;
+                        return this.version >= 163;
                     }
                 };
                 InstanaQueryCtrl.templateUrl = 'partials/query.editor.html';

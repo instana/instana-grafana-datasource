@@ -1,2 +1,5 @@
-export declare function aggregate(aggregation: string, data: any): any;
-export declare function buildAggregationLabel(target: any): any;
+export declare function aggregateTarget(data: any, target: any): {
+    datapoints: any;
+    refId: any;
+    target: any;
+};

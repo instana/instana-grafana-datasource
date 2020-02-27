@@ -94,6 +94,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     toggleFreeTextMetrics(): void;
     toggleAdvancedSettings(): void;
     toggleGraphAggregation(): void;
+    canShowMaxMetricValue(): any;
     addCustomFilter(): void;
     removeCustomFilter(index: number, refresh?: boolean): void;
     isNotSingleStatOrGauge(): boolean;

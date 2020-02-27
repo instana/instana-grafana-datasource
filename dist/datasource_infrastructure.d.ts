@@ -19,7 +19,15 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     buildSnapshotCacheKey(query: string, timeFilter: TimeFilter): string;
     buildLabel(snapshotResponse: any, host: any, target: any, index: any, metric: any): string;
     getHostSuffix(host: string): string;
-    fetchMetricsForSnapshots(target: any, snapshots: any, timeFilter: TimeFilter, metric: any): any;
+    fetchMetricsForSnapshots(target: any, snapshots: any, timeFilter: TimeFilter, metric: any): Promise<any>;
+    buildMaxMetricTarget(target: any, timeseries: any, maxValue: any, resultLabel: any): {
+        'target': string;
+        'datapoints': any;
+        'refId': any;
+    };
+    convertRelativeToAbsolute(datapoints: any, maxValue: any): any;
+    convertMetricNameToMaxLabel(metric: any): string;
+    getMaxMetricValue(metric: any, snapshot: any): number;
     readTimeSeries(values: any, aggregation: string, pluginId: string, timeFilter: TimeFilter): any;
     correctMeanToSum(values: any, timeFilter: TimeFilter): any;
     fetchMetricsForSnapshot(snapshotId: string, timeFilter: TimeFilter, rollup: number, metric: any): any;

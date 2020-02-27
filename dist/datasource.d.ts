@@ -5,6 +5,7 @@ import InstanaServiceDataSource from "./datasource_service";
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
 import TimeFilter from './types/time_filter';
+import Cache from './cache';
 import Selectable from "./types/selectable";
 export default class InstanaDatasource extends AbstractDatasource {
     infrastructure: InstanaInfrastructureDataSource;
@@ -18,28 +19,26 @@ export default class InstanaDatasource extends AbstractDatasource {
     maxWindowSizeAnalyzeWebsites: number;
     maxWindowSizeAnalyzeApplications: number;
     maxWindowSizeAnalyzeMetrics: number;
+    resultCache: Cache<any>;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     query(options: any): any;
+    appendResult(data: any, target: any): any;
+    adjustTimeFilterIfCached(timeFilter: TimeFilter, target: any): TimeFilter;
+    getDeltaRequestTimestamp(series: any, fromDefault: number): number;
+    buildTargetWithAppendedDataResult(target: any, timeFilter: TimeFilter, data: any): {
+        target: any;
+        data: any;
+    };
+    cacheResultIfNecessary(result: any, target: any): void;
+    hasResult(result: any): boolean;
     removeEmptyTargetsFromResultData(data: any): any;
-    applyTimeShiftIfNecessary(data: any, targets: any): void;
-    aggregateDataIfNecessary(data: any, targets: any): any[];
+    applyTimeShiftIfNecessary(data: any, target: any): void;
+    aggregateDataIfNecessary(data: any, target: any): any;
     groupTargetsByRefId(data: any): any;
-    setRollupTimeInterval(target: any, timeFilter: TimeFilter): void;
-    setGranularityTimeInterval(target: any, timeFilter: TimeFilter): void;
-    aggregateTarget(target: any, targetMetaData: any): {
-        datapoints: any;
-        refId: any;
-        target: any;
-    };
-    aggregateDataOfTimestamp(dataGroupedByTimestamp: any, aggregationLabel: string): any[];
-    concatTargetData(target: any): any[];
+    setRollupTimeInterval(target: any): void;
+    setGranularityTimeInterval(target: any): void;
     applyTimeShiftOnData(data: any, timeshift: any): void;
-    buildResult(aggregatedData: any, refId: any, target: any): {
-        datapoints: any;
-        refId: any;
-        target: any;
-    };
     getAllDatapointsOfTimestamp(data: any, index: any): any[];
     convertTimeShiftToMillis(timeShift: string): number;
     parseTimeShift(timeShift: string): number;
@@ -58,6 +57,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     isEndpointSet(endpoint: any): any;
     annotationQuery(options: any): void;
     metricFindQuery(query: string): void;
-    getVersion(): number;
+    supportsDeltaRequests(): any;
+    getVersion(): any;
     testDatasource(): any;
 }
