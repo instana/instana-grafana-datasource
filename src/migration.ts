@@ -26,15 +26,13 @@ export default function (target) {
   if (target.metricCategory === '5') {
     //old service metric view
     target.metricCategory = '4';
-    target.service = {}; //because target.endpoint does not exist yet.
+    target.service = {}; //because target.service does not exist yet.
     target.service.key = target.entity.key;
     target.service.label = target.entity.label;
     if (target.selectedApplication && target.selectedApplication.key) {
       target.entity.key = target.selectedApplication.key;
       target.entity.label = target.selectedApplication.label;
     } else {
-      // this will be recognized by query control and later on be changed to the "All Services"
-      // application that is always present with proper id.
       target.entity.key = null;
       target.entity.label = "Test";
     }

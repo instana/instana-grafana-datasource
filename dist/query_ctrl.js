@@ -68,14 +68,14 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     this.target.pluginId = this.panelCtrl.panel.type || this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
-                    var now = Date.now();
+                    var now = Math.floor(Date.now() / 1000) * 1000;
                     var windowSize = 6 * 60 * 60 * 1000; // 6h
                     this.timeFilter = {
                         from: now - windowSize,
                         to: now,
                         windowSize: windowSize
                     };
-                    // on new panel creation we default the category selection to built-in
+                    // on new panel creation we default the category selection to app/service/endpoint metrics
                     if (!this.target.metricCategory) {
                         this.target.metricCategory = this.BUILT_IN_METRICS;
                         this.target.canShowAllMetrics = false;
@@ -142,7 +142,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     });
                 };
                 InstanaQueryCtrl.prototype.isInfrastructure = function () {
-                    return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
+                    return this.isBuiltInInfrastructure() || this.isCustomInfrastructure();
                 };
                 InstanaQueryCtrl.prototype.isBuiltInInfrastructure = function () {
                     return this.target.metricCategory === this.BUILT_IN_METRICS;

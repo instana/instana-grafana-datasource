@@ -77,8 +77,8 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
                     return this.$q.all(lodash_1.default.map(options.targets, function (target) {
                         var timeFilter = _this.readTime(options);
                         // grafana setting to disable query execution
-                        if (target.hide || !target.metricCategory) {
-                            return { data: [] };
+                        if (target.hide) {
+                            return { data: [], target: target };
                         }
                         // target migration for downwards compatibility
                         migration_1.default(target);
@@ -89,13 +89,13 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
                         target['stableHash'] = delta_util_1.generateStableHash(target);
                         timeFilter = _this.adjustTimeFilterIfCached(timeFilter, target);
                         if (target.metricCategory === _this.BUILT_IN_METRICS || target.metricCategory === _this.CUSTOM_METRICS) {
-                            _this.setRollupTimeInterval(target);
+                            _this.setRollupTimeInterval(target, target.timeFilter);
                             return _this.getInfrastructureMetrics(target, timeFilter).then(function (data) {
                                 return _this.buildTargetWithAppendedDataResult(target, timeFilter, data);
                             });
                         }
                         else if (target.metricCategory) {
-                            _this.setGranularityTimeInterval(target);
+                            _this.setGranularityTimeInterval(target, target.timeFilter);
                             if (target.metricCategory === _this.ANALYZE_WEBSITE_METRICS) {
                                 return _this.getAnalyzeWebsiteMetrics(target, timeFilter).then(function (data) {
                                     return _this.buildTargetWithAppendedDataResult(target, timeFilter, data);
@@ -112,6 +112,7 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
                                 });
                             }
                         }
+                        return { data: [], target: target };
                     })).then(function (targetData) {
                         var result = [];
                         lodash_1.default.each(targetData, function (targetAndData, index) {
@@ -201,14 +202,14 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
                         return target.refId;
                     });
                 };
-                InstanaDatasource.prototype.setRollupTimeInterval = function (target) {
+                InstanaDatasource.prototype.setRollupTimeInterval = function (target, timeFilter) {
                     if (!target.timeInterval || !lodash_1.default.find(this.availableRollups, ['key', target.timeInterval.key])) {
-                        target.timeInterval = rollup_granularity_util_1.getDefaultMetricRollupDuration(target.timeFilter);
+                        target.timeInterval = rollup_granularity_util_1.getDefaultMetricRollupDuration(timeFilter);
                     }
                 };
-                InstanaDatasource.prototype.setGranularityTimeInterval = function (target) {
+                InstanaDatasource.prototype.setGranularityTimeInterval = function (target, timeFilter) {
                     if (!target.timeInterval || !lodash_1.default.find(this.availableGranularities, ['key', target.timeInterval.key])) {
-                        target.timeInterval = rollup_granularity_util_1.getDefaultChartGranularity(target.timeFilter.windowSize);
+                        target.timeInterval = rollup_granularity_util_1.getDefaultChartGranularity(timeFilter.windowSize);
                     }
                 };
                 InstanaDatasource.prototype.applyTimeShiftOnData = function (data, timeshift) {

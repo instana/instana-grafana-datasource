@@ -75,7 +75,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
 
-    const now = Date.now();
+    const now = Math.floor(Date.now() / 1000) * 1000;
     const windowSize = 6 * 60 * 60 * 1000; // 6h
     this.timeFilter = {
       from: now - windowSize,
@@ -83,7 +83,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       windowSize: windowSize
     };
 
-    // on new panel creation we default the category selection to built-in
+    // on new panel creation we default the category selection to app/service/endpoint metrics
     if (!this.target.metricCategory) {
       this.target.metricCategory = this.BUILT_IN_METRICS;
       this.target.canShowAllMetrics = false;
@@ -155,7 +155,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   isInfrastructure() {
-    return this.target.metricCategory === this.BUILT_IN_METRICS || this.target.metricCategory === this.CUSTOM_METRICS;
+    return this.isBuiltInInfrastructure() || this.isCustomInfrastructure();
   }
 
   isBuiltInInfrastructure() {

@@ -36,8 +36,8 @@ export default class InstanaDatasource extends AbstractDatasource {
     applyTimeShiftIfNecessary(data: any, target: any): void;
     aggregateDataIfNecessary(data: any, target: any): any;
     groupTargetsByRefId(data: any): any;
-    setRollupTimeInterval(target: any): void;
-    setGranularityTimeInterval(target: any): void;
+    setRollupTimeInterval(target: any, timeFilter: TimeFilter): void;
+    setGranularityTimeInterval(target: any, timeFilter: TimeFilter): void;
     applyTimeShiftOnData(data: any, timeshift: any): void;
     getAllDatapointsOfTimestamp(data: any, index: any): any[];
     convertTimeShiftToMillis(timeShift: string): number;

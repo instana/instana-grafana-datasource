@@ -22,30 +22,30 @@
       </div>
     </div>
 
-    <div ng-show="ctrl.target.metricCategory === '0'">
+    <div ng-if="ctrl.target.metricCategory === '0'">
       <div ng-include src="'queryAndType.html'"/>
       <div ng-include src="'metric.html'"/>
     </div>
 
-    <div ng-show="ctrl.target.metricCategory === '1'">
+    <div ng-if="ctrl.target.metricCategory === '1'">
       <div ng-include src="'queryAndType.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'metric_filters.html'"/>
     </div>
 
-    <div ng-show="ctrl.target.metricCategory === '2'">
+    <div ng-if="ctrl.target.metricCategory === '2'">
       <div ng-include src="'website_application.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'filters.html'"/>
     </div>
 
-    <div ng-show="ctrl.target.metricCategory === '3'">
+    <div ng-if="ctrl.target.metricCategory === '3'">
       <div ng-include src="'website_application.html'"/>
       <div ng-include src="'metric.html'"/>
       <div ng-include src="'filters.html'"/>
     </div>
 
-    <div ng-show="ctrl.target.metricCategory === '4'">
+    <div ng-if="ctrl.target.metricCategory === '4'">
       <div ng-include src="'application_service_endpoint.html'"/>
       <div ng-include src="'metric.html'"/>
     </div>
@@ -127,7 +127,7 @@
     </script>
 
     <script type="text/ng-template" id="metric.html">
-      <label class="gf-form">
+      <div class="gf-form">
         <label class="gf-form-label query-keyword width-13 pointer" for="in-metric-{{ctrl.target.refId}}">
           Metric
           <info-popover position="top center" mode="right-normal">
@@ -202,7 +202,7 @@
                   ng-options="f as f.label for f in ctrl.getAvailableTimeIntervals() track by f.key">
           </select>
         </div>
-      </label>
+      </div>
     </script>
 
     <script type="text/ng-template" id="website_legend.html">
