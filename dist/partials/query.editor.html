@@ -145,11 +145,11 @@
           </select>
         </div>
         <label ng-show="ctrl.isBuiltInInfrastructure()"
-               class="gf-form-label query-keyword width-13 pointer"
+               class="gf-form-label query-keyword pointer"
                for="in-aggregate-graphs-{{ctrl.target.refId}}">
           Show max value
           <info-popover position="top center" mode="right-normal">
-            <p>Displays the maximal value of current metric. Works only with cpu.used, memory.used, and openFiles.used.</p>
+            <p>Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only.</p>
           </info-popover>
         </label>
         <gf-form-switch ng-show="ctrl.isBuiltInInfrastructure()"
