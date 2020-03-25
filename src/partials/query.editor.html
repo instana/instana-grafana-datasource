@@ -18,6 +18,7 @@
           <option value="4">Application/Service/Endpoint metrics</option>
           <option value="2">Analyze application calls</option>
           <option value="3">Analyze websites</option>
+          <option value="7">SLO Information</option>
         </select>
       </div>
     </div>
@@ -48,6 +49,10 @@
     <div ng-if="ctrl.target.metricCategory === '4'">
       <div ng-include src="'application_service_endpoint.html'"/>
       <div ng-include src="'metric.html'"/>
+    </div>
+
+    <div ng-if="ctrl.target.metricCategory === '7'">
+      <div ng-include src="'slo.html'"/>
     </div>
 
     <div ng-include src="'advanced_settings.html'"/>
@@ -466,6 +471,52 @@
             <p>Add Filter to narrow down the data.</p>
           </info-popover>
         </label>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="slo.html">
+      <div class="gf-form">
+        <label class="gf-form-label query-keyword pointer width-13"
+               for="select-configured-slo-{{ctrl.target.refId}}">
+          Configured SLO
+          <info-popover position="top center" mode="right-normal">
+            <p>Select your configured SLO.</p>
+          </info-popover>
+        </label>
+        <select id="select-configured-slo-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.sloReport"
+                ng-change="ctrl.onChange()"
+                ng-options="f as f.label for f in ctrl.configuredReports track by f.key">
+        </select>
+        <label class="gf-form-label query-keyword pointer"
+               for="select-slo-specific-{{ctrl.target.refId}}">
+          SLO Value
+          <info-popover position="top center" mode="right-normal">
+            <p>Type in your desired SLO value. E.g, 0.9 for 90% SLO.</p>
+          </info-popover>
+        </label>
+        <input id="in-slo-value-{{ctrl.target.refId}}"
+               class="gf-form-input full-width"
+               type="number"
+               ng-model="ctrl.target.sloValue"
+               ng-model-options='{ debounce: 500 }'
+               placeholder="0.99"
+               ng-change="ctrl.onSloValueChange()"
+               spellcheck="false" />
+        <label class="gf-form-label query-keyword pointer"
+               for="select-slo-specific-{{ctrl.target.refId}}">
+          Specifics
+          <info-popover position="top center" mode="right-normal">
+            <p>Select your specific SLO information.</p>
+          </info-popover>
+        </label>
+        <select id="select-slo-specific-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.sloSpecific"
+                ng-change="ctrl.onChange()"
+                ng-options="f as f.key for f in ctrl.sloSpecifics track by f.key">
+        </select>
       </div>
     </script>
 

@@ -13,6 +13,7 @@ import InstanaWebsiteDataSource from './datasource_website';
 import { aggregateTarget } from "./util/aggregation_util";
 import AbstractDatasource from './datasource_abstract';
 import { readItemMetrics } from './util/analyze_util';
+import InstanaSLODataSource from './datasource_slo';
 import TimeFilter from './types/time_filter';
 import migrate from './migration';
 import Cache from './cache';
@@ -26,6 +27,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   website: InstanaWebsiteDataSource;
   service: InstanaServiceDataSource;
   endpoint: InstanaEndpointDataSource;
+  slo: InstanaSLODataSource;
   availableGranularities: Array<Selectable>;
   availableRollups: Array<Selectable>;
   maxWindowSizeInfrastructure: number;
@@ -42,6 +44,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.service = new InstanaServiceDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q);
+    this.slo = new InstanaSLODataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.availableGranularities = [];
     this.availableRollups = [];
     this.maxWindowSizeInfrastructure = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_infra);
@@ -100,6 +103,10 @@ export default class InstanaDatasource extends AbstractDatasource {
             return this.getApplicationServiceEndpointMetrics(target, timeFilter).then(data => {
               return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
             });
+          } else if (target.metricCategory === this.SLO_INFORMATION) {
+            return this.getSloInformation(target, timeFilter).then(data => {
+              return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
+            });
           }
         }
         return { data: [], target: target };
@@ -107,12 +114,16 @@ export default class InstanaDatasource extends AbstractDatasource {
     ).then(targetData => {
       var result = [];
       _.each(targetData, (targetAndData, index) => {
-        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-        var resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
-        this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
-        resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
-        this.cacheResultIfNecessary(resultData, targetAndData.target);
-        result.push(resultData);
+        if (targetAndData.target.metricCategory !== this.SLO_INFORMATION) {
+          // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+          var resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
+          this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
+          resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
+          this.cacheResultIfNecessary(resultData, targetAndData.target);
+          result.push(resultData);
+        } else {
+          result.push(targetAndData.data);
+        }
       });
 
       return { data: _.flatten(result) };
@@ -381,6 +392,15 @@ export default class InstanaDatasource extends AbstractDatasource {
     }
 
     return this.$q.resolve({data: {items: []}});
+  }
+
+  getSloInformation(target, timeFilter: TimeFilter) {
+    // do not try to execute to big queries
+    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeMetrics)) {
+       return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeMetrics);
+    }
+
+    return this.slo.fetchSLOReport(target, timeFilter);
   }
 
   isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean {
