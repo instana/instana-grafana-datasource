@@ -328,7 +328,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   loadConfiguredSLOs() {
     this.datasource.slo.getConfiguredSLOs().then(reports => {
       this.configuredReports = reports;
-      if (!this.target.sloReport.key) {
+      if (!this.target.sloReport || !this.target.sloReport.key) {
         if (this.configuredReports.length >= 1) {
           this.target.sloReport = this.configuredReports[0];
         } else {
