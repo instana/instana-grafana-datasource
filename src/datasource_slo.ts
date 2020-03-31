@@ -15,7 +15,7 @@ export default class InstanaSLODataSource extends AbstractDatasource {
   }
 
   getConfiguredSLOs(target, timeFilter: TimeFilter) {
-    let url = 'api/settings/sli'; //TODO verify endpoint
+    let url = 'api/settings/sli';
     return this.doRequest(url).then(response => {
       return _.map(response.data, (r, index) => {
         return {
