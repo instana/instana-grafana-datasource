@@ -395,11 +395,6 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   getSloInformation(target, timeFilter: TimeFilter) {
-    // do not try to execute to big queries
-    if (this.isInvalidQueryInterval(timeFilter.windowSize, this.maxWindowSizeAnalyzeMetrics)) {
-       return this.rejectLargeTimeWindow(this.maxWindowSizeAnalyzeMetrics);
-    }
-
     return this.slo.fetchSLOReport(target, timeFilter);
   }
 
