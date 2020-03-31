@@ -44,7 +44,7 @@
     "karma-sinon": "^1.0.5",
     "karma-systemjs": "^0.16.0",
     "kind-of": "^6.0.3",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.2",
     "mocha": "^4.1.0",
     "moment": "^2.18.1",
     "plugin-typescript": "^7.1.0",
