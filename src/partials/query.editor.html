@@ -508,7 +508,12 @@
                for="select-slo-specific-{{ctrl.target.refId}}">
           Specifics
           <info-popover position="top center" mode="right-normal">
-            <p>Select your specific SLO information.</p>
+            Select your specific SLO information:
+            <ul>
+              <li>SLI requires Gauge visualization</li>
+              <li>Remaining budget requires Singlestat visualization</li>
+              <li>Timeseries requires Bar graph visualization</li>
+            </ul>
           </info-popover>
         </label>
         <select id="select-slo-specific-{{ctrl.target.refId}}"

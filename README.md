@@ -191,6 +191,16 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 If no custom format is provided the default label '_$label ($website) $metric_' will be shown.
 
+##### SLO Information
+
+Display specific SLO/SLI information in Grafana based on Instana. This category works a bit more different than the others.
+
+The easiest approach is to import the SLO Dashboard template from the `Templates` folder of this repository. Edit the template and add your SLO wherever the comment tells you to do so.
+
+Once the template file is ready, make sure you import it within Grafana by hovering your mouse on the big plus in Grafana and click import. Paste in the content of the .json File or upload it directly.
+
+The last step is editing each of the three panels and selecting the specific configured SLO that you want to see.
+
 #### Singlestat visualization
 
 While using the "Singlestat" visualization an additional metric aggregation is selectable.
