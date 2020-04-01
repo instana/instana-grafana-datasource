@@ -22,14 +22,7 @@
     "equals": {
       "method": "POST",
       "path": "/api/settings/sli/report/1",
-      "query": {
-        "from": 1585746561000,
-        "to": 1585768161000,
-        "slo": 0.8
-      }
     }
-  },{
-    "contains": { "body": "beaconCount" }
   }],
   "responses": [{
     "inject": "<%- stringify(filename, 'slo_response.ejs') %>"
