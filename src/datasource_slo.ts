@@ -40,11 +40,11 @@ export default class InstanaSLODataSource extends AbstractDatasource {
 
   extractSpecificValueFromSLI(target, sliResult, sloSpecific, timeFilter: TimeFilter) {
     if (sloSpecific.key === 'SLI') {
-      return this.createTarget(sloSpecific.label, this.buildResultArray(sliResult.sli), target.refId);
+      return [this.createTarget(sloSpecific.label, this.buildResultArray(sliResult.sli), target.refId)];
     } else if (sloSpecific.key === 'Remaining Error Budget') {
-      return this.createTarget(sloSpecific.label, this.buildResultArray(sliResult.errorBudgetRemaining), target.refId);
+      return [this.createTarget(sloSpecific.label, this.buildResultArray(sliResult.errorBudgetRemaining), target.refId)];
     } else if (sloSpecific.key === 'Timeseries') {
-      return this.splitAndPopulate(target, sliResult.violationDistribution, timeFilter);
+      return [this.splitAndPopulate(target, sliResult.violationDistribution, timeFilter)];
     }
 
     return this.$q.resolve({data: {items: []}});

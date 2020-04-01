@@ -54,7 +54,7 @@ If your Dynamic Focus query matches, the returned dataset will include metrics p
 
 ![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/custom-metrics.gif)
 
-### Change legend format
+#### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -74,7 +74,7 @@ A simple version of getting metrics related to one or multiple applications. Onc
 
 ![application metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application_metrics.gif)
 
-### Change legend format
+#### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -95,7 +95,7 @@ Allows to show metrics related to a service. Services can either be selected as 
 
 ![application service metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application_service_metrics.gif)
 
-### Change legend format
+#### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -117,7 +117,7 @@ Allows to show metrics related to an endpoint. Endpoints can either be selected 
 
 ![application service endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application_service_endpoint_metrics.gif)
 
-### Change legend format
+#### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -148,7 +148,7 @@ If your selection matches, the returned dataset will include metrics providing g
 
 If more then 20 metics are fetched, a warning appears that not all results are shown. Add Filter to narrow down the data.
 
-### Change legend format
+#### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -177,7 +177,7 @@ If your selection matches, the returned dataset will include metrics providing g
 
 A default label '_$label ($website) $metric_' will be shown.
 
-### Change legend format
+#### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
@@ -195,11 +195,18 @@ If no custom format is provided the default label '_$label ($website) $metric_' 
 
 Display specific SLO/SLI information in Grafana based on Instana. This category works a bit more different than the others.
 
-The easiest approach is to import the SLO Dashboard template from the `Templates` folder of this repository. Edit the template and add your SLO wherever the comment tells you to do so.
+For SLI:
+Use the Gauge visualization to display the SLI. Move to the Threshold settings and switch the colors (red to green, green to red). Type in your SLO in order to properly show the SLO threshold. Further, choose "percent" as your unit (Field settings).
 
-Once the template file is ready, make sure you import it within Grafana by hovering your mouse on the big plus in Grafana and click import. Paste in the content of the .json File or upload it directly.
+For Remaining Error Budget:
+Use the Singlestat visualization. Move to Coloring settings, toggle the Background toggle and use `0,0` as your Thresholds. Also, invert the colors below. This will turn the background of the panel green as long as the number of remaining minutes is positive.
 
-The last step is editing each of the three panels and selecting the specific configured SLO that you want to see.
+For Timeseries:
+Select graph visualization, choose bars instead of lines as your draw mode and add a Y-Max value of `1` for the left y axis.
+
+The image below shows how such a dashboard could look like.
+
+![slo_dashbpard](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/slo_dashboard.png)
 
 #### Singlestat visualization
 
