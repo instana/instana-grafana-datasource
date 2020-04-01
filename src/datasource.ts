@@ -35,6 +35,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   maxWindowSizeAnalyzeApplications: number;
   maxWindowSizeAnalyzeMetrics: number;
   resultCache: Cache<any>;
+  sloIsEnabled: boolean;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -52,6 +53,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.maxWindowSizeAnalyzeApplications = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_calls);
     this.maxWindowSizeAnalyzeMetrics = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_metrics);
     this.resultCache = new Cache<any>();
+    this.sloIsEnabled = instanceSettings.jsonData.allowSlo;
   }
 
   query(options) {
@@ -451,6 +453,10 @@ export default class InstanaDatasource extends AbstractDatasource {
       }, error => {
         return null;
       });
+  }
+
+  isSloEnabled() {
+    return this.sloIsEnabled;
   }
 
   testDatasource() {

@@ -18,7 +18,7 @@
           <option value="4">Application/Service/Endpoint metrics</option>
           <option value="2">Analyze application calls</option>
           <option value="3">Analyze websites</option>
-          <option value="7">SLO Information</option>
+          <option ng-show="ctrl.isSloEnabled()" value="7">SLO Information</option>
         </select>
       </div>
     </div>

@@ -25,7 +25,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   sloSpecifics: Array<Selectable> = sloInfo;
   aggregationFunctions = aggregation_functions;
 
-
   uniqueEntityTypes: Array<Selectable>; // subset of allEntityTypes filtered by DF
   allCustomMetrics: Array<Selectable>; // internal reference only to speed up filtering // TODO needed ?
   availableMetrics: Array<Selectable>; // subset of allCustomMetrics for display only
@@ -802,6 +801,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
         this.version = version;
       });
     }
+  }
+
+  isSloEnabled() {
+    return this.datasource.isSloEnabled();
   }
 
   supportsApplicationPerspective() {
