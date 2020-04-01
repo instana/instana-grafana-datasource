@@ -15,7 +15,7 @@ export default class InstanaSLODataSource extends AbstractDatasource {
   }
 
   getConfiguredSLOs(target, timeFilter: TimeFilter) {
-    let url = 'api/settings/sli';
+    let url = '/api/settings/sli';
     return this.doRequest(url).then(response => {
       return _.map(response.data, (r, index) => {
         return {
@@ -32,7 +32,7 @@ export default class InstanaSLODataSource extends AbstractDatasource {
       return this.$q.resolve({data: {items: []}});
     }
 
-    let url = 'api/sli/report/' + target.sloReport.key + '?from=' + timeFilter.from + '&to=' + timeFilter.to + '&slo=' + target.sloValue;
+    let url = '/api/sli/report/' + target.sloReport.key + '?from=' + timeFilter.from + '&to=' + timeFilter.to + '&slo=' + target.sloValue;
     return this.doRequest(url).then(response => {
       return this.extractSpecificValueFromSLI(target, response.data, target.sloSpecific, timeFilter);
     });
