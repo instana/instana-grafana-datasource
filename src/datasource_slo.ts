@@ -59,7 +59,7 @@ export default class InstanaSLODataSource extends AbstractDatasource {
     var reds = [];
     var greys = [];
 
-    var granularity = this.getWindowSize(timeFilter) / 101;
+    var granularity = this.getWindowSize(timeFilter) / Object.keys(series).length;
     _.forEach(series, (value, index) => {
       if (value === 1) {
         greens.push([1, timeFilter.from + (index * granularity)]);
@@ -72,10 +72,8 @@ export default class InstanaSLODataSource extends AbstractDatasource {
 
     var result = [];
     result.push(this.createTarget("No violation", greens, target.refId));
-    result.push(this.createTarget("", [], target.refId));
-    result.push(this.createTarget("No data", greys, target.refId));
-    result.push(this.createTarget("", [], target.refId));
     result.push(this.createTarget("Violation", reds, target.refId));
+    result.push(this.createTarget("No data", greys, target.refId));
 
     return result;
   }

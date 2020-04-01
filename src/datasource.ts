@@ -116,16 +116,12 @@ export default class InstanaDatasource extends AbstractDatasource {
     ).then(targetData => {
       var result = [];
       _.each(targetData, (targetAndData, index) => {
-        if (targetAndData.target.metricCategory !== this.SLO_INFORMATION) {
-          // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-          var resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
-          this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
-          resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
-          this.cacheResultIfNecessary(resultData, targetAndData.target);
-          result.push(resultData);
-        } else {
-          result.push(targetAndData.data);
-        }
+        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+        var resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
+        this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
+        resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
+        this.cacheResultIfNecessary(resultData, targetAndData.target);
+        result.push(resultData);
       });
 
       return { data: _.flatten(result) };
@@ -174,8 +170,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   cacheResultIfNecessary(result, target) {
-    if (this.supportsDeltaRequests() && this.hasResult(result)) {
-
+    if (this.supportsDeltaRequests(target) && this.hasResult(result)) {
       var cachedObj = {
         timeFilter: target.timeFilter,
         results: result
@@ -432,7 +427,10 @@ export default class InstanaDatasource extends AbstractDatasource {
     throw new Error('Template Variable Support not implemented yet.');
   }
 
-  supportsDeltaRequests() {
+  supportsDeltaRequests(target) {
+    if (this.SLO_INFORMATION === target.metricCategory) {
+      return false;
+    }
     let version = this.resultCache.get('version');
     if (!version) {
         return this.getVersion().then(version => {
