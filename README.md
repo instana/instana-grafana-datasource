@@ -206,7 +206,7 @@ Select graph visualization, choose bars instead of lines as your draw mode and a
 
 The image below shows how such a dashboard could look like.
 
-![slo_dashbpard](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/slo_dashboard.png)
+![slo_dashboard](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/slo_dashboard.png)
 
 #### Singlestat visualization
 
