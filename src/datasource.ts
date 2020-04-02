@@ -13,6 +13,7 @@ import InstanaWebsiteDataSource from './datasource_website';
 import { aggregateTarget } from "./util/aggregation_util";
 import AbstractDatasource from './datasource_abstract';
 import { readItemMetrics } from './util/analyze_util';
+import InstanaSLODataSource from './datasource_slo';
 import TimeFilter from './types/time_filter';
 import migrate from './migration';
 import Cache from './cache';
@@ -26,6 +27,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   website: InstanaWebsiteDataSource;
   service: InstanaServiceDataSource;
   endpoint: InstanaEndpointDataSource;
+  slo: InstanaSLODataSource;
   availableGranularities: Array<Selectable>;
   availableRollups: Array<Selectable>;
   maxWindowSizeInfrastructure: number;
@@ -33,6 +35,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   maxWindowSizeAnalyzeApplications: number;
   maxWindowSizeAnalyzeMetrics: number;
   resultCache: Cache<any>;
+  sloIsEnabled: boolean;
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
@@ -42,6 +45,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.website = new InstanaWebsiteDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.service = new InstanaServiceDataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.endpoint = new InstanaEndpointDataSource(instanceSettings, backendSrv, templateSrv, $q);
+    this.slo = new InstanaSLODataSource(instanceSettings, backendSrv, templateSrv, $q);
     this.availableGranularities = [];
     this.availableRollups = [];
     this.maxWindowSizeInfrastructure = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_infra);
@@ -49,6 +53,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     this.maxWindowSizeAnalyzeApplications = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_calls);
     this.maxWindowSizeAnalyzeMetrics = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_metrics);
     this.resultCache = new Cache<any>();
+    this.sloIsEnabled = instanceSettings.jsonData.allowSlo;
   }
 
   query(options) {
@@ -98,6 +103,10 @@ export default class InstanaDatasource extends AbstractDatasource {
             });
           } else if (target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
             return this.getApplicationServiceEndpointMetrics(target, timeFilter).then(data => {
+              return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
+            });
+          } else if (target.metricCategory === this.SLO_INFORMATION) {
+            return this.getSloInformation(target, timeFilter).then(data => {
               return this.buildTargetWithAppendedDataResult(target, timeFilter, data);
             });
           }
@@ -161,8 +170,7 @@ export default class InstanaDatasource extends AbstractDatasource {
   }
 
   cacheResultIfNecessary(result, target) {
-    if (this.supportsDeltaRequests() && this.hasResult(result)) {
-
+    if (this.supportsDeltaRequests(target) && this.hasResult(result)) {
       var cachedObj = {
         timeFilter: target.timeFilter,
         results: result
@@ -383,6 +391,10 @@ export default class InstanaDatasource extends AbstractDatasource {
     return this.$q.resolve({data: {items: []}});
   }
 
+  getSloInformation(target, timeFilter: TimeFilter) {
+    return this.slo.fetchSLOReport(target, timeFilter);
+  }
+
   isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean {
     if (queryIntervalLimit > 0) {
       return Math.floor(windowSize / 1000) * 1000 > queryIntervalLimit;
@@ -415,7 +427,10 @@ export default class InstanaDatasource extends AbstractDatasource {
     throw new Error('Template Variable Support not implemented yet.');
   }
 
-  supportsDeltaRequests() {
+  supportsDeltaRequests(target) {
+    if (this.SLO_INFORMATION === target.metricCategory) {
+      return false;
+    }
     let version = this.resultCache.get('version');
     if (!version) {
         return this.getVersion().then(version => {
@@ -436,6 +451,10 @@ export default class InstanaDatasource extends AbstractDatasource {
       }, error => {
         return null;
       });
+  }
+
+  isSloEnabled() {
+    return this.sloIsEnabled;
   }
 
   testDatasource() {
