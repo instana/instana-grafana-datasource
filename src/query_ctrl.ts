@@ -111,7 +111,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       }
     }
 
-    // analyze applications
+    // analyze application calls
     if (this.isAnalyzeApplication()) {
       this.websiteApplicationLabel = "Application";
       this.onApplicationChanges(false, true).then(() => {
@@ -131,7 +131,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       });
     }
 
-    // application/service/endpoint metric
+    // application/service/endpoint metrics
     if (this.isApplicationServiceEndpointMetric()) {
       this.onApplicationChanges(false, false).then(() => {
         if (this.target.metric) {
@@ -142,11 +142,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.loadEndpoints();
     }
 
+    // slo information
     if (this.isSLORequest()) {
-      if (!this.target.sloSpecific) {
-        this.target.sloSpecific = this.sloSpecifics[0]; //set default value
-      }
-
       this.loadConfiguredSLOs();
     }
   }
@@ -325,6 +322,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   loadConfiguredSLOs() {
+    if (!this.target.sloSpecific) {
+      this.target.sloSpecific = this.sloSpecifics[0]; //set default value
+    }
     this.datasource.slo.getConfiguredSLOs().then(reports => {
       this.configuredReports = reports;
       if (!this.target.sloReport || !this.target.sloReport.key) {
@@ -334,7 +334,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
           this.target.sloReport === this.EMPTY_DROPDOWN_TEXT;
         }
       }
-
       this.panelCtrl.refresh();
     });
   }
