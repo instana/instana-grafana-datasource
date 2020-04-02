@@ -97,6 +97,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // infrastructure (built-in & custom)
     if (this.isInfrastructure()) {
+      if (this.datasource) { // hack for testing
+        this.datasource.setRollupTimeInterval(this.target, this.timeFilter);
+      }
       if (this.target.entityQuery) {
         this.onFilterChange(false).then(() => {
           // infrastructure metrics support available metrics on a selected entity type
@@ -113,6 +116,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // analyze application calls
     if (this.isAnalyzeApplication()) {
+      this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
       this.websiteApplicationLabel = "Application";
       this.onApplicationChanges(false, true).then(() => {
         if (this.target.metric) {
@@ -123,6 +127,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // analyze websites
     if (this.isAnalyzeWebsite()) {
+      this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
       this.websiteApplicationLabel = "Website";
       this.onWebsiteChanges(false, true).then(() => {
         if (this.target.metric) {
@@ -133,6 +138,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // application/service/endpoint metrics
     if (this.isApplicationServiceEndpointMetric()) {
+      this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
       this.onApplicationChanges(false, false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -192,7 +198,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     return this.target.metricCategory === this.SLO_INFORMATION;
   }
 
-  onWebsiteChanges(refresh, isAnalyze: boolean) {
+  onWebsiteChanges(refresh: boolean, isAnalyze: boolean) {
     // select a meaningful default group
     if (this.target && !this.target.entityType) {
       this.target.entityType = _.find(this.uniqueBeaconTypes, ['key', 'pageLoad']);
@@ -230,12 +236,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
         this.allWebsiteMetrics = metrics;
         this.availableMetrics = _.filter(this.allWebsiteMetrics, m => m.beaconTypes.includes(this.target.entityType.key));
         this.checkMetricAndRefresh(refresh);
-        this.adjustMetricSelectionPlaceholder();
       }
     );
   }
 
-  onApplicationChanges(refresh, isAnalyze: boolean) {
+  onApplicationChanges(refresh: boolean, isAnalyze: boolean) {
     this.datasource.application.getApplications(this.timeFilter).then(
       applications => {
         this.uniqueEntities = _.orderBy(applications, [application => application.label.toLowerCase()], ['asc']);
@@ -272,7 +277,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
       metrics => {
         this.availableMetrics = metrics;
         this.checkMetricAndRefresh(refresh);
-        this.adjustMetricSelectionPlaceholder();
       }
     );
   }
@@ -294,7 +298,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
       metrics => {
         this.availableMetrics = metrics;
         this.checkMetricAndRefresh(refresh);
-        this.adjustMetricSelectionPlaceholder();
       }
     );
   }
@@ -316,7 +319,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
       metrics => {
         this.availableMetrics = metrics;
         this.checkMetricAndRefresh(refresh);
-        this.adjustMetricSelectionPlaceholder();
       }
     );
   }
@@ -334,7 +336,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
           this.target.sloReport === this.EMPTY_DROPDOWN_TEXT;
         }
       }
-      this.panelCtrl.refresh();
+      this.refresh();
     });
   }
 
@@ -367,6 +369,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
       if (this.isInfrastructure()) {
         this.datasource.setRollupTimeInterval(this.target, this.timeFilter);
         this.onFilterChange(false);
+      } else if (this.isSLORequest()) {
+        this.loadConfiguredSLOs();
       } else {
         this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
         if (this.isAnalyzeApplication()) {
@@ -379,8 +383,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
           this.onApplicationChanges(false, false);
           this.loadServices();
           this.loadEndpoints();
-        } else if (this.isSLORequest()) {
-          this.loadConfiguredSLOs();
         }
       }
     }
@@ -390,7 +392,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
   onBeaconTypeSelect(refresh: boolean) {
     this.availableMetrics = _.filter(this.allWebsiteMetrics, m => m.beaconTypes.includes(this.target.entityType.key));
     this.checkMetricAndRefresh(refresh);
-    this.adjustMetricSelectionPlaceholder();
   }
 
   filterForEntityType(refresh: boolean, findMatchingEntityTypes: boolean) {
@@ -400,8 +401,9 @@ export class InstanaQueryCtrl extends QueryCtrl {
       if (this.target.entityType && !_.find(this.uniqueEntityTypes, ['key', this.target.entityType.key])) {
         this.target.entityType = null; // entity selection label will be untouched
         this.resetMetricSelection();
-      } else if (this.target.metric && refresh) {
-        this.panelCtrl.refresh();
+      }
+      if (refresh) {
+        this.refresh();
       }
     });
   }
@@ -447,9 +449,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
           this.allCustomMetrics = metrics;
           this.onMetricsFilter(refresh);
         }
-
         this.checkMetricAndRefresh(refresh);
-        this.adjustMetricSelectionPlaceholder();
       }
     );
   }
@@ -460,7 +460,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.availableMetrics = this.allCustomMetrics;
       this.target.canShowAllMetrics = false;
       this.target.showAllMetrics = false;
-      this.panelCtrl.refresh();
+      this.refresh();
     } else {
       let filteredMetrics = this.allCustomMetrics;
       _.forEach(this.target.customFilters, filter => {
@@ -479,9 +479,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
         this.target.showAllMetrics = false;
       }
     }
-
     this.checkMetricAndRefresh(refresh);
-    this.adjustMetricSelectionPlaceholder();
   }
 
   isAbleToShowAllMetrics() {
@@ -507,7 +505,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   removeFilter(index: number) {
     this.target.filters.splice(index, 1);
-    this.panelCtrl.refresh();
+    this.refresh();
   }
 
   onTagFilterChange(index: number) {
@@ -539,14 +537,16 @@ export class InstanaQueryCtrl extends QueryCtrl {
     } else {
       filter.isValid = false;
     }
-    this.panelCtrl.refresh();
+    this.refresh();
   }
 
   checkMetricAndRefresh(refresh: boolean) {
     if (this.target.metric && !_.includes(_.map(this.availableMetrics, m => m.key), this.target.metric.key)) {
       this.resetMetricSelection();
-    } else if (refresh && this.target.metric || this.target.showAllMetrics) {
-      this.panelCtrl.refresh();
+    }
+    this.adjustMetricSelectionPlaceholder();
+    if (refresh) {
+      this.refresh();
     }
   }
 
@@ -558,7 +558,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.availableMetrics = [];
     this.uniqueEntities = [];
     this.uniqueTags = [];
-    this.target.timeInterval = null;
     this.resetEntityTypeSelection();
     this.resetEntitySelection();
     this.resetMetricSelection();
@@ -657,27 +656,31 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
 
     this.adjustServiceEndpointSelectionPlaceholder();
-    this.panelCtrl.refresh();
+    this.refresh();
   }
 
   onGroupChange() {
     if (this.target.group && (this.isAnalyzeApplication() || this.isAnalyzeWebsite())) {
       this.target.showGroupBySecondLevel = this.target.group.type === 'KEY_VALUE_PAIR';
     }
-
     if (!this.target.showGroupBySecondLevel) {
       this.target.groupbyTagSecondLevelKey = null;
     }
-    this.panelCtrl.refresh();
+    this.refresh();
   }
 
   onChange() {
+    this.refresh();
+  }
+
+  refresh() {
+    console.log("this.panelCtrl.refresh();");
     this.panelCtrl.refresh();
   }
 
   onSloValueChange() {
     if (this.target.sloValue <= 1.0 && this.target.sloValue > 0.0) {
-      this.panelCtrl.refresh();
+      this.refresh();
     }
   }
 
@@ -685,11 +688,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
     if (this.target.metric && !_.includes(this.target.metric.aggregations, this.target.aggregation)) {
       this.target.aggregation = this.target.metric.aggregations[0];
     }
-
     if (this.target.displayMaxMetricValue && !this.canShowMaxMetricValue()) {
       this.target.displayMaxMetricValue = false;
     }
-    this.panelCtrl.refresh();
+    this.refresh();
   }
 
   onAllMetricsSelect() {
@@ -699,11 +701,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     } else {
       this.target.showAllMetrics = false;
     }
-    this.panelCtrl.refresh();
-  }
-
-  onFreeTextMetricChange() {
-    this.panelCtrl.refresh();
+    this.refresh();
   }
 
   onTimeShiftChange() {
@@ -714,7 +712,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     }
 
     if (this.target.timeShiftIsValid) {
-      this.panelCtrl.refresh();
+      this.refresh();
     }
   }
 
@@ -723,13 +721,13 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.resetEndpoints();
     this.loadServices();
     this.loadEndpoints();
-    this.panelCtrl.refresh();
+    this.refresh();
   }
 
   onServiceSelect() {
     this.resetEndpoints();
     this.loadEndpoints();
-    this.panelCtrl.refresh();
+    this.refresh();
   }
 
   toggleFreeTextMetrics() {
@@ -746,7 +744,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       this.target.labelFormat = "";
     }
 
-    this.panelCtrl.refresh();
+    this.refresh();
   }
 
   canShowMaxMetricValue() {
