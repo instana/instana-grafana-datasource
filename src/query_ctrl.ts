@@ -92,14 +92,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
     if (!this.target.metricCategory) {
       this.target.metricCategory = this.BUILT_IN_METRICS;
       this.target.canShowAllMetrics = false;
+      if (this.datasource) { // hack for testing
+        this.target.timeInterval = this.datasource.getDefaultMetricRollupDuration(this.timeFilter);
+      }
     }
     this.previousMetricCategory = this.target.metricCategory;
 
     // infrastructure (built-in & custom)
     if (this.isInfrastructure()) {
-      if (this.datasource) { // hack for testing
-        this.datasource.setRollupTimeInterval(this.target, this.timeFilter);
-      }
       if (this.target.entityQuery) {
         this.onFilterChange(false).then(() => {
           // infrastructure metrics support available metrics on a selected entity type
@@ -116,7 +116,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // analyze application calls
     if (this.isAnalyzeApplication()) {
-      this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
       this.websiteApplicationLabel = "Application";
       this.onApplicationChanges(false, true).then(() => {
         if (this.target.metric) {
@@ -127,7 +126,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // analyze websites
     if (this.isAnalyzeWebsite()) {
-      this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
       this.websiteApplicationLabel = "Website";
       this.onWebsiteChanges(false, true).then(() => {
         if (this.target.metric) {
@@ -138,7 +136,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // application/service/endpoint metrics
     if (this.isApplicationServiceEndpointMetric()) {
-      this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
       this.onApplicationChanges(false, false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -669,12 +666,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.refresh();
   }
 
-  onChange() {
+  onSelect() {
     this.refresh();
   }
 
   refresh() {
-    console.log("this.panelCtrl.refresh();");
     this.panelCtrl.refresh();
   }
 
