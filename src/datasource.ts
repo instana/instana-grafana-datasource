@@ -427,7 +427,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     throw new Error('Template Variable Support not implemented yet.');
   }
 
-  supportsDeltaRequests(target) {
+  supportsDeltaRequests(target): boolean {
     if (this.SLO_INFORMATION === target.metricCategory) {
       return false;
     }

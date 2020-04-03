@@ -789,7 +789,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   }
 
   loadVersion() {
-    if (this.datasource) {
+    if (this.datasource) { // hack for testing
       this.datasource.getVersion().then(version => {
         this.version = version;
       });
