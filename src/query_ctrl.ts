@@ -1,6 +1,7 @@
 ///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
 import {QueryCtrl} from 'app/plugins/sdk';
 
+import {getDefaultMetricRollupDuration} from "./util/rollup_granularity_util";
 import aggregation_functions from './lists/aggregation_function';
 import beaconTypes from './lists/beacon_types';
 import max_metrics from './lists/max_metrics';
@@ -88,23 +89,21 @@ export class InstanaQueryCtrl extends QueryCtrl {
       windowSize: windowSize
     };
 
-    // on new panel creation we default the category selection to app/service/endpoint metrics
+    // on new panel creation we default the category selection to built-in metrics
     if (!this.target.metricCategory) {
       this.target.metricCategory = this.BUILT_IN_METRICS;
+      this.target.timeInterval = getDefaultMetricRollupDuration(this.timeFilter);
       this.target.canShowAllMetrics = false;
-      if (this.datasource) { // hack for testing
-        this.target.timeInterval = this.datasource.getDefaultMetricRollupDuration(this.timeFilter);
-      }
     }
     this.previousMetricCategory = this.target.metricCategory;
 
     // infrastructure (built-in & custom)
     if (this.isInfrastructure()) {
       if (this.target.entityQuery) {
-        this.onFilterChange(false).then(() => {
+        this.onFilterChange(true).then(() => {
           // infrastructure metrics support available metrics on a selected entity type
           if (this.target.entityType) {
-            this.onEntityTypeSelect(false).then(() => {
+            this.onEntityTypeSelect(true).then(() => {
               if (this.target.metric || this.target.showAllMetrics) {
                 this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
               }
@@ -117,7 +116,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // analyze application calls
     if (this.isAnalyzeApplication()) {
       this.websiteApplicationLabel = "Application";
-      this.onApplicationChanges(false, true).then(() => {
+      this.onApplicationChanges(true, true).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
         }
@@ -127,7 +126,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
     // analyze websites
     if (this.isAnalyzeWebsite()) {
       this.websiteApplicationLabel = "Website";
-      this.onWebsiteChanges(false, true).then(() => {
+      this.onWebsiteChanges(true, true).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
         }
@@ -136,7 +135,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // application/service/endpoint metrics
     if (this.isApplicationServiceEndpointMetric()) {
-      this.onApplicationChanges(false, false).then(() => {
+      this.onApplicationChanges(true, false).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
         }
@@ -365,19 +364,19 @@ export class InstanaQueryCtrl extends QueryCtrl {
       // fresh internal used lists without re-rendering
       if (this.isInfrastructure()) {
         this.datasource.setRollupTimeInterval(this.target, this.timeFilter);
-        this.onFilterChange(false);
+        this.onFilterChange(true);
       } else if (this.isSLORequest()) {
         this.loadConfiguredSLOs();
       } else {
         this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
         if (this.isAnalyzeApplication()) {
           this.websiteApplicationLabel = "Application";
-          this.onApplicationChanges(false, true);
+          this.onApplicationChanges(true, true);
         } else if (this.isAnalyzeWebsite()) {
           this.websiteApplicationLabel = "Website";
-          this.onWebsiteChanges(false, true);
+          this.onWebsiteChanges(true, true);
         } else if (this.isApplicationServiceEndpointMetric()) {
-          this.onApplicationChanges(false, false);
+          this.onApplicationChanges(true, false);
           this.loadServices();
           this.loadEndpoints();
         }

@@ -53,6 +53,25 @@
   "predicates": [{
     "equals": {
       "method": "GET",
+      "path": "/api/application-monitoring/applications;id=3paufjUFS5-0QU3Pmj8KwQ/services"
+    }
+  }],
+  "responses": [{
+    "is": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json;charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+      },
+      "body": "{\"items\": [{\"label\": \"All\", \"id\": \"3paufjUFS5-0QU3Pmj8PwQ\"}, {\"label\": \"AWS Lambda Service\", \"id\": \"3paufjUFS5-0QU3Pmj8PwW\"}],\"totalHits\": 2,\"totalRepresentedItemCount\": 2}"
+    }
+  }]
+},
+{
+  "predicates": [{
+    "equals": {
+      "method": "GET",
       "path": "/api/application-monitoring/catalog/metrics"
     }
   }],

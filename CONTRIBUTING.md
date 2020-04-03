@@ -93,8 +93,10 @@ This should render a chart with two datasets (`node (on host "host-1")` and `nod
 * Category: `Infrastructure custom metrics`
 * Query: `filler`
 * Type: `Dropwizard`
-* Filter metric select: `kpi`
+* Add filter metric select
+* 1. Filter metric select: `kpi`
 * Metric: `Dropwizard meter (KPI.errors)`
+* Show Advanced Settings
 * Legend format: `$host ($pid)`
 
 This should render a chart with one dataset (`host-3 (29042)`).

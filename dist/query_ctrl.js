@@ -1,15 +1,18 @@
-System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/beacon_types', './lists/max_metrics', './lists/slo_specifics', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/aggregation_function', './lists/beacon_types', './lists/max_metrics', './lists/slo_specifics', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, aggregation_function_1, beacon_types_1, max_metrics_1, slo_specifics_1, operators_1, migration_1, lodash_1;
+    var sdk_1, rollup_granularity_util_1, aggregation_function_1, beacon_types_1, max_metrics_1, slo_specifics_1, operators_1, migration_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
             function (sdk_1_1) {
                 sdk_1 = sdk_1_1;
+            },
+            function (rollup_granularity_util_1_1) {
+                rollup_granularity_util_1 = rollup_granularity_util_1_1;
             },
             function (aggregation_function_1_1) {
                 aggregation_function_1 = aggregation_function_1_1;
@@ -80,22 +83,20 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                         to: now,
                         windowSize: windowSize
                     };
-                    // on new panel creation we default the category selection to app/service/endpoint metrics
+                    // on new panel creation we default the category selection to built-in metrics
                     if (!this.target.metricCategory) {
                         this.target.metricCategory = this.BUILT_IN_METRICS;
+                        this.target.timeInterval = rollup_granularity_util_1.getDefaultMetricRollupDuration(this.timeFilter);
                         this.target.canShowAllMetrics = false;
-                        if (this.datasource) {
-                            this.target.timeInterval = this.datasource.getDefaultMetricRollupDuration(this.timeFilter);
-                        }
                     }
                     this.previousMetricCategory = this.target.metricCategory;
                     // infrastructure (built-in & custom)
                     if (this.isInfrastructure()) {
                         if (this.target.entityQuery) {
-                            this.onFilterChange(false).then(function () {
+                            this.onFilterChange(true).then(function () {
                                 // infrastructure metrics support available metrics on a selected entity type
                                 if (_this.target.entityType) {
-                                    _this.onEntityTypeSelect(false).then(function () {
+                                    _this.onEntityTypeSelect(true).then(function () {
                                         if (_this.target.metric || _this.target.showAllMetrics) {
                                             _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                                         }
@@ -107,7 +108,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     // analyze application calls
                     if (this.isAnalyzeApplication()) {
                         this.websiteApplicationLabel = "Application";
-                        this.onApplicationChanges(false, true).then(function () {
+                        this.onApplicationChanges(true, true).then(function () {
                             if (_this.target.metric) {
                                 _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                             }
@@ -116,7 +117,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     // analyze websites
                     if (this.isAnalyzeWebsite()) {
                         this.websiteApplicationLabel = "Website";
-                        this.onWebsiteChanges(false, true).then(function () {
+                        this.onWebsiteChanges(true, true).then(function () {
                             if (_this.target.metric) {
                                 _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                             }
@@ -124,7 +125,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     }
                     // application/service/endpoint metrics
                     if (this.isApplicationServiceEndpointMetric()) {
-                        this.onApplicationChanges(false, false).then(function () {
+                        this.onApplicationChanges(true, false).then(function () {
                             if (_this.target.metric) {
                                 _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
                             }
@@ -314,7 +315,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                         // fresh internal used lists without re-rendering
                         if (this.isInfrastructure()) {
                             this.datasource.setRollupTimeInterval(this.target, this.timeFilter);
-                            this.onFilterChange(false);
+                            this.onFilterChange(true);
                         }
                         else if (this.isSLORequest()) {
                             this.loadConfiguredSLOs();
@@ -323,14 +324,14 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                             this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
                             if (this.isAnalyzeApplication()) {
                                 this.websiteApplicationLabel = "Application";
-                                this.onApplicationChanges(false, true);
+                                this.onApplicationChanges(true, true);
                             }
                             else if (this.isAnalyzeWebsite()) {
                                 this.websiteApplicationLabel = "Website";
-                                this.onWebsiteChanges(false, true);
+                                this.onWebsiteChanges(true, true);
                             }
                             else if (this.isApplicationServiceEndpointMetric()) {
-                                this.onApplicationChanges(false, false);
+                                this.onApplicationChanges(true, false);
                                 this.loadServices();
                                 this.loadEndpoints();
                             }
