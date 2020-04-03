@@ -1,10 +1,10 @@
-System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/beacon_types', './lists/max_metrics', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/beacon_types', './lists/max_metrics', './lists/slo_specifics', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, aggregation_function_1, beacon_types_1, max_metrics_1, operators_1, migration_1, lodash_1;
+    var sdk_1, aggregation_function_1, beacon_types_1, max_metrics_1, slo_specifics_1, operators_1, migration_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
@@ -19,6 +19,9 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
             },
             function (max_metrics_1_1) {
                 max_metrics_1 = max_metrics_1_1;
+            },
+            function (slo_specifics_1_1) {
+                slo_specifics_1 = slo_specifics_1_1;
             },
             function (operators_1_1) {
                 operators_1 = operators_1_1;
@@ -42,6 +45,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     this.$q = $q;
                     this.uniqueOperators = operators_1.default;
                     this.uniqueBeaconTypes = beacon_types_1.default;
+                    this.sloSpecifics = slo_specifics_1.default;
                     this.aggregationFunctions = aggregation_function_1.default;
                     this.websiteApplicationLabel = "";
                     this.customFilters = [];
@@ -61,6 +65,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     // APPLICATION_METRICS = '4';
                     // SERVICE_METRICS = '5';
                     // ENDPOINT_METRICS = '6';
+                    this.SLO_INFORMATION = '7';
                     this.defaults = {};
                     // target migration for downwards compatibility
                     migration_1.default(this.target);
@@ -79,6 +84,9 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     if (!this.target.metricCategory) {
                         this.target.metricCategory = this.BUILT_IN_METRICS;
                         this.target.canShowAllMetrics = false;
+                        if (this.datasource) {
+                            this.target.timeInterval = this.datasource.getDefaultMetricRollupDuration(this.timeFilter);
+                        }
                     }
                     this.previousMetricCategory = this.target.metricCategory;
                     // infrastructure (built-in & custom)
@@ -96,7 +104,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                             });
                         }
                     }
-                    // analyze applications
+                    // analyze application calls
                     if (this.isAnalyzeApplication()) {
                         this.websiteApplicationLabel = "Application";
                         this.onApplicationChanges(false, true).then(function () {
@@ -114,7 +122,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                             }
                         });
                     }
-                    // application/service/endpoint metric
+                    // application/service/endpoint metrics
                     if (this.isApplicationServiceEndpointMetric()) {
                         this.onApplicationChanges(false, false).then(function () {
                             if (_this.target.metric) {
@@ -123,6 +131,10 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                         });
                         this.loadServices();
                         this.loadEndpoints();
+                    }
+                    // slo information
+                    if (this.isSLORequest()) {
+                        this.loadConfiguredSLOs();
                     }
                 }
                 InstanaQueryCtrl.prototype.loadServices = function () {
@@ -159,6 +171,9 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                 InstanaQueryCtrl.prototype.isApplicationServiceEndpointMetric = function () {
                     return this.target.metricCategory === this.APPLICATION_SERVICE_ENDPOINT_METRICS;
                 };
+                InstanaQueryCtrl.prototype.isSLORequest = function () {
+                    return this.target.metricCategory === this.SLO_INFORMATION;
+                };
                 InstanaQueryCtrl.prototype.onWebsiteChanges = function (refresh, isAnalyze) {
                     var _this = this;
                     // select a meaningful default group
@@ -189,7 +204,6 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                         _this.allWebsiteMetrics = metrics;
                         _this.availableMetrics = lodash_1.default.filter(_this.allWebsiteMetrics, function (m) { return m.beaconTypes.includes(_this.target.entityType.key); });
                         _this.checkMetricAndRefresh(refresh);
-                        _this.adjustMetricSelectionPlaceholder();
                     });
                 };
                 InstanaQueryCtrl.prototype.onApplicationChanges = function (refresh, isAnalyze) {
@@ -221,7 +235,6 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     return this.datasource.application.getApplicationMetricsCatalog().then(function (metrics) {
                         _this.availableMetrics = metrics;
                         _this.checkMetricAndRefresh(refresh);
-                        _this.adjustMetricSelectionPlaceholder();
                     });
                 };
                 InstanaQueryCtrl.prototype.onServiceChanges = function (refresh) {
@@ -238,7 +251,6 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     return this.datasource.application.getApplicationMetricsCatalog().then(function (metrics) {
                         _this.availableMetrics = metrics;
                         _this.checkMetricAndRefresh(refresh);
-                        _this.adjustMetricSelectionPlaceholder();
                     });
                 };
                 InstanaQueryCtrl.prototype.onEndpointChanges = function (refresh) {
@@ -255,7 +267,24 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     return this.datasource.application.getApplicationMetricsCatalog().then(function (metrics) {
                         _this.availableMetrics = metrics;
                         _this.checkMetricAndRefresh(refresh);
-                        _this.adjustMetricSelectionPlaceholder();
+                    });
+                };
+                InstanaQueryCtrl.prototype.loadConfiguredSLOs = function () {
+                    var _this = this;
+                    if (!this.target.sloSpecific) {
+                        this.target.sloSpecific = this.sloSpecifics[0]; //set default value
+                    }
+                    this.datasource.slo.getConfiguredSLOs().then(function (reports) {
+                        _this.configuredReports = reports;
+                        if (!_this.target.sloReport || !_this.target.sloReport.key) {
+                            if (_this.configuredReports.length >= 1) {
+                                _this.target.sloReport = _this.configuredReports[0];
+                            }
+                            else {
+                                _this.target.sloReport === _this.EMPTY_DROPDOWN_TEXT;
+                            }
+                        }
+                        _this.refresh();
                     });
                 };
                 InstanaQueryCtrl.prototype.onFilterChange = function (refresh, findMatchingEntityTypes) {
@@ -287,6 +316,9 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                             this.datasource.setRollupTimeInterval(this.target, this.timeFilter);
                             this.onFilterChange(false);
                         }
+                        else if (this.isSLORequest()) {
+                            this.loadConfiguredSLOs();
+                        }
                         else {
                             this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
                             if (this.isAnalyzeApplication()) {
@@ -310,7 +342,6 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     var _this = this;
                     this.availableMetrics = lodash_1.default.filter(this.allWebsiteMetrics, function (m) { return m.beaconTypes.includes(_this.target.entityType.key); });
                     this.checkMetricAndRefresh(refresh);
-                    this.adjustMetricSelectionPlaceholder();
                 };
                 InstanaQueryCtrl.prototype.filterForEntityType = function (refresh, findMatchingEntityTypes) {
                     var _this = this;
@@ -320,8 +351,8 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                             _this.target.entityType = null; // entity selection label will be untouched
                             _this.resetMetricSelection();
                         }
-                        else if (_this.target.metric && refresh) {
-                            _this.panelCtrl.refresh();
+                        if (refresh) {
+                            _this.refresh();
                         }
                     });
                 };
@@ -358,7 +389,6 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                             _this.onMetricsFilter(refresh);
                         }
                         _this.checkMetricAndRefresh(refresh);
-                        _this.adjustMetricSelectionPlaceholder();
                     });
                 };
                 InstanaQueryCtrl.prototype.onMetricsFilter = function (refresh) {
@@ -367,7 +397,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                         this.availableMetrics = this.allCustomMetrics;
                         this.target.canShowAllMetrics = false;
                         this.target.showAllMetrics = false;
-                        this.panelCtrl.refresh();
+                        this.refresh();
                     }
                     else {
                         var filteredMetrics = this.allCustomMetrics;
@@ -382,7 +412,6 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                         }
                     }
                     this.checkMetricAndRefresh(refresh);
-                    this.adjustMetricSelectionPlaceholder();
                 };
                 InstanaQueryCtrl.prototype.isAbleToShowAllMetrics = function () {
                     return this.target.metricCategory === this.CUSTOM_METRICS
@@ -404,7 +433,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                 };
                 InstanaQueryCtrl.prototype.removeFilter = function (index) {
                     this.target.filters.splice(index, 1);
-                    this.panelCtrl.refresh();
+                    this.refresh();
                 };
                 InstanaQueryCtrl.prototype.onTagFilterChange = function (index) {
                     var filter = this.target.filters[index];
@@ -440,14 +469,15 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     else {
                         filter.isValid = false;
                     }
-                    this.panelCtrl.refresh();
+                    this.refresh();
                 };
                 InstanaQueryCtrl.prototype.checkMetricAndRefresh = function (refresh) {
                     if (this.target.metric && !lodash_1.default.includes(lodash_1.default.map(this.availableMetrics, function (m) { return m.key; }), this.target.metric.key)) {
                         this.resetMetricSelection();
                     }
-                    else if (refresh && this.target.metric || this.target.showAllMetrics) {
-                        this.panelCtrl.refresh();
+                    this.adjustMetricSelectionPlaceholder();
+                    if (refresh) {
+                        this.refresh();
                     }
                 };
                 InstanaQueryCtrl.prototype.selectionReset = function () {
@@ -458,7 +488,6 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     this.availableMetrics = [];
                     this.uniqueEntities = [];
                     this.uniqueTags = [];
-                    this.target.timeInterval = null;
                     this.resetEntityTypeSelection();
                     this.resetEntitySelection();
                     this.resetMetricSelection();
@@ -484,6 +513,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     this.serviceEndpointSelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.resetServices();
                     this.resetEndpoints();
+                    this.resetSLO();
                 };
                 InstanaQueryCtrl.prototype.resetMetricSelection = function () {
                     this.target.metric = null;
@@ -504,6 +534,10 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                 InstanaQueryCtrl.prototype.resetEndpoints = function () {
                     this.target.endpoint = null;
                     this.uniqueEndpoints = [];
+                };
+                InstanaQueryCtrl.prototype.resetSLO = function () {
+                    this.target.sloValue = null;
+                    this.target.sloReport = null;
                 };
                 InstanaQueryCtrl.prototype.adjustEntitySelectionPlaceholder = function () {
                     this.entitySelectionText = this.uniqueEntityTypes.length > 0
@@ -543,7 +577,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                             lodash_1.default.filter(this.uniqueEntities, function (entity) { return entity.label.includes(_this.target.serviceNamefilter); });
                     }
                     this.adjustServiceEndpointSelectionPlaceholder();
-                    this.panelCtrl.refresh();
+                    this.refresh();
                 };
                 InstanaQueryCtrl.prototype.onGroupChange = function () {
                     if (this.target.group && (this.isAnalyzeApplication() || this.isAnalyzeWebsite())) {
@@ -552,10 +586,18 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     if (!this.target.showGroupBySecondLevel) {
                         this.target.groupbyTagSecondLevelKey = null;
                     }
+                    this.refresh();
+                };
+                InstanaQueryCtrl.prototype.onSelect = function () {
+                    this.refresh();
+                };
+                InstanaQueryCtrl.prototype.refresh = function () {
                     this.panelCtrl.refresh();
                 };
-                InstanaQueryCtrl.prototype.onChange = function () {
-                    this.panelCtrl.refresh();
+                InstanaQueryCtrl.prototype.onSloValueChange = function () {
+                    if (this.target.sloValue <= 1.0 && this.target.sloValue > 0.0) {
+                        this.refresh();
+                    }
                 };
                 InstanaQueryCtrl.prototype.onMetricSelect = function () {
                     if (this.target.metric && !lodash_1.default.includes(this.target.metric.aggregations, this.target.aggregation)) {
@@ -564,7 +606,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     if (this.target.displayMaxMetricValue && !this.canShowMaxMetricValue()) {
                         this.target.displayMaxMetricValue = false;
                     }
-                    this.panelCtrl.refresh();
+                    this.refresh();
                 };
                 InstanaQueryCtrl.prototype.onAllMetricsSelect = function () {
                     if (this.target.showAllMetrics) {
@@ -574,10 +616,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     else {
                         this.target.showAllMetrics = false;
                     }
-                    this.panelCtrl.refresh();
-                };
-                InstanaQueryCtrl.prototype.onFreeTextMetricChange = function () {
-                    this.panelCtrl.refresh();
+                    this.refresh();
                 };
                 InstanaQueryCtrl.prototype.onTimeShiftChange = function () {
                     if (this.target.timeShift) {
@@ -587,7 +626,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                         this.target.timeShiftIsValid = true;
                     }
                     if (this.target.timeShiftIsValid) {
-                        this.panelCtrl.refresh();
+                        this.refresh();
                     }
                 };
                 InstanaQueryCtrl.prototype.onApplicationSelect = function () {
@@ -595,12 +634,12 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                     this.resetEndpoints();
                     this.loadServices();
                     this.loadEndpoints();
-                    this.panelCtrl.refresh();
+                    this.refresh();
                 };
                 InstanaQueryCtrl.prototype.onServiceSelect = function () {
                     this.resetEndpoints();
                     this.loadEndpoints();
-                    this.panelCtrl.refresh();
+                    this.refresh();
                 };
                 InstanaQueryCtrl.prototype.toggleFreeTextMetrics = function () {
                     this.onFilterChange(true, false);
@@ -613,7 +652,7 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                         this.target.aggregationFunction = this.aggregationFunctions[0];
                         this.target.labelFormat = "";
                     }
-                    this.panelCtrl.refresh();
+                    this.refresh();
                 };
                 InstanaQueryCtrl.prototype.canShowMaxMetricValue = function () {
                     var _this = this;
@@ -660,6 +699,9 @@ System.register(['app/plugins/sdk', './lists/aggregation_function', './lists/bea
                             _this.version = version;
                         });
                     }
+                };
+                InstanaQueryCtrl.prototype.isSloEnabled = function () {
+                    return this.datasource.isSloEnabled();
                 };
                 InstanaQueryCtrl.prototype.supportsApplicationPerspective = function () {
                     if (!this.target.entity || !this.target.entity.key) {

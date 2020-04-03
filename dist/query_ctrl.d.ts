@@ -10,6 +10,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     version: number;
     uniqueOperators: Array<Selectable>;
     uniqueBeaconTypes: Array<Selectable>;
+    sloSpecifics: Array<Selectable>;
     aggregationFunctions: {
         label: string;
     }[];
@@ -20,6 +21,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     uniqueServices: Array<Selectable>;
     uniqueEndpoints: Array<Selectable>;
     uniqueTags: Array<Selectable>;
+    configuredReports: Array<Selectable>;
     allWebsiteMetrics: Array<Selectable>;
     allTypes: Array<Selectable>;
     snapshots: Array<string>;
@@ -44,6 +46,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     ANALYZE_APPLICATION_METRICS: string;
     ANALYZE_WEBSITE_METRICS: string;
     APPLICATION_SERVICE_ENDPOINT_METRICS: string;
+    SLO_INFORMATION: string;
     defaults: {};
     /** @ngInject **/
     constructor($scope: any, $injector: any, templateSrv: any, backendSrv: any, $q: any);
@@ -55,10 +58,12 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     isAnalyzeWebsite(): boolean;
     isAnalyzeApplication(): boolean;
     isApplicationServiceEndpointMetric(): boolean;
-    onWebsiteChanges(refresh: any, isAnalyze: boolean): any;
-    onApplicationChanges(refresh: any, isAnalyze: boolean): any;
+    isSLORequest(): boolean;
+    onWebsiteChanges(refresh: boolean, isAnalyze: boolean): any;
+    onApplicationChanges(refresh: boolean, isAnalyze: boolean): any;
     onServiceChanges(refresh: boolean): any;
     onEndpointChanges(refresh: boolean): any;
+    loadConfiguredSLOs(): void;
     onFilterChange(refresh: boolean, findMatchingEntityTypes?: boolean): any;
     onMetricCategorySelect(): void;
     onBeaconTypeSelect(refresh: boolean): void;
@@ -78,16 +83,18 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     resetMetricSelection(): void;
     resetServices(): void;
     resetEndpoints(): void;
+    resetSLO(): void;
     adjustEntitySelectionPlaceholder(): void;
     adjustMetricSelectionPlaceholder(): void;
     adjustServiceEndpointSelectionPlaceholder(): void;
     buildSelectionPlaceholderText(selectableValues: any): string;
     onNamefilterChanges(): void;
     onGroupChange(): void;
-    onChange(): void;
+    onSelect(): void;
+    refresh(): void;
+    onSloValueChange(): void;
     onMetricSelect(): void;
     onAllMetricsSelect(): void;
-    onFreeTextMetricChange(): void;
     onTimeShiftChange(): void;
     onApplicationSelect(): void;
     onServiceSelect(): void;
@@ -103,5 +110,6 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     isAnalyzeCategory(): boolean;
     getAvailableTimeIntervals(): any;
     loadVersion(): void;
+    isSloEnabled(): any;
     supportsApplicationPerspective(): boolean;
 }

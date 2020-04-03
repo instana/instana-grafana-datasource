@@ -1,10 +1,10 @@
-System.register(["./util/rollup_granularity_util", './util/delta_util', './datasource_infrastructure', './datasource_application', "./datasource_endpoint", "./datasource_service", './datasource_website', "./util/aggregation_util", './datasource_abstract', './util/analyze_util', './migration', './cache', 'lodash'], function(exports_1) {
+System.register(["./util/rollup_granularity_util", './util/delta_util', './datasource_infrastructure', './datasource_application', "./datasource_endpoint", "./datasource_service", './datasource_website', "./util/aggregation_util", './datasource_abstract', './util/analyze_util', './datasource_slo', './migration', './cache', 'lodash'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var rollup_granularity_util_1, delta_util_1, datasource_infrastructure_1, datasource_application_1, datasource_endpoint_1, datasource_service_1, datasource_website_1, aggregation_util_1, datasource_abstract_1, analyze_util_1, migration_1, cache_1, lodash_1;
+    var rollup_granularity_util_1, delta_util_1, datasource_infrastructure_1, datasource_application_1, datasource_endpoint_1, datasource_service_1, datasource_website_1, aggregation_util_1, datasource_abstract_1, analyze_util_1, datasource_slo_1, migration_1, cache_1, lodash_1;
     var InstanaDatasource;
     return {
         setters:[
@@ -38,6 +38,9 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
             function (analyze_util_1_1) {
                 analyze_util_1 = analyze_util_1_1;
             },
+            function (datasource_slo_1_1) {
+                datasource_slo_1 = datasource_slo_1_1;
+            },
             function (migration_1_1) {
                 migration_1 = migration_1_1;
             },
@@ -58,6 +61,7 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
                     this.website = new datasource_website_1.default(instanceSettings, backendSrv, templateSrv, $q);
                     this.service = new datasource_service_1.default(instanceSettings, backendSrv, templateSrv, $q);
                     this.endpoint = new datasource_endpoint_1.default(instanceSettings, backendSrv, templateSrv, $q);
+                    this.slo = new datasource_slo_1.default(instanceSettings, backendSrv, templateSrv, $q);
                     this.availableGranularities = [];
                     this.availableRollups = [];
                     this.maxWindowSizeInfrastructure = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_infra);
@@ -65,6 +69,7 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
                     this.maxWindowSizeAnalyzeApplications = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_calls);
                     this.maxWindowSizeAnalyzeMetrics = this.hoursToMs(instanceSettings.jsonData.queryinterval_limit_app_metrics);
                     this.resultCache = new cache_1.default();
+                    this.sloIsEnabled = instanceSettings.jsonData.allowSlo;
                 }
                 InstanaDatasource.prototype.query = function (options) {
                     var _this = this;
@@ -108,6 +113,11 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
                             }
                             else if (target.metricCategory === _this.APPLICATION_SERVICE_ENDPOINT_METRICS) {
                                 return _this.getApplicationServiceEndpointMetrics(target, timeFilter).then(function (data) {
+                                    return _this.buildTargetWithAppendedDataResult(target, timeFilter, data);
+                                });
+                            }
+                            else if (target.metricCategory === _this.SLO_INFORMATION) {
+                                return _this.getSloInformation(target, timeFilter).then(function (data) {
                                     return _this.buildTargetWithAppendedDataResult(target, timeFilter, data);
                                 });
                             }
@@ -164,7 +174,7 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
                     };
                 };
                 InstanaDatasource.prototype.cacheResultIfNecessary = function (result, target) {
-                    if (this.supportsDeltaRequests() && this.hasResult(result)) {
+                    if (this.supportsDeltaRequests(target) && this.hasResult(result)) {
                         var cachedObj = {
                             timeFilter: target.timeFilter,
                             results: result
@@ -365,6 +375,9 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
                     }
                     return this.$q.resolve({ data: { items: [] } });
                 };
+                InstanaDatasource.prototype.getSloInformation = function (target, timeFilter) {
+                    return this.slo.fetchSLOReport(target, timeFilter);
+                };
                 InstanaDatasource.prototype.isInvalidQueryInterval = function (windowSize, queryIntervalLimit) {
                     if (queryIntervalLimit > 0) {
                         return Math.floor(windowSize / 1000) * 1000 > queryIntervalLimit;
@@ -390,8 +403,11 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
                 InstanaDatasource.prototype.metricFindQuery = function (query) {
                     throw new Error('Template Variable Support not implemented yet.');
                 };
-                InstanaDatasource.prototype.supportsDeltaRequests = function () {
+                InstanaDatasource.prototype.supportsDeltaRequests = function (target) {
                     var _this = this;
+                    if (this.SLO_INFORMATION === target.metricCategory) {
+                        return false;
+                    }
                     var version = this.resultCache.get('version');
                     if (!version) {
                         return this.getVersion().then(function (version) {
@@ -410,6 +426,9 @@ System.register(["./util/rollup_granularity_util", './util/delta_util', './datas
                     }, function (error) {
                         return null;
                     });
+                };
+                InstanaDatasource.prototype.isSloEnabled = function () {
+                    return this.sloIsEnabled;
                 };
                 InstanaDatasource.prototype.testDatasource = function () {
                     return this.doRequest('/api/monitoringState').then(function (result) {

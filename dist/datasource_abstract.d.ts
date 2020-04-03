@@ -19,6 +19,7 @@ export default class AbstractDatasource {
     ANALYZE_APPLICATION_METRICS: string;
     ANALYZE_WEBSITE_METRICS: string;
     APPLICATION_SERVICE_ENDPOINT_METRICS: string;
+    SLO_INFORMATION: string;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     currentTime: () => number;

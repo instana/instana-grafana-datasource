@@ -4,6 +4,7 @@ import InstanaEndpointDataSource from "./datasource_endpoint";
 import InstanaServiceDataSource from "./datasource_service";
 import InstanaWebsiteDataSource from './datasource_website';
 import AbstractDatasource from './datasource_abstract';
+import InstanaSLODataSource from './datasource_slo';
 import TimeFilter from './types/time_filter';
 import Cache from './cache';
 import Selectable from "./types/selectable";
@@ -13,6 +14,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     website: InstanaWebsiteDataSource;
     service: InstanaServiceDataSource;
     endpoint: InstanaEndpointDataSource;
+    slo: InstanaSLODataSource;
     availableGranularities: Array<Selectable>;
     availableRollups: Array<Selectable>;
     maxWindowSizeInfrastructure: number;
@@ -20,6 +22,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     maxWindowSizeAnalyzeApplications: number;
     maxWindowSizeAnalyzeMetrics: number;
     resultCache: Cache<any>;
+    sloIsEnabled: boolean;
     /** @ngInject */
     constructor(instanceSettings: any, backendSrv: any, templateSrv: any, $q: any);
     query(options: any): any;
@@ -50,6 +53,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     getAnalyzeWebsiteMetrics(target: any, timeFilter: TimeFilter): any;
     getAnalyzeApplicationMetrics(target: any, timeFilter: TimeFilter): any;
     getApplicationServiceEndpointMetrics(target: any, timeFilter: TimeFilter): any;
+    getSloInformation(target: any, timeFilter: TimeFilter): any;
     isInvalidQueryInterval(windowSize: number, queryIntervalLimit: number): boolean;
     rejectLargeTimeWindow(maxWindowSize: number): any;
     isApplicationSet(application: any): any;
@@ -57,7 +61,8 @@ export default class InstanaDatasource extends AbstractDatasource {
     isEndpointSet(endpoint: any): any;
     annotationQuery(options: any): void;
     metricFindQuery(query: string): void;
-    supportsDeltaRequests(): any;
+    supportsDeltaRequests(target: any): boolean;
     getVersion(): any;
+    isSloEnabled(): boolean;
     testDatasource(): any;
 }

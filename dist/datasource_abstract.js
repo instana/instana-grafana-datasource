@@ -14,9 +14,6 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
             }],
         execute: function() {
             AbstractDatasource = (function () {
-                // APPLICATION_METRICS = '4';
-                // SERVICE_METRICS = '5';
-                // ENDPOINT_METRICS = '6';
                 /** @ngInject */
                 function AbstractDatasource(instanceSettings, backendSrv, templateSrv, $q) {
                     this.backendSrv = backendSrv;
@@ -30,6 +27,10 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
                     this.ANALYZE_APPLICATION_METRICS = '2';
                     this.ANALYZE_WEBSITE_METRICS = '3';
                     this.APPLICATION_SERVICE_ENDPOINT_METRICS = '4'; // replaces previous
+                    // APPLICATION_METRICS = '4';
+                    // SERVICE_METRICS = '5';
+                    // ENDPOINT_METRICS = '6';
+                    this.SLO_INFORMATION = '7';
                     this.currentTime = function () {
                         return Date.now();
                     };

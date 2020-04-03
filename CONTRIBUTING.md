@@ -53,7 +53,7 @@ The actual screenshots are from "Quick Check" example below. Do not delete old s
 * Run the full build with `yarn build`.
 * Make sure that the quick check scenario described below works against:
 * - mountebank
-* - test-instana (with proxy)
+* - test-instana.pink (with proxy)
 * - qa-onprem (without proxy)
 * Update `src/plugin.json` with the new version number and the version date.
 * Run the full build again, this should update `dist/plugin.json`.
