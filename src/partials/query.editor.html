@@ -15,10 +15,10 @@
                 ng-change="ctrl.onMetricCategorySelect()">
           <option value="0" selected>Infrastructure built-in metrics</option>
           <option value="1">Infrastructure custom metrics</option>
-          <option value="4">Application/Service/Endpoint metrics</option>
+          <option value="4">Application/service/endpoint metrics</option>
           <option value="2">Analyze application calls</option>
           <option value="3">Analyze websites</option>
-          <option ng-show="ctrl.isSloEnabled()" value="7">SLO Information</option>
+          <option ng-show="ctrl.isSloEnabled()" value="7">SLO information</option>
         </select>
       </div>
     </div>
@@ -74,7 +74,7 @@
                ng-class="ctrl.target.queryIsValid ? 'ng-valid' : 'ng-invalid'"
                ng-model-options='{ debounce: 500 }'
                ng-change="ctrl.onFilterChange(true)"
-               placeholder="Please Specify"
+               placeholder="please specify"
                spellcheck='false'>
         <label class="gf-form-label query-keyword pointer min-width-8" for="in-type-{{ctrl.target.refId}}">
           Type
@@ -99,7 +99,7 @@
         <div class="gf-form">
           <label class="gf-form-label width-13 pointer query-keyword"
                  for="in-metric-filter-{{ctrl.target.refId}}-{{$index}}">
-            {{$index+1}}. Filter metric select
+            {{$index+1}}. filter metric select
             <info-popover position="top center" mode="right-normal">
               <p>Type to suggest metrics.</p>
             </info-popover>
@@ -110,7 +110,7 @@
                  ng-model="ctrl.target.customFilters[$index].value"
                  ng-model-options='{ debounce: 500 }'
                  ng-change="ctrl.onMetricsFilter(true)"
-                 placeholder="Please Specify"
+                 placeholder="please specify"
                  spellcheck='false'/>
           <button class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.removeCustomFilter($index)">
             <i class="fa fa-minus"></i>
@@ -163,7 +163,7 @@
                         checked="ctrl.target.displayMaxMetricValue"
                         on-change="ctrl.onSelect()"/>
         <label ng-show="ctrl.target.metricCategory === '1'" class="gf-form-label query-keyword pointer">
-          Show all Metrics
+          Show all metrics
           <info-popover position="top center" mode="right-normal">
             <p>You have the option to show all metrics in the graph once the amount of possible, selectable metrics is
               between 1 and 5.</p>
@@ -344,7 +344,7 @@
                ng-model='ctrl.target.groupbyTagSecondLevelKey'
                ng-model-options='{ debounce: 500 }'
                ng-change="ctrl.onSelect()"
-               placeholder="Please Specify"
+               placeholder="please specify"
                spellcheck='false'/>
       </div>
     </script>
@@ -398,7 +398,7 @@
         <div class="gf-form">
           <label class="gf-form-label query-keyword width-13 pointer"
                  for="in-filter-name-{{ctrl.target.refId}}-{{$index}}">
-            {{$index+1}}. Filter
+            {{$index+1}}. filter
             <info-popover position="top center" class="ng-invalid" mode="right-normal">
               <p>Filter by tag.</p>
             </info-popover>
@@ -427,7 +427,7 @@
                  ng-model="ctrl.target.filters[$index].stringValue"
                  ng-model-options='{ debounce: 500 }'
                  ng-change="ctrl.onTagFilterChange($index)"
-                 placeholder="{{ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR' ? 'Key=Value' : 'Please Specify'}}"
+                 placeholder="{{ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : 'please specify'}}"
                  spellcheck='false'/>
           <input id="in-filter-numberValue-{{ctrl.target.refId}}-{{$index}}"
                  type="number"
@@ -437,7 +437,7 @@
                  ng-model="ctrl.target.filters[$index].numberValue"
                  ng-model-options='{ debounce: 500 }'
                  ng-change="ctrl.onTagFilterChange($index)"
-                 placeholder="Please Specify"
+                 placeholder="please specify"
                  spellcheck='false'/>
           <select id="in-filter-booleanValue-{{ctrl.target.refId}}"
                   ng-show="ctrl.target.filters[$index].tag.type === 'BOOLEAN'"
@@ -491,7 +491,7 @@
         </select>
         <label class="gf-form-label query-keyword pointer"
                for="select-slo-specific-{{ctrl.target.refId}}">
-          SLO Value
+          SLO value
           <info-popover position="top center" mode="right-normal">
             <p>Type in your desired SLO value. E.g, 0.9 for 90% SLO.</p>
           </info-popover>
@@ -528,7 +528,7 @@
     <script type="text/ng-template" id="advanced_settings.html">
       <div class="gf-form">
         <label class="gf-form-label width-13 pointer" for="in-advanced-settings-{{ctrl.target.refId}}">
-          Show Advanced Settings
+          Show advanced settings
           <info-popover position="top center" mode="right-normal">
             <p>Show all additional settings.</p>
           </info-popover>
@@ -579,7 +579,7 @@
 
     <script type="text/ng-template" id="timeshift.html">
       <label class="gf-form-label query-keyword pointer width-13" for="in-timeshift-{{ctrl.target.refId}}">
-        Time Shift
+        Time shift
         <info-popover position="top center" mode="right-normal">
           <p>Specify the amount of hours that shall be used. The time shift function always go back in time, not
             forward. Accepts values such as 1s, 1m, 1h, 1d, 1w
@@ -598,7 +598,7 @@
 
     <script type="text/ng-template" id="freeTextMetrics.html">
       <label class="gf-form-label query-keyword width-13 pointer" for="in-free-text-metrics-{{ctrl.target.refId}}">
-        Enable Free Text Metrics
+        Enable free text metrics
         <info-popover position="top center" mode="right-normal">
           <p>Specify comma separated metrics directly in this text field. Once this field has a value, selected
             metrics from above will be ignored. Enabled as soon as a query is entered. Max 4 metrics supported.
@@ -619,7 +619,7 @@
 
     <script type="text/ng-template" id="aggregate_graphs.html">
       <label class="gf-form-label query-keyword width-13 pointer" for="in-aggregate-graphs-{{ctrl.target.refId}}">
-        Aggregate Query Graphs
+        Aggregate query graphs
         <info-popover position="top center" mode="right-normal">
           <p>Aggregate all graphs of a query.</p>
         </info-popover>
@@ -635,7 +635,7 @@
               ng-options="f as f.label for f in ctrl.aggregationFunctions track by f.label">
       </select>
       <label class="gf-form-label query-keyword width-13 pointer" for="in-hide-graphs-{{ctrl.target.refId}}">
-        Hide Original Graphs
+        Hide original graphs
         <info-popover position="top center" mode="right-normal">
           <p>Removes the original graphs resulted from the query and only shows the aggregated graph.</p>
         </info-popover>
