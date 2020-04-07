@@ -133,14 +133,14 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
         name: 'application.name',
         operator: 'EQUALS',
         value: target.entity.label,
-        entity: 'DESTINATION'
+        entity: target.applicationCallToEntity.key
       });
     }
 
     _.forEach(target.filters, filter => {
       if (filter.isValid) {
         let tagFilter = createTagFilter(filter);
-        tagFilter['groupbyTagEntity'] = filter.tag.tagEntity;
+        tagFilter['groupbyTagEntity'] = filter.callToEntity.key;
         tagFilters.push(tagFilter);
       }
     });
@@ -161,7 +161,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       groupbyTag: target.group.key
     };
 
-    group['groupbyTagEntity'] = target.group.tagEntity;
+    group['groupbyTagEntity'] = target.callToEntity.key;
 
     if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
       group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
