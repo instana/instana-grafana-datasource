@@ -30,7 +30,8 @@ export function readItemMetrics(target, response, getLabel) {
       return {
         'target': getLabel(target, item, key, index),
         'datapoints': _.map(value, metric => [metric[1], metric[0]]),
-        'refId': target.refId
+        'refId': target.refId,
+        'key': target.stableHash
       };
     });
   }));

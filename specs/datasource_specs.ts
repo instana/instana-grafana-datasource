@@ -365,7 +365,7 @@ describe('Given an InstanaDatasource', function() {
       }, timeFilter)
       .then(function(results) {
         expect(results.length).to.equal(2);
-        expect(results[0]).to.eql({ snapshotId: 'A', host: 'Stans-Macbook-Pro', response: { status: 200, data: { label: 'label for A (on host "Stans-Macbook-Pro")' }}});
+        expect(results[0]).to.eql({ snapshotId: 'A', host: 'Stans-Macbook-Pro', response: { status: 200, data: { label: 'label for A' }}});
         expect(results[1]).to.eql({ snapshotId: 'B', host: '', response: { status: 200, data: { label: 'label for B' }}});
       });
     })
