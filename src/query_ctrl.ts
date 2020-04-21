@@ -590,6 +590,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.canShowAllMetrics = false;
     this.target.displayMaxMetricValue = false;
     this.serviceEndpointSelectionText = this.EMPTY_DROPDOWN_TEXT;
+    this.target.applicationCallToEntity = null;
+    this.target.callToEntity = null;
     this.resetServices();
     this.resetEndpoints();
     this.resetSLO();
@@ -720,6 +722,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
     if (this.target.timeShiftIsValid) {
       this.refresh();
     }
+  }
+
+  onEntitySelect() {
+    if (this.isAnalyzeApplication() && this.target.entity && this.target.entity.key === null) {
+      this.target.applicationCallToEntity = this.callToEntities[0];
+    }
+
+    this.refresh();
   }
 
   onApplicationSelect() {

@@ -297,22 +297,22 @@
             <p>Select your {{ctrl.websiteApplicationLabel}}.</p>
           </info-popover>
         </label>
-        <div class="gf-form-select-wrapper full-width min-width-12">
-          <select id="in-{{ctrl.websiteApplicationLabel}}-{{ctrl.target.refId}}"
-                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                  ng-model="ctrl.target.entity"
-                  ng-change="ctrl.onSelect()"
-                  ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
-          </select>
-        </div>
         <div ng-show="ctrl.isAnalyzeApplication()" class="gf-form-select-wrapper min-width-6">
-            <select id="in-group-{{ctrl.target.refId}}"
+          <select id="in-group-{{ctrl.target.refId}}"
                   ng-disabled="ctrl.target.entity.key === null"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.applicationCallToEntity"
                   ng-change="ctrl.onSelect()"
                   ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
-            </select>
+          </select>
+        </div>
+        <div class="gf-form-select-wrapper full-width min-width-12">
+          <select id="in-{{ctrl.websiteApplicationLabel}}-{{ctrl.target.refId}}"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                  ng-model="ctrl.target.entity"
+                  ng-change="ctrl.onEntitySelect()"
+                  ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
+          </select>
         </div>
         <label ng-show="ctrl.target.metricCategory === '3'" class="gf-form-label query-keyword pointer"
                for="in-beacontype-{{ctrl.target.refId}}">
@@ -337,6 +337,14 @@
             <p>Group by tag.</p>
           </info-popover>
         </label>
+        <div ng-show="ctrl.isAnalyzeApplication()" class="gf-form-select-wrapper">
+          <select id="in-group-{{ctrl.target.refId}}"
+                  class="gf-form-input ng-pristine ng-valid min-width-6 ng-not-empty ng-touched"
+                  ng-model="ctrl.target.callToEntity"
+                  ng-change="ctrl.onSelect()"
+                  ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
+          </select>
+        </div>
         <div ng-show="ctrl.isAnalyzeCategory()"
              class="gf-form-select-wrapper full-width min-width-12 ">
           <select id="in-group-{{ctrl.target.refId}}"
@@ -355,15 +363,6 @@
                ng-change="ctrl.onSelect()"
                placeholder="please specify"
                spellcheck='false'/>
-        <div ng-show="ctrl.isAnalyzeApplication()"
-               class="gf-form-select-wrapper ">
-            <select id="in-group-{{ctrl.target.refId}}"
-                  class="gf-form-input ng-pristine ng-valid min-width-6 ng-not-empty ng-touched"
-                  ng-model="ctrl.target.callToEntity"
-                  ng-change="ctrl.onSelect()"
-                  ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
-            </select>
-        </div>
       </div>
     </script>
 
