@@ -52,7 +52,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     metrics = this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`).then(catalogResponse =>
       catalogResponse.data.map(entry => ({
         'key': entry.metricId,
-        'label': metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // custom-in metrics have shorter descriptions
+        'label': entry.label,
         'aggregations': ['MEAN', 'SUM'],
         'entityType': entry.pluginId
       }))
