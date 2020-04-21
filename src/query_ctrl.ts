@@ -117,7 +117,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // analyze application calls
     if (this.isAnalyzeApplication()) {
-      this.websiteApplicationLabel = "Application";
+      this.websiteApplicationLabel = "application";
       this.onApplicationChanges(true, true).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -127,7 +127,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     // analyze websites
     if (this.isAnalyzeWebsite()) {
-      this.websiteApplicationLabel = "Website";
+      this.websiteApplicationLabel = "website";
       this.onWebsiteChanges(true, true).then(() => {
         if (this.target.metric) {
           this.target.metric = _.find(this.availableMetrics, m => m.key === this.target.metric.key);
@@ -380,10 +380,10 @@ export class InstanaQueryCtrl extends QueryCtrl {
       } else {
         this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
         if (this.isAnalyzeApplication()) {
-          this.websiteApplicationLabel = "Application";
+          this.websiteApplicationLabel = "application";
           this.onApplicationChanges(true, true);
         } else if (this.isAnalyzeWebsite()) {
-          this.websiteApplicationLabel = "Website";
+          this.websiteApplicationLabel = "website";
           this.onWebsiteChanges(true, true);
         } else if (this.isApplicationServiceEndpointMetric()) {
           this.onApplicationChanges(true, false);
