@@ -56,12 +56,13 @@ export function hasIntersection(t1: TimeFilter, t2: TimeFilter): boolean {
 */
 export function appendData(newDeltaData, cachedData): any {
   _.each(newDeltaData, (deltaData, index) => {
-    var matchingCachedData = _.find(cachedData, o => o.target === deltaData.target);
+    var matchingCachedData = _.find(cachedData, o => o.key === deltaData.key);
     if (matchingCachedData && deltaData.datapoints) {
       const size = matchingCachedData.datapoints.length;
       let datapoints = deltaData.datapoints.concat(matchingCachedData.datapoints);
       datapoints = _.sortedUniqBy(datapoints.sort((a, b) => a[1] - b[1]), a => a[1]);
       matchingCachedData.datapoints = _.takeRight(datapoints, size);
+      matchingCachedData.target = deltaData.target;
     } else {
       cachedData.push(deltaData);
     }

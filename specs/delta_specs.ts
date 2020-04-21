@@ -171,7 +171,8 @@ function generateTestData(amountOfTimeseries, numberOfEntries) {
     data.push({
       target: "Metrics for " + i,
       refId: "A",
-      datapoints: timeseries
+      datapoints: timeseries,
+      key: "Metrics for " + i
     });
   }
   return data;
