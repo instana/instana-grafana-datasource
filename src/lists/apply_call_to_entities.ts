@@ -1,4 +1,4 @@
 export default [
-    { key: "DESTINATION", label: "Destination" },
-    { key: "SOURCE", label: "Source" }
+    { key: "DESTINATION", label: "Dest" },
+    { key: "SOURCE", label: "Src" }
   ];
