@@ -25,6 +25,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   uniqueOperators: Array<Selectable> = operators;
   uniqueBeaconTypes: Array<Selectable> = beaconTypes;
   sloSpecifics: Array<Selectable> = sloInfo;
+  callToEntities: Array<Selectable> = call_to_entities;
   aggregationFunctions = aggregation_functions;
 
   uniqueEntityTypes: Array<Selectable>; // subset of allEntityTypes filtered by DF
@@ -257,11 +258,11 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
     if (isAnalyze) {
       if (!this.target.callToEntity) {
-        this.target.callToEntity = call_to_entities[0];
+        this.target.callToEntity = this.callToEntities[0];
       }
 
       if (!this.target.applicationCallToEntity) {
-        this.target.applicationCallToEntity = call_to_entities[0];
+        this.target.applicationCallToEntity = this.callToEntities[0];
       }
 
       this.datasource.application.getApplicationTags().then(
@@ -505,7 +506,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       numberValue: null,
       booleanValue: "true",
       isValid: false,
-      callToEntity: call_to_entities[0]
+      callToEntity: this.callToEntities[0]
     });
   }
 
@@ -725,7 +726,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
 
   onEntitySelect() {
     if (this.isAnalyzeApplication() && this.target.entity && this.target.entity.key === null) {
-      this.target.applicationCallToEntity = call_to_entities[0];
+      this.target.applicationCallToEntity = this.callToEntities[0];
     }
 
     this.refresh();
