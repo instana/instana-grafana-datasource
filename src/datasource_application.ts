@@ -139,8 +139,8 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
 
     _.forEach(target.filters, filter => {
       if (filter.isValid) {
-        let tagFilter = createTagFilter(filter);
-        tagFilter['groupbyTagEntity'] = filter.callToEntity.key;
+        let tagFilter = createTagFilter(filter, true);
+        tagFilter['groupbyTagEntity'] = filter.entity.key;
         tagFilters.push(tagFilter);
       }
     });

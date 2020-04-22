@@ -506,7 +506,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
       numberValue: null,
       booleanValue: "true",
       isValid: false,
-      callToEntity: this.callToEntities[0]
+      entity: this.callToEntities[0]
     });
   }
 

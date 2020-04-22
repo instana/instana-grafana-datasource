@@ -423,7 +423,7 @@
           <div class="gf-form-select-wrapper min-width-6">
             <select id="in-group-{{ctrl.target.refId}}"
                     class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
-                    ng-model="ctrl.target.filters[$index].callToEntity"
+                    ng-model="ctrl.target.filters[$index].entity"
                     ng-change="ctrl.onSelect()"
                     ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
             </select>
