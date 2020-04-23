@@ -2,6 +2,7 @@
 import {QueryCtrl} from 'app/plugins/sdk';
 
 import {getDefaultMetricRollupDuration} from "./util/rollup_granularity_util";
+import call_to_entities from './lists/apply_call_to_entities';
 import aggregation_functions from './lists/aggregation_function';
 import beaconTypes from './lists/beacon_types';
 import max_metrics from './lists/max_metrics';
@@ -24,6 +25,7 @@ export class InstanaQueryCtrl extends QueryCtrl {
   uniqueOperators: Array<Selectable> = operators;
   uniqueBeaconTypes: Array<Selectable> = beaconTypes;
   sloSpecifics: Array<Selectable> = sloInfo;
+  callToEntities: Array<Selectable> = call_to_entities;
   aggregationFunctions = aggregation_functions;
 
   uniqueEntityTypes: Array<Selectable>; // subset of allEntityTypes filtered by DF
@@ -255,6 +257,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
     );
 
     if (isAnalyze) {
+      if (!this.target.callToEntity) {
+        this.target.callToEntity = this.callToEntities[0];
+      }
+
+      if (!this.target.applicationCallToEntity) {
+        this.target.applicationCallToEntity = this.callToEntities[0];
+      }
+
       this.datasource.application.getApplicationTags().then(
         applicationTags => {
           this.uniqueTags =
@@ -495,7 +505,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
       stringValue: "",
       numberValue: null,
       booleanValue: "true",
-      isValid: false
+      isValid: false,
+      entity: this.callToEntities[0]
     });
   }
 
@@ -579,6 +590,8 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.target.canShowAllMetrics = false;
     this.target.displayMaxMetricValue = false;
     this.serviceEndpointSelectionText = this.EMPTY_DROPDOWN_TEXT;
+    this.target.applicationCallToEntity = null;
+    this.target.callToEntity = null;
     this.resetServices();
     this.resetEndpoints();
     this.resetSLO();
@@ -709,6 +722,14 @@ export class InstanaQueryCtrl extends QueryCtrl {
     if (this.target.timeShiftIsValid) {
       this.refresh();
     }
+  }
+
+  onEntitySelect() {
+    if (this.isAnalyzeApplication() && this.target.entity && this.target.entity.key === null) {
+      this.target.applicationCallToEntity = this.callToEntities[0];
+    }
+
+    this.refresh();
   }
 
   onApplicationSelect() {

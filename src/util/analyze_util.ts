@@ -5,12 +5,16 @@ import Granularity from "../types/granularity";
 
 const MAX_ALLOWED_DATA_POINTS = 1000;
 
-export function createTagFilter(filter: TagFilter) {
-  const tagFilter = {
+export function createTagFilter(filter: TagFilter, useEntity = false) {
+  let tagFilter = {
     name: filter.tag.key,
     operator: filter.operator.key,
     value: filter.stringValue
   };
+
+  if (useEntity) {
+    tagFilter['entity'] = filter.entity.key;
+  }
 
   if ('NUMBER' === filter.tag.type) {
     if (filter.numberValue !== null) {

@@ -8,7 +8,7 @@
           <p>Select a metric category.</p>
         </info-popover>
       </label>
-      <div class="gf-form-select-wrapper gf-form-select-wrapper--has-help-icon" style="width: 100%;">
+      <div class="gf-form-select-wrapper " style="width: 100%;">
         <select id="in-category-{{ctrl.target.refId}}"
                 class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                 ng-model="ctrl.target.metricCategory"
@@ -82,7 +82,7 @@
             <p>Select an entity type for a list of available metrics.</p>
           </info-popover>
         </label>
-        <div class="gf-form-select-wrapper width-24 gf-form-select-wrapper--has-help-icon">
+        <div class="gf-form-select-wrapper width-24">
           <select id="in-type-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.entityType"
@@ -139,7 +139,7 @@
             <p>Select the metric you wish to plot.</p>
           </info-popover>
         </label>
-        <div class="gf-form-select-wrapper gf-form-select-wrapper--has-help-icon full-width">
+        <div class="gf-form-select-wrapper full-width">
           <select id="in-metric-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched "
                   ng-disabled="(ctrl.target.canShowAllMetrics && ctrl.target.showAllMetrics) || ctrl.target.freeTextMetrics"
@@ -198,7 +198,7 @@
             <p>Select the rollup value.</p>
           </info-popover>
         </label>
-        <div class="gf-form-select-wrapper min-width-8 gf-form-select-wrapper--has-help-icon">
+        <div class="gf-form-select-wrapper min-width-6">
           <select id="in-timeInterval-{{ctrl.target.refId}}"
                   ng-disabled="ctrl.getAvailableTimeIntervals().length <= 1"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
@@ -297,11 +297,20 @@
             <p>Select your {{ctrl.websiteApplicationLabel}}.</p>
           </info-popover>
         </label>
-        <div class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
+        <div ng-show="ctrl.isAnalyzeApplication()" class="gf-form-select-wrapper min-width-6">
+          <select id="in-group-{{ctrl.target.refId}}"
+                  ng-disabled="ctrl.target.entity.key === null"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                  ng-model="ctrl.target.applicationCallToEntity"
+                  ng-change="ctrl.onSelect()"
+                  ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
+          </select>
+        </div>
+        <div class="gf-form-select-wrapper full-width min-width-12">
           <select id="in-{{ctrl.websiteApplicationLabel}}-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.entity"
-                  ng-change="ctrl.onSelect()"
+                  ng-change="ctrl.onEntitySelect()"
                   ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
           </select>
         </div>
@@ -313,7 +322,7 @@
           </info-popover>
         </label>
         <div ng-show="ctrl.target.metricCategory === '3'"
-             class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
+             class="gf-form-select-wrapper full-width min-width-12 ">
           <select id="in-beacontype-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.entityType"
@@ -328,8 +337,16 @@
             <p>Group by tag.</p>
           </info-popover>
         </label>
+        <div ng-show="ctrl.isAnalyzeApplication()" class="gf-form-select-wrapper">
+          <select id="in-group-{{ctrl.target.refId}}"
+                  class="gf-form-input ng-pristine ng-valid min-width-6 ng-not-empty ng-touched"
+                  ng-model="ctrl.target.callToEntity"
+                  ng-change="ctrl.onSelect()"
+                  ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
+          </select>
+        </div>
         <div ng-show="ctrl.isAnalyzeCategory()"
-             class="gf-form-select-wrapper full-width min-width-12 gf-form-select-wrapper--has-help-icon">
+             class="gf-form-select-wrapper full-width min-width-12 ">
           <select id="in-group-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.group"
@@ -403,7 +420,15 @@
               <p>Filter by tag.</p>
             </info-popover>
           </label>
-          <div class="gf-form-select-wrapper width-14 gf-form-select-wrapper--has-help-icon">
+          <div class="gf-form-select-wrapper min-width-6">
+            <select id="in-group-{{ctrl.target.refId}}"
+                    class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                    ng-model="ctrl.target.filters[$index].entity"
+                    ng-change="ctrl.onSelect()"
+                    ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
+            </select>
+          </div>
+          <div class="gf-form-select-wrapper width-14 ">
             <select id="in-filter-name-{{ctrl.target.refId}}-{{$index}}"
                     class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                     ng-model="ctrl.target.filters[$index].tag"
@@ -411,7 +436,7 @@
                     ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
             </select>
           </div>
-          <div class="gf-form-select-wrapper width-8 gf-form-select-wrapper--has-help-icon">
+          <div class="gf-form-select-wrapper width-8 ">
             <select id="in-filter-operator-{{ctrl.target.refId}}-{{$index}}"
                     class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                     ng-model="ctrl.target.filters[$index].operator"
