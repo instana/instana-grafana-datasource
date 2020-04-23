@@ -52,7 +52,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
     metrics = this.doRequest(`/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`).then(catalogResponse =>
       catalogResponse.data.map(entry => ({
         'key': entry.metricId,
-        'label': metricCategory === this.CUSTOM_METRICS ? entry.description : entry.label, // custom-in metrics have shorter descriptions
+        'label': entry.label,
         'aggregations': ['MEAN', 'SUM'],
         'entityType': entry.pluginId
       }))
@@ -80,7 +80,6 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       return snapshots;
     }
 
-    const windowSize = this.getWindowSize(timeFilter);
     const fetchSnapshotContextsUrl = `/api/snapshots/context` +
       `?q=${query}` +
       `&from=${timeFilter.from}` +
@@ -185,7 +184,8 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
         var result = {
           'target': this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
           'datapoints': _.map(timeseries, value => [value.value, value.timestamp]),
-          'refId': target.refId
+          'refId': target.refId,
+          'key': target.stableHash
         };
 
         if (target.displayMaxMetricValue) {
@@ -211,10 +211,13 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
       return [maxValue, series.timestamp];
     });
 
+    var maxLabel = this.convertMetricNameToMaxLabel(target.metric);
+
     return {
-      'target': resultLabel + ' ' + this.convertMetricNameToMaxLabel(target.metric),
+      'target': resultLabel + ' ' + maxLabel,
       'datapoints': datapoints,
-      'refId': target.refId
+      'refId': target.refId,
+      'key': target.stableHash + maxLabel
     };
   }
 

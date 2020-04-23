@@ -191,9 +191,9 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 If no custom format is provided the default label '_$label ($website) $metric_' will be shown.
 
-##### SLO Information
+#### SLO Information
 
-Display specific SLO/SLI information in Grafana based on Instana. This category works a bit more different than the others.
+Display specific SLO/SLI information in Grafana based on Instana. This category can be enabled by going into the Instana Grafana plugin's settings and enable the `Enable SLO Dashboards` toggle. Then, the category will be visible next to the others.
 
 For SLI:
 Use the Gauge visualization to display the SLI. Move to the Threshold settings and switch the colors (red to green, green to red). Type in your SLO in order to properly show the SLO threshold. Further, choose "percent" as your unit (Field settings).

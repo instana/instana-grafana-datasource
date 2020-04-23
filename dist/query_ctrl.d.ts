@@ -11,6 +11,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     uniqueOperators: Array<Selectable>;
     uniqueBeaconTypes: Array<Selectable>;
     sloSpecifics: Array<Selectable>;
+    callToEntities: Array<Selectable>;
     aggregationFunctions: {
         label: string;
     }[];
@@ -96,6 +97,7 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     onMetricSelect(): void;
     onAllMetricsSelect(): void;
     onTimeShiftChange(): void;
+    onEntitySelect(): void;
     onApplicationSelect(): void;
     onServiceSelect(): void;
     toggleFreeTextMetrics(): void;

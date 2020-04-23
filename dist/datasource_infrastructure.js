@@ -50,7 +50,6 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './l
                     return entityTypes;
                 };
                 InstanaInfrastructureDataSource.prototype.getMetricsCatalog = function (plugin, metricCategory) {
-                    var _this = this;
                     var key = plugin.key + this.SEPARATOR + metricCategory;
                     var metrics = this.catalogCache.get(key);
                     if (metrics) {
@@ -60,7 +59,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './l
                     metrics = this.doRequest("/api/infrastructure-monitoring/catalog/metrics/" + plugin.key + "?filter=" + filter).then(function (catalogResponse) {
                         return catalogResponse.data.map(function (entry) { return ({
                             'key': entry.metricId,
-                            'label': metricCategory === _this.CUSTOM_METRICS ? entry.description : entry.label,
+                            'label': entry.label,
                             'aggregations': ['MEAN', 'SUM'],
                             'entityType': entry.pluginId
                         }); });
@@ -84,7 +83,6 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './l
                     if (snapshots) {
                         return snapshots;
                     }
-                    var windowSize = this.getWindowSize(timeFilter);
                     var fetchSnapshotContextsUrl = "/api/snapshots/context" +
                         ("?q=" + query) +
                         ("&from=" + timeFilter.from) +
@@ -180,7 +178,8 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './l
                             var result = {
                                 'target': _this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
                                 'datapoints': lodash_1.default.map(timeseries, function (value) { return [value.value, value.timestamp]; }),
-                                'refId': target.refId
+                                'refId': target.refId,
+                                'key': target.stableHash
                             };
                             if (target.displayMaxMetricValue) {
                                 var maxValue = _this.getMaxMetricValue(target.metric, snapshot);
@@ -201,10 +200,12 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './l
                     var datapoints = lodash_1.default.map(timeseries, function (series, index) {
                         return [maxValue, series.timestamp];
                     });
+                    var maxLabel = this.convertMetricNameToMaxLabel(target.metric);
                     return {
-                        'target': resultLabel + ' ' + this.convertMetricNameToMaxLabel(target.metric),
+                        'target': resultLabel + ' ' + maxLabel,
                         'datapoints': datapoints,
-                        'refId': target.refId
+                        'refId': target.refId,
+                        'key': target.stableHash + maxLabel
                     };
                 };
                 InstanaInfrastructureDataSource.prototype.convertRelativeToAbsolute = function (datapoints, maxValue) {

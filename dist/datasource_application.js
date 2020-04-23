@@ -129,13 +129,13 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                             name: 'application.name',
                             operator: 'EQUALS',
                             value: target.entity.label,
-                            entity: 'DESTINATION'
+                            entity: target.applicationCallToEntity.key
                         });
                     }
                     lodash_1.default.forEach(target.filters, function (filter) {
                         if (filter.isValid) {
-                            var tagFilter = analyze_util_1.createTagFilter(filter);
-                            tagFilter['groupbyTagEntity'] = filter.tag.tagEntity;
+                            var tagFilter = analyze_util_1.createTagFilter(filter, true);
+                            tagFilter['groupbyTagEntity'] = filter.entity.key;
                             tagFilters.push(tagFilter);
                         }
                     });
@@ -152,7 +152,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                     var group = {
                         groupbyTag: target.group.key
                     };
-                    group['groupbyTagEntity'] = target.group.tagEntity;
+                    group['groupbyTagEntity'] = target.callToEntity.key;
                     if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
                         group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
                     }

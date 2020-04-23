@@ -40,12 +40,13 @@ System.register(['lodash'], function(exports_1) {
     */
     function appendData(newDeltaData, cachedData) {
         lodash_1.default.each(newDeltaData, function (deltaData, index) {
-            var matchingCachedData = lodash_1.default.find(cachedData, function (o) { return o.target === deltaData.target; });
+            var matchingCachedData = lodash_1.default.find(cachedData, function (o) { return o.key === deltaData.key; });
             if (matchingCachedData && deltaData.datapoints) {
                 var size = matchingCachedData.datapoints.length;
                 var datapoints = deltaData.datapoints.concat(matchingCachedData.datapoints);
                 datapoints = lodash_1.default.sortedUniqBy(datapoints.sort(function (a, b) { return a[1] - b[1]; }), function (a) { return a[1]; });
                 matchingCachedData.datapoints = lodash_1.default.takeRight(datapoints, size);
+                matchingCachedData.target = deltaData.target;
             }
             else {
                 cachedData.push(deltaData);

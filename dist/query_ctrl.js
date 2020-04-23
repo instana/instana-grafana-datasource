@@ -1,10 +1,10 @@
-System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/aggregation_function', './lists/beacon_types', './lists/max_metrics', './lists/slo_specifics', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
+System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/apply_call_to_entities', './lists/aggregation_function', './lists/beacon_types', './lists/max_metrics', './lists/slo_specifics', './lists/operators', './migration', 'lodash', './css/query_editor.css!'], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var sdk_1, rollup_granularity_util_1, aggregation_function_1, beacon_types_1, max_metrics_1, slo_specifics_1, operators_1, migration_1, lodash_1;
+    var sdk_1, rollup_granularity_util_1, apply_call_to_entities_1, aggregation_function_1, beacon_types_1, max_metrics_1, slo_specifics_1, operators_1, migration_1, lodash_1;
     var InstanaQueryCtrl;
     return {
         setters:[
@@ -13,6 +13,9 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
             },
             function (rollup_granularity_util_1_1) {
                 rollup_granularity_util_1 = rollup_granularity_util_1_1;
+            },
+            function (apply_call_to_entities_1_1) {
+                apply_call_to_entities_1 = apply_call_to_entities_1_1;
             },
             function (aggregation_function_1_1) {
                 aggregation_function_1 = aggregation_function_1_1;
@@ -49,6 +52,7 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
                     this.uniqueOperators = operators_1.default;
                     this.uniqueBeaconTypes = beacon_types_1.default;
                     this.sloSpecifics = slo_specifics_1.default;
+                    this.callToEntities = apply_call_to_entities_1.default;
                     this.aggregationFunctions = aggregation_function_1.default;
                     this.websiteApplicationLabel = "";
                     this.customFilters = [];
@@ -107,7 +111,7 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
                     }
                     // analyze application calls
                     if (this.isAnalyzeApplication()) {
-                        this.websiteApplicationLabel = "Application";
+                        this.websiteApplicationLabel = "application";
                         this.onApplicationChanges(true, true).then(function () {
                             if (_this.target.metric) {
                                 _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
@@ -116,7 +120,7 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
                     }
                     // analyze websites
                     if (this.isAnalyzeWebsite()) {
-                        this.websiteApplicationLabel = "Website";
+                        this.websiteApplicationLabel = "website";
                         this.onWebsiteChanges(true, true).then(function () {
                             if (_this.target.metric) {
                                 _this.target.metric = lodash_1.default.find(_this.availableMetrics, function (m) { return m.key === _this.target.metric.key; });
@@ -224,6 +228,12 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
                         }
                     });
                     if (isAnalyze) {
+                        if (!this.target.callToEntity) {
+                            this.target.callToEntity = this.callToEntities[0];
+                        }
+                        if (!this.target.applicationCallToEntity) {
+                            this.target.applicationCallToEntity = this.callToEntities[0];
+                        }
                         this.datasource.application.getApplicationTags().then(function (applicationTags) {
                             _this.uniqueTags =
                                 lodash_1.default.sortBy(applicationTags, 'key');
@@ -323,11 +333,11 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
                         else {
                             this.datasource.setGranularityTimeInterval(this.target, this.timeFilter);
                             if (this.isAnalyzeApplication()) {
-                                this.websiteApplicationLabel = "Application";
+                                this.websiteApplicationLabel = "application";
                                 this.onApplicationChanges(true, true);
                             }
                             else if (this.isAnalyzeWebsite()) {
-                                this.websiteApplicationLabel = "Website";
+                                this.websiteApplicationLabel = "website";
                                 this.onWebsiteChanges(true, true);
                             }
                             else if (this.isApplicationServiceEndpointMetric()) {
@@ -429,7 +439,8 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
                         stringValue: "",
                         numberValue: null,
                         booleanValue: "true",
-                        isValid: false
+                        isValid: false,
+                        entity: this.callToEntities[0]
                     });
                 };
                 InstanaQueryCtrl.prototype.removeFilter = function (index) {
@@ -512,6 +523,8 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
                     this.target.canShowAllMetrics = false;
                     this.target.displayMaxMetricValue = false;
                     this.serviceEndpointSelectionText = this.EMPTY_DROPDOWN_TEXT;
+                    this.target.applicationCallToEntity = null;
+                    this.target.callToEntity = null;
                     this.resetServices();
                     this.resetEndpoints();
                     this.resetSLO();
@@ -629,6 +642,12 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
                     if (this.target.timeShiftIsValid) {
                         this.refresh();
                     }
+                };
+                InstanaQueryCtrl.prototype.onEntitySelect = function () {
+                    if (this.isAnalyzeApplication() && this.target.entity && this.target.entity.key === null) {
+                        this.target.applicationCallToEntity = this.callToEntities[0];
+                    }
+                    this.refresh();
                 };
                 InstanaQueryCtrl.prototype.onApplicationSelect = function () {
                     this.resetServices();

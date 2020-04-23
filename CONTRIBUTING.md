@@ -136,8 +136,8 @@ Switching the Visualization for the custom metric above to `Singlestat` and `Gau
 
 #### Analyze application calls
 * Category: `Analyze application calls`
-* Application: `AWS instances`
-* Group by: `endpoint.name`
+* Application: `Dest` `AWS instances`
+* Group by: `Dest` `endpoint.name`
 * Metric: `Call latency (latency)` `MEAN`
 * Legend format: ``
 

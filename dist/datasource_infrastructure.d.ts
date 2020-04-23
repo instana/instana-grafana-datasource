@@ -24,6 +24,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
         'target': string;
         'datapoints': any;
         'refId': any;
+        'key': string;
     };
     convertRelativeToAbsolute(datapoints: any, maxValue: any): any;
     convertMetricNameToMaxLabel(metric: any): string;
