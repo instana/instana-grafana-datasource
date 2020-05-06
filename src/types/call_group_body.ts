@@ -34,8 +34,8 @@ export interface Pagination {
 export interface CallGroupBody {
   group: Group;
   timeFrame: TimeFrame;
-  metrics: Array<Metric>;
-  tagFilters?: Array<TagFilter>;
+  metrics: Metric[];
+  tagFilters?: TagFilter[];
   order?: Order;
   pagination?: Pagination;
 }

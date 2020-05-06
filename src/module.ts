@@ -1,14 +1,10 @@
-import InstanaDatasource from './datasource';
-import {InstanaQueryCtrl} from './query_ctrl';
-import {InstanaConfigCtrl} from './config_ctrl';
+import { InstanaOptions } from './types/instana_options';
+import { DataSourcePlugin } from '@grafana/data';
+import { DataSource } from './datasources/DataSource';
+import { ConfigEditor } from './components/ConfigEditor';
+import { QueryEditor } from './components/QueryEditor';
+import { MyQuery } from './types';
 
-class InstanaAnnotationsQueryCtrl {
-  static templateUrl = 'partials/annotations.editor.html';
-}
-
-export {
-  InstanaDatasource as Datasource,
-  InstanaQueryCtrl as QueryCtrl,
-  InstanaConfigCtrl as ConfigCtrl,
-  InstanaAnnotationsQueryCtrl as AnnotationsQueryCtrl,
-};
+export const plugin = new DataSourcePlugin<DataSource, MyQuery, InstanaOptions>(DataSource)
+  .setConfigEditor(ConfigEditor)
+  .setQueryEditor(QueryEditor);

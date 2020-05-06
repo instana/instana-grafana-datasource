@@ -6,11 +6,3 @@ services:
       - 3000:3000
     volumes:
       - ./dist:/var/lib/grafana/plugins/instana
-    links:
-      - mountebank
-  mountebank:
-    build: specs/mb
-    image: ui-backend-mockserver
-    ports:
-      - 2525:2525
-      - 8010:8010

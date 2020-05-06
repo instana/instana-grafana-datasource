@@ -35,8 +35,8 @@ export interface BeaconGroupBody {
   group: Group;
   timeFrame: TimeFrame;
   type: string;
-  metrics: Array<Metric>;
-  tagFilters?: Array<TagFilter>;
+  metrics: Metric[];
+  tagFilters?: TagFilter[];
   order?: Order;
   pagination?: Pagination;
 }
