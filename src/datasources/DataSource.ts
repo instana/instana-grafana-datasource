@@ -9,11 +9,11 @@ import {
   FieldType,
 } from '@grafana/data';
 
-import { MyQuery, defaultQuery } from '../types';
+import { InstanaQuery } from '../types/instana_query';
 import { InstanaOptions } from '../types/instana_options';
 import { getRequest } from '../util/request_handler';
 
-export class DataSource extends DataSourceApi<MyQuery, InstanaOptions> {
+export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   options: InstanaOptions;
 
   constructor(instanceSettings: DataSourceInstanceSettings<InstanaOptions>) {
@@ -21,13 +21,14 @@ export class DataSource extends DataSourceApi<MyQuery, InstanaOptions> {
     this.options = instanceSettings.jsonData;
   }
 
-  async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
+  async query(options: DataQueryRequest<InstanaQuery>): Promise<DataQueryResponse> {
     console.log(options);
     const { range } = options;
     const from = range!.from.valueOf();
     const to = range!.to.valueOf();
 
     const data = options.targets.map(target => {
+      const defaultQuery: Partial<InstanaQuery> = { constant: 6.5 };
       const query = defaults(target, defaultQuery);
       return new MutableDataFrame({
         refId: query.refId,
