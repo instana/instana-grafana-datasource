@@ -1,24 +1,28 @@
 import React, { ChangeEvent, PureComponent } from 'react';
-import { DataSourcePluginOptionsEditorProps, SelectableValue } from '@grafana/data';
+import { DataSourcePluginOptionsEditorProps, DataSourceSettings, SelectableValue } from '@grafana/data';
 import { InstanaOptions } from '../types/instana_options';
 import { FormField, Switch } from '@grafana/ui';
 import getVersion from "../util/instana_version";
 
-interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {}
+interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {
+}
 
-interface State {}
+interface State {
+  canQueryOfflineSnapshots: boolean;
+}
 
 export class ConfigEditor extends PureComponent<Props, State> {
   constructor(props: Readonly<Props>) {
     super(props);
-    this.detectFeatures(props);
+    this.detectFeatures();
+    this.state = { canQueryOfflineSnapshots: true };
   }
 
   onInstanaOptionsChange = (
     eventItem: ChangeEvent<HTMLInputElement> | SelectableValue<string>,
     key: keyof InstanaOptions
   ) => {
-    const { onOptionsChange, options } = this.props;
+    const { options, onOptionsChange } = this.props;
     const jsonData = {
       ...options.jsonData,
       [key]: eventItem.currentTarget.value,
@@ -28,7 +32,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   };
 
   onSwitchChange = (eventItem: SelectableValue<HTMLInputElement> | any, key: keyof InstanaOptions) => {
-    const { onOptionsChange, options } = this.props;
+    const { options, onOptionsChange } = this.props;
     let value = false;
 
     if (eventItem && eventItem.currentTarget) {
@@ -43,23 +47,26 @@ export class ConfigEditor extends PureComponent<Props, State> {
     onOptionsChange({ ...options, jsonData });
   };
 
-  detectFeatures(props: Props) {
-    const { options } = props;
+  /**
+   * Checks whether the provided tenant-unit is able to provide certain features such as querying offline snapshots.
+   */
+  detectFeatures = (settings?: DataSourceSettings<InstanaOptions, {}>) => {
+    if (!settings) {
+      settings = this.props.options;
+    }
 
-    if (!options.id) {
+    if (!settings.id) {
       return;
     }
 
-    console.log(options.name);
-    getVersion(options.jsonData.url, options.jsonData.apiToken).then(version => {
-      //this.current.jsonData.canQueryOfflineSnapshots = version >= 156;
-      this.setState({ canQueryOfflineSnapshots: false });
+    getVersion(settings.jsonData.url, settings.jsonData.apiToken).then(version => {
+      version ? this.setState({ canQueryOfflineSnapshots: version >= 156 }) : this.setState({ canQueryOfflineSnapshots: false });
     });
   }
 
   render() {
     const { options } = this.props;
-    const { jsonData } = options;
+    const { jsonData } = options
 
     return (
       <div>
@@ -70,6 +77,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           inputWidth={30}
           value={jsonData.url}
           onChange={event => this.onInstanaOptionsChange(event, 'url')}
+          onBlur={(e) => this.detectFeatures(options)}
           tooltip={'Enter the URL of your Instana installation. E.g. https://tools-acme.instana.io'}
         />
 
@@ -79,6 +87,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           inputWidth={30}
           value={jsonData.apiToken}
           onChange={event => this.onInstanaOptionsChange(event, 'apiToken')}
+          onBlur={(e) => this.detectFeatures(options)}
           tooltip={
             'Enter the API token to access the data. You can create API tokens following the instructions at https://docs.instana.io/quick_start/api/#api-tokens'
           }
@@ -95,16 +104,18 @@ export class ConfigEditor extends PureComponent<Props, State> {
           }
         />
 
-        <Switch
-          label={'Enable offline snapshots'}
-          labelClass={'width-14'}
-          checked={jsonData.showOffline}
-          onChange={event => this.onSwitchChange(event, 'showOffline')}
-          tooltipPlacement={'top'}
-          tooltip={
-            'Enables querying offline snapshots for given timeranges. Supported with Instana 1.156+ and Instana datasource 2.3.0+'
-          }
-        />
+        <div style={!this.state.canQueryOfflineSnapshots ? { opacity: "0.4", pointerEvents: "none" } : {}}>
+          <Switch
+            label={'Enable offline snapshots'}
+            labelClass={'width-14'}
+            checked={jsonData.showOffline}
+            onChange={event => this.onSwitchChange(event, 'showOffline')}
+            tooltipPlacement={'top'}
+            tooltip={
+              'Enables querying offline snapshots for given timeranges. Supported with Instana 1.156+ and Instana datasource 2.3.0+'
+            }
+          />
+        </div>
 
         <Switch
           label={'Enable SLO dashboards'}
@@ -115,7 +126,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           tooltip={'Adds a new category that allows retrieval of SLO information (feature flag required).'}
         />
 
-        <br />
+        <br/>
         <b>Maximum query intervals in hours</b>
         <p>
           This settings are optional values to control the load of data queries, by defining the maximum allowed query
