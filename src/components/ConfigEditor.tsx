@@ -59,7 +59,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
       return;
     }
 
-    getVersion(settings.jsonData.url, settings.jsonData.apiToken).then(version => {
+    getVersion(settings.jsonData).then(version => {
       version ? this.setState({ canQueryOfflineSnapshots: version >= 156 }) : this.setState({ canQueryOfflineSnapshots: false });
     });
   }

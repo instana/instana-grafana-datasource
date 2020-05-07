@@ -1,28 +1,46 @@
 import { getBackendSrv } from '@grafana/runtime';
 import { BackendSrvRequest } from '@grafana/runtime/services/backendSrv';
+import { InstanaOptions } from "../types/instana_options";
 
-export function doRequest(url: string, apiToken: string, swallowError = false, maxRetries = 1) {
+export function getRequest(options: InstanaOptions, endpoint: string, swallowError = false, maxRetries = 1) {
   const request = {
     method: 'GET',
-    url: url,
+    url: buildUrl(options, endpoint),
   };
-  return execute(request, apiToken, swallowError, maxRetries);
+
+  return doRequest(options, request, swallowError, maxRetries);
 }
 
-export function postRequest(url: string, apiToken: string, data: {}, swallowError = false, maxRetries = 0) {
+export function postRequest(options: InstanaOptions, endpoint: string, data: {}, swallowError = false, maxRetries = 0) {
   const request = {
     method: 'POST',
-    url: url,
+    url: buildUrl(options, endpoint),
     data: data,
   };
-  return execute(request, apiToken, swallowError, maxRetries);
+
+  return doRequest(options, request, swallowError, maxRetries);
+}
+
+function doRequest(options: InstanaOptions, request: BackendSrvRequest, swallowError: boolean, maxRetries: number) {
+  if (options.useProxy) {
+    return execute(request, swallowError, maxRetries, undefined);
+  } else {
+    return execute(request, swallowError, maxRetries, options.apiToken);
+  }
+}
+function buildUrl(options: InstanaOptions, endpoint: string) {
+  if (options.useProxy) {
+    return options.url + '/instana' + endpoint; // to match proxy route in plugin.json
+  } else {
+    return options.url + endpoint;
+  }
 }
 
 function execute(
   request: BackendSrvRequest,
-  apiToken: string,
   swallowError: boolean,
-  maxRetries: number
+  maxRetries: number,
+  apiToken?: string
 ): Promise<any> {
   if (apiToken) {
     request['headers'] = {
@@ -43,7 +61,7 @@ function execute(
         return;
       }
       if (maxRetries > 0) {
-        return execute(request, apiToken, swallowError, maxRetries - 1);
+        return execute(request, swallowError, maxRetries - 1, apiToken);
       }
       throw error;
     });
