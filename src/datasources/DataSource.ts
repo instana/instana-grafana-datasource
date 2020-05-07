@@ -11,10 +11,9 @@ import {
 
 import { MyQuery, defaultQuery } from '../types';
 import { InstanaOptions } from '../types/instana_options';
-import { getRequest } from "../util/request_handler";
+import { getRequest } from '../util/request_handler';
 
 export class DataSource extends DataSourceApi<MyQuery, InstanaOptions> {
-
   options: InstanaOptions;
 
   constructor(instanceSettings: DataSourceInstanceSettings<InstanaOptions>) {
@@ -33,8 +32,8 @@ export class DataSource extends DataSourceApi<MyQuery, InstanaOptions> {
       return new MutableDataFrame({
         refId: query.refId,
         fields: [
-          { name: 'Time', values: [ from, to ], type: FieldType.time },
-          { name: 'Value', values: [ query.constant, query.constant ], type: FieldType.number },
+          { name: 'Time', values: [from, to], type: FieldType.time },
+          { name: 'Value', values: [query.constant, query.constant], type: FieldType.number },
         ],
       });
     });
@@ -48,7 +47,7 @@ export class DataSource extends DataSourceApi<MyQuery, InstanaOptions> {
         return {
           status: 'success',
           message: 'Successfully connected to the Instana API.',
-          title: 'Success'
+          title: 'Success',
         };
       },
       error => {
@@ -56,14 +55,14 @@ export class DataSource extends DataSourceApi<MyQuery, InstanaOptions> {
           return {
             status: 'error',
             message: 'Unauthorized. Please verify the API Token.',
-            title: 'Error'
+            title: 'Error',
           };
         } else {
           console.log(error);
           return {
             status: 'error',
             message: 'Error (' + error.status + ') connecting to the Instana API: ' + error.statusText,
-            title: 'Error'
+            title: 'Error',
           };
         }
       }

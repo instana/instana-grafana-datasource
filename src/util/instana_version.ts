@@ -1,6 +1,6 @@
 import Cache from '../cache';
 import { getRequest } from './request_handler';
-import { InstanaOptions } from "../types/instana_options";
+import { InstanaOptions } from '../types/instana_options';
 
 const versionCache: Cache<number> = new Cache<number>();
 

@@ -2,10 +2,9 @@ import React, { ChangeEvent, PureComponent } from 'react';
 import { DataSourcePluginOptionsEditorProps, DataSourceSettings, SelectableValue } from '@grafana/data';
 import { InstanaOptions } from '../types/instana_options';
 import { FormField, Switch } from '@grafana/ui';
-import getVersion from "../util/instana_version";
+import getVersion from '../util/instana_version';
 
-interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {
-}
+interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {}
 
 interface State {
   canQueryOfflineSnapshots: boolean;
@@ -60,13 +59,15 @@ export class ConfigEditor extends PureComponent<Props, State> {
     }
 
     getVersion(settings.jsonData).then(version => {
-      version ? this.setState({ canQueryOfflineSnapshots: version >= 156 }) : this.setState({ canQueryOfflineSnapshots: false });
+      version
+        ? this.setState({ canQueryOfflineSnapshots: version >= 156 })
+        : this.setState({ canQueryOfflineSnapshots: false });
     });
-  }
+  };
 
   render() {
     const { options } = this.props;
-    const { jsonData } = options
+    const { jsonData } = options;
 
     return (
       <div>
@@ -77,7 +78,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           inputWidth={30}
           value={jsonData.url}
           onChange={event => this.onInstanaOptionsChange(event, 'url')}
-          onBlur={(e) => this.detectFeatures(options)}
+          onBlur={e => this.detectFeatures(options)}
           tooltip={'Enter the URL of your Instana installation. E.g. https://tools-acme.instana.io'}
         />
 
@@ -87,7 +88,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           inputWidth={30}
           value={jsonData.apiToken}
           onChange={event => this.onInstanaOptionsChange(event, 'apiToken')}
-          onBlur={(e) => this.detectFeatures(options)}
+          onBlur={e => this.detectFeatures(options)}
           tooltip={
             'Enter the API token to access the data. You can create API tokens following the instructions at https://docs.instana.io/quick_start/api/#api-tokens'
           }
@@ -104,7 +105,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           }
         />
 
-        <div style={!this.state.canQueryOfflineSnapshots ? { opacity: "0.4", pointerEvents: "none" } : {}}>
+        <div style={!this.state.canQueryOfflineSnapshots ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
           <Switch
             label={'Enable offline snapshots'}
             labelClass={'width-14'}
@@ -126,7 +127,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           tooltip={'Adds a new category that allows retrieval of SLO information (feature flag required).'}
         />
 
-        <br/>
+        <br />
         <b>Maximum query intervals in hours</b>
         <p>
           This settings are optional values to control the load of data queries, by defining the maximum allowed query

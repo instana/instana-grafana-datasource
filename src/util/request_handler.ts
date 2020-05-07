@@ -1,6 +1,6 @@
 import { getBackendSrv } from '@grafana/runtime';
 import { BackendSrvRequest } from '@grafana/runtime/services/backendSrv';
-import { InstanaOptions } from "../types/instana_options";
+import { InstanaOptions } from '../types/instana_options';
 
 export function getRequest(options: InstanaOptions, endpoint: string, swallowError = false, maxRetries = 1) {
   const request = {
