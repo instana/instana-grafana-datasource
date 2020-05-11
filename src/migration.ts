@@ -1,3 +1,7 @@
+import call_to_entities from './lists/apply_call_to_entities';
+
+import _ from 'lodash';
+
 // can be removed once mixpanel shows no old plugins around
 export default function (target) {
   // 1.3.1 towards 2.0.0
@@ -51,5 +55,14 @@ export default function (target) {
       target.entity.key = null;
       target.entity.label = "Test";
     }
+  }
+
+  // 2.7.0 towards 2.7.1
+  if (target.metricCategory === '2' && !target.applicationCallToEntity) {
+    target.applicationCallToEntity = call_to_entities[0];
+    target.callToEntity = call_to_entities[0];
+    _.forEach(target.filters, filter => {
+      filter.entity = call_to_entities[0];
+    });
   }
 }
