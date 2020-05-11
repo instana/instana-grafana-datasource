@@ -87,8 +87,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
           labelWidth={14}
           inputWidth={30}
           value={jsonData.apiToken}
-          onChange={event => this.onInstanaOptionsChange(event, 'apiToken')}
           onBlur={e => this.detectFeatures(options)}
+          onChange={event => this.onInstanaOptionsChange(event, 'apiToken')}
           tooltip={
             'Enter the API token to access the data. You can create API tokens following the instructions at https://docs.instana.io/quick_start/api/#api-tokens'
           }
@@ -98,8 +98,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
           label={'Use proxy'}
           labelClass={'width-14'}
           checked={jsonData.useProxy}
-          onChange={event => this.onSwitchChange(event, 'useProxy')}
           tooltipPlacement={'top'}
+          onChange={event => this.onSwitchChange(event, 'useProxy')}
           tooltip={
             'Use Grafana server as proxy, this adds the Instana API token on the server. Supported with Grafana 5.3+ and Instana datasource 2.0.0+'
           }
@@ -107,9 +107,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <div style={!this.state.canQueryOfflineSnapshots ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
           <Switch
-            label={'Enable offline snapshots'}
             labelClass={'width-14'}
             checked={jsonData.showOffline}
+            label={'Enable offline snapshots'}
             onChange={event => this.onSwitchChange(event, 'showOffline')}
             tooltipPlacement={'top'}
             tooltip={
@@ -119,9 +119,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
         </div>
 
         <Switch
-          label={'Enable SLO dashboards'}
           labelClass={'width-14'}
           checked={jsonData.allowSlo}
+          label={'Enable SLO dashboards'}
           onChange={event => this.onSwitchChange(event, 'allowSlo')}
           tooltipPlacement={'top'}
           tooltip={'Adds a new category that allows retrieval of SLO information (feature flag required).'}
@@ -135,9 +135,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
         </p>
 
         <FormField
-          label="Infrastructure metrics"
           labelWidth={14}
           inputWidth={30}
+          label="Infrastructure metrics"
           value={jsonData.queryinterval_limit_infra}
           placeholder={'optional: interval limit in hours'}
           onChange={event => this.onInstanaOptionsChange(event, 'queryinterval_limit_infra')}
@@ -145,9 +145,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
         />
 
         <FormField
-          label="Application metrics"
           labelWidth={14}
           inputWidth={30}
+          label="Application metrics"
           value={jsonData.queryinterval_limit_app_metrics}
           placeholder={'optional: interval limit in hours'}
           onChange={event => this.onInstanaOptionsChange(event, 'queryinterval_limit_app_metrics')}
@@ -155,9 +155,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
         />
 
         <FormField
-          label="Analyze application calls"
           labelWidth={14}
           inputWidth={30}
+          label="Analyze application calls"
           value={jsonData.queryinterval_limit_app_calls}
           placeholder={'optional: interval limit in hours'}
           onChange={event => this.onInstanaOptionsChange(event, 'queryinterval_limit_app_calls')}
@@ -165,11 +165,11 @@ export class ConfigEditor extends PureComponent<Props, State> {
         />
 
         <FormField
-          label="Analyze website"
           labelWidth={14}
           inputWidth={30}
-          value={jsonData.queryinterval_limit_website_metrics}
+          label="Analyze website"
           placeholder={'optional: interval limit in hours'}
+          value={jsonData.queryinterval_limit_website_metrics}
           onChange={event => this.onInstanaOptionsChange(event, 'queryinterval_limit_website_metrics')}
           tooltip={'Limit for max. query interval in hours for Category: Analyze websites'}
         />

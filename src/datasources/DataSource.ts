@@ -22,7 +22,6 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   async query(options: DataQueryRequest<InstanaQuery>): Promise<DataQueryResponse> {
-    console.log(options);
     const { range } = options;
     const from = range!.from.valueOf();
     const to = range!.to.valueOf();

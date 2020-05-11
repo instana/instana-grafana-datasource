@@ -9,20 +9,15 @@ import MetricCategories from '../lists/metric_categories';
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
-interface QueryState {
-  metricCatgory: SelectableValue;
-}
+interface QueryState {}
 
 export class QueryEditor extends PureComponent<Props, QueryState> {
   query: InstanaQuery;
 
   constructor(props: Props) {
     super(props);
-    const defaultQuery: Partial<InstanaQuery> = { constant: 6.5 };
+    const defaultQuery: Partial<InstanaQuery> = { constant: 6.5, metricCategory: MetricCategories[0] };
     this.query = Object.assign({}, defaultQuery, props.query);
-    this.state = {
-      metricCatgory: MetricCategories[0]
-    }
   }
 
   onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -38,10 +33,15 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   };
 
   onCategoryChange = (newCategory: SelectableValue<string>) => {
-    this.setState({
-      metricCatgory: newCategory
-    })
+    this.query.metricCategory = newCategory;
+    this.onRunQuery();
   };
+
+  onRunQuery = () => {
+    const { query } = this;
+    this.props.onChange(query);
+    this.props.onRunQuery();
+  }
 
   render() {
     return (
@@ -50,20 +50,19 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           <FormLabel width={14} tooltip={'Select a metric category.'}>Category</FormLabel>
           <Select
             width={30}
-            isSearchable={true}
+            isSearchable={false}
             options={MetricCategories}
             onChange={this.onCategoryChange}
-            value={this.state.metricCatgory}
+            value={this.query.metricCategory}
           />
         </div>
 
-        <br />
+        <br/>
 
 
+        <br/>
 
-        <br />
-
-          <AdvancedSettings  metricCategory={this.state.metricCatgory} />
+        <AdvancedSettings query={this.query} onChange={this.props.onChange} onRunQuery={this.onRunQuery}/>
       </div>
     );
   }
