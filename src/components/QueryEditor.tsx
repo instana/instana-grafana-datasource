@@ -6,6 +6,7 @@ import { InstanaQuery } from '../types/instana_query';
 import { AdvancedSettings } from './AdvancedSettings';
 import { FormLabel, Select } from "@grafana/ui";
 import MetricCategories from '../lists/metric_categories';
+import { SloInformation } from "./SloInformation";
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
@@ -44,6 +45,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   render() {
+    const { query, onRunQuery, onCategoryChange } = this;
+
     return (
       <div>
         <div className={'gf-form'}>
@@ -52,17 +55,14 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
             width={30}
             isSearchable={false}
             options={MetricCategories}
-            onChange={this.onCategoryChange}
-            value={this.query.metricCategory}
+            onChange={onCategoryChange}
+            value={query.metricCategory}
           />
         </div>
 
-        <br/>
+        <SloInformation hidden={query.metricCategory.key !== 7} query={query} onChange={this.props.onChange} onRunQuery={onRunQuery}/>
 
-
-        <br/>
-
-        <AdvancedSettings query={this.query} onChange={this.props.onChange} onRunQuery={this.onRunQuery}/>
+        <AdvancedSettings query={query} onChange={this.props.onChange} onRunQuery={onRunQuery}/>
       </div>
     );
   }

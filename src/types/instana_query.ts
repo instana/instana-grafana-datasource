@@ -10,4 +10,6 @@ export interface InstanaQuery extends DataQuery {
   aggregateGraphs: boolean;
   aggregationFunction: SelectableValue;
   hideOriginalGraphs: boolean;
+
+  sloReport: SelectableValue;
 }
