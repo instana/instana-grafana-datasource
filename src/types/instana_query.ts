@@ -12,4 +12,6 @@ export interface InstanaQuery extends DataQuery {
   hideOriginalGraphs: boolean;
 
   sloReport: SelectableValue;
+  sloValue: string;
+  sloSpecific: SelectableValue;
 }

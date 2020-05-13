@@ -1,11 +1,14 @@
 export default [
   {
-    key: 'SLI'
+    key: 'SLI',
+    label: 'SLI'
   },
   {
-    key: 'Remaining Error Budget'
+    key: 'Remaining Error Budget',
+    label: 'Remaining Error Budget'
   },
   {
-    key: 'Timeseries'
+    key: 'Timeseries',
+    label: 'Timeseries'
   },
 ];
