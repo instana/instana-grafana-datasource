@@ -1,4 +1,4 @@
-import React, { ChangeEvent, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import { InstanaOptions } from '../types/instana_options';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { DataSource } from '../datasources/DataSource';
@@ -20,18 +20,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     const defaultQuery: Partial<InstanaQuery> = { constant: 6.5, metricCategory: MetricCategories[0] };
     this.query = Object.assign({}, defaultQuery, props.query);
   }
-
-  onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query } = this.props;
-    onChange({ ...query, queryText: event.target.value });
-  };
-
-  onConstantChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query, onRunQuery } = this.props;
-    onChange({ ...query, constant: parseFloat(event.target.value) });
-    // executes the query
-    onRunQuery();
-  };
 
   onCategoryChange = (newCategory: SelectableValue<string>) => {
     this.query.metricCategory = newCategory;
@@ -60,7 +48,9 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         </div>
 
-        <SloInformation hidden={query.metricCategory.key !== 7} query={query} onChange={this.props.onChange} onRunQuery={onRunQuery}/>
+        <div hidden={query.metricCategory.key !== 7}>
+          <SloInformation hidden={query.metricCategory.key !== 7} query={query} onChange={this.props.onChange} onRunQuery={onRunQuery}/>
+        </div>
 
         <AdvancedSettings query={query} onChange={this.props.onChange} onRunQuery={onRunQuery}/>
       </div>
