@@ -10,7 +10,8 @@ import { SloInformation } from "./SloInformation";
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
-interface QueryState {}
+interface QueryState {
+}
 
 export class QueryEditor extends PureComponent<Props, QueryState> {
   query: InstanaQuery;
@@ -48,11 +49,15 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         </div>
 
-        <div hidden={query.metricCategory.key !== 7}>
-          <SloInformation hidden={query.metricCategory.key !== 7} query={query} onChange={this.props.onChange} onRunQuery={onRunQuery}/>
-        </div>
+        {query.metricCategory.key === 7 &&
+          <SloInformation query={query} onRunQuery={onRunQuery} onChange={this.props.onChange}/>
+        }
 
-        <AdvancedSettings query={query} onChange={this.props.onChange} onRunQuery={onRunQuery}/>
+        <AdvancedSettings
+          query={query}
+          onRunQuery={onRunQuery}
+          onChange={this.props.onChange}
+        />
       </div>
     );
   }
