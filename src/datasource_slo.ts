@@ -20,7 +20,7 @@ export default class InstanaSLODataSource extends AbstractDatasource {
       return _.map(response.data, (r, index) => {
         return {
           'key': r.id,
-          'label': r.sloName
+          'label': r.sliName
         };
       });
     });
