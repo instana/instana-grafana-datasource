@@ -56,13 +56,4 @@ export default function (target) {
       target.entity.label = "Test";
     }
   }
-
-  // 2.7.0 towards 2.7.1
-  if (target.metricCategory === '2' && !target.applicationCallToEntity) {
-    target.applicationCallToEntity = call_to_entities[0];
-    target.callToEntity = call_to_entities[0];
-    _.forEach(target.filters, filter => {
-      filter.entity = call_to_entities[0];
-    });
-  }
 }

@@ -13,6 +13,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     getApplicationTags(): Selectable[];
     getApplicationMetricsCatalog(): Selectable[];
     fetchAnalyzeMetricsForApplication(target: any, timeFilter: TimeFilter): any;
+    getTagEntity(selectedEntity: any, tag: any): string;
     fetchApplicationMetrics(target: any, timeFilter: TimeFilter): any;
     buildAnalyzeApplicationLabel(target: any, item: any, key: any, index: any): string;
     buildApplicationMetricLabel(target: any, item: any, key: any, index: any): string;

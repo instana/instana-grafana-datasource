@@ -84,7 +84,8 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
       tagsResponse.data.map(entry => ({
         'key': entry.name,
         'type': entry.type,
-        'tagEntity': entry.canApplyToDestination ? 'DESTINATION' : 'NOT_APPLICABLE'
+        'canApplyToSource': entry.canApplyToSource,
+        'canApplyToDestination': entry.canApplyToDestination
       }))
     );
     this.simpleCache.put('applicationTags', applicationTags);
@@ -128,55 +129,74 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
     const windowSize = this.getWindowSize(timeFilter);
     const tagFilters = [];
 
-    if (target.entity.key) {
-      tagFilters.push({
-        name: 'application.name',
-        operator: 'EQUALS',
-        value: target.entity.label,
-        entity: target.applicationCallToEntity.key
-      });
-    }
+    return Promise.resolve(this.getApplicationTags()).then(
+      applicationTags => {
 
-    _.forEach(target.filters, filter => {
-      if (filter.isValid) {
-        let tagFilter = createTagFilter(filter, true);
-        tagFilter['groupbyTagEntity'] = filter.entity.key;
-        tagFilters.push(tagFilter);
+        if (target.entity.key) {
+          tagFilters.push({
+            name: 'application.name',
+            operator: 'EQUALS',
+            value: target.entity.label,
+            entity: target.applicationCallToEntity ? target.applicationCallToEntity.key : 'DESTINATION'
+          });
+        }
+
+        _.forEach(target.filters, filter => {
+          if (filter.isValid) {
+            let tagFilter = createTagFilter(filter);
+            const tag = _.find(applicationTags, ['key', filter.tag.key]);
+            if (tag.canApplyToDestination || tag.canApplyToSource) {
+              tagFilter['entity'] = this.getTagEntity(filter.entity, tag);
+            }
+            tagFilters.push(tagFilter);
+          }
+        });
+
+        const metric = {
+          metric: target.metric.key,
+          aggregation: target.aggregation ? target.aggregation : 'SUM'
+        };
+
+        if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
+          if (!target.timeInterval) {
+            target.timeInterval = getDefaultChartGranularity(windowSize);
+          }
+          metric['granularity'] = target.timeInterval.key;
+        }
+
+        const group = {
+          groupbyTag: target.group.key
+        };
+        const tag = _.find(applicationTags, ['key', target.group.key]);
+        if (tag.canApplyToDestination || tag.canApplyToSource) {
+          group['groupbyTagEntity'] = this.getTagEntity(target.group, tag);
+        }
+        if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
+          group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
+        }
+
+        const data: CallGroupBody = {
+          group: group,
+          timeFrame: {
+            to: timeFilter.to,
+            windowSize: windowSize
+          },
+          tagFilters: tagFilters,
+          metrics: [metric]
+        };
+        return this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
       }
-    });
+    );
+  }
 
-    const metric = {
-      metric: target.metric.key,
-      aggregation: target.aggregation ? target.aggregation : 'SUM'
-    };
-
-    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
-      if (!target.timeInterval) {
-        target.timeInterval = getDefaultChartGranularity(windowSize);
-      }
-      metric['granularity'] = target.timeInterval.key;
+  getTagEntity(selectedEntity, tag): string {
+    if (selectedEntity && selectedEntity.key === 'DESTINATION' && tag.canApplyToDestination) {
+      return 'DESTINATION';
     }
-
-    const group = {
-      groupbyTag: target.group.key
-    };
-
-    group['groupbyTagEntity'] = target.callToEntity.key;
-
-    if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
-      group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
+    if (selectedEntity && selectedEntity.key === 'SOURCE' && tag.canApplyToSource) {
+      return 'SOURCE';
     }
-
-    const data: CallGroupBody = {
-      group: group,
-      timeFrame: {
-        to: timeFilter.to,
-        windowSize: windowSize
-      },
-      tagFilters: tagFilters,
-      metrics: [metric]
-    };
-    return this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
+    return tag.canApplyToDestination ? 'DESTINATION' : 'SOURCE';
   }
 
   fetchApplicationMetrics(target, timeFilter: TimeFilter) {

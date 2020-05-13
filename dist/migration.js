@@ -1,5 +1,4 @@
-System.register(['./lists/apply_call_to_entities', 'lodash'], function(exports_1) {
-    var apply_call_to_entities_1, lodash_1;
+System.register([], function(exports_1) {
     // can be removed once mixpanel shows no old plugins around
     function default_1(target) {
         // 1.3.1 towards 2.0.0
@@ -53,24 +52,10 @@ System.register(['./lists/apply_call_to_entities', 'lodash'], function(exports_1
                 target.entity.label = "Test";
             }
         }
-        // 2.7.0 towards 2.7.1
-        if (target.metricCategory === '2' && !target.applicationCallToEntity) {
-            target.applicationCallToEntity = apply_call_to_entities_1.default[0];
-            target.callToEntity = apply_call_to_entities_1.default[0];
-            lodash_1.default.forEach(target.filters, function (filter) {
-                filter.entity = apply_call_to_entities_1.default[0];
-            });
-        }
     }
     exports_1("default", default_1);
     return {
-        setters:[
-            function (apply_call_to_entities_1_1) {
-                apply_call_to_entities_1 = apply_call_to_entities_1_1;
-            },
-            function (lodash_1_1) {
-                lodash_1 = lodash_1_1;
-            }],
+        setters:[],
         execute: function() {
         }
     }

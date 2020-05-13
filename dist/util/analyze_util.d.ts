@@ -1,5 +1,5 @@
 import TagFilter from "../types/tag_filter";
-export declare function createTagFilter(filter: TagFilter, useEntity?: boolean): {
+export declare function createTagFilter(filter: TagFilter): {
     name: string;
     operator: string;
     value: string;

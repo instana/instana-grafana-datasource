@@ -1,16 +1,12 @@
 System.register(["lodash"], function(exports_1) {
     var lodash_1;
     var MAX_ALLOWED_DATA_POINTS;
-    function createTagFilter(filter, useEntity) {
-        if (useEntity === void 0) { useEntity = false; }
+    function createTagFilter(filter) {
         var tagFilter = {
             name: filter.tag.key,
             operator: filter.operator.key,
             value: filter.stringValue
         };
-        if (useEntity) {
-            tagFilter['entity'] = filter.entity.key;
-        }
         if ('NUMBER' === filter.tag.type) {
             if (filter.numberValue !== null) {
                 tagFilter.value = filter.numberValue.toString();

@@ -87,7 +87,8 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                         return tagsResponse.data.map(function (entry) { return ({
                             'key': entry.name,
                             'type': entry.type,
-                            'tagEntity': entry.canApplyToDestination ? 'DESTINATION' : 'NOT_APPLICABLE'
+                            'canApplyToSource': entry.canApplyToSource,
+                            'canApplyToDestination': entry.canApplyToDestination
                         }); });
                     });
                     this.simpleCache.put('applicationTags', applicationTags);
@@ -118,54 +119,72 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                     return applicationCatalog;
                 };
                 InstanaApplicationDataSource.prototype.fetchAnalyzeMetricsForApplication = function (target, timeFilter) {
+                    var _this = this;
                     // avoid invalid calls
                     if (!target || !target.metric || !target.group || !target.entity) {
                         return this.$q.resolve({ data: { items: [] } });
                     }
                     var windowSize = this.getWindowSize(timeFilter);
                     var tagFilters = [];
-                    if (target.entity.key) {
-                        tagFilters.push({
-                            name: 'application.name',
-                            operator: 'EQUALS',
-                            value: target.entity.label,
-                            entity: target.applicationCallToEntity.key
+                    return Promise.resolve(this.getApplicationTags()).then(function (applicationTags) {
+                        if (target.entity.key) {
+                            tagFilters.push({
+                                name: 'application.name',
+                                operator: 'EQUALS',
+                                value: target.entity.label,
+                                entity: target.applicationCallToEntity ? target.applicationCallToEntity.key : 'DESTINATION'
+                            });
+                        }
+                        lodash_1.default.forEach(target.filters, function (filter) {
+                            if (filter.isValid) {
+                                var tagFilter = analyze_util_1.createTagFilter(filter);
+                                var tag_1 = lodash_1.default.find(applicationTags, ['key', filter.tag.key]);
+                                if (tag_1.canApplyToDestination || tag_1.canApplyToSource) {
+                                    tagFilter['entity'] = _this.getTagEntity(filter.entity, tag_1);
+                                }
+                                tagFilters.push(tagFilter);
+                            }
                         });
-                    }
-                    lodash_1.default.forEach(target.filters, function (filter) {
-                        if (filter.isValid) {
-                            var tagFilter = analyze_util_1.createTagFilter(filter, true);
-                            tagFilter['groupbyTagEntity'] = filter.entity.key;
-                            tagFilters.push(tagFilter);
+                        var metric = {
+                            metric: target.metric.key,
+                            aggregation: target.aggregation ? target.aggregation : 'SUM'
+                        };
+                        if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") {
+                            if (!target.timeInterval) {
+                                target.timeInterval = rollup_granularity_util_1.getDefaultChartGranularity(windowSize);
+                            }
+                            metric['granularity'] = target.timeInterval.key;
                         }
+                        var group = {
+                            groupbyTag: target.group.key
+                        };
+                        var tag = lodash_1.default.find(applicationTags, ['key', target.group.key]);
+                        if (tag.canApplyToDestination || tag.canApplyToSource) {
+                            group['groupbyTagEntity'] = _this.getTagEntity(target.group, tag);
+                        }
+                        if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
+                            group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
+                        }
+                        var data = {
+                            group: group,
+                            timeFrame: {
+                                to: timeFilter.to,
+                                windowSize: windowSize
+                            },
+                            tagFilters: tagFilters,
+                            metrics: [metric]
+                        };
+                        return _this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
                     });
-                    var metric = {
-                        metric: target.metric.key,
-                        aggregation: target.aggregation ? target.aggregation : 'SUM'
-                    };
-                    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") {
-                        if (!target.timeInterval) {
-                            target.timeInterval = rollup_granularity_util_1.getDefaultChartGranularity(windowSize);
-                        }
-                        metric['granularity'] = target.timeInterval.key;
+                };
+                InstanaApplicationDataSource.prototype.getTagEntity = function (selectedEntity, tag) {
+                    if (selectedEntity && selectedEntity.key === 'DESTINATION' && tag.canApplyToDestination) {
+                        return 'DESTINATION';
                     }
-                    var group = {
-                        groupbyTag: target.group.key
-                    };
-                    group['groupbyTagEntity'] = target.callToEntity.key;
-                    if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
-                        group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
+                    if (selectedEntity && selectedEntity.key === 'SOURCE' && tag.canApplyToSource) {
+                        return 'SOURCE';
                     }
-                    var data = {
-                        group: group,
-                        timeFrame: {
-                            to: timeFilter.to,
-                            windowSize: windowSize
-                        },
-                        tagFilters: tagFilters,
-                        metrics: [metric]
-                    };
-                    return this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
+                    return tag.canApplyToDestination ? 'DESTINATION' : 'SOURCE';
                 };
                 InstanaApplicationDataSource.prototype.fetchApplicationMetrics = function (target, timeFilter) {
                     // avoid invalid calls
