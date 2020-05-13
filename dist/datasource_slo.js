@@ -31,7 +31,7 @@ System.register(["./datasource_abstract", './cache', "lodash"], function(exports
                         return lodash_1.default.map(response.data, function (r, index) {
                             return {
                                 'key': r.id,
-                                'label': r.sloName
+                                'label': r.sliName
                             };
                         });
                     });
