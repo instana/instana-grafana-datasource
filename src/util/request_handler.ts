@@ -41,7 +41,7 @@ function execute(
   swallowError: boolean,
   maxRetries: number,
   apiToken?: string
-): Promise<any> {
+): any {
   if (apiToken) {
     request['headers'] = {
       Authorization: 'apiToken ' + apiToken,

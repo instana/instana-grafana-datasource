@@ -3,6 +3,7 @@ import { InstanaQuery } from "../types/instana_query";
 import { FormLabel, Input, Select } from "@grafana/ui";
 import { SelectableValue } from "@grafana/data";
 import SloSpecifics from '../lists/slo_specifics';
+import { DataSource } from "../datasources/DataSource";
 
 interface SloInformationState {
   sloReports: SelectableValue<string>[];
@@ -10,18 +11,19 @@ interface SloInformationState {
 
 interface Props {
   query: InstanaQuery;
-
   onRunQuery(): void;
-
   onChange(value: InstanaQuery): void;
+  datasource: DataSource;
 }
 
 export class SloInformation extends React.Component<Props, SloInformationState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      sloReports: this.getOptions()
+      sloReports: []
     }
+
+    this.loadSloReports();
   }
 
   onSloChange = (slo: SelectableValue<string>) => {
@@ -48,18 +50,10 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
     return nextProps.query.metricCategory.key === 7;
   }
 
-  getOptions(): SelectableValue<string>[] {
-    console.log("getOptions");
-    return [
-      {
-        label: 'Slo 1',
-        value: 'Value 1'
-      },
-      {
-        label: 'Slo 2',
-        value: 'Value 2'
-      }
-    ];
+  loadSloReports() {
+    this.props.datasource.getSloReports().then(sloReports => {
+      this.setState({sloReports: sloReports});
+    })
   }
 
   render() {

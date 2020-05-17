@@ -50,7 +50,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         </div>
 
         {query.metricCategory.key === 7 &&
-          <SloInformation query={query} onRunQuery={onRunQuery} onChange={this.props.onChange}/>
+          <SloInformation query={query} onRunQuery={onRunQuery} onChange={this.props.onChange} datasource={this.props.datasource} />
         }
 
         <AdvancedSettings

@@ -1,56 +1,65 @@
-import defaults from 'lodash/defaults';
-
 import {
   DataQueryRequest,
   DataQueryResponse,
   DataSourceApi,
   DataSourceInstanceSettings,
-  MutableDataFrame,
-  FieldType,
+  SelectableValue,
 } from '@grafana/data';
 
 import { InstanaQuery } from '../types/instana_query';
 import { InstanaOptions } from '../types/instana_options';
 import { getRequest } from '../util/request_handler';
+import { DataSourceSlo } from "./DataSource_Slo";
+import MetricCategories from '../lists/metric_categories';
+import TimeFilter from "../types/time_filter";
+import { readTime } from "../util/time_util";
+import { emptyResultData } from "../util/target_util";
+import _ from "lodash";
 
 export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   options: InstanaOptions;
+  dataSourceSlo: DataSourceSlo;
+  timeFilter!: TimeFilter;
 
   constructor(instanceSettings: DataSourceInstanceSettings<InstanaOptions>) {
     super(instanceSettings);
     this.options = instanceSettings.jsonData;
+    this.dataSourceSlo = new DataSourceSlo(instanceSettings.jsonData);
   }
 
   async query(options: DataQueryRequest<InstanaQuery>): Promise<DataQueryResponse> {
     const { range } = options;
-    const from = range!.from.valueOf();
-    const to = range!.to.valueOf();
+    this.timeFilter = readTime(range!);
 
-    const data = options.targets.map(target => {
-      const defaultQuery: Partial<InstanaQuery> = { constant: 6.5 };
-      const query = defaults(target, defaultQuery);
-      return new MutableDataFrame({
-        refId: query.refId,
-        fields: [
-          { name: 'Time', values: [from, to], type: FieldType.time },
-          { name: 'Value', values: [query.constant, query.constant], type: FieldType.number },
-        ],
-      });
-    });
+    return Promise.all(options.targets.map(target => {
+      if (!target.metricCategory) {
+        target.metricCategory = MetricCategories[0];
+      }
 
-    return { data };
+      if (target.metricCategory.key === 7) {
+        return this.dataSourceSlo.runQuery(target, this.timeFilter);
+      }
+
+      return Promise.resolve(emptyResultData(target.refId));
+    })).then(targets => {
+      return { data: _.flatten(targets) };
+    })
+  }
+
+  getSloReports(): Promise<SelectableValue<string>[]> {
+    return this.dataSourceSlo.getConfiguredSLOs();
   }
 
   testDatasource(): Promise<any> {
     return getRequest(this.options, '/api/monitoringState').then(
-      result => {
+      (result: any) => {
         return {
           status: 'success',
           message: 'Successfully connected to the Instana API.',
           title: 'Success',
         };
       },
-      error => {
+      (error: any) => {
         if (error.status === 401) {
           return {
             status: 'error',
