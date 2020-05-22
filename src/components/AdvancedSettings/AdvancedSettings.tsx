@@ -1,7 +1,7 @@
-import { FormField, Switch } from "@grafana/ui";
-import React, { ChangeEvent } from "react";
-import { InstanaQuery } from "../types/instana_query";
-import { AggregateQuery } from "./AggregateQuery";
+import { Switch, FormField } from '@grafana/ui';
+import React, { ChangeEvent, FormEvent } from 'react';
+import { InstanaQuery } from '../../types/instana_query';
+import { AggregateQuery } from './AggregateQuery';
 
 const legendFormatPlaceholders = [
   '$label (on host $host)',
@@ -12,7 +12,7 @@ const legendFormatPlaceholders = [
   '',
   '',
   '',
-]
+];
 
 interface AdvancedSettingsState {
   showAdditionalSettings: boolean;
@@ -21,31 +21,33 @@ interface AdvancedSettingsState {
 
 interface Props {
   query: InstanaQuery;
+
   onRunQuery(): void;
+
   onChange(value: InstanaQuery): void;
 }
 
-export class AdvancedSettings extends React.Component<Props, AdvancedSettingsState> {
+export default class AdvancedSettings extends React.Component<Props, AdvancedSettingsState> {
 
   constructor(props: any) {
     super(props);
     this.state = {
       showAdditionalSettings: false,
       legendFormatPlaceholder: this.setLegendFormatPlaceholder()
-    }
+    };
   }
 
-  onLegendFormatChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
+  onLegendFormatChange = (eventItem: FormEvent<HTMLInputElement>) => {
     const { query } = this.props;
     query.legendFormat = eventItem.currentTarget.value;
     this.props.onRunQuery();
-  }
+  };
 
   onTimeShiftChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
     const { query } = this.props;
     query.timeShift = eventItem.currentTarget.value;
     this.props.onRunQuery();
-  }
+  };
 
   setLegendFormatPlaceholder(): string {
     const { query } = this.props;

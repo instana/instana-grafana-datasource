@@ -1,20 +1,34 @@
-import React, { ChangeEvent, PureComponent } from 'react';
 import { DataSourcePluginOptionsEditorProps, DataSourceSettings, SelectableValue } from '@grafana/data';
+import React, { ChangeEvent, PureComponent } from 'react';
 import { InstanaOptions } from '../types/instana_options';
-import { FormField, Switch } from '@grafana/ui';
 import getVersion from '../util/instana_version';
+import proxyCheck from '../util/proxy_check';
+import { Switch, FormField } from '@grafana/ui';
 
-interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {}
+interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {
+}
 
 interface State {
   canQueryOfflineSnapshots: boolean;
+  canUseProxy: boolean;
 }
 
 export class ConfigEditor extends PureComponent<Props, State> {
   constructor(props: Readonly<Props>) {
     super(props);
     this.detectFeatures();
-    this.state = { canQueryOfflineSnapshots: true };
+    this.state = { canQueryOfflineSnapshots: true, canUseProxy: true };
+
+    // check possibility every time
+    this.setState({ canUseProxy: proxyCheck() });
+
+    const { options } = this.props;
+    const { jsonData } = options;
+
+    if (jsonData.useProxy === undefined) {
+      jsonData.useProxy = proxyCheck();
+    }
+
   }
 
   onInstanaOptionsChange = (
@@ -58,7 +72,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
       return;
     }
 
-    getVersion(settings.jsonData).then(version => {
+    getVersion(settings.jsonData).then((version: any) => {
       version
         ? this.setState({ canQueryOfflineSnapshots: version >= 156 })
         : this.setState({ canQueryOfflineSnapshots: false });
@@ -127,7 +141,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           tooltip={'Adds a new category that allows retrieval of SLO information (feature flag required).'}
         />
 
-        <br />
+        <br/>
         <b>Maximum query intervals in hours</b>
         <p>
           This settings are optional values to control the load of data queries, by defining the maximum allowed query

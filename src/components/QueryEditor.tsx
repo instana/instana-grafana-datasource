@@ -3,14 +3,18 @@ import { InstanaOptions } from '../types/instana_options';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { DataSource } from '../datasources/DataSource';
 import { InstanaQuery } from '../types/instana_query';
-import { AdvancedSettings } from './AdvancedSettings';
-import { FormLabel, Select } from "@grafana/ui";
+import AdvancedSettings from './AdvancedSettings/AdvancedSettings';
+import { FormLabel, Select } from '@grafana/ui';
 import MetricCategories from '../lists/metric_categories';
-import { SloInformation } from "./SloInformation";
+import { SloInformation } from './SLOInformation/SloInformation';
+import { InfrastructureBuiltIn } from './Infrastructure/BuiltIn/InfrastructureBuiltIn';
+import _ from 'lodash';
+import Metric from './Metric';
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
 interface QueryState {
+  availableMetrics: SelectableValue<string>[];
 }
 
 export class QueryEditor extends PureComponent<Props, QueryState> {
@@ -18,24 +22,46 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   constructor(props: Props) {
     super(props);
-    const defaultQuery: Partial<InstanaQuery> = { constant: 6.5, metricCategory: MetricCategories[0] };
+    const defaultQuery: Partial<InstanaQuery> = {
+      constant: 6.5,
+      metricCategory: MetricCategories[0]
+    };
     this.query = Object.assign({}, defaultQuery, props.query);
+    this.state = {
+      availableMetrics: []
+    }
   }
 
   onCategoryChange = (newCategory: SelectableValue<string>) => {
     this.query.metricCategory = newCategory;
     this.onRunQuery();
-  };
+  }
 
   onRunQuery = () => {
-    const { query } = this;
-    this.props.onChange(query);
+    this.props.onChange(this.query);
     this.props.onRunQuery();
+  }
+
+  updateMetrics = (metrics: SelectableValue<string>[]) => {
+    this.setState({availableMetrics: _.sortBy(metrics, 'key')});
+
+    if (this.query.metric || this.query.showAllMetrics) {
+      const metric = _.find(this.state.availableMetrics, m => m.key === this.query.metric.key);
+      metric ? this.query.metric = metrics : this.query.metric = { key: null }
+    }
+
+    if (!this.query.metric) {
+      this.query.metric = {
+        key: null,
+        label: "Please select (" + metrics.length + ")"
+      }
+    }
+
+    this.props.onChange(this.query);
   }
 
   render() {
     const { query, onRunQuery, onCategoryChange } = this;
-
     return (
       <div>
         <div className={'gf-form'}>
@@ -49,8 +75,32 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         </div>
 
+        {query.metricCategory.key === 0 &&
+        <InfrastructureBuiltIn
+          query={query}
+          onRunQuery={onRunQuery}
+          onChange={this.props.onChange}
+          updateMetrics={this.updateMetrics}
+          datasource={this.props.datasource}
+        />
+        }
+
         {query.metricCategory.key === 7 &&
-          <SloInformation query={query} onRunQuery={onRunQuery} onChange={this.props.onChange} datasource={this.props.datasource} />
+        <SloInformation
+          query={query}
+          onRunQuery={onRunQuery}
+          onChange={this.props.onChange}
+          datasource={this.props.datasource} />
+        }
+
+        {query.metricCategory.key !== 7 &&
+        <Metric
+          query={query}
+          onChange={this.props.onChange}
+          onRunQuery={onRunQuery}
+          availableMetrics={this.state.availableMetrics}
+          datasource={this.props.datasource}
+        />
         }
 
         <AdvancedSettings

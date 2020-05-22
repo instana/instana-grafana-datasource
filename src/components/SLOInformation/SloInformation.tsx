@@ -1,9 +1,9 @@
 import React, { ChangeEvent } from "react";
-import { InstanaQuery } from "../types/instana_query";
-import { FormLabel, Input, Select } from "@grafana/ui";
+import { InstanaQuery } from "../../types/instana_query";
+import { FormLabel, Input, Select } from '@grafana/ui';
 import { SelectableValue } from "@grafana/data";
-import SloSpecifics from '../lists/slo_specifics';
-import { DataSource } from "../datasources/DataSource";
+import SloSpecifics from '../../lists/slo_specifics';
+import { DataSource } from "../../datasources/DataSource";
 
 interface SloInformationState {
   sloReports: SelectableValue<string>[];
@@ -51,8 +51,13 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
   }
 
   loadSloReports() {
+    const { query } = this.props;
     this.props.datasource.getSloReports().then(sloReports => {
       this.setState({sloReports: sloReports});
+
+      if (!query.sloReport && sloReports.length >= 1) {
+        query.sloReport = sloReports[0];
+      }
     })
   }
 

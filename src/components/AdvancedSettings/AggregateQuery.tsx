@@ -1,8 +1,8 @@
-import { Select, Switch } from "@grafana/ui";
-import React from "react";
-import { InstanaQuery } from "../types/instana_query";
-import { SelectableValue } from "@grafana/data";
-import AggregationFunctions from '../lists/aggregation_function';
+import { Select, Switch } from '@grafana/ui';
+import React from 'react';
+import { InstanaQuery } from '../../types/instana_query';
+import { SelectableValue } from '@grafana/data';
+import AggregationFunctions from '../../lists/aggregation_function';
 
 interface AggregateQueryState { }
 
@@ -15,26 +15,26 @@ interface Props {
 export class AggregateQuery extends React.Component<Props, AggregateQueryState> {
   constructor(props: any) {
     super(props);
-    this.state = { showAdditionalSettings: false, legendFormat: '' }
+    this.state = { showAdditionalSettings: false, legendFormat: '' };
   }
 
   onAggregateGraphs = (event: React.SyntheticEvent<HTMLInputElement> | undefined) => {
     const { query, onRunQuery } = this.props;
     query.aggregateGraphs = !query.aggregateGraphs;
     onRunQuery();
-  }
+  };
 
   onHideOriginalGraph = (event: React.SyntheticEvent<HTMLInputElement> | undefined) => {
     const { query, onRunQuery } = this.props;
     query.hideOriginalGraphs = !query.hideOriginalGraphs;
     onRunQuery();
-  }
+  };
 
   onAggregationFunctionChange = (event: SelectableValue<string>) => {
     const { query, onRunQuery } = this.props;
     query.aggregationFunction = event;
     onRunQuery();
-  }
+  };
 
   render() {
     const { query } = this.props;
