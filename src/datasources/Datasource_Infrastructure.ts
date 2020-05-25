@@ -1,4 +1,4 @@
-import { SelectableValue } from "@grafana/data";
+import { SelectableValue, TimeSeries } from '@grafana/data';
 import { InstanaOptions } from "../types/instana_options";
 import { InstanaQuery } from "../types/instana_query";
 import { getRequest } from "../util/request_handler";
@@ -32,7 +32,7 @@ export class DataSourceInfrastructure {
     // do not try to execute to big queries
     if (isInvalidQueryInterval(timeFilter.windowSize, this.instanaOptions.queryinterval_limit_infra)) {
       //return this.rejectLargeTimeWindow(this.maxWindowSizeInfrastructure);
-      return null;
+      return Promise.resolve(emptyResultData(target.refId));
     }
 
     // do not try to retrieve data without selected metric
@@ -288,7 +288,7 @@ export class DataSourceInfrastructure {
       `/api/metrics?metric=${metric.key}`
       + `&from=${timeFilter.from}`
       + `&to=${timeFilter.to}`
-      + `&rollup=${rollup}`
+      + `&rollup=60000` //${rollup}`
       + `&fillTimeSeries=true`
       + `&snapshotId=${snapshotId}`;
     return getRequest(this.instanaOptions, url);

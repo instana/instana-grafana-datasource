@@ -75,7 +75,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         </div>
 
-        {query.metricCategory.key === 0 &&
+        {query.metricCategory.key < 2 &&
         <InfrastructureBuiltIn
           query={query}
           onRunQuery={onRunQuery}

@@ -1,4 +1,5 @@
 import { DataQuery, SelectableValue } from '@grafana/data';
+import TimeFilter from './time_filter';
 
 export interface InstanaQuery extends DataQuery {
   queryText?: string;
@@ -25,4 +26,5 @@ export interface InstanaQuery extends DataQuery {
   pluginId: string;
   stableHash: string;
   displayMaxMetricValue: boolean;
+  timeFilter: TimeFilter;
 }

@@ -34,7 +34,7 @@ export class DataSourceSlo {
     return sliReports;
   }
 
-  runQuery(target: InstanaQuery, timeFilter: TimeFilter): Promise<TimeSeries> {
+  runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
     //avoid involid calls
     if (!target || !target.sloReport || !target.sloReport.key || !target.sloSpecific || !target.sloSpecific.key || !target.sloValue) {
       return Promise.resolve(emptyResultData(target.refId));
