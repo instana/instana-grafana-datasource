@@ -16,6 +16,10 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
   constructor(props: any) {
     super(props);
     this.state = { showAdditionalSettings: false, legendFormat: '' };
+    const { query } = this.props;
+    if (!query.aggregationFunction) {
+      query.aggregationFunction = AggregationFunctions[0];
+    }
   }
 
   onAggregateGraphs = (event: React.SyntheticEvent<HTMLInputElement> | undefined) => {
@@ -56,7 +60,6 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
           options={AggregationFunctions}
           value={query.aggregationFunction}
           isDisabled={!query.aggregateGraphs}
-          defaultValue={AggregationFunctions[0]}
           onChange={this.onAggregationFunctionChange}
         />
 
