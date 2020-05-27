@@ -49,7 +49,6 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   async query(options: DataQueryRequest<InstanaQuery>): Promise<DataQueryResponse> {
-    console.log("geht rein");
     const { range } = options;
     this.timeFilter = readTime(range!);
     this.availableRollups = getPossibleRollups(this.timeFilter);

@@ -24,7 +24,9 @@ export default class Metric extends React.Component<Props, MetricState> {
     this.state = {
       possibleTimeIntervals: []
     };
+  }
 
+  componentDidMount() {
     const { query, datasource } = this.props;
     if (query.entityQuery && query.entityType) {
       datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(results => {

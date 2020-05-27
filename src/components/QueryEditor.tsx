@@ -63,7 +63,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       metric ? this.query.metric = metrics : this.query.metric = { key: null }
     }
 
-    if (this.query.metric && !this.query.metric.key) {
+    if (!this.query.metric || !this.query.metric.key) {
       this.query.metric = {
         key: null,
         label: "Please select (" + metrics.length + ")"
@@ -79,7 +79,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       this.setState({ availableMetrics: this.state.allMetrics });
       this.query.canShowAllMetrics = false;
       this.query.showAllMetrics = false;
-      //this.refresh();
+      this.props.onRunQuery();
     } else {
       let filteredMetrics: any = this.state.allMetrics;
       _.forEach(this.query.customFilters, filter => {
