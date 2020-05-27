@@ -7,8 +7,6 @@ import _ from 'lodash';
 
 interface QueryTypeState {
   types: SelectableValue<string>[] | any;
-  entityQuery: string;
-  entityType: SelectableValue<string>;
 }
 
 interface Props {
@@ -28,12 +26,9 @@ let snapshots: any;
 export class QueryType extends React.Component<Props, QueryTypeState> {
   constructor(props: any) {
     super(props);
-    const { query } = props;
 
     this.state = {
-      types: [],
-      entityQuery: query.entityQuery !== '' ? query.entityQuery : '',
-      entityType: query.entityType ? query.entityType : { key: null, label: '-' }
+      types: []
     };
   }
 
@@ -62,8 +57,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
 
   onTypeChange = (eventItem: SelectableValue<string>) => {
     const { query, datasource, onChange } = this.props;
-    this.setState({ entityType: eventItem });
-    query.entityType = this.state.entityType;
+    query.entityType = eventItem;
     onChange(query);
 
     datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(results => {
