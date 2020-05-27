@@ -4,6 +4,7 @@ import { FormLabel, Select, Switch } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { DataSource } from '../datasources/DataSource';
 import _ from 'lodash';
+import max_metrics from '../lists/max_metrics';
 
 interface MetricState {
   possibleTimeIntervals: SelectableValue<string>[];
@@ -46,16 +47,40 @@ export default class Metric extends React.Component<Props, MetricState> {
   }
 
   onMetricChange = (metric: SelectableValue<string>) => {
-    const { query, onRunQuery } = this.props;
+    const { query, onRunQuery, onChange } = this.props;
     query.metric = metric;
+
+    if (query.displayMaxMetricValue && !this.canShowMaxMetricValue()) {
+      query.displayMaxMetricValue = false;
+    }
+
+    onChange(query);
     onRunQuery();
   };
 
+  canShowMaxMetricValue() {
+    const { query } = this.props;
+    return query.entityType &&
+      query.entityType.key === 'host' &&
+      query.metric &&
+      _.find(max_metrics, m => m.key === query.metric.key);
+  }
+
   onTimeIntervalChange = (timeInterval: SelectableValue<string>) => {
-    const { query, onRunQuery } = this.props;
+    const { query, onRunQuery, onChange } = this.props;
     query.timeInterval = timeInterval;
+    onChange(query);
     onRunQuery();
   };
+
+  onShowMaxValueChange = (event?: React.SyntheticEvent<HTMLInputElement>) => {
+    const { query, onChange, onRunQuery } = this.props;
+    if (event && event.currentTarget && event.currentTarget.value) {
+      query.displayMaxMetricValue = !query.displayMaxMetricValue;
+      onChange(query);
+      onRunQuery();
+    }
+  }
 
   onShowAllMetricsChange = (event?: React.SyntheticEvent<HTMLInputElement>) => {
     const { query, onChange, onRunQuery } = this.props;
@@ -73,26 +98,28 @@ export default class Metric extends React.Component<Props, MetricState> {
       <div className={'gf-form-inline'}>
         <FormLabel width={14} tooltip={'Select the metric you wish to plot.'}>Metric</FormLabel>
         <div style={query.showAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-        <Select
-          width={30}
-          isSearchable={false}
-          value={query.metric}
-          onChange={this.onMetricChange}
-          options={this.props.availableMetrics}>
-        </Select>
+          <Select
+            width={30}
+            isSearchable={false}
+            value={query.metric}
+            onChange={this.onMetricChange}
+            options={this.props.availableMetrics}>
+          </Select>
         </div>
 
         {query.metricCategory.key === 0 &&
-        <Switch
-          label={'Show max value'}
-          labelClass={'width-10'}
-          checked={false}
-          tooltipPlacement={'top'}
-          onChange={event => console.log(event)}
-          tooltip={
-            'Displays the maximal value of current metric. Supported for \'Type=Host\' with cpu.used, memory.used and openFiles.used only.'
-          }
-        />
+        <div style={!this.canShowMaxMetricValue() ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
+          <Switch
+            label={'Show max value'}
+            labelClass={'width-10'}
+            checked={query.displayMaxMetricValue}
+            tooltipPlacement={'top'}
+            onChange={this.onShowMaxValueChange}
+            tooltip={
+              'Displays the maximal value of current metric. Supported for \'Type=Host\' with cpu.used, memory.used and openFiles.used only.'
+            }
+          />
+        </div>
         }
 
         {query.metricCategory.key === 1 &&

@@ -34,7 +34,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.state = {
       allMetrics: [],
       availableMetrics: []
-    }
+    };
 
     this.props.onChange(this.query);
   }
@@ -47,11 +47,20 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       this.query.metricCategory = newCategory;
       this.onRunQuery();
     }
-  }
+  };
 
   onRunQuery = () => {
     this.props.onChange(this.query);
     this.props.onRunQuery();
+  };
+
+  setMetricPlaceholder(nrOfTotalResults: number) {
+    const { query, onChange } = this.props;
+    query.metric = {
+      key: null,
+      label: 'Please select (' + nrOfTotalResults + ')'
+    }
+    onChange(query);
   }
 
   updateMetrics = (metrics: SelectableValue<string>[]) => {
@@ -62,49 +71,66 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
     if (this.query.metric || this.query.showAllMetrics) {
       const metric = _.find(this.state.availableMetrics, m => m.key === this.query.metric.key);
-      metric ? this.query.metric = metrics : this.query.metric = { key: null }
+      metric ? this.query.metric = metrics : this.query.metric = { key: null };
     }
 
     if (!this.query.metric || !this.query.metric.key) {
-      this.query.metric = {
-        key: null,
-        label: "Please select (" + metrics.length + ")"
-      }
+      this.setMetricPlaceholder(metrics.length);
     }
 
     this.props.onChange(this.query);
     this.onRunQuery();
-  }
+  };
 
-  onFilterChange = () => {
-    if (!this.query.customFilters || this.query.customFilters.length === 0) {
+  onFilterChange = (customFilters: string[]) => {
+    if (!customFilters || customFilters.length === 0) {
       // don't do any filtering if no custom filters are set.
       this.setState({ availableMetrics: this.state.allMetrics });
-      this.query.canShowAllMetrics = false;
       this.query.showAllMetrics = false;
+      this.query.customFilters = customFilters;
+
+      if (!this.query.metric || !this.query.metric.key || !_.find(this.state.availableMetrics, m => m.key === this.query.metric.key)) {
+        this.setMetricPlaceholder(this.state.allMetrics.length);
+      }
+
+      this.props.onChange(this.query);
       this.props.onRunQuery();
     } else {
-      let filteredMetrics: any = this.state.allMetrics;
-      _.forEach(this.query.customFilters, filter => {
+      console.log("mind. ein filter");
+      let filteredMetrics = this.applyFilterToMetricList(customFilters);
+
+      if (!this.query.metric || !this.query.metric.key) {
+        this.setMetricPlaceholder(filteredMetrics.length);
+        console.log(this.query.metric);
+      }
+      console.log(this.query.metric);
+
+      this.setState({ availableMetrics: filteredMetrics });
+      this.query.customFilters = customFilters;
+      !this.query.canShowAllMetrics ? this.query.showAllMetrics = false : this.query.allMetrics = this.state.availableMetrics;
+
+      this.props.onChange(this.query);
+      this.onRunQuery();
+    }
+
+    this.query.canShowAllMetrics = this.isAbleToShowAllMetrics();
+    this.checkMetricAndRefresh(true);
+  };
+
+  applyFilterToMetricList(filters: string[]) {
+    let filteredMetrics: any = this.state.allMetrics;
+    _.forEach(filters, filter => {
+      if (filter !== '') {
         filteredMetrics =
           _.sortBy(
             _.filter(
               filteredMetrics,
               metric => metric.key.toLowerCase().includes(filter.toLowerCase())),
             'key');
-      });
-
-      this.setState({ availableMetrics: filteredMetrics });
-      this.query.canShowAllMetrics = this.isAbleToShowAllMetrics();
-
-      if (!this.query.canShowAllMetrics) {
-        this.query.showAllMetrics = false;
-      } else {
-        this.query.allMetrics = this.state.availableMetrics;
       }
-    }
+    });
 
-    this.checkMetricAndRefresh(true);
+    return filteredMetrics;
   }
 
   isAbleToShowAllMetrics() {
@@ -119,10 +145,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     }
 
     if (!this.query.metric.key) {
-      this.query.metric = {
-        key: null,
-        label: "Please select (" + this.state.availableMetrics.length + ")"
-      }
+      this.setMetricPlaceholder(this.state.availableMetrics.length);
     }
 
     if (refresh) {
@@ -170,7 +193,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           query={query}
           onRunQuery={onRunQuery}
           onChange={this.props.onChange}
-          datasource={this.props.datasource} />
+          datasource={this.props.datasource}/>
         }
 
         {query.metricCategory.key !== 7 &&
@@ -241,7 +264,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     query.aggregateGraphs = false;
     query.aggregationFunction = {
       key: null
-    }
+    };
     //query.filters = [];
     //query.serviceNamefilter = null;
     //query.showWarningCantShowAllResults = false;
@@ -255,7 +278,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.resetEndpoints();
     this.resetSLO();
   }
-
 
   resetMetricSelection() {
     const { query } = this.props;

@@ -12,7 +12,7 @@ interface Props {
   query: InstanaQuery;
   datasource: DataSource;
   availableMetrics: SelectableValue<string>[];
-  onFilterChange(): void;
+  onFilterChange(customFilters: string[]): void;
   onRunQuery(): void;
   onChange(value: InstanaQuery): void;
 }
@@ -27,13 +27,11 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
   }
 
   onFilterChange = (eventItem: ChangeEvent<HTMLInputElement>, index: number) => {
-    const { query, onChange, onFilterChange } = this.props;
-    const cf = this.state.customFilters;
+    const { onFilterChange } = this.props;
+    const cf: string[] = this.state.customFilters;
     cf[index] = eventItem.currentTarget.value;
     this.setState({customFilters: cf});
-    query.customFilters = cf;
-    onChange(query);
-    onFilterChange();
+    onFilterChange(cf);
   };
 
   addCustomFilter = () => {
@@ -47,15 +45,11 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
   };
 
   removeCustomFilter = (index: number) => {
-    let cf = this.state.customFilters;
+    let cf: string[] = this.state.customFilters;
     cf.splice(index, 1);
     this.setState({ customFilters: cf });
-
-    const { query, onChange } = this.props;
-    query.customFilters = cf;
-    onChange(query);
     // removing a filter might result in more than 5 available metrics
-    //this.onMetricsFilter(refresh);
+    this.props.onFilterChange(cf);
   }
 
   render() {

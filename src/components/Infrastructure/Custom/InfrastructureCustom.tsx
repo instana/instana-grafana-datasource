@@ -19,12 +19,6 @@ export class InfrastructureCustom extends React.Component<Props, InfrastructureC
     super(props);
   }
 
-  shouldComponentUpdate(nextProps: Readonly<Props>,
-                        nextState: Readonly<InfrastructureCustomState>,
-                        nextContext: any): boolean {
-    return nextProps.query.metricCategory.key === 0;
-  }
-
   render() {
     const { query, onRunQuery, onChange, updateMetrics, datasource} = this.props;
 

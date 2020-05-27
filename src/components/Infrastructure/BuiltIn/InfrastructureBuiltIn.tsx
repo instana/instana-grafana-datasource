@@ -4,8 +4,7 @@ import { DataSource } from "../../../datasources/DataSource";
 import { QueryType } from '../QueryType';
 import { SelectableValue } from '@grafana/data';
 
-interface InfrastructureBuiltInState {
-}
+interface InfrastructureBuiltInState { }
 
 interface Props {
   onRunQuery(): void;
@@ -18,12 +17,6 @@ interface Props {
 export class InfrastructureBuiltIn extends React.Component<Props, InfrastructureBuiltInState> {
   constructor(props: any) {
     super(props);
-  }
-
-  shouldComponentUpdate(nextProps: Readonly<Props>,
-                        nextState: Readonly<InfrastructureBuiltInState>,
-                        nextContext: any): boolean {
-    return nextProps.query.metricCategory.key === 0;
   }
 
   render() {
