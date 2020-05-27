@@ -5,7 +5,6 @@ export interface InstanaQuery extends DataQuery {
   queryText?: string;
   constant: number;
   metricCategory: SelectableValue;
-  legendFormat: string;
   timeShift: string;
   aggregateGraphs: boolean;
   aggregationFunction: SelectableValue;
@@ -14,17 +13,21 @@ export interface InstanaQuery extends DataQuery {
   sloValue: string;
   sloSpecific: SelectableValue;
   metric: SelectableValue;
-  aggregation: string;
+  aggregation: SelectableValue;
   entityQuery: string;
   entityType: SelectableValue;
   showAllMetrics: boolean;
+  canShowAllMetrics: boolean;
   timeInterval: SelectableValue;
   freeTextMetrics: string;
-  allMetrics: string;
+  allMetrics: SelectableValue[];
   labelFormat: string;
-  timeShiftIsValid: string;
+  timeShiftIsValid: boolean;
   pluginId: string;
   stableHash: string;
+  customFilters: string[];
   displayMaxMetricValue: boolean;
   timeFilter: TimeFilter;
+  useFreeTextMetrics: boolean;
+  filter: string;
 }

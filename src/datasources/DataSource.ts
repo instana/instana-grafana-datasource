@@ -25,6 +25,7 @@ import {
 import { appendData, generateStableHash, hasIntersection } from '../util/delta_util';
 import { SLO_INFORMATION } from '../GlobalVariables';
 import getVersion from '../util/instana_version';
+import { aggregateTarget } from '../util/aggregation_util';
 
 export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   options: InstanaOptions;
@@ -48,6 +49,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   async query(options: DataQueryRequest<InstanaQuery>): Promise<DataQueryResponse> {
+    console.log("geht rein");
     const { range } = options;
     this.timeFilter = readTime(range!);
     this.availableRollups = getPossibleRollups(this.timeFilter);
@@ -82,6 +84,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         });
       } else if (target.metricCategory.key === 0 || target.metricCategory.key === 1) {
         return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
+          target.entityQuery = "test";
           return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
         });
       }
@@ -94,7 +97,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
         let resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
         this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
-        //resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
+        resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
         this.cacheResultIfNecessary(resultData, targetAndData.target);
         result.push(resultData);
       });
@@ -147,9 +150,21 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     });
   }
 
+  aggregateDataIfNecessary(data: any, target: InstanaQuery) {
+    var newData = [];
+
+    if (target.aggregateGraphs) {
+      newData.push(aggregateTarget(data, target));
+      if (!target.hideOriginalGraphs) {
+        _.each(data, (dt, index) => newData.push(dt));
+      }
+      return newData;
+    }
+
+    return data;
+  }
+
   buildTargetWithAppendedDataResult(target: InstanaQuery, timeFilter: TimeFilter, data: any) {
-    console.log(timeFilter);
-    console.log(target);
     if (timeFilter.from !== target.timeFilter.from && data) {
       data = this.appendResult(data, target);
     }
@@ -200,7 +215,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   fetchTypesForTarget(query: InstanaQuery) {
-    return this.dataSourceInfrastructure.fetchTypesForTarget(query, this.timeFilter);
+    return this.dataSourceInfrastructure.fetchTypesForTarget(query, this.getTimeFilter());
   }
 
   getDefaultTimeInterval(query: InstanaQuery) {
@@ -259,6 +274,20 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     } else {
       this.availableTimeIntervals = this.availableGranularities;
     }
+  }
+
+  getTimeFilter(): TimeFilter {
+    if (!this.timeFilter || !this.timeFilter.from) {
+      const now = Math.floor(Date.now() / 1000) * 1000;
+      const windowSize = 6 * 60 * 60 * 1000; // 6h
+      this.timeFilter = {
+        from: now - windowSize,
+        to: now,
+        windowSize: windowSize
+      };
+    }
+
+    return this.timeFilter;
   }
 
   testDatasource(): Promise<any> {

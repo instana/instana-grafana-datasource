@@ -1,4 +1,4 @@
-import { SelectableValue, TimeSeries } from '@grafana/data';
+import { SelectableValue } from '@grafana/data';
 import { InstanaOptions } from "../types/instana_options";
 import { InstanaQuery } from "../types/instana_query";
 import { getRequest } from "../util/request_handler";
@@ -36,7 +36,7 @@ export class DataSourceInfrastructure {
     }
 
     // do not try to retrieve data without selected metric
-    if (!target.metric && !target.showAllMetrics && !target.freeTextMetrics) {
+    if ((!target.metric || !target.metric.key) && !target.showAllMetrics && !target.freeTextMetrics) {
       return Promise.resolve(emptyResultData(target.refId));
     }
 
@@ -86,7 +86,7 @@ export class DataSourceInfrastructure {
       // ...fetch the metric data for every snapshot in the results.
       return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then((response: any) => {
         let timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
-        var result = {
+        let result = {
           'target': this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
           'datapoints': _.map(timeseries, value => [value.value, value.timestamp]),
           'refId': target.refId,
@@ -116,11 +116,11 @@ export class DataSourceInfrastructure {
   }
 
   buildMaxMetricTarget(target: any, timeseries: any, maxValue: any, resultLabel: any) {
-    let datapoints = _.map(timeseries, (series, index) => {
+    let datapoints = _.map(timeseries, (series) => {
       return [maxValue, series.timestamp];
     });
 
-    var maxLabel = this.convertMetricNameToMaxLabel(target.metric);
+    let maxLabel = this.convertMetricNameToMaxLabel(target.metric);
 
     return {
       'target': resultLabel + ' ' + maxLabel,
@@ -135,7 +135,7 @@ export class DataSourceInfrastructure {
   }
 
   convertRelativeToAbsolute(datapoints: any, maxValue: any) {
-    return _.map(datapoints, (datapoint, index) => {
+    return _.map(datapoints, (datapoint) => {
       if (datapoint[0]) {
         return [datapoint[0] * maxValue, datapoint[1]];
       }
@@ -211,7 +211,7 @@ export class DataSourceInfrastructure {
 
     snapshots = getRequest(this.instanaOptions, fetchSnapshotContextsUrl).then((contextsResponse: any) => {
       return Promise.all(
-        contextsResponse.data.map(({snapshotId, host, plugin}: any) => {
+        contextsResponse.data.map(({snapshotId, host}: any) => {
           let snapshotInfo = this.snapshotInfoCache.get(snapshotId);
           if (snapshotInfo) {
             return snapshotInfo;
@@ -266,8 +266,8 @@ export class DataSourceInfrastructure {
     return snapshotResponse;
   }
 
-  readTimeSeries(values: any, aggregation: string, pluginId: string, timeFilter: TimeFilter) {
-    if (aggregation === 'SUM' && (pluginId === 'singlestat' || pluginId === 'gauge' || pluginId === 'table')) {
+  readTimeSeries(values: any, aggregation: SelectableValue, pluginId: string, timeFilter: TimeFilter) {
+    if (aggregation && aggregation.label === 'SUM' && (pluginId === 'singlestat' || pluginId === 'gauge' || pluginId === 'table')) {
       return this.correctMeanToSum(values, timeFilter);
     }
     return values;
@@ -303,6 +303,7 @@ export class DataSourceInfrastructure {
 
   buildLabel(snapshotResponse: any, host: any, target: InstanaQuery, index: any, metric: any): string {
     if (target.labelFormat) {
+      console.log("geht rein");
       let label = target.labelFormat;
       label = _.replace(label, '$label', snapshotResponse.data.label);
       label = _.replace(label, '$plugin', snapshotResponse.data.plugin); // not documented

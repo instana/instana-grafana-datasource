@@ -15,6 +15,7 @@ const legendFormatPlaceholders = [
 ];
 
 interface AdvancedSettingsState {
+  labelFormat: string;
   showAdditionalSettings: boolean;
   legendFormatPlaceholder: string;
 }
@@ -32,15 +33,17 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
   constructor(props: any) {
     super(props);
     this.state = {
+      labelFormat: '',
       showAdditionalSettings: false,
       legendFormatPlaceholder: this.setLegendFormatPlaceholder()
     };
   }
 
   onLegendFormatChange = (eventItem: FormEvent<HTMLInputElement>) => {
-    const { query } = this.props;
-    query.legendFormat = eventItem.currentTarget.value;
-    this.props.onRunQuery();
+    const { query, onChange } = this.props;
+    this.setState({labelFormat: eventItem.currentTarget.value});
+    query.labelFormat = this.state.labelFormat;
+    onChange(query);
   };
 
   onTimeShiftChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
@@ -74,9 +77,10 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
               labelWidth={14}
               inputWidth={30}
               label={'Legend format'}
-              value={query.legendFormat}
+              value={this.state.labelFormat}
               placeholder={this.setLegendFormatPlaceholder()}
               onChange={event => this.onLegendFormatChange(event)}
+              onBlur={e => onRunQuery()}
               tooltip={'Enter the URL of your Instana installation. E.g. https://tools-acme.instana.io'}
             />
           </div>

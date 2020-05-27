@@ -10,10 +10,14 @@ import { SloInformation } from './SLOInformation/SloInformation';
 import { InfrastructureBuiltIn } from './Infrastructure/BuiltIn/InfrastructureBuiltIn';
 import _ from 'lodash';
 import Metric from './Metric';
+import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
+import { CUSTOM_METRICS } from '../GlobalVariables';
+import { InfrastructureCustom } from './Infrastructure/Custom/InfrastructureCustom';
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
 interface QueryState {
+  allMetrics: SelectableValue<string>[];
   availableMetrics: SelectableValue<string>[];
 }
 
@@ -23,18 +27,24 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   constructor(props: Props) {
     super(props);
     const defaultQuery: Partial<InstanaQuery> = {
-      constant: 6.5,
-      metricCategory: MetricCategories[0]
+      metricCategory: MetricCategories[0],
+      customFilters: []
     };
     this.query = Object.assign({}, defaultQuery, props.query);
     this.state = {
+      allMetrics: [],
       availableMetrics: []
     }
   }
 
   onCategoryChange = (newCategory: SelectableValue<string>) => {
-    this.query.metricCategory = newCategory;
-    this.onRunQuery();
+    if (this.query.metricCategory === newCategory) {
+      // nothing needs to be done
+    } else {
+      this.selectionReset();
+      this.query.metricCategory = newCategory;
+      this.onRunQuery();
+    }
   }
 
   onRunQuery = () => {
@@ -43,14 +53,17 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   updateMetrics = (metrics: SelectableValue<string>[]) => {
-    this.setState({availableMetrics: _.sortBy(metrics, 'key')});
+    this.setState({
+      availableMetrics: _.sortBy(metrics, 'key'),
+      allMetrics: _.sortBy(metrics, 'key')
+    });
 
     if (this.query.metric || this.query.showAllMetrics) {
       const metric = _.find(this.state.availableMetrics, m => m.key === this.query.metric.key);
       metric ? this.query.metric = metrics : this.query.metric = { key: null }
     }
 
-    if (!this.query.metric) {
+    if (this.query.metric && !this.query.metric.key) {
       this.query.metric = {
         key: null,
         label: "Please select (" + metrics.length + ")"
@@ -58,6 +71,60 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     }
 
     this.props.onChange(this.query);
+  }
+
+  onFilterChange = () => {
+    if (!this.query.customFilters || this.query.customFilters.length === 0) {
+      // don't do any filtering if no custom filters are set.
+      this.setState({ availableMetrics: this.state.allMetrics });
+      this.query.canShowAllMetrics = false;
+      this.query.showAllMetrics = false;
+      //this.refresh();
+    } else {
+      let filteredMetrics: any = this.state.allMetrics;
+      _.forEach(this.query.customFilters, filter => {
+        filteredMetrics =
+          _.sortBy(
+            _.filter(
+              filteredMetrics,
+              metric => metric.key.toLowerCase().includes(filter.toLowerCase())),
+            'key');
+      });
+
+      this.setState({ availableMetrics: filteredMetrics });
+      this.query.canShowAllMetrics = this.isAbleToShowAllMetrics();
+
+      if (!this.query.canShowAllMetrics) {
+        this.query.showAllMetrics = false;
+      } else {
+        this.query.allMetrics = this.state.availableMetrics;
+      }
+    }
+
+    this.checkMetricAndRefresh(true);
+  }
+
+  isAbleToShowAllMetrics() {
+    return this.query.metricCategory.key === CUSTOM_METRICS
+      && this.state.availableMetrics.length > 0
+      && this.state.availableMetrics.length <= 5;
+  }
+
+  checkMetricAndRefresh(refresh: boolean) {
+    if (this.query.metric && !_.includes(_.map(this.state.availableMetrics, m => m.key), this.query.metric.key)) {
+      this.resetMetricSelection();
+    }
+
+    if (!this.query.metric.key) {
+      this.query.metric = {
+        key: null,
+        label: "Please select (" + this.state.availableMetrics.length + ")"
+      }
+    }
+
+    if (refresh) {
+      this.onRunQuery();
+    }
   }
 
   render() {
@@ -75,8 +142,18 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         </div>
 
-        {query.metricCategory.key < 2 &&
+        {query.metricCategory.key === 0 &&
         <InfrastructureBuiltIn
+          query={query}
+          onRunQuery={onRunQuery}
+          onChange={this.props.onChange}
+          updateMetrics={this.updateMetrics}
+          datasource={this.props.datasource}
+        />
+        }
+
+        {query.metricCategory.key === 1 &&
+        <InfrastructureCustom
           query={query}
           onRunQuery={onRunQuery}
           onChange={this.props.onChange}
@@ -98,6 +175,18 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           query={query}
           onChange={this.props.onChange}
           onRunQuery={onRunQuery}
+          updateMetrics={this.updateMetrics}
+          availableMetrics={this.state.availableMetrics}
+          datasource={this.props.datasource}
+        />
+        }
+
+        {query.metricCategory.key === 1 &&
+        <MetricFilter
+          query={query}
+          onChange={this.props.onChange}
+          onRunQuery={onRunQuery}
+          onFilterChange={this.onFilterChange}
           availableMetrics={this.state.availableMetrics}
           datasource={this.props.datasource}
         />
@@ -111,4 +200,92 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       </div>
     );
   }
+
+  selectionReset() {
+    const { query } = this.props;
+    if (query.metricCategory.key > 1) {
+      query.entityQuery = '';
+    }
+    //this.uniqueEntityTypes = [];
+
+    this.setState({
+      availableMetrics: [],
+      allMetrics: []
+    });
+    //this.uniqueEntities = [];
+    //this.uniqueTags = [];
+    this.resetEntityTypeSelection();
+    this.resetEntitySelection();
+    this.resetMetricSelection();
+  }
+
+  resetEntityTypeSelection() {
+    const { query } = this.props;
+    query.entityType = {
+      key: null,
+      label: '-'
+    };
+    query.customFilters = [];
+    //this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
+  }
+
+  resetEntitySelection() {
+    const { query } = this.props;
+    //query.entity = null;
+    //query.group = null;
+    //query.showGroupBySecondLevel = null;
+    //query.groupbyTagSecondLevelKey = null;
+    query.aggregateGraphs = false;
+    query.aggregationFunction = {
+      key: null
+    }
+    //query.filters = [];
+    //query.serviceNamefilter = null;
+    //query.showWarningCantShowAllResults = false;
+    query.showAllMetrics = false;
+    query.canShowAllMetrics = false;
+    query.displayMaxMetricValue = false;
+    //this.serviceEndpointSelectionText = this.EMPTY_DROPDOWN_TEXT;
+    //query.applicationCallToEntity = null;
+    //query.callToEntity = null;
+    this.resetServices();
+    this.resetEndpoints();
+    this.resetSLO();
+  }
+
+
+  resetMetricSelection() {
+    const { query } = this.props;
+    query.metric = { key: null };
+    query.filter = '';
+    query.timeShift = '';
+    query.timeShiftIsValid = true;
+    //query.showWarningCantShowAllResults = false;
+    query.showAllMetrics = false;
+    query.labelFormat = '';
+    //this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
+    query.freeTextMetrics = '';
+    query.useFreeTextMetrics = false;
+  }
+
+  resetServices() {
+    //const { query } = this.props;
+    //query.service = null;
+    //this.uniqueServices = [];
+  }
+
+  resetEndpoints() {
+    //const { query } = this.props;
+    //query.endpoint = null;
+    //this.uniqueEndpoints = [];
+  }
+
+  resetSLO() {
+    const { query } = this.props;
+    query.sloValue = '';
+    query.sloReport = {
+      key: null
+    };
+  }
+
 }

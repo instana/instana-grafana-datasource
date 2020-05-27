@@ -7,7 +7,7 @@ export function aggregateTarget(data: any, target: InstanaQuery) {
   let dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (d) {
     return d[1];
   });
-  
+
   let aggregatedData = aggregateDataOfTimestamp(dataGroupedByTimestamp, target.aggregationFunction.label!);
   aggregatedData = _.sortBy(aggregatedData, [function (datapoint) {
     return datapoint[1];

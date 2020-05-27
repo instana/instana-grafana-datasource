@@ -8,13 +8,18 @@ import _ from 'lodash';
 interface QueryTypeState {
   types: SelectableValue<string>[] | any;
   entityQuery: string;
+  entityType: SelectableValue<string>;
 }
 
 interface Props {
   query: InstanaQuery;
+
   onRunQuery(): void;
+
   onChange(value: InstanaQuery): void;
+
   updateMetrics(metrics: SelectableValue<string>[]): void;
+
   datasource: DataSource;
 }
 
@@ -27,19 +32,38 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
 
     this.state = {
       types: [],
-      entityQuery: query.entityQuery
+      entityQuery: query.entityQuery !== '' ? query.entityQuery : '',
+      entityType: query.entityType ? query.entityType : { key: null, label: '-' }
     };
   }
 
-  onQueryChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
+  componentDidMount() {
     const { query } = this.props;
-    query.entityQuery = eventItem.currentTarget.value;
-    this.loadEntityTypes();
+    if (query.entityQuery) {
+      this.loadEntityTypes();
+    }
+  }
+
+  onQueryChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
+    const { query, onChange } = this.props;
+    if (eventItem.currentTarget.value) {
+      query.entityQuery = eventItem.currentTarget.value;
+    } else {
+      this.setState({
+        types: [],
+      });
+
+      query.entityQuery = '';
+      query.entityType = { key: null, label: '-' };
+    }
+
+    onChange(query);
   };
 
   onTypeChange = (eventItem: SelectableValue<string>) => {
     const { query, datasource, onChange } = this.props;
-    query.entityType = eventItem;
+    this.setState({ entityType: eventItem });
+    query.entityType = this.state.entityType;
     onChange(query);
 
     datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(results => {
@@ -49,32 +73,25 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
 
   loadEntityTypes() {
     const { query, datasource, onRunQuery, onChange } = this.props;
+
     if (query.entityQuery) {
       datasource.fetchTypesForTarget(query).then(
         (response: any) => {
           snapshots = response.data;
-
           datasource.getEntityTypes().then(entityTypes => {
             let filteredEntityTypes = this.filterEntityTypes(entityTypes);
-            this.setState({ types: filteredEntityTypes });
-            query.entityType = {
-              key: 'null',
-              label: 'Please select (' + filteredEntityTypes.length + ')'
-            };
+            this.setState({
+              types: filteredEntityTypes,
+            });
+            query.entityType = { key: null, label: 'Please select (' + filteredEntityTypes.length + ')' };
             onChange(query);
           });
+
+          onRunQuery();
         }
       );
-
-      onRunQuery();
     } else {
-      this.setState({types: []});
-      query.entityType = {
-        key: null,
-      };
-
-      onChange(query);
-      onRunQuery();
+      this.setState({ types: [] });
     }
   }
 
@@ -109,16 +126,17 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
           label="Query"
           labelWidth={14}
           inputWidth={30}
-          value={this.state.entityQuery}
+          value={query.entityQuery}
           placeholder={'Please specify'}
-          onBlur={this.onQueryChange}
+          onChange={this.onQueryChange}
+          onBlur={event => this.loadEntityTypes()}
           tooltip={'Specify a query for the entities you wish to plot. Use the dynamic focus syntax: https://docs.instana.io/core_concepts/dynamic_focus/#syntax'}
         />
 
         <FormLabel tooltip={'Select an entity type for a list of available metrics.'}>Type</FormLabel>
         <Select
           width={13}
-          isSearchable={false}
+          isSearchable={true}
           value={query.entityType}
           options={this.state.types}
           onChange={this.onTypeChange}

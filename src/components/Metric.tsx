@@ -13,7 +13,7 @@ interface Props {
   query: InstanaQuery;
   datasource: DataSource;
   availableMetrics: SelectableValue<string>[];
-
+  updateMetrics(metrics: SelectableValue<string>[]): void;
   onRunQuery(): void;
   onChange(value: InstanaQuery): void;
 }
@@ -24,6 +24,13 @@ export default class Metric extends React.Component<Props, MetricState> {
     this.state = {
       possibleTimeIntervals: []
     };
+
+    const { query, datasource } = this.props;
+    if (query.entityQuery && query.entityType) {
+      datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(results => {
+        this.props.updateMetrics(results);
+      });
+    }
   }
 
   componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<MetricState>, snapshot?: any) {
@@ -45,6 +52,15 @@ export default class Metric extends React.Component<Props, MetricState> {
     onRunQuery();
   };
 
+  onShowAllMetricsChange = (event?: React.SyntheticEvent<HTMLInputElement>) => {
+    const { query, onRunQuery } = this.props;
+    if (event && event.currentTarget) {
+      query.showAllMetrics = !query.showAllMetrics;
+    }
+
+    onRunQuery();
+  }
+
   render() {
     const { query, datasource } = this.props;
 
@@ -60,7 +76,7 @@ export default class Metric extends React.Component<Props, MetricState> {
         </Select>
 
         {query.metricCategory.key === 0 &&
-          <Switch
+        <Switch
           label={'Show max value'}
           labelClass={'width-10'}
           checked={false}
@@ -69,7 +85,20 @@ export default class Metric extends React.Component<Props, MetricState> {
           tooltip={
             'Displays the maximal value of current metric. Supported for \'Type=Host\' with cpu.used, memory.used and openFiles.used only.'
           }
-          />
+        />
+        }
+
+        {query.metricCategory.key === 1 &&
+        <Switch
+          label={'Show all metrics'}
+          labelClass={'width-10'}
+          checked={query.showAllMetrics}
+          tooltipPlacement={'top'}
+          onChange={this.onShowAllMetricsChange}
+          tooltip={
+            'You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.'
+          }
+        />
         }
 
         {query.metricCategory.key > 1 &&
