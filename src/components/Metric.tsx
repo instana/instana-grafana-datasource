@@ -13,8 +13,11 @@ interface Props {
   query: InstanaQuery;
   datasource: DataSource;
   availableMetrics: SelectableValue<string>[];
+
   updateMetrics(metrics: SelectableValue<string>[]): void;
+
   onRunQuery(): void;
+
   onChange(value: InstanaQuery): void;
 }
 
@@ -55,13 +58,13 @@ export default class Metric extends React.Component<Props, MetricState> {
   };
 
   onShowAllMetricsChange = (event?: React.SyntheticEvent<HTMLInputElement>) => {
-    const { query, onRunQuery } = this.props;
-    if (event && event.currentTarget) {
+    const { query, onChange, onRunQuery } = this.props;
+    if (event && event.currentTarget && event.currentTarget.value) {
       query.showAllMetrics = !query.showAllMetrics;
+      onChange(query);
+      onRunQuery();
     }
-
-    onRunQuery();
-  }
+  };
 
   render() {
     const { query, datasource } = this.props;
@@ -69,6 +72,7 @@ export default class Metric extends React.Component<Props, MetricState> {
     return (
       <div className={'gf-form-inline'}>
         <FormLabel width={14} tooltip={'Select the metric you wish to plot.'}>Metric</FormLabel>
+        <div style={query.showAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
         <Select
           width={30}
           isSearchable={false}
@@ -76,6 +80,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           onChange={this.onMetricChange}
           options={this.props.availableMetrics}>
         </Select>
+        </div>
 
         {query.metricCategory.key === 0 &&
         <Switch
@@ -91,16 +96,18 @@ export default class Metric extends React.Component<Props, MetricState> {
         }
 
         {query.metricCategory.key === 1 &&
-        <Switch
-          label={'Show all metrics'}
-          labelClass={'width-10'}
-          checked={query.showAllMetrics}
-          tooltipPlacement={'top'}
-          onChange={this.onShowAllMetricsChange}
-          tooltip={
-            'You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.'
-          }
-        />
+        <div style={!query.canShowAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
+          <Switch
+            label={'Show all metrics'}
+            labelClass={'width-10'}
+            checked={query.showAllMetrics}
+            tooltipPlacement={'top'}
+            onChange={this.onShowAllMetricsChange}
+            tooltip={
+              'You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.'
+            }
+          />
+        </div>
         }
 
         {query.metricCategory.key > 1 &&

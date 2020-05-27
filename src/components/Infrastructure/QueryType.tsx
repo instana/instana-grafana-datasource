@@ -81,6 +81,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
             if (!query.entityType || !query.entityType.key || !_.find(this.state.types, m => m.key === query.entityType.key)) {
               query.entityType = { key: null, label: 'Please select (' + filteredEntityTypes.length + ')' };
             }
+
             onChange(query);
           });
 

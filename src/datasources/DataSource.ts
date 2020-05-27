@@ -83,14 +83,12 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         });
       } else if (target.metricCategory.key === 0 || target.metricCategory.key === 1) {
         return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
-          target.entityQuery = "test";
           return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
         });
       }
 
       return Promise.resolve(emptyResultData(target.refId));
     })).then(targetData => {
-      console.log(targetData);
       let result: any = [];
       _.each(targetData, (targetAndData) => {
         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.

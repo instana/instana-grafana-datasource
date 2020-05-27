@@ -35,6 +35,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       allMetrics: [],
       availableMetrics: []
     }
+
+    this.props.onChange(this.query);
   }
 
   onCategoryChange = (newCategory: SelectableValue<string>) => {
@@ -71,6 +73,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     }
 
     this.props.onChange(this.query);
+    this.onRunQuery();
   }
 
   onFilterChange = () => {
