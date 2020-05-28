@@ -288,7 +288,7 @@ export class DataSourceInfrastructure {
       `/api/metrics?metric=${metric.key}`
       + `&from=${timeFilter.from}`
       + `&to=${timeFilter.to}`
-      + `&rollup=60000` //${rollup}`
+      + `&rollup=${rollup}`
       + `&fillTimeSeries=true`
       + `&snapshotId=${snapshotId}`;
     return getRequest(this.instanaOptions, url);

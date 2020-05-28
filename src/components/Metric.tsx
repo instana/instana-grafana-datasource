@@ -37,11 +37,11 @@ export default class Metric extends React.Component<Props, MetricState> {
         this.props.updateMetrics(results);
       });
     } else {
-      console.log("no metric");
       query.metric = {
         key: null,
         label: '-'
       }
+
       onChange(query);
     }
   }
