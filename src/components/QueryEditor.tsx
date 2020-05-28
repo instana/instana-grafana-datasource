@@ -39,6 +39,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       currentCategory: this.query.metricCategory
     };
 
+    //TODO query.pluginId = this.props.panelCtrl.panel.type || this.panelCtrl.pluginId;
     this.props.onChange(this.query);
   }
 

@@ -1,7 +1,6 @@
 import React from "react";
 import { InstanaQuery } from "../../types/instana_query";
 import { DataSource } from "../../datasources/DataSource";
-import { Metric } from "../Metric";
 
 interface WebsiteMetricsState {
 
@@ -20,11 +19,11 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
   }
 
   render() {
-    const { query, onRunQuery, onChange, datasource } = this.props;
+    // const { query, onRunQuery, onChange, datasource } = this.props;
 
     return (
       <div>
-        <Metric query={query} onRunQuery={onRunQuery} onChange={onChange} datasource={datasource} />
+        Website Metrics here
       </div>
     );
   }

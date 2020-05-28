@@ -112,7 +112,8 @@ export class DataSourceInfrastructure {
   }
 
   getMaxMetricValue(metric: any, snapshot: any): number {
-    return snapshot.response.data.data[_.find(max_metrics, m => m.key === metric.key).value];
+    const maxMetrics: any = max_metrics;
+    return snapshot.response.data.data[_.find(maxMetrics, (m: any) => m.key === metric.key).value];
   }
 
   buildMaxMetricTarget(target: any, timeseries: any, maxValue: any, resultLabel: any) {
@@ -131,7 +132,8 @@ export class DataSourceInfrastructure {
   }
 
   convertMetricNameToMaxLabel(metric: any): string {
-    return _.find(max_metrics, m => m.key === metric.key).label;
+    const maxMetrics: any = max_metrics;
+    return _.find(maxMetrics, m => m.key === metric.key).label;
   }
 
   convertRelativeToAbsolute(datapoints: any, maxValue: any) {

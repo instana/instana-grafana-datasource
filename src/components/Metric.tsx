@@ -98,6 +98,16 @@ export default class Metric extends React.Component<Props, MetricState> {
     }
   };
 
+  canShowAggregation() {
+    const { query } = this.props;
+    return query.metricCategory.key >= 2 || this.isPluginThatSupportsAggregation();
+  }
+
+  isPluginThatSupportsAggregation() {
+    const { query } = this.props;
+    return query.pluginId === 'singlestat' || query.pluginId === 'gauge' || query.pluginId === 'table';
+  }
+
   render() {
     const { query, datasource } = this.props;
 
@@ -148,7 +158,7 @@ export default class Metric extends React.Component<Props, MetricState> {
         <FormLabel width={8} tooltip={'Select a metric aggregation.'}>Aggregation</FormLabel>
         }
 
-        {query.metricCategory.key > 1 &&
+        {this.canShowAggregation() &&
         <Select
           width={8}
           isSearchable={false}
