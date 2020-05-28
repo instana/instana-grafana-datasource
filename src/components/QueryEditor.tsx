@@ -255,6 +255,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     //query.groupbyTagSecondLevelKey = null;
     query.aggregateGraphs = false;
     query.aggregationFunction = AggregationFunctions[0];
+    query.hideOriginalGraphs = false;
     //query.filters = [];
     //query.serviceNamefilter = null;
     //query.showWarningCantShowAllResults = false;
