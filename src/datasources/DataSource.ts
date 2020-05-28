@@ -217,9 +217,9 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
   getDefaultTimeInterval(query: InstanaQuery) {
     if (query.metricCategory.key === 0 || query.metricCategory.key === 1) {
-      return getDefaultMetricRollupDuration(this.timeFilter);
+      return getDefaultMetricRollupDuration(this.getTimeFilter());
     } else {
-      return getDefaultChartGranularity(this.timeFilter.windowSize);
+      return getDefaultChartGranularity(this.getTimeFilter().windowSize);
     }
   }
 

@@ -19,6 +19,7 @@ type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 interface QueryState {
   allMetrics: SelectableValue<string>[];
   availableMetrics: SelectableValue<string>[];
+  currentCategory: SelectableValue<string>;
 }
 
 export class QueryEditor extends PureComponent<Props, QueryState> {
@@ -33,18 +34,20 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.query = Object.assign({}, defaultQuery, props.query);
     this.state = {
       allMetrics: [],
-      availableMetrics: []
+      availableMetrics: [],
+      currentCategory: this.query.metricCategory
     };
 
     this.props.onChange(this.query);
   }
 
   onCategoryChange = (newCategory: SelectableValue<string>) => {
-    if (this.query.metricCategory === newCategory) {
+    if (this.state.currentCategory === newCategory) {
       // nothing needs to be done
     } else {
       this.selectionReset();
       this.query.metricCategory = newCategory;
+      this.setState({currentCategory: newCategory});
       this.onRunQuery();
     }
   };
@@ -55,12 +58,12 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   };
 
   setMetricPlaceholder(nrOfTotalResults: number) {
-    const { query, onChange } = this.props;
-    query.metric = {
+    this.query.metric = {
       key: null,
       label: 'Please select (' + nrOfTotalResults + ')'
     }
-    onChange(query);
+
+    this.props.onChange(this.query);
   }
 
   updateMetrics = (metrics: SelectableValue<string>[]) => {
@@ -88,32 +91,17 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       this.setState({ availableMetrics: this.state.allMetrics });
       this.query.showAllMetrics = false;
       this.query.customFilters = customFilters;
-
-      if (!this.query.metric || !this.query.metric.key || !_.find(this.state.availableMetrics, m => m.key === this.query.metric.key)) {
-        this.setMetricPlaceholder(this.state.allMetrics.length);
-      }
-
-      this.props.onChange(this.query);
-      this.props.onRunQuery();
     } else {
-      console.log("mind. ein filter");
       let filteredMetrics = this.applyFilterToMetricList(customFilters);
-
-      if (!this.query.metric || !this.query.metric.key) {
-        this.setMetricPlaceholder(filteredMetrics.length);
-        console.log(this.query.metric);
-      }
-      console.log(this.query.metric);
-
+      console.log(filteredMetrics);
       this.setState({ availableMetrics: filteredMetrics });
+      console.log(this.state.availableMetrics);
       this.query.customFilters = customFilters;
       !this.query.canShowAllMetrics ? this.query.showAllMetrics = false : this.query.allMetrics = this.state.availableMetrics;
-
-      this.props.onChange(this.query);
-      this.onRunQuery();
     }
 
     this.query.canShowAllMetrics = this.isAbleToShowAllMetrics();
+    this.props.onChange(this.query);
     this.checkMetricAndRefresh(true);
   };
 
@@ -145,8 +133,11 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     }
 
     if (!this.query.metric.key) {
+      console.log(this.state.availableMetrics);
       this.setMetricPlaceholder(this.state.availableMetrics.length);
     }
+
+    this.props.onChange(this.query);
 
     if (refresh) {
       this.onRunQuery();
@@ -281,7 +272,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   resetMetricSelection() {
     const { query } = this.props;
-    query.metric = { key: null };
+    query.metric = { key: null, label: '-' };
     query.filter = '';
     query.timeShift = '';
     query.timeShiftIsValid = true;

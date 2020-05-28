@@ -31,11 +31,18 @@ export default class Metric extends React.Component<Props, MetricState> {
   }
 
   componentDidMount() {
-    const { query, datasource } = this.props;
-    if (query.entityQuery && query.entityType) {
+    const { query, datasource, onChange } = this.props;
+    if (query.entityQuery && query.entityType && query.entityType.key) {
       datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(results => {
         this.props.updateMetrics(results);
       });
+    } else {
+      console.log("no metric");
+      query.metric = {
+        key: null,
+        label: '-'
+      }
+      onChange(query);
     }
   }
 
