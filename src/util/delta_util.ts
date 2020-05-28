@@ -10,9 +10,7 @@ const omitLabels = [
   'timeShiftIsValid',
   'useFreeTextMetrics',
   'showGroupBySecondLevel',
-  'aggregateGraphs',
   'canShowAllMetrics',
-  'aggregationFunction',
   'timeFilter',
   'stableHash'
 ];

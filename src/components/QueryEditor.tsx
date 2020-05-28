@@ -13,6 +13,7 @@ import Metric from './Metric';
 import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
 import { CUSTOM_METRICS } from '../GlobalVariables';
 import { InfrastructureCustom } from './Infrastructure/Custom/InfrastructureCustom';
+import AggregationFunctions from '../lists/aggregation_function';
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
@@ -253,9 +254,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     //query.showGroupBySecondLevel = null;
     //query.groupbyTagSecondLevelKey = null;
     query.aggregateGraphs = false;
-    query.aggregationFunction = {
-      key: null
-    };
+    query.aggregationFunction = AggregationFunctions[0];
     //query.filters = [];
     //query.serviceNamefilter = null;
     //query.showWarningCantShowAllResults = false;
