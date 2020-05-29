@@ -14,6 +14,7 @@ import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
 import { CUSTOM_METRICS } from '../GlobalVariables';
 import { InfrastructureCustom } from './Infrastructure/Custom/InfrastructureCustom';
 import AggregationFunctions from '../lists/aggregation_function';
+import { WebsiteMetrics } from './WebsiteMetrics/WebsiteMetrics';
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
@@ -174,6 +175,16 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           onRunQuery={onRunQuery}
           onChange={this.props.onChange}
           updateMetrics={this.updateMetrics}
+          datasource={this.props.datasource}
+        />
+        }
+
+
+        {query.metricCategory.key === 3 &&
+        <WebsiteMetrics
+          query={query}
+          onRunQuery={onRunQuery}
+          onChange={this.props.onChange}
           datasource={this.props.datasource}
         />
         }

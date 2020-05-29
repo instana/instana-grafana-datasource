@@ -26,10 +26,12 @@ import { appendData, generateStableHash, hasIntersection } from '../util/delta_u
 import { SLO_INFORMATION } from '../GlobalVariables';
 import getVersion from '../util/instana_version';
 import { aggregateTarget } from '../util/aggregation_util';
+import { DataSourceWebsite } from './DataSource_Website';
 
 export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   options: InstanaOptions;
   dataSourceInfrastructure: DataSourceInfrastructure;
+  dataSourceWebsite: DataSourceWebsite;
   dataSourceSlo: DataSourceSlo;
   timeFilter!: TimeFilter;
   availableGranularities: SelectableValue[];
@@ -45,6 +47,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     this.availableTimeIntervals = [];
     this.dataSourceSlo = new DataSourceSlo(instanceSettings.jsonData);
     this.dataSourceInfrastructure = new DataSourceInfrastructure(instanceSettings.jsonData);
+    this.dataSourceWebsite = new DataSourceWebsite(instanceSettings.jsonData);
     this.resultCache = new Cache<any>();
   }
 
@@ -213,6 +216,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
   fetchTypesForTarget(query: InstanaQuery) {
     return this.dataSourceInfrastructure.fetchTypesForTarget(query, this.getTimeFilter());
+  }
+
+  fetchWebsites(): Promise<SelectableValue<string>[]> {
+    return this.dataSourceWebsite.getWebsites(this.getTimeFilter());
   }
 
   getDefaultTimeInterval(query: InstanaQuery) {
