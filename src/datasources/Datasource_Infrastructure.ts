@@ -305,7 +305,6 @@ export class DataSourceInfrastructure {
 
   buildLabel(snapshotResponse: any, host: any, target: InstanaQuery, index: any, metric: any): string {
     if (target.labelFormat) {
-      console.log("geht rein");
       let label = target.labelFormat;
       label = _.replace(label, '$label', snapshotResponse.data.label);
       label = _.replace(label, '$plugin', snapshotResponse.data.plugin); // not documented

@@ -95,9 +95,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       this.query.customFilters = customFilters;
     } else {
       let filteredMetrics = this.applyFilterToMetricList(customFilters);
-      console.log(filteredMetrics);
       this.setState({ availableMetrics: filteredMetrics });
-      console.log(this.state.availableMetrics);
       this.query.customFilters = customFilters;
       !this.query.canShowAllMetrics ? this.query.showAllMetrics = false : this.query.allMetrics = this.state.availableMetrics;
     }
@@ -135,7 +133,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     }
 
     if (!this.query.metric.key) {
-      console.log(this.state.availableMetrics);
       this.setMetricPlaceholder(this.state.availableMetrics.length);
     }
 
