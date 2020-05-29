@@ -23,7 +23,7 @@ import {
   getPossibleRollups
 } from '../util/rollup_granularity_util';
 import { appendData, generateStableHash, hasIntersection } from '../util/delta_util';
-import { SLO_INFORMATION } from '../GlobalVariables';
+import { ANALYZE_WEBSITE_METRICS, BUILT_IN_METRICS, CUSTOM_METRICS, SLO_INFORMATION } from '../GlobalVariables';
 import getVersion from '../util/instana_version';
 import { aggregateTarget } from '../util/aggregation_util';
 import { DataSourceWebsite } from './DataSource_Website';
@@ -80,12 +80,16 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       target.stableHash = generateStableHash(target);
       targetTimeFilter = this.adjustTimeFilterIfCached(targetTimeFilter, target);
 
-      if (target.metricCategory.key === 7) {
+      if (target.metricCategory.key === SLO_INFORMATION) {
         return this.dataSourceSlo.runQuery(target, targetTimeFilter).then((data: any) => {
           return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
         });
-      } else if (target.metricCategory.key === 0 || target.metricCategory.key === 1) {
+      } else if (target.metricCategory.key === BUILT_IN_METRICS || target.metricCategory.key === CUSTOM_METRICS) {
         return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
+          return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+        });
+      } else if (target.metricCategory.key === ANALYZE_WEBSITE_METRICS) {
+        return this.dataSourceWebsite.runQuery(target, targetTimeFilter).then((data: any) => {
           return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
         });
       }

@@ -185,6 +185,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           query={query}
           onRunQuery={onRunQuery}
           onChange={this.props.onChange}
+          updateMetrics={this.updateMetrics}
           datasource={this.props.datasource}
         />
         }
