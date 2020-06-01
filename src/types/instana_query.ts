@@ -35,4 +35,5 @@ export interface InstanaQuery extends DataQuery {
   timeFilter: TimeFilter;
   useFreeTextMetrics: boolean;
   filter: string;
+  showGroupBySecondLevel: boolean;
 }

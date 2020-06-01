@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { InstanaQuery } from '../../types/instana_query';
 import { DataSource } from '../../datasources/DataSource';
-import { FormLabel, Select } from '@grafana/ui';
+import { FormLabel, Input, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import beacon_types from '../../lists/beacon_types';
 import _ from 'lodash';
+import { ANALYZE_APPLICATION_METRICS, ANALYZE_WEBSITE_METRICS } from '../../GlobalVariables';
 
 interface WebsiteMetricsState {
   websites: SelectableValue[];
@@ -13,10 +14,15 @@ interface WebsiteMetricsState {
 
 interface Props {
   query: InstanaQuery;
+
   onRunQuery(): void;
+
   onChange(value: InstanaQuery): void;
+
   updateMetrics(metrics: SelectableValue<string>[]): void;
+
   filterMetricsOnType(type: string): any;
+
   datasource: DataSource;
 }
 
@@ -40,7 +46,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
     query.entity = {
       key: null,
       label: 'Please select (' + nrOfTotalResults + ')'
-    }
+    };
 
     onChange(query);
   }
@@ -52,7 +58,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
         websites: websites
       });
 
-      this.setWebsitePlaceholder(websites.length)
+      this.setWebsitePlaceholder(websites.length);
     });
 
     datasource.dataSourceWebsite.getWebsiteTags().then((websiteTags: any) => {
@@ -62,7 +68,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
 
       // select a meaningful default group
       if (!query.group || !query.group.key) {
-        query.group = _.find(websiteTags, ['key', 'beacon.page.name']);
+        query.group = _.find(websiteTags, [ 'key', 'beacon.page.name' ]);
         onChange(query);
       }
     });
@@ -77,21 +83,36 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
     query.entity = website;
     onChange(query);
     onRunQuery();
-  }
+  };
 
   onBeaconTypeChange = (type: SelectableValue) => {
     const { query, onChange, filterMetricsOnType } = this.props;
     query.entityType = type;
     onChange(query);
     filterMetricsOnType(query.entityType.key);
-  }
+  };
 
   onGroupChange = (group: SelectableValue) => {
     const { query, onChange, onRunQuery } = this.props;
     query.group = group;
+
+    if (query.group && (query.metricCategory.key === ANALYZE_WEBSITE_METRICS || query.metricCategory.key === ANALYZE_APPLICATION_METRICS)) {
+      query.showGroupBySecondLevel = query.group.type === 'KEY_VALUE_PAIR';
+    }
+    if (!query.showGroupBySecondLevel) {
+      query.groupbyTagSecondLevelKey = '';
+    }
+
     onChange(query);
     onRunQuery();
-  }
+  };
+
+  onGroupByTagSecondLevelKeyChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
+    const { query, onChange, onRunQuery } = this.props;
+    query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
+    onChange(query);
+    onRunQuery();
+  };
 
   render() {
     const { query } = this.props;
@@ -124,6 +145,14 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
           options={this.state.websiteTags}
           onChange={this.onGroupChange}
         />
+
+        <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
+          <Input
+            type={'text'}
+            value={query.groupbyTagSecondLevelKey}
+            onBlur={this.onGroupByTagSecondLevelKeyChange}
+          />
+        </div>
       </div>
     );
   }
