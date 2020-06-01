@@ -8,6 +8,7 @@ import max_metrics from '../lists/max_metrics';
 
 interface MetricState {
   possibleTimeIntervals: SelectableValue<string>[];
+  possibleAggregations: SelectableValue<string>[];
 }
 
 interface Props {
@@ -26,24 +27,9 @@ export default class Metric extends React.Component<Props, MetricState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      possibleTimeIntervals: []
+      possibleTimeIntervals: [],
+      possibleAggregations: []
     };
-  }
-
-  componentDidMount() {
-    const { query, datasource, onChange } = this.props;
-    if (query.entityQuery && query.entityType && query.entityType.key) {
-      datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(results => {
-        this.props.updateMetrics(results);
-      });
-    } else {
-      query.metric = {
-        key: null,
-        label: '-'
-      }
-
-      onChange(query);
-    }
   }
 
   componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<MetricState>, snapshot?: any) {
@@ -56,6 +42,10 @@ export default class Metric extends React.Component<Props, MetricState> {
   onMetricChange = (metric: SelectableValue<string>) => {
     const { query, onRunQuery, onChange } = this.props;
     query.metric = metric;
+
+    if (query.metric && query.metric.key && !_.includes(query.metric.aggregations, query.aggregation)) {
+      query.aggregation = query.metric.aggregations[0];
+    }
 
     if (query.displayMaxMetricValue && !this.canShowMaxMetricValue()) {
       query.displayMaxMetricValue = false;
@@ -87,7 +77,7 @@ export default class Metric extends React.Component<Props, MetricState> {
       onChange(query);
       onRunQuery();
     }
-  }
+  };
 
   onShowAllMetricsChange = (event?: React.SyntheticEvent<HTMLInputElement>) => {
     const { query, onChange, onRunQuery } = this.props;

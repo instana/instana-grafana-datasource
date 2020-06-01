@@ -7,9 +7,9 @@ import { SelectableValue } from '@grafana/data';
 interface InfrastructureBuiltInState { }
 
 interface Props {
-  onRunQuery(): void;
   query: InstanaQuery;
   datasource: DataSource;
+  onRunQuery(): void;
   onChange(value: InstanaQuery): void;
   updateMetrics(metrics: SelectableValue<string>[]): void;
 }
@@ -17,6 +17,23 @@ interface Props {
 export class InfrastructureBuiltIn extends React.Component<Props, InfrastructureBuiltInState> {
   constructor(props: any) {
     super(props);
+  }
+
+  componentDidMount() {
+    const { query, onChange, datasource } = this.props;
+
+    if (query.entityQuery && query.entityType && query.entityType.key) {
+      datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(results => {
+        this.props.updateMetrics(results);
+      });
+    } else {
+      query.metric = {
+        key: null,
+        label: '-'
+      };
+    }
+
+    onChange(query);
   }
 
   render() {

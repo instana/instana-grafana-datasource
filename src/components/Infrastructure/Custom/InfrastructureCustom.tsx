@@ -19,6 +19,23 @@ export class InfrastructureCustom extends React.Component<Props, InfrastructureC
     super(props);
   }
 
+  componentDidMount() {
+    const { query, onChange, datasource } = this.props;
+
+    if (query.entityQuery && query.entityType && query.entityType.key) {
+      datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(results => {
+        this.props.updateMetrics(results);
+      });
+    } else {
+      query.metric = {
+        key: null,
+        label: '-'
+      };
+    }
+
+    onChange(query);
+  }
+
   render() {
     const { query, onRunQuery, onChange, updateMetrics, datasource} = this.props;
 
