@@ -70,6 +70,13 @@ export default class Metric extends React.Component<Props, MetricState> {
     onRunQuery();
   };
 
+  onAggregationChange = (aggregation: SelectableValue<string>) => {
+    const { query, onRunQuery, onChange } = this.props;
+    query.aggregation = aggregation;
+    onChange(query);
+    onRunQuery();
+  };
+
   onShowMaxValueChange = (event?: React.SyntheticEvent<HTMLInputElement>) => {
     const { query, onChange, onRunQuery } = this.props;
     if (event && event.currentTarget && event.currentTarget.value) {
@@ -153,8 +160,8 @@ export default class Metric extends React.Component<Props, MetricState> {
           width={8}
           isSearchable={false}
           value={query.aggregation}
-          onChange={this.onMetricChange}
-          options={this.props.availableMetrics}
+          onChange={this.onAggregationChange}
+          options={query.metric.aggregations}
         />
         }
 

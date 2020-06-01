@@ -36,7 +36,6 @@ export class DataSourceWebsite {
     }
 
     return this.fetchAnalyzeMetricsForWebsite(target, timeFilter).then((response: any) => {
-      console.log(response);
       return readItemMetrics(target, response, this.buildAnalyzeWebsiteLabel);
     });
   }
@@ -112,13 +111,22 @@ export class DataSourceWebsite {
       catalogResponse.data.map((entry: any) => ({
         'key': entry.metricId,
         'label': entry.label,
-        'aggregations': entry.aggregations ? entry.aggregations.sort() : [],
+        'aggregations': entry.aggregations ? this.transformAggregations(entry.aggregations.sort()) : [],
         'beaconTypes': entry.beaconTypes ? entry.beaconTypes : [ 'pageLoad', 'resourceLoad', 'httpRequest', 'error' ]
       }))
     );
     this.miscCache.put('websiteCatalog', websiteCatalog);
 
     return websiteCatalog;
+  }
+
+  transformAggregations(aggregations: string[]) {
+    return _.map(aggregations, a => {
+      return {
+        key: a,
+        label: a
+      }
+    });
   }
 
   private fetchAnalyzeMetricsForWebsite(target: InstanaQuery, timeFilter: TimeFilter) {
@@ -136,7 +144,7 @@ export class DataSourceWebsite {
     });
     const metric: any = {
       metric: target.metric.key,
-      aggregation: target.aggregation ? target.aggregation : 'SUM'
+      aggregation: target.aggregation.key ? target.aggregation.key : 'SUM'
     };
 
     if (target.pluginId !== 'singlestat' && target.pluginId !== 'gauge') { // no granularity for singlestat and gauge
