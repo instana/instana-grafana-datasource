@@ -33,12 +33,16 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       metricCategory: MetricCategories[0],
       customFilters: []
     };
+
     this.query = Object.assign({}, defaultQuery, props.query);
+
     this.state = {
       allMetrics: [],
       availableMetrics: [],
       currentCategory: this.query.metricCategory
     };
+
+    this.filterMetricsOnType = this.filterMetricsOnType.bind(this);
 
     //TODO query.pluginId = this.props.panelCtrl.panel.type || this.panelCtrl.pluginId;
     this.props.onChange(this.query);
@@ -122,6 +126,22 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     return filteredMetrics;
   }
 
+  filterMetricsOnType(type: string) {
+    let filteredMetrics: SelectableValue<string>[] = this.state.allMetrics.filter(metric => {
+      return metric.beaconTypes.includes(type);
+    });
+
+    this.setState({
+      availableMetrics: filteredMetrics
+    });
+
+    if (!this.query.metric || !this.query.metric.key || !this.query.metric.beaconTypes.includes(type)) {
+      this.setMetricPlaceholder(filteredMetrics.length);
+    }
+
+    this.onRunQuery();
+  }
+
   isAbleToShowAllMetrics() {
     return this.query.metricCategory.key === CUSTOM_METRICS
       && this.state.availableMetrics.length > 0
@@ -186,6 +206,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           onRunQuery={onRunQuery}
           onChange={this.props.onChange}
           updateMetrics={this.updateMetrics}
+          filterMetricsOnType={this.filterMetricsOnType}
           datasource={this.props.datasource}
         />
         }
@@ -259,8 +280,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   resetEntitySelection() {
     const { query } = this.props;
-    //query.entity = null;
-    //query.group = null;
+    query.entity = { key: null, label: '-' };
+    query.group = { key: null, label: '-' };
     //query.showGroupBySecondLevel = null;
     //query.groupbyTagSecondLevelKey = null;
     query.aggregateGraphs = false;

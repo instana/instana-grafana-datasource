@@ -16,6 +16,7 @@ interface Props {
   onRunQuery(): void;
   onChange(value: InstanaQuery): void;
   updateMetrics(metrics: SelectableValue<string>[]): void;
+  filterMetricsOnType(type: string): any;
   datasource: DataSource;
 }
 
@@ -79,10 +80,10 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
   }
 
   onBeaconTypeChange = (type: SelectableValue) => {
-    const { query, onChange, onRunQuery } = this.props;
+    const { query, onChange, filterMetricsOnType } = this.props;
     query.entityType = type;
     onChange(query);
-    onRunQuery();
+    filterMetricsOnType(query.entityType.key);
   }
 
   onGroupChange = (group: SelectableValue) => {
