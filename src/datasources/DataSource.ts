@@ -27,11 +27,17 @@ import { ANALYZE_WEBSITE_METRICS, BUILT_IN_METRICS, CUSTOM_METRICS, SLO_INFORMAT
 import getVersion from '../util/instana_version';
 import { aggregateTarget } from '../util/aggregation_util';
 import { DataSourceWebsite } from './DataSource_Website';
+import { DataSourceApplicaton } from './DataSource_Application';
+import { DataSourceService } from './DataSource_Service';
+import { DataSourceEndpoint } from './DataSource_Endpoint';
 
 export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   options: InstanaOptions;
   dataSourceInfrastructure: DataSourceInfrastructure;
   dataSourceWebsite: DataSourceWebsite;
+  dataSourceApplication: DataSourceApplicaton;
+  dataSourceService: DataSourceService;
+  dataSourceEndpoint: DataSourceEndpoint;
   dataSourceSlo: DataSourceSlo;
   timeFilter!: TimeFilter;
   availableGranularities: SelectableValue[];
@@ -48,6 +54,9 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     this.dataSourceSlo = new DataSourceSlo(instanceSettings.jsonData);
     this.dataSourceInfrastructure = new DataSourceInfrastructure(instanceSettings.jsonData);
     this.dataSourceWebsite = new DataSourceWebsite(instanceSettings.jsonData);
+    this.dataSourceApplication = new DataSourceApplicaton(instanceSettings.jsonData);
+    this.dataSourceService = new DataSourceService(instanceSettings.jsonData);
+    this.dataSourceEndpoint = new DataSourceEndpoint(instanceSettings.jsonData);
     this.resultCache = new Cache<any>();
   }
 
@@ -216,6 +225,18 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
   getEntityTypes(): Promise<SelectableValue<string>[]> {
     return this.dataSourceInfrastructure.getEntityTypes();
+  }
+
+  fetchApplications() {
+    return this.dataSourceApplication.getApplications(this.getTimeFilter());
+  }
+
+  fetchServices(target: InstanaQuery) {
+    return this.dataSourceService.getServicesOfApplication(target, this.getTimeFilter());
+  }
+
+  fetchEndpoints(target: InstanaQuery) {
+    return this.dataSourceEndpoint.getEndpointsOfService(target, this.getTimeFilter());
   }
 
   fetchTypesForTarget(query: InstanaQuery) {

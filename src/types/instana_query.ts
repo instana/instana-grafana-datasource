@@ -16,6 +16,8 @@ export interface InstanaQuery extends DataQuery {
   sloSpecific: SelectableValue;
   metric: SelectableValue;
   entity: SelectableValue;
+  service: SelectableValue;
+  endpoint: SelectableValue;
   aggregation: SelectableValue;
   entityQuery: string;
   entityType: SelectableValue;
@@ -36,4 +38,5 @@ export interface InstanaQuery extends DataQuery {
   useFreeTextMetrics: boolean;
   filter: string;
   showGroupBySecondLevel: boolean;
+  applicationCallToEntity: SelectableValue;
 }
