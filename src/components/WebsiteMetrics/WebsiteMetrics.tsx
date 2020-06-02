@@ -52,7 +52,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
         websites: websites
       });
 
-      if (!query.entityType || !query.entityType.key) {
+      if (!query.entity || !query.entity.key) {
         this.setWebsitePlaceholder(websites.length);
       }
     });
@@ -68,6 +68,11 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
         onChange(query);
       }
     });
+
+    if (!query.entityType || !query.entityType.key) {
+      query.entityType = beacon_types[0];
+      onChange(query);
+    }
 
     datasource.dataSourceWebsite.getWebsiteMetricsCatalog().then((websiteMetrics: any) => {
       this.props.updateMetrics(_.filter(websiteMetrics, m => m.beaconTypes.includes(query.entityType.key)));
