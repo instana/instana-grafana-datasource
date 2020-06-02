@@ -33,12 +33,6 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
       websites: [],
       websiteTags: []
     };
-
-    const { query, onChange } = this.props;
-    if (!query.entityType || !query.entityType.key) {
-      query.entityType = beacon_types[0];
-      onChange(query);
-    }
   }
 
   setWebsitePlaceholder(nrOfTotalResults: number) {
@@ -58,7 +52,9 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
         websites: websites
       });
 
-      this.setWebsitePlaceholder(websites.length);
+      if (!query.entityType || !query.entityType.key) {
+        this.setWebsitePlaceholder(websites.length);
+      }
     });
 
     datasource.dataSourceWebsite.getWebsiteTags().then((websiteTags: any) => {

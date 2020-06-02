@@ -32,9 +32,9 @@ export default class Metric extends React.Component<Props, MetricState> {
     };
   }
 
-  componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<MetricState>, snapshot?: any) {
+  componentDidMount() {
     const { query, datasource } = this.props;
-    if (!query.timeInterval || !_.find(datasource.availableTimeIntervals, interval => interval === query.timeInterval)) {
+    if (!query.timeInterval || !query.timeInterval.key ||!_.find(datasource.availableTimeIntervals, interval => interval.key === query.timeInterval.key)) {
       query.timeInterval = datasource.getDefaultTimeInterval(query);
     }
   }
