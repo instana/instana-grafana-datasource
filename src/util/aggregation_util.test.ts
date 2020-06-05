@@ -1,6 +1,6 @@
-import { aggregateTarget } from './aggregation_util';
 import { InstanaQuery } from '../types/instana_query';
 import { buildTestTarget, generateTestData } from '../test_util';
+import { aggregateTarget } from './aggregation_util';
 
 describe('Given a dataset', function() {
   describe('with 3 entries', function() {
@@ -9,6 +9,7 @@ describe('Given a dataset', function() {
     it('should aggregate correctly to SUM', function() {
       let target: InstanaQuery = buildTestTarget();
       target.refId = 'A';
+      target.metric = {  key: 'my metric' };
       target.aggregationFunction = {
         label: 'SUM'
       };
@@ -20,7 +21,7 @@ describe('Given a dataset', function() {
           [9, 200000000]
         ],
         refId: target.refId,
-        target: target.aggregationFunction.label
+        target: target.metric.key + " (" + target.aggregationFunction.label + ")"
       };
       let result = aggregateTarget(data, target);
       expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
@@ -40,7 +41,7 @@ describe('Given a dataset', function() {
           [3, 200000000]
         ],
         refId: target.refId,
-        target: target.aggregationFunction.label
+        target: target.metric.key + " (" + target.aggregationFunction.label + ")"
       };
       let result = aggregateTarget(data, target);
       expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
@@ -49,6 +50,7 @@ describe('Given a dataset', function() {
     it('should aggregate correctly to MIN', function() {
       let target = buildTestTarget();
       target.refId = 'C';
+      target.metric = { key: 'my metric'}
       target.aggregationFunction = {
         label: 'MIN'
       };
@@ -61,7 +63,7 @@ describe('Given a dataset', function() {
           [2, 200000000]
         ],
         refId: target.refId,
-        target: target.aggregationFunction!.label
+        target: target.metric.key + " (" + target.aggregationFunction.label + ")"
       };
       let result = aggregateTarget(data, target);
       expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
@@ -70,6 +72,7 @@ describe('Given a dataset', function() {
     it('should aggregate correctly to MAX', function() {
       let target = buildTestTarget();
       target.refId = 'D';
+      target.metric = { key: 'my metric'}
       target.aggregationFunction = {
         label: 'MAX'
       };
@@ -81,7 +84,7 @@ describe('Given a dataset', function() {
           [4, 200000000]
         ],
         refId: target.refId,
-        target: target.aggregationFunction!.label
+        target: target.metric.key + " (" + target.aggregationFunction.label + ")"
       };
       let result = aggregateTarget(data, target);
       expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));

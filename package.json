@@ -11,11 +11,11 @@
   "author": "Instana",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@grafana/ui": "latest",
     "@grafana/data": "latest",
     "@grafana/runtime": "latest",
-    "@grafana/toolkit": "latest",
-    "@types/lodash": "latest"
+    "@grafana/toolkit": "7.0.3",
+    "@grafana/ui": "latest",
+    "@types/lodash": "4.14.155"
   },
   "dependencies": {
     "@types/react": "^16.9.35",

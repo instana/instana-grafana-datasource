@@ -14,7 +14,7 @@ export default function getVersion(options: InstanaOptions) {
     return Promise.resolve(cachedVersion);
   }
 
-  let version = getRequest(options, '/api/instana/version').then(
+  return getRequest(options, '/api/instana/version').then(
     (result: any) => {
       if (result.data && result.data.imageTag) {
         const v = parseInt(result.data.imageTag.split('.', 2)[1], 10) || null;
@@ -30,6 +30,4 @@ export default function getVersion(options: InstanaOptions) {
       return null;
     }
   );
-
-  return version;
 }

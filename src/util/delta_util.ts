@@ -19,7 +19,7 @@ export function generateStableHash(obj: any): string {
   let pseudoHash = _.omit(obj, omitLabels);
   pseudoHash = _.mapValues(pseudoHash, (value: any) => {
     // to reduce overhead of interface Selectable
-    if (value != null && typeof value === 'object' && 'key' in value) {
+    if (value != null && !_.isEmpty(value) && typeof value === 'object' && 'key' in value) {
       value = value.key;
     }
     return value;
@@ -48,8 +48,8 @@ export function hasIntersection(t1: TimeFilter, t2: TimeFilter): boolean {
   the corresponding oldest four datapoints are removed).
 */
 export function appendData(newDeltaData: any, cachedData: any): any {
-  _.each(newDeltaData, (deltaData, index) => {
-    var matchingCachedData = _.find(cachedData, o => o.key === deltaData.key);
+  _.each(newDeltaData, (deltaData) => {
+    let matchingCachedData = _.find(cachedData, o => o.key === deltaData.key);
     if (matchingCachedData && deltaData.datapoints) {
       const size = matchingCachedData.datapoints.length;
       let datapoints = deltaData.datapoints.concat(matchingCachedData.datapoints);

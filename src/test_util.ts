@@ -37,46 +37,46 @@ export function generateTestData(amountOfTimeseries: number, numberOfEntries: nu
   return data;
 }
 
+/*
+  Returns an InstanaQuery object with example values
+ */
 export function buildTestTarget(): InstanaQuery {
   return {
     aggregateGraphs: false,
-    aggregation: { key: null },
-    applicationCallToEntity: { key: null },
+    aggregation: { },
+    applicationCallToEntity: { },
     canShowAllMetrics: false,
     customFilters: [],
     displayMaxMetricValue: false,
-    endpoint: { key: null },
-    entity: { key: null },
+    endpoint: { },
+    entity: { },
     entityQuery: '',
-    entityType: { key: null },
+    entityType: { } ,
     filter: '',
     filters: [],
     freeTextMetrics: '',
-    group: { key: null },
+    group: { },
     groupbyTagSecondLevelKey: '',
     hideOriginalGraphs: false,
     labelFormat: '',
-    metric: { key: null },
-    metricCategory: { key: null },
+    metric: { },
+    metricCategory: { },
     pluginId: '',
-    service: { key: null },
+    service: { },
     showGroupBySecondLevel: false,
-    sloReport: { key: null },
-    sloSpecific: { key: null },
+    showWarningCantShowAllResults: false,
+    sloReport: { },
+    sloSpecific: { },
     sloValue: '',
     stableHash: '',
     timeFilter: { from: 0, to: 0, windowSize: 0 },
-    timeInterval: { key: null },
+    timeInterval: { },
     timeShift: '',
     timeShiftIsValid: false,
     useFreeTextMetrics: false,
-    showAllMetrics: true,
-    allMetrics: [
-      { key: '1' }, { key: '2' }
-    ],
-    aggregationFunction: {
-      label: "SUM"
-    },
+    showAllMetrics: false,
+    allMetrics: [ ],
+    aggregationFunction: { },
     refId: "A"
   };
 }
