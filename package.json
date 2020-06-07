@@ -20,6 +20,6 @@
   "dependencies": {
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
   }
 }

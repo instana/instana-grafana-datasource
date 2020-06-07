@@ -22,6 +22,7 @@ export interface InstanaQuery extends DataQuery {
   showAllMetrics: boolean;
   canShowAllMetrics: boolean;
   groupbyTagSecondLevelKey: string;
+  showWarningCantShowAllResults: boolean;
   timeInterval: SelectableValue;
   freeTextMetrics: string;
   allMetrics: SelectableValue[];
