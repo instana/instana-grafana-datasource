@@ -19,9 +19,10 @@ export function generateStableHash(obj: any): string {
   let pseudoHash = _.omit(obj, omitLabels);
   pseudoHash = _.mapValues(pseudoHash, (value: any) => {
     // to reduce overhead of interface Selectable
-    if (value != null && !_.isEmpty(value) && typeof value === 'object' && 'key' in value) {
+    if (value != null && typeof value === 'object' && 'key' in value) {
       value = value.key;
     }
+
     return value;
   });
   return JSON.stringify(pseudoHash);
