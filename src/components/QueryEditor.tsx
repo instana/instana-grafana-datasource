@@ -17,12 +17,14 @@ import AggregationFunctions from '../lists/aggregation_function';
 import { WebsiteMetrics } from './WebsiteMetrics/WebsiteMetrics';
 import { ApplicationServiceEndpointMetrics } from './ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics';
 import migrate from '../migration';
+import { Filters } from './Filter';
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
 interface QueryState {
   allMetrics: SelectableValue<string>[];
   availableMetrics: SelectableValue<string>[];
+  groups: SelectableValue<string>[];
   currentCategory: SelectableValue<string>;
 }
 
@@ -43,6 +45,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.state = {
       allMetrics: [],
       availableMetrics: [],
+      groups: [],
       currentCategory: this.query.metricCategory
     };
 
@@ -96,6 +99,12 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.props.onChange(this.query);
     this.onRunQuery();
   };
+
+  updateGroups = (groups: SelectableValue[]) => {
+    this.setState({
+      groups: groups
+    });
+  }
 
   onFilterChange = (customFilters: string[]) => {
     if (!customFilters || customFilters.length === 0) {
@@ -210,6 +219,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           onRunQuery={onRunQuery}
           onChange={this.props.onChange}
           updateMetrics={this.updateMetrics}
+          groups={this.state.groups}
+          updateGroups={this.updateGroups}
           filterMetricsOnType={this.filterMetricsOnType}
           datasource={this.props.datasource}
         />
@@ -255,6 +266,16 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         />
         }
 
+        {query.metricCategory.key === 3 &&
+        <Filters
+          query={query}
+          onChange={this.props.onChange}
+          onRunQuery={onRunQuery}
+          datasource={this.props.datasource}
+          groups={this.state.groups}
+        />
+        }
+
         <AdvancedSettings
           query={query}
           onRunQuery={onRunQuery}
@@ -273,7 +294,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
     this.setState({
       availableMetrics: [],
-      allMetrics: []
+      allMetrics: [],
+      groups: []
     });
 
     //this.uniqueEntities = [];

@@ -9,11 +9,14 @@ import { ANALYZE_APPLICATION_METRICS, ANALYZE_WEBSITE_METRICS } from '../../Glob
 
 interface WebsiteMetricsState {
   websites: SelectableValue[];
-  websiteTags: SelectableValue[];
 }
 
 interface Props {
   query: InstanaQuery;
+
+  groups: SelectableValue[];
+
+  updateGroups(groups: SelectableValue[]): void;
 
   onRunQuery(): void;
 
@@ -30,8 +33,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
   constructor(props: any) {
     super(props);
     this.state = {
-      websites: [],
-      websiteTags: []
+      websites: []
     };
   }
 
@@ -58,9 +60,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
     });
 
     datasource.dataSourceWebsite.getWebsiteTags().then((websiteTags: any) => {
-      this.setState({
-        websiteTags: _.sortBy(websiteTags, 'key')
-      });
+      this.props.updateGroups(_.sortBy(websiteTags, 'key'));
 
       // select a meaningful default group
       if (!query.group || !query.group.key) {
@@ -116,7 +116,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
   };
 
   render() {
-    const { query } = this.props;
+    const { query, groups } = this.props;
 
     return (
       <div className={'gf-form-inline'}>
@@ -143,7 +143,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
           width={20}
           isSearchable={true}
           value={query.group}
-          options={this.state.websiteTags}
+          options={groups}
           onChange={this.onGroupChange}
         />
 
