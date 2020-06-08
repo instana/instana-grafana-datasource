@@ -11,15 +11,15 @@
   "author": "Instana",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@grafana/data": "latest",
-    "@grafana/runtime": "latest",
-    "@grafana/toolkit": "7.0.3",
-    "@grafana/ui": "latest",
+    "@grafana/data": "^6.7.3",
+    "@grafana/runtime": "^6.7.3",
+    "@grafana/toolkit": "^6.7.3",
+    "@grafana/ui": "^6.7.3",
     "@types/lodash": "4.14.155"
   },
   "dependencies": {
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.15"
   }
 }
