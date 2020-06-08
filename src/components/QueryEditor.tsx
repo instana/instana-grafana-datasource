@@ -16,6 +16,7 @@ import { InfrastructureCustom } from './Infrastructure/Custom/InfrastructureCust
 import AggregationFunctions from '../lists/aggregation_function';
 import { WebsiteMetrics } from './WebsiteMetrics/WebsiteMetrics';
 import { ApplicationServiceEndpointMetrics } from './ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics';
+import migrate from '../migration';
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
@@ -36,6 +37,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     };
 
     this.query = Object.assign({}, defaultQuery, props.query);
+
+    migrate(this.query);
 
     this.state = {
       allMetrics: [],

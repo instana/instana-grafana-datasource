@@ -38,6 +38,7 @@ import { DataSourceService } from './DataSource_Service';
 import { DataSourceEndpoint } from './DataSource_Endpoint';
 import { isInvalidQueryInterval } from '../util/queryInterval_check';
 import { readItemMetrics } from '../util/analyze_util';
+import migrate from '../migration';
 
 export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   options: InstanaOptions;
@@ -76,6 +77,13 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
     return Promise.all(options.targets.map(target => {
       let targetTimeFilter = readTime(range!);
+
+      // grafana setting to disable query execution
+      if (target.hide) {
+        return { data: [], target: target };
+      }
+
+      migrate(target);
 
       if (!target.metricCategory) {
         target.metricCategory = MetricCategories[0];
