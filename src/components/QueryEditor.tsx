@@ -55,7 +55,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     } else {
       this.selectionReset();
       this.query.metricCategory = newCategory;
-      this.setState({currentCategory: newCategory});
+      this.setState({currentCategory: newCategory})
+      this.query.timeInterval = this.props.datasource.getDefaultTimeInterval(this.query);
       this.onRunQuery();
     }
   };
@@ -261,7 +262,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   selectionReset() {
-    const { query } = this.props;
+    const { query, datasource } = this.props;
     if (query.metricCategory.key > 1) {
       query.entityQuery = '';
     }
@@ -271,6 +272,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       availableMetrics: [],
       allMetrics: []
     });
+
     //this.uniqueEntities = [];
     //this.uniqueTags = [];
     this.resetEntityTypeSelection();
@@ -290,16 +292,16 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   resetEntitySelection() {
     const { query } = this.props;
-    query.entity = { key: null, label: '-' };
-    query.group = { key: null, label: '-' };
-    //query.showGroupBySecondLevel = null;
-    //query.groupbyTagSecondLevelKey = null;
+    query.entity = { };
+    query.group = { };
+    query.showGroupBySecondLevel = false;
+    query.groupbyTagSecondLevelKey = '';
     query.aggregateGraphs = false;
     query.aggregationFunction = AggregationFunctions[0];
     query.hideOriginalGraphs = false;
     //query.filters = [];
     //query.serviceNamefilter = null;
-    //query.showWarningCantShowAllResults = false;
+    query.showWarningCantShowAllResults = false;
     query.showAllMetrics = false;
     query.canShowAllMetrics = false;
     query.displayMaxMetricValue = false;
@@ -313,11 +315,11 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   resetMetricSelection() {
     const { query } = this.props;
-    query.metric = { key: null, label: '-' };
+    query.metric = { };
     query.filter = '';
     query.timeShift = '';
     query.timeShiftIsValid = true;
-    //query.showWarningCantShowAllResults = false;
+    query.showWarningCantShowAllResults = false;
     query.showAllMetrics = false;
     query.labelFormat = '';
     //this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
@@ -326,23 +328,17 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   resetServices() {
-    //const { query } = this.props;
-    //query.service = null;
-    //this.uniqueServices = [];
+    this.props.query.service = { };
   }
 
   resetEndpoints() {
-    //const { query } = this.props;
-    //query.endpoint = null;
-    //this.uniqueEndpoints = [];
+    this.props.query.endpoint = { };
   }
 
   resetSLO() {
     const { query } = this.props;
     query.sloValue = '';
-    query.sloReport = {
-      key: null
-    };
+    query.sloReport = { };
   }
 
 }
