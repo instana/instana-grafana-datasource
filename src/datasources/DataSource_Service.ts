@@ -99,7 +99,7 @@ export class DataSourceService {
 
     const metric = {
       metric: target.metric.key,
-      aggregation: target.aggregation ? target.aggregation : 'SUM',
+      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
       granularity: target.timeInterval.key
     };
 

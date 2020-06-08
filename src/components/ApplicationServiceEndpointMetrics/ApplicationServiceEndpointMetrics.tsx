@@ -4,7 +4,7 @@ import { DataSource } from '../../datasources/DataSource';
 import { FormLabel, Input, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
-import { ANALYZE_APPLICATION_METRICS, ANALYZE_WEBSITE_METRICS } from '../../GlobalVariables';
+import { ALL_APPLICATIONS, ALL_ENDPOINTS, ALL_SERVICES } from '../../GlobalVariables';
 
 interface ApplicationServiceEndpointMetricsState {
   applications: SelectableValue[];
@@ -38,6 +38,9 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
     this.loadApplications();
     this.loadServices();
     this.loadEndpoints();
+
+    const { datasource } = this.props;
+    this.props.updateMetrics(datasource.dataSourceApplication.getApplicationMetricsCatalog());
   }
 
   loadApplications() {
@@ -47,12 +50,19 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         applications: applications
       });
 
-      if (query.entity && query.entity.key)  {
-        if (!_.find(this.state.applications, app => app.key === query.entity.key)) {
-          query.entity = { key: null, label: '-- No Application Filter --'};
-        }
-      } else {
-        query.entity = { key: null, label: '-- No Application Filter --'};
+      if (!_.find(this.state.applications, {'key': null})) {
+        let apps = this.state.applications;
+        apps.unshift({key: null, label: ALL_APPLICATIONS});
+        this.setState({
+          applications: apps
+        });
+      }
+
+      // replace removed application
+      if (query.entity && query.entity.key && !_.find(this.state.applications, app => app.key === query.entity.key)) {
+        query.entity = this.state.applications[0];
+      } else if ((!query.entity || !query.entity.key) && applications) {
+        query.entity = this.state.applications[0];
       }
 
       onChange(query);
@@ -66,12 +76,20 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         services: services
       });
 
+      if (!_.find(this.state.services, {'key': null})) {
+        let s = this.state.services;
+        s.unshift({key: null, label: ALL_SERVICES});
+        this.setState({
+          services: s
+        });
+      }
+
       if (query.service && query.service.key)  {
         if (!_.find(this.state.services, app => app.key === query.service.key)) {
-          query.service = { key: null, label: '-- No Service Filter --'};
+          query.service = this.state.services[0];
         }
       } else {
-        query.service = { key: null, label: '-- No Service Filter --'};
+        query.service = this.state.services[0];
       }
 
       onChange(query);
@@ -85,6 +103,14 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         endpoints: endpoints
       });
 
+      if (!_.find(this.state.endpoints, {'key': null})) {
+        let e = this.state.endpoints;
+        e.unshift({key: null, label: ALL_ENDPOINTS});
+        this.setState({
+          endpoints: e
+        });
+      }
+
       if (query.endpoint && query.endpoint.key)  {
         if (!_.find(this.state.endpoints, app => app.key === query.endpoint.key)) {
           query.endpoint = { key: null, label: '-- No Endpoint Filter --'};
@@ -97,40 +123,26 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
     });
   }
 
-  setWebsitePlaceholder(nrOfTotalResults: number) {
-    const { query, onChange } = this.props;
-    query.entity = {
-      key: null,
-      label: 'Please select (' + nrOfTotalResults + ')'
-    };
-
-    onChange(query);
-  }
-
-  onWebsiteChange = (website: SelectableValue) => {
+  onApplicationChange = (application: SelectableValue) => {
     const { query, onChange, onRunQuery } = this.props;
-    query.entity = website;
+    query.entity = application;
     onChange(query);
+    this.loadServices();
+    this.loadEndpoints();
     onRunQuery();
   };
 
-  onBeaconTypeChange = (type: SelectableValue) => {
-    const { query, onChange } = this.props;
-    query.entityType = type;
+  onServiceChange = (service: SelectableValue) => {
+    const { query, onChange, onRunQuery } = this.props;
+    query.service = service;
     onChange(query);
+    this.loadEndpoints();
+    onRunQuery();
   };
 
-  onGroupChange = (group: SelectableValue) => {
+  onEndpointChange = (endpoint: SelectableValue) => {
     const { query, onChange, onRunQuery } = this.props;
-    query.group = group;
-
-    if (query.group && (query.metricCategory.key === ANALYZE_WEBSITE_METRICS || query.metricCategory.key === ANALYZE_APPLICATION_METRICS)) {
-      query.showGroupBySecondLevel = query.group.type === 'KEY_VALUE_PAIR';
-    }
-    if (!query.showGroupBySecondLevel) {
-      query.groupbyTagSecondLevelKey = '';
-    }
-
+    query.endpoint = endpoint;
     onChange(query);
     onRunQuery();
   };
@@ -153,7 +165,7 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
           isSearchable={true}
           value={query.entity}
           options={this.state.applications}
-          onChange={this.onWebsiteChange}
+          onChange={this.onApplicationChange}
         />
 
         <FormLabel width={7} tooltip={'Select your service.'}>Service</FormLabel>
@@ -162,7 +174,7 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
           isSearchable={false}
           value={query.service}
           options={this.state.services}
-          onChange={this.onBeaconTypeChange}
+          onChange={this.onServiceChange}
         />
 
         <FormLabel width={8} tooltip={'Select your endpoint.'}>Endpoints</FormLabel>
@@ -171,7 +183,7 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
           isSearchable={true}
           value={query.endpoint}
           options={this.state.endpoints}
-          onChange={this.onGroupChange}
+          onChange={this.onEndpointChange}
         />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>

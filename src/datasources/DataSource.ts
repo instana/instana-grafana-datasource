@@ -23,13 +23,21 @@ import {
   getPossibleRollups
 } from '../util/rollup_granularity_util';
 import { appendData, generateStableHash, hasIntersection } from '../util/delta_util';
-import { ANALYZE_WEBSITE_METRICS, BUILT_IN_METRICS, CUSTOM_METRICS, SLO_INFORMATION } from '../GlobalVariables';
+import {
+  ANALYZE_WEBSITE_METRICS,
+  APPLICATION_SERVICE_ENDPOINT_METRICS,
+  BUILT_IN_METRICS,
+  CUSTOM_METRICS,
+  SLO_INFORMATION
+} from '../GlobalVariables';
 import getVersion from '../util/instana_version';
 import { aggregateTarget } from '../util/aggregation_util';
 import { DataSourceWebsite } from './DataSource_Website';
 import { DataSourceApplicaton } from './DataSource_Application';
 import { DataSourceService } from './DataSource_Service';
 import { DataSourceEndpoint } from './DataSource_Endpoint';
+import { isInvalidQueryInterval } from '../util/queryInterval_check';
+import { readItemMetrics } from '../util/analyze_util';
 
 export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   options: InstanaOptions;
@@ -101,6 +109,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         return this.dataSourceWebsite.runQuery(target, targetTimeFilter).then((data: any) => {
           return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
         });
+      } else if (target.metricCategory.key === APPLICATION_SERVICE_ENDPOINT_METRICS) {
+        return this.getApplicationServiceEndpointMetrics(target, targetTimeFilter).then((data: any) => {
+          return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+        });
       }
 
       return Promise.resolve(emptyResultData(target.refId));
@@ -117,6 +129,31 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
       return { data: _.flatten(result) };
     })
+  }
+
+  getApplicationServiceEndpointMetrics(target: InstanaQuery, timeFilter: TimeFilter) {
+    // do not try to execute too big queries
+    if (isInvalidQueryInterval(timeFilter.windowSize, this.options.queryinterval_limit_app_metrics)) {
+      //return rejectLargeTimeWindow(this.maxWindowSizeAnalyzeMetrics);
+      return Promise.resolve(emptyResultData(target.refId));
+    }
+
+    if (target.endpoint && target.endpoint.key) {
+      return this.dataSourceEndpoint.fetchEndpointMetrics(target, timeFilter).then((response: any) => {
+        return readItemMetrics(target, response, this.dataSourceEndpoint.buildEndpointMetricLabel);
+      });
+    } else if (target.service && target.service.key) {
+      return this.dataSourceService.fetchServiceMetrics(target, timeFilter).then((response: any) => {
+        return readItemMetrics(target, response, this.dataSourceService.buildServiceMetricLabel);
+      });
+    } else if (target.entity && target.entity.key) {
+      return this.dataSourceApplication.fetchApplicationMetrics(target, timeFilter).then((response: any) => {
+        target.showWarningCantShowAllResults = response.data.canLoadMore;
+        return readItemMetrics(target, response, this.dataSourceApplication.buildApplicationMetricLabel);
+      });
+    }
+
+    return Promise.resolve({data: {items: []}});
   }
 
   applyTimeShiftIfNecessary(data: any, target: InstanaQuery) {

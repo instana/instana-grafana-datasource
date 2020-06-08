@@ -81,7 +81,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     });
 
     if ((this.query.metric && this.query.metric.key) || this.query.showAllMetrics) {
-      const metric = _.find(this.state.availableMetrics, m => m.key === this.query.metric.key);
+      const metric = _.find(metrics, m => m.key === this.query.metric.key);
       metric ? this.query.metric = metric : this.query.metric = { key: null };
     }
 

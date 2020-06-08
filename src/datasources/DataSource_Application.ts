@@ -9,14 +9,14 @@ import { getDefaultChartGranularity } from '../util/rollup_granularity_util';
 import { InstanaQuery } from '../types/instana_query';
 import { createTagFilter } from '../util/analyze_util';
 import { emptyResultData } from '../util/target_util';
-import { PAGINATION_LIMIT } from '../GlobalVariables';
+import { ALL_APPLICATIONS, PAGINATION_LIMIT } from '../GlobalVariables';
+import defaultApplicationMetricCatalog from '../lists/default_metric_catalog';
 
 export class DataSourceApplicaton {
 
   instanaOptions: InstanaOptions;
   applicationsCache: Cache<Promise<Array<SelectableValue>>>;
   miscCache: Cache<any>;
-
 
   constructor(options: InstanaOptions) {
     this.instanaOptions = options;
@@ -98,16 +98,7 @@ export class DataSourceApplicaton {
   }
 
   getApplicationMetricsCatalog() {
-    return [
-      { key: 'calls', label: 'Call count', aggregations: [ 'SUM' ] },
-      {
-        key: 'latency',
-        label: 'Call latency',
-        aggregations: [ 'MAX', 'MEAN', 'MIN', 'P25', 'P50', 'P75', 'P90', 'P95', 'P98', 'P99' ]
-      },
-      { key: 'errors', label: 'Error rate', aggregations: [ 'MEAN' ] },
-      { key: 'services', label: 'Service Count', aggregations: [ 'DISTINCT_COUNT' ] },
-    ];
+    return defaultApplicationMetricCatalog;
   }
 
   fetchAnalyzeMetricsForApplication(target: InstanaQuery, timeFilter: TimeFilter) {
@@ -198,7 +189,7 @@ export class DataSourceApplicaton {
     const windowSize = getWindowSize(timeFilter);
     const metric: any = {
       metric: target.metric.key,
-      aggregation: target.aggregation ? target.aggregation : 'SUM',
+      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
     };
 
     if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
@@ -221,5 +212,49 @@ export class DataSourceApplicaton {
     }
 
     return postRequest(this.instanaOptions, '/api/application-monitoring/metrics/applications?fillTimeSeries=true', data);
+  }
+/*
+  buildAnalyzeApplicationLabel(target, item, key, index): string {
+    if (target.labelFormat) {
+      let label = target.labelFormat;
+      label = _.replace(label, '$label', item.name);
+      label = _.replace(label, '$application', target.entity.label);
+      label = _.replace(label, '$metric', target.metric.label);
+      label = _.replace(label, '$key', key);
+      label = _.replace(label, '$index', index + 1);
+      label = _.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    if (target.entity.label === this.ALL_APPLICATIONS) {
+      return target.timeShift ? item.name + ' - ' + key + " - " + target.timeShift : item.name + ' - ' + key;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ?
+      item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
+      :
+      item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+  }*/
+
+  buildApplicationMetricLabel(target: InstanaQuery, item: any, key: string, index: number): string {
+    if (target.labelFormat) {
+      let label = target.labelFormat;
+      label = _.replace(label, '$label', item.application.label);
+      label = _.replace(label, '$application', target.entity.label!);
+      label = _.replace(label, '$metric', target.metric.label!);
+      label = _.replace(label, '$key', key);
+      label = _.replace(label, '$index', '' + index + 1);
+      label = _.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    if (target.entity.label === ALL_APPLICATIONS) {
+      return target.timeShift ? item.application.label + ' - ' + key + " - " + target.timeShift : item.application.label + ' - ' + key;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ?
+      item.application.label + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
+      :
+      item.application.label + ' (' + target.entity.label + ')' + ' - ' + key;
   }
 }
