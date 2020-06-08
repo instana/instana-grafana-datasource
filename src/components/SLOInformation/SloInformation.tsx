@@ -66,7 +66,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
 
     return (
       <div className={'gf-form-inline'}>
-        <FormLabel width={14} tooltip={'Select your configured SLO.'}>Configured SLO</FormLabel>
+        <FormLabel width={14} tooltip={'SLI configuration used to compute error budget and SLI values.'}>Configured SLI</FormLabel>
         <Select
           width={30}
           isSearchable={false}
@@ -75,7 +75,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
           options={this.state.sloReports}
         />
 
-        <FormLabel tooltip={'Type in your desired SLO value. E.g, 0.9 for 90% SLO.'}>Slo Value</FormLabel>
+        <FormLabel tooltip={'Type in your desired SLO threshold from 0 to 0.9999'}>SLO</FormLabel>
 
         <Input
           value={query.sloValue}
@@ -83,7 +83,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
           onChange={this.onSloValueChange}
         />
 
-        <FormLabel tooltip={'TODO'}>Specifics</FormLabel>
+        <FormLabel>Value type</FormLabel>
         <Select
           width={30}
           isSearchable={false}

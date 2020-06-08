@@ -262,7 +262,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   selectionReset() {
-    const { query, datasource } = this.props;
+    const { query } = this.props;
     if (query.metricCategory.key > 1) {
       query.entityQuery = '';
     }
