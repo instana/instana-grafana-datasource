@@ -42,7 +42,7 @@ export class Filters extends React.Component<Props, FilterState> {
       booleanValue: false,
       isValid: false,
       numberValue: 0,
-      operator: this.filterOperatorsOnType(groups[0].type),
+      operator: this.filterOperatorsOnType(groups[0].type)[0],
       stringValue: '',
     });
 
