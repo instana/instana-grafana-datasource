@@ -7,10 +7,11 @@ import { getTimeKey, getWindowSize } from '../util/time_util';
 import { getRequest, postRequest } from '../util/request_handler';
 import { getDefaultChartGranularity } from '../util/rollup_granularity_util';
 import { InstanaQuery } from '../types/instana_query';
-import { createTagFilter } from '../util/analyze_util';
+import { createTagFilter, readItemMetrics } from '../util/analyze_util';
 import { emptyResultData } from '../util/target_util';
 import { ALL_APPLICATIONS, PAGINATION_LIMIT } from '../GlobalVariables';
 import defaultApplicationMetricCatalog from '../lists/default_metric_catalog';
+import { isInvalidQueryInterval } from '../util/queryInterval_check';
 
 export class DataSourceApplicaton {
 
@@ -24,8 +25,22 @@ export class DataSourceApplicaton {
     this.miscCache = new Cache<any>();
   }
 
-  runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
+  runQuery(target: InstanaQuery, timeFilter: TimeFilter): any {
+    // do not try to execute to big queries
+    if (isInvalidQueryInterval(timeFilter.windowSize, this.instanaOptions.queryinterval_limit_app_calls)) {
+      //return this.rejectLargeTimeWindow(this.maxWindowSizeInfrastructure);
+      return Promise.resolve(emptyResultData(target.refId));
+    }
 
+    // avoid invalid calls
+    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key ||  !target.entity || !target.entity.key) {
+      return Promise.resolve(emptyResultData(target.refId));
+    }
+
+    return this.fetchAnalyzeMetricsForApplication(target, timeFilter).then(response => {
+      target.showWarningCantShowAllResults = response.data.canLoadMore;
+      return readItemMetrics(target, response, this.buildAnalyzeApplicationLabel);
+    });
   }
 
   getApplications(timeFilter: TimeFilter) {
@@ -87,6 +102,7 @@ export class DataSourceApplicaton {
     applicationTags = getRequest(this.instanaOptions, '/api/application-monitoring/catalog/tags').then((tagsResponse: any) =>
       tagsResponse.data.map((entry: any) => ({
         'key': entry.name,
+        'label': entry.name,
         'type': entry.type,
         'canApplyToSource': entry.canApplyToSource,
         'canApplyToDestination': entry.canApplyToDestination
@@ -102,11 +118,6 @@ export class DataSourceApplicaton {
   }
 
   fetchAnalyzeMetricsForApplication(target: InstanaQuery, timeFilter: TimeFilter) {
-    // avoid invalid calls
-    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key ||  !target.entity || !target.entity.key) {
-      return Promise.resolve(emptyResultData(target.refId));
-    }
-
     const windowSize = getWindowSize(timeFilter);
     const tagFilters: any[] = [];
 
@@ -118,7 +129,7 @@ export class DataSourceApplicaton {
             name: 'application.name',
             operator: 'EQUALS',
             value: target.entity.label!,
-            entity: target.applicationCallToEntity.key ? target.applicationCallToEntity.key : 'DESTINATION'
+            entity: target.applicationCallToEntity && target.applicationCallToEntity.key ? target.applicationCallToEntity.key : 'DESTINATION'
           });
         }
 
@@ -135,7 +146,7 @@ export class DataSourceApplicaton {
 
         const metric: any = {
           metric: target.metric.key,
-          aggregation: target.aggregation ? target.aggregation : 'SUM'
+          aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM'
         };
 
         if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
@@ -213,20 +224,20 @@ export class DataSourceApplicaton {
 
     return postRequest(this.instanaOptions, '/api/application-monitoring/metrics/applications?fillTimeSeries=true', data);
   }
-/*
-  buildAnalyzeApplicationLabel(target, item, key, index): string {
+
+  buildAnalyzeApplicationLabel(target: InstanaQuery, item: any, key: string, index: number): string {
     if (target.labelFormat) {
       let label = target.labelFormat;
       label = _.replace(label, '$label', item.name);
-      label = _.replace(label, '$application', target.entity.label);
-      label = _.replace(label, '$metric', target.metric.label);
+      label = _.replace(label, '$application', target.entity.label!);
+      label = _.replace(label, '$metric', target.metric.label!);
       label = _.replace(label, '$key', key);
-      label = _.replace(label, '$index', index + 1);
+      label = _.replace(label, '$index', '' + index + 1);
       label = _.replace(label, '$timeShift', target.timeShift);
       return label;
     }
 
-    if (target.entity.label === this.ALL_APPLICATIONS) {
+    if (target.entity.label === ALL_APPLICATIONS) {
       return target.timeShift ? item.name + ' - ' + key + " - " + target.timeShift : item.name + ' - ' + key;
     }
 
@@ -234,7 +245,7 @@ export class DataSourceApplicaton {
       item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
       :
       item.name + ' (' + target.entity.label + ')' + ' - ' + key;
-  }*/
+  }
 
   buildApplicationMetricLabel(target: InstanaQuery, item: any, key: string, index: number): string {
     if (target.labelFormat) {

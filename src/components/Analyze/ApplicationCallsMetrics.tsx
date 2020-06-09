@@ -3,12 +3,12 @@ import { InstanaQuery } from '../../types/instana_query';
 import { DataSource } from '../../datasources/DataSource';
 import { FormLabel, Input, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import beacon_types from '../../lists/beacon_types';
 import _ from 'lodash';
-import { ANALYZE_APPLICATION_METRICS, ANALYZE_WEBSITE_METRICS } from '../../GlobalVariables';
+import { ANALYZE_APPLICATION_METRICS } from '../../GlobalVariables';
+import call_to_entities from '../../lists/apply_call_to_entities';
 
-interface WebsiteMetricsState {
-  websites: SelectableValue[];
+interface ApplicationCallsMetricsState {
+  applications: SelectableValue[];
 }
 
 interface Props {
@@ -24,86 +24,77 @@ interface Props {
 
   updateMetrics(metrics: SelectableValue<string>[]): void;
 
-  filterMetricsOnType(type: string): any;
-
   datasource: DataSource;
 }
 
-export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> {
+export class ApplicationCallsMetrics extends React.Component<Props, ApplicationCallsMetricsState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      websites: []
+      applications: []
     };
-  }
-
-  setWebsitePlaceholder(nrOfTotalResults: number) {
-    const { query, onChange } = this.props;
-    query.entity = {
-      key: null,
-      label: 'Please select (' + nrOfTotalResults + ')'
-    };
-
-    onChange(query);
   }
 
   componentDidMount() {
     const { query, datasource, onChange } = this.props;
-    datasource.fetchWebsites().then(websites => {
+    datasource.fetchApplications().then(applications => {
       this.setState({
-        websites: websites
+        applications: applications
       });
 
       if (!query.entity || !query.entity.key) {
-        this.setWebsitePlaceholder(websites.length);
+        query.entity = applications[0];
       }
+
+      onChange(query);
     });
 
-    datasource.dataSourceWebsite.getWebsiteTags().then((websiteTags: any) => {
-      this.props.updateGroups(_.sortBy(websiteTags, 'key'));
+    datasource.dataSourceApplication.getApplicationTags().then((applicationTags: any) => {
+      this.props.updateGroups(_.sortBy(applicationTags, 'key'));
 
       // select a meaningful default group
       if (!query.group || !query.group.key) {
-        query.group = _.find(websiteTags, [ 'key', 'beacon.page.name' ]);
+        query.group = _.find(applicationTags, [ 'key', 'endpoint.name' ]);
         onChange(query);
       }
     });
 
-    if (!query.entityType || !query.entityType.key) {
-      query.entityType = beacon_types[0];
-      onChange(query);
-    }
-
-    datasource.dataSourceWebsite.getWebsiteMetricsCatalog().then((websiteMetrics: any) => {
-      this.props.updateMetrics(_.filter(websiteMetrics, m => m.beaconTypes.includes(query.entityType.key)));
-    });
+    this.props.updateMetrics(datasource.dataSourceApplication.getApplicationMetricsCatalog());
   }
 
-  onWebsiteChange = (website: SelectableValue) => {
+  onApplicationChange = (application: SelectableValue) => {
     const { query, onChange, onRunQuery } = this.props;
-    query.entity = website;
+    query.entity = application;
     onChange(query);
     onRunQuery();
-  };
-
-  onBeaconTypeChange = (type: SelectableValue) => {
-    const { query, onChange, filterMetricsOnType } = this.props;
-    query.entityType = type;
-    onChange(query);
-    filterMetricsOnType(query.entityType.key);
   };
 
   onGroupChange = (group: SelectableValue) => {
     const { query, onChange, onRunQuery } = this.props;
     query.group = group;
 
-    if (query.group && (query.metricCategory.key === ANALYZE_WEBSITE_METRICS || query.metricCategory.key === ANALYZE_APPLICATION_METRICS)) {
+    if (query.group && query.metricCategory.key === ANALYZE_APPLICATION_METRICS) {
       query.showGroupBySecondLevel = query.group.type === 'KEY_VALUE_PAIR';
     }
+
     if (!query.showGroupBySecondLevel) {
       query.groupbyTagSecondLevelKey = '';
     }
 
+    onChange(query);
+    onRunQuery();
+  };
+
+  onApplicationCallToEntityChange = (applicationCallToEntity: SelectableValue) => {
+    const { query, onChange, onRunQuery } = this.props;
+    query.applicationCallToEntity = applicationCallToEntity;
+    onChange(query);
+    onRunQuery();
+  };
+
+  onCallToEntityChange = (callToEntity: SelectableValue) => {
+    const { query, onChange, onRunQuery } = this.props;
+    query.callToEntity = callToEntity;
     onChange(query);
     onRunQuery();
   };
@@ -120,30 +111,37 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
 
     return (
       <div className={'gf-form-inline'}>
-        <FormLabel width={14} tooltip={'Select your website.'}>Website</FormLabel>
+        <FormLabel width={14} tooltip={'Select your application.'}>Application</FormLabel>
+        <Select
+          width={7}
+          isSearchable={false}
+          options={call_to_entities}
+          defaultValue={call_to_entities[0]}
+          value={query.applicationCallToEntity}
+          onChange={this.onApplicationCallToEntityChange}
+        />
         <Select
           width={20}
           isSearchable={true}
           value={query.entity}
-          options={this.state.websites}
-          onChange={this.onWebsiteChange}
-        />
-
-        <FormLabel width={6} tooltip={'Select a beacon type.'}>Type</FormLabel>
-        <Select
-          width={20}
-          isSearchable={false}
-          value={query.entityType}
-          options={beacon_types}
-          onChange={this.onBeaconTypeChange}
+          options={this.state.applications}
+          onChange={this.onApplicationChange}
         />
 
         <FormLabel width={7} tooltip={'Group by tag.'}>Group by</FormLabel>
         <Select
+          width={7}
+          isSearchable={false}
+          value={query.callToEntity}
+          options={call_to_entities}
+          defaultValue={call_to_entities[0]}
+          onChange={this.onCallToEntityChange}
+        />
+        <Select
           width={20}
-          isSearchable={true}
-          value={query.group}
           options={groups}
+          value={query.group}
+          isSearchable={true}
           onChange={this.onGroupChange}
         />
 

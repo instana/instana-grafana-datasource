@@ -1,11 +1,11 @@
 import React, { ChangeEvent } from 'react';
-import { InstanaQuery } from '../types/instana_query';
+import { InstanaQuery } from '../../types/instana_query';
 import { Button, FormLabel, Input, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { DataSource } from '../datasources/DataSource';
-import operators from '../lists/operators';
+import { DataSource } from '../../datasources/DataSource';
+import operators from '../../lists/operators';
 import _ from 'lodash';
-import TagFilter from '../types/tag_filter';
+import TagFilter from '../../types/tag_filter';
 
 interface FilterState {
   tagFilters: TagFilter[]

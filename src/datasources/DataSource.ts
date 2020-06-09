@@ -24,6 +24,7 @@ import {
 } from '../util/rollup_granularity_util';
 import { appendData, generateStableHash, hasIntersection } from '../util/delta_util';
 import {
+  ANALYZE_APPLICATION_METRICS,
   ANALYZE_WEBSITE_METRICS,
   APPLICATION_SERVICE_ENDPOINT_METRICS,
   BUILT_IN_METRICS,
@@ -115,6 +116,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         });
       } else if (target.metricCategory.key === ANALYZE_WEBSITE_METRICS) {
         return this.dataSourceWebsite.runQuery(target, targetTimeFilter).then((data: any) => {
+          return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+        });
+      } else if (target.metricCategory.key === ANALYZE_APPLICATION_METRICS) {
+        return this.dataSourceApplication.runQuery(target, targetTimeFilter).then((data: any) => {
           return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
         });
       } else if (target.metricCategory.key === APPLICATION_SERVICE_ENDPOINT_METRICS) {

@@ -17,6 +17,7 @@ export interface InstanaQuery extends DataQuery {
   service: SelectableValue;
   endpoint: SelectableValue;
   aggregation: SelectableValue;
+  callToEntity: SelectableValue
   entityQuery: string;
   entityType: SelectableValue;
   showAllMetrics: boolean;

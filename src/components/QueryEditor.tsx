@@ -14,10 +14,11 @@ import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
 import { CUSTOM_METRICS } from '../GlobalVariables';
 import { InfrastructureCustom } from './Infrastructure/Custom/InfrastructureCustom';
 import AggregationFunctions from '../lists/aggregation_function';
-import { WebsiteMetrics } from './WebsiteMetrics/WebsiteMetrics';
+import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import { ApplicationServiceEndpointMetrics } from './ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics';
 import migrate from '../migration';
-import { Filters } from './Filter';
+import { Filters } from './Analyze/Filter';
+import { ApplicationCallsMetrics } from './Analyze/ApplicationCallsMetrics';
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
@@ -213,6 +214,18 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         />
         }
 
+        {query.metricCategory.key === 2 &&
+        <ApplicationCallsMetrics
+          query={query}
+          onRunQuery={onRunQuery}
+          onChange={this.props.onChange}
+          updateMetrics={this.updateMetrics}
+          groups={this.state.groups}
+          updateGroups={this.updateGroups}
+          datasource={this.props.datasource}
+        />
+        }
+
         {query.metricCategory.key === 3 &&
         <WebsiteMetrics
           query={query}
@@ -266,7 +279,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         />
         }
 
-        {query.metricCategory.key === 3 &&
+        {(query.metricCategory.key === 2 || query.metricCategory.key === 3) &&
         <Filters
           query={query}
           onChange={this.props.onChange}
