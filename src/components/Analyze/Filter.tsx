@@ -6,6 +6,8 @@ import { DataSource } from '../../datasources/DataSource';
 import operators from '../../lists/operators';
 import _ from 'lodash';
 import TagFilter from '../../types/tag_filter';
+import { ANALYZE_APPLICATION_METRICS } from '../../GlobalVariables';
+import call_to_entities from '../../lists/apply_call_to_entities';
 
 interface FilterState {
   tagFilters: TagFilter[]
@@ -79,6 +81,13 @@ export class Filters extends React.Component<Props, FilterState> {
     this.isValid(index);
   }
 
+  onCallToEntityChange = (callToEntity: SelectableValue, index: number) => {
+    const { query, onChange } = this.props;
+    query.filters[index].entity = callToEntity;
+    onChange(query);
+    this.isValid(index);
+  }
+
   onOperatorChange = (operator: SelectableValue, index: number) => {
     const { query, onChange } = this.props;
     query.filters[index].operator = operator;
@@ -142,6 +151,16 @@ export class Filters extends React.Component<Props, FilterState> {
       filter =
         <div className={'gf-form-inline'}>
           <FormLabel width={14} tooltip={'Add an additional tag filter.'}>Add filter</FormLabel>
+          {query.metricCategory.key === ANALYZE_APPLICATION_METRICS &&
+          <Select
+            width={7}
+            isSearchable={false}
+            options={call_to_entities}
+            defaultValue={call_to_entities[0]}
+            value={query.applicationCallToEntity}
+            onChange={callToEntity => this.onCallToEntityChange(callToEntity, index)}
+          />
+          }
           <Select
             width={20}
             isSearchable={true}
