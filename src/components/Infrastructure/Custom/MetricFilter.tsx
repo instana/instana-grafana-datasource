@@ -66,7 +66,7 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
             onChange={event => this.onFilterChange(event, index)}
             tooltip={'Type to suggest metrics.'}
           />
-          <Button variant={'inverse'} onClick={event => this.removeCustomFilter(index)}>-</Button>
+          <Button variant={'inverse'} onClick={() => this.removeCustomFilter(index)}>-</Button>
         </div>;
       return filter;
     });

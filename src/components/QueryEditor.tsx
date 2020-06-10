@@ -74,6 +74,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   };
 
   setMetricPlaceholder(nrOfTotalResults: number) {
+    console.log(nrOfTotalResults);
     this.query.metric = {
       key: null,
       label: 'Please select (' + nrOfTotalResults + ')'
@@ -108,21 +109,26 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   onFilterChange = (customFilters: string[]) => {
+    let newAvailableMetrics: SelectableValue[] = [];
     if (!customFilters || customFilters.length === 0) {
       // don't do any filtering if no custom filters are set.
-      this.setState({ availableMetrics: this.state.allMetrics });
+      newAvailableMetrics = this.state.allMetrics;
       this.query.showAllMetrics = false;
       this.query.customFilters = customFilters;
     } else {
-      let filteredMetrics = this.applyFilterToMetricList(customFilters);
-      this.setState({ availableMetrics: filteredMetrics });
+      newAvailableMetrics = this.applyFilterToMetricList(customFilters);
       this.query.customFilters = customFilters;
       !this.query.canShowAllMetrics ? this.query.showAllMetrics = false : this.query.allMetrics = this.state.availableMetrics;
     }
 
+    this.setState(state => ({...state, availableMetrics: newAvailableMetrics}));
+    if (!this.query.metric.key) {
+      this.setMetricPlaceholder(newAvailableMetrics.length);
+    }
+
     this.query.canShowAllMetrics = this.isAbleToShowAllMetrics();
     this.props.onChange(this.query);
-    this.checkMetricAndRefresh(true);
+    this.checkMetricAndRefresh();
   };
 
   applyFilterToMetricList(filters: string[]) {
@@ -163,20 +169,12 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       && this.state.availableMetrics.length <= 5;
   }
 
-  checkMetricAndRefresh(refresh: boolean) {
-    if (this.query.metric && !_.includes(_.map(this.state.availableMetrics, m => m.key), this.query.metric.key)) {
+  checkMetricAndRefresh() {
+    if (this.query.metric && this.query.metric.key && !_.includes(_.map(this.state.availableMetrics, m => m.key), this.query.metric.key)) {
       this.resetMetricSelection();
     }
 
-    if (!this.query.metric.key) {
-      this.setMetricPlaceholder(this.state.availableMetrics.length);
-    }
-
-    this.props.onChange(this.query);
-
-    if (refresh) {
-      this.onRunQuery();
-    }
+    this.onRunQuery();
   }
 
   render() {

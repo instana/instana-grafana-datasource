@@ -34,8 +34,6 @@ export default class Metric extends React.Component<Props, MetricState> {
 
   componentDidMount() {
     const { query, datasource } = this.props;
-    console.log(datasource.availableTimeIntervals);
-    console.log(query.timeInterval);
 
     if (!query.timeInterval || !query.timeInterval.key) {
       query.timeInterval = datasource.getDefaultTimeInterval(query);
