@@ -14,8 +14,77 @@ const legendFormatPlaceholders = [
   '',
 ];
 
+const legendFormatTooltips = [
+  (<div>
+    Default: $label (on host $host)
+    <ul>
+      <li>• $label - entity label</li>
+      <li>• $host - corresponding host</li>
+      <li>• $pid - corresponding PID</li>
+      <li>• $timeShift - corresponding timeShift</li>
+      <li>• $metric - displayed metric</li>
+      <li>• $type - entity type</li>
+      <li>• $service - service label</li>
+      <li>• $name - label alternative</li>
+      <li>• $index - index in the list</li>
+    </ul>
+  </div>),
+  (<div>
+    Default: $label (on host $host)
+    <ul>
+      <li>• $label - entity label</li>
+      <li>• $host - corresponding host</li>
+      <li>• $pid - corresponding PID</li>
+      <li>• $timeShift - corresponding timeShift</li>
+      <li>• $metric - displayed metric</li>
+      <li>• $type - entity type</li>
+      <li>• $service - service label</li>
+      <li>• $name - label alternative</li>
+      <li>• $index - index in the list</li>
+    </ul>
+  </div>),
+  (<div>
+    Default: $label ($application) - $key
+    <ul>
+      <li>• $label - entity label</li>
+      <li>• $application - application label</li>
+      <li>• $timeShift - corresponding timeShift</li>
+      <li>• $metric - displayed metric</li>
+      <li>• $key - metric key with aggregation and rollup</li>
+      <li>• $index - index in the list</li>
+    </ul>
+  </div>),
+  (<div>
+    Default: $label ($website) - $key
+    <ul>
+      <li>• $label - entity label</li>
+      <li>• $website - application label</li>
+      <li>• $type - entity type</li>
+      <li>• $timeShift - corresponding timeShift</li>
+      <li>• $metric - displayed metric</li>
+      <li>• $key - metric key with aggregation and rollup</li>
+      <li>• $index - index in the list</li>
+    </ul>
+  </div>),
+  (<div>
+    Default: $label ($application) - $key
+    <ul>
+      <li>• $label - entity label</li>
+      <li>• $application - application label</li>
+      <li>• $service - service label</li>
+      <li>• $endpoint - endpoint label</li>
+      <li>• $timeShift - corresponding timeShift</li>
+      <li>• $metric - displayed metric</li>
+      <li>• $key - metric key with aggregation and rollup</li>
+      <li>• $index - index in the list</li>
+    </ul>
+  </div>),
+  (''),
+  (''),
+  ('')
+];
+
 interface AdvancedSettingsState {
-  labelFormat: string;
   showAdditionalSettings: boolean;
   legendFormatPlaceholder: string;
 }
@@ -33,7 +102,6 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
   constructor(props: any) {
     super(props);
     this.state = {
-      labelFormat: '',
       showAdditionalSettings: false,
       legendFormatPlaceholder: this.setLegendFormatPlaceholder()
     };
@@ -41,8 +109,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
 
   onLegendFormatChange = (eventItem: FormEvent<HTMLInputElement>) => {
     const { query, onChange } = this.props;
-    this.setState({labelFormat: eventItem.currentTarget.value});
-    query.labelFormat = this.state.labelFormat;
+    query.labelFormat = eventItem.currentTarget.value;
     onChange(query);
   };
 
@@ -57,6 +124,11 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
     return legendFormatPlaceholders[query.metricCategory.key];
   }
 
+  setLegendFormatTooltip() {
+    const { query } = this.props;
+    return legendFormatTooltips[query.metricCategory.key];
+  }
+
   render() {
     const { query, onRunQuery, onChange } = this.props;
 
@@ -68,7 +140,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
           label={'Show advanced settings'}
           tooltip={'Show all additional settings'}
           checked={this.state.showAdditionalSettings}
-          onChange={e => this.setState({ showAdditionalSettings: !this.state.showAdditionalSettings })}
+          onChange={() => this.setState({ showAdditionalSettings: !this.state.showAdditionalSettings })}
         />
 
         <div hidden={!this.state.showAdditionalSettings}>
@@ -77,11 +149,11 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
               labelWidth={14}
               inputWidth={30}
               label={'Legend format'}
-              value={this.state.labelFormat}
+              value={query.labelFormat}
               placeholder={this.setLegendFormatPlaceholder()}
               onChange={event => this.onLegendFormatChange(event)}
-              onBlur={e => onRunQuery()}
-              tooltip={'Enter the URL of your Instana installation. E.g. https://tools-acme.instana.io'}
+              onBlur={() => onRunQuery()}
+              tooltip={(this.setLegendFormatTooltip())}
             />
           </div>
 
