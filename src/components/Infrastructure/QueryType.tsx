@@ -66,25 +66,13 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
   };
 
   loadEntityTypes() {
-    const { query, datasource, onRunQuery, onChange } = this.props;
+    const { query, datasource, onRunQuery } = this.props;
 
     if (query.entityQuery) {
       datasource.fetchTypesForTarget(query).then(
         (response: any) => {
           snapshots = response.data;
-          datasource.getEntityTypes().then(entityTypes => {
-            let filteredEntityTypes = this.filterEntityTypes(entityTypes);
-            this.setState({
-              types: filteredEntityTypes,
-            });
-
-            if (!query.entityType || !query.entityType.key || !_.find(this.state.types, m => m.key === query.entityType.key)) {
-              query.entityType = { key: null, label: 'Please select (' + filteredEntityTypes.length + ')' };
-            }
-
-            onChange(query);
-          });
-
+          this.filterForEntityType();
           onRunQuery();
         }
       );
@@ -93,12 +81,32 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
     }
   }
 
-  filterEntityTypes(entityTypes: SelectableValue<string>[]) {
-    return _.sortBy(
-      _.filter(
-        entityTypes,
-        entityType => this.findMatchingEntityTypes(entityType)),
-      'label');
+  filterForEntityType(findMatchingEntityTypes: boolean = true) {
+    const { query, datasource, onChange } = this.props;
+    datasource.getEntityTypes().then(entityTypes => {
+      let filteredEntityTypes = this.filterEntityTypes(entityTypes, findMatchingEntityTypes);
+      this.setState({
+        types: filteredEntityTypes,
+      });
+
+      if (!query.entityType || !query.entityType.key || !_.find(this.state.types, m => m.key === query.entityType.key)) {
+        query.entityType = { key: null, label: 'Please select (' + filteredEntityTypes.length + ')' };
+      }
+
+      onChange(query);
+    });
+  }
+
+  filterEntityTypes(entityTypes: SelectableValue<string>[], findMatchingEntityTypes: boolean) {
+    if (findMatchingEntityTypes) {
+      return _.sortBy(
+        _.filter(
+          entityTypes,
+          entityType => this.findMatchingEntityTypes(entityType)),
+        'label');
+    }
+
+    return _.sortBy(entityTypes, 'label');
   }
 
   findMatchingEntityTypes(entityType: SelectableValue<string>) {
@@ -112,7 +120,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
       return snapshots.find((type: any) => type === entityType.key) && entityType.label != null;
     }
 
-    return snapshots;
+    return false;
   }
 
   render() {
@@ -127,7 +135,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
           value={query.entityQuery}
           placeholder={'Please specify'}
           onChange={this.onQueryChange}
-          onBlur={event => this.loadEntityTypes()}
+          onBlur={() => this.loadEntityTypes()}
           tooltip={'Specify a query for the entities you wish to plot. Use the dynamic focus syntax: https://docs.instana.io/core_concepts/dynamic_focus/#syntax'}
         />
 
