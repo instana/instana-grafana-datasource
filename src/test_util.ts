@@ -1,4 +1,5 @@
 import { InstanaQuery } from './types/instana_query';
+import { InstanaOptions } from './types/instana_options';
 
 /*
   [
@@ -42,6 +43,7 @@ export function generateTestData(amountOfTimeseries: number, numberOfEntries: nu
  */
 export function buildTestTarget(): InstanaQuery {
   return {
+    callToEntity: { },
     aggregateGraphs: false,
     aggregation: { },
     applicationCallToEntity: { },
@@ -79,4 +81,14 @@ export function buildTestTarget(): InstanaQuery {
     aggregationFunction: { },
     refId: "A"
   };
+}
+
+export function buildInstanaOptions(): InstanaOptions {
+  return {
+    url: "string",
+    apiToken: "",
+    useProxy: true,
+    showOffline: true,
+    allowSlo: true,
+  }
 }
