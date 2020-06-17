@@ -13,7 +13,7 @@ import { ALL_APPLICATIONS, PAGINATION_LIMIT } from '../GlobalVariables';
 import defaultApplicationMetricCatalog from '../lists/default_metric_catalog';
 import { isInvalidQueryInterval } from '../util/queryInterval_check';
 
-export class DataSourceApplicaton {
+export class DataSourceApplication {
 
   instanaOptions: InstanaOptions;
   applicationsCache: Cache<Promise<Array<SelectableValue>>>;
@@ -60,7 +60,7 @@ export class DataSourceApplicaton {
         return pageSet.items;
       }));
 
-      return allResults.map(entry => {
+      return _.compact(allResults).map(entry => {
         return {
           'key': entry.id,
           'label': entry.label

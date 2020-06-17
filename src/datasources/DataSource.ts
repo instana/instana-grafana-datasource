@@ -34,7 +34,7 @@ import {
 import getVersion from '../util/instana_version';
 import { aggregateTarget } from '../util/aggregation_util';
 import { DataSourceWebsite } from './DataSource_Website';
-import { DataSourceApplicaton } from './DataSource_Application';
+import { DataSourceApplication } from './DataSource_Application';
 import { DataSourceService } from './DataSource_Service';
 import { DataSourceEndpoint } from './DataSource_Endpoint';
 import { isInvalidQueryInterval } from '../util/queryInterval_check';
@@ -45,7 +45,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   options: InstanaOptions;
   dataSourceInfrastructure: DataSourceInfrastructure;
   dataSourceWebsite: DataSourceWebsite;
-  dataSourceApplication: DataSourceApplicaton;
+  dataSourceApplication: DataSourceApplication;
   dataSourceService: DataSourceService;
   dataSourceEndpoint: DataSourceEndpoint;
   dataSourceSlo: DataSourceSlo;
@@ -64,7 +64,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     this.dataSourceSlo = new DataSourceSlo(instanceSettings.jsonData);
     this.dataSourceInfrastructure = new DataSourceInfrastructure(instanceSettings.jsonData);
     this.dataSourceWebsite = new DataSourceWebsite(instanceSettings.jsonData);
-    this.dataSourceApplication = new DataSourceApplicaton(instanceSettings.jsonData);
+    this.dataSourceApplication = new DataSourceApplication(instanceSettings.jsonData);
     this.dataSourceService = new DataSourceService(instanceSettings.jsonData);
     this.dataSourceEndpoint = new DataSourceEndpoint(instanceSettings.jsonData);
     this.resultCache = new Cache<any>();
@@ -270,7 +270,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   getSloReports(): Promise<SelectableValue<string>[]> {
-    return this.dataSourceSlo.getConfiguredSLOs();
+    return this.dataSourceSlo.getConfiguredSLIs();
   }
 
   getEntityTypes(): Promise<SelectableValue<string>[]> {

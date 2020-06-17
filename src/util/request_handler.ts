@@ -28,7 +28,8 @@ function doRequest(options: InstanaOptions, request: BackendSrvRequest, swallowE
     return execute(request, swallowError, maxRetries, options.apiToken);
   }
 }
-function buildUrl(options: InstanaOptions, endpoint: string) {
+
+export function buildUrl(options: InstanaOptions, endpoint: string) {
   if (options.useProxy) {
     return options.url + '/instana' + endpoint; // to match proxy route in plugin.json
   } else {

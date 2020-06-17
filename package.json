@@ -11,6 +11,7 @@
   "author": "Instana",
   "license": "Apache-2.0",
   "devDependencies": {
+    "axios": "^0.19.2",
     "@grafana/data": "^6.7.3",
     "@grafana/runtime": "^6.7.3",
     "@grafana/toolkit": "^6.7.3",

@@ -2,7 +2,7 @@ import TimeFilter from '../types/time_filter';
 import { appendData, generateStableHash, hasIntersection } from './delta_util';
 import _ from 'lodash';
 import { InstanaQuery } from '../types/instana_query';
-import { buildTestTarget } from '../test_util';
+import { buildTestTarget } from './test_util';
 
 describe('Given a delta', function() {
   describe('with two overlapping timeFilter', function() {
@@ -74,6 +74,7 @@ describe('Given a delta', function() {
     it('should generate a stable hash and should have SelectableValue flattened', function() {
       let result = generateStableHash(target);
       expect(result).toEqual(JSON.stringify({
+        callToEntity: {},
         aggregateGraphs: false,
         aggregation: {},
         applicationCallToEntity: {},

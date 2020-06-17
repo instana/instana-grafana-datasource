@@ -1,4 +1,4 @@
-import Cache from '../src/cache';
+import Cache from './cache';
 
 describe('Given a cache', function() {
   let cache: Cache<any>;

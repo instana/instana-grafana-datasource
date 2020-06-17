@@ -1,5 +1,8 @@
-import { InstanaQuery } from './types/instana_query';
-import { InstanaOptions } from './types/instana_options';
+import { InstanaQuery } from '../types/instana_query';
+import { InstanaOptions } from '../types/instana_options';
+import { buildUrl } from './request_handler';
+import TimeFilter from '../types/time_filter';
+const axios = require('axios');
 
 /*
   [
@@ -85,10 +88,28 @@ export function buildTestTarget(): InstanaQuery {
 
 export function buildInstanaOptions(): InstanaOptions {
   return {
-    url: "string",
+    url: "",
     apiToken: "",
     useProxy: true,
     showOffline: true,
     allowSlo: true,
   }
+}
+
+export function buildTimeFilter(): TimeFilter {
+  const currentTime = new Date().getTime();
+  return {
+    to: currentTime,
+    from: currentTime - 3600000,
+    windowSize: 3600000
+  }
+}
+
+export async function mockGetRequest(instanaOptions: InstanaOptions, endpoint: string) {
+  let test = buildUrl(instanaOptions, endpoint);
+  return axios.get(test, {
+    headers: {
+      Authorization: 'apiToken ' + instanaOptions.apiToken
+    }
+  })
 }

@@ -17,13 +17,13 @@ export class DataSourceSlo {
     this.sliReportsCache = new Cache<Promise<SelectableValue<string>[]>>();
   }
 
-  getConfiguredSLOs(): Promise<SelectableValue<string>[]> {
+  getConfiguredSLIs(): Promise<SelectableValue<string>[]> {
     let sliReports = this.sliReportsCache.get('sliReports');
     if (sliReports) {
       return sliReports;
     }
 
-    sliReports = getRequest(this.instanaOptions, '/api/settings/sli').then((response: any) => _.map(response.data, (r, index) => {
+    sliReports = getRequest(this.instanaOptions, '/api/settings/sli').then((response: any) => _.map(response.data, r => {
       return {
         'key': r.id,
         'label': r.sliName
@@ -67,7 +67,7 @@ export class DataSourceSlo {
     const reds: any[] = [];
     const greys: any[] = [];
 
-    var granularity = getWindowSize(timeFilter) / Object.keys(series).length;
+    let granularity = getWindowSize(timeFilter) / Object.keys(series).length;
     _.forEach(series, (value: number, index: number) => {
       if (value === 1) {
         greens.push([1, timeFilter.from + (index * granularity)]);

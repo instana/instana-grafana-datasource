@@ -20,10 +20,6 @@ export class DataSourceService {
     this.servicesCache = new Cache<Promise<Array<SelectableValue>>>();
   }
 
-  runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
-
-  }
-
   getServicesOfApplication(target: InstanaQuery, timeFilter: TimeFilter) {
     let applicationId = "";
     if (target.entity && target.entity.key) {
@@ -45,7 +41,7 @@ export class DataSourceService {
         return pageSet.items;
       }));
 
-      return allResults.map(entry => {
+      return _.compact(allResults).map(entry => {
         return {
           'key': entry.id,
           'label': entry.label

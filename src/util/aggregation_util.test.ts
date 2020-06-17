@@ -1,5 +1,5 @@
 import { InstanaQuery } from '../types/instana_query';
-import { buildTestTarget, generateTestData } from '../test_util';
+import { buildTestTarget, generateTestData } from './test_util';
 import { aggregateTarget } from './aggregation_util';
 
 describe('Given a dataset', function() {

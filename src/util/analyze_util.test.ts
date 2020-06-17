@@ -1,6 +1,6 @@
 import { createTagFilter, readItemMetrics } from './analyze_util';
 import { InstanaQuery } from '../types/instana_query';
-import { buildTestTarget } from '../test_util';
+import { buildTestTarget } from './test_util';
 import TagFilter from '../types/tag_filter';
 
 describe('Given a TagFilter object', function() {
