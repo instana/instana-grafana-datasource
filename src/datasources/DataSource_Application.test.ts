@@ -7,40 +7,90 @@ import _ from 'lodash';
 const options = buildInstanaOptions();
 const axios = require('axios');
 
-describe('Given an application datasource', function() {
+describe('Given an application datasource', () => {
   const dataSourceApplication: DataSourceApplication = new DataSourceApplication(options);
   const timeFilter: TimeFilter = buildTimeFilter();
+  let paginateApplicationsSpy: any;
+  let getRequestSpy: any;
 
-  it('should return applications as SelectableValues', function() {
-    let applications: any = axios.get(options.url + '/api/application-monitoring/applications?windowSize'
-      + timeFilter.windowSize
-      + '&to=' + timeFilter.to, {
-      headers: {
-        Authorization: 'apiToken ' + options.apiToken
-      }
+  afterEach(() => {
+    paginateApplicationsSpy.mockReset();
+    getRequestSpy.mockReset();
+  });
+
+  describe('and invoking functions only once', () => {
+    paginateApplicationsSpy = jest.spyOn(dataSourceApplication, 'paginateApplications');
+    getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
+
+    it('should return applications as SelectableValues', () => {
+      return axios.get(options.url + '/api/application-monitoring/applications?windowSize'
+        + timeFilter.windowSize
+        + '&to=' + timeFilter.to, {
+        headers: {
+          Authorization: 'apiToken ' + options.apiToken
+        }
+      }).then((applications: any) => {
+        paginateApplicationsSpy.mockResolvedValue(applications);
+        getApplicationsAndVerifyFormat(dataSourceApplication, timeFilter);
+      })
     });
 
-    const spy = jest.spyOn(dataSourceApplication, 'paginateApplications');
-    spy.mockResolvedValue(applications);
+    it('should return application tag in the correct format', () => {
+      return axios.get(options.url + '/api/application-monitoring/catalog/tags', {
+        headers: {
+          Authorization: 'apiToken ' + options.apiToken
+        }
+      }).then((tags: any) => {
+        getRequestSpy.mockResolvedValue(tags);
+        getApplicationTagsAndVerifyFormat(dataSourceApplication);
+      })
+    });
 
+    describe('and invoking functions multiple times', () => {
+      paginateApplicationsSpy = jest.spyOn(dataSourceApplication, 'paginateApplications');
+      getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
+
+      it('should return applications as SelectableValues', () => {
+        return axios.get(options.url + '/api/application-monitoring/applications?windowSize'
+          + timeFilter.windowSize
+          + '&to=' + timeFilter.to, {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken
+          }
+        }).then((applications: any) => {
+          paginateApplicationsSpy.mockResolvedValue(applications);
+          getApplicationsAndVerifyFormat(dataSourceApplication, timeFilter);
+          getApplicationsAndVerifyFormat(dataSourceApplication, timeFilter);
+          expect(paginateApplicationsSpy).toHaveBeenCalledTimes(1);
+        })
+      });
+
+      it('should cache application tags', () => {
+        return axios.get(options.url + '/api/application-monitoring/catalog/tags', {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken
+          }
+        }).then((tags: any) => {
+          getRequestSpy.mockResolvedValue(tags);
+          getApplicationTagsAndVerifyFormat(dataSourceApplication);
+          getApplicationTagsAndVerifyFormat(dataSourceApplication);
+          return expect(getRequestSpy).toHaveBeenCalledTimes(1);
+        });
+      });
+    });
+  });
+
+
+  function getApplicationsAndVerifyFormat(dataSourceApplication: DataSourceApplication, timeFilter: TimeFilter) {
     return dataSourceApplication.getApplications(timeFilter).then(apps => {
       _.map(apps, app => {
         expect(app).toHaveProperty('key');
         expect(app).toHaveProperty('label');
       });
     });
-  });
+  }
 
-  it('should return application tag in the correct format', function() {
-    let tags: any = axios.get(options.url + '/api/application-monitoring/catalog/tags', {
-      headers: {
-        Authorization: 'apiToken ' + options.apiToken
-      }
-    });
-
-    const spy = jest.spyOn(RequestHandler, 'getRequest');
-    spy.mockResolvedValue(tags);
-
+  function getApplicationTagsAndVerifyFormat(dataSourceApplication: DataSourceApplication) {
     return dataSourceApplication.getApplicationTags().then((appTags: any) => {
       _.map(appTags, tag => {
         expect(tag).toHaveProperty('key');
@@ -50,5 +100,6 @@ describe('Given an application datasource', function() {
         expect(tag).toHaveProperty('canApplyToDestination');
       });
     });
-  });
+  }
+
 });
