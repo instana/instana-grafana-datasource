@@ -61,7 +61,7 @@ export class DataSourceInfrastructure {
     _.each(metricsString, (metricString) => metrics.push(JSON.parse('{ "key": "' + metricString + '"}')));
 
     if (metrics.length > 4) {
-      metrics.slice(0, 3); // API supports up to 4 metrics at once
+      metrics = metrics.slice(0, 4); // API supports up to 4 metrics at once
     }
 
     return metrics;

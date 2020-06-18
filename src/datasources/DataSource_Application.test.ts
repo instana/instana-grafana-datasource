@@ -79,8 +79,7 @@ describe('Given an application datasource', () => {
       });
     });
   });
-
-
+  
   function getApplicationsAndVerifyFormat(dataSourceApplication: DataSourceApplication, timeFilter: TimeFilter) {
     return dataSourceApplication.getApplications(timeFilter).then(apps => {
       _.map(apps, app => {
