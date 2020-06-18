@@ -1,7 +1,10 @@
 import { buildInstanaOptions } from '../util/test_util';
 import { DataSourceInfrastructure } from './Datasource_Infrastructure';
+import * as RequestHandler from '../util/request_handler';
+import _ from 'lodash';
 
 const options = buildInstanaOptions();
+const axios = require('axios');
 
 describe('Given an infrastructure datasource', () => {
   const dataSourceInfrastructure: DataSourceInfrastructure = new DataSourceInfrastructure(options);
@@ -38,7 +41,46 @@ describe('Given an infrastructure datasource', () => {
       expect(result[2]).toEqual({key: 'metric03'});
       expect(result[3]).toEqual({key: 'metric04'});
     })
+  });
 
+  describe('when fetching entity types', () => {
+    let pluginsSpy: any;
+
+    afterEach(() => {
+      pluginsSpy.mockReset();
+    });
+
+    it('should return entity types in correct format', () => {
+      return axios.get(options.url + '/api/infrastructure-monitoring/catalog/plugins', {
+        headers: {
+          Authorization: 'apiToken ' + options.apiToken
+        }
+      }).then((types: any) => {
+        pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
+        pluginsSpy.mockResolvedValue(types);
+
+        let result = dataSourceInfrastructure.getEntityTypes();
+        _.map(result, et => {
+          expect(et).toHaveProperty('key');
+          expect(et).toHaveProperty('label');
+        })
+      });
+    });
+
+    it('should cache entityTypes', () => {
+      return axios.get(options.url + '/api/infrastructure-monitoring/catalog/plugins', {
+        headers: {
+          Authorization: 'apiToken ' + options.apiToken
+        }
+      }).then((types: any) => {
+        pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
+        pluginsSpy.mockResolvedValue(types);
+
+        dataSourceInfrastructure.getEntityTypes();
+        dataSourceInfrastructure.getEntityTypes();
+        expect(pluginsSpy).toHaveBeenCalledTimes(1);
+      });
+    });
   });
 
 });
