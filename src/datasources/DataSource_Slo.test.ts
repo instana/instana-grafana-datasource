@@ -1,5 +1,5 @@
 import TimeFilter from '../types/time_filter';
-import { buildInstanaOptions, buildTestTarget, buildTimeFilter } from '../util/test_util';
+import { buildInstanaOptions, buildTestTarget } from '../util/test_util';
 import { DataSourceSlo } from './DataSource_Slo';
 import { InstanaOptions } from '../types/instana_options';
 import * as RequestHandler from '../util/request_handler';
