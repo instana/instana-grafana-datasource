@@ -39,7 +39,6 @@ describe('Given an infrastructure datasource', () => {
     it('should return a maximum of four metrics', () => {
       freeText = 'metric01,metric02,  metric03,      metric04,metric05,metric06';
       const result = dataSourceInfrastructure.extractMetricsFromText(freeText);
-      console.log(result);
       expect(result.length).toEqual(4);
       expect(result[0]).toEqual({ key: 'metric01' });
       expect(result[1]).toEqual({ key: 'metric02' });
@@ -151,7 +150,7 @@ describe('Given an infrastructure datasource', () => {
     let contextSpy: any = jest.spyOn(RequestHandler, 'getRequest');
     const timeFilter: TimeFilter = buildTimeFilter();
     const target: InstanaQuery = buildTestTarget();
-    target.entityType = { key: 'someKey' }
+    target.entityType = { key: 'someKey' };
     target.entityQuery = 'java';
 
     const snapshotA = { status: 200, data: { label: 'label for A' } };
@@ -160,15 +159,15 @@ describe('Given an infrastructure datasource', () => {
       status: 200,
       data: [
         {
-          "snapshotId": "A",
-          "host": "Stans-Macbook-Pro"
+          'snapshotId': 'A',
+          'host': 'Stans-Macbook-Pro'
         },
         {
-          "snapshotId": "B",
-          "host": ""
+          'snapshotId': 'B',
+          'host': ''
         }
       ]
-    }
+    };
 
     beforeEach(() => {
       contextSpy.mockReset();
@@ -176,7 +175,8 @@ describe('Given an infrastructure datasource', () => {
       contextSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
         if (endpoint === '/api/snapshots/context?q=java%20AND%20entity.pluginId%3AsomeKey&from=' + timeFilter.from + '&to=' + timeFilter.to) {
           return Promise.resolve(contexts);
-        } if (endpoint === '/api/snapshots/context?q=daljeet%20AND%20entity.pluginId%3AsomeKey&from=' + timeFilter.from + '&to=' + timeFilter.to) {
+        }
+        if (endpoint === '/api/snapshots/context?q=daljeet%20AND%20entity.pluginId%3AsomeKey&from=' + timeFilter.from + '&to=' + timeFilter.to) {
           return Promise.resolve(contexts);
         } else if (endpoint === '/api/snapshots/A?from=' + timeFilter.from + '&to=' + timeFilter.to) {
           return Promise.resolve(snapshotA);
@@ -191,8 +191,16 @@ describe('Given an infrastructure datasource', () => {
     it('should return snapshots with response', () => {
       dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter).then(results => {
         expect(results.length).toEqual(2);
-        expect(results[0]).toEqual({ snapshotId: 'A', host: 'Stans-Macbook-Pro', response: { status: 200, data: { label: 'label for A' }}});
-        expect(results[1]).toEqual({ snapshotId: 'B', host: '', response: { status: 200, data: { label: 'label for B' }}});
+        expect(results[0]).toEqual({
+          snapshotId: 'A',
+          host: 'Stans-Macbook-Pro',
+          response: { status: 200, data: { label: 'label for A' } }
+        });
+        expect(results[1]).toEqual({
+          snapshotId: 'B',
+          host: '',
+          response: { status: 200, data: { label: 'label for B' } }
+        });
       });
     });
 
@@ -202,12 +210,62 @@ describe('Given an infrastructure datasource', () => {
       dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter).then(results => {
         expect(contextSpy).toHaveBeenCalledTimes(1); //TODO
         expect(results.length).toEqual(2);
-        expect(results[0]).toEqual({ snapshotId: 'A', host: 'Stans-Macbook-Pro', response: { status: 200, data: { label: 'label for A' }}});
-        expect(results[1]).toEqual({ snapshotId: 'B', host: '', response: { status: 200, data: { label: 'label for B' }}});
+        expect(results[0]).toEqual({
+          snapshotId: 'A',
+          host: 'Stans-Macbook-Pro',
+          response: { status: 200, data: { label: 'label for A' } }
+        });
+        expect(results[1]).toEqual({
+          snapshotId: 'B',
+          host: '',
+          response: { status: 200, data: { label: 'label for B' } }
+        });
+      });
+    });
+  });
+
+  describe('When performing a query', function() {
+    const timeFilter: TimeFilter = buildTimeFilter();
+    let getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
+    const target: InstanaQuery = buildTestTarget();
+    target.refId = 'A';
+    target.metricCategory = { key: 0 };
+    target.entityQuery = 'java';
+    target.entityType = { key: 'jvmRuntimePlatform' };
+    target.metric = { key: 'memory.used' };
+    target.timeInterval = { key: 3600000 };
+
+    let snapshotCounter: number = 0;
+
+    getRequestSpy.mockImplementation((instanaOptions, endpoint) => {
+      if (endpoint.startsWith('/api/snapshots/') && !endpoint.startsWith('/api/snapshots/context')) {
+        //count how many snapshots were fetched
+        snapshotCounter++;
+      }
+
+      return axios.get(options.url + endpoint, {
+        headers: {
+          Authorization: 'apiToken ' + options.apiToken
+        }
       });
     });
 
+    it('should return the correct number of results and cache snapshots', function() {
+      return dataSourceInfrastructure.runQuery(target, timeFilter).then(result => {
+        expect(result.length).toBe(snapshotCounter);
+        _.forEach(result, target => {
+          expect(target).toHaveProperty('target');
+          expect(target).toHaveProperty('datapoints');
+          expect(target).toHaveProperty('refId');
+          expect(target.refId).toBe('A');
+        });
 
+        const query = target.entityQuery + '%20AND%20entity.pluginId%3A' + target.entityType.key;
+        const key = dataSourceInfrastructure.buildSnapshotCacheKey(query, timeFilter);
+        const snapshots = dataSourceInfrastructure.snapshotCache.get(key).valueOf();
+        expect(snapshots).not.toBeNull();
+      });
+    });
 
   });
 
