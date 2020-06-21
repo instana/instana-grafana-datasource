@@ -214,12 +214,12 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   aggregateDataIfNecessary(data: any, target: InstanaQuery) {
-    var newData = [];
+    let newData = [];
 
     if (target.aggregateGraphs) {
       newData.push(aggregateTarget(data, target));
       if (!target.hideOriginalGraphs) {
-        _.each(data, (dt, index) => newData.push(dt));
+        _.each(data, (dt) => newData.push(dt));
       }
       return newData;
     }
