@@ -202,7 +202,6 @@ export class DataSourceInfrastructure {
 
     let snapshots = this.snapshotCache.get(key);
     if (snapshots) {
-      console.log("geht rein");
       return snapshots;
     }
 
