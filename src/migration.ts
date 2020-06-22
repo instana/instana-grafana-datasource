@@ -61,7 +61,6 @@ export default function (target: any) {
   if (typeof target.aggregation === 'string') {
     target.aggregation ? target.aggregation = { key: target.aggregation, label: target.aggregation } : target.aggregation = {}
     target.aggregationFunction ? target.aggregationFunction = { key: target.aggregationFunction.label, label: target.aggregationFunction.label } : target.aggregationFunction = { }
-    // TODO applicationCallToEntity
     target.customFilters ? target.customFilters = _.map(target.customFilters, (cf) => { return cf.value }) : target.customFilters = [];
     // TODO filter
     _.forEach(target.filters, filter => {

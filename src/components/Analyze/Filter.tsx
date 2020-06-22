@@ -37,7 +37,9 @@ export class Filters extends React.Component<Props, FilterState> {
 
   componentDidMount() {
     const { query } = this.props;
-    this.setState({ tagFilters: query.filters });
+    if (query.filters) {
+      this.setState({ tagFilters: query.filters });
+    }
   }
 
   addTagFilter = () => {
