@@ -147,8 +147,8 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   getApplicationServiceEndpointMetrics(target: InstanaQuery, timeFilter: TimeFilter) {
     // do not try to execute too big queries
     if (isInvalidQueryInterval(timeFilter.windowSize, this.options.queryinterval_limit_app_metrics)) {
-      //return rejectLargeTimeWindow(this.maxWindowSizeAnalyzeMetrics);
-      return Promise.resolve(emptyResultData(target.refId));
+      throw new Error("Limit for maximum selectable windowsize exceeded, max is: "
+        + this.options.queryinterval_limit_app_metrics + " hours");
     }
 
     if (target.endpoint && target.endpoint.key) {

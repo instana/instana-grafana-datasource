@@ -26,8 +26,8 @@ export class DataSourceWebsite {
 
   runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
     if (isInvalidQueryInterval(timeFilter.windowSize, this.instanaOptions.queryinterval_limit_website_metrics)) {
-      //return rejectLargeTimeWindow(this.maxWindowSizeAnalyzeWebsites);
-      Promise.resolve(emptyResultData(target.refId));
+      throw new Error("Limit for maximum selectable windowsize exceeded, max is: "
+        + this.instanaOptions.queryinterval_limit_website_metrics + " hours");
     }
 
     // avoid invalid calls

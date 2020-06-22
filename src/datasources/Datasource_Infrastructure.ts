@@ -31,8 +31,8 @@ export class DataSourceInfrastructure {
   runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
     // do not try to execute to big queries
     if (isInvalidQueryInterval(timeFilter.windowSize, this.instanaOptions.queryinterval_limit_infra)) {
-      //return this.rejectLargeTimeWindow(this.maxWindowSizeInfrastructure);
-      return Promise.resolve(emptyResultData(target.refId));
+      throw new Error("Limit for maximum selectable windowsize exceeded, max is: "
+        + this.instanaOptions.queryinterval_limit_infra + " hours");
     }
 
     // do not try to retrieve data without selected metric

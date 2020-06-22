@@ -28,8 +28,8 @@ export class DataSourceApplication {
   runQuery(target: InstanaQuery, timeFilter: TimeFilter): any {
     // do not try to execute to big queries
     if (isInvalidQueryInterval(timeFilter.windowSize, this.instanaOptions.queryinterval_limit_app_calls)) {
-      //return this.rejectLargeTimeWindow(this.maxWindowSizeInfrastructure);
-      return Promise.resolve(emptyResultData(target.refId));
+      throw new Error("Limit for maximum selectable windowsize exceeded, max is: "
+        + this.instanaOptions.queryinterval_limit_app_calls + " hours");
     }
 
     // avoid invalid calls
