@@ -31,7 +31,7 @@ export class DataSourceApplication {
     }
 
     // avoid invalid calls
-    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key || !target.entity || !target.entity.key) {
+    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key || !target.entity || (!target.entity.key && !target.entity.label)) {
       return Promise.resolve(emptyResultData(target.refId));
     }
 

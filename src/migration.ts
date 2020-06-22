@@ -1,4 +1,8 @@
 // can be removed once mixpanel shows no old plugins around
+import { buildTestTarget } from './util/test_util';
+import _ from 'lodash';
+import metric_categories from './lists/metric_categories';
+
 export default function (target: any) {
   // 1.3.1 towards 2.0.0
   if (target.entityType && typeof target.entityType === 'string') {
@@ -55,6 +59,21 @@ export default function (target: any) {
 
   //2.7.0 towards 3.0 (Angular to React Migration)
   if (typeof target.aggregation === 'string') {
-    target.aggregation = { key: target.aggregation, label: target.aggregation };
+    target.aggregation ? target.aggregation = { key: target.aggregation, label: target.aggregation } : target.aggregation = {}
+    target.aggregationFunction ? target.aggregationFunction = { key: target.aggregationFunction.label, label: target.aggregationFunction.label } : target.aggregationFunction = { }
+    // TODO applicationCallToEntity
+    target.customFilters ? target.customFilters = _.map(target.customFilters, (cf) => { return cf.value }) : target.customFilters = [];
+    // TODO filter
+    _.forEach(target.filters, filter => {
+      filter.tag = {
+        canApplyToDestination: filter.tag.canApplyToDestination,
+        canApplyToSource: filter.tag.canApplyToSource,
+        key: filter.tag.key,
+        label: filter.tag.key,
+        type: filter.tag.type,
+      }
+    });
+    target.group ? target.group = { key: target.group.key, label: target.group.key, type: target.group.type } : target.group = {};
+    target.metricCategory = _.find(metric_categories, category => category.key === parseInt(target.metricCategory));
   }
 }

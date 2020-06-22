@@ -26,6 +26,11 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
     };
   }
 
+  componentDidMount() {
+    const { query } = this.props;
+    this.setState({ customFilters: query.customFilters });
+  }
+
   onFilterChange = (eventItem: ChangeEvent<HTMLInputElement>, index: number) => {
     const { onFilterChange } = this.props;
     const cf: string[] = this.state.customFilters;

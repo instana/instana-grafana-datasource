@@ -4,7 +4,7 @@ import { DataSource } from '../../datasources/DataSource';
 import { FormLabel, Input, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
-import { ANALYZE_APPLICATION_METRICS } from '../../GlobalVariables';
+import { ALL_APPLICATIONS, ANALYZE_APPLICATION_METRICS } from '../../GlobalVariables';
 import call_to_entities from '../../lists/apply_call_to_entities';
 
 interface ApplicationCallsMetricsState {
@@ -38,11 +38,15 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
   componentDidMount() {
     const { query, datasource, onChange } = this.props;
     datasource.fetchApplications().then((applications) => {
+      if (!_.find(applications, { key: null })) {
+        applications.unshift({ key: null, label: ALL_APPLICATIONS });
+      }
+
       this.setState({
-        applications: applications,
+        applications: applications
       });
 
-      if (!query.entity || !query.entity.key) {
+      if (!query.entity || (!query.entity.key && !query.entity.label)) {
         query.entity = applications[0];
       }
 

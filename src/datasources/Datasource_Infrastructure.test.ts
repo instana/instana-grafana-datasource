@@ -7,6 +7,7 @@ import { BUILT_IN_METRICS, CUSTOM_METRICS } from '../GlobalVariables';
 import TimeFilter from '../types/time_filter';
 import { InstanaQuery } from '../types/instana_query';
 import { InstanaOptions } from '../types/instana_options';
+import Cache from '../cache';
 
 const options = buildInstanaOptions();
 const axios = require('axios');
@@ -51,6 +52,7 @@ describe('Given an infrastructure datasource', () => {
     let pluginsSpy: any;
 
     afterEach(() => {
+      resetDataSource();
       pluginsSpy.mockReset();
     });
 
@@ -91,11 +93,12 @@ describe('Given an infrastructure datasource', () => {
     });
   });
 
-  describe('when fetching metrics catalog', function () {
+  describe('when fetching metrics catalog', function() {
     let plugin: SelectableValue = { key: 'jvmRuntimePlatform', label: 'java' };
     let catalogSpy: any;
 
     afterEach(() => {
+      resetDataSource();
       catalogSpy.mockReset();
     });
 
@@ -218,7 +221,7 @@ describe('Given an infrastructure datasource', () => {
       target.entityQuery = 'daljeet';
       dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
       dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter).then((results) => {
-        expect(contextSpy).toHaveBeenCalledTimes(1); //TODO
+        expect(contextSpy).toHaveBeenCalledTimes(1);
         expect(results.length).toEqual(2);
         expect(results[0]).toEqual({
           snapshotId: 'A',
@@ -234,7 +237,7 @@ describe('Given an infrastructure datasource', () => {
     });
   });
 
-  describe('When performing a query', function () {
+  describe('When performing a query', function() {
     const timeFilter: TimeFilter = buildTimeFilter();
     let getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
     const target: InstanaQuery = buildTestTarget();
@@ -260,7 +263,7 @@ describe('Given an infrastructure datasource', () => {
       });
     });
 
-    it('should return the correct number of results and cache snapshots', function () {
+    it('should return the correct number of results and cache snapshots', function() {
       return dataSourceInfrastructure.runQuery(target, timeFilter).then((result) => {
         expect(result.length).toBe(snapshotCounter);
         _.forEach(result, (target) => {
@@ -277,4 +280,11 @@ describe('Given an infrastructure datasource', () => {
       });
     });
   });
+
+  function resetDataSource() {
+    dataSourceInfrastructure.snapshotCache = new Cache<Promise<SelectableValue[]>>();
+    dataSourceInfrastructure.snapshotInfoCache = new Cache<Promise<SelectableValue[]>>();
+    dataSourceInfrastructure.catalogCache = new Cache<Promise<SelectableValue[]>>();
+    dataSourceInfrastructure.typeCache = new Cache<Promise<SelectableValue[]>>();
+  }
 });
