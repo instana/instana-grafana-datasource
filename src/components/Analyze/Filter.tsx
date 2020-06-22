@@ -10,7 +10,7 @@ import { ANALYZE_APPLICATION_METRICS } from '../../GlobalVariables';
 import call_to_entities from '../../lists/apply_call_to_entities';
 
 interface FilterState {
-  tagFilters: TagFilter[]
+  tagFilters: TagFilter[];
 }
 
 interface Props {
@@ -31,7 +31,7 @@ export class Filters extends React.Component<Props, FilterState> {
     super(props);
 
     this.state = {
-      tagFilters: []
+      tagFilters: [],
     };
   }
 
@@ -40,7 +40,7 @@ export class Filters extends React.Component<Props, FilterState> {
     let cf = this.state.tagFilters;
     cf.push({
       tag: groups[0],
-      entity: { },
+      entity: {},
       booleanValue: false,
       isValid: false,
       numberValue: 0,
@@ -62,10 +62,10 @@ export class Filters extends React.Component<Props, FilterState> {
 
     onChange(query);
     onRunQuery();
-  }
+  };
 
   filterOperatorsOnType(type: any): SelectableValue[] {
-    return _.filter(operators, o => o.type === type)
+    return _.filter(operators, (o) => o.type === type);
   }
 
   onGroupChange(group: SelectableValue, index: number) {
@@ -86,17 +86,17 @@ export class Filters extends React.Component<Props, FilterState> {
     query.filters[index].entity = callToEntity;
     onChange(query);
     this.isValid(index);
-  }
+  };
 
   onOperatorChange = (operator: SelectableValue, index: number) => {
     const { query, onChange } = this.props;
     query.filters[index].operator = operator;
     onChange(query);
     this.isValid(index);
-  }
+  };
 
   canShowStringInput(filter: TagFilter) {
-    return (filter.tag.type === 'STRING' || filter.tag.type === 'KEY_VALUE_PAIR') && !filter.operator.key.includes('EMPTY')
+    return (filter.tag.type === 'STRING' || filter.tag.type === 'KEY_VALUE_PAIR') && !filter.operator.key.includes('EMPTY');
   }
 
   onTagFilterStringValueChange = (value: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -104,14 +104,14 @@ export class Filters extends React.Component<Props, FilterState> {
     query.filters[index].stringValue = value.currentTarget.value;
     onChange(query);
     this.isValid(index);
-  }
+  };
 
   onTagFilterNumberValueChange = (value: ChangeEvent<HTMLInputElement>, index: number) => {
     const { query, onChange } = this.props;
     query.filters[index].numberValue = value.currentTarget.valueAsNumber;
     onChange(query);
     this.isValid(index);
-  }
+  };
 
   onTagFilterBooleanValueChange(value: SelectableValue, index: number) {
     const { query, onChange } = this.props;
@@ -123,19 +123,25 @@ export class Filters extends React.Component<Props, FilterState> {
   isValid(index: number) {
     const { query, onChange, onRunQuery } = this.props;
     if (query.filters[index].tag) {
-      if (query.filters[index].operator.key.includes("EMPTY")) {
+      if (query.filters[index].operator.key.includes('EMPTY')) {
         query.filters[index].isValid = true;
         // to avoid sending value with query.filters[index] operators that do not require a value (such as is-present/is-not-present)
-        query.filters[index].stringValue = "";
+        query.filters[index].stringValue = '';
         query.filters[index].numberValue = 0;
         query.filters[index].booleanValue = true;
       } else if (this.OPERATOR_STRING === query.filters[index].tag.type && query.filters[index].stringValue) {
         query.filters[index].isValid = true;
-      } else if (this.OPERATOR_KEY_VALUE === query.filters[index].tag.type && query.filters[index].stringValue && query.filters[index].stringValue.includes('=')) {
+      } else if (
+        this.OPERATOR_KEY_VALUE === query.filters[index].tag.type &&
+        query.filters[index].stringValue &&
+        query.filters[index].stringValue.includes('=')
+      ) {
         query.filters[index].isValid = true;
       } else if (this.OPERATOR_NUMBER === query.filters[index].tag.type && query.filters[index].numberValue !== null) {
         query.filters[index].isValid = true;
-      } else query.filters[index].isValid = this.OPERATOR_BOOLEAN === query.filters[index].tag.type && query.filters[index].booleanValue;
+      } else {
+        query.filters[index].isValid = this.OPERATOR_BOOLEAN === query.filters[index].tag.type && query.filters[index].booleanValue;
+      }
     } else {
       query.filters[index].isValid = false;
     }
@@ -148,63 +154,71 @@ export class Filters extends React.Component<Props, FilterState> {
     const { query, groups } = this.props;
     let filter = null;
     let listFilter = this.state.tagFilters.map((filters, index) => {
-      filter =
+      filter = (
         <div className={'gf-form-inline'}>
-          <FormLabel width={14} tooltip={'Add an additional tag filter.'}>Add filter</FormLabel>
-          {query.metricCategory.key === ANALYZE_APPLICATION_METRICS &&
-          <Select
-            width={7}
-            isSearchable={false}
-            options={call_to_entities}
-            defaultValue={call_to_entities[0]}
-            value={query.applicationCallToEntity}
-            onChange={callToEntity => this.onCallToEntityChange(callToEntity, index)}
-          />
-          }
+          <FormLabel width={14} tooltip={'Add an additional tag filter.'}>
+            Add filter
+          </FormLabel>
+          {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
+            <Select
+              width={7}
+              isSearchable={false}
+              options={call_to_entities}
+              defaultValue={call_to_entities[0]}
+              value={query.applicationCallToEntity}
+              onChange={(callToEntity) => this.onCallToEntityChange(callToEntity, index)}
+            />
+          )}
           <Select
             width={20}
             isSearchable={true}
             value={query.filters[index].tag}
             options={groups}
-            onChange={group => this.onGroupChange(group, index)}
+            onChange={(group) => this.onGroupChange(group, index)}
           />
           <Select
             width={10}
             isSearchable={true}
             value={query.filters[index].operator}
             options={this.filterOperatorsOnType(query.filters[index].tag.type)}
-            onChange={operator => this.onOperatorChange(operator, index)}
+            onChange={(operator) => this.onOperatorChange(operator, index)}
           />
 
-          { this.canShowStringInput(query.filters[index]) &&
-          <Input
-            value={query.filters[index].stringValue}
-            placeholder={query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : 'please specify'}
-            onChange={e => this.onTagFilterStringValueChange(e, index)}
-            onBlur={this.props.onRunQuery}
-          />
-          }
+          {this.canShowStringInput(query.filters[index]) && (
+            <Input
+              value={query.filters[index].stringValue}
+              placeholder={query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : 'please specify'}
+              onChange={(e) => this.onTagFilterStringValueChange(e, index)}
+              onBlur={this.props.onRunQuery}
+            />
+          )}
 
-          { query.filters[index].tag.type === 'NUMBER' &&
-          <Input
-            type={'number'}
-            value={query.filters[index].numberValue}
-            placeholder={'please specify'}
-            onChange={e => this.onTagFilterNumberValueChange(e, index)}
-            onBlur={this.props.onRunQuery}
-          />
-          }
+          {query.filters[index].tag.type === 'NUMBER' && (
+            <Input
+              type={'number'}
+              value={query.filters[index].numberValue}
+              placeholder={'please specify'}
+              onChange={(e) => this.onTagFilterNumberValueChange(e, index)}
+              onBlur={this.props.onRunQuery}
+            />
+          )}
 
-          { query.filters[index].tag.type === 'BOOLEAN' &&
-          <Select
-            onChange={e => this.onTagFilterBooleanValueChange(e, index)}
-            value={{key: '' + query.filters[index].booleanValue, label: '' + query.filters[index].booleanValue}}
-            options={[{key: 'false', label: 'false'}, {key: 'true', label: 'true'}, ]}
-          />
-          }
+          {query.filters[index].tag.type === 'BOOLEAN' && (
+            <Select
+              onChange={(e) => this.onTagFilterBooleanValueChange(e, index)}
+              value={{ key: '' + query.filters[index].booleanValue, label: '' + query.filters[index].booleanValue }}
+              options={[
+                { key: 'false', label: 'false' },
+                { key: 'true', label: 'true' },
+              ]}
+            />
+          )}
 
-          <Button variant={'inverse'} onClick={event => this.removeTagFilter(index)}>-</Button>
-        </div>;
+          <Button variant={'inverse'} onClick={(event) => this.removeTagFilter(index)}>
+            -
+          </Button>
+        </div>
+      );
       return filter;
     });
 
@@ -213,11 +227,14 @@ export class Filters extends React.Component<Props, FilterState> {
         {listFilter}
 
         <div className={'gf-form-inline'}>
-          <FormLabel width={14} tooltip={'Add an additional tag filter.'}>Add filter</FormLabel>
-          <Button variant={'inverse'} onClick={this.addTagFilter}>+</Button>
+          <FormLabel width={14} tooltip={'Add an additional tag filter.'}>
+            Add filter
+          </FormLabel>
+          <Button variant={'inverse'} onClick={this.addTagFilter}>
+            +
+          </Button>
         </div>
       </div>
     );
   }
-
 }

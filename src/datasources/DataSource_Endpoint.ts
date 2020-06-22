@@ -11,13 +11,12 @@ import { emptyResultData } from '../util/target_util';
 import { getDefaultChartGranularity } from '../util/rollup_granularity_util';
 
 export class DataSourceEndpoint {
-
   instanaOptions: InstanaOptions;
-  endpointsCache: Cache<Promise<Array<SelectableValue>>>;
+  endpointsCache: Cache<Promise<SelectableValue[]>>;
 
   constructor(options: InstanaOptions) {
     this.instanaOptions = options;
-    this.endpointsCache = new Cache<Promise<Array<SelectableValue>>>();
+    this.endpointsCache = new Cache<Promise<SelectableValue[]>>();
   }
 
   getEndpointsOfService(target: InstanaQuery, timeFilter: TimeFilter) {
@@ -41,39 +40,50 @@ export class DataSourceEndpoint {
     let page = 1;
     let pageSize = 200;
 
-    endpoints = this.paginateEndpoints([], applicationId, serviceId, windowSize, timeFilter.to, page, pageSize, PAGINATION_LIMIT)
-      .then((response: any) => {
-        let allResults = _.flattenDeep(_.map(response, (pageSet, index) => {
-          return pageSet.items;
-        }));
+    endpoints = this.paginateEndpoints([], applicationId, serviceId, windowSize, timeFilter.to, page, pageSize, PAGINATION_LIMIT).then(
+      (response: any) => {
+        let allResults = _.flattenDeep(
+          _.map(response, (pageSet, index) => {
+            return pageSet.items;
+          })
+        );
 
-        return _.compact(allResults).map(entry => {
+        return _.compact(allResults).map((entry) => {
           return {
-            'key': entry.id,
-            'label': entry.label
+            key: entry.id,
+            label: entry.label,
           };
         });
-      });
+      }
+    );
 
     this.endpointsCache.put(key, endpoints, 600000);
     return endpoints;
   }
 
-  paginateEndpoints(results: any, applicationId: string, serviceId: string, windowSize: number, to: number, page: number, pageSize: number, pageLimit: number) {
+  paginateEndpoints(
+    results: any,
+    applicationId: string,
+    serviceId: string,
+    windowSize: number,
+    to: number,
+    page: number,
+    pageSize: number,
+    pageLimit: number
+  ) {
     if (page > pageLimit) {
       return results;
     }
 
-    var queryParameters = 'windowSize=' + windowSize
-      + '&to=' + to
-      + '&page=' + page
-      + '&pageSize=' + pageSize;
+    var queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
 
-    var url = '/api/application-monitoring/applications;id='
-      + (applicationId ? applicationId : '')
-      + '/services;id='
-      + (serviceId ? serviceId : '')
-      + '/endpoints?' + queryParameters;
+    var url =
+      '/api/application-monitoring/applications;id=' +
+      (applicationId ? applicationId : '') +
+      '/services;id=' +
+      (serviceId ? serviceId : '') +
+      '/endpoints?' +
+      queryParameters;
 
     return getRequest(this.instanaOptions, url).then((response: any) => {
       results.push(response.data);
@@ -98,7 +108,8 @@ export class DataSourceEndpoint {
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
     };
 
-    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
+    if (target.pluginId !== 'singlestat' && target.pluginId !== 'gauge') {
+      // no granularity for singlestat and gauge
       if (!target.timeInterval) {
         target.timeInterval = getDefaultChartGranularity(windowSize);
       }
@@ -109,12 +120,13 @@ export class DataSourceEndpoint {
       endpointId: target.endpoint.key,
       timeFrame: {
         to: timeFilter.to,
-        windowSize: windowSize
+        windowSize: windowSize,
       },
-      metrics: [metric]
+      metrics: [metric],
     };
 
-    if (target.entity && target.entity.key) { //see migration.ts why "ALL_SERVICES"
+    if (target.entity && target.entity.key) {
+      //see migration.ts why "ALL_SERVICES"
       data['applicationId'] = target.entity.key;
     }
 
@@ -140,12 +152,11 @@ export class DataSourceEndpoint {
     }
 
     if (target.endpoint.label === ALL_ENDPOINTS) {
-      return target.timeShift ? item.endpoint.label + ' - ' + key + " - " + target.timeShift : item.endpoint.label + ' - ' + key;
+      return target.timeShift ? item.endpoint.label + ' - ' + key + ' - ' + target.timeShift : item.endpoint.label + ' - ' + key;
     }
 
-    return target.timeShift && target.timeShiftIsValid ?
-      item.endpoint.label + ' (' + target.endpoint.label + ')' + ' - ' + key + " - " + target.timeShift
-      :
-      item.endpoint.label + ' (' + target.endpoint.label + ')' + ' - ' + key;
+    return target.timeShift && target.timeShiftIsValid
+      ? item.endpoint.label + ' (' + target.endpoint.label + ')' + ' - ' + key + ' - ' + target.timeShift
+      : item.endpoint.label + ' (' + target.endpoint.label + ')' + ' - ' + key;
   }
 }

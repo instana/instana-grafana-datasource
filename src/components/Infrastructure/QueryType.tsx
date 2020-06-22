@@ -6,7 +6,7 @@ import { DataSource } from '../../datasources/DataSource';
 import _ from 'lodash';
 
 interface QueryTypeState {
-  types: SelectableValue<string>[] | any;
+  types: SelectableValue[] | any;
 }
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 
   onChange(value: InstanaQuery): void;
 
-  updateMetrics(metrics: SelectableValue<string>[]): void;
+  updateMetrics(metrics: SelectableValue[]): void;
 
   datasource: DataSource;
 }
@@ -28,7 +28,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
     super(props);
 
     this.state = {
-      types: []
+      types: [],
     };
   }
 
@@ -55,12 +55,12 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
     onChange(query);
   };
 
-  onTypeChange = (eventItem: SelectableValue<string>) => {
+  onTypeChange = (eventItem: SelectableValue) => {
     const { query, datasource, onChange } = this.props;
     query.entityType = eventItem;
     onChange(query);
 
-    datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(results => {
+    datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then((results) => {
       this.props.updateMetrics(results);
     });
   };
@@ -69,27 +69,25 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
     const { query, datasource, onRunQuery } = this.props;
 
     if (query.entityQuery) {
-      datasource.fetchTypesForTarget(query).then(
-        (response: any) => {
-          snapshots = response.data;
-          this.filterForEntityType();
-          onRunQuery();
-        }
-      );
+      datasource.fetchTypesForTarget(query).then((response: any) => {
+        snapshots = response.data;
+        this.filterForEntityType();
+        onRunQuery();
+      });
     } else {
       this.setState({ types: [] });
     }
   }
 
-  filterForEntityType(findMatchingEntityTypes: boolean = true) {
+  filterForEntityType(findMatchingEntityTypes = true) {
     const { query, datasource, onChange } = this.props;
-    datasource.getEntityTypes().then(entityTypes => {
+    datasource.getEntityTypes().then((entityTypes) => {
       let filteredEntityTypes = this.filterEntityTypes(entityTypes, findMatchingEntityTypes);
       this.setState({
         types: filteredEntityTypes,
       });
 
-      if (!query.entityType || !query.entityType.key || !_.find(this.state.types, m => m.key === query.entityType.key)) {
+      if (!query.entityType || !query.entityType.key || !_.find(this.state.types, (m) => m.key === query.entityType.key)) {
         query.entityType = { key: null, label: 'Please select (' + filteredEntityTypes.length + ')' };
       }
 
@@ -97,26 +95,27 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
     });
   }
 
-  filterEntityTypes(entityTypes: SelectableValue<string>[], findMatchingEntityTypes: boolean) {
+  filterEntityTypes(entityTypes: SelectableValue[], findMatchingEntityTypes: boolean) {
     if (findMatchingEntityTypes) {
       return _.sortBy(
-        _.filter(
-          entityTypes,
-          entityType => this.findMatchingEntityTypes(entityType)),
-        'label');
+        _.filter(entityTypes, (entityType) => this.findMatchingEntityTypes(entityType)),
+        'label'
+      );
     }
 
     return _.sortBy(entityTypes, 'label');
   }
 
-  findMatchingEntityTypes(entityType: SelectableValue<string>) {
+  findMatchingEntityTypes(entityType: SelectableValue) {
     const { query } = this.props;
     // workaround as long the api does not support returning plugins with custom metrics only
-    if (query.metricCategory.key === 0 ||
+    if (
+      query.metricCategory.key === 0 ||
       entityType.key === 'statsd' ||
       entityType.key === 'prometheus' ||
       entityType.key === 'jvmRuntimePlatform' ||
-      entityType.key === 'dropwizardApplicationContainer') {
+      entityType.key === 'dropwizardApplicationContainer'
+    ) {
       return snapshots.find((type: any) => type === entityType.key) && entityType.label != null;
     }
 
@@ -136,19 +135,14 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
           placeholder={'Please specify'}
           onChange={this.onQueryChange}
           onBlur={() => this.loadEntityTypes()}
-          tooltip={'Specify a query for the entities you wish to plot. Use the dynamic focus syntax: https://docs.instana.io/core_concepts/dynamic_focus/#syntax'}
+          tooltip={
+            'Specify a query for the entities you wish to plot. Use the dynamic focus syntax: https://docs.instana.io/core_concepts/dynamic_focus/#syntax'
+          }
         />
 
         <FormLabel tooltip={'Select an entity type for a list of available metrics.'}>Type</FormLabel>
-        <Select
-          width={13}
-          isSearchable={true}
-          value={query.entityType}
-          options={this.state.types}
-          onChange={this.onTypeChange}
-        />
+        <Select width={13} isSearchable={true} value={query.entityType} options={this.state.types} onChange={this.onTypeChange} />
       </div>
     );
   }
-
 }

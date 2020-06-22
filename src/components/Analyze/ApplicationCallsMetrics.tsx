@@ -22,7 +22,7 @@ interface Props {
 
   onChange(value: InstanaQuery): void;
 
-  updateMetrics(metrics: SelectableValue<string>[]): void;
+  updateMetrics(metrics: SelectableValue[]): void;
 
   datasource: DataSource;
 }
@@ -31,15 +31,15 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
   constructor(props: any) {
     super(props);
     this.state = {
-      applications: []
+      applications: [],
     };
   }
 
   componentDidMount() {
     const { query, datasource, onChange } = this.props;
-    datasource.fetchApplications().then(applications => {
+    datasource.fetchApplications().then((applications) => {
       this.setState({
-        applications: applications
+        applications: applications,
       });
 
       if (!query.entity || !query.entity.key) {
@@ -54,7 +54,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
 
       // select a meaningful default group
       if (!query.group || !query.group.key) {
-        query.group = _.find(applicationTags, [ 'key', 'endpoint.name' ]);
+        query.group = _.find(applicationTags, ['key', 'endpoint.name']);
         onChange(query);
       }
     });
@@ -111,7 +111,9 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
 
     return (
       <div className={'gf-form-inline'}>
-        <FormLabel width={14} tooltip={'Select your application.'}>Application</FormLabel>
+        <FormLabel width={14} tooltip={'Select your application.'}>
+          Application
+        </FormLabel>
         <Select
           width={7}
           isSearchable={false}
@@ -120,15 +122,11 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           value={query.applicationCallToEntity}
           onChange={this.onApplicationCallToEntityChange}
         />
-        <Select
-          width={20}
-          isSearchable={true}
-          value={query.entity}
-          options={this.state.applications}
-          onChange={this.onApplicationChange}
-        />
+        <Select width={20} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
 
-        <FormLabel width={7} tooltip={'Group by tag.'}>Group by</FormLabel>
+        <FormLabel width={7} tooltip={'Group by tag.'}>
+          Group by
+        </FormLabel>
         <Select
           width={7}
           isSearchable={false}
@@ -137,23 +135,12 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           defaultValue={call_to_entities[0]}
           onChange={this.onCallToEntityChange}
         />
-        <Select
-          width={20}
-          options={groups}
-          value={query.group}
-          isSearchable={true}
-          onChange={this.onGroupChange}
-        />
+        <Select width={20} options={groups} value={query.group} isSearchable={true} onChange={this.onGroupChange} />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input
-            type={'text'}
-            value={query.groupbyTagSecondLevelKey}
-            onBlur={this.onGroupByTagSecondLevelKeyChange}
-          />
+          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );
   }
-
 }

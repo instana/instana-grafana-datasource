@@ -11,17 +11,16 @@ import { PAGINATION_LIMIT } from '../GlobalVariables';
 import { emptyResultData } from '../util/target_util';
 
 export class DataSourceService {
-
   instanaOptions: InstanaOptions;
-  servicesCache: Cache<Promise<Array<SelectableValue>>>;
+  servicesCache: Cache<Promise<SelectableValue[]>>;
 
   constructor(options: InstanaOptions) {
     this.instanaOptions = options;
-    this.servicesCache = new Cache<Promise<Array<SelectableValue>>>();
+    this.servicesCache = new Cache<Promise<SelectableValue[]>>();
   }
 
   getServicesOfApplication(target: InstanaQuery, timeFilter: TimeFilter) {
-    let applicationId = "";
+    let applicationId = '';
     if (target.entity && target.entity.key) {
       applicationId = target.entity.key;
     }
@@ -37,14 +36,16 @@ export class DataSourceService {
     let pageSize = 200;
 
     services = this.paginateServices([], applicationId, windowSize, timeFilter.to, page, pageSize, PAGINATION_LIMIT).then((response: any) => {
-      let allResults = _.flattenDeep(_.map(response, pageSet => {
-        return pageSet.items;
-      }));
+      let allResults = _.flattenDeep(
+        _.map(response, (pageSet) => {
+          return pageSet.items;
+        })
+      );
 
-      return _.compact(allResults).map(entry => {
+      return _.compact(allResults).map((entry) => {
         return {
-          'key': entry.id,
-          'label': entry.label
+          key: entry.id,
+          label: entry.label,
         };
       });
     });
@@ -58,15 +59,9 @@ export class DataSourceService {
       return results;
     }
 
-    let queryParameters = "windowSize=" + windowSize
-      + "&to=" + to
-      + "&page=" + page
-      + "&pageSize=" + pageSize;
+    let queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
 
-    let url = '/api/application-monitoring/applications;id='
-      + (applicationId ? applicationId : '')
-      + '/services?'
-      + queryParameters;
+    let url = '/api/application-monitoring/applications;id=' + (applicationId ? applicationId : '') + '/services?' + queryParameters;
 
     return getRequest(this.instanaOptions, url).then((response: any) => {
       results.push(response.data);
@@ -87,7 +82,8 @@ export class DataSourceService {
 
     const windowSize = getWindowSize(timeFilter);
 
-    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
+    if (target.pluginId !== 'singlestat' && target.pluginId !== 'gauge') {
+      // no granularity for singlestat and gauge
       if (!target.timeInterval) {
         target.timeInterval = getDefaultChartGranularity(windowSize);
       }
@@ -96,18 +92,19 @@ export class DataSourceService {
     const metric = {
       metric: target.metric.key,
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
-      granularity: target.timeInterval.key
+      granularity: target.timeInterval.key,
     };
 
     const data: any = {
       timeFrame: {
         to: timeFilter.to,
-        windowSize: windowSize
+        windowSize: windowSize,
       },
-      metrics: [metric]
+      metrics: [metric],
     };
 
-    if (target.entity && target.entity.key) { //see migration.ts why "NO_SERVICE_FILTER"
+    if (target.entity && target.entity.key) {
+      //see migration.ts why "NO_SERVICE_FILTER"
       data['applicationId'] = target.entity.key;
     }
 
@@ -132,12 +129,11 @@ export class DataSourceService {
     }
 
     if (target.service.key === null) {
-      return target.timeShift ? item.service.label + ' - ' + key + " - " + target.timeShift : item.service.label + ' - ' + key;
+      return target.timeShift ? item.service.label + ' - ' + key + ' - ' + target.timeShift : item.service.label + ' - ' + key;
     }
 
-    return target.timeShift && target.timeShiftIsValid ?
-      item.service.label + ' (' + target.service.label + ')' + ' - ' + key + " - " + target.timeShift
-      :
-      item.service.label + ' (' + target.service.label + ')' + ' - ' + key;
+    return target.timeShift && target.timeShiftIsValid
+      ? item.service.label + ' (' + target.service.label + ')' + ' - ' + key + ' - ' + target.timeShift
+      : item.service.label + ' (' + target.service.label + ')' + ' - ' + key;
   }
 }

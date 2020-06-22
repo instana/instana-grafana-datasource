@@ -4,7 +4,7 @@ import { InstanaQuery } from '../../types/instana_query';
 import { SelectableValue } from '@grafana/data';
 import AggregationFunctions from '../../lists/aggregation_function';
 
-interface AggregateQueryState { }
+interface AggregateQueryState {}
 
 interface Props {
   query: InstanaQuery;
@@ -34,7 +34,7 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
     onRunQuery();
   };
 
-  onAggregationFunctionChange = (event: SelectableValue<string>) => {
+  onAggregationFunctionChange = (event: SelectableValue) => {
     const { query, onRunQuery } = this.props;
     query.aggregationFunction = event;
     onRunQuery();
@@ -76,5 +76,4 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
       </div>
     );
   }
-
 }

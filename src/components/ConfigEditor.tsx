@@ -5,8 +5,7 @@ import getVersion from '../util/instana_version';
 import proxyCheck from '../util/proxy_check';
 import { Switch, FormField } from '@grafana/ui';
 
-interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {
-}
+interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {}
 
 interface State {
   canQueryOfflineSnapshots: boolean;
@@ -28,13 +27,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
     if (jsonData.useProxy === undefined) {
       jsonData.useProxy = proxyCheck();
     }
-
   }
 
-  onInstanaOptionsChange = (
-    eventItem: ChangeEvent<HTMLInputElement> | SelectableValue<string>,
-    key: keyof InstanaOptions
-  ) => {
+  onInstanaOptionsChange = (eventItem: ChangeEvent<HTMLInputElement> | SelectableValue, key: keyof InstanaOptions) => {
     const { options, onOptionsChange } = this.props;
     const jsonData = {
       ...options.jsonData,
@@ -73,9 +68,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
     }
 
     getVersion(settings.jsonData).then((version: any) => {
-      version
-        ? this.setState({ canQueryOfflineSnapshots: version >= 156 })
-        : this.setState({ canQueryOfflineSnapshots: false });
+      version ? this.setState({ canQueryOfflineSnapshots: version >= 156 }) : this.setState({ canQueryOfflineSnapshots: false });
     });
   };
 
@@ -91,8 +84,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
           labelWidth={14}
           inputWidth={30}
           value={jsonData.url}
-          onChange={event => this.onInstanaOptionsChange(event, 'url')}
-          onBlur={e => this.detectFeatures(options)}
+          onChange={(event) => this.onInstanaOptionsChange(event, 'url')}
+          onBlur={(e) => this.detectFeatures(options)}
           tooltip={'Enter the URL of your Instana installation. E.g. https://tools-acme.instana.io'}
         />
 
@@ -101,8 +94,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
           labelWidth={14}
           inputWidth={30}
           value={jsonData.apiToken}
-          onBlur={e => this.detectFeatures(options)}
-          onChange={event => this.onInstanaOptionsChange(event, 'apiToken')}
+          onBlur={(e) => this.detectFeatures(options)}
+          onChange={(event) => this.onInstanaOptionsChange(event, 'apiToken')}
           tooltip={
             'Enter the API token to access the data. You can create API tokens following the instructions at https://docs.instana.io/quick_start/api/#api-tokens'
           }
@@ -113,7 +106,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           labelClass={'width-14'}
           checked={jsonData.useProxy}
           tooltipPlacement={'top'}
-          onChange={event => this.onSwitchChange(event, 'useProxy')}
+          onChange={(event) => this.onSwitchChange(event, 'useProxy')}
           tooltip={
             'Use Grafana server as proxy, this adds the Instana API token on the server. Supported with Grafana 5.3+ and Instana datasource 2.0.0+'
           }
@@ -124,11 +117,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
             labelClass={'width-14'}
             checked={jsonData.showOffline}
             label={'Enable offline snapshots'}
-            onChange={event => this.onSwitchChange(event, 'showOffline')}
+            onChange={(event) => this.onSwitchChange(event, 'showOffline')}
             tooltipPlacement={'top'}
-            tooltip={
-              'Enables querying offline snapshots for given timeranges. Supported with Instana 1.156+ and Instana datasource 2.3.0+'
-            }
+            tooltip={'Enables querying offline snapshots for given timeranges. Supported with Instana 1.156+ and Instana datasource 2.3.0+'}
           />
         </div>
 
@@ -136,16 +127,16 @@ export class ConfigEditor extends PureComponent<Props, State> {
           labelClass={'width-14'}
           checked={jsonData.allowSlo}
           label={'Enable SLO dashboards'}
-          onChange={event => this.onSwitchChange(event, 'allowSlo')}
+          onChange={(event) => this.onSwitchChange(event, 'allowSlo')}
           tooltipPlacement={'top'}
           tooltip={'Adds a new category that allows retrieval of SLO information (feature flag required).'}
         />
 
-        <br/>
+        <br />
         <b>Maximum query intervals in hours</b>
         <p>
-          This settings are optional values to control the load of data queries, by defining the maximum allowed query
-          intervals against the Instana API.
+          This settings are optional values to control the load of data queries, by defining the maximum allowed query intervals against the Instana
+          API.
         </p>
 
         <FormField
@@ -154,7 +145,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           label="Infrastructure metrics"
           value={jsonData.queryinterval_limit_infra}
           placeholder={'optional: interval limit in hours'}
-          onChange={event => this.onInstanaOptionsChange(event, 'queryinterval_limit_infra')}
+          onChange={(event) => this.onInstanaOptionsChange(event, 'queryinterval_limit_infra')}
           tooltip={'Limit for max. query interval in hours for Category: Infrastructure built-in/custom metrics'}
         />
 
@@ -164,7 +155,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           label="Application metrics"
           value={jsonData.queryinterval_limit_app_metrics}
           placeholder={'optional: interval limit in hours'}
-          onChange={event => this.onInstanaOptionsChange(event, 'queryinterval_limit_app_metrics')}
+          onChange={(event) => this.onInstanaOptionsChange(event, 'queryinterval_limit_app_metrics')}
           tooltip={'Limit for max. query interval in hours for Category: Application/Service/Endpoint metrics'}
         />
 
@@ -174,7 +165,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           label="Analyze application calls"
           value={jsonData.queryinterval_limit_app_calls}
           placeholder={'optional: interval limit in hours'}
-          onChange={event => this.onInstanaOptionsChange(event, 'queryinterval_limit_app_calls')}
+          onChange={(event) => this.onInstanaOptionsChange(event, 'queryinterval_limit_app_calls')}
           tooltip={'Limit for max. query interval in hours for Category: Analyze application calls'}
         />
 
@@ -184,7 +175,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           label="Analyze website"
           placeholder={'optional: interval limit in hours'}
           value={jsonData.queryinterval_limit_website_metrics}
-          onChange={event => this.onInstanaOptionsChange(event, 'queryinterval_limit_website_metrics')}
+          onChange={(event) => this.onInstanaOptionsChange(event, 'queryinterval_limit_website_metrics')}
           tooltip={'Limit for max. query interval in hours for Category: Analyze websites'}
         />
       </div>

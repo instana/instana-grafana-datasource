@@ -15,7 +15,7 @@ describe('Given an infrastructure datasource', () => {
   const dataSourceInfrastructure: DataSourceInfrastructure = new DataSourceInfrastructure(options);
 
   describe('with free text metrics', () => {
-    let freeText: string = '';
+    let freeText = '';
 
     it('should return metric in a string array', () => {
       freeText = 'metric1,metric2,metric3,metric4';
@@ -55,39 +55,43 @@ describe('Given an infrastructure datasource', () => {
     });
 
     it('should return entity types in correct format', () => {
-      return axios.get(options.url + '/api/infrastructure-monitoring/catalog/plugins', {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken
-        }
-      }).then((types: any) => {
-        pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
-        pluginsSpy.mockResolvedValue(types);
+      return axios
+        .get(options.url + '/api/infrastructure-monitoring/catalog/plugins', {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken,
+          },
+        })
+        .then((types: any) => {
+          pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
+          pluginsSpy.mockResolvedValue(types);
 
-        let result = dataSourceInfrastructure.getEntityTypes();
-        _.map(result, et => {
-          expect(et).toHaveProperty('key');
-          expect(et).toHaveProperty('label');
+          let result = dataSourceInfrastructure.getEntityTypes();
+          _.map(result, (et) => {
+            expect(et).toHaveProperty('key');
+            expect(et).toHaveProperty('label');
+          });
         });
-      });
     });
 
     it('should cache entityTypes', () => {
-      return axios.get(options.url + '/api/infrastructure-monitoring/catalog/plugins', {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken
-        }
-      }).then((types: any) => {
-        pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
-        pluginsSpy.mockResolvedValue(types);
+      return axios
+        .get(options.url + '/api/infrastructure-monitoring/catalog/plugins', {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken,
+          },
+        })
+        .then((types: any) => {
+          pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
+          pluginsSpy.mockResolvedValue(types);
 
-        dataSourceInfrastructure.getEntityTypes();
-        dataSourceInfrastructure.getEntityTypes();
-        expect(pluginsSpy).toHaveBeenCalledTimes(1);
-      });
+          dataSourceInfrastructure.getEntityTypes();
+          dataSourceInfrastructure.getEntityTypes();
+          expect(pluginsSpy).toHaveBeenCalledTimes(1);
+        });
     });
   });
 
-  describe('when fetching metrics catalog', function() {
+  describe('when fetching metrics catalog', function () {
     let plugin: SelectableValue = { key: 'jvmRuntimePlatform', label: 'java' };
     let catalogSpy: any;
 
@@ -99,8 +103,8 @@ describe('Given an infrastructure datasource', () => {
       catalogSpy = jest.spyOn(RequestHandler, 'getRequest');
       catalogSpy.mockResolvedValue(catalog);
 
-      dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory).then(result => {
-        _.map(result, entry => {
+      dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory).then((result) => {
+        _.map(result, (entry) => {
           expect(entry).toHaveProperty('key');
           expect(entry).toHaveProperty('label');
           expect(entry).toHaveProperty('aggregations');
@@ -112,37 +116,43 @@ describe('Given an infrastructure datasource', () => {
 
     it('should return builtin metrics in the correct format', () => {
       let metricCategory: number = BUILT_IN_METRICS;
-      return axios.get(options.url + '/api/infrastructure-monitoring/catalog/metrics/jvmRuntimePlatform?filter=builtin', {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken
-        }
-      }).then((catalog: any) => {
-        mockCatalogResponseAndVerify(catalog, metricCategory);
-      });
+      return axios
+        .get(options.url + '/api/infrastructure-monitoring/catalog/metrics/jvmRuntimePlatform?filter=builtin', {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken,
+          },
+        })
+        .then((catalog: any) => {
+          mockCatalogResponseAndVerify(catalog, metricCategory);
+        });
     });
 
     it('should return custom metrics in the correct format', () => {
       let metricCategory: number = CUSTOM_METRICS;
-      return axios.get(options.url + '/api/infrastructure-monitoring/catalog/metrics/jvmRuntimePlatform?filter=custom', {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken
-        }
-      }).then((catalog: any) => {
-        mockCatalogResponseAndVerify(catalog, metricCategory);
-      });
+      return axios
+        .get(options.url + '/api/infrastructure-monitoring/catalog/metrics/jvmRuntimePlatform?filter=custom', {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken,
+          },
+        })
+        .then((catalog: any) => {
+          mockCatalogResponseAndVerify(catalog, metricCategory);
+        });
     });
 
     it('should return cache a catalog', () => {
       let metricCategory: number = CUSTOM_METRICS;
-      return axios.get(options.url + '/api/infrastructure-monitoring/catalog/metrics/jvmRuntimePlatform?filter=custom', {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken
-        }
-      }).then((catalog: any) => {
-        mockCatalogResponseAndVerify(catalog, metricCategory);
-        mockCatalogResponseAndVerify(catalog, metricCategory);
-        expect(catalogSpy).toBeCalledTimes(1);
-      });
+      return axios
+        .get(options.url + '/api/infrastructure-monitoring/catalog/metrics/jvmRuntimePlatform?filter=custom', {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken,
+          },
+        })
+        .then((catalog: any) => {
+          mockCatalogResponseAndVerify(catalog, metricCategory);
+          mockCatalogResponseAndVerify(catalog, metricCategory);
+          expect(catalogSpy).toBeCalledTimes(1);
+        });
     });
   });
 
@@ -159,14 +169,14 @@ describe('Given an infrastructure datasource', () => {
       status: 200,
       data: [
         {
-          'snapshotId': 'A',
-          'host': 'Stans-Macbook-Pro'
+          snapshotId: 'A',
+          host: 'Stans-Macbook-Pro',
         },
         {
-          'snapshotId': 'B',
-          'host': ''
-        }
-      ]
+          snapshotId: 'B',
+          host: '',
+        },
+      ],
     };
 
     beforeEach(() => {
@@ -189,17 +199,17 @@ describe('Given an infrastructure datasource', () => {
     });
 
     it('should return snapshots with response', () => {
-      dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter).then(results => {
+      dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter).then((results) => {
         expect(results.length).toEqual(2);
         expect(results[0]).toEqual({
           snapshotId: 'A',
           host: 'Stans-Macbook-Pro',
-          response: { status: 200, data: { label: 'label for A' } }
+          response: { status: 200, data: { label: 'label for A' } },
         });
         expect(results[1]).toEqual({
           snapshotId: 'B',
           host: '',
-          response: { status: 200, data: { label: 'label for B' } }
+          response: { status: 200, data: { label: 'label for B' } },
         });
       });
     });
@@ -207,24 +217,24 @@ describe('Given an infrastructure datasource', () => {
     it('should cache snapshots with response', () => {
       target.entityQuery = 'daljeet';
       dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
-      dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter).then(results => {
+      dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter).then((results) => {
         expect(contextSpy).toHaveBeenCalledTimes(1); //TODO
         expect(results.length).toEqual(2);
         expect(results[0]).toEqual({
           snapshotId: 'A',
           host: 'Stans-Macbook-Pro',
-          response: { status: 200, data: { label: 'label for A' } }
+          response: { status: 200, data: { label: 'label for A' } },
         });
         expect(results[1]).toEqual({
           snapshotId: 'B',
           host: '',
-          response: { status: 200, data: { label: 'label for B' } }
+          response: { status: 200, data: { label: 'label for B' } },
         });
       });
     });
   });
 
-  describe('When performing a query', function() {
+  describe('When performing a query', function () {
     const timeFilter: TimeFilter = buildTimeFilter();
     let getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
     const target: InstanaQuery = buildTestTarget();
@@ -235,7 +245,7 @@ describe('Given an infrastructure datasource', () => {
     target.metric = { key: 'memory.used' };
     target.timeInterval = { key: 3600000 };
 
-    let snapshotCounter: number = 0;
+    let snapshotCounter = 0;
 
     getRequestSpy.mockImplementation((instanaOptions, endpoint) => {
       if (endpoint.startsWith('/api/snapshots/') && !endpoint.startsWith('/api/snapshots/context')) {
@@ -245,15 +255,15 @@ describe('Given an infrastructure datasource', () => {
 
       return axios.get(options.url + endpoint, {
         headers: {
-          Authorization: 'apiToken ' + options.apiToken
-        }
+          Authorization: 'apiToken ' + options.apiToken,
+        },
       });
     });
 
-    it('should return the correct number of results and cache snapshots', function() {
-      return dataSourceInfrastructure.runQuery(target, timeFilter).then(result => {
+    it('should return the correct number of results and cache snapshots', function () {
+      return dataSourceInfrastructure.runQuery(target, timeFilter).then((result) => {
         expect(result.length).toBe(snapshotCounter);
-        _.forEach(result, target => {
+        _.forEach(result, (target) => {
           expect(target).toHaveProperty('target');
           expect(target).toHaveProperty('datapoints');
           expect(target).toHaveProperty('refId');
@@ -266,7 +276,5 @@ describe('Given an infrastructure datasource', () => {
         expect(snapshots).not.toBeNull();
       });
     });
-
   });
-
 });

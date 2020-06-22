@@ -13,25 +13,25 @@ import { emptyResultData } from '../util/target_util';
 import { isInvalidQueryInterval } from '../util/queryInterval_check';
 
 export class DataSourceWebsite {
-
   instanaOptions: InstanaOptions;
-  websitesCache: Cache<Promise<Array<SelectableValue>>>;
+  websitesCache: Cache<Promise<SelectableValue[]>>;
   miscCache: Cache<any>;
 
   constructor(options: InstanaOptions) {
     this.instanaOptions = options;
-    this.websitesCache = new Cache<Promise<Array<SelectableValue>>>();
+    this.websitesCache = new Cache<Promise<SelectableValue[]>>();
     this.miscCache = new Cache<any>();
   }
 
   runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
     if (isInvalidQueryInterval(timeFilter.windowSize, this.instanaOptions.queryinterval_limit_website_metrics)) {
-      throw new Error("Limit for maximum selectable windowsize exceeded, max is: "
-        + this.instanaOptions.queryinterval_limit_website_metrics + " hours");
+      throw new Error(
+        'Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_website_metrics + ' hours'
+      );
     }
 
     // avoid invalid calls
-    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key || !target.entity ||!target.entity.key) {
+    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key || !target.entity || !target.entity.key) {
       return Promise.resolve(emptyResultData(target.refId));
     }
 
@@ -51,31 +51,33 @@ export class DataSourceWebsite {
     const windowSize = getWindowSize(timeFilter);
     const data: BeaconGroupBody = {
       group: {
-        groupbyTag: 'beacon.website.name'
+        groupbyTag: 'beacon.website.name',
       },
       timeFrame: {
         to: timeFilter.to,
-        windowSize: windowSize
+        windowSize: windowSize,
       },
       type: 'PAGELOAD',
-      metrics: [ {
-        metric: 'pageLoads',
-        aggregation: 'SUM'
-      } ],
+      metrics: [
+        {
+          metric: 'pageLoads',
+          aggregation: 'SUM',
+        },
+      ],
       order: {
         by: 'pageLoads',
-        direction: 'desc'
+        direction: 'desc',
       },
       pagination: {
         ingestionTime: 0,
         offset: 0,
-        retrievalSize: 200
-      }
+        retrievalSize: 200,
+      },
     };
     websites = postRequest(this.instanaOptions, '/api/website-monitoring/analyze/beacon-groups', data).then((websitesResponse: any) =>
       websitesResponse.data.items.map((entry: any) => ({
-        'key': entry.name,
-        'label': entry.name
+        key: entry.name,
+        label: entry.name,
       }))
     );
     this.websitesCache.put(key, websites);
@@ -91,9 +93,9 @@ export class DataSourceWebsite {
 
     websiteTags = getRequest(this.instanaOptions, '/api/website-monitoring/catalog/tags').then((tagsResponse: any) =>
       tagsResponse.data.map((entry: any) => ({
-        'key': entry.name,
-        'label': entry.name,
-        'type': entry.type
+        key: entry.name,
+        label: entry.name,
+        type: entry.type,
       }))
     );
     this.miscCache.put('websiteTags', websiteTags);
@@ -109,10 +111,10 @@ export class DataSourceWebsite {
 
     websiteCatalog = getRequest(this.instanaOptions, '/api/website-monitoring/catalog/metrics').then((catalogResponse: any) =>
       catalogResponse.data.map((entry: any) => ({
-        'key': entry.metricId,
-        'label': entry.label,
-        'aggregations': entry.aggregations ? this.transformAggregations(entry.aggregations.sort()) : [],
-        'beaconTypes': entry.beaconTypes ? entry.beaconTypes : [ 'pageLoad', 'resourceLoad', 'httpRequest', 'error' ]
+        key: entry.metricId,
+        label: entry.label,
+        aggregations: entry.aggregations ? this.transformAggregations(entry.aggregations.sort()) : [],
+        beaconTypes: entry.beaconTypes ? entry.beaconTypes : ['pageLoad', 'resourceLoad', 'httpRequest', 'error'],
       }))
     );
     this.miscCache.put('websiteCatalog', websiteCatalog);
@@ -121,33 +123,36 @@ export class DataSourceWebsite {
   }
 
   transformAggregations(aggregations: string[]) {
-    return _.map(aggregations, a => {
+    return _.map(aggregations, (a) => {
       return {
         key: a,
-        label: a
-      }
+        label: a,
+      };
     });
   }
 
   private fetchAnalyzeMetricsForWebsite(target: InstanaQuery, timeFilter: TimeFilter) {
     const windowSize = getWindowSize(timeFilter);
-    const tagFilters = [ {
-      name: 'beacon.website.name',
-      operator: 'EQUALS',
-      value: target.entity.key
-    } ];
+    const tagFilters = [
+      {
+        name: 'beacon.website.name',
+        operator: 'EQUALS',
+        value: target.entity.key,
+      },
+    ];
 
-    _.forEach(target.filters, filter => {
+    _.forEach(target.filters, (filter) => {
       if (filter.isValid) {
         tagFilters.push(createTagFilter(filter));
       }
     });
     const metric: any = {
       metric: target.metric.key,
-      aggregation: target.aggregation.key ? target.aggregation.key : 'SUM'
+      aggregation: target.aggregation.key ? target.aggregation.key : 'SUM',
     };
 
-    if (target.pluginId !== 'singlestat' && target.pluginId !== 'gauge') { // no granularity for singlestat and gauge
+    if (target.pluginId !== 'singlestat' && target.pluginId !== 'gauge') {
+      // no granularity for singlestat and gauge
       if (!target.timeInterval) {
         target.timeInterval = getDefaultChartGranularity(windowSize);
       }
@@ -155,7 +160,7 @@ export class DataSourceWebsite {
     }
 
     const group: any = {
-      groupbyTag: target.group.key
+      groupbyTag: target.group.key,
     };
     if (target.group.type === 'KEY_VALUE_PAIR' && target.groupbyTagSecondLevelKey) {
       group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
@@ -165,11 +170,11 @@ export class DataSourceWebsite {
       group: group,
       timeFrame: {
         to: timeFilter.to,
-        windowSize: windowSize
+        windowSize: windowSize,
       },
       tagFilters: tagFilters,
       type: target.entityType.key,
-      metrics: [ metric ]
+      metrics: [metric],
     };
     return postRequest(this.instanaOptions, '/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
   }
@@ -186,10 +191,8 @@ export class DataSourceWebsite {
       label = _.replace(label, '$timeShift', target.timeShift);
       return label;
     }
-    return target.timeShift && target.timeShiftIsValid ?
-      item.name + ' (' + target.entity.label + ')' + ' - ' + key + ' - ' + target.timeShift
-      :
-      item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+    return target.timeShift && target.timeShiftIsValid
+      ? item.name + ' (' + target.entity.label + ')' + ' - ' + key + ' - ' + target.timeShift
+      : item.name + ' (' + target.entity.label + ')' + ' - ' + key;
   }
-
 }

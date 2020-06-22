@@ -15,7 +15,7 @@ const legendFormatPlaceholders = [
 ];
 
 const legendFormatTooltips = [
-  (<div>
+  <div>
     Default: $label (on host $host)
     <ul>
       <li>• $label - entity label</li>
@@ -28,8 +28,8 @@ const legendFormatTooltips = [
       <li>• $name - label alternative</li>
       <li>• $index - index in the list</li>
     </ul>
-  </div>),
-  (<div>
+  </div>,
+  <div>
     Default: $label (on host $host)
     <ul>
       <li>• $label - entity label</li>
@@ -42,8 +42,8 @@ const legendFormatTooltips = [
       <li>• $name - label alternative</li>
       <li>• $index - index in the list</li>
     </ul>
-  </div>),
-  (<div>
+  </div>,
+  <div>
     Default: $label ($application) - $key
     <ul>
       <li>• $label - entity label</li>
@@ -53,8 +53,8 @@ const legendFormatTooltips = [
       <li>• $key - metric key with aggregation and rollup</li>
       <li>• $index - index in the list</li>
     </ul>
-  </div>),
-  (<div>
+  </div>,
+  <div>
     Default: $label ($website) - $key
     <ul>
       <li>• $label - entity label</li>
@@ -65,8 +65,8 @@ const legendFormatTooltips = [
       <li>• $key - metric key with aggregation and rollup</li>
       <li>• $index - index in the list</li>
     </ul>
-  </div>),
-  (<div>
+  </div>,
+  <div>
     Default: $label ($application) - $key
     <ul>
       <li>• $label - entity label</li>
@@ -78,10 +78,10 @@ const legendFormatTooltips = [
       <li>• $key - metric key with aggregation and rollup</li>
       <li>• $index - index in the list</li>
     </ul>
-  </div>),
-  (''),
-  (''),
-  ('')
+  </div>,
+  '',
+  '',
+  '',
 ];
 
 interface AdvancedSettingsState {
@@ -98,12 +98,11 @@ interface Props {
 }
 
 export default class AdvancedSettings extends React.Component<Props, AdvancedSettingsState> {
-
   constructor(props: any) {
     super(props);
     this.state = {
       showAdditionalSettings: false,
-      legendFormatPlaceholder: this.setLegendFormatPlaceholder()
+      legendFormatPlaceholder: this.setLegendFormatPlaceholder(),
     };
   }
 
@@ -151,9 +150,9 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
               label={'Legend format'}
               value={query.labelFormat}
               placeholder={this.setLegendFormatPlaceholder()}
-              onChange={event => this.onLegendFormatChange(event)}
+              onChange={(event) => this.onLegendFormatChange(event)}
               onBlur={() => onRunQuery()}
-              tooltip={(this.setLegendFormatTooltip())}
+              tooltip={this.setLegendFormatTooltip()}
             />
           </div>
 
@@ -163,14 +162,15 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
             placeholder={'1h'}
             label={'Time shift'}
             value={query.timeShift}
-            onChange={event => this.onTimeShiftChange(event)}
-            tooltip={'Specify the amount of hours that shall be used. The time shift function always go back in time, not forward. Accepts values such as 1s, 1m, 1h, 1d, 1w.'}
+            onChange={(event) => this.onTimeShiftChange(event)}
+            tooltip={
+              'Specify the amount of hours that shall be used. The time shift function always go back in time, not forward. Accepts values such as 1s, 1m, 1h, 1d, 1w.'
+            }
           />
 
           <div hidden={query.metricCategory.key !== 0 && query.metricCategory.key !== 1}>
-            <AggregateQuery query={query} onRunQuery={onRunQuery} onChange={onChange}/>
+            <AggregateQuery query={query} onRunQuery={onRunQuery} onChange={onChange} />
           </div>
-
         </div>
       </div>
     );

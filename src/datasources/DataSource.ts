@@ -1,26 +1,21 @@
-import {
-  DataQueryRequest,
-  DataQueryResponse,
-  DataSourceApi,
-  DataSourceInstanceSettings,
-  SelectableValue,
-} from '@grafana/data';
+import { DataQueryRequest, DataQueryResponse, DataSourceApi, DataSourceInstanceSettings, SelectableValue } from '@grafana/data';
 
 import { InstanaQuery } from '../types/instana_query';
 import { InstanaOptions } from '../types/instana_options';
 import { getRequest } from '../util/request_handler';
-import { DataSourceSlo } from "./DataSource_Slo";
+import { DataSourceSlo } from './DataSource_Slo';
 import MetricCategories from '../lists/metric_categories';
-import TimeFilter from "../types/time_filter";
-import { readTime } from "../util/time_util";
+import TimeFilter from '../types/time_filter';
+import { readTime } from '../util/time_util';
 import Cache from '../cache';
-import { emptyResultData } from "../util/target_util";
-import _ from "lodash";
+import { emptyResultData } from '../util/target_util';
+import _ from 'lodash';
 import { DataSourceInfrastructure } from './Datasource_Infrastructure';
 import {
-  getDefaultChartGranularity, getDefaultMetricRollupDuration,
+  getDefaultChartGranularity,
+  getDefaultMetricRollupDuration,
   getPossibleGranularities,
-  getPossibleRollups
+  getPossibleRollups,
 } from '../util/rollup_granularity_util';
 import { appendData, generateStableHash, hasIntersection } from '../util/delta_util';
 import {
@@ -29,7 +24,7 @@ import {
   APPLICATION_SERVICE_ENDPOINT_METRICS,
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
-  SLO_INFORMATION
+  SLO_INFORMATION,
 } from '../GlobalVariables';
 import getVersion from '../util/instana_version';
 import { aggregateTarget } from '../util/aggregation_util';
@@ -76,60 +71,62 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     this.availableRollups = getPossibleRollups(this.timeFilter);
     this.availableGranularities = getPossibleGranularities(this.timeFilter.windowSize);
 
-    return Promise.all(options.targets.map(target => {
-      let targetTimeFilter = readTime(range!);
+    return Promise.all(
+      options.targets.map((target) => {
+        let targetTimeFilter = readTime(range!);
 
-      // grafana setting to disable query execution
-      if (target.hide) {
-        return { data: [], target: target };
-      }
-
-      migrate(target);
-
-      if (!target.metricCategory) {
-        target.metricCategory = MetricCategories[0];
-      }
-
-      this.setPossibleTimeIntervals(target);
-
-      // target migration for downwards compatibility
-      //migrate(target);
-
-      if (target.timeShift) {
-        let millis = this.convertTimeShiftToMillis(target.timeShift);
-        if (millis) {
-          targetTimeFilter = this.applyTimeShiftOnTimeFilter(targetTimeFilter, millis);
+        // grafana setting to disable query execution
+        if (target.hide) {
+          return { data: [], target: target };
         }
-      }
 
-      target.timeFilter = targetTimeFilter;
-      target.stableHash = generateStableHash(target);
-      targetTimeFilter = this.adjustTimeFilterIfCached(targetTimeFilter, target);
+        migrate(target);
 
-      if (target.metricCategory.key === SLO_INFORMATION) {
-        return this.dataSourceSlo.runQuery(target, targetTimeFilter).then((data: any) => {
-          return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
-        });
-      } else if (target.metricCategory.key === BUILT_IN_METRICS || target.metricCategory.key === CUSTOM_METRICS) {
-        return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
-          return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
-        });
-      } else if (target.metricCategory.key === ANALYZE_WEBSITE_METRICS) {
-        return this.dataSourceWebsite.runQuery(target, targetTimeFilter).then((data: any) => {
-          return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
-        });
-      } else if (target.metricCategory.key === ANALYZE_APPLICATION_METRICS) {
-        return this.dataSourceApplication.runQuery(target, targetTimeFilter).then((data: any) => {
-          return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
-        });
-      } else if (target.metricCategory.key === APPLICATION_SERVICE_ENDPOINT_METRICS) {
-        return this.getApplicationServiceEndpointMetrics(target, targetTimeFilter).then((data: any) => {
-          return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
-        });
-      }
+        if (!target.metricCategory) {
+          target.metricCategory = MetricCategories[0];
+        }
 
-      return Promise.resolve(emptyResultData(target.refId));
-    })).then(targetData => {
+        this.setPossibleTimeIntervals(target);
+
+        // target migration for downwards compatibility
+        //migrate(target);
+
+        if (target.timeShift) {
+          let millis = this.convertTimeShiftToMillis(target.timeShift);
+          if (millis) {
+            targetTimeFilter = this.applyTimeShiftOnTimeFilter(targetTimeFilter, millis);
+          }
+        }
+
+        target.timeFilter = targetTimeFilter;
+        target.stableHash = generateStableHash(target);
+        targetTimeFilter = this.adjustTimeFilterIfCached(targetTimeFilter, target);
+
+        if (target.metricCategory.key === SLO_INFORMATION) {
+          return this.dataSourceSlo.runQuery(target, targetTimeFilter).then((data: any) => {
+            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+          });
+        } else if (target.metricCategory.key === BUILT_IN_METRICS || target.metricCategory.key === CUSTOM_METRICS) {
+          return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
+            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+          });
+        } else if (target.metricCategory.key === ANALYZE_WEBSITE_METRICS) {
+          return this.dataSourceWebsite.runQuery(target, targetTimeFilter).then((data: any) => {
+            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+          });
+        } else if (target.metricCategory.key === ANALYZE_APPLICATION_METRICS) {
+          return this.dataSourceApplication.runQuery(target, targetTimeFilter).then((data: any) => {
+            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+          });
+        } else if (target.metricCategory.key === APPLICATION_SERVICE_ENDPOINT_METRICS) {
+          return this.getApplicationServiceEndpointMetrics(target, targetTimeFilter).then((data: any) => {
+            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+          });
+        }
+
+        return Promise.resolve(emptyResultData(target.refId));
+      })
+    ).then((targetData) => {
       let result: any = [];
       _.each(targetData, (targetAndData) => {
         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
@@ -141,14 +138,13 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       });
 
       return { data: _.flatten(result) };
-    })
+    });
   }
 
   getApplicationServiceEndpointMetrics(target: InstanaQuery, timeFilter: TimeFilter) {
     // do not try to execute too big queries
     if (isInvalidQueryInterval(timeFilter.windowSize, this.options.queryinterval_limit_app_metrics)) {
-      throw new Error("Limit for maximum selectable windowsize exceeded, max is: "
-        + this.options.queryinterval_limit_app_metrics + " hours");
+      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.options.queryinterval_limit_app_metrics + ' hours');
     }
 
     if (target.endpoint && target.endpoint.key) {
@@ -166,7 +162,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       });
     }
 
-    return Promise.resolve({data: {items: []}});
+    return Promise.resolve({ data: { items: [] } });
   }
 
   applyTimeShiftIfNecessary(data: any, target: InstanaQuery) {
@@ -181,7 +177,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     if (this.supportsDeltaRequests(target) && this.hasResult(result)) {
       let cachedObj = {
         timeFilter: target.timeFilter,
-        results: result
+        results: result,
       };
       this.resultCache.put(target.stableHash, cachedObj, 400000); // to cover at least 5 min refreshs
     }
@@ -234,7 +230,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
     return {
       target: target,
-      data: data
+      data: data,
     };
   }
 
@@ -254,7 +250,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       return {
         from: newFrom,
         to: newTo,
-        windowSize: newTo - newFrom
+        windowSize: newTo - newFrom,
       };
     }
     return timeFilter;
@@ -269,11 +265,11 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     return series[0].datapoints[penultimate][1];
   }
 
-  getSloReports(): Promise<SelectableValue<string>[]> {
+  getSloReports(): Promise<SelectableValue[]> {
     return this.dataSourceSlo.getConfiguredSLIs();
   }
 
-  getEntityTypes(): Promise<SelectableValue<string>[]> {
+  getEntityTypes(): Promise<SelectableValue[]> {
     return this.dataSourceInfrastructure.getEntityTypes();
   }
 
@@ -293,7 +289,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     return this.dataSourceInfrastructure.fetchTypesForTarget(query, this.getTimeFilter());
   }
 
-  fetchWebsites(): Promise<SelectableValue<string>[]> {
+  fetchWebsites(): Promise<SelectableValue[]> {
     return this.dataSourceWebsite.getWebsites(this.getTimeFilter());
   }
 
@@ -340,7 +336,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       return {
         from: timeFilter.from - timeShift,
         to: timeFilter.to - timeShift,
-        windowSize: timeFilter.windowSize
+        windowSize: timeFilter.windowSize,
       };
     } else {
       return timeFilter;
@@ -362,7 +358,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       this.timeFilter = {
         from: now - windowSize,
         to: now,
-        windowSize: windowSize
+        windowSize: windowSize,
       };
     }
 

@@ -46,54 +46,54 @@ export function generateTestData(amountOfTimeseries: number, numberOfEntries: nu
  */
 export function buildTestTarget(): InstanaQuery {
   return {
-    callToEntity: { },
+    callToEntity: {},
     aggregateGraphs: false,
-    aggregation: { },
-    applicationCallToEntity: { },
+    aggregation: {},
+    applicationCallToEntity: {},
     canShowAllMetrics: false,
     customFilters: [],
     displayMaxMetricValue: false,
-    endpoint: { },
-    entity: { },
+    endpoint: {},
+    entity: {},
     entityQuery: '',
-    entityType: { } ,
+    entityType: {},
     filter: '',
     filters: [],
     freeTextMetrics: '',
-    group: { },
+    group: {},
     groupbyTagSecondLevelKey: '',
     hideOriginalGraphs: false,
     labelFormat: '',
-    metric: { },
-    metricCategory: { },
+    metric: {},
+    metricCategory: {},
     pluginId: '',
-    service: { },
+    service: {},
     showGroupBySecondLevel: false,
     showWarningCantShowAllResults: false,
-    sloReport: { },
-    sloSpecific: { },
+    sloReport: {},
+    sloSpecific: {},
     sloValue: '',
     stableHash: '',
     timeFilter: { from: 0, to: 0, windowSize: 0 },
-    timeInterval: { },
+    timeInterval: {},
     timeShift: '',
     timeShiftIsValid: false,
     useFreeTextMetrics: false,
     showAllMetrics: false,
-    allMetrics: [ ],
-    aggregationFunction: { },
-    refId: "A"
+    allMetrics: [],
+    aggregationFunction: {},
+    refId: 'A',
   };
 }
 
 export function buildInstanaOptions(): InstanaOptions {
   return {
-    url: "",
-    apiToken: "",
+    url: '',
+    apiToken: '',
     useProxy: true,
     showOffline: true,
     allowSlo: true,
-  }
+  };
 }
 
 export function buildTimeFilter(): TimeFilter {
@@ -101,15 +101,15 @@ export function buildTimeFilter(): TimeFilter {
   return {
     to: currentTime,
     from: currentTime - 3600000,
-    windowSize: 3600000
-  }
+    windowSize: 3600000,
+  };
 }
 
 export async function mockGetRequest(instanaOptions: InstanaOptions, endpoint: string) {
   let test = buildUrl(instanaOptions, endpoint);
   return axios.get(test, {
     headers: {
-      Authorization: 'apiToken ' + instanaOptions.apiToken
-    }
-  })
+      Authorization: 'apiToken ' + instanaOptions.apiToken,
+    },
+  });
 }

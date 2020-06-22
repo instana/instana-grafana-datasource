@@ -1,17 +1,17 @@
-import React from "react";
-import { InstanaQuery } from "../../../types/instana_query";
-import { DataSource } from "../../../datasources/DataSource";
+import React from 'react';
+import { InstanaQuery } from '../../../types/instana_query';
+import { DataSource } from '../../../datasources/DataSource';
 import { QueryType } from '../QueryType';
 import { SelectableValue } from '@grafana/data';
 
-interface InfrastructureBuiltInState { }
+interface InfrastructureBuiltInState {}
 
 interface Props {
   query: InstanaQuery;
   datasource: DataSource;
   onRunQuery(): void;
   onChange(value: InstanaQuery): void;
-  updateMetrics(metrics: SelectableValue<string>[]): void;
+  updateMetrics(metrics: SelectableValue[]): void;
 }
 
 export class InfrastructureBuiltIn extends React.Component<Props, InfrastructureBuiltInState> {
@@ -23,13 +23,13 @@ export class InfrastructureBuiltIn extends React.Component<Props, Infrastructure
     const { query, onChange, datasource } = this.props;
 
     if (query.entityQuery && query.entityType && query.entityType.key) {
-      datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(results => {
+      datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then((results) => {
         this.props.updateMetrics(results);
       });
     } else {
       query.metric = {
         key: null,
-        label: '-'
+        label: '-',
       };
     }
 
@@ -37,19 +37,12 @@ export class InfrastructureBuiltIn extends React.Component<Props, Infrastructure
   }
 
   render() {
-    const { query, onRunQuery, onChange, updateMetrics, datasource} = this.props;
+    const { query, onRunQuery, onChange, updateMetrics, datasource } = this.props;
 
     return (
       <div>
-        <QueryType
-          query={query}
-          onChange={onChange}
-          onRunQuery={onRunQuery}
-          datasource={datasource}
-          updateMetrics={updateMetrics}
-        />
+        <QueryType query={query} onChange={onChange} onRunQuery={onRunQuery} datasource={datasource} updateMetrics={updateMetrics} />
       </div>
     );
   }
-
 }

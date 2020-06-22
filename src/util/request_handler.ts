@@ -37,12 +37,7 @@ export function buildUrl(options: InstanaOptions, endpoint: string) {
   }
 }
 
-function execute(
-  request: BackendSrvRequest,
-  swallowError: boolean,
-  maxRetries: number,
-  apiToken?: string
-): any {
+function execute(request: BackendSrvRequest, swallowError: boolean, maxRetries: number, apiToken?: string): any {
   if (apiToken) {
     request['headers'] = {
       Authorization: 'apiToken ' + apiToken,
@@ -51,7 +46,7 @@ function execute(
 
   return getBackendSrv()
     .datasourceRequest(request)
-    .catch(error => {
+    .catch((error) => {
       if (error.status === 429) {
         throw new Error('API limit is reached.');
         return;

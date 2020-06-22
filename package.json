@@ -6,21 +6,26 @@
     "build": "grafana-toolkit plugin:build",
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
-    "watch": "grafana-toolkit plugin:dev --watch"
+    "watch": "grafana-toolkit plugin:dev --watch",
+    "format": "prettier src/**/*.ts --write"
   },
   "author": "Instana",
   "license": "Apache-2.0",
   "devDependencies": {
-    "axios": "^0.19.2",
     "@grafana/data": "^6.7.3",
     "@grafana/runtime": "^6.7.3",
     "@grafana/toolkit": "^6.7.3",
     "@grafana/ui": "^6.7.3",
-    "@types/lodash": "4.14.155"
+    "@types/lodash": "4.14.155",
+    "axios": "^0.19.2",
+    "prettier": "^2.0.5",
+    "prettier-eslint": "^11.0.0",
+    "prettier-eslint-cli": "^5.0.0"
   },
   "dependencies": {
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
+    "eslint-plugin-prettier": "^3.1.4",
     "lodash": "^4.17.15"
   }
 }

@@ -14,30 +14,28 @@ import defaultApplicationMetricCatalog from '../lists/default_metric_catalog';
 import { isInvalidQueryInterval } from '../util/queryInterval_check';
 
 export class DataSourceApplication {
-
   instanaOptions: InstanaOptions;
-  applicationsCache: Cache<Promise<Array<SelectableValue>>>;
+  applicationsCache: Cache<Promise<SelectableValue[]>>;
   miscCache: Cache<any>;
 
   constructor(options: InstanaOptions) {
     this.instanaOptions = options;
-    this.applicationsCache = new Cache<Promise<Array<SelectableValue>>>();
+    this.applicationsCache = new Cache<Promise<SelectableValue[]>>();
     this.miscCache = new Cache<any>();
   }
 
   runQuery(target: InstanaQuery, timeFilter: TimeFilter): any {
     // do not try to execute to big queries
     if (isInvalidQueryInterval(timeFilter.windowSize, this.instanaOptions.queryinterval_limit_app_calls)) {
-      throw new Error("Limit for maximum selectable windowsize exceeded, max is: "
-        + this.instanaOptions.queryinterval_limit_app_calls + " hours");
+      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_app_calls + ' hours');
     }
 
     // avoid invalid calls
-    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key ||  !target.entity || !target.entity.key) {
+    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key || !target.entity || !target.entity.key) {
       return Promise.resolve(emptyResultData(target.refId));
     }
 
-    return this.fetchAnalyzeMetricsForApplication(target, timeFilter).then(response => {
+    return this.fetchAnalyzeMetricsForApplication(target, timeFilter).then((response) => {
       target.showWarningCantShowAllResults = response.data.canLoadMore;
       return readItemMetrics(target, response, this.buildAnalyzeApplicationLabel);
     });
@@ -56,14 +54,16 @@ export class DataSourceApplication {
     let pageSize = 200;
 
     applications = this.paginateApplications([], windowSize, timeFilter.to, page, pageSize, PAGINATION_LIMIT).then((response: any) => {
-      let allResults = _.flattenDeep(_.map(response, pageSet => {
-        return pageSet.items;
-      }));
+      let allResults = _.flattenDeep(
+        _.map(response, (pageSet) => {
+          return pageSet.items;
+        })
+      );
 
-      return _.compact(allResults).map(entry => {
+      return _.compact(allResults).map((entry) => {
         return {
-          'key': entry.id,
-          'label': entry.label
+          key: entry.id,
+          label: entry.label,
         };
       });
     });
@@ -77,10 +77,7 @@ export class DataSourceApplication {
       return results;
     }
 
-    let queryParameters = 'windowSize=' + windowSize
-      + '&to=' + to
-      + '&page=' + page
-      + '&pageSize=' + pageSize;
+    let queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
 
     return getRequest(this.instanaOptions, '/api/application-monitoring/applications?' + queryParameters).then((response: any) => {
       results.push(response.data);
@@ -101,11 +98,11 @@ export class DataSourceApplication {
 
     applicationTags = getRequest(this.instanaOptions, '/api/application-monitoring/catalog/tags').then((tagsResponse: any) =>
       tagsResponse.data.map((entry: any) => ({
-        'key': entry.name,
-        'label': entry.name,
-        'type': entry.type,
-        'canApplyToSource': entry.canApplyToSource,
-        'canApplyToDestination': entry.canApplyToDestination
+        key: entry.name,
+        label: entry.name,
+        type: entry.type,
+        canApplyToSource: entry.canApplyToSource,
+        canApplyToDestination: entry.canApplyToDestination,
       }))
     );
     this.miscCache.put('applicationTags', applicationTags);
@@ -121,64 +118,62 @@ export class DataSourceApplication {
     const windowSize = getWindowSize(timeFilter);
     const tagFilters: any[] = [];
 
-    return Promise.resolve(this.getApplicationTags()).then(
-      applicationTags => {
-
-        if (target.entity.key) {
-          tagFilters.push({
-            name: 'application.name',
-            operator: 'EQUALS',
-            value: target.entity.label!,
-            entity: target.applicationCallToEntity && target.applicationCallToEntity.key ? target.applicationCallToEntity.key : 'DESTINATION'
-          });
-        }
-
-        _.forEach(target.filters, filter => {
-          if (filter.isValid) {
-            let tagFilter: any = createTagFilter(filter);
-            const tag = _.find(applicationTags, ['key', filter.tag.key]);
-            if (tag.canApplyToDestination || tag.canApplyToSource) {
-              tagFilter['entity'] = this.getTagEntity(filter.entity, tag);
-            }
-            tagFilters.push(tagFilter);
-          }
+    return Promise.resolve(this.getApplicationTags()).then((applicationTags) => {
+      if (target.entity.key) {
+        tagFilters.push({
+          name: 'application.name',
+          operator: 'EQUALS',
+          value: target.entity.label!,
+          entity: target.applicationCallToEntity && target.applicationCallToEntity.key ? target.applicationCallToEntity.key : 'DESTINATION',
         });
-
-        const metric: any = {
-          metric: target.metric.key,
-          aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM'
-        };
-
-        if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
-          if (!target.timeInterval) {
-            target.timeInterval = getDefaultChartGranularity(windowSize);
-          }
-          metric['granularity'] = target.timeInterval.key;
-        }
-
-        const group: any = {
-          groupbyTag: target.group.key
-        };
-        const tag: any = _.find(applicationTags, ['key', target.group.key]);
-        if (tag.canApplyToDestination || tag.canApplyToSource) {
-          group['groupbyTagEntity'] = this.getTagEntity(target.group, tag);
-        }
-        if (target.group.type === "KEY_VALUE_PAIR" && target.groupbyTagSecondLevelKey) {
-          group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
-        }
-
-        const data: any = {
-          group: group,
-          timeFrame: {
-            to: timeFilter.to,
-            windowSize: windowSize
-          },
-          tagFilters: tagFilters,
-          metrics: [metric]
-        };
-        return postRequest(this.instanaOptions, '/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
       }
-    );
+
+      _.forEach(target.filters, (filter) => {
+        if (filter.isValid) {
+          let tagFilter: any = createTagFilter(filter);
+          const tag = _.find(applicationTags, ['key', filter.tag.key]);
+          if (tag.canApplyToDestination || tag.canApplyToSource) {
+            tagFilter['entity'] = this.getTagEntity(filter.entity, tag);
+          }
+          tagFilters.push(tagFilter);
+        }
+      });
+
+      const metric: any = {
+        metric: target.metric.key,
+        aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+      };
+
+      if (target.pluginId !== 'singlestat' && target.pluginId !== 'gauge') {
+        // no granularity for singlestat and gauge
+        if (!target.timeInterval) {
+          target.timeInterval = getDefaultChartGranularity(windowSize);
+        }
+        metric['granularity'] = target.timeInterval.key;
+      }
+
+      const group: any = {
+        groupbyTag: target.group.key,
+      };
+      const tag: any = _.find(applicationTags, ['key', target.group.key]);
+      if (tag.canApplyToDestination || tag.canApplyToSource) {
+        group['groupbyTagEntity'] = this.getTagEntity(target.group, tag);
+      }
+      if (target.group.type === 'KEY_VALUE_PAIR' && target.groupbyTagSecondLevelKey) {
+        group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
+      }
+
+      const data: any = {
+        group: group,
+        timeFrame: {
+          to: timeFilter.to,
+          windowSize: windowSize,
+        },
+        tagFilters: tagFilters,
+        metrics: [metric],
+      };
+      return postRequest(this.instanaOptions, '/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
+    });
   }
 
   getTagEntity(selectedEntity: any, tag: any): string {
@@ -203,7 +198,8 @@ export class DataSourceApplication {
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
     };
 
-    if (target.pluginId !== "singlestat" && target.pluginId !== "gauge") { // no granularity for singlestat and gauge
+    if (target.pluginId !== 'singlestat' && target.pluginId !== 'gauge') {
+      // no granularity for singlestat and gauge
       if (!target.timeInterval) {
         target.timeInterval = getDefaultChartGranularity(windowSize);
       }
@@ -213,9 +209,9 @@ export class DataSourceApplication {
     const data: any = {
       timeFrame: {
         to: timeFilter.to,
-        windowSize: windowSize
+        windowSize: windowSize,
       },
-      metrics: [metric]
+      metrics: [metric],
     };
 
     if (target.entity.key !== null) {
@@ -238,13 +234,12 @@ export class DataSourceApplication {
     }
 
     if (target.entity.label === ALL_APPLICATIONS) {
-      return target.timeShift ? item.name + ' - ' + key + " - " + target.timeShift : item.name + ' - ' + key;
+      return target.timeShift ? item.name + ' - ' + key + ' - ' + target.timeShift : item.name + ' - ' + key;
     }
 
-    return target.timeShift && target.timeShiftIsValid ?
-      item.name + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
-      :
-      item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+    return target.timeShift && target.timeShiftIsValid
+      ? item.name + ' (' + target.entity.label + ')' + ' - ' + key + ' - ' + target.timeShift
+      : item.name + ' (' + target.entity.label + ')' + ' - ' + key;
   }
 
   buildApplicationMetricLabel(target: InstanaQuery, item: any, key: string, index: number): string {
@@ -260,12 +255,11 @@ export class DataSourceApplication {
     }
 
     if (target.entity.label === ALL_APPLICATIONS) {
-      return target.timeShift ? item.application.label + ' - ' + key + " - " + target.timeShift : item.application.label + ' - ' + key;
+      return target.timeShift ? item.application.label + ' - ' + key + ' - ' + target.timeShift : item.application.label + ' - ' + key;
     }
 
-    return target.timeShift && target.timeShiftIsValid ?
-      item.application.label + ' (' + target.entity.label + ')' + ' - ' + key + " - " + target.timeShift
-      :
-      item.application.label + ' (' + target.entity.label + ')' + ' - ' + key;
+    return target.timeShift && target.timeShiftIsValid
+      ? item.application.label + ' (' + target.entity.label + ')' + ' - ' + key + ' - ' + target.timeShift
+      : item.application.label + ' (' + target.entity.label + ')' + ' - ' + key;
   }
 }

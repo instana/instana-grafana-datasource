@@ -9,9 +9,11 @@ export function aggregateTarget(data: any, target: InstanaQuery) {
   });
 
   let aggregatedData = aggregateDataOfTimestamp(dataGroupedByTimestamp, target.aggregationFunction.label!);
-  aggregatedData = _.sortBy(aggregatedData, [function (datapoint) {
-    return datapoint[1];
-  }]);
+  aggregatedData = _.sortBy(aggregatedData, [
+    function (datapoint) {
+      return datapoint[1];
+    },
+  ]);
 
   return buildResult(aggregatedData, target.refId, buildAggregationLabel(target));
 }
@@ -37,13 +39,13 @@ function aggregateDataOfTimestamp(dataGroupedByTimestamp: any, aggregationLabel:
 }
 
 function aggregate(aggregation: string, data: any) {
-  if (aggregation.toLowerCase() === "sum") {
+  if (aggregation.toLowerCase() === 'sum') {
     return _.sum(data);
-  } else if (aggregation.toLowerCase() === "mean") {
+  } else if (aggregation.toLowerCase() === 'mean') {
     return _.mean(data);
-  } else if (aggregation.toLowerCase() === "min") {
+  } else if (aggregation.toLowerCase() === 'min') {
     return _.min(data);
-  } else if (aggregation.toLowerCase() === "max") {
+  } else if (aggregation.toLowerCase() === 'max') {
     return _.max(data);
   } else {
     //apply not aggregation
@@ -55,7 +57,7 @@ function buildResult(aggregatedData: any, refId: string, target: string) {
   return {
     datapoints: aggregatedData,
     refId: refId,
-    target: target
+    target: target,
   };
 }
 
@@ -63,22 +65,22 @@ function buildAggregationLabel(target: InstanaQuery): string {
   if (target.showAllMetrics) {
     if (target.allMetrics.length > 1) {
       if (target.customFilters && target.customFilters.length > 0) {
-        let label = "";
+        let label = '';
         _.each(target.customFilters, (filter, index) => {
-          label += filter
+          label += filter;
           if (index !== target.customFilters.length - 1) {
-            label += ".";
+            label += '.';
           }
         });
-        label = label + " (" + target.aggregationFunction.label + ")";
+        label = label + ' (' + target.aggregationFunction.label + ')';
         return label;
       } else {
         return target.aggregationFunction.label!;
       }
     } else {
-      return target.allMetrics[0].key + " (" + target.aggregationFunction.label + ")";
+      return target.allMetrics[0].key + ' (' + target.aggregationFunction.label + ')';
     }
   } else {
-    return target.metric.key + " (" + target.aggregationFunction.label + ")";
+    return target.metric.key + ' (' + target.aggregationFunction.label + ')';
   }
 }

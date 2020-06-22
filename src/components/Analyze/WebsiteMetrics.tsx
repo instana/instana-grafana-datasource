@@ -22,7 +22,7 @@ interface Props {
 
   onChange(value: InstanaQuery): void;
 
-  updateMetrics(metrics: SelectableValue<string>[]): void;
+  updateMetrics(metrics: SelectableValue[]): void;
 
   filterMetricsOnType(type: string): any;
 
@@ -33,7 +33,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
   constructor(props: any) {
     super(props);
     this.state = {
-      websites: []
+      websites: [],
     };
   }
 
@@ -41,7 +41,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
     const { query, onChange } = this.props;
     query.entity = {
       key: null,
-      label: 'Please select (' + nrOfTotalResults + ')'
+      label: 'Please select (' + nrOfTotalResults + ')',
     };
 
     onChange(query);
@@ -49,9 +49,9 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
 
   componentDidMount() {
     const { query, datasource, onChange } = this.props;
-    datasource.fetchWebsites().then(websites => {
+    datasource.fetchWebsites().then((websites) => {
       this.setState({
-        websites: websites
+        websites: websites,
       });
 
       if (!query.entity || !query.entity.key) {
@@ -64,7 +64,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
 
       // select a meaningful default group
       if (!query.group || !query.group.key) {
-        query.group = _.find(websiteTags, [ 'key', 'beacon.page.name' ]);
+        query.group = _.find(websiteTags, ['key', 'beacon.page.name']);
         onChange(query);
       }
     });
@@ -75,7 +75,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
     }
 
     datasource.dataSourceWebsite.getWebsiteMetricsCatalog().then((websiteMetrics: any) => {
-      this.props.updateMetrics(_.filter(websiteMetrics, m => m.beaconTypes.includes(query.entityType.key)));
+      this.props.updateMetrics(_.filter(websiteMetrics, (m) => m.beaconTypes.includes(query.entityType.key)));
     });
   }
 
@@ -120,42 +120,25 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
 
     return (
       <div className={'gf-form-inline'}>
-        <FormLabel width={14} tooltip={'Select your website.'}>Website</FormLabel>
-        <Select
-          width={20}
-          isSearchable={true}
-          value={query.entity}
-          options={this.state.websites}
-          onChange={this.onWebsiteChange}
-        />
+        <FormLabel width={14} tooltip={'Select your website.'}>
+          Website
+        </FormLabel>
+        <Select width={20} isSearchable={true} value={query.entity} options={this.state.websites} onChange={this.onWebsiteChange} />
 
-        <FormLabel width={6} tooltip={'Select a beacon type.'}>Type</FormLabel>
-        <Select
-          width={20}
-          isSearchable={false}
-          value={query.entityType}
-          options={beacon_types}
-          onChange={this.onBeaconTypeChange}
-        />
+        <FormLabel width={6} tooltip={'Select a beacon type.'}>
+          Type
+        </FormLabel>
+        <Select width={20} isSearchable={false} value={query.entityType} options={beacon_types} onChange={this.onBeaconTypeChange} />
 
-        <FormLabel width={7} tooltip={'Group by tag.'}>Group by</FormLabel>
-        <Select
-          width={20}
-          isSearchable={true}
-          value={query.group}
-          options={groups}
-          onChange={this.onGroupChange}
-        />
+        <FormLabel width={7} tooltip={'Group by tag.'}>
+          Group by
+        </FormLabel>
+        <Select width={20} isSearchable={true} value={query.group} options={groups} onChange={this.onGroupChange} />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input
-            type={'text'}
-            value={query.groupbyTagSecondLevelKey}
-            onBlur={this.onGroupByTagSecondLevelKeyChange}
-          />
+          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );
   }
-
 }

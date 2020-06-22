@@ -38,4 +38,4 @@ export default [
     label: 'SLO Information',
     key: 7,
   },
-]
+];

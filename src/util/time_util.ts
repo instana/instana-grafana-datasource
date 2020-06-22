@@ -1,5 +1,5 @@
-import { TimeRange } from "@grafana/data/types/time";
-import TimeFilter from "../types/time_filter";
+import { TimeRange } from '@grafana/data/types/time';
+import TimeFilter from '../types/time_filter';
 import { SEPARATOR } from '../GlobalVariables';
 
 export function readTime(time: TimeRange): TimeFilter {
@@ -8,7 +8,7 @@ export function readTime(time: TimeRange): TimeFilter {
   return {
     from: from,
     to: to,
-    windowSize: to - from
+    windowSize: to - from,
   };
 }
 
@@ -24,4 +24,3 @@ export function getTimeKey(timeFilter: TimeFilter): string {
 function msToMin(time: number): number {
   return Math.floor(time / 60000);
 }
-

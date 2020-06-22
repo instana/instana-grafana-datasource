@@ -23,10 +23,10 @@ import { ApplicationCallsMetrics } from './Analyze/ApplicationCallsMetrics';
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
 interface QueryState {
-  allMetrics: SelectableValue<string>[];
-  availableMetrics: SelectableValue<string>[];
-  groups: SelectableValue<string>[];
-  currentCategory: SelectableValue<string>;
+  allMetrics: SelectableValue[];
+  availableMetrics: SelectableValue[];
+  groups: SelectableValue[];
+  currentCategory: SelectableValue;
 }
 
 export class QueryEditor extends PureComponent<Props, QueryState> {
@@ -36,7 +36,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     super(props);
     const defaultQuery: Partial<InstanaQuery> = {
       metricCategory: MetricCategories[0],
-      customFilters: []
+      customFilters: [],
     };
 
     this.query = Object.assign({}, defaultQuery, props.query);
@@ -47,7 +47,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       allMetrics: [],
       availableMetrics: [],
       groups: [],
-      currentCategory: this.query.metricCategory
+      currentCategory: this.query.metricCategory,
     };
 
     this.filterMetricsOnType = this.filterMetricsOnType.bind(this);
@@ -56,13 +56,13 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.props.onChange(this.query);
   }
 
-  onCategoryChange = (newCategory: SelectableValue<string>) => {
+  onCategoryChange = (newCategory: SelectableValue) => {
     if (this.state.currentCategory === newCategory) {
       // nothing needs to be done
     } else {
       this.selectionReset();
       this.query.metricCategory = newCategory;
-      this.setState({currentCategory: newCategory})
+      this.setState({ currentCategory: newCategory });
       this.query.timeInterval = this.props.datasource.getDefaultTimeInterval(this.query);
       this.onRunQuery();
     }
@@ -76,21 +76,21 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   setMetricPlaceholder(nrOfTotalResults: number) {
     this.query.metric = {
       key: null,
-      label: 'Please select (' + nrOfTotalResults + ')'
-    }
+      label: 'Please select (' + nrOfTotalResults + ')',
+    };
 
     this.props.onChange(this.query);
   }
 
-  updateMetrics = (metrics: SelectableValue<string>[]) => {
+  updateMetrics = (metrics: SelectableValue[]) => {
     this.setState({
       availableMetrics: _.sortBy(metrics, 'key'),
-      allMetrics: _.sortBy(metrics, 'key')
+      allMetrics: _.sortBy(metrics, 'key'),
     });
 
     if ((this.query.metric && this.query.metric.key) || this.query.showAllMetrics) {
-      const metric = _.find(metrics, m => m.key === this.query.metric.key);
-      metric ? this.query.metric = metric : this.query.metric = { key: null };
+      const metric = _.find(metrics, (m) => m.key === this.query.metric.key);
+      metric ? (this.query.metric = metric) : (this.query.metric = { key: null });
     }
 
     if (!this.query.metric || !this.query.metric.key) {
@@ -103,9 +103,9 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   updateGroups = (groups: SelectableValue[]) => {
     this.setState({
-      groups: groups
+      groups: groups,
     });
-  }
+  };
 
   onFilterChange = (customFilters: string[]) => {
     let newAvailableMetrics: SelectableValue[] = [];
@@ -117,10 +117,10 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     } else {
       newAvailableMetrics = this.applyFilterToMetricList(customFilters);
       this.query.customFilters = customFilters;
-      !this.query.canShowAllMetrics ? this.query.showAllMetrics = false : this.query.allMetrics = this.state.availableMetrics;
+      !this.query.canShowAllMetrics ? (this.query.showAllMetrics = false) : (this.query.allMetrics = this.state.availableMetrics);
     }
 
-    this.setState(state => ({...state, availableMetrics: newAvailableMetrics}));
+    this.setState((state) => ({ ...state, availableMetrics: newAvailableMetrics }));
     if (!this.query.metric.key) {
       this.setMetricPlaceholder(newAvailableMetrics.length);
     }
@@ -132,14 +132,12 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   applyFilterToMetricList(filters: string[]) {
     let filteredMetrics: any = this.state.allMetrics;
-    _.forEach(filters, filter => {
+    _.forEach(filters, (filter) => {
       if (filter !== '') {
-        filteredMetrics =
-          _.sortBy(
-            _.filter(
-              filteredMetrics,
-              metric => metric.key.toLowerCase().includes(filter.toLowerCase())),
-            'key');
+        filteredMetrics = _.sortBy(
+          _.filter(filteredMetrics, (metric) => metric.key.toLowerCase().includes(filter.toLowerCase())),
+          'key'
+        );
       }
     });
 
@@ -147,12 +145,12 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   filterMetricsOnType(type: string) {
-    let filteredMetrics: SelectableValue<string>[] = this.state.allMetrics.filter(metric => {
+    let filteredMetrics: SelectableValue[] = this.state.allMetrics.filter((metric) => {
       return metric.beaconTypes.includes(type);
     });
 
     this.setState({
-      availableMetrics: filteredMetrics
+      availableMetrics: filteredMetrics,
     });
 
     if (!this.query.metric || !this.query.metric.key || !this.query.metric.beaconTypes.includes(type)) {
@@ -163,13 +161,18 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   isAbleToShowAllMetrics() {
-    return this.query.metricCategory.key === CUSTOM_METRICS
-      && this.state.availableMetrics.length > 0
-      && this.state.availableMetrics.length <= 5;
+    return this.query.metricCategory.key === CUSTOM_METRICS && this.state.availableMetrics.length > 0 && this.state.availableMetrics.length <= 5;
   }
 
   checkMetricAndRefresh() {
-    if (this.query.metric && this.query.metric.key && !_.includes(_.map(this.state.availableMetrics, m => m.key), this.query.metric.key)) {
+    if (
+      this.query.metric &&
+      this.query.metric.key &&
+      !_.includes(
+        _.map(this.state.availableMetrics, (m) => m.key),
+        this.query.metric.key
+      )
+    ) {
       this.resetMetricSelection();
     }
 
@@ -181,116 +184,104 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     return (
       <div>
         <div className={'gf-form'}>
-          <FormLabel width={14} tooltip={'Select a metric category.'}>Category</FormLabel>
-          <Select
-            width={30}
-            isSearchable={false}
-            options={MetricCategories}
-            onChange={onCategoryChange}
-            value={query.metricCategory}
-          />
+          <FormLabel width={14} tooltip={'Select a metric category.'}>
+            Category
+          </FormLabel>
+          <Select width={30} isSearchable={false} options={MetricCategories} onChange={onCategoryChange} value={query.metricCategory} />
         </div>
 
-        {query.metricCategory.key === 0 &&
-        <InfrastructureBuiltIn
-          query={query}
-          onRunQuery={onRunQuery}
-          onChange={this.props.onChange}
-          updateMetrics={this.updateMetrics}
-          datasource={this.props.datasource}
-        />
-        }
+        {query.metricCategory.key === 0 && (
+          <InfrastructureBuiltIn
+            query={query}
+            onRunQuery={onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
+            datasource={this.props.datasource}
+          />
+        )}
 
-        {query.metricCategory.key === 1 &&
-        <InfrastructureCustom
-          query={query}
-          onRunQuery={onRunQuery}
-          onChange={this.props.onChange}
-          updateMetrics={this.updateMetrics}
-          datasource={this.props.datasource}
-        />
-        }
+        {query.metricCategory.key === 1 && (
+          <InfrastructureCustom
+            query={query}
+            onRunQuery={onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
+            datasource={this.props.datasource}
+          />
+        )}
 
-        {query.metricCategory.key === 2 &&
-        <ApplicationCallsMetrics
-          query={query}
-          onRunQuery={onRunQuery}
-          onChange={this.props.onChange}
-          updateMetrics={this.updateMetrics}
-          groups={this.state.groups}
-          updateGroups={this.updateGroups}
-          datasource={this.props.datasource}
-        />
-        }
+        {query.metricCategory.key === 2 && (
+          <ApplicationCallsMetrics
+            query={query}
+            onRunQuery={onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
+            groups={this.state.groups}
+            updateGroups={this.updateGroups}
+            datasource={this.props.datasource}
+          />
+        )}
 
-        {query.metricCategory.key === 3 &&
-        <WebsiteMetrics
-          query={query}
-          onRunQuery={onRunQuery}
-          onChange={this.props.onChange}
-          updateMetrics={this.updateMetrics}
-          groups={this.state.groups}
-          updateGroups={this.updateGroups}
-          filterMetricsOnType={this.filterMetricsOnType}
-          datasource={this.props.datasource}
-        />
-        }
+        {query.metricCategory.key === 3 && (
+          <WebsiteMetrics
+            query={query}
+            onRunQuery={onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
+            groups={this.state.groups}
+            updateGroups={this.updateGroups}
+            filterMetricsOnType={this.filterMetricsOnType}
+            datasource={this.props.datasource}
+          />
+        )}
 
-        {query.metricCategory.key === 4 &&
-        <ApplicationServiceEndpointMetrics
-          query={query}
-          onRunQuery={onRunQuery}
-          onChange={this.props.onChange}
-          updateMetrics={this.updateMetrics}
-          datasource={this.props.datasource}
-        />
-        }
+        {query.metricCategory.key === 4 && (
+          <ApplicationServiceEndpointMetrics
+            query={query}
+            onRunQuery={onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
+            datasource={this.props.datasource}
+          />
+        )}
 
-        {query.metricCategory.key === 7 &&
-        <SloInformation
-          query={query}
-          onRunQuery={onRunQuery}
-          onChange={this.props.onChange}
-          datasource={this.props.datasource}/>
-        }
+        {query.metricCategory.key === 7 && (
+          <SloInformation query={query} onRunQuery={onRunQuery} onChange={this.props.onChange} datasource={this.props.datasource} />
+        )}
 
-        {query.metricCategory.key !== 7 &&
-        <Metric
-          query={query}
-          onChange={this.props.onChange}
-          onRunQuery={onRunQuery}
-          updateMetrics={this.updateMetrics}
-          availableMetrics={this.state.availableMetrics}
-          datasource={this.props.datasource}
-        />
-        }
+        {query.metricCategory.key !== 7 && (
+          <Metric
+            query={query}
+            onChange={this.props.onChange}
+            onRunQuery={onRunQuery}
+            updateMetrics={this.updateMetrics}
+            availableMetrics={this.state.availableMetrics}
+            datasource={this.props.datasource}
+          />
+        )}
 
-        {query.metricCategory.key === 1 &&
-        <MetricFilter
-          query={query}
-          onChange={this.props.onChange}
-          onRunQuery={onRunQuery}
-          onFilterChange={this.onFilterChange}
-          availableMetrics={this.state.availableMetrics}
-          datasource={this.props.datasource}
-        />
-        }
+        {query.metricCategory.key === 1 && (
+          <MetricFilter
+            query={query}
+            onChange={this.props.onChange}
+            onRunQuery={onRunQuery}
+            onFilterChange={this.onFilterChange}
+            availableMetrics={this.state.availableMetrics}
+            datasource={this.props.datasource}
+          />
+        )}
 
-        {(query.metricCategory.key === 2 || query.metricCategory.key === 3) &&
-        <Filters
-          query={query}
-          onChange={this.props.onChange}
-          onRunQuery={onRunQuery}
-          datasource={this.props.datasource}
-          groups={this.state.groups}
-        />
-        }
+        {(query.metricCategory.key === 2 || query.metricCategory.key === 3) && (
+          <Filters
+            query={query}
+            onChange={this.props.onChange}
+            onRunQuery={onRunQuery}
+            datasource={this.props.datasource}
+            groups={this.state.groups}
+          />
+        )}
 
-        <AdvancedSettings
-          query={query}
-          onRunQuery={onRunQuery}
-          onChange={this.props.onChange}
-        />
+        <AdvancedSettings query={query} onRunQuery={onRunQuery} onChange={this.props.onChange} />
       </div>
     );
   }
@@ -305,7 +296,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.setState({
       availableMetrics: [],
       allMetrics: [],
-      groups: []
+      groups: [],
     });
 
     //this.uniqueEntities = [];
@@ -319,7 +310,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     const { query } = this.props;
     query.entityType = {
       key: null,
-      label: '-'
+      label: '-',
     };
     query.customFilters = [];
     //this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
@@ -327,8 +318,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   resetEntitySelection() {
     const { query } = this.props;
-    query.entity = { };
-    query.group = { };
+    query.entity = {};
+    query.group = {};
     query.showGroupBySecondLevel = false;
     query.groupbyTagSecondLevelKey = '';
     query.aggregateGraphs = false;
@@ -350,7 +341,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   resetMetricSelection() {
     const { query } = this.props;
-    query.metric = { };
+    query.metric = {};
     query.filter = '';
     query.timeShift = '';
     query.timeShiftIsValid = true;
@@ -363,17 +354,16 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   resetServices() {
-    this.props.query.service = { };
+    this.props.query.service = {};
   }
 
   resetEndpoints() {
-    this.props.query.endpoint = { };
+    this.props.query.endpoint = {};
   }
 
   resetSLO() {
     const { query } = this.props;
     query.sloValue = '';
-    query.sloReport = { };
+    query.sloReport = {};
   }
-
 }

@@ -3,7 +3,7 @@ import { DataSourcePlugin } from '@grafana/data';
 import { DataSource } from './datasources/DataSource';
 import { ConfigEditor } from './components/ConfigEditor';
 import { QueryEditor } from './components/QueryEditor';
-import { InstanaQuery } from "./types/instana_query";
+import { InstanaQuery } from './types/instana_query';
 
 export const plugin = new DataSourcePlugin<DataSource, InstanaQuery, InstanaOptions>(DataSource)
   .setConfigEditor(ConfigEditor)

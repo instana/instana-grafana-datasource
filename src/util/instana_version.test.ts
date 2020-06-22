@@ -3,7 +3,6 @@ import { buildInstanaOptions } from './test_util';
 import getVersion from './instana_version';
 
 describe('when retrieving the version of instana', () => {
-
   const options = buildInstanaOptions();
   const axios = require('axios');
 
@@ -12,8 +11,8 @@ describe('when retrieving the version of instana', () => {
     getRequestSpy.mockImplementation((instanaOptions, endpoint) => {
       return axios.get(instanaOptions.url + endpoint, {
         headers: {
-          Authorization: 'apiToken ' + options.apiToken
-        }
+          Authorization: 'apiToken ' + options.apiToken,
+        },
       });
     });
 
@@ -27,5 +26,4 @@ describe('when retrieving the version of instana', () => {
       expect(getRequestSpy).toBeCalledTimes(1);
     });
   });
-
 });

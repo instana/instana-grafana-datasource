@@ -7,16 +7,16 @@ import _ from 'lodash';
 import max_metrics from '../lists/max_metrics';
 
 interface MetricState {
-  possibleTimeIntervals: SelectableValue<string>[];
-  possibleAggregations: SelectableValue<string>[];
+  possibleTimeIntervals: SelectableValue[];
+  possibleAggregations: SelectableValue[];
 }
 
 interface Props {
   query: InstanaQuery;
   datasource: DataSource;
-  availableMetrics: SelectableValue<string>[];
+  availableMetrics: SelectableValue[];
 
-  updateMetrics(metrics: SelectableValue<string>[]): void;
+  updateMetrics(metrics: SelectableValue[]): void;
 
   onRunQuery(): void;
 
@@ -28,7 +28,7 @@ export default class Metric extends React.Component<Props, MetricState> {
     super(props);
     this.state = {
       possibleTimeIntervals: [],
-      possibleAggregations: []
+      possibleAggregations: [],
     };
   }
 
@@ -40,7 +40,7 @@ export default class Metric extends React.Component<Props, MetricState> {
     }
   }
 
-  onMetricChange = (metric: SelectableValue<string>) => {
+  onMetricChange = (metric: SelectableValue) => {
     const { query, onRunQuery, onChange } = this.props;
     query.metric = metric;
 
@@ -58,20 +58,17 @@ export default class Metric extends React.Component<Props, MetricState> {
 
   canShowMaxMetricValue() {
     const { query } = this.props;
-    return query.entityType &&
-      query.entityType.key === 'host' &&
-      query.metric &&
-      _.find(max_metrics, m => m.key === query.metric.key);
+    return query.entityType && query.entityType.key === 'host' && query.metric && _.find(max_metrics, (m) => m.key === query.metric.key);
   }
 
-  onTimeIntervalChange = (timeInterval: SelectableValue<string>) => {
+  onTimeIntervalChange = (timeInterval: SelectableValue) => {
     const { query, onRunQuery, onChange } = this.props;
     query.timeInterval = timeInterval;
     onChange(query);
     onRunQuery();
   };
 
-  onAggregationChange = (aggregation: SelectableValue<string>) => {
+  onAggregationChange = (aggregation: SelectableValue) => {
     const { query, onRunQuery, onChange } = this.props;
     query.aggregation = aggregation;
     onChange(query);
@@ -111,62 +108,52 @@ export default class Metric extends React.Component<Props, MetricState> {
 
     return (
       <div className={'gf-form-inline'}>
-        <FormLabel width={14} tooltip={'Select the metric you wish to plot.'}>Metric</FormLabel>
+        <FormLabel width={14} tooltip={'Select the metric you wish to plot.'}>
+          Metric
+        </FormLabel>
         <div style={query.showAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-          <Select
-            width={30}
-            isSearchable={false}
-            value={query.metric}
-            onChange={this.onMetricChange}
-            options={this.props.availableMetrics}>
-          </Select>
+          <Select width={30} isSearchable={false} value={query.metric} onChange={this.onMetricChange} options={this.props.availableMetrics}></Select>
         </div>
 
-        {query.metricCategory.key === 0 &&
-        <div style={!this.canShowMaxMetricValue() ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-          <Switch
-            label={'Show max value'}
-            labelClass={'width-10'}
-            checked={query.displayMaxMetricValue}
-            tooltipPlacement={'top'}
-            onChange={this.onShowMaxValueChange}
-            tooltip={
-              'Displays the maximal value of current metric. Supported for \'Type=Host\' with cpu.used, memory.used and openFiles.used only.'
-            }
-          />
-        </div>
-        }
+        {query.metricCategory.key === 0 && (
+          <div style={!this.canShowMaxMetricValue() ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
+            <Switch
+              label={'Show max value'}
+              labelClass={'width-10'}
+              checked={query.displayMaxMetricValue}
+              tooltipPlacement={'top'}
+              onChange={this.onShowMaxValueChange}
+              tooltip={"Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only."}
+            />
+          </div>
+        )}
 
-        {query.metricCategory.key === 1 &&
-        <div style={!query.canShowAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-          <Switch
-            label={'Show all metrics'}
-            labelClass={'width-10'}
-            checked={query.showAllMetrics}
-            tooltipPlacement={'top'}
-            onChange={this.onShowAllMetricsChange}
-            tooltip={
-              'You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.'
-            }
-          />
-        </div>
-        }
+        {query.metricCategory.key === 1 && (
+          <div style={!query.canShowAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
+            <Switch
+              label={'Show all metrics'}
+              labelClass={'width-10'}
+              checked={query.showAllMetrics}
+              tooltipPlacement={'top'}
+              onChange={this.onShowAllMetricsChange}
+              tooltip={'You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.'}
+            />
+          </div>
+        )}
 
-        {query.metricCategory.key > 1 &&
-        <FormLabel width={8} tooltip={'Select a metric aggregation.'}>Aggregation</FormLabel>
-        }
+        {query.metricCategory.key > 1 && (
+          <FormLabel width={8} tooltip={'Select a metric aggregation.'}>
+            Aggregation
+          </FormLabel>
+        )}
 
-        {this.canShowAggregation() &&
-        <Select
-          width={8}
-          isSearchable={false}
-          value={query.aggregation}
-          onChange={this.onAggregationChange}
-          options={query.metric.aggregations}
-        />
-        }
+        {this.canShowAggregation() && (
+          <Select width={8} isSearchable={false} value={query.aggregation} onChange={this.onAggregationChange} options={query.metric.aggregations} />
+        )}
 
-        <FormLabel width={6} tooltip={'Select the rollup value.'}>Rollup</FormLabel>
+        <FormLabel width={6} tooltip={'Select the rollup value.'}>
+          Rollup
+        </FormLabel>
         <Select
           width={8}
           isSearchable={false}
@@ -177,5 +164,4 @@ export default class Metric extends React.Component<Props, MetricState> {
       </div>
     );
   }
-
 }

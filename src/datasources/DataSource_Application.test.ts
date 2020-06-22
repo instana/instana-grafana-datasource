@@ -23,27 +23,29 @@ describe('Given an application datasource', () => {
     getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
 
     it('should return applications as SelectableValues', () => {
-      return axios.get(options.url + '/api/application-monitoring/applications?windowSize'
-        + timeFilter.windowSize
-        + '&to=' + timeFilter.to, {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken
-        }
-      }).then((applications: any) => {
-        paginateApplicationsSpy.mockResolvedValue(applications);
-        getApplicationsAndVerifyFormat(dataSourceApplication, timeFilter);
-      })
+      return axios
+        .get(options.url + '/api/application-monitoring/applications?windowSize' + timeFilter.windowSize + '&to=' + timeFilter.to, {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken,
+          },
+        })
+        .then((applications: any) => {
+          paginateApplicationsSpy.mockResolvedValue(applications);
+          getApplicationsAndVerifyFormat(dataSourceApplication, timeFilter);
+        });
     });
 
     it('should return application tag in the correct format', () => {
-      return axios.get(options.url + '/api/application-monitoring/catalog/tags', {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken
-        }
-      }).then((tags: any) => {
-        getRequestSpy.mockResolvedValue(tags);
-        getApplicationTagsAndVerifyFormat(dataSourceApplication);
-      })
+      return axios
+        .get(options.url + '/api/application-monitoring/catalog/tags', {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken,
+          },
+        })
+        .then((tags: any) => {
+          getRequestSpy.mockResolvedValue(tags);
+          getApplicationTagsAndVerifyFormat(dataSourceApplication);
+        });
     });
 
     describe('and invoking functions multiple times', () => {
@@ -51,38 +53,40 @@ describe('Given an application datasource', () => {
       getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
 
       it('should return applications as SelectableValues', () => {
-        return axios.get(options.url + '/api/application-monitoring/applications?windowSize'
-          + timeFilter.windowSize
-          + '&to=' + timeFilter.to, {
-          headers: {
-            Authorization: 'apiToken ' + options.apiToken
-          }
-        }).then((applications: any) => {
-          paginateApplicationsSpy.mockResolvedValue(applications);
-          getApplicationsAndVerifyFormat(dataSourceApplication, timeFilter);
-          getApplicationsAndVerifyFormat(dataSourceApplication, timeFilter);
-          expect(paginateApplicationsSpy).toHaveBeenCalledTimes(1);
-        })
+        return axios
+          .get(options.url + '/api/application-monitoring/applications?windowSize' + timeFilter.windowSize + '&to=' + timeFilter.to, {
+            headers: {
+              Authorization: 'apiToken ' + options.apiToken,
+            },
+          })
+          .then((applications: any) => {
+            paginateApplicationsSpy.mockResolvedValue(applications);
+            getApplicationsAndVerifyFormat(dataSourceApplication, timeFilter);
+            getApplicationsAndVerifyFormat(dataSourceApplication, timeFilter);
+            expect(paginateApplicationsSpy).toHaveBeenCalledTimes(1);
+          });
       });
 
       it('should cache application tags', () => {
-        return axios.get(options.url + '/api/application-monitoring/catalog/tags', {
-          headers: {
-            Authorization: 'apiToken ' + options.apiToken
-          }
-        }).then((tags: any) => {
-          getRequestSpy.mockResolvedValue(tags);
-          getApplicationTagsAndVerifyFormat(dataSourceApplication);
-          getApplicationTagsAndVerifyFormat(dataSourceApplication);
-          return expect(getRequestSpy).toHaveBeenCalledTimes(1);
-        });
+        return axios
+          .get(options.url + '/api/application-monitoring/catalog/tags', {
+            headers: {
+              Authorization: 'apiToken ' + options.apiToken,
+            },
+          })
+          .then((tags: any) => {
+            getRequestSpy.mockResolvedValue(tags);
+            getApplicationTagsAndVerifyFormat(dataSourceApplication);
+            getApplicationTagsAndVerifyFormat(dataSourceApplication);
+            return expect(getRequestSpy).toHaveBeenCalledTimes(1);
+          });
       });
     });
   });
-  
+
   function getApplicationsAndVerifyFormat(dataSourceApplication: DataSourceApplication, timeFilter: TimeFilter) {
-    return dataSourceApplication.getApplications(timeFilter).then(apps => {
-      _.map(apps, app => {
+    return dataSourceApplication.getApplications(timeFilter).then((apps) => {
+      _.map(apps, (app) => {
         expect(app).toHaveProperty('key');
         expect(app).toHaveProperty('label');
       });
@@ -91,7 +95,7 @@ describe('Given an application datasource', () => {
 
   function getApplicationTagsAndVerifyFormat(dataSourceApplication: DataSourceApplication) {
     return dataSourceApplication.getApplicationTags().then((appTags: any) => {
-      _.map(appTags, tag => {
+      _.map(appTags, (tag) => {
         expect(tag).toHaveProperty('key');
         expect(tag).toHaveProperty('label');
         expect(tag).toHaveProperty('type');
@@ -100,5 +104,4 @@ describe('Given an application datasource', () => {
       });
     });
   }
-
 });

@@ -1,34 +1,36 @@
-import { SelectableValue, TimeSeries, TimeSeriesPoints } from "@grafana/data";
-import { buildTimeSeries, emptyResultData } from "../util/target_util";
-import { InstanaOptions } from "../types/instana_options";
-import { InstanaQuery } from "../types/instana_query";
-import { getRequest } from "../util/request_handler";
-import { getWindowSize } from "../util/time_util";
-import TimeFilter from "../types/time_filter";
+import { SelectableValue, TimeSeries, TimeSeriesPoints } from '@grafana/data';
+import { buildTimeSeries, emptyResultData } from '../util/target_util';
+import { InstanaOptions } from '../types/instana_options';
+import { InstanaQuery } from '../types/instana_query';
+import { getRequest } from '../util/request_handler';
+import { getWindowSize } from '../util/time_util';
+import TimeFilter from '../types/time_filter';
 import Cache from '../cache';
-import _ from "lodash";
+import _ from 'lodash';
 
 export class DataSourceSlo {
-  sliReportsCache: Cache<Promise<SelectableValue<string>[]>>;
+  sliReportsCache: Cache<Promise<SelectableValue[]>>;
   instanaOptions: InstanaOptions;
 
   constructor(options: InstanaOptions) {
     this.instanaOptions = options;
-    this.sliReportsCache = new Cache<Promise<SelectableValue<string>[]>>();
+    this.sliReportsCache = new Cache<Promise<SelectableValue[]>>();
   }
 
-  getConfiguredSLIs(): Promise<SelectableValue<string>[]> {
+  getConfiguredSLIs(): Promise<SelectableValue[]> {
     let sliReports = this.sliReportsCache.get('sliReports');
     if (sliReports) {
       return sliReports;
     }
 
-    sliReports = getRequest(this.instanaOptions, '/api/settings/sli').then((response: any) => _.map(response.data, r => {
-      return {
-        'key': r.id,
-        'label': r.sliName
-      };
-    }));
+    sliReports = getRequest(this.instanaOptions, '/api/settings/sli').then((response: any) =>
+      _.map(response.data, (r) => {
+        return {
+          key: r.id,
+          label: r.sliName,
+        };
+      })
+    );
 
     this.sliReportsCache.put('sliReports', sliReports);
     return sliReports;
@@ -52,7 +54,7 @@ export class DataSourceSlo {
     } else if (target.sloSpecific.key === 'Remaining Error Budget') {
       return [buildTimeSeries(target.sloSpecific.label!, target.refId, this.buildResultArray(sliResult.errorBudgetRemaining, timeFilter.to))];
     } else if (target.sloSpecific.key === 'Timeseries') {
-      return this.buildViolationDistributionTimeSeries(target, sliResult.violationDistribution, timeFilter)
+      return this.buildViolationDistributionTimeSeries(target, sliResult.violationDistribution, timeFilter);
     }
 
     return [emptyResultData(target.refId)];
@@ -70,18 +72,18 @@ export class DataSourceSlo {
     let granularity = getWindowSize(timeFilter) / Object.keys(series).length;
     _.forEach(series, (value: number, index: number) => {
       if (value === 1) {
-        greens.push([1, timeFilter.from + (index * granularity)]);
+        greens.push([1, timeFilter.from + index * granularity]);
       } else if (value === 0) {
-        greys.push([1, timeFilter.from + (index * granularity)]);
+        greys.push([1, timeFilter.from + index * granularity]);
       } else if (value === -1) {
-        reds.push([1, timeFilter.from + (index * granularity)]);
+        reds.push([1, timeFilter.from + index * granularity]);
       }
     });
 
     const result: TimeSeries[] = [];
-    result.push(buildTimeSeries("No violation", target.refId, greens));
-    result.push(buildTimeSeries("Violation", target.refId, reds));
-    result.push(buildTimeSeries("No data", target.refId, greys));
+    result.push(buildTimeSeries('No violation', target.refId, greens));
+    result.push(buildTimeSeries('Violation', target.refId, reds));
+    result.push(buildTimeSeries('No data', target.refId, greys));
 
     return result;
   }

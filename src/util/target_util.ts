@@ -1,12 +1,9 @@
-import {
-  TimeSeries,
-  TimeSeriesPoints
-} from '@grafana/data';
+import { TimeSeries, TimeSeriesPoints } from '@grafana/data';
 
 export function emptyResultData(refId: string): TimeSeries {
   return {
     target: refId,
-    datapoints: []
+    datapoints: [],
   };
 }
 
@@ -14,6 +11,6 @@ export function buildTimeSeries(label: string, refId: string, datapoints: TimeSe
   return {
     target: label,
     refId: refId,
-    datapoints: datapoints
+    datapoints: datapoints,
   };
 }
