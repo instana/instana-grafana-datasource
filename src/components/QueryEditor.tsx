@@ -74,7 +74,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   };
 
   setMetricPlaceholder(nrOfTotalResults: number) {
-    console.log(nrOfTotalResults);
     this.query.metric = {
       key: null,
       label: 'Please select (' + nrOfTotalResults + ')'
