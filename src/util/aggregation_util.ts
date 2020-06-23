@@ -33,7 +33,7 @@ function aggregateDataOfTimestamp(dataGroupedByTimestamp: any, aggregationLabel:
       return datapoint[0];
     });
     let aggregatedValue = aggregate(aggregationLabel, valuesOfTimestamp);
-    result.push([aggregatedValue, parseInt(timestamp)]);
+    result.push([aggregatedValue, parseInt(timestamp, 10)]);
   });
   return result;
 }

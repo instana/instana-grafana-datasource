@@ -6,7 +6,7 @@ import { getRequest } from '../util/request_handler';
 import { DataSourceSlo } from './DataSource_Slo';
 import MetricCategories from '../lists/metric_categories';
 import TimeFilter from '../types/time_filter';
-import { readTime } from '../util/time_util';
+import { hoursToMs, readTime } from '../util/time_util';
 import Cache from '../cache';
 import { emptyResultData } from '../util/target_util';
 import _ from 'lodash';
@@ -143,7 +143,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
   getApplicationServiceEndpointMetrics(target: InstanaQuery, timeFilter: TimeFilter) {
     // do not try to execute too big queries
-    if (isInvalidQueryInterval(timeFilter.windowSize, this.options.queryinterval_limit_app_metrics)) {
+    if (isInvalidQueryInterval(timeFilter.windowSize, hoursToMs(this.options.queryinterval_limit_app_metrics))) {
       throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.options.queryinterval_limit_app_metrics + ' hours');
     }
 
@@ -317,15 +317,15 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     let milliSeconds = 1000;
 
     if (timeShift.endsWith('s')) {
-      return parseInt(timeShift.split('s')[0]) * milliSeconds;
+      return parseInt(timeShift.split('s')[0], 10) * milliSeconds;
     } else if (timeShift.endsWith('m')) {
-      return parseInt(timeShift.split('m')[0]) * 60 * milliSeconds;
+      return parseInt(timeShift.split('m')[0], 10) * 60 * milliSeconds;
     } else if (timeShift.endsWith('h')) {
-      return parseInt(timeShift.split('h')[0]) * 60 * 60 * milliSeconds;
+      return parseInt(timeShift.split('h')[0], 10) * 60 * 60 * milliSeconds;
     } else if (timeShift.endsWith('d')) {
-      return parseInt(timeShift.split('d')[0]) * 60 * 60 * 24 * milliSeconds;
+      return parseInt(timeShift.split('d')[0], 10) * 60 * 60 * 24 * milliSeconds;
     } else if (timeShift.endsWith('w')) {
-      return parseInt(timeShift.split('w')[0]) * 60 * 60 * 24 * 7 * milliSeconds;
+      return parseInt(timeShift.split('w')[0], 10) * 60 * 60 * 24 * 7 * milliSeconds;
     }
 
     return null;

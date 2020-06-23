@@ -55,8 +55,8 @@ export function appendData(newDeltaData: any, cachedData: any): any {
       const size = matchingCachedData.datapoints.length;
       let datapoints = deltaData.datapoints.concat(matchingCachedData.datapoints);
       datapoints = _.sortedUniqBy(
-        datapoints.sort((a, b) => a[1] - b[1]),
-        (a) => a[1]
+        datapoints.sort((a: any, b: any) => a[1] - b[1]),
+        (a: any) => a[1]
       );
       matchingCachedData.datapoints = _.takeRight(datapoints, size);
       matchingCachedData.target = deltaData.target;

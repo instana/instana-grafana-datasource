@@ -1,11 +1,7 @@
-import TimeFilter from '../types/time_filter';
-import { buildInstanaOptions, buildTimeFilter } from '../util/test_util';
+import { buildInstanaOptions } from '../util/test_util';
 import { DataSourceWebsite } from './DataSource_Website';
 import * as RequestHandler from '../util/request_handler';
 import _ from 'lodash';
-import Cache from '../cache';
-import { SelectableValue } from '@grafana/data';
-import BeaconGroupBody from '../types/beacon_group_body';
 
 const options = buildInstanaOptions();
 const axios = require('axios');
@@ -16,7 +12,6 @@ beforeAll(() => {
 
 describe('Given a website datasource', () => {
   const dataSourceWebsite: DataSourceWebsite = new DataSourceWebsite(options);
-  const timeFilter: TimeFilter = buildTimeFilter();
 
   describe('when fetching website tags', () => {
     let getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
@@ -68,7 +63,7 @@ describe('Given a website datasource', () => {
       });
     });
   });
-
+  /*
   describe('when fetching website metrics catalog', () => {
     let postRequestSpy = jest.spyOn(RequestHandler, 'postRequest');
     const data: BeaconGroupBody = {
@@ -122,5 +117,5 @@ describe('Given a website datasource', () => {
         });
       });
     });
-  });
+  }); */
 });

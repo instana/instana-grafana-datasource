@@ -24,3 +24,10 @@ export function getTimeKey(timeFilter: TimeFilter): string {
 function msToMin(time: number): number {
   return Math.floor(time / 60000);
 }
+
+export function hoursToMs(hours: any): number {
+  if (hours > 0) {
+    return hours * 60 * 60 * 1000;
+  }
+  return 0;
+}

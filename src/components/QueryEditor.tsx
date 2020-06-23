@@ -342,7 +342,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   resetMetricSelection() {
     const { query } = this.props;
     query.metric = {};
-    query.filter = '';
     query.timeShift = '';
     query.timeShiftIsValid = true;
     query.showWarningCantShowAllResults = false;

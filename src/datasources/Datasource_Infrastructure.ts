@@ -6,7 +6,7 @@ import TimeFilter from '../types/time_filter';
 import Cache from '../cache';
 import { CUSTOM_METRICS, SEPARATOR } from '../GlobalVariables';
 import _ from 'lodash';
-import { getTimeKey } from '../util/time_util';
+import { getTimeKey, hoursToMs } from '../util/time_util';
 import { isInvalidQueryInterval } from '../util/queryInterval_check';
 import { emptyResultData } from '../util/target_util';
 import { getDefaultMetricRollupDuration } from '../util/rollup_granularity_util';
@@ -30,7 +30,7 @@ export class DataSourceInfrastructure {
 
   runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
     // do not try to execute to big queries
-    if (isInvalidQueryInterval(timeFilter.windowSize, this.instanaOptions.queryinterval_limit_infra)) {
+    if (isInvalidQueryInterval(timeFilter.windowSize, hoursToMs(this.instanaOptions.queryinterval_limit_infra))) {
       throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_infra + ' hours');
     }
 
@@ -279,7 +279,7 @@ export class DataSourceInfrastructure {
   }
 
   correctMeanToSum(values: any, timeFilter: TimeFilter) {
-    const secondMultiplier = parseInt(getDefaultMetricRollupDuration(timeFilter).key) / 1000;
+    const secondMultiplier = parseInt(getDefaultMetricRollupDuration(timeFilter).key, 10) / 1000;
     return _.map(values, (value) => {
       return {
         value: value.value ? value.value * secondMultiplier : null,

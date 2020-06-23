@@ -43,7 +43,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
       }
 
       this.setState({
-        applications: applications
+        applications: applications,
       });
 
       if (!query.entity || (!query.entity.key && !query.entity.label)) {

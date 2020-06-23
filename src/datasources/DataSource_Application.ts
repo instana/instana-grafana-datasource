@@ -3,7 +3,7 @@ import { InstanaOptions } from '../types/instana_options';
 import Cache from '../cache';
 import _ from 'lodash';
 import TimeFilter from '../types/time_filter';
-import { getTimeKey, getWindowSize } from '../util/time_util';
+import { getTimeKey, getWindowSize, hoursToMs } from '../util/time_util';
 import { getRequest, postRequest } from '../util/request_handler';
 import { getDefaultChartGranularity } from '../util/rollup_granularity_util';
 import { InstanaQuery } from '../types/instana_query';
@@ -26,7 +26,7 @@ export class DataSourceApplication {
 
   runQuery(target: InstanaQuery, timeFilter: TimeFilter): any {
     // do not try to execute to big queries
-    if (isInvalidQueryInterval(timeFilter.windowSize, this.instanaOptions.queryinterval_limit_app_calls)) {
+    if (isInvalidQueryInterval(timeFilter.windowSize, hoursToMs(this.instanaOptions.queryinterval_limit_app_calls))) {
       throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_app_calls + ' hours');
     }
 
