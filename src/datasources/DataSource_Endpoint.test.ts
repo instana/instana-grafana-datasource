@@ -9,12 +9,12 @@ const axios = require('axios');
 const dataSourceEndpoint: DataSourceEndpoint = new DataSourceEndpoint(options);
 const timeFilter: TimeFilter = buildTimeFilter();
 
-describe('Given an endpoint datasource', function () {
-  it('should return endpoints', function () {
+describe('Given an endpoint datasource', () => {
+  it('should return endpoints', () => {
     return getEndpointsAndVerify();
   });
 
-  it('should return endpoints of a service', function () {
+  it('should return endpoints of a service', () => {
     // get any service id
     return axios
       .get(options.url + '/api/application-monitoring/applications;id=' + '/services?' + timeFilter.windowSize + '&to=' + timeFilter.to, {
@@ -35,7 +35,7 @@ describe('Given an endpoint datasource', function () {
       });
   });
 
-  it('should return endpoints of a service of an application', function () {
+  it('should return endpoints of a service of an application', () => {
     // get any application id
     return axios
       .get(options.url + '/api/application-monitoring/applications?' + timeFilter.windowSize + '&to=' + timeFilter.to, {

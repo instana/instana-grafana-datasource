@@ -3,9 +3,9 @@ import { InstanaQuery } from '../types/instana_query';
 import { buildTestTarget } from './test_util';
 import TagFilter from '../types/tag_filter';
 
-describe('Given a TagFilter object', function () {
-  describe('with no tag type', function () {
-    it('should return a TagFilter object with the provided stringValue', function () {
+describe('Given a TagFilter object', () => {
+  describe('with no tag type', () => {
+    it('should return a TagFilter object with the provided stringValue', () => {
       let tagFilter: TagFilter = {
         tag: { key: 'test', type: 'useless type' },
         operator: { key: 'operator' },
@@ -26,8 +26,8 @@ describe('Given a TagFilter object', function () {
     });
   });
 
-  describe('with NUMBER tag type', function () {
-    it('should return a TagFilter object with the provided numberValue as the string value', function () {
+  describe('with NUMBER tag type', () => {
+    it('should return a TagFilter object with the provided numberValue as the string value', () => {
       let tagFilter: TagFilter = {
         tag: { key: 'some key', type: 'NUMBER' },
         operator: { key: 'operator' },
@@ -48,8 +48,8 @@ describe('Given a TagFilter object', function () {
     });
   });
 
-  describe('with BOOLEAN tag type', function () {
-    it('should return a TagFilter object with the provided booleanValue as the string value', function () {
+  describe('with BOOLEAN tag type', () => {
+    it('should return a TagFilter object with the provided booleanValue as the string value', () => {
       let tagFilter: TagFilter = {
         tag: { key: 'tagKey', type: 'BOOLEAN' },
         operator: { key: 'operator' },
@@ -71,9 +71,9 @@ describe('Given a TagFilter object', function () {
   });
 });
 
-describe('Given a response object', function () {
-  describe('with data elements', function () {
-    it('should return an object containing correct target, datapoints, refId, and key objects', function () {
+describe('Given a response object', () => {
+  describe('with data elements', () => {
+    it('should return an object containing correct target, datapoints, refId, and key objects', () => {
       let target: InstanaQuery = buildTestTarget();
       target.refId = 'A';
       target.stableHash = 'some random hash';

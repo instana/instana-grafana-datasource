@@ -181,7 +181,7 @@ describe('Given an application datasource', () => {
       }
     });
 
-    it('should return only one value for sli', function () {
+    it('should return only one value for sli', () => {
       const target: InstanaQuery = buildTestTarget();
       target.sloReport = { key: '2', label: 'Some Random SloReport' };
       target.sloSpecific = { key: 'SLI', label: 'SLI' };
@@ -194,7 +194,7 @@ describe('Given an application datasource', () => {
       });
     });
 
-    it('should return only one value for remaining error budget', function () {
+    it('should return only one value for remaining error budget', () => {
       const target: InstanaQuery = buildTestTarget();
       target.sloReport = { key: '2', label: 'Some Random SloReport' };
       target.sloSpecific = { key: 'Remaining Error Budget', label: 'Remaining Error Budget' };
@@ -207,7 +207,7 @@ describe('Given an application datasource', () => {
       });
     });
 
-    it('should return three result targets with only datapoint values of 1', function () {
+    it('should return three result targets with only datapoint values of 1', () => {
       const target: InstanaQuery = buildTestTarget();
       target.sloReport = { key: '2', label: 'Some Random SloReport' };
       target.sloSpecific = { key: 'Timeseries', label: 'Timeseries' };

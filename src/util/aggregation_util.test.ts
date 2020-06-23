@@ -2,11 +2,11 @@ import { InstanaQuery } from '../types/instana_query';
 import { buildTestTarget, generateTestData } from './test_util';
 import { aggregateTarget } from './aggregation_util';
 
-describe('Given a dataset', function () {
-  describe('with 3 entries', function () {
+describe('Given a dataset', () => {
+  describe('with 3 entries', () => {
     let data = generateTestData(3, 3);
 
-    it('should aggregate correctly to SUM', function () {
+    it('should aggregate correctly to SUM', () => {
       let target: InstanaQuery = buildTestTarget();
       target.refId = 'A';
       target.metric = { key: 'my metric' };
@@ -27,7 +27,7 @@ describe('Given a dataset', function () {
       expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
     });
 
-    it('should aggregate correctly to MEAN', function () {
+    it('should aggregate correctly to MEAN', () => {
       let target: InstanaQuery = buildTestTarget();
       target.refId = 'B';
       target.aggregationFunction = {
@@ -47,7 +47,7 @@ describe('Given a dataset', function () {
       expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
     });
 
-    it('should aggregate correctly to MIN', function () {
+    it('should aggregate correctly to MIN', () => {
       let target = buildTestTarget();
       target.refId = 'C';
       target.metric = { key: 'my metric' };
@@ -68,7 +68,7 @@ describe('Given a dataset', function () {
       expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
     });
 
-    it('should aggregate correctly to MAX', function () {
+    it('should aggregate correctly to MAX', () => {
       let target = buildTestTarget();
       target.refId = 'D';
       target.metric = { key: 'my metric' };

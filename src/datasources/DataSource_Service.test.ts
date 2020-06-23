@@ -9,8 +9,8 @@ const axios = require('axios');
 const dataSourceService: DataSourceService = new DataSourceService(options);
 const timeFilter: TimeFilter = buildTimeFilter();
 
-describe('Given an application datasource', function () {
-  it('should return services', function () {
+describe('Given an application datasource', () => {
+  it('should return services', () => {
     // get any application id
     return axios
       .get(
@@ -26,7 +26,7 @@ describe('Given an application datasource', function () {
       });
   });
 
-  it('should return services of an application', function () {
+  it('should return services of an application', () => {
     // get any application id
     return axios
       .get(options.url + '/api/application-monitoring/applications?windowSize' + timeFilter.windowSize + '&to=' + timeFilter.to, {

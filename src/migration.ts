@@ -1,5 +1,4 @@
 // can be removed once mixpanel shows no old plugins around
-import { buildTestTarget } from './util/test_util';
 import _ from 'lodash';
 import metric_categories from './lists/metric_categories';
 
@@ -62,7 +61,6 @@ export default function (target: any) {
     target.aggregation ? target.aggregation = { key: target.aggregation, label: target.aggregation } : target.aggregation = {}
     target.aggregationFunction ? target.aggregationFunction = { key: target.aggregationFunction.label, label: target.aggregationFunction.label } : target.aggregationFunction = { }
     target.customFilters ? target.customFilters = _.map(target.customFilters, (cf) => { return cf.value }) : target.customFilters = [];
-    // TODO filter
     _.forEach(target.filters, filter => {
       filter.tag = {
         canApplyToDestination: filter.tag.canApplyToDestination,

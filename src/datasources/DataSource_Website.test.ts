@@ -2,8 +2,10 @@ import TimeFilter from '../types/time_filter';
 import { buildInstanaOptions, buildTimeFilter } from '../util/test_util';
 import { DataSourceWebsite } from './DataSource_Website';
 import * as RequestHandler from '../util/request_handler';
-import BeaconGroupBody from '../types/beacon_group_body';
 import _ from 'lodash';
+import Cache from '../cache';
+import { SelectableValue } from '@grafana/data';
+import BeaconGroupBody from '../types/beacon_group_body';
 
 const options = buildInstanaOptions();
 const axios = require('axios');
@@ -15,17 +17,61 @@ beforeAll(() => {
 describe('Given a website datasource', () => {
   const dataSourceWebsite: DataSourceWebsite = new DataSourceWebsite(options);
   const timeFilter: TimeFilter = buildTimeFilter();
-  let postRequestSpy: any;
-  let getRequestSpy: any;
 
-  afterEach(() => {
-    postRequestSpy.mockReset();
-    getRequestSpy.mockReset();
+  describe('when fetching website tags', () => {
+    let getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
+    getRequestSpy.mockImplementation(() => {
+      return axios.get(options.url + '/api/website-monitoring/catalog/tags', {
+        headers: {
+          Authorization: 'apiToken ' + options.apiToken,
+        },
+      });
+    });
+
+    it('should return tags as selectable values with a type', () => {
+      return dataSourceWebsite.getWebsiteTags().then((result: any) => {
+        _.map(result, (tag) => {
+          expect(tag).toHaveProperty('key');
+          expect(tag).toHaveProperty('label');
+          expect(tag).toHaveProperty('type');
+        });
+      });
+    });
+
+    it('should cache website tags', () => {
+      return dataSourceWebsite.getWebsiteTags().then(() => {
+        return dataSourceWebsite.getWebsiteTags().then(() => {
+          expect(getRequestSpy).toBeCalledTimes(1);
+        });
+      });
+    });
   });
 
-  describe('when fetching websites', () => {
-    postRequestSpy = jest.spyOn(RequestHandler, 'postRequest');
-    const beaconGroupBody: BeaconGroupBody = {
+  describe('when fetching website metrics catalog', () => {
+    let getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
+    getRequestSpy.mockImplementation(() => {
+      return axios.get(options.url + '/api/website-monitoring/catalog/metrics', {
+        headers: {
+          Authorization: 'apiToken ' + options.apiToken,
+        },
+      });
+    });
+
+    it('should return the catalog as an array of selectable values with aggregations and beaconTypes', () => {
+      return dataSourceWebsite.getWebsiteMetricsCatalog().then((catalog: any) => {
+        return _.map(catalog, (metric) => {
+          expect(metric).toHaveProperty('key');
+          expect(metric).toHaveProperty('label');
+          expect(metric).toHaveProperty('aggregations');
+          expect(metric).toHaveProperty('beaconTypes');
+        });
+      });
+    });
+  });
+
+  describe('when fetching website metrics catalog', () => {
+    let postRequestSpy = jest.spyOn(RequestHandler, 'postRequest');
+    const data: BeaconGroupBody = {
       group: {
         groupbyTag: 'beacon.website.name',
       },
@@ -53,7 +99,7 @@ describe('Given a website datasource', () => {
 
     postRequestSpy.mockImplementation(() => {
       return axios.post(options.url + '/api/website-monitoring/analyze/beacon-groups', {
-        data: beaconGroupBody,
+        data: data,
         headers: {
           Authorization: 'apiToken ' + options.apiToken,
         },
@@ -73,56 +119,6 @@ describe('Given a website datasource', () => {
       return dataSourceWebsite.getWebsites(timeFilter).then(() => {
         return dataSourceWebsite.getWebsites(timeFilter).then(() => {
           expect(postRequestSpy).toBeCalledTimes(1);
-        });
-      });
-    });
-  });
-
-  describe('when fetching website tags', () => {
-    getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
-    getRequestSpy.mockImplementation(() => {
-      return axios.get(options.url + '/api/website-monitoring/catalog/tags', {
-        headers: {
-          Authorization: 'apiToken' + options.apiToken,
-        },
-      });
-    });
-
-    it('should return tags as selectable values', () => {
-      return dataSourceWebsite.getWebsiteTags().then((result: any) => {
-        _.map(result, (tag) => {
-          expect(tag).toHaveProperty('key');
-          expect(tag).toHaveProperty('label');
-        });
-      });
-    });
-
-    it('should cache website tags', () => {
-      return dataSourceWebsite.getWebsiteTags().then(() => {
-        return dataSourceWebsite.getWebsiteTags().then(() => {
-          expect(getRequestSpy).toBeCalledTimes(1);
-        });
-      });
-    });
-  });
-
-  describe('when fetching website metrics catalog', () => {
-    getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
-    getRequestSpy.mockImplementation(() => {
-      return axios.get(options.url + '/api/website-monitoring/catalog/metrics', {
-        headers: {
-          Authorization: 'apiToken' + options.apiToken,
-        },
-      });
-    });
-
-    it('should return the catalog in the correct format', () => {
-      return dataSourceWebsite.getWebsiteTags().then((catalog: any) => {
-        return _.map(catalog, (metric) => {
-          expect(metric).toHaveProperty('key');
-          expect(metric).toHaveProperty('label');
-          expect(metric).toHaveProperty('aggregations');
-          expect(metric).toHaveProperty('beaconTypes');
         });
       });
     });

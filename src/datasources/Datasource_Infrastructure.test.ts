@@ -93,7 +93,7 @@ describe('Given an infrastructure datasource', () => {
     });
   });
 
-  describe('when fetching metrics catalog', function() {
+  describe('when fetching metrics catalog', function () {
     let plugin: SelectableValue = { key: 'jvmRuntimePlatform', label: 'java' };
     let catalogSpy: any;
 
@@ -233,50 +233,6 @@ describe('Given an infrastructure datasource', () => {
           host: '',
           response: { status: 200, data: { label: 'label for B' } },
         });
-      });
-    });
-  });
-
-  describe('When performing a query', function() {
-    const timeFilter: TimeFilter = buildTimeFilter();
-    let getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
-    const target: InstanaQuery = buildTestTarget();
-    target.refId = 'A';
-    target.metricCategory = { key: 0 };
-    target.entityQuery = 'java';
-    target.entityType = { key: 'jvmRuntimePlatform' };
-    target.metric = { key: 'memory.used' };
-    target.timeInterval = { key: 3600000 };
-
-    let snapshotCounter = 0;
-
-    getRequestSpy.mockImplementation((instanaOptions, endpoint) => {
-      if (endpoint.startsWith('/api/snapshots/') && !endpoint.startsWith('/api/snapshots/context')) {
-        //count how many snapshots were fetched
-        snapshotCounter++;
-      }
-
-      return axios.get(options.url + endpoint, {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken,
-        },
-      });
-    });
-
-    it('should return the correct number of results and cache snapshots', function() {
-      return dataSourceInfrastructure.runQuery(target, timeFilter).then((result) => {
-        expect(result.length).toBe(snapshotCounter);
-        _.forEach(result, (target) => {
-          expect(target).toHaveProperty('target');
-          expect(target).toHaveProperty('datapoints');
-          expect(target).toHaveProperty('refId');
-          expect(target.refId).toBe('A');
-        });
-
-        const query = target.entityQuery + '%20AND%20entity.pluginId%3A' + target.entityType.key;
-        const key = dataSourceInfrastructure.buildSnapshotCacheKey(query, timeFilter);
-        const snapshots = dataSourceInfrastructure.snapshotCache.get(key).valueOf();
-        expect(snapshots).not.toBeNull();
       });
     });
   });

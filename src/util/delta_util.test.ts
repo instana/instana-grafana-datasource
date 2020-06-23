@@ -4,15 +4,15 @@ import _ from 'lodash';
 import { InstanaQuery } from '../types/instana_query';
 import { buildTestTarget } from './test_util';
 
-describe('Given a delta', function () {
-  describe('with two overlapping timeFilter', function () {
+describe('Given a delta', () => {
+  describe('with two overlapping timeFilter', () => {
     let preTimeFilter: TimeFilter = {
       from: 10300000,
       to: 10600000,
       windowSize: 300000,
     };
 
-    it('should find after overlap', function () {
+    it('should find after overlap', () => {
       let newTimeFilter: TimeFilter = {
         from: 10500000,
         to: 10700000,
@@ -23,7 +23,7 @@ describe('Given a delta', function () {
       expect(result).toEqual(true);
     });
 
-    it('should not find before overlap', function () {
+    it('should not find before overlap', () => {
       let newTimeFilter: TimeFilter = {
         from: 10200000,
         to: 10400000,
@@ -34,7 +34,7 @@ describe('Given a delta', function () {
       expect(result).toEqual(false);
     });
 
-    it('should not find innerlap', function () {
+    it('should not find innerlap', () => {
       let newTimeFilter: TimeFilter = {
         from: 10400000,
         to: 10500000,
@@ -45,7 +45,7 @@ describe('Given a delta', function () {
       expect(result).toEqual(true);
     });
 
-    it('should not find after outerlap', function () {
+    it('should not find after outerlap', () => {
       let newTimeFilter: TimeFilter = {
         from: 10700000,
         to: 10800000,
@@ -56,7 +56,7 @@ describe('Given a delta', function () {
       expect(result).toEqual(false);
     });
 
-    it('should not find before outerlap', function () {
+    it('should not find before outerlap', () => {
       let newTimeFilter: TimeFilter = {
         from: 10100000,
         to: 10200000,
@@ -68,10 +68,10 @@ describe('Given a delta', function () {
     });
   });
 
-  describe('with a target', function () {
+  describe('with a target', () => {
     let target = buildTarget();
 
-    it('should generate a stable hash and should have SelectableValue flattened', function () {
+    it('should generate a stable hash and should have SelectableValue flattened', () => {
       let result = generateStableHash(target);
       expect(result).toEqual(
         JSON.stringify({
@@ -85,7 +85,6 @@ describe('Given a delta', function () {
           entity: 'key', //no more label
           entityQuery: 'query',
           entityType: {},
-          filter: 'filter',
           filters: [],
           freeTextMetrics: '',
           group: {},
@@ -107,8 +106,8 @@ describe('Given a delta', function () {
     });
   });
 
-  describe('with new data', function () {
-    it('should override cached data with new data', function () {
+  describe('with new data', () => {
+    it('should override cached data with new data', () => {
       let deltaData = generateTestData(2, 2);
       let cachedData = generateTestData(2, 20);
 
@@ -125,7 +124,7 @@ describe('Given a delta', function () {
       expect(result[1].datapoints[17]).toEqual(cachedData[1].datapoints[17]);
     });
 
-    it('should add completly new data to cache', function () {
+    it('should add completly new data to cache', () => {
       let deltaData = generateTestData(2, 2);
       let cachedData = generateTestData(1, 20);
 
@@ -141,7 +140,7 @@ describe('Given a delta', function () {
       expect(result[1].datapoints[0]).toEqual(deltaData[1].datapoints[0]);
     });
 
-    it('should still contain cached data if not updated', function () {
+    it('should still contain cached data if not updated', () => {
       let deltaData = generateTestData(1, 2);
       let cachedData = generateTestData(2, 20);
 
@@ -158,7 +157,7 @@ describe('Given a delta', function () {
       expect(result[1].datapoints[17]).toEqual(cachedData[1].datapoints[17]);
     });
 
-    it('should dropp old cached data when new data was added', function () {
+    it('should dropp old cached data when new data was added', () => {
       let deltaData = generateTestData(1, 2);
       let cachedData = generateTestData(1, 21);
       cachedData[0].datapoints = _.takeRight(cachedData[0].datapoints, 20);
@@ -206,7 +205,6 @@ function buildTarget() {
   target.entity = { key: 'key', label: 'test' };
   target.service = { key: null };
   target.entityQuery = 'query';
-  target.filter = 'filter';
   target.pluginId = 'pluginId';
   target.showWarningCantShowAllResults = false;
   target.labelFormat = 'labelFormat';

@@ -36,7 +36,6 @@ export interface InstanaQuery extends DataQuery {
   displayMaxMetricValue: boolean;
   timeFilter: TimeFilter;
   useFreeTextMetrics: boolean;
-  filter: string;
   showGroupBySecondLevel: boolean;
   applicationCallToEntity: SelectableValue;
 }
