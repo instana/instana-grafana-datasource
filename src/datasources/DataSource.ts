@@ -89,7 +89,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         this.setPossibleTimeIntervals(target);
 
         // target migration for downwards compatibility
-        //migrate(target);
+        migrate(target);
 
         if (target.timeShift) {
           let millis = this.convertTimeShiftToMillis(target.timeShift);

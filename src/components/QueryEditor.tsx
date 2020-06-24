@@ -11,7 +11,14 @@ import { InfrastructureBuiltIn } from './Infrastructure/BuiltIn/InfrastructureBu
 import _ from 'lodash';
 import Metric from './Metric';
 import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
-import { CUSTOM_METRICS } from '../GlobalVariables';
+import {
+  ANALYZE_APPLICATION_METRICS,
+  ANALYZE_WEBSITE_METRICS,
+  APPLICATION_SERVICE_ENDPOINT_METRICS,
+  BUILT_IN_METRICS,
+  CUSTOM_METRICS,
+  SLO_INFORMATION,
+} from '../GlobalVariables';
 import { InfrastructureCustom } from './Infrastructure/Custom/InfrastructureCustom';
 import AggregationFunctions from '../lists/aggregation_function';
 import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
@@ -52,7 +59,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
     this.filterMetricsOnType = this.filterMetricsOnType.bind(this);
 
-    //TODO query.pluginId = this.props.panelCtrl.panel.type || this.panelCtrl.pluginId;
     this.props.onChange(this.query);
   }
 
@@ -190,7 +196,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           <Select width={30} isSearchable={false} options={MetricCategories} onChange={onCategoryChange} value={query.metricCategory} />
         </div>
 
-        {query.metricCategory.key === 0 && (
+        {query.metricCategory.key === BUILT_IN_METRICS && (
           <InfrastructureBuiltIn
             query={query}
             onRunQuery={onRunQuery}
@@ -200,7 +206,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key === 1 && (
+        {query.metricCategory.key === CUSTOM_METRICS && (
           <InfrastructureCustom
             query={query}
             onRunQuery={onRunQuery}
@@ -210,7 +216,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key === 2 && (
+        {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
           <ApplicationCallsMetrics
             query={query}
             onRunQuery={onRunQuery}
@@ -222,7 +228,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key === 3 && (
+        {query.metricCategory.key === ANALYZE_WEBSITE_METRICS && (
           <WebsiteMetrics
             query={query}
             onRunQuery={onRunQuery}
@@ -235,7 +241,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key === 4 && (
+        {query.metricCategory.key === APPLICATION_SERVICE_ENDPOINT_METRICS && (
           <ApplicationServiceEndpointMetrics
             query={query}
             onRunQuery={onRunQuery}
@@ -245,11 +251,11 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key === 7 && (
+        {query.metricCategory.key === SLO_INFORMATION && (
           <SloInformation query={query} onRunQuery={onRunQuery} onChange={this.props.onChange} datasource={this.props.datasource} />
         )}
 
-        {query.metricCategory.key !== 7 && (
+        {query.metricCategory.key !== SLO_INFORMATION && (
           <Metric
             query={query}
             onChange={this.props.onChange}
@@ -260,7 +266,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key === 1 && (
+        {query.metricCategory.key === CUSTOM_METRICS && (
           <MetricFilter
             query={query}
             onChange={this.props.onChange}
@@ -271,7 +277,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {(query.metricCategory.key === 2 || query.metricCategory.key === 3) && (
+        {(query.metricCategory.key === ANALYZE_APPLICATION_METRICS || query.metricCategory.key === ANALYZE_WEBSITE_METRICS) && (
           <Filters
             query={query}
             onChange={this.props.onChange}
@@ -288,10 +294,9 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   selectionReset() {
     const { query } = this.props;
-    if (query.metricCategory.key > 1) {
+    if (query.metricCategory.key > CUSTOM_METRICS) {
       query.entityQuery = '';
     }
-    //this.uniqueEntityTypes = [];
 
     this.setState({
       availableMetrics: [],
@@ -299,8 +304,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       groups: [],
     });
 
-    //this.uniqueEntities = [];
-    //this.uniqueTags = [];
     this.resetEntityTypeSelection();
     this.resetEntitySelection();
     this.resetMetricSelection();
@@ -313,7 +316,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       label: '-',
     };
     query.customFilters = [];
-    //this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
   }
 
   resetEntitySelection() {
@@ -325,15 +327,13 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     query.aggregateGraphs = false;
     query.aggregationFunction = AggregationFunctions[0];
     query.hideOriginalGraphs = false;
-    //query.filters = [];
-    //query.serviceNamefilter = null;
+    query.filters = [];
     query.showWarningCantShowAllResults = false;
     query.showAllMetrics = false;
     query.canShowAllMetrics = false;
     query.displayMaxMetricValue = false;
-    //this.serviceEndpointSelectionText = this.EMPTY_DROPDOWN_TEXT;
-    //query.applicationCallToEntity = null;
-    //query.callToEntity = null;
+    query.applicationCallToEntity = {};
+    query.callToEntity = {};
     this.resetServices();
     this.resetEndpoints();
     this.resetSLO();
@@ -347,7 +347,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     query.showWarningCantShowAllResults = false;
     query.showAllMetrics = false;
     query.labelFormat = '';
-    //this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
     query.freeTextMetrics = '';
     query.useFreeTextMetrics = false;
   }

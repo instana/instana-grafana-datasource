@@ -108,13 +108,10 @@ export class DataSourceEndpoint {
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
     };
 
-    if (target.pluginId !== 'singlestat' && target.pluginId !== 'gauge') {
-      // no granularity for singlestat and gauge
-      if (!target.timeInterval) {
-        target.timeInterval = getDefaultChartGranularity(windowSize);
-      }
-      metric['granularity'] = target.timeInterval.key;
+    if (!target.timeInterval) {
+      target.timeInterval = getDefaultChartGranularity(windowSize);
     }
+    metric['granularity'] = target.timeInterval.key;
 
     const data: any = {
       endpointId: target.endpoint.key,

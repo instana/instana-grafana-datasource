@@ -205,7 +205,6 @@ function buildTarget() {
   target.entity = { key: 'key', label: 'test' };
   target.service = { key: null };
   target.entityQuery = 'query';
-  target.pluginId = 'pluginId';
   target.showWarningCantShowAllResults = false;
   target.labelFormat = 'labelFormat';
   target.timeShiftIsValid = false;

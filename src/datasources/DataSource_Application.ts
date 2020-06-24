@@ -152,13 +152,10 @@ export class DataSourceApplication {
         aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
       };
 
-      if (target.pluginId !== 'singlestat' && target.pluginId !== 'gauge') {
-        // no granularity for singlestat and gauge
-        if (!target.timeInterval) {
-          target.timeInterval = getDefaultChartGranularity(windowSize);
-        }
-        metric['granularity'] = target.timeInterval.key;
+      if (!target.timeInterval) {
+        target.timeInterval = getDefaultChartGranularity(windowSize);
       }
+      metric['granularity'] = target.timeInterval.key;
 
       const group: any = {
         groupbyTag: target.group.key,
@@ -206,13 +203,10 @@ export class DataSourceApplication {
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
     };
 
-    if (target.pluginId !== 'singlestat' && target.pluginId !== 'gauge') {
-      // no granularity for singlestat and gauge
-      if (!target.timeInterval) {
-        target.timeInterval = getDefaultChartGranularity(windowSize);
-      }
-      metric['granularity'] = target.timeInterval.key;
+    if (!target.timeInterval) {
+      target.timeInterval = getDefaultChartGranularity(windowSize);
     }
+    metric['granularity'] = target.timeInterval.key;
 
     const data: any = {
       timeFrame: {

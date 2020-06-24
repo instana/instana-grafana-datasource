@@ -84,7 +84,7 @@ export class DataSourceInfrastructure {
     let res = _.map(snapshots, (snapshot, index) => {
       // ...fetch the metric data for every snapshot in the results.
       return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then((response: any) => {
-        let timeseries = this.readTimeSeries(response.data.values, target.aggregation, target.pluginId, timeFilter);
+        let timeseries = this.readTimeSeries(response.data.values, target.aggregation, timeFilter);
         let result = {
           target: this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
           datapoints: _.map(timeseries, (value) => [value.value, value.timestamp]),
@@ -271,8 +271,8 @@ export class DataSourceInfrastructure {
     return snapshotResponse;
   }
 
-  readTimeSeries(values: any, aggregation: SelectableValue, pluginId: string, timeFilter: TimeFilter) {
-    if (aggregation && aggregation.label === 'SUM' && (pluginId === 'singlestat' || pluginId === 'gauge' || pluginId === 'table')) {
+  readTimeSeries(values: any, aggregation: SelectableValue, timeFilter: TimeFilter) {
+    if (aggregation && aggregation.label === 'SUM') {
       return this.correctMeanToSum(values, timeFilter);
     }
     return values;

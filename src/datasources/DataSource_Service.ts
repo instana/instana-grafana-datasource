@@ -82,11 +82,8 @@ export class DataSourceService {
 
     const windowSize = getWindowSize(timeFilter);
 
-    if (target.pluginId !== 'singlestat' && target.pluginId !== 'gauge') {
-      // no granularity for singlestat and gauge
-      if (!target.timeInterval) {
-        target.timeInterval = getDefaultChartGranularity(windowSize);
-      }
+    if (!target.timeInterval) {
+      target.timeInterval = getDefaultChartGranularity(windowSize);
     }
 
     const metric = {

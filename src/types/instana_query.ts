@@ -29,7 +29,6 @@ export interface InstanaQuery extends DataQuery {
   allMetrics: SelectableValue[];
   labelFormat: string;
   timeShiftIsValid: boolean;
-  pluginId: string;
   group: SelectableValue;
   stableHash: string;
   customFilters: string[];

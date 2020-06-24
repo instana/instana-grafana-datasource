@@ -1,8 +1,6 @@
 import { InstanaQuery } from '../types/instana_query';
 import { InstanaOptions } from '../types/instana_options';
-import { buildUrl } from './request_handler';
 import TimeFilter from '../types/time_filter';
-const axios = require('axios');
 
 /*
   [
@@ -65,7 +63,6 @@ export function buildTestTarget(): InstanaQuery {
     labelFormat: '',
     metric: {},
     metricCategory: {},
-    pluginId: '',
     service: {},
     showGroupBySecondLevel: false,
     showWarningCantShowAllResults: false,
@@ -87,8 +84,8 @@ export function buildTestTarget(): InstanaQuery {
 
 export function buildInstanaOptions(): InstanaOptions {
   return {
-    url: '',
-    apiToken: '',
+    url: process.env.INSTANA_BACKEND_URL || 'http://mountebank:8010',
+    apiToken: process.env.INSTANA_API_TOKEN || 'valid-api-token',
     useProxy: true,
     showOffline: true,
     allowSlo: true,
@@ -102,13 +99,4 @@ export function buildTimeFilter(): TimeFilter {
     from: currentTime - 3600000,
     windowSize: 3600000,
   };
-}
-
-export async function mockGetRequest(instanaOptions: InstanaOptions, endpoint: string) {
-  let test = buildUrl(instanaOptions, endpoint);
-  return axios.get(test, {
-    headers: {
-      Authorization: 'apiToken ' + instanaOptions.apiToken,
-    },
-  });
 }

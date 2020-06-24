@@ -95,12 +95,7 @@ export default class Metric extends React.Component<Props, MetricState> {
 
   canShowAggregation() {
     const { query } = this.props;
-    return query.metricCategory.key >= 2 || this.isPluginThatSupportsAggregation();
-  }
-
-  isPluginThatSupportsAggregation() {
-    const { query } = this.props;
-    return query.pluginId === 'singlestat' || query.pluginId === 'gauge' || query.pluginId === 'table';
+    return query.metricCategory.key >= 2;
   }
 
   render() {
@@ -112,7 +107,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           Metric
         </FormLabel>
         <div style={query.showAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-          <Select width={30} isSearchable={false} value={query.metric} onChange={this.onMetricChange} options={this.props.availableMetrics}></Select>
+          <Select width={30} isSearchable={true} value={query.metric} onChange={this.onMetricChange} options={this.props.availableMetrics} />
         </div>
 
         {query.metricCategory.key === 0 && (
