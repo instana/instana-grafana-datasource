@@ -68,6 +68,9 @@ export default class InstanaDatasource extends AbstractDatasource {
 
     return this.$q.all(
       _.map(options.targets, target => {
+
+        target.entityQuery = this.templateSrv.replace(target.entityQuery, options.scopedVars);
+
         let timeFilter: TimeFilter = this.readTime(options);
 
         // grafana setting to disable query execution
