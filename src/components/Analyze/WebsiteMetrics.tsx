@@ -79,8 +79,6 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
     });
   }
 
-  // TODO componentWillUnmount -> cancel API calls; use 'isDisponing' flag; ask in then() if true: don't return
-
   onWebsiteChange = (website: SelectableValue) => {
     const { query, onChange, onRunQuery } = this.props;
     query.entity = website;
