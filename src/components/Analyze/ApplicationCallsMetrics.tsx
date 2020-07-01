@@ -27,7 +27,10 @@ interface Props {
   datasource: DataSource;
 }
 
+let isUnmounting = false;
+
 export class ApplicationCallsMetrics extends React.Component<Props, ApplicationCallsMetricsState> {
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -37,33 +40,42 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
 
   componentDidMount() {
     const { query, datasource, onChange } = this.props;
+    isUnmounting = false;
     datasource.fetchApplications().then((applications) => {
-      if (!_.find(applications, { key: null })) {
-        applications.unshift({ key: null, label: ALL_APPLICATIONS });
-      }
+      if (!isUnmounting) {
+        if (!_.find(applications, { key: null })) {
+          applications.unshift({ key: null, label: ALL_APPLICATIONS });
+        }
 
-      this.setState({
-        applications: applications,
-      });
+        this.setState({
+          applications: applications,
+        });
 
-      if (!query.entity || (!query.entity.key && !query.entity.label)) {
-        query.entity = applications[0];
-      }
+        if (!query.entity || (!query.entity.key && !query.entity.label)) {
+          query.entity = applications[0];
+        }
 
-      onChange(query);
-    });
-
-    datasource.dataSourceApplication.getApplicationTags().then((applicationTags: any) => {
-      this.props.updateGroups(_.sortBy(applicationTags, 'key'));
-
-      // select a meaningful default group
-      if (!query.group || !query.group.key) {
-        query.group = _.find(applicationTags, ['key', 'endpoint.name']);
         onChange(query);
       }
     });
 
+    datasource.dataSourceApplication.getApplicationTags().then((applicationTags: any) => {
+      if (!isUnmounting) {
+        this.props.updateGroups(_.sortBy(applicationTags, 'key'));
+
+        // select a meaningful default group
+        if (!query.group || !query.group.key) {
+          query.group = _.find(applicationTags, [ 'key', 'endpoint.name' ]);
+          onChange(query);
+        }
+      }
+    });
+
     this.props.updateMetrics(datasource.dataSourceApplication.getApplicationMetricsCatalog());
+  }
+
+  componentWillUnmount() {
+    isUnmounting = true;
   }
 
   onApplicationChange = (application: SelectableValue) => {
@@ -126,7 +138,8 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           value={query.applicationCallToEntity}
           onChange={this.onApplicationCallToEntityChange}
         />
-        <Select width={20} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
+        <Select width={20} isSearchable={true} value={query.entity} options={this.state.applications}
+                onChange={this.onApplicationChange}/>
 
         <FormLabel width={7} tooltip={'Group by tag.'}>
           Group by
@@ -139,10 +152,10 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           defaultValue={call_to_entities[0]}
           onChange={this.onCallToEntityChange}
         />
-        <Select width={20} options={groups} value={query.group} isSearchable={true} onChange={this.onGroupChange} />
+        <Select width={20} options={groups} value={query.group} isSearchable={true} onChange={this.onGroupChange}/>
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange} />
+          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange}/>
         </div>
       </div>
     );

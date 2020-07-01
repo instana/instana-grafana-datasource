@@ -11,10 +11,15 @@ interface SloInformationState {
 
 interface Props {
   query: InstanaQuery;
+
   onRunQuery(): void;
+
   onChange(value: InstanaQuery): void;
+
   datasource: DataSource;
 }
+
+let isUnmounting = false;
 
 export class SloInformation extends React.Component<Props, SloInformationState> {
   constructor(props: any) {
@@ -23,7 +28,15 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
       sloReports: [],
     };
 
+  }
+
+  componentDidMount() {
+    isUnmounting = false;
     this.loadSloReports();
+  }
+
+  componentWillUnmount() {
+    isUnmounting = true;
   }
 
   onSloChange = (slo: SelectableValue) => {
@@ -51,10 +64,12 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
   loadSloReports() {
     const { query } = this.props;
     this.props.datasource.getSloReports().then((sloReports) => {
-      this.setState({ sloReports: sloReports });
+      if (!isUnmounting) {
+        this.setState({ sloReports: sloReports });
 
-      if (!query.sloReport && sloReports.length >= 1) {
-        query.sloReport = sloReports[0];
+        if (!query.sloReport && sloReports.length >= 1) {
+          query.sloReport = sloReports[0];
+        }
       }
     });
   }
@@ -67,14 +82,16 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
         <FormLabel width={14} tooltip={'SLI configuration used to compute error budget and SLI values.'}>
           Configured SLI
         </FormLabel>
-        <Select width={30} isSearchable={false} value={query.sloReport} onChange={this.onSloChange} options={this.state.sloReports} />
+        <Select width={30} isSearchable={false} value={query.sloReport} onChange={this.onSloChange}
+                options={this.state.sloReports}/>
 
         <FormLabel tooltip={'Type in your desired SLO threshold from 0 to 0.9999'}>SLO</FormLabel>
 
-        <Input value={query.sloValue} placeholder={'0.99'} onChange={this.onSloValueChange} />
+        <Input value={query.sloValue} placeholder={'0.99'} onChange={this.onSloValueChange}/>
 
         <FormLabel>Value type</FormLabel>
-        <Select width={30} isSearchable={false} options={SloSpecifics} value={query.sloSpecific} onChange={this.onSloSpecificChange} />
+        <Select width={30} isSearchable={false} options={SloSpecifics} value={query.sloSpecific}
+                onChange={this.onSloSpecificChange}/>
       </div>
     );
   }

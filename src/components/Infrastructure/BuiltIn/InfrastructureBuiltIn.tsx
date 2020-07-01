@@ -14,6 +14,8 @@ interface Props {
   updateMetrics(metrics: SelectableValue[]): void;
 }
 
+let isUnmounting = false;
+
 export class InfrastructureBuiltIn extends React.Component<Props, InfrastructureBuiltInState> {
   constructor(props: any) {
     super(props);
@@ -21,10 +23,13 @@ export class InfrastructureBuiltIn extends React.Component<Props, Infrastructure
 
   componentDidMount() {
     const { query, onChange, datasource } = this.props;
+    isUnmounting = false;
 
     if (query.entityQuery && query.entityType && query.entityType.key) {
       datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then((results) => {
-        this.props.updateMetrics(results);
+        if (!isUnmounting) {
+          this.props.updateMetrics(results);
+        }
       });
     } else {
       query.metric = {
@@ -34,6 +39,10 @@ export class InfrastructureBuiltIn extends React.Component<Props, Infrastructure
     }
 
     onChange(query);
+  }
+
+  componentWillUnmount() {
+    isUnmounting = true;
   }
 
   render() {

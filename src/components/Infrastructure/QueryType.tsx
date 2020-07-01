@@ -22,6 +22,7 @@ interface Props {
 }
 
 let snapshots: any;
+let isUnmounting = false;
 
 export class QueryType extends React.Component<Props, QueryTypeState> {
   constructor(props: any) {
@@ -34,9 +35,14 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
 
   componentDidMount() {
     const { query } = this.props;
+    isUnmounting = false;
     if (query.entityQuery) {
       this.loadEntityTypes();
     }
+  }
+
+  componentWillUnmount() {
+    isUnmounting = true;
   }
 
   onQueryChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
@@ -70,9 +76,11 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
 
     if (query.entityQuery) {
       datasource.fetchTypesForTarget(query).then((response: any) => {
-        snapshots = response.data;
-        this.filterForEntityType();
-        onRunQuery();
+        if (!isUnmounting) {
+          snapshots = response.data;
+          this.filterForEntityType();
+          onRunQuery();
+        }
       });
     } else {
       this.setState({ types: [] });
@@ -141,7 +149,8 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
         />
 
         <FormLabel tooltip={'Select an entity type for a list of available metrics.'}>Type</FormLabel>
-        <Select width={13} isSearchable={true} value={query.entityType} options={this.state.types} onChange={this.onTypeChange} />
+        <Select width={13} isSearchable={true} value={query.entityType} options={this.state.types}
+                onChange={this.onTypeChange}/>
       </div>
     );
   }
