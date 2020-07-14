@@ -27,7 +27,6 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
     this.state = {
       sloReports: [],
     };
-
   }
 
   componentDidMount() {
@@ -82,16 +81,14 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
         <FormLabel width={14} tooltip={'SLI configuration used to compute error budget and SLI values.'}>
           Configured SLI
         </FormLabel>
-        <Select width={30} isSearchable={false} value={query.sloReport} onChange={this.onSloChange}
-                options={this.state.sloReports}/>
+        <Select width={30} isSearchable={false} value={query.sloReport} onChange={this.onSloChange} options={this.state.sloReports} />
 
         <FormLabel tooltip={'Type in your desired SLO threshold from 0 to 0.9999'}>SLO</FormLabel>
 
-        <Input value={query.sloValue} placeholder={'0.99'} onChange={this.onSloValueChange}/>
+        <Input value={query.sloValue} placeholder={'0.99'} onChange={this.onSloValueChange} />
 
         <FormLabel>Value type</FormLabel>
-        <Select width={30} isSearchable={false} options={SloSpecifics} value={query.sloSpecific}
-                onChange={this.onSloSpecificChange}/>
+        <Select width={30} isSearchable={false} options={SloSpecifics} value={query.sloSpecific} onChange={this.onSloSpecificChange} />
       </div>
     );
   }

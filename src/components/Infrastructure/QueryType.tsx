@@ -149,8 +149,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
         />
 
         <FormLabel tooltip={'Select an entity type for a list of available metrics.'}>Type</FormLabel>
-        <Select width={13} isSearchable={true} value={query.entityType} options={this.state.types}
-                onChange={this.onTypeChange}/>
+        <Select width={13} isSearchable={true} value={query.entityType} options={this.state.types} onChange={this.onTypeChange} />
       </div>
     );
   }

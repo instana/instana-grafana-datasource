@@ -70,7 +70,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
 
         // select a meaningful default group
         if (!query.group || !query.group.key) {
-          query.group = _.find(websiteTags, [ 'key', 'beacon.page.name' ]);
+          query.group = _.find(websiteTags, ['key', 'beacon.page.name']);
           onChange(query);
         }
       }
@@ -136,22 +136,20 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
         <FormLabel width={14} tooltip={'Select your website.'}>
           Website
         </FormLabel>
-        <Select width={20} isSearchable={true} value={query.entity} options={this.state.websites}
-                onChange={this.onWebsiteChange}/>
+        <Select width={20} isSearchable={true} value={query.entity} options={this.state.websites} onChange={this.onWebsiteChange} />
 
         <FormLabel width={6} tooltip={'Select a beacon type.'}>
           Type
         </FormLabel>
-        <Select width={20} isSearchable={false} value={query.entityType} options={beacon_types}
-                onChange={this.onBeaconTypeChange}/>
+        <Select width={20} isSearchable={false} value={query.entityType} options={beacon_types} onChange={this.onBeaconTypeChange} />
 
         <FormLabel width={7} tooltip={'Group by tag.'}>
           Group by
         </FormLabel>
-        <Select width={20} isSearchable={true} value={query.group} options={groups} onChange={this.onGroupChange}/>
+        <Select width={20} isSearchable={true} value={query.group} options={groups} onChange={this.onGroupChange} />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange}/>
+          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );

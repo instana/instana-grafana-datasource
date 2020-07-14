@@ -175,23 +175,20 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         <FormLabel width={14} tooltip={'Select your application.'}>
           Application
         </FormLabel>
-        <Select width={20} isSearchable={true} value={query.entity} options={this.state.applications}
-                onChange={this.onApplicationChange}/>
+        <Select width={20} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
 
         <FormLabel width={7} tooltip={'Select your service.'}>
           Service
         </FormLabel>
-        <Select width={20} isSearchable={false} value={query.service} options={this.state.services}
-                onChange={this.onServiceChange}/>
+        <Select width={20} isSearchable={false} value={query.service} options={this.state.services} onChange={this.onServiceChange} />
 
         <FormLabel width={8} tooltip={'Select your endpoint.'}>
           Endpoints
         </FormLabel>
-        <Select width={20} isSearchable={true} value={query.endpoint} options={this.state.endpoints}
-                onChange={this.onEndpointChange}/>
+        <Select width={20} isSearchable={true} value={query.endpoint} options={this.state.endpoints} onChange={this.onEndpointChange} />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange}/>
+          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );
