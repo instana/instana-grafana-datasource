@@ -102,7 +102,8 @@
                   ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
           </select>
         </div>
-        <label ng-if="ctrl.isAnalyzeCategory()" class="gf-form-label query-keyword pointer"
+        <label ng-if="ctrl.isAnalyzeCategory()"
+               class="gf-form-label query-keyword pointer"
                for="in-group-{{ctrl.target.refId}}">
           Group by
           <info-popover position="top center" mode="right-normal">
@@ -202,7 +203,7 @@
         </div>
         <label ng-if="ctrl.isBuiltInInfrastructure()"
                class="gf-form-label query-keyword pointer"
-               for="in-aggregate-graphs-{{ctrl.target.refId}}">
+               for="in-max-value-{{ctrl.target.refId}}">
           Show max value
           <info-popover position="top center" mode="right-normal">
             <p>Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only.</p>
@@ -213,21 +214,23 @@
                         id="in-max-value-{{ctrl.target.refId}}"
                         checked="ctrl.target.displayMaxMetricValue"
                         on-change="ctrl.onSelect()"/>
-        <label ng-if="ctrl.isBuiltInInfrastructure()" class="gf-form-label query-keyword pointer">
+        <label ng-if="ctrl.isCustomInfrastructure()"
+               class="gf-form-label query-keyword pointer"
+               for="in-all-metrics-{{ctrl.target.refId}}">
           Show all metrics
           <info-popover position="top center" mode="right-normal">
-            <p>You have the option to show all metrics in the graph once the amount of possible, selectable metrics is
-              between 1 and 5.</p>
+            <p>You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.</p>
           </info-popover>
         </label>
-        <gf-form-switch
-          ng-if="ctrl.isBuiltInInfrastructure()"
-          ng-disabled="!ctrl.target.canShowAllMetrics"
-          checked="ctrl.target.showAllMetrics"
-          on-change="ctrl.onAllMetricsSelect()"
+        <gf-form-switch ng-if="ctrl.isCustomInfrastructure()"
+                        ng-disabled="!ctrl.target.canShowAllMetrics"
+                        id="in-all-metrics-{{ctrl.target.refId}}"
+                        checked="ctrl.target.showAllMetrics"
+                        on-change="ctrl.onAllMetricsSelect()"
         />
-        <label class="gf-form-label query-keyword pointer" for="in-metric-{{ctrl.target.refId}}"
-               ng-if="ctrl.canShowAggregation()">
+        <label ng-if="ctrl.canShowAggregation()"
+               class="gf-form-label query-keyword pointer"
+               for="in-aggregation-{{ctrl.target.refId}}">
           Aggregation
           <info-popover position="top center" mode="right-normal">
             <p>Select a metric aggretion.</p>
@@ -243,14 +246,15 @@
                   ng-options="f for f in ctrl.target.metric.aggregations">
           </select>
         </div>
-        <label class="gf-form-label query-keyword pointer" for="in-timeInterval-{{ctrl.target.refId}}">
+        <label class="gf-form-label query-keyword pointer"
+               for="in-time-interval-{{ctrl.target.refId}}">
           Rollup
           <info-popover position="top center" mode="right-normal">
             <p>Select the rollup value.</p>
           </info-popover>
         </label>
         <div class="gf-form-select-wrapper min-width-6">
-          <select id="in-timeInterval-{{ctrl.target.refId}}"
+          <select id="in-time-interval-{{ctrl.target.refId}}"
                   ng-disabled="ctrl.getAvailableTimeIntervals().length <= 1"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.timeInterval"
@@ -316,7 +320,7 @@
                     ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
             </select>
           </div>
-          <div class="gf-form-select-wrapper width-14 ">
+          <div class="gf-form-select-wrapper width-14">
             <select id="in-filter-name-{{ctrl.target.refId}}-{{$index}}"
                     class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                     ng-model="ctrl.target.filters[$index].tag"
@@ -324,7 +328,7 @@
                     ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
             </select>
           </div>
-          <div class="gf-form-select-wrapper width-8 ">
+          <div class="gf-form-select-wrapper width-8">
             <select id="in-filter-operator-{{ctrl.target.refId}}-{{$index}}"
                     class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                     ng-model="ctrl.target.filters[$index].operator"
@@ -451,7 +455,7 @@
     </div>
 
     <div class="gf-form full-width" ng-if="ctrl.target.showAdvancedSettings && ctrl.isInfrastructure()">
-      <label class="gf-form-label query-keyword width-13 pointer">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-legend-{{ctrl.target.refId}}">
         Legend format
         <info-popover position="top center" mode="right-normal">
           Default: $label (on host $host)
@@ -479,7 +483,7 @@
     </div>
 
     <div class="gf-form full-width" ng-if="ctrl.target.showAdvancedSettings && ctrl.isAnalyzeApplication()">
-      <label class="gf-form-label query-keyword width-13 pointer">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-application-legend-{{ctrl.target.refId}}">
         Legend format
         <info-popover position="top center" mode="right-normal">
           Default: $label ($application) - $key
@@ -504,7 +508,7 @@
     </div>
 
     <div class="gf-form full-width" ng-if="ctrl.target.showAdvancedSettings && ctrl.isApplicationServiceEndpointMetric()">
-      <label class="gf-form-label query-keyword width-13 pointer">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-application-service-endpoint-legend-{{ctrl.target.refId}}">
         Legend format
         <info-popover position="top center" mode="right-normal">
           Default: $label ($application) - $key
@@ -531,7 +535,7 @@
     </div>
 
     <div class="gf-form full-width" ng-if="ctrl.target.showAdvancedSettings && ctrl.isAnalyzeWebsite()">
-      <label class="gf-form-label query-keyword width-13 pointer">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-website-legend-{{ctrl.target.refId}}">
         Legend format
         <info-popover position="top center" mode="right-normal">
           Default: "$label ($website) - $key"
