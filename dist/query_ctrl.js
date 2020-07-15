@@ -77,7 +77,6 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
                     // target migration for downwards compatibility
                     migration_1.default(this.target);
                     this.loadVersion();
-                    this.target.pluginId = this.panelCtrl.panel.type || this.panelCtrl.pluginId;
                     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
                     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
                     var now = Math.floor(Date.now() / 1000) * 1000;
@@ -691,14 +690,16 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
                     // removing a filter might result in more than 5 available metrics
                     this.onMetricsFilter(refresh);
                 };
-                InstanaQueryCtrl.prototype.isNotSingleStatOrGauge = function () {
-                    return this.target.pluginId !== 'gauge' && this.target.pluginId !== 'singlestat';
-                };
                 InstanaQueryCtrl.prototype.canShowAggregation = function () {
                     return this.target.metricCategory >= '2' || this.isPluginThatSupportsAggregation();
                 };
+                // left to support grafana pre 7.0
                 InstanaQueryCtrl.prototype.isPluginThatSupportsAggregation = function () {
-                    return this.target.pluginId === 'singlestat' || this.target.pluginId === 'gauge' || this.target.pluginId === 'table';
+                    var pluginId = this.getPluginId();
+                    return pluginId === 'singlestat' || pluginId === 'stat' || pluginId === 'gauge' || pluginId === 'table';
+                };
+                InstanaQueryCtrl.prototype.getPluginId = function () {
+                    return this.panelCtrl.panel.type || this.panelCtrl.pluginId;
                 };
                 InstanaQueryCtrl.prototype.isAnalyzeCategory = function () {
                     return this.isAnalyzeApplication() || this.isAnalyzeWebsite();

@@ -18,7 +18,7 @@
           <option value="4">Application/service/endpoint metrics</option>
           <option value="2">Analyze application calls</option>
           <option value="3">Analyze websites</option>
-          <option value="7" ng-show="ctrl.isSloEnabled()">SLO information</option>
+          <option value="7" ng-if="ctrl.isSloEnabled()">SLO information</option>
         </select>
       </div>
     </div>
@@ -69,7 +69,7 @@
             <p>Select your {{ctrl.websiteApplicationLabel}}.</p>
           </info-popover>
         </label>
-        <div ng-show="ctrl.isAnalyzeApplication()" class="gf-form-select-wrapper min-width-6">
+        <div ng-if="ctrl.isAnalyzeApplication()" class="gf-form-select-wrapper min-width-6">
           <select id="in-group-{{ctrl.target.refId}}"
                   ng-disabled="ctrl.target.entity.key === null"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
@@ -86,14 +86,14 @@
                   ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
           </select>
         </div>
-        <label ng-show="ctrl.target.metricCategory === '3'" class="gf-form-label query-keyword pointer"
+        <label ng-if="ctrl.target.metricCategory === '3'" class="gf-form-label query-keyword pointer"
                for="in-beacontype-{{ctrl.target.refId}}">
           Type
           <info-popover position="top center" mode="right-normal">
             <p>Select a beacon type.</p>
           </info-popover>
         </label>
-        <div ng-show="ctrl.target.metricCategory === '3'"
+        <div ng-if="ctrl.target.metricCategory === '3'"
              class="gf-form-select-wrapper full-width min-width-12 ">
           <select id="in-beacontype-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
@@ -102,14 +102,14 @@
                   ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
           </select>
         </div>
-        <label ng-show="ctrl.isAnalyzeCategory()" class="gf-form-label query-keyword pointer"
+        <label ng-if="ctrl.isAnalyzeCategory()" class="gf-form-label query-keyword pointer"
                for="in-group-{{ctrl.target.refId}}">
           Group by
           <info-popover position="top center" mode="right-normal">
             <p>Group by tag.</p>
           </info-popover>
         </label>
-        <div ng-show="ctrl.isAnalyzeApplication()" class="gf-form-select-wrapper">
+        <div ng-if="ctrl.isAnalyzeApplication()" class="gf-form-select-wrapper">
           <select id="in-group-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid min-width-6 ng-not-empty ng-touched"
                   ng-model="ctrl.target.callToEntity"
@@ -117,7 +117,7 @@
                   ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
           </select>
         </div>
-        <div ng-show="ctrl.isAnalyzeCategory()"
+        <div ng-if="ctrl.isAnalyzeCategory()"
              class="gf-form-select-wrapper full-width min-width-12 ">
           <select id="in-group-{{ctrl.target.refId}}"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
@@ -200,7 +200,7 @@
             <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
           </select>
         </div>
-        <label ng-show="ctrl.isBuiltInInfrastructure()"
+        <label ng-if="ctrl.isBuiltInInfrastructure()"
                class="gf-form-label query-keyword pointer"
                for="in-aggregate-graphs-{{ctrl.target.refId}}">
           Show max value
@@ -208,12 +208,12 @@
             <p>Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only.</p>
           </info-popover>
         </label>
-        <gf-form-switch ng-show="ctrl.isBuiltInInfrastructure()"
+        <gf-form-switch ng-if="ctrl.isBuiltInInfrastructure()"
                         ng-disabled="!ctrl.canShowMaxMetricValue()"
                         id="in-max-value-{{ctrl.target.refId}}"
                         checked="ctrl.target.displayMaxMetricValue"
                         on-change="ctrl.onSelect()"/>
-        <label ng-show="ctrl.target.metricCategory === '1'" class="gf-form-label query-keyword pointer">
+        <label ng-if="ctrl.isBuiltInInfrastructure()" class="gf-form-label query-keyword pointer">
           Show all metrics
           <info-popover position="top center" mode="right-normal">
             <p>You have the option to show all metrics in the graph once the amount of possible, selectable metrics is
@@ -221,20 +221,20 @@
           </info-popover>
         </label>
         <gf-form-switch
-          ng-show="ctrl.target.metricCategory === '1'"
+          ng-if="ctrl.isBuiltInInfrastructure()"
           ng-disabled="!ctrl.target.canShowAllMetrics"
           checked="ctrl.target.showAllMetrics"
           on-change="ctrl.onAllMetricsSelect()"
         />
         <label class="gf-form-label query-keyword pointer" for="in-metric-{{ctrl.target.refId}}"
-               ng-show="ctrl.canShowAggregation()">
+               ng-if="ctrl.canShowAggregation()">
           Aggregation
           <info-popover position="top center" mode="right-normal">
             <p>Select a metric aggretion.</p>
           </info-popover>
         </label>
         <div class="gf-form-select-wrapper min-width-8"
-             ng-show="ctrl.canShowAggregation()">
+             ng-if="ctrl.canShowAggregation()">
           <select id="in-aggregation-{{ctrl.target.refId}}"
                   ng-disabled="!ctrl.target.metric || ctrl.target.metric.aggregations.length <= 1"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
@@ -298,7 +298,7 @@
       </div>
     </div>
 
-    <div ng-if="ctrl.target.metricCategory === '2'|| ctrl.target.metricCategory === '3'">
+    <div ng-if="ctrl.target.metricCategory === '2' || ctrl.target.metricCategory === '3'">
       <div ng-repeat="filter in ctrl.target.filters">
         <div class="gf-form">
           <label class="gf-form-label query-keyword width-13 pointer"
@@ -334,7 +334,7 @@
           </div>
           <input id="in-filter-stringValue-{{ctrl.target.refId}}-{{$index}}"
                  type="text"
-                 ng-show="(ctrl.target.filters[$index].tag.type === 'STRING' || ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR') && !ctrl.target.filters[$index].operator.key.includes('EMPTY')"
+                 ng-if="(ctrl.target.filters[$index].tag.type === 'STRING' || ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR') && !ctrl.target.filters[$index].operator.key.includes('EMPTY')"
                  class="gf-form-input width-22"
                  ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
                  ng-model="ctrl.target.filters[$index].stringValue"
@@ -344,7 +344,7 @@
                  spellcheck='false'/>
           <input id="in-filter-numberValue-{{ctrl.target.refId}}-{{$index}}"
                  type="number"
-                 ng-show="ctrl.target.filters[$index].tag.type === 'NUMBER'"
+                 ng-if="ctrl.target.filters[$index].tag.type === 'NUMBER'"
                  class="gf-form-input width-22"
                  ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
                  ng-model="ctrl.target.filters[$index].numberValue"
@@ -353,7 +353,7 @@
                  placeholder="please specify"
                  spellcheck='false'/>
           <select id="in-filter-booleanValue-{{ctrl.target.refId}}"
-                  ng-show="ctrl.target.filters[$index].tag.type === 'BOOLEAN'"
+                  ng-if="ctrl.target.filters[$index].tag.type === 'BOOLEAN'"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.filters[$index].booleanValue"
                   ng-model-options='{ debounce: 300 }'

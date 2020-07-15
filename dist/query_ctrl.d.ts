@@ -105,9 +105,9 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     canShowMaxMetricValue(): any;
     addCustomFilter(): void;
     removeCustomFilter(index: number, refresh?: boolean): void;
-    isNotSingleStatOrGauge(): boolean;
     canShowAggregation(): boolean;
     isPluginThatSupportsAggregation(): boolean;
+    getPluginId(): any;
     isAnalyzeCategory(): boolean;
     getAvailableTimeIntervals(): any;
     loadVersion(): void;

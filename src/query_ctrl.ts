@@ -79,7 +79,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     migrate(this.target);
     this.loadVersion();
 
-    this.target.pluginId = this.panelCtrl.panel.type || this.panelCtrl.pluginId;
     this.entitySelectionText = this.EMPTY_DROPDOWN_TEXT;
     this.metricSelectionText = this.EMPTY_DROPDOWN_TEXT;
 
@@ -780,16 +779,18 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.onMetricsFilter(refresh);
   }
 
-  isNotSingleStatOrGauge() {
-    return this.target.pluginId !== 'gauge' && this.target.pluginId !== 'singlestat';
-  }
-
   canShowAggregation() {
     return this.target.metricCategory >= '2' || this.isPluginThatSupportsAggregation();
   }
 
+  // left to support grafana pre 7.0
   isPluginThatSupportsAggregation() {
-    return this.target.pluginId === 'singlestat' || this.target.pluginId === 'gauge' || this.target.pluginId === 'table';
+    const pluginId = this.getPluginId();
+    return pluginId === 'singlestat' || pluginId === 'stat' || pluginId === 'gauge' || pluginId === 'table';
+  }
+
+  getPluginId() {
+    return this.panelCtrl.panel.type || this.panelCtrl.pluginId;
   }
 
   isAnalyzeCategory() {
