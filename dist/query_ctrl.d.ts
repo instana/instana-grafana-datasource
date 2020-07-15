@@ -92,7 +92,6 @@ export declare class InstanaQueryCtrl extends QueryCtrl {
     onNamefilterChanges(): void;
     onGroupChange(): void;
     onSelect(): void;
-    refresh(): void;
     onSloValueChange(): void;
     onMetricSelect(): void;
     onAllMetricsSelect(): void;

@@ -605,9 +605,6 @@ System.register(['app/plugins/sdk', "./util/rollup_granularity_util", './lists/a
                 InstanaQueryCtrl.prototype.onSelect = function () {
                     this.refresh();
                 };
-                InstanaQueryCtrl.prototype.refresh = function () {
-                    this.panelCtrl.refresh();
-                };
                 InstanaQueryCtrl.prototype.onSloValueChange = function () {
                     if (this.target.sloValue <= 1.0 && this.target.sloValue > 0.0) {
                         this.refresh();

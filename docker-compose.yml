@@ -8,6 +8,8 @@ services:
       - ./dist:/var/lib/grafana/plugins/instana
     links:
       - mountebank
+    environment:
+      GF_LOG_LEVEL: debug
   mountebank:
     build: specs/mb
     image: ui-backend-mockserver

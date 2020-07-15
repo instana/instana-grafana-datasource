@@ -5,3 +5,4 @@ npm-debug.log
 .idea
 *.swp
 results.txt
+.env.test.local

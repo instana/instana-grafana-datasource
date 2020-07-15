@@ -682,10 +682,6 @@ export class InstanaQueryCtrl extends QueryCtrl {
     this.refresh();
   }
 
-  refresh() {
-    this.panelCtrl.refresh();
-  }
-
   onSloValueChange() {
     if (this.target.sloValue <= 1.0 && this.target.sloValue > 0.0) {
       this.refresh();

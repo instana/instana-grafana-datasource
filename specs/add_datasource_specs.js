@@ -14,36 +14,39 @@ describe('When adding the Instana datasource to Grafana', function() {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     // For some reason even after waiting for the port to be open on the container we cannot immediately hit the page
-    await page.waitFor(500);
-
+    await page.waitFor(1000);
     await page.goto('http://localhost:3000/login');
+
     await page.type('input[name=user]', 'admin');
     await page.type('input[name=password]', 'admin');
-    const logInButton = await page.waitForXPath('//button[contains(text(),"Log In")]');
+    const logInButton = await page.waitForXPath('//button[span="Log in"]');
     logInButton.click();
-    await page.waitFor(1000); // don't ask
-    const saveNewButton = await page.waitForXPath('//button[contains(text(),"Save")]');
+
+    await page.waitFor(1000);
+
     await page.type('input[name=newPassword]', 'admin');
     await page.type('input[name=confirmNew]', 'admin');
+    const saveNewButton = await page.waitForXPath('//button[span="Submit"]');
     saveNewButton.click();
-    await page.waitFor(1000); // don't ask
+    await page.waitFor(1000);
+
     await page.goto('http://localhost:3000/datasources/new?gettingstarted');
-    await page.waitFor(1000); // don't ask
+    await page.waitFor(1000);
 
     const installButton = await page.waitForXPath('//div//span[contains(text(),"Instana")]');
     installButton.click();
-    await page.waitFor(1000); // don't ask
+    await page.waitFor(1000);
 
     page.content().then(content => {
       return content
     });
     await page.type('input[id=in-url]', instanaUiBackendUrl);
-    await page.type('input[ng-model="ctrl.current.jsonData.apiToken"]', instanaApiToken);
+    await page.type('input[id=in-api-token]', instanaApiToken);
     const saveAndTestButton = await page.waitForXPath('//button[contains(text(),"Save & Test")]');
     saveAndTestButton.click();
 
     // waitForSelector doesn't work for some reason so we'll do with a sleep for now
-    await page.waitFor(2500);
+    await page.waitFor(2000);
 
     const alerts = await page.evaluate((sel) => {
       return [
