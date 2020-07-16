@@ -151,7 +151,7 @@
         </div>
         <label ng-show="ctrl.isBuiltInInfrastructure()"
                class="gf-form-label query-keyword pointer"
-               for="in-aggregate-graphs-{{ctrl.target.refId}}">
+               for="in-max-value-{{ctrl.target.refId}}">
           Show max value
           <info-popover position="top center" mode="right-normal">
             <p>Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only.</p>
@@ -162,7 +162,9 @@
                         id="in-max-value-{{ctrl.target.refId}}"
                         checked="ctrl.target.displayMaxMetricValue"
                         on-change="ctrl.onSelect()"></gf-form-switch>
-        <label ng-show="ctrl.target.metricCategory === '1'" class="gf-form-label query-keyword pointer">
+        <label ng-show="ctrl.target.metricCategory === '1'"
+               class="gf-form-label query-keyword pointer"
+               for="in-all-metrics-{{ctrl.target.refId}}">
           Show all metrics
           <info-popover position="top center" mode="right-normal">
             <p>You have the option to show all metrics in the graph once the amount of possible, selectable metrics is
@@ -173,8 +175,10 @@
           ng-show="ctrl.target.metricCategory === '1'"
           ng-disabled="!ctrl.target.canShowAllMetrics"
           checked="ctrl.target.showAllMetrics"
-          on-change="ctrl.onAllMetricsSelect()"></gf-form-switch>
-        <label class="gf-form-label query-keyword pointer" for="in-metric-{{ctrl.target.refId}}"
+          on-change="ctrl.onAllMetricsSelect()"
+          id="in-all-metrics-{{ctrl.target.refId}}"></gf-form-switch>
+        <label class="gf-form-label query-keyword pointer"
+               for="in-aggregation-{{ctrl.target.refId}}"
                ng-show="ctrl.canShowAggregation()">
           Aggregation
           <info-popover position="top center" mode="right-normal">
@@ -191,14 +195,14 @@
                   ng-options="f for f in ctrl.target.metric.aggregations">
           </select>
         </div>
-        <label class="gf-form-label query-keyword pointer" for="in-timeInterval-{{ctrl.target.refId}}">
+        <label class="gf-form-label query-keyword pointer" for="in-time-interval-{{ctrl.target.refId}}">
           Rollup
           <info-popover position="top center" mode="right-normal">
             <p>Select the rollup value.</p>
           </info-popover>
         </label>
         <div class="gf-form-select-wrapper min-width-6">
-          <select id="in-timeInterval-{{ctrl.target.refId}}"
+          <select id="in-time-interval-{{ctrl.target.refId}}"
                   ng-disabled="ctrl.getAvailableTimeIntervals().length <= 1"
                   class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
                   ng-model="ctrl.target.timeInterval"
@@ -210,7 +214,7 @@
     </script>
 
     <script type="text/ng-template" id="website_legend.html">
-      <label class="gf-form-label query-keyword width-13 pointer">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-website-legend-{{ctrl.target.refId}}">
         Legend format
         <info-popover position="top center" mode="right-normal">
           Default: "$label ($website) - $key"
@@ -236,7 +240,7 @@
     </script>
 
     <script type="text/ng-template" id="application_legend.html">
-      <label class="gf-form-label query-keyword width-13 pointer">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-application-legend-{{ctrl.target.refId}}">
         Legend format
         <info-popover position="top center" mode="right-normal">
           Default: $label ($application) - $key
@@ -261,7 +265,7 @@
     </script>
 
     <script type="text/ng-template" id="application_service_endpoint_legend.html">
-      <label class="gf-form-label query-keyword width-13 pointer">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-application-service-endpoint-legend-{{ctrl.target.refId}}">
         Legend format
         <info-popover position="top center" mode="right-normal">
           Default: $label ($application) - $key
@@ -573,7 +577,7 @@
     </script>
 
     <script type="text/ng-template" id="legend.html">
-      <label class="gf-form-label query-keyword width-13 pointer">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-legend-{{ctrl.target.refId}}">
         Legend format
         <info-popover position="top center" mode="right-normal">
           Default: $label (on host $host)
