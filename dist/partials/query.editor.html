@@ -150,7 +150,7 @@
           </select>
         </div>
         <label ng-show="ctrl.isBuiltInInfrastructure()"
-               class="gf-form-label query-keyword pointer"
+               class="gf-form-label query-keyword"
                for="in-max-value-{{ctrl.target.refId}}">
           Show max value
           <info-popover position="top center" mode="right-normal">
@@ -163,7 +163,7 @@
                         checked="ctrl.target.displayMaxMetricValue"
                         on-change="ctrl.onSelect()"></gf-form-switch>
         <label ng-show="ctrl.target.metricCategory === '1'"
-               class="gf-form-label query-keyword pointer"
+               class="gf-form-label query-keyword"
                for="in-all-metrics-{{ctrl.target.refId}}">
           Show all metrics
           <info-popover position="top center" mode="right-normal">
@@ -171,12 +171,11 @@
               between 1 and 5.</p>
           </info-popover>
         </label>
-        <gf-form-switch
-          ng-show="ctrl.target.metricCategory === '1'"
-          ng-disabled="!ctrl.target.canShowAllMetrics"
-          checked="ctrl.target.showAllMetrics"
-          on-change="ctrl.onAllMetricsSelect()"
-          id="in-all-metrics-{{ctrl.target.refId}}"></gf-form-switch>
+        <gf-form-switch ng-show="ctrl.target.metricCategory === '1'"
+                        ng-disabled="!ctrl.target.canShowAllMetrics"
+                        checked="ctrl.target.showAllMetrics"
+                        on-change="ctrl.onAllMetricsSelect()"
+                        id="in-all-metrics-{{ctrl.target.refId}}"></gf-form-switch>
         <label class="gf-form-label query-keyword pointer"
                for="in-aggregation-{{ctrl.target.refId}}"
                ng-show="ctrl.canShowAggregation()">
@@ -555,14 +554,16 @@
 
     <script type="text/ng-template" id="advanced_settings.html">
       <div class="gf-form">
-        <label class="gf-form-label width-13 pointer" for="in-advanced-settings-{{ctrl.target.refId}}">
+        <label class="gf-form-label width-13"
+               for="in-advanced-settings-{{ctrl.target.refId}}">
           Show advanced settings
           <info-popover position="top center" mode="right-normal">
             <p>Show all additional settings.</p>
           </info-popover>
         </label>
         <gf-form-switch id="in-advanced-settings-{{ctrl.target.refId}}"
-                        checked="ctrl.target.advancedSettingsSwitchChecked" on-change="ctrl.toggleAdvancedSettings()"></gf-form-switch>
+                        checked="ctrl.target.advancedSettingsSwitchChecked"
+                        on-change="ctrl.toggleAdvancedSettings()"></gf-form-switch>
       </div>
 
       <div class="gf-form full-width" ng-show="ctrl.target.showAdvancedSettings && ctrl.isInfrastructure()" ng-include src="'legend.html'"></div>
@@ -625,7 +626,8 @@
     </script>
 
     <script type="text/ng-template" id="freeTextMetrics.html">
-      <label class="gf-form-label query-keyword width-13 pointer" for="in-free-text-metrics-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword width-13"
+             for="in-free-text-metrics-{{ctrl.target.refId}}">
         Enable free text metrics
         <info-popover position="top center" mode="right-normal">
           <p>Specify comma separated metrics directly in this text field. Once this field has a value, selected
@@ -634,7 +636,8 @@
         </info-popover>
       </label>
       <gf-form-switch id="in-free-text-metrics-toggle-{{ctrl.target.refId}}"
-                      checked="ctrl.target.useFreeTextMetrics" on-change="ctrl.onFilterChange(true, !ctrl.target.useFreeTextMetrics)"></gf-form-switch>
+                      checked="ctrl.target.useFreeTextMetrics"
+                      on-change="ctrl.onFilterChange(true, !ctrl.target.useFreeTextMetrics)"></gf-form-switch>
       <input id="in-free-text-metrics-{{ctrl.target.refId}}"
              class="gf-form-input full-width"
              type="text"
@@ -646,14 +649,15 @@
     </script>
 
     <script type="text/ng-template" id="aggregate_graphs.html">
-      <label class="gf-form-label query-keyword width-13 pointer" for="in-aggregate-graphs-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword width-13" for="in-aggregate-graphs-{{ctrl.target.refId}}">
         Aggregate query graphs
         <info-popover position="top center" mode="right-normal">
           <p>Aggregate all graphs of a query.</p>
         </info-popover>
       </label>
       <gf-form-switch id="in-aggregate-graphs-{{ctrl.target.refId}}"
-                      checked="ctrl.target.aggregateGraphs" on-change="ctrl.toggleGraphAggregation()"></gf-form-switch>
+                      checked="ctrl.target.aggregateGraphs"
+                      on-change="ctrl.toggleGraphAggregation()"></gf-form-switch>
       <select id="in-aggregation-function-{{ctrl.target.refId}}"
               ng-disabled="!ctrl.target.aggregateGraphs"
               class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched width-8"
@@ -662,14 +666,17 @@
               ng-change="ctrl.onSelect()"
               ng-options="f as f.label for f in ctrl.aggregationFunctions track by f.label">
       </select>
-      <label class="gf-form-label query-keyword width-13 pointer" for="in-hide-graphs-{{ctrl.target.refId}}">
+      <label class="gf-form-label query-keyword width-13"
+             for="in-hide-graphs-{{ctrl.target.refId}}">
         Hide original graphs
         <info-popover position="top center" mode="right-normal">
           <p>Removes the original graphs resulted from the query and only shows the aggregated graph.</p>
         </info-popover>
       </label>
-      <gf-form-switch ng-disabled="!ctrl.target.aggregateGraphs" id="in-hide-graphs-{{ctrl.target.refId}}"
-                      checked="ctrl.target.hideOriginalGraphs" on-change="ctrl.onSelect()"></gf-form-switch>
+      <gf-form-switch ng-disabled="!ctrl.target.aggregateGraphs"
+                      id="in-hide-graphs-{{ctrl.target.refId}}"
+                      checked="ctrl.target.hideOriginalGraphs"
+                      on-change="ctrl.onSelect()"></gf-form-switch>
     </script>
   </div>
 </query-editor-row>
