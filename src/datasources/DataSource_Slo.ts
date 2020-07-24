@@ -38,11 +38,26 @@ export class DataSourceSlo {
 
   runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
     //avoid involid calls
-    if (!target || !target.sloReport || !target.sloReport.key || !target.sloSpecific || !target.sloSpecific.key || !target.sloValue) {
+    if (
+      !target ||
+      !target.sloReport ||
+      !target.sloReport.key ||
+      !target.sloSpecific ||
+      !target.sloSpecific.key ||
+      !target.sloValue
+    ) {
       return Promise.resolve(emptyResultData(target.refId));
     }
 
-    let endpoint = '/api/sli/report/' + target.sloReport.key + '?from=' + timeFilter.from + '&to=' + timeFilter.to + '&slo=' + target.sloValue;
+    let endpoint =
+      '/api/sli/report/' +
+      target.sloReport.key +
+      '?from=' +
+      timeFilter.from +
+      '&to=' +
+      timeFilter.to +
+      '&slo=' +
+      target.sloValue;
     return getRequest(this.instanaOptions, endpoint).then((response: any) => {
       return this.extractSpecificValueFromSLI(target, response.data, timeFilter);
     });
@@ -50,9 +65,17 @@ export class DataSourceSlo {
 
   extractSpecificValueFromSLI(target: InstanaQuery, sliResult: any, timeFilter: TimeFilter) {
     if (target.sloSpecific.key === 'SLI') {
-      return [buildTimeSeries(target.sloSpecific.label!, target.refId, this.buildResultArray(sliResult.sli, timeFilter.to))];
+      return [
+        buildTimeSeries(target.sloSpecific.label!, target.refId, this.buildResultArray(sliResult.sli, timeFilter.to)),
+      ];
     } else if (target.sloSpecific.key === 'Remaining Error Budget') {
-      return [buildTimeSeries(target.sloSpecific.label!, target.refId, this.buildResultArray(sliResult.errorBudgetRemaining, timeFilter.to))];
+      return [
+        buildTimeSeries(
+          target.sloSpecific.label!,
+          target.refId,
+          this.buildResultArray(sliResult.errorBudgetRemaining, timeFilter.to)
+        ),
+      ];
     } else if (target.sloSpecific.key === 'Timeseries') {
       return this.buildViolationDistributionTimeSeries(target, sliResult.violationDistribution, timeFilter);
     }

@@ -40,22 +40,29 @@ export class DataSourceEndpoint {
     let page = 1;
     let pageSize = 200;
 
-    endpoints = this.paginateEndpoints([], applicationId, serviceId, windowSize, timeFilter.to, page, pageSize, PAGINATION_LIMIT).then(
-      (response: any) => {
-        let allResults = _.flattenDeep(
-          _.map(response, (pageSet, index) => {
-            return pageSet.items;
-          })
-        );
+    endpoints = this.paginateEndpoints(
+      [],
+      applicationId,
+      serviceId,
+      windowSize,
+      timeFilter.to,
+      page,
+      pageSize,
+      PAGINATION_LIMIT
+    ).then((response: any) => {
+      let allResults = _.flattenDeep(
+        _.map(response, (pageSet, index) => {
+          return pageSet.items;
+        })
+      );
 
-        return _.compact(allResults).map((entry) => {
-          return {
-            key: entry.id,
-            label: entry.label,
-          };
-        });
-      }
-    );
+      return _.compact(allResults).map((entry) => {
+        return {
+          key: entry.id,
+          label: entry.label,
+        };
+      });
+    });
 
     this.endpointsCache.put(key, endpoints, 600000);
     return endpoints;
@@ -149,7 +156,9 @@ export class DataSourceEndpoint {
     }
 
     if (target.endpoint.label === ALL_ENDPOINTS) {
-      return target.timeShift ? item.endpoint.label + ' - ' + key + ' - ' + target.timeShift : item.endpoint.label + ' - ' + key;
+      return target.timeShift
+        ? item.endpoint.label + ' - ' + key + ' - ' + target.timeShift
+        : item.endpoint.label + ' - ' + key;
     }
 
     return target.timeShift && target.timeShiftIsValid

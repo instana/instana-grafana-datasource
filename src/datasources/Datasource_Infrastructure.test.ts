@@ -186,10 +186,22 @@ describe('Given an infrastructure datasource', () => {
       contextSpy.mockReset();
       contextSpy = jest.spyOn(RequestHandler, 'getRequest');
       contextSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
-        if (endpoint === '/api/snapshots/context?q=java%20AND%20entity.pluginId%3AsomeKey&from=' + timeFilter.from + '&to=' + timeFilter.to) {
+        if (
+          endpoint ===
+          '/api/snapshots/context?q=java%20AND%20entity.pluginId%3AsomeKey&from=' +
+            timeFilter.from +
+            '&to=' +
+            timeFilter.to
+        ) {
           return Promise.resolve(contexts);
         }
-        if (endpoint === '/api/snapshots/context?q=daljeet%20AND%20entity.pluginId%3AsomeKey&from=' + timeFilter.from + '&to=' + timeFilter.to) {
+        if (
+          endpoint ===
+          '/api/snapshots/context?q=daljeet%20AND%20entity.pluginId%3AsomeKey&from=' +
+            timeFilter.from +
+            '&to=' +
+            timeFilter.to
+        ) {
           return Promise.resolve(contexts);
         } else if (endpoint === '/api/snapshots/A?from=' + timeFilter.from + '&to=' + timeFilter.to) {
           return Promise.resolve(snapshotA);

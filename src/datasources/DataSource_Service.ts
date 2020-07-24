@@ -35,7 +35,15 @@ export class DataSourceService {
     let page = 1;
     let pageSize = 200;
 
-    services = this.paginateServices([], applicationId, windowSize, timeFilter.to, page, pageSize, PAGINATION_LIMIT).then((response: any) => {
+    services = this.paginateServices(
+      [],
+      applicationId,
+      windowSize,
+      timeFilter.to,
+      page,
+      pageSize,
+      PAGINATION_LIMIT
+    ).then((response: any) => {
       let allResults = _.flattenDeep(
         _.map(response, (pageSet) => {
           return pageSet.items;
@@ -54,14 +62,26 @@ export class DataSourceService {
     return services;
   }
 
-  paginateServices(results: any, applicationId: string, windowSize: number, to: number, page: number, pageSize: number, pageLimit: number) {
+  paginateServices(
+    results: any,
+    applicationId: string,
+    windowSize: number,
+    to: number,
+    page: number,
+    pageSize: number,
+    pageLimit: number
+  ) {
     if (page > pageLimit) {
       return results;
     }
 
     let queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
 
-    let url = '/api/application-monitoring/applications;id=' + (applicationId ? applicationId : '') + '/services?' + queryParameters;
+    let url =
+      '/api/application-monitoring/applications;id=' +
+      (applicationId ? applicationId : '') +
+      '/services?' +
+      queryParameters;
 
     return getRequest(this.instanaOptions, url).then((response: any) => {
       results.push(response.data);
@@ -126,7 +146,9 @@ export class DataSourceService {
     }
 
     if (target.service.key === null) {
-      return target.timeShift ? item.service.label + ' - ' + key + ' - ' + target.timeShift : item.service.label + ' - ' + key;
+      return target.timeShift
+        ? item.service.label + ' - ' + key + ' - ' + target.timeShift
+        : item.service.label + ' - ' + key;
     }
 
     return target.timeShift && target.timeShiftIsValid

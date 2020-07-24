@@ -28,11 +28,18 @@ describe('Given an application datasource', () => {
 
     it('should return applications as SelectableValues', () => {
       return axios
-        .get(options.url + '/api/application-monitoring/applications?windowSize' + timeFilter.windowSize + '&to=' + timeFilter.to, {
-          headers: {
-            Authorization: 'apiToken ' + options.apiToken,
-          },
-        })
+        .get(
+          options.url +
+            '/api/application-monitoring/applications?windowSize' +
+            timeFilter.windowSize +
+            '&to=' +
+            timeFilter.to,
+          {
+            headers: {
+              Authorization: 'apiToken ' + options.apiToken,
+            },
+          }
+        )
         .then((applications: any) => {
           paginateApplicationsSpy.mockResolvedValue(applications);
           getApplicationsAndVerifyFormat(dataSourceApplication, timeFilter);
@@ -59,11 +66,18 @@ describe('Given an application datasource', () => {
 
     it('should return applications as SelectableValues', () => {
       return axios
-        .get(options.url + '/api/application-monitoring/applications?windowSize' + timeFilter.windowSize + '&to=' + timeFilter.to, {
-          headers: {
-            Authorization: 'apiToken ' + options.apiToken,
-          },
-        })
+        .get(
+          options.url +
+            '/api/application-monitoring/applications?windowSize' +
+            timeFilter.windowSize +
+            '&to=' +
+            timeFilter.to,
+          {
+            headers: {
+              Authorization: 'apiToken ' + options.apiToken,
+            },
+          }
+        )
         .then((applications: any) => {
           paginateApplicationsSpy.mockResolvedValue(applications);
           getApplicationsAndVerifyFormat(dataSourceApplication, timeFilter);

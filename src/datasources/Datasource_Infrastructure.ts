@@ -31,7 +31,11 @@ export class DataSourceInfrastructure {
   runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
     // do not try to execute to big queries
     if (isInvalidQueryInterval(timeFilter.windowSize, hoursToMs(this.instanaOptions.queryinterval_limit_infra))) {
-      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_infra + ' hours');
+      throw new Error(
+        'Limit for maximum selectable windowsize exceeded, max is: ' +
+          this.instanaOptions.queryinterval_limit_infra +
+          ' hours'
+      );
     }
 
     // do not try to retrieve data without selected metric
@@ -83,23 +87,25 @@ export class DataSourceInfrastructure {
     let maxValues: any = [];
     let res = _.map(snapshots, (snapshot, index) => {
       // ...fetch the metric data for every snapshot in the results.
-      return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then((response: any) => {
-        let timeseries = this.readTimeSeries(response.data.values, target.aggregation, timeFilter);
-        let result = {
-          target: this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
-          datapoints: _.map(timeseries, (value) => [value.value, value.timestamp]),
-          refId: target.refId,
-          key: target.stableHash,
-        };
+      return this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then(
+        (response: any) => {
+          let timeseries = this.readTimeSeries(response.data.values, target.aggregation, timeFilter);
+          let result = {
+            target: this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
+            datapoints: _.map(timeseries, (value) => [value.value, value.timestamp]),
+            refId: target.refId,
+            key: target.stableHash,
+          };
 
-        if (target.displayMaxMetricValue) {
-          const maxValue = this.getMaxMetricValue(target.metric, snapshot);
-          maxValues.push(this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
-          result.datapoints = this.convertRelativeToAbsolute(result.datapoints, maxValue);
+          if (target.displayMaxMetricValue) {
+            const maxValue = this.getMaxMetricValue(target.metric, snapshot);
+            maxValues.push(this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
+            result.datapoints = this.convertRelativeToAbsolute(result.datapoints, maxValue);
+          }
+
+          return result;
         }
-
-        return result;
-      });
+      );
     });
 
     return Promise.all(res).then((allResults) => {
@@ -150,11 +156,12 @@ export class DataSourceInfrastructure {
       return entityTypes;
     }
 
-    entityTypes = getRequest(this.instanaOptions, '/api/infrastructure-monitoring/catalog/plugins').then((typesResponse: any) =>
-      typesResponse.data.map((entry: any) => ({
-        key: entry.plugin,
-        label: entry.label,
-      }))
+    entityTypes = getRequest(this.instanaOptions, '/api/infrastructure-monitoring/catalog/plugins').then(
+      (typesResponse: any) =>
+        typesResponse.data.map((entry: any) => ({
+          key: entry.plugin,
+          label: entry.label,
+        }))
     );
 
     this.typeCache.put('entityTypes', entityTypes);
@@ -181,14 +188,16 @@ export class DataSourceInfrastructure {
     }
 
     const filter = metricCategory === CUSTOM_METRICS ? 'custom' : 'builtin';
-    metrics = getRequest(this.instanaOptions, `/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`).then(
-      (catalogResponse: any) =>
-        catalogResponse.data.map((entry: any) => ({
-          key: entry.metricId,
-          label: entry.label,
-          aggregations: ['MEAN', 'SUM'],
-          entityType: entry.pluginId,
-        }))
+    metrics = getRequest(
+      this.instanaOptions,
+      `/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`
+    ).then((catalogResponse: any) =>
+      catalogResponse.data.map((entry: any) => ({
+        key: entry.metricId,
+        label: entry.label,
+        aggregations: ['MEAN', 'SUM'],
+        entityType: entry.pluginId,
+      }))
     );
 
     this.catalogCache.put(key, metrics);
@@ -223,7 +232,9 @@ export class DataSourceInfrastructure {
 
             const fetchSnapshotUrl =
               `/api/snapshots/${snapshotId}` +
-              (this.instanaOptions.showOffline ? `?from=${timeFilter.from}&to=${timeFilter.to}` : `?time=${timeFilter.to}`); // @see SnapshotApiResource#getSnapshot
+              (this.instanaOptions.showOffline
+                ? `?from=${timeFilter.from}&to=${timeFilter.to}`
+                : `?time=${timeFilter.to}`); // @see SnapshotApiResource#getSnapshot
 
             snapshotInfo = getRequest(this.instanaOptions, fetchSnapshotUrl, true).then((snapshotResponse: any) => {
               // check for undefined because the fetchSnapshotContexts is buggy

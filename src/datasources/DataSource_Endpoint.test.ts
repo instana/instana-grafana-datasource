@@ -17,11 +17,19 @@ describe('Given an endpoint datasource', () => {
   it('should return endpoints of a service', () => {
     // get any service id
     return axios
-      .get(options.url + '/api/application-monitoring/applications;id=' + '/services?' + timeFilter.windowSize + '&to=' + timeFilter.to, {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken,
-        },
-      })
+      .get(
+        options.url +
+          '/api/application-monitoring/applications;id=' +
+          '/services?' +
+          timeFilter.windowSize +
+          '&to=' +
+          timeFilter.to,
+        {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken,
+          },
+        }
+      )
       .then((services: any) => {
         let serviceId = '';
         try {

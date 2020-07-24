@@ -14,7 +14,13 @@ describe('Given an application datasource', () => {
     // get any application id
     return axios
       .get(
-        options.url + '/api/application-monitoring/applications;id=' + '/services?' + 'windowSize=' + timeFilter.windowSize + '&to=' + timeFilter.to,
+        options.url +
+          '/api/application-monitoring/applications;id=' +
+          '/services?' +
+          'windowSize=' +
+          timeFilter.windowSize +
+          '&to=' +
+          timeFilter.to,
         {
           headers: {
             Authorization: 'apiToken ' + options.apiToken,
@@ -29,11 +35,18 @@ describe('Given an application datasource', () => {
   it('should return services of an application', () => {
     // get any application id
     return axios
-      .get(options.url + '/api/application-monitoring/applications?windowSize' + timeFilter.windowSize + '&to=' + timeFilter.to, {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken,
-        },
-      })
+      .get(
+        options.url +
+          '/api/application-monitoring/applications?windowSize' +
+          timeFilter.windowSize +
+          '&to=' +
+          timeFilter.to,
+        {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken,
+          },
+        }
+      )
       .then((applications: any) => {
         let applicationId = '';
         try {

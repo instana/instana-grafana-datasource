@@ -1,4 +1,10 @@
-import { DataQueryRequest, DataQueryResponse, DataSourceApi, DataSourceInstanceSettings, SelectableValue } from '@grafana/data';
+import {
+  DataQueryRequest,
+  DataQueryResponse,
+  DataSourceApi,
+  DataSourceInstanceSettings,
+  SelectableValue,
+} from '@grafana/data';
 
 import { InstanaQuery } from '../types/instana_query';
 import { InstanaOptions } from '../types/instana_options';
@@ -144,7 +150,11 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   getApplicationServiceEndpointMetrics(target: InstanaQuery, timeFilter: TimeFilter) {
     // do not try to execute too big queries
     if (isInvalidQueryInterval(timeFilter.windowSize, hoursToMs(this.options.queryinterval_limit_app_metrics))) {
-      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.options.queryinterval_limit_app_metrics + ' hours');
+      throw new Error(
+        'Limit for maximum selectable windowsize exceeded, max is: ' +
+          this.options.queryinterval_limit_app_metrics +
+          ' hours'
+      );
     }
 
     if (target.endpoint && target.endpoint.key) {

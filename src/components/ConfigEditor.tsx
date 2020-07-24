@@ -1,9 +1,9 @@
 import { DataSourcePluginOptionsEditorProps, DataSourceSettings, SelectableValue } from '@grafana/data';
+import { Legend, Field, Input, Checkbox } from '@grafana/ui';
 import React, { ChangeEvent, PureComponent } from 'react';
 import { InstanaOptions } from '../types/instana_options';
 import getVersion from '../util/instana_version';
 import proxyCheck from '../util/proxy_check';
-import { Legend, Field, Input, Checkbox } from '@grafana/ui';
 
 interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {
 }

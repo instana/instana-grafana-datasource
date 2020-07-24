@@ -1,5 +1,10 @@
 import TimeFilter from '../types/time_filter';
-import { getDefaultChartGranularity, getDefaultMetricRollupDuration, getPossibleGranularities, getPossibleRollups } from './rollup_granularity_util';
+import {
+  getDefaultChartGranularity,
+  getDefaultMetricRollupDuration,
+  getPossibleGranularities,
+  getPossibleRollups,
+} from './rollup_granularity_util';
 
 describe('Given a timeInterval', () => {
   describe('with 1 second time frame', () => {

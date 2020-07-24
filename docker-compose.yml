@@ -1,8 +1,18 @@
 version: "3"
 services:
   grafana:
-    image: grafana/grafana:7.0.2
+    image: grafana/grafana
     ports:
       - 3000:3000
     volumes:
       - ./dist:/var/lib/grafana/plugins/instana
+    environment:
+      GF_LOG_LEVEL: debug
+#    links:
+#      - mountebank
+#  mountebank:
+#    build: specs/mb
+#    image: ui-backend-mockserver
+#    ports:
+#      - 2525:2525
+#      - 8010:8010

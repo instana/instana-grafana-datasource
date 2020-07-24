@@ -27,7 +27,11 @@ export class DataSourceApplication {
   runQuery(target: InstanaQuery, timeFilter: TimeFilter): any {
     // do not try to execute to big queries
     if (isInvalidQueryInterval(timeFilter.windowSize, hoursToMs(this.instanaOptions.queryinterval_limit_app_calls))) {
-      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_app_calls + ' hours');
+      throw new Error(
+        'Limit for maximum selectable windowsize exceeded, max is: ' +
+          this.instanaOptions.queryinterval_limit_app_calls +
+          ' hours'
+      );
     }
 
     // avoid invalid calls
@@ -61,41 +65,52 @@ export class DataSourceApplication {
     let page = 1;
     let pageSize = 200;
 
-    applications = this.paginateApplications([], windowSize, timeFilter.to, page, pageSize, PAGINATION_LIMIT).then((response: any) => {
-      let allResults = _.flattenDeep(
-        _.map(response, (pageSet) => {
-          return pageSet.items;
-        })
-      );
+    applications = this.paginateApplications([], windowSize, timeFilter.to, page, pageSize, PAGINATION_LIMIT).then(
+      (response: any) => {
+        let allResults = _.flattenDeep(
+          _.map(response, (pageSet) => {
+            return pageSet.items;
+          })
+        );
 
-      return _.compact(allResults).map((entry) => {
-        return {
-          key: entry.id,
-          label: entry.label,
-        };
-      });
-    });
+        return _.compact(allResults).map((entry) => {
+          return {
+            key: entry.id,
+            label: entry.label,
+          };
+        });
+      }
+    );
 
     this.applicationsCache.put(key, applications, 600000);
     return applications;
   }
 
-  paginateApplications(results: any, windowSize: number, to: number, page: number, pageSize: number, pageLimit: number) {
+  paginateApplications(
+    results: any,
+    windowSize: number,
+    to: number,
+    page: number,
+    pageSize: number,
+    pageLimit: number
+  ) {
     if (page > pageLimit) {
       return results;
     }
 
     let queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
 
-    return getRequest(this.instanaOptions, '/api/application-monitoring/applications?' + queryParameters).then((response: any) => {
-      results.push(response.data);
-      if (page * pageSize < response.data.totalHits) {
-        page++;
-        return this.paginateApplications(results, windowSize, to, page, pageSize, pageLimit);
-      } else {
-        return results;
+    return getRequest(this.instanaOptions, '/api/application-monitoring/applications?' + queryParameters).then(
+      (response: any) => {
+        results.push(response.data);
+        if (page * pageSize < response.data.totalHits) {
+          page++;
+          return this.paginateApplications(results, windowSize, to, page, pageSize, pageLimit);
+        } else {
+          return results;
+        }
       }
-    });
+    );
   }
 
   getApplicationTags() {
@@ -104,14 +119,15 @@ export class DataSourceApplication {
       return applicationTags;
     }
 
-    applicationTags = getRequest(this.instanaOptions, '/api/application-monitoring/catalog/tags').then((tagsResponse: any) =>
-      tagsResponse.data.map((entry: any) => ({
-        key: entry.name,
-        label: entry.name,
-        type: entry.type,
-        canApplyToSource: entry.canApplyToSource,
-        canApplyToDestination: entry.canApplyToDestination,
-      }))
+    applicationTags = getRequest(this.instanaOptions, '/api/application-monitoring/catalog/tags').then(
+      (tagsResponse: any) =>
+        tagsResponse.data.map((entry: any) => ({
+          key: entry.name,
+          label: entry.name,
+          type: entry.type,
+          canApplyToSource: entry.canApplyToSource,
+          canApplyToDestination: entry.canApplyToDestination,
+        }))
     );
     this.miscCache.put('applicationTags', applicationTags);
 
@@ -132,7 +148,10 @@ export class DataSourceApplication {
           name: 'application.name',
           operator: 'EQUALS',
           value: target.entity.label!,
-          entity: target.applicationCallToEntity && target.applicationCallToEntity.key ? target.applicationCallToEntity.key : 'DESTINATION',
+          entity:
+            target.applicationCallToEntity && target.applicationCallToEntity.key
+              ? target.applicationCallToEntity.key
+              : 'DESTINATION',
         });
       }
 
@@ -177,7 +196,11 @@ export class DataSourceApplication {
         tagFilters: tagFilters,
         metrics: [metric],
       };
-      return postRequest(this.instanaOptions, '/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
+      return postRequest(
+        this.instanaOptions,
+        '/api/application-monitoring/analyze/call-groups?fillTimeSeries=true',
+        data
+      );
     });
   }
 
@@ -220,7 +243,11 @@ export class DataSourceApplication {
       data['applicationId'] = target.entity.key;
     }
 
-    return postRequest(this.instanaOptions, '/api/application-monitoring/metrics/applications?fillTimeSeries=true', data);
+    return postRequest(
+      this.instanaOptions,
+      '/api/application-monitoring/metrics/applications?fillTimeSeries=true',
+      data
+    );
   }
 
   buildAnalyzeApplicationLabel(target: InstanaQuery, item: any, key: string, index: number): string {
@@ -257,7 +284,9 @@ export class DataSourceApplication {
     }
 
     if (target.entity.label === ALL_APPLICATIONS) {
-      return target.timeShift ? item.application.label + ' - ' + key + ' - ' + target.timeShift : item.application.label + ' - ' + key;
+      return target.timeShift
+        ? item.application.label + ' - ' + key + ' - ' + target.timeShift
+        : item.application.label + ' - ' + key;
     }
 
     return target.timeShift && target.timeShiftIsValid

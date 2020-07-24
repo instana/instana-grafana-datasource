@@ -3,8 +3,9 @@
   "name": "Instana",
   "id": "instana-datasource",
   "metrics": true,
-  "annotations": true,
-  "alerting": true,
+  "annotations": false,
+  "alerting": false,
+  "logs": false,
   "info": {
     "description": "Grafana datasource plugin for Instana: Automatic Infrastructure and Application Monitoring",
     "author": {
@@ -34,8 +35,8 @@
       }
     ],
     "screenshots": [],
-    "version": "2.8.0",
-    "updated": "2020-04-03"
+    "version": "3.0.0",
+    "updated": "2020-08-12"
   },
   "routes": [
     {
@@ -51,7 +52,7 @@
     }
   ],
   "dependencies": {
-    "grafanaVersion": "6.5.x",
+    "grafanaVersion": "7.0.x",
     "plugins": []
   }
 }

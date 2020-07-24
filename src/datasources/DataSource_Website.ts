@@ -24,14 +24,26 @@ export class DataSourceWebsite {
   }
 
   runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
-    if (isInvalidQueryInterval(timeFilter.windowSize, hoursToMs(this.instanaOptions.queryinterval_limit_website_metrics))) {
+    if (
+      isInvalidQueryInterval(timeFilter.windowSize, hoursToMs(this.instanaOptions.queryinterval_limit_website_metrics))
+    ) {
       throw new Error(
-        'Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_website_metrics + ' hours'
+        'Limit for maximum selectable windowsize exceeded, max is: ' +
+          this.instanaOptions.queryinterval_limit_website_metrics +
+          ' hours'
       );
     }
 
     // avoid invalid calls
-    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key || !target.entity || !target.entity.key) {
+    if (
+      !target ||
+      !target.metric ||
+      !target.metric.key ||
+      !target.group ||
+      !target.group.key ||
+      !target.entity ||
+      !target.entity.key
+    ) {
       return Promise.resolve(emptyResultData(target.refId));
     }
 
@@ -74,11 +86,12 @@ export class DataSourceWebsite {
         retrievalSize: 200,
       },
     };
-    websites = postRequest(this.instanaOptions, '/api/website-monitoring/analyze/beacon-groups', data).then((websitesResponse: any) =>
-      websitesResponse.data.items.map((entry: any) => ({
-        key: entry.name,
-        label: entry.name,
-      }))
+    websites = postRequest(this.instanaOptions, '/api/website-monitoring/analyze/beacon-groups', data).then(
+      (websitesResponse: any) =>
+        websitesResponse.data.items.map((entry: any) => ({
+          key: entry.name,
+          label: entry.name,
+        }))
     );
     this.websitesCache.put(key, websites);
 
@@ -109,13 +122,14 @@ export class DataSourceWebsite {
       return websiteCatalog;
     }
 
-    websiteCatalog = getRequest(this.instanaOptions, '/api/website-monitoring/catalog/metrics').then((catalogResponse: any) =>
-      catalogResponse.data.map((entry: any) => ({
-        key: entry.metricId,
-        label: entry.label,
-        aggregations: entry.aggregations ? this.transformAggregations(entry.aggregations.sort()) : [],
-        beaconTypes: entry.beaconTypes ? entry.beaconTypes : ['pageLoad', 'resourceLoad', 'httpRequest', 'error'],
-      }))
+    websiteCatalog = getRequest(this.instanaOptions, '/api/website-monitoring/catalog/metrics').then(
+      (catalogResponse: any) =>
+        catalogResponse.data.map((entry: any) => ({
+          key: entry.metricId,
+          label: entry.label,
+          aggregations: entry.aggregations ? this.transformAggregations(entry.aggregations.sort()) : [],
+          beaconTypes: entry.beaconTypes ? entry.beaconTypes : ['pageLoad', 'resourceLoad', 'httpRequest', 'error'],
+        }))
     );
     this.miscCache.put('websiteCatalog', websiteCatalog);
 
