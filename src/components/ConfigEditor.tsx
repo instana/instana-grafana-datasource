@@ -1,6 +1,7 @@
-import { DataSourcePluginOptionsEditorProps, DataSourceSettings, SelectableValue } from '@grafana/data';
-import { Legend, Field, Input, Checkbox } from '@grafana/ui';
 import React, { ChangeEvent, PureComponent } from 'react';
+
+import { DataSourcePluginOptionsEditorProps, DataSourceSettings, SelectableValue } from '@grafana/data';
+import { Legend, Field, Input, Checkbox, Icon } from '@grafana/ui';
 import { InstanaOptions } from '../types/instana_options';
 import getVersion from '../util/instana_version';
 import proxyCheck from '../util/proxy_check';
@@ -16,11 +17,10 @@ interface State {
 export class ConfigEditor extends PureComponent<Props, State> {
   constructor(props: Readonly<Props>) {
     super(props);
-    this.detectFeatures();
-    this.state = { canQueryOfflineSnapshots: true, canUseProxy: true };
+    this.state = { canQueryOfflineSnapshots: false, canUseProxy: false };
 
     // check possibility every time
-    this.setState({ canUseProxy: proxyCheck() });
+    this.detectFeatures();
 
     const { options } = this.props;
     const { jsonData } = options;
@@ -68,6 +68,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
       return;
     }
 
+    this.setState({ canUseProxy: proxyCheck() });
     getVersion(settings.jsonData).then((version: any) => {
       version ? this.setState({ canQueryOfflineSnapshots: version >= 156 }) : this.setState({ canQueryOfflineSnapshots: false });
     });
@@ -81,7 +82,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
       <div>
         <Legend>Instana configuration</Legend>
 
-        <Field className={'width-30'} horizontal label="URL" description="URL of Instana installation">
+        <Field className={'width-30'} horizontal required label="URL" description="The URL of your Instana installation.">
           <Input
             width={40}
             value={jsonData.url}
@@ -91,10 +92,11 @@ export class ConfigEditor extends PureComponent<Props, State> {
           />
         </Field>
 
-        <Field className={'width-30'} horizontal label="API Token" description="To access Instana API">
+        <Field className={'width-30'} horizontal required label="API Token" description="The API token to access the data.">
           <Input
             width={40}
             value={jsonData.apiToken}
+            suffix={<Icon name="info-circle"/>}
             onBlur={() => this.detectFeatures(options)}
             onChange={(event) => this.onInstanaOptionsChange(event, 'apiToken')}
           />

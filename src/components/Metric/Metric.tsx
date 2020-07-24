@@ -1,10 +1,10 @@
 import React from 'react';
-import { InstanaQuery } from '../types/instana_query';
+import { DataSource } from '../../datasources/DataSource';
+import { InstanaQuery } from '../../types/instana_query';
 import { FormLabel, Select, Switch } from '@grafana/ui';
+import max_metrics from '../../lists/max_metrics';
 import { SelectableValue } from '@grafana/data';
-import { DataSource } from '../datasources/DataSource';
 import _ from 'lodash';
-import max_metrics from '../lists/max_metrics';
 
 interface MetricState {
   possibleTimeIntervals: SelectableValue[];
