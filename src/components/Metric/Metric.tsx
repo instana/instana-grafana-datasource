@@ -1,10 +1,11 @@
 import React from 'react';
-import { InstanaQuery } from '../types/instana_query';
-import { FormLabel, Select, Switch } from '@grafana/ui';
+
+import { DataSource } from '../../datasources/DataSource';
+import { InstanaQuery } from '../../types/instana_query';
+import { Label, Select, Switch } from '@grafana/ui';
+import max_metrics from '../../lists/max_metrics';
 import { SelectableValue } from '@grafana/data';
-import { DataSource } from '../datasources/DataSource';
 import _ from 'lodash';
-import max_metrics from '../lists/max_metrics';
 
 interface MetricState {
   possibleTimeIntervals: SelectableValue[];
@@ -103,9 +104,9 @@ export default class Metric extends React.Component<Props, MetricState> {
 
     return (
       <div className={'gf-form-inline'}>
-        <FormLabel width={14} tooltip={'Select the metric you wish to plot.'}>
+        <Label width={14} tooltip={'Select the metric you wish to plot.'}>
           Metric
-        </FormLabel>
+        </Label>
         <div style={query.showAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
           <Select width={30} isSearchable={true} value={query.metric} onChange={this.onMetricChange} options={this.props.availableMetrics} />
         </div>
@@ -137,18 +138,18 @@ export default class Metric extends React.Component<Props, MetricState> {
         )}
 
         {query.metricCategory.key > 1 && (
-          <FormLabel width={8} tooltip={'Select a metric aggregation.'}>
+          <Label width={8} description={'Select a metric aggregation.'}>
             Aggregation
-          </FormLabel>
+          </Label>
         )}
 
         {this.canShowAggregation() && (
           <Select width={8} isSearchable={false} value={query.aggregation} onChange={this.onAggregationChange} options={query.metric.aggregations} />
         )}
 
-        <FormLabel width={6} tooltip={'Select the rollup value.'}>
+        <Label width={6} description={'Select the rollup value.'}>
           Rollup
-        </FormLabel>
+        </Label>
         <Select
           width={8}
           isSearchable={false}

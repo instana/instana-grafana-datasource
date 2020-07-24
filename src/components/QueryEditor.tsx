@@ -1,16 +1,5 @@
 import React, { PureComponent } from 'react';
-import { InstanaOptions } from '../types/instana_options';
-import { QueryEditorProps, SelectableValue } from '@grafana/data';
-import { DataSource } from '../datasources/DataSource';
-import { InstanaQuery } from '../types/instana_query';
-import AdvancedSettings from './AdvancedSettings/AdvancedSettings';
-import { FormLabel, Select } from '@grafana/ui';
-import MetricCategories from '../lists/metric_categories';
-import { SloInformation } from './SLOInformation/SloInformation';
-import { InfrastructureBuiltIn } from './Infrastructure/BuiltIn/InfrastructureBuiltIn';
-import _ from 'lodash';
-import Metric from './Metric';
-import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
+
 import {
   ANALYZE_APPLICATION_METRICS,
   ANALYZE_WEBSITE_METRICS,
@@ -19,13 +8,25 @@ import {
   CUSTOM_METRICS,
   SLO_INFORMATION,
 } from '../GlobalVariables';
-import { InfrastructureCustom } from './Infrastructure/Custom/InfrastructureCustom';
-import AggregationFunctions from '../lists/aggregation_function';
-import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import { ApplicationServiceEndpointMetrics } from './ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics';
-import migrate from '../migration';
-import { Filters } from './Analyze/Filter';
+import { InfrastructureBuiltIn } from './Infrastructure/BuiltIn/InfrastructureBuiltIn';
+import { InfrastructureCustom } from './Infrastructure/Custom/InfrastructureCustom';
 import { ApplicationCallsMetrics } from './Analyze/ApplicationCallsMetrics';
+import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
+import AdvancedSettings from './AdvancedSettings/AdvancedSettings';
+import { QueryEditorProps, SelectableValue } from '@grafana/data';
+import { SloInformation } from './SLOInformation/SloInformation';
+import AggregationFunctions from '../lists/aggregation_function';
+import { InstanaOptions } from '../types/instana_options';
+import MetricCategories from '../lists/metric_categories';
+import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
+import { DataSource } from '../datasources/DataSource';
+import { InstanaQuery } from '../types/instana_query';
+import { FormLabel, Select } from '@grafana/ui';
+import { Filters } from './Analyze/Filter';
+import Metric from './Metric/Metric';
+import migrate from '../migration';
+import _ from 'lodash';
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
