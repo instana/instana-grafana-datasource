@@ -22,7 +22,7 @@ import MetricCategories from '../lists/metric_categories';
 import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import { DataSource } from '../datasources/DataSource';
 import { InstanaQuery } from '../types/instana_query';
-import { Label, Select } from '@grafana/ui';
+import { InlineFormLabel, Select } from '@grafana/ui';
 import { Filters } from './Analyze/Filter';
 import Metric from './Metric/Metric';
 import migrate from '../migration';
@@ -191,10 +191,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     return (
       <div>
         <div className={'gf-form'}>
-          <Label width={14} tooltip={'Select a metric category.'}>
-            Category
-          </Label>
-          <Select width={30} isSearchable={false} options={MetricCategories} onChange={onCategoryChange} value={query.metricCategory} />
+          <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select a metric category.'}>Category</InlineFormLabel>
+          <Select menuPlacement="bottom" width={30} isSearchable={false} options={MetricCategories} onChange={onCategoryChange} value={query.metricCategory} />
         </div>
 
         {query.metricCategory.key === BUILT_IN_METRICS && (

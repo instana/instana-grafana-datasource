@@ -1,23 +1,26 @@
 
 import React from 'react';
 
-import { Field, Input, PopoverContent } from '@grafana/ui';
+import { InlineFormLabel, Input, PopoverContent } from '@grafana/ui';
 
 interface State {}
 
 interface Props {
     label: string;
     value: string;
-    description?: string;
+    hidden?: boolean;
     placeholder?: string;
-    hidden?: boolean | false;
+    queryKeyword?: boolean;
     labelWidth?: number | 14;
     inputWidth?: number | 30;
     tooltip?: PopoverContent;
+
+    onBlur();
+    onChange();
 }
 
 /**
- * Default form field including label. Default input element is simple <input />.
+ * Default input field including label. Input element is grafana/ui <Input />.
  */
 export default class FormField extends React.Component<Props, State> {
   constructor(props: any) {
@@ -25,17 +28,17 @@ export default class FormField extends React.Component<Props, State> {
   }
 
   render() {
-    const { label, value, description, placeholder, hidden, labelWidth, inputWidth } = this.props; // , onChange, onBlur
+    const { label, value, tooltip, placeholder, queryKeyword, hidden, labelWidth, inputWidth, onChange, onBlur } = this.props;
     return (
-      <div hidden={hidden}>
-        <Field className={'width-'+labelWidth} horizontal label={label} description={description}>
-          <Input width={inputWidth}
-            value={value}
-            placeholder={placeholder}
-  //                onChange={onChange}
-  //                onBlur={onBlur}
-          />
-        </Field>
+      <div className={'gf-form'} hidden={hidden}>
+        <InlineFormLabel className={queryKeyword?'query-keyword':''} width={labelWidth} tooltip={tooltip}>{label}</InlineFormLabel>
+        <Input
+          width={inputWidth}
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          onBlur={onBlur}
+        />
       </div>
     )
   }
