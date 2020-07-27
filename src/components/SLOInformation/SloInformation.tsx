@@ -1,9 +1,10 @@
 import React, { ChangeEvent } from 'react';
-import { InstanaQuery } from '../../types/instana_query';
-import { FormLabel, Input, Select } from '@grafana/ui';
-import { SelectableValue } from '@grafana/data';
-import SloSpecifics from '../../lists/slo_specifics';
+
 import { DataSource } from '../../datasources/DataSource';
+import { InstanaQuery } from '../../types/instana_query';
+import SloSpecifics from '../../lists/slo_specifics';
+import { Label, Input, Select } from '@grafana/ui';
+import { SelectableValue } from '@grafana/data';
 
 interface SloInformationState {
   sloReports: SelectableValue[];
@@ -78,16 +79,16 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
 
     return (
       <div className={'gf-form-inline'}>
-        <FormLabel width={14} tooltip={'SLI configuration used to compute error budget and SLI values.'}>
+        <Label width={14} tooltip={'SLI configuration used to compute error budget and SLI values.'}>
           Configured SLI
-        </FormLabel>
+        </Label>
         <Select width={30} isSearchable={false} value={query.sloReport} onChange={this.onSloChange} options={this.state.sloReports} />
 
-        <FormLabel tooltip={'Type in your desired SLO threshold from 0 to 0.9999'}>SLO</FormLabel>
+        <Label tooltip={'Type in your desired SLO threshold from 0 to 0.9999'}>SLO</Label>
 
         <Input value={query.sloValue} placeholder={'0.99'} onChange={this.onSloValueChange} />
 
-        <FormLabel>Value type</FormLabel>
+        <Label>Value type</Label>
         <Select width={30} isSearchable={false} options={SloSpecifics} value={query.sloSpecific} onChange={this.onSloSpecificChange} />
       </div>
     );

@@ -1,7 +1,9 @@
-import { Switch, FormField } from '@grafana/ui';
 import React, { ChangeEvent, FormEvent } from 'react';
+
 import { InstanaQuery } from '../../types/instana_query';
 import { AggregateQuery } from './AggregateQuery';
+import FormField from '../FormField/FormField';
+import { Switch } from '@grafana/ui';
 
 const legendFormatPlaceholders = [
   '$label (on host $host)',

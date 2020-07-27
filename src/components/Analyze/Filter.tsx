@@ -1,13 +1,16 @@
 import React, { ChangeEvent } from 'react';
-import { InstanaQuery } from '../../types/instana_query';
-import { Button, FormLabel, Input, Select } from '@grafana/ui';
-import { SelectableValue } from '@grafana/data';
+
+import {
+  ANALYZE_APPLICATION_METRICS
+} from '../../GlobalVariables';
+import call_to_entities from '../../lists/apply_call_to_entities';
+import { Button, Label, Input, Select } from '@grafana/ui';
 import { DataSource } from '../../datasources/DataSource';
+import { InstanaQuery } from '../../types/instana_query';
+import { SelectableValue } from '@grafana/data';
+import TagFilter from '../../types/tag_filter';
 import operators from '../../lists/operators';
 import _ from 'lodash';
-import TagFilter from '../../types/tag_filter';
-import { ANALYZE_APPLICATION_METRICS } from '../../GlobalVariables';
-import call_to_entities from '../../lists/apply_call_to_entities';
 
 interface FilterState {
   tagFilters: TagFilter[];
@@ -163,9 +166,9 @@ export class Filters extends React.Component<Props, FilterState> {
     let listFilter = this.state.tagFilters.map((filters, index) => {
       filter = (
         <div className={'gf-form-inline'}>
-          <FormLabel width={14} tooltip={'Add an additional tag filter.'}>
+          <Label width={14} tooltip={'Add an additional tag filter.'}>
             Add filter
-          </FormLabel>
+          </Label>
           {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
             <Select
               width={7}
@@ -234,9 +237,9 @@ export class Filters extends React.Component<Props, FilterState> {
         {listFilter}
 
         <div className={'gf-form-inline'}>
-          <FormLabel width={14} tooltip={'Add an additional tag filter.'}>
+          <Label width={14} tooltip={'Add an additional tag filter.'}>
             Add filter
-          </FormLabel>
+          </Label>
           <Button variant={'inverse'} onClick={this.addTagFilter}>
             +
           </Button>

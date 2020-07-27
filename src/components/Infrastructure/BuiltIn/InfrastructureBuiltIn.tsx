@@ -1,8 +1,9 @@
 import React from 'react';
-import { InstanaQuery } from '../../../types/instana_query';
+
 import { DataSource } from '../../../datasources/DataSource';
-import { QueryType } from '../QueryType';
+import { InstanaQuery } from '../../../types/instana_query';
 import { SelectableValue } from '@grafana/data';
+import { QueryType } from '../QueryType';
 
 interface InfrastructureBuiltInState {}
 

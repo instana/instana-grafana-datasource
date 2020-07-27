@@ -1,8 +1,9 @@
-import { Select, Switch } from '@grafana/ui';
 import React from 'react';
+
+import AggregationFunctions from '../../lists/aggregation_function';
 import { InstanaQuery } from '../../types/instana_query';
 import { SelectableValue } from '@grafana/data';
-import AggregationFunctions from '../../lists/aggregation_function';
+import { Select, Switch } from '@grafana/ui';
 
 interface AggregateQueryState {}
 

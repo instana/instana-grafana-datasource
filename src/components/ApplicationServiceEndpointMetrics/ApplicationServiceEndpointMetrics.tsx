@@ -1,10 +1,15 @@
 import React, { ChangeEvent } from 'react';
-import { InstanaQuery } from '../../types/instana_query';
+
+import {
+  ALL_APPLICATIONS,
+  ALL_ENDPOINTS,
+  ALL_SERVICES
+} from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
-import { FormLabel, Input, Select } from '@grafana/ui';
+import { InstanaQuery } from '../../types/instana_query';
+import { Label, Input, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
-import { ALL_APPLICATIONS, ALL_ENDPOINTS, ALL_SERVICES } from '../../GlobalVariables';
 
 interface ApplicationServiceEndpointMetricsState {
   applications: SelectableValue[];
@@ -172,19 +177,19 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
 
     return (
       <div className={'gf-form-inline'}>
-        <FormLabel width={14} tooltip={'Select your application.'}>
+        <Label width={14} tooltip={'Select your application.'}>
           Application
-        </FormLabel>
+        </Label>
         <Select width={20} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
 
-        <FormLabel width={7} tooltip={'Select your service.'}>
+        <Label width={7} tooltip={'Select your service.'}>
           Service
-        </FormLabel>
+        </Label>
         <Select width={20} isSearchable={false} value={query.service} options={this.state.services} onChange={this.onServiceChange} />
 
-        <FormLabel width={8} tooltip={'Select your endpoint.'}>
+        <Label width={8} tooltip={'Select your endpoint.'}>
           Endpoints
-        </FormLabel>
+        </Label>
         <Select width={20} isSearchable={true} value={query.endpoint} options={this.state.endpoints} onChange={this.onEndpointChange} />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>

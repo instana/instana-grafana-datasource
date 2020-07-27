@@ -1,8 +1,10 @@
 import React, { ChangeEvent } from 'react';
-import { InstanaQuery } from '../../types/instana_query';
-import { FormField, FormLabel, Select } from '@grafana/ui';
-import { SelectableValue } from '@grafana/data';
+
 import { DataSource } from '../../datasources/DataSource';
+import { InstanaQuery } from '../../types/instana_query';
+import { SelectableValue } from '@grafana/data';
+import FormField from '../FormField/FormField';
+import { Label, Select } from '@grafana/ui';
 import _ from 'lodash';
 
 interface QueryTypeState {
@@ -148,7 +150,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
           }
         />
 
-        <FormLabel tooltip={'Select an entity type for a list of available metrics.'}>Type</FormLabel>
+        <Label tooltip={'Select an entity type for a list of available metrics.'}>Type</Label>
         <Select width={13} isSearchable={true} value={query.entityType} options={this.state.types} onChange={this.onTypeChange} />
       </div>
     );

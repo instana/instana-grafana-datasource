@@ -1,11 +1,15 @@
 import React, { ChangeEvent } from 'react';
-import { InstanaQuery } from '../../types/instana_query';
+
+import {
+  ALL_APPLICATIONS,
+  ANALYZE_APPLICATION_METRICS
+} from '../../GlobalVariables';
+import call_to_entities from '../../lists/apply_call_to_entities';
 import { DataSource } from '../../datasources/DataSource';
-import { FormLabel, Input, Select } from '@grafana/ui';
+import { InstanaQuery } from '../../types/instana_query';
+import { Label, Input, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
-import { ALL_APPLICATIONS, ANALYZE_APPLICATION_METRICS } from '../../GlobalVariables';
-import call_to_entities from '../../lists/apply_call_to_entities';
 
 interface ApplicationCallsMetricsState {
   applications: SelectableValue[];
@@ -126,9 +130,9 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
 
     return (
       <div className={'gf-form-inline'}>
-        <FormLabel width={14} tooltip={'Select your application.'}>
+        <Label width={14} tooltip={'Select your application.'}>
           Application
-        </FormLabel>
+        </Label>
         <Select
           width={7}
           isSearchable={false}
@@ -139,9 +143,9 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
         />
         <Select width={20} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
 
-        <FormLabel width={7} tooltip={'Group by tag.'}>
+        <Label width={7} tooltip={'Group by tag.'}>
           Group by
-        </FormLabel>
+        </Label>
         <Select
           width={7}
           isSearchable={false}
