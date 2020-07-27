@@ -49,7 +49,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
 
   onQueryChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
     const { query, onChange } = this.props;
-    if (eventItem.currentTarget.value) {
+    if (eventItem.currentTarget && eventItem.currentTarget.value) {
       query.entityQuery = eventItem.currentTarget.value;
     } else {
       this.setState({
@@ -61,6 +61,9 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
     }
 
     onChange(query);
+
+    // loadEntityTypes with 500ms delay after last debounce
+    this.debouncedEntityTypes();
   };
 
   onTypeChange = (eventItem: SelectableValue) => {
@@ -72,6 +75,8 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
       this.props.updateMetrics(results);
     });
   };
+
+  debouncedEntityTypes = _.debounce(this.loadEntityTypes, 500);
 
   loadEntityTypes() {
     const { query, datasource, onRunQuery } = this.props;
@@ -140,12 +145,9 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
         <FormField
           queryKeyword
           label="Query"
-          labelWidth={14}
-          inputWidth={30}
           value={query.entityQuery}
           placeholder={'Please specify'}
           onChange={this.onQueryChange}
-          onBlur={() => this.loadEntityTypes()}
           tooltip={<div>Specify a query for the entities you wish to plot. Use the dynamic focus syntax: <a href="https://docs.instana.io/core_concepts/dynamic_focus/#syntax">https://docs.instana.io/core_concepts/dynamic_focus/#syntax</a></div>}
         />
 
