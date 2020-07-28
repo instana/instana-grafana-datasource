@@ -4,7 +4,7 @@ import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import FormSelect from '../FormField/FormSelect';
 import { SelectableValue } from '@grafana/data';
-import FormField from '../FormField/FormField';
+import FormInput from '../FormField/FormInput';
 import _ from 'lodash';
 
 interface QueryTypeState {
@@ -142,7 +142,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
 
     return (
       <div className={'gf-form-inline'}>
-        <FormField
+        <FormInput
           queryKeyword
           label={'Query'}
           value={query.entityQuery}

@@ -4,11 +4,11 @@ import {
   ALL_APPLICATIONS,
   ANALYZE_APPLICATION_METRICS
 } from '../../GlobalVariables';
+import { Input, Select, LegacyForms, InlineFormLabel } from '@grafana/ui';
 import call_to_entities from '../../lists/apply_call_to_entities';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import FormSelect from '../FormField/FormSelect';
-import { Input, LegacyForms, InlineFormLabel } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
 
@@ -121,7 +121,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
     onRunQuery();
   };
 
-  debouncedGroupByTagSecondLevelKeyChange = _.debounce(this.onGroupByTagSecondLevelKeyChange, 500);
+  debouncedGroupByTagSecondLevelKeyChange = _.debounce(() => this.onGroupByTagSecondLevelKeyChange, 500);
 
   onGroupByTagSecondLevelKeyChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
     const { query, onChange, onRunQuery } = this.props;

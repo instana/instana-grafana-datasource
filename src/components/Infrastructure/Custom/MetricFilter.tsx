@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 
 import { DataSource } from '../../../datasources/DataSource';
 import { InstanaQuery } from '../../../types/instana_query';
-import FormField from '../../FormField/FormField';
+import FormInput from '../../FormField/FormInput';
 import { SelectableValue } from '@grafana/data';
 import { Button, Label } from '@grafana/ui';
 
@@ -64,7 +64,7 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
     let listFilter = this.state.customFilters.map((filters, index) => {
       filter = (
         <div className={'gf-form-inline'}>
-          <FormField
+          <FormInput
             label={index + 1 + '. filter metric select'}
             labelWidth={14}
             inputWidth={30}

@@ -3,8 +3,8 @@ import React, { ChangeEvent } from 'react';
 import {
   ANALYZE_APPLICATION_METRICS
 } from '../../GlobalVariables';
-import call_to_entities from '../../lists/apply_call_to_entities';
 import { Button, InlineFormLabel, Input, Select } from '@grafana/ui';
+import call_to_entities from '../../lists/apply_call_to_entities';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import { SelectableValue } from '@grafana/data';
@@ -166,7 +166,7 @@ export class Filters extends React.Component<Props, FilterState> {
     let listFilter = this.state.tagFilters.map((filters, index) => {
       filter = (
         <div className={'gf-form-inline'}>
-          <InlineFormLabel width={14} tooltip={'Filter by tag.'}>
+          <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Filter by tag.'}>
             {index+1}. filter
           </InlineFormLabel>
           {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
@@ -196,6 +196,7 @@ export class Filters extends React.Component<Props, FilterState> {
 
           {this.canShowStringInput(query.filters[index]) && (
             <Input
+              width={20}
               value={query.filters[index].stringValue}
               placeholder={query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : 'please specify'}
               onChange={(e) => this.onTagFilterStringValueChange(e, index)}
@@ -206,6 +207,7 @@ export class Filters extends React.Component<Props, FilterState> {
           {query.filters[index].tag.type === 'NUMBER' && (
             <Input
               type={'number'}
+              width={20}
               value={query.filters[index].numberValue}
               placeholder={'please specify'}
               onChange={(e) => this.onTagFilterNumberValueChange(e, index)}
@@ -215,6 +217,7 @@ export class Filters extends React.Component<Props, FilterState> {
 
           {query.filters[index].tag.type === 'BOOLEAN' && (
             <Select
+              width={20}
               onChange={(e) => this.onTagFilterBooleanValueChange(e, index)}
               value={{ key: '' + query.filters[index].booleanValue, label: '' + query.filters[index].booleanValue }}
               options={[
@@ -224,7 +227,7 @@ export class Filters extends React.Component<Props, FilterState> {
             />
           )}
 
-          <Button variant={'inverse'} onClick={(event) => this.removeTagFilter(index)}>
+          <Button variant={'secondary'} onClick={(event) => this.removeTagFilter(index)}>
             -
           </Button>
         </div>
@@ -240,7 +243,7 @@ export class Filters extends React.Component<Props, FilterState> {
           <InlineFormLabel width={14} tooltip={'Add an additional tag filter.'}>
             Add filter
           </InlineFormLabel>
-          <Button variant={'inverse'} onClick={this.addTagFilter}>
+          <Button variant={'secondary'} onClick={this.addTagFilter}>
             +
           </Button>
         </div>

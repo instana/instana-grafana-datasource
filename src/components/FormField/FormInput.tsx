@@ -21,7 +21,7 @@ interface Props {
 /**
  * Default input field including label. Input element is grafana/ui <Input />.
  */
-export default class FormField extends React.Component<Props, State> {
+export default class FormInput extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
   }

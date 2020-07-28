@@ -144,7 +144,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           queryKeyword
           hidden={this.canShowAggregation()}
           label={'Aggregation'}
-          labelWidth={8}
+          labelWidth={6}
           inputWidth={8}
           value={query.aggregation}
           options={query.metric.aggregations}
