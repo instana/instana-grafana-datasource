@@ -2,9 +2,10 @@ import React from 'react';
 
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
-import { Label, Select, Switch } from '@grafana/ui';
 import max_metrics from '../../lists/max_metrics';
+import FormSelect from '../FormField/FormSelect';
 import { SelectableValue } from '@grafana/data';
+import { Switch } from '@grafana/ui';
 import _ from 'lodash';
 
 interface MetricState {
@@ -104,12 +105,14 @@ export default class Metric extends React.Component<Props, MetricState> {
 
     return (
       <div className={'gf-form-inline'}>
-        <Label width={14} tooltip={'Select the metric you wish to plot.'}>
-          Metric
-        </Label>
-        <div style={query.showAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-          <Select width={30} isSearchable={true} value={query.metric} onChange={this.onMetricChange} options={this.props.availableMetrics} />
-        </div>
+        <FormSelect
+          queryKeyword searchable
+          label={'Metric'}
+          value={query.metric}
+          options={this.props.availableMetrics}
+          onChange={this.onMetricChange}
+          tooltip={'Select the metric you wish to plot.'}
+        />
 
         {query.metricCategory.key === 0 && (
           <div style={!this.canShowMaxMetricValue() ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
@@ -137,26 +140,29 @@ export default class Metric extends React.Component<Props, MetricState> {
           </div>
         )}
 
-        {query.metricCategory.key > 1 && (
-          <Label width={8} description={'Select a metric aggregation.'}>
-            Aggregation
-          </Label>
-        )}
-
-        {this.canShowAggregation() && (
-          <Select width={8} isSearchable={false} value={query.aggregation} onChange={this.onAggregationChange} options={query.metric.aggregations} />
-        )}
-
-        <Label width={6} description={'Select the rollup value.'}>
-          Rollup
-        </Label>
-        <Select
-          width={8}
-          isSearchable={false}
-          value={query.timeInterval}
-          onChange={this.onTimeIntervalChange}
-          options={datasource.availableTimeIntervals}
+        <FormSelect
+          queryKeyword
+          hidden={this.canShowAggregation()}
+          label={'Aggregation'}
+          labelWidth={8}
+          inputWidth={8}
+          value={query.aggregation}
+          options={query.metric.aggregations}
+          onChange={this.onAggregationChange}
+          tooltip={'Select a metric aggregation.'}
         />
+
+        <FormSelect
+          queryKeyword
+          label={'Rollup'}
+          labelWidth={6}
+          inputWidth={8}
+          value={query.timeInterval}
+          options={this.props.onTimeIntervalChange}
+          onChange={datasource.onTimeIntervalChange}
+          tooltip={'Select the rollup value.'}
+        />
+
       </div>
     );
   }
