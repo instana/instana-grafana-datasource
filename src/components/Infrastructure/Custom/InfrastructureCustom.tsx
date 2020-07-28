@@ -50,9 +50,7 @@ export class InfrastructureCustom extends React.Component<Props, InfrastructureC
     const { query, onRunQuery, onChange, updateMetrics, datasource } = this.props;
 
     return (
-      <div>
-        <QueryType query={query} onChange={onChange} onRunQuery={onRunQuery} datasource={datasource} updateMetrics={updateMetrics} />
-      </div>
+      <QueryType query={query} onChange={onChange} onRunQuery={onRunQuery} datasource={datasource} updateMetrics={updateMetrics} />
     );
   }
 }

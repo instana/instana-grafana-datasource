@@ -2,10 +2,8 @@ import React, { ChangeEvent, FormEvent } from 'react';
 
 import { InstanaQuery } from '../../types/instana_query';
 import { AggregateQuery } from './AggregateQuery';
+import FormSwitch from '../FormField/FormSwitch';
 import FormInput from '../FormField/FormInput';
-import { LegacyForms } from '@grafana/ui';
-
-const { Switch } = LegacyForms;
 
 const legendFormatPlaceholders = [
   '$label (on host $host)',
@@ -137,38 +135,40 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
 
     return (
       <div>
-        <Switch
-          labelClass={'width-14'}
-          tooltipPlacement={'top'}
-          label={'Show advanced settings'}
-          tooltip={'Show all additional settings'}
-          checked={this.state.showAdditionalSettings}
-          onChange={() => this.setState({ showAdditionalSettings: !this.state.showAdditionalSettings })}
-        />
+        <div className={'gf-form'}>
+          <FormSwitch
+            label={'Show advanced settings'}
+            tooltip={'Show all additional settings'}
+            value={this.state.showAdditionalSettings}
+            onChange={() => this.setState({ showAdditionalSettings: !this.state.showAdditionalSettings })}
+          />
+        </div>
 
         <div hidden={!this.state.showAdditionalSettings}>
-          <div hidden={query.metricCategory.key === 7}>
+          <div className={'gf-form'} hidden={query.metricCategory.key === 7}>
             <FormInput
               queryKeyword
+              inputWidth={0}
               label={'Legend format'}
+              tooltip={this.setLegendFormatTooltip()}
               value={query.labelFormat}
               placeholder={this.setLegendFormatPlaceholder()}
               onChange={(event) => this.onLegendFormatChange(event)}
               onBlur={() => onRunQuery()}
-              tooltip={this.setLegendFormatTooltip()}
             />
           </div>
 
-          <FormInput
-            queryKeyword
-            placeholder={'1h'}
-            label={'Time shift'}
-            value={query.timeShift}
-            onChange={(event) => this.onTimeShiftChange(event)}
-            tooltip={
-              'Specify the amount of hours that shall be used. The time shift function always go back in time, not forward. Accepts values such as 1s, 1m, 1h, 1d, 1w.'
-            }
-          />
+          <div className={'gf-form'}>
+            <FormInput
+              queryKeyword
+              inputWidth={0}
+              label={'Time shift'}
+              tooltip={'Specify the amount of hours that shall be used. The time shift function always go back in time, not forward. Accepts values such as 1s, 1m, 1h, 1d, 1w.'}
+              value={query.timeShift}
+              placeholder={'1h'}
+              onChange={(event) => this.onTimeShiftChange(event)}
+            />
+          </div>
 
           <div hidden={query.metricCategory.key !== 0 && query.metricCategory.key !== 1}>
             <AggregateQuery query={query} onRunQuery={onRunQuery} onChange={onChange} />

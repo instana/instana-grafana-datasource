@@ -78,7 +78,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
     const { query } = this.props;
 
     return (
-      <div className={'gf-form-inline'}>
+      <div className={'gf-form'}>
         <InlineFormLabel className={'query-keyword'} width={14} tooltip={'SLI configuration used to compute error budget and SLI values.'}>Configured SLI</InlineFormLabel>
         <Select width={30} isSearchable={true} value={query.sloReport} onChange={this.onSloChange} options={this.state.sloReports} />
 

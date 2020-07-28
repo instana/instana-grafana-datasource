@@ -190,16 +190,18 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   render() {
     const { query, onRunQuery, onCategoryChange } = this;
     return (
-      <div>
-        <FormSelect
-          queryKeyword
-          inputWidth={0}
-          label={'Category'}
-          tooltip={'Select a metric category.'}
-          value={query.metricCategory}
-          options={MetricCategories}
-          onChange={onCategoryChange}
-        />
+      <div className={'gf-form-group'}>
+        <div className={'gf-form'}>
+          <FormSelect
+            queryKeyword
+            inputWidth={0}
+            label={'Category'}
+            tooltip={'Select a metric category.'}
+            value={query.metricCategory}
+            options={MetricCategories}
+            onChange={onCategoryChange}
+          />
+        </div>
 
         {query.metricCategory.key === BUILT_IN_METRICS && (
           <InfrastructureBuiltIn

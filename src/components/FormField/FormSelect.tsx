@@ -9,7 +9,6 @@ interface Props {
     label: string;
     value: string;
     options: SelectOptionGroup;
-    hidden?: boolean;
     queryKeyword?: boolean;
     searchable?: boolean | true;
     labelWidth?: number | 14;
@@ -29,10 +28,10 @@ export default class FormSelect extends React.Component<Props, State> {
   }
 
   render() {
-    const { label, tooltip, searchable=true, queryKeyword, hidden, placeholder='-', labelWidth=14, inputWidth=30,...remaingProps } = this.props;
+    const { label, tooltip, searchable=true, queryKeyword, placeholder='-', labelWidth=14, inputWidth=30,...remaingProps } = this.props;
 
     return (
-      <div className={'gf-form'} hidden={hidden}>
+      <>
         <InlineFormLabel className={queryKeyword?'query-keyword':''} width={labelWidth} tooltip={tooltip}>{label}</InlineFormLabel>
         <Select
           width={inputWidth}
@@ -40,7 +39,7 @@ export default class FormSelect extends React.Component<Props, State> {
           placeholder={placeholder}
           {...remaingProps}
         />
-      </div>
+      </>
     )
   }
 }

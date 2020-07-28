@@ -4,11 +4,9 @@ import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import max_metrics from '../../lists/max_metrics';
 import FormSelect from '../FormField/FormSelect';
+import FormSwitch from '../FormField/FormSwitch';
 import { SelectableValue } from '@grafana/data';
-import { LegacyForms } from '@grafana/ui';
 import _ from 'lodash';
-
-const { Switch } = LegacyForms;
 
 interface MetricState {
   possibleTimeIntervals: SelectableValue[];
@@ -106,7 +104,7 @@ export default class Metric extends React.Component<Props, MetricState> {
     const { query, datasource } = this.props;
 
     return (
-      <div className={'gf-form-inline'}>
+      <div className={'gf-form'}>
         <FormSelect
           queryKeyword
           inputWidth={0}
@@ -119,41 +117,40 @@ export default class Metric extends React.Component<Props, MetricState> {
 
         {query.metricCategory.key === 0 && (
           <div style={!this.canShowMaxMetricValue() ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-            <Switch
+            <FormSwitch
+              labelWidth={10}
               label={'Show max value'}
-              labelClass={'width-10'}
-              checked={query.displayMaxMetricValue}
-              tooltipPlacement={'top'}
-              onChange={this.onShowMaxValueChange}
               tooltip={"Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only."}
+              value={query.displayMaxMetricValue}
+              onChange={this.onShowMaxValueChange}
             />
           </div>
         )}
 
         {query.metricCategory.key === 1 && (
           <div style={!query.canShowAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-            <Switch
+            <FormSwitch
+              labelWidth={8}
               label={'Show all metrics'}
-              labelClass={'width-8'}
-              checked={query.showAllMetrics}
-              tooltipPlacement={'top'}
-              onChange={this.onShowAllMetricsChange}
               tooltip={'You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.'}
+              value={query.showAllMetrics}
+              onChange={this.onShowAllMetricsChange}
             />
           </div>
         )}
 
-        <FormSelect
-          queryKeyword
-          hidden={this.canShowAggregation()}
-          labelWidth={6}
-          inputWidth={8}
-          label={'Aggregation'}
-          tooltip={'Select a metric aggregation.'}
-          value={query.aggregation}
-          options={query.metric.aggregations}
-          onChange={this.onAggregationChange}
-        />
+        {this.canShowAggregation() && (
+          <FormSelect
+            queryKeyword
+            labelWidth={6}
+            inputWidth={8}
+            label={'Aggregation'}
+            tooltip={'Select a metric aggregation.'}
+            value={query.aggregation}
+            options={query.metric.aggregations}
+            onChange={this.onAggregationChange}
+          />
+        )}
 
         <FormSelect
           queryKeyword

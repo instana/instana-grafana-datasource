@@ -141,7 +141,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
     const { query } = this.props;
 
     return (
-      <div className={'gf-form-inline'}>
+      <div className={'gf-form'}>
         <FormInput
           queryKeyword
           inputWidth={0}

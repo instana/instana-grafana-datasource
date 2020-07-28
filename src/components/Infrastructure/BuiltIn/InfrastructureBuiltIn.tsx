@@ -50,9 +50,7 @@ export class InfrastructureBuiltIn extends React.Component<Props, Infrastructure
     const { query, onRunQuery, onChange, updateMetrics, datasource } = this.props;
 
     return (
-      <div>
-        <QueryType query={query} onChange={onChange} onRunQuery={onRunQuery} datasource={datasource} updateMetrics={updateMetrics} />
-      </div>
+      <QueryType query={query} onChange={onChange} onRunQuery={onRunQuery} datasource={datasource} updateMetrics={updateMetrics} />
     );
   }
 }

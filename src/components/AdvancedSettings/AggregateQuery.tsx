@@ -2,10 +2,9 @@ import React from 'react';
 
 import AggregationFunctions from '../../lists/aggregation_function';
 import { InstanaQuery } from '../../types/instana_query';
-import { Select, LegacyForms } from '@grafana/ui';
+import FormSwitch from '../FormField/FormSwitch';
 import { SelectableValue } from '@grafana/data';
-
-const { Switch } = LegacyForms;
+import { Select } from '@grafana/ui';
 
 interface AggregateQueryState {}
 
@@ -47,14 +46,12 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
     const { query } = this.props;
 
     return (
-      <div className={'gf-form-inline'}>
-        <Switch
-          labelClass={'width-14'}
-          tooltipPlacement={'top'}
-          checked={query.aggregateGraphs}
+      <div className={'gf-form'}>
+        <FormSwitch
           label={'Aggregate query graphs'}
-          onChange={this.onAggregateGraphs}
           tooltip={'Aggregate all graphs of a query.'}
+          value={query.aggregateGraphs}
+          onChange={this.onAggregateGraphs}
         />
 
         <Select
@@ -67,13 +64,12 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
         />
 
         <div style={!query.aggregateGraphs ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-          <Switch
-            labelClass={'width-10'}
-            tooltipPlacement={'top'}
+          <FormSwitch
+            labelWidth={10}
             label={'Hide original graphs'}
-            checked={query.hideOriginalGraphs}
-            onChange={this.onHideOriginalGraph}
             tooltip={'Removes the original graphs resulted from the query and only shows the aggregated graph.'}
+            value={query.hideOriginalGraphs}
+            onChange={this.onHideOriginalGraph}
           />
         </div>
       </div>

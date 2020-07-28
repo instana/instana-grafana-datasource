@@ -173,7 +173,7 @@ export class Filters extends React.Component<Props, FilterState> {
     let filter = null;
     let listFilter = this.state.tagFilters.map((filters, index) => {
       filter = (
-        <div className={'gf-form-inline'}>
+        <div className={'gf-form'}>
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Filter by tag.'}>
             {index+1}. filter
           </InlineFormLabel>
@@ -245,7 +245,7 @@ export class Filters extends React.Component<Props, FilterState> {
       <div>
         {listFilter}
 
-        <div className={'gf-form-inline'}>
+        <div className={'gf-form'}>
           <InlineFormLabel width={14} tooltip={'Add an additional tag filter.'}>
             Add filter
           </InlineFormLabel>

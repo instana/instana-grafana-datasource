@@ -63,7 +63,7 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
     let filter = null;
     let listFilter = this.state.customFilters.map((filters, index) => {
       filter = (
-        <div className={'gf-form-inline'}>
+        <div className={'gf-form'}>
           <FormInput
             label={index + 1 + '. filter metric select'}
             labelWidth={14}
@@ -85,7 +85,7 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
       <div>
         {listFilter}
 
-        <div className={'gf-form-inline'}>
+        <div className={'gf-form'}>
           <InlineFormLabel width={14} tooltip={'Add an additional metric select filter.'}>
             Add filter metric select
           </InlineFormLabel>

@@ -4,15 +4,14 @@ import {
   ALL_APPLICATIONS,
   ANALYZE_APPLICATION_METRICS
 } from '../../GlobalVariables';
-import { Input, Select, LegacyForms, InlineFormLabel } from '@grafana/ui';
 import call_to_entities from '../../lists/apply_call_to_entities';
+import { Input, Select, InlineFormLabel } from '@grafana/ui';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import FormSelect from '../FormField/FormSelect';
+import FormSwitch from '../FormField/FormSwitch';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
-
-const { Switch } = LegacyForms;
 
 interface ApplicationCallsMetricsState {
   applications: SelectableValue[];
@@ -136,7 +135,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
     const { query, groups } = this.props;
 
     return (
-      <div className={'gf-form-inline'}>
+      <div className={'gf-form'}>
         <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your application.'}>
           Application
         </InlineFormLabel>

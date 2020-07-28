@@ -181,7 +181,7 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
     const { query } = this.props;
 
     return (
-      <div className={'gf-form-inline'}>
+      <div className={'gf-form'}>
         <FormSelect
           queryKeyword
           inputWidth={0}

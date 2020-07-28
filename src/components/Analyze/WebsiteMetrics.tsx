@@ -140,7 +140,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
     const { query, groups } = this.props;
 
     return (
-      <div className={'gf-form-inline'}>
+      <div className={'gf-form'}>
         <FormSelect
           queryKeyword
           inputWidth={0}
