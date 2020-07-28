@@ -5,8 +5,10 @@ import { InstanaQuery } from '../../types/instana_query';
 import max_metrics from '../../lists/max_metrics';
 import FormSelect from '../FormField/FormSelect';
 import { SelectableValue } from '@grafana/data';
-import { Switch } from '@grafana/ui';
+import { LegacyForms } from '@grafana/ui';
 import _ from 'lodash';
+
+const { Switch } = LegacyForms;
 
 interface MetricState {
   possibleTimeIntervals: SelectableValue[];
@@ -132,7 +134,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           <div style={!query.canShowAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
             <Switch
               label={'Show all metrics'}
-              labelClass={'width-10'}
+              labelClass={'width-8'}
               checked={query.showAllMetrics}
               tooltipPlacement={'top'}
               onChange={this.onShowAllMetricsChange}
