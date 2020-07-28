@@ -27,15 +27,13 @@ export default class FormField extends React.Component<Props, State> {
   }
 
   render() {
-    const { label, value, tooltip, placeholder, queryKeyword, hidden, labelWidth, inputWidth, onChange } = this.props;
+    const { label, tooltip, placeholder, queryKeyword, hidden, labelWidth=14, inputWidth=30,...remaingProps } = this.props;
     return (
       <div className={'gf-form'} hidden={hidden}>
         <InlineFormLabel className={queryKeyword?'query-keyword':''} width={labelWidth} tooltip={tooltip}>{label}</InlineFormLabel>
         <Input
           width={inputWidth}
-          value={value}
-          placeholder={placeholder}
-          onChange={onChange}
+          {...remaingProps}
         />
       </div>
     )

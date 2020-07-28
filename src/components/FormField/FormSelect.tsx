@@ -29,7 +29,7 @@ export default class FormSelect extends React.Component<Props, State> {
   }
 
   render() {
-    const { label, value, tooltip, options, searchable, placeholder, queryKeyword, hidden, labelWidth, inputWidth, onChange } = this.props;
+    const { label, tooltip, searchable, queryKeyword, hidden, placeholder='-', labelWidth=14, inputWidth=30,...remaingProps } = this.props;
 
     return (
       <div className={'gf-form'} hidden={hidden}>
@@ -37,10 +37,8 @@ export default class FormSelect extends React.Component<Props, State> {
         <Select
           width={inputWidth}
           isSearchable={searchable}
-          options={options}
-          onChange={onChange}
-          value={value}
           placeholder={placeholder}
+          {...remaingProps}
         />
       </div>
     )

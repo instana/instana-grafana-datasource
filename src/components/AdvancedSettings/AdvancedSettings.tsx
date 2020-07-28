@@ -3,7 +3,9 @@ import React, { ChangeEvent, FormEvent } from 'react';
 import { InstanaQuery } from '../../types/instana_query';
 import { AggregateQuery } from './AggregateQuery';
 import FormField from '../FormField/FormField';
-import { Switch } from '@grafana/ui';
+import { LegacyForms } from '@grafana/ui';
+
+const { Switch } = LegacyForms;
 
 const legendFormatPlaceholders = [
   '$label (on host $host)',
@@ -147,8 +149,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
         <div hidden={!this.state.showAdditionalSettings}>
           <div hidden={query.metricCategory.key === 7}>
             <FormField
-              labelWidth={14}
-              inputWidth={30}
+              queryKeyword
               label={'Legend format'}
               value={query.labelFormat}
               placeholder={this.setLegendFormatPlaceholder()}
@@ -159,8 +160,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
           </div>
 
           <FormField
-            labelWidth={14}
-            inputWidth={30}
+            queryKeyword
             placeholder={'1h'}
             label={'Time shift'}
             value={query.timeShift}
