@@ -2,8 +2,8 @@ import React, { ChangeEvent } from 'react';
 
 import { DataSource } from '../../../datasources/DataSource';
 import { InstanaQuery } from '../../../types/instana_query';
-import { SelectableValue } from '@grafana/data';
 import FormField from '../../FormField/FormField';
+import { SelectableValue } from '@grafana/data';
 import { Button, Label } from '@grafana/ui';
 
 interface MetricFilterState {

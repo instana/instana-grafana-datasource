@@ -5,9 +5,10 @@ import {
 } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
-import { Label, Input, Select } from '@grafana/ui';
 import beacon_types from '../../lists/beacon_types';
+import FormSelect from '../FormField/FormSelect';
 import { SelectableValue } from '@grafana/data';
+import { Input } from '@grafana/ui';
 import _ from 'lodash';
 
 interface WebsiteMetricsState {
@@ -136,20 +137,32 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
 
     return (
       <div className={'gf-form-inline'}>
-        <Label width={14} tooltip={'Select your website.'}>
-          Website
-        </Label>
-        <Select width={20} isSearchable={true} value={query.entity} options={this.state.websites} onChange={this.onWebsiteChange} />
+        <FormSelect
+          queryKeyword searchable
+          label={'Website'}
+          value={query.entity}
+          options={this.state.websites}
+          onChange={this.onWebsiteChange}
+          tooltip={'Select your website.'}
+        />
 
-        <Label width={6} tooltip={'Select a beacon type.'}>
-          Type
-        </Label>
-        <Select width={20} isSearchable={false} value={query.entityType} options={beacon_types} onChange={this.onBeaconTypeChange} />
+        <FormSelect
+          queryKeyword
+          label={'Type'}
+          value={query.entityType}
+          options={beacon_types}
+          onChange={this.onBeaconTypeChange}
+          tooltip={'Select a beacon type.'}
+        />
 
-        <Label width={7} tooltip={'Group by tag.'}>
-          Group by
-        </Label>
-        <Select width={20} isSearchable={true} value={query.group} options={groups} onChange={this.onGroupChange} />
+        <FormSelect
+          queryKeyword searchable
+          label={'Group by'}
+          value={query.group}
+          options={groups}
+          onChange={this.onGroupChange}
+          tooltip={'Group by tag.'}
+        />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
           <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange} />

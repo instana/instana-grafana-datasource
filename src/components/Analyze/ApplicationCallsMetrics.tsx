@@ -7,9 +7,12 @@ import {
 import call_to_entities from '../../lists/apply_call_to_entities';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
-import { Label, Input, Select } from '@grafana/ui';
+import FormSelect from '../FormField/FormSelect';
+import { Input, LegacyForms, InlineFormLabel } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
+
+const { Switch } = LegacyForms;
 
 interface ApplicationCallsMetricsState {
   applications: SelectableValue[];
@@ -118,6 +121,8 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
     onRunQuery();
   };
 
+  debouncedGroupByTagSecondLevelKeyChange = _.debounce(this.onGroupByTagSecondLevelKeyChange, 500);
+
   onGroupByTagSecondLevelKeyChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
     const { query, onChange, onRunQuery } = this.props;
     query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
@@ -130,9 +135,9 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
 
     return (
       <div className={'gf-form-inline'}>
-        <Label width={14} tooltip={'Select your application.'}>
+        <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your application.'}>
           Application
-        </Label>
+        </InlineFormLabel>
         <Select
           width={7}
           isSearchable={false}
@@ -143,9 +148,9 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
         />
         <Select width={20} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
 
-        <Label width={7} tooltip={'Group by tag.'}>
+        <InlineFormLabel className={'query-keyword'} width={7} tooltip={'Group by tag.'}>
           Group by
-        </Label>
+        </InlineFormLabel>
         <Select
           width={7}
           isSearchable={false}
@@ -157,7 +162,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
         <Select width={20} options={groups} value={query.group} isSearchable={true} onChange={this.onGroupChange} />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange} />
+          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.debouncedGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );

@@ -2,8 +2,10 @@ import React from 'react';
 
 import AggregationFunctions from '../../lists/aggregation_function';
 import { InstanaQuery } from '../../types/instana_query';
+import { Select, LegacyForms } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
-import { Select, Switch } from '@grafana/ui';
+
+const { Switch } = LegacyForms;
 
 interface AggregateQueryState {}
 

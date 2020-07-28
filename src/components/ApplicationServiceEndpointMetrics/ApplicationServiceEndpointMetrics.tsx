@@ -7,8 +7,9 @@ import {
 } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
-import { Label, Input, Select } from '@grafana/ui';
+import FormSelect from '../FormField/FormSelect';
 import { SelectableValue } from '@grafana/data';
+import { Input } from '@grafana/ui';
 import _ from 'lodash';
 
 interface ApplicationServiceEndpointMetricsState {
@@ -165,6 +166,8 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
     onRunQuery();
   };
 
+  debouncedGroupByTagSecondLevelKeyChange = _.debounce(this.debouncedGroupByTagSecondLevelKeyChange, 500);
+
   onGroupByTagSecondLevelKeyChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
     const { query, onChange, onRunQuery } = this.props;
     query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
@@ -177,23 +180,40 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
 
     return (
       <div className={'gf-form-inline'}>
-        <Label width={14} tooltip={'Select your application.'}>
-          Application
-        </Label>
-        <Select width={20} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
+        <FormSelect
+          queryKeyword
+          searchable
+          label={'Application'}
+          value={query.entity}
+          options={this.state.applications}
+          onChange={this.onApplicationChange}
+          tooltip={'Select your application.'}
+        />
 
-        <Label width={7} tooltip={'Select your service.'}>
-          Service
-        </Label>
-        <Select width={20} isSearchable={false} value={query.service} options={this.state.services} onChange={this.onServiceChange} />
+        <FormSelect
+          queryKeyword
+          searchable
+          labelWidth={7}
+          label={'Service'}
+          value={query.service}
+          options={this.state.services}
+          onChange={this.onServiceChange}
+          tooltip={'Select your service.'}
+        />
 
-        <Label width={8} tooltip={'Select your endpoint.'}>
-          Endpoints
-        </Label>
-        <Select width={20} isSearchable={true} value={query.endpoint} options={this.state.endpoints} onChange={this.onEndpointChange} />
+        <FormSelect
+          queryKeyword
+          searchable
+          labelWidth={8}
+          label={'Endpoints'}
+          value={query.endpoint}
+          options={this.state.endpoints}
+          onChange={this.onEndpointChange}
+          tooltip={'Select your endpoint.'}
+        />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange} />
+          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.debouncedGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );
