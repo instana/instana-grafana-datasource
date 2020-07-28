@@ -2,9 +2,9 @@ import React, { ChangeEvent } from 'react';
 
 import { DataSource } from '../../../datasources/DataSource';
 import { InstanaQuery } from '../../../types/instana_query';
+import { Button, InlineFormLabel } from '@grafana/ui';
 import FormInput from '../../FormField/FormInput';
 import { SelectableValue } from '@grafana/data';
-import { Button, Label } from '@grafana/ui';
 
 interface MetricFilterState {
   customFilters: string[];
@@ -73,7 +73,7 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
             onChange={(event) => this.onFilterChange(event, index)}
             tooltip={'Type to suggest metrics.'}
           />
-          <Button variant={'inverse'} onClick={() => this.removeCustomFilter(index)}>
+          <Button variant={'secondary'} onClick={() => this.removeCustomFilter(index)}>
             -
           </Button>
         </div>
@@ -86,10 +86,10 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
         {listFilter}
 
         <div className={'gf-form-inline'}>
-          <Label width={14} tooltip={'Add an additional metric select filter.'}>
+          <InlineFormLabel width={14} tooltip={'Add an additional metric select filter.'}>
             Add filter metric select
-          </Label>
-          <Button variant={'inverse'} onClick={this.addCustomFilter}>
+          </InlineFormLabel>
+          <Button variant={'secondary'} onClick={this.addCustomFilter}>
             +
           </Button>
         </div>

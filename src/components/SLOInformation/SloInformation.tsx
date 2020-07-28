@@ -79,16 +79,13 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
 
     return (
       <div className={'gf-form-inline'}>
-        <InlineFormLabel width={14} tooltip={'SLI configuration used to compute error budget and SLI values.'}>
-          Configured SLI
-        </InlineFormLabel>
+        <InlineFormLabel className={'query-keyword'} width={14} tooltip={'SLI configuration used to compute error budget and SLI values.'}>Configured SLI</InlineFormLabel>
         <Select width={30} isSearchable={false} value={query.sloReport} onChange={this.onSloChange} options={this.state.sloReports} />
 
-        <InlineFormLabel tooltip={'Type in your desired SLO threshold from 0 to 0.9999'}>SLO</InlineFormLabel>
+        <InlineFormLabel className={'query-keyword'} width={4} tooltip={'Type in your desired SLO threshold from 0 to 0.9999'}>SLO</InlineFormLabel>
+        <Input width={30} value={query.sloValue} placeholder={'0.99'} onChange={this.onSloValueChange} />
 
-        <Input value={query.sloValue} placeholder={'0.99'} onChange={this.onSloValueChange} />
-
-        <InlineFormLabel>Value type</InlineFormLabel>
+        <InlineFormLabel className={'query-keyword'} width={6}>Value type</InlineFormLabel>
         <Select width={30} isSearchable={false} options={SloSpecifics} value={query.sloSpecific} onChange={this.onSloSpecificChange} />
       </div>
     );

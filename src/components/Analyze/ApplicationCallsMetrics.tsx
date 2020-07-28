@@ -121,13 +121,15 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
     onRunQuery();
   };
 
-  debouncedGroupByTagSecondLevelKeyChange = _.debounce(() => this.onGroupByTagSecondLevelKeyChange, 500);
+  deboundedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
   onGroupByTagSecondLevelKeyChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
-    const { query, onChange, onRunQuery } = this.props;
+    const { query, onChange } = this.props;
     query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
     onChange(query);
-    onRunQuery();
+
+    // onRunQuery with 500ms delay after last debounce
+    this.deboundedRunQuery();
   };
 
   render() {
@@ -139,7 +141,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           Application
         </InlineFormLabel>
         <Select
-          width={7}
+          width={8}
           isSearchable={false}
           options={call_to_entities}
           defaultValue={call_to_entities[0]}
@@ -152,7 +154,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           Group by
         </InlineFormLabel>
         <Select
-          width={7}
+          width={8}
           isSearchable={false}
           value={query.callToEntity}
           options={call_to_entities}
@@ -162,7 +164,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
         <Select width={20} options={groups} value={query.group} isSearchable={true} onChange={this.onGroupChange} />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.debouncedGroupByTagSecondLevelKeyChange} />
+          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );

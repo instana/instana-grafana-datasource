@@ -125,11 +125,15 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
     onRunQuery();
   };
 
+  deboundedRunQuery = _.debounce(this.props.onRunQuery, 500);
+
   onGroupByTagSecondLevelKeyChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
-    const { query, onChange, onRunQuery } = this.props;
+    const { query, onChange } = this.props;
     query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
     onChange(query);
-    onRunQuery();
+
+    // onRunQuery with 500ms delay after last debounce
+    this.deboundedRunQuery();
   };
 
   render() {
@@ -169,7 +173,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
         />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onBlur={this.onGroupByTagSecondLevelKeyChange} />
+          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );

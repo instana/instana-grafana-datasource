@@ -68,7 +68,7 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
 
         <div style={!query.aggregateGraphs ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
           <Switch
-            labelClass={'width-14'}
+            labelClass={'width-10'}
             tooltipPlacement={'top'}
             label={'Hide original graphs'}
             checked={query.hideOriginalGraphs}

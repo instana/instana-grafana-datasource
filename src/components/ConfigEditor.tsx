@@ -38,6 +38,10 @@ export class ConfigEditor extends PureComponent<Props, State> {
     };
 
     onOptionsChange({ ...options, jsonData });
+
+    if ('url' === key || 'apiToken' === key) {
+      this.debouncedDetectFeatures(options):
+    }
   };
 
   onSwitchChange = (eventItem: SelectableValue<HTMLInputElement> | any, key: keyof InstanaOptions) => {
@@ -56,6 +60,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
     onOptionsChange({ ...options, jsonData });
   };
 
+  debouncedDetectFeatures = _.debounce(this.detectFeatures, 500);
   /**
    * Checks whether the provided tenant-unit is able to provide certain features such as querying offline snapshots.
    */
@@ -87,7 +92,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
             width={40}
             value={jsonData.url}
             placeholder={'https://tools-acme.instana.io'}
-            onBlur={() => this.detectFeatures(options)}
             onChange={(event) => this.onInstanaOptionsChange(event, 'url')}
           />
         </Field>
@@ -97,7 +101,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
             width={40}
             value={jsonData.apiToken}
             suffix={<Icon name="info-circle"/>}
-            onBlur={() => this.detectFeatures(options)}
             onChange={(event) => this.onInstanaOptionsChange(event, 'apiToken')}
           />
         </Field>

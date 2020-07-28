@@ -166,13 +166,15 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
     onRunQuery();
   };
 
-  debouncedGroupByTagSecondLevelKeyChange = _.debounce(this.debouncedGroupByTagSecondLevelKeyChange, 500);
+  debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
   onGroupByTagSecondLevelKeyChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
-    const { query, onChange, onRunQuery } = this.props;
+    const { query, onChange } = this.props;
     query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
     onChange(query);
-    onRunQuery();
+
+    // onRunQuery with 500ms delay after last debounce
+    this.debouncedRunQuery();
   };
 
   render() {

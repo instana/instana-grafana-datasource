@@ -109,11 +109,16 @@ export class Filters extends React.Component<Props, FilterState> {
     return (filter.tag.type === 'STRING' || filter.tag.type === 'KEY_VALUE_PAIR') && !filter.operator.key.includes('EMPTY');
   }
 
+  deboundedRunQuery = _.debounce(this.props.onRunQuery, 500);
+
   onTagFilterStringValueChange = (value: ChangeEvent<HTMLInputElement>, index: number) => {
     const { query, onChange } = this.props;
     query.filters[index].stringValue = value.currentTarget.value;
     onChange(query);
     this.isValid(index);
+
+    // onRunQuery with 500ms delay after last debounce
+    this.deboundedRunQuery();
   };
 
   onTagFilterNumberValueChange = (value: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -121,6 +126,9 @@ export class Filters extends React.Component<Props, FilterState> {
     query.filters[index].numberValue = value.currentTarget.valueAsNumber;
     onChange(query);
     this.isValid(index);
+
+    // onRunQuery with 500ms delay after last debounce
+    this.deboundedRunQuery();
   };
 
   onTagFilterBooleanValueChange(value: SelectableValue, index: number) {
@@ -200,7 +208,6 @@ export class Filters extends React.Component<Props, FilterState> {
               value={query.filters[index].stringValue}
               placeholder={query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : 'please specify'}
               onChange={(e) => this.onTagFilterStringValueChange(e, index)}
-              onBlur={this.props.onRunQuery}
             />
           )}
 
@@ -211,7 +218,6 @@ export class Filters extends React.Component<Props, FilterState> {
               value={query.filters[index].numberValue}
               placeholder={'please specify'}
               onChange={(e) => this.onTagFilterNumberValueChange(e, index)}
-              onBlur={this.props.onRunQuery}
             />
           )}
 
