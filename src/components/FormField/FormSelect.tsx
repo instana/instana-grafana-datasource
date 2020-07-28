@@ -1,41 +1,46 @@
 
 import React from 'react';
 
-import { InlineFormLabel, Input, PopoverContent } from '@grafana/ui';
+import { InlineFormLabel, Select, PopoverContent, SelectOptionGroup } from '@grafana/ui';
 
 interface State {}
 
 interface Props {
     label: string;
     value: string;
+    options: SelectOptionGroup;
     hidden?: boolean;
-    placeholder?: string;
+    searchable?: boolean;
     queryKeyword?: boolean;
     labelWidth?: number | 14;
     inputWidth?: number | 30;
+    placeholder?: string | '-';
     tooltip?: PopoverContent;
 
     onChange();
 }
 
 /**
- * Default input field including label. Input element is grafana/ui <Input />.
+ * Default select field including label. Select element is grafana/ui <Select />.
  */
-export default class FormField extends React.Component<Props, State> {
+export default class FormSelect extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
   }
 
   render() {
-    const { label, value, tooltip, placeholder, queryKeyword, hidden, labelWidth, inputWidth, onChange } = this.props;
+    const { label, value, tooltip, options, searchable, placeholder, queryKeyword, hidden, labelWidth, inputWidth, onChange } = this.props;
+
     return (
       <div className={'gf-form'} hidden={hidden}>
         <InlineFormLabel className={queryKeyword?'query-keyword':''} width={labelWidth} tooltip={tooltip}>{label}</InlineFormLabel>
-        <Input
+        <Select
           width={inputWidth}
+          isSearchable={searchable}
+          options={options}
+          onChange={onChange}
           value={value}
           placeholder={placeholder}
-          onChange={onChange}
         />
       </div>
     )
