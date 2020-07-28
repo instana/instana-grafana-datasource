@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import { InlineFormLabel, Input, PopoverContent } from '@grafana/ui';
+import { InlineFormLabel, PopoverContent } from '@grafana/ui';
 
 interface State {}
 
@@ -31,8 +31,8 @@ export default class FormInput extends React.Component<Props, State> {
     return (
       <div className={'gf-form'} hidden={hidden}>
         <InlineFormLabel className={queryKeyword?'query-keyword':''} width={labelWidth} tooltip={tooltip}>{label}</InlineFormLabel>
-        <Input
-          width={inputWidth}
+        <input type="text"
+          className={inputWidth>0?'width-'+inputWidth:'full-width'}
           {...remaingProps}
         />
       </div>

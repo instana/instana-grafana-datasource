@@ -143,35 +143,36 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
       <div className={'gf-form-inline'}>
         <FormSelect
           queryKeyword
+          inputWidth={0}
           label={'Website'}
+          tooltip={'Select your website.'}
           value={query.entity}
           options={this.state.websites}
           onChange={this.onWebsiteChange}
-          tooltip={'Select your website.'}
         />
 
         <FormSelect
           queryKeyword
-          label={'Type'}
           labelWidth={6}
+          label={'Type'}
+          tooltip={'Select a beacon type.'}
           value={query.entityType}
           options={beacon_types}
           onChange={this.onBeaconTypeChange}
-          tooltip={'Select a beacon type.'}
         />
 
         <FormSelect
           queryKeyword
-          label={'Group by'}
           labelWidth={6}
+          label={'Group by'}
+          tooltip={'Group by tag.'}
           value={query.group}
           options={groups}
           onChange={this.onGroupChange}
-          tooltip={'Group by tag.'}
         />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
+          <Input value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );

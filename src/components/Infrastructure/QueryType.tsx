@@ -144,9 +144,9 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
       <div className={'gf-form-inline'}>
         <FormInput
           queryKeyword
+          inputWidth={0}
           label={'Query'}
           tooltip={<div>Specify a query for the entities you wish to plot. Use the dynamic focus syntax: <a href="https://docs.instana.io/core_concepts/dynamic_focus/#syntax">https://docs.instana.io/core_concepts/dynamic_focus/#syntax</a></div>}
-          inputWidth={0}
           value={query.entityQuery}
           placeholder={'Please specify'}
           onChange={this.onQueryChange}
@@ -154,8 +154,8 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
 
         <FormSelect
           queryKeyword
-          label={'Type'}
           labelWidth={6}
+          label={'Type'}
           tooltip={'Select an entity type for a list of available metrics.'}
           value={query.entityType}
           options={this.state.types}

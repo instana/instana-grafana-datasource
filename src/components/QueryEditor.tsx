@@ -193,9 +193,9 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       <div>
         <FormSelect
           queryKeyword
+          inputWidth={0}
           label={'Category'}
           tooltip={'Select a metric category.'}
-          inputWidth={0}
           value={query.metricCategory}
           options={MetricCategories}
           onChange={onCategoryChange}

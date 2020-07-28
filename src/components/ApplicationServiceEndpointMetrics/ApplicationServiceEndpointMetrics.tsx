@@ -184,31 +184,32 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
       <div className={'gf-form-inline'}>
         <FormSelect
           queryKeyword
+          inputWidth={0}
           label={'Application'}
+          tooltip={'Select your application.'}
           value={query.entity}
           options={this.state.applications}
           onChange={this.onApplicationChange}
-          tooltip={'Select your application.'}
         />
 
         <FormSelect
           queryKeyword
-          labelWidth={7}
+          labelWidth={6}
           label={'Service'}
+          tooltip={'Select your service.'}
           value={query.service}
           options={this.state.services}
           onChange={this.onServiceChange}
-          tooltip={'Select your service.'}
         />
 
         <FormSelect
           queryKeyword
           labelWidth={8}
           label={'Endpoints'}
+          tooltip={'Select your endpoint.'}
           value={query.endpoint}
           options={this.state.endpoints}
           onChange={this.onEndpointChange}
-          tooltip={'Select your endpoint.'}
         />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>

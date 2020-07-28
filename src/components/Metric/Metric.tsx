@@ -107,11 +107,12 @@ export default class Metric extends React.Component<Props, MetricState> {
       <div className={'gf-form-inline'}>
         <FormSelect
           queryKeyword
+          inputWidth={0}
           label={'Metric'}
+          tooltip={'Select the metric you wish to plot.'}
           value={query.metric}
           options={this.props.availableMetrics}
           onChange={this.onMetricChange}
-          tooltip={'Select the metric you wish to plot.'}
         />
 
         {query.metricCategory.key === 0 && (
@@ -143,24 +144,24 @@ export default class Metric extends React.Component<Props, MetricState> {
         <FormSelect
           queryKeyword
           hidden={this.canShowAggregation()}
-          label={'Aggregation'}
           labelWidth={6}
           inputWidth={8}
+          label={'Aggregation'}
+          tooltip={'Select a metric aggregation.'}
           value={query.aggregation}
           options={query.metric.aggregations}
           onChange={this.onAggregationChange}
-          tooltip={'Select a metric aggregation.'}
         />
 
         <FormSelect
           queryKeyword
-          label={'Rollup'}
           labelWidth={6}
           inputWidth={8}
+          label={'Rollup'}
+          tooltip={'Select the rollup value.'}
           value={query.timeInterval}
           options={this.props.onTimeIntervalChange}
           onChange={datasource.onTimeIntervalChange}
-          tooltip={'Select the rollup value.'}
         />
 
       </div>
