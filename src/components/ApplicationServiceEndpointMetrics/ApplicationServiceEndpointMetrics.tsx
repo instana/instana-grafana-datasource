@@ -184,7 +184,6 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
       <div className={'gf-form-inline'}>
         <FormSelect
           queryKeyword
-          searchable
           label={'Application'}
           value={query.entity}
           options={this.state.applications}
@@ -194,7 +193,6 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
 
         <FormSelect
           queryKeyword
-          searchable
           labelWidth={7}
           label={'Service'}
           value={query.service}
@@ -205,7 +203,6 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
 
         <FormSelect
           queryKeyword
-          searchable
           labelWidth={8}
           label={'Endpoints'}
           value={query.endpoint}

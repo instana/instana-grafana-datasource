@@ -180,7 +180,7 @@ export class Filters extends React.Component<Props, FilterState> {
           {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
             <Select
               width={7}
-              isSearchable={false}
+              isSearchable={true}
               options={call_to_entities}
               defaultValue={call_to_entities[0]}
               value={query.applicationCallToEntity}

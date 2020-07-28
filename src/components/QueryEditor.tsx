@@ -72,6 +72,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       this.query.metricCategory = newCategory;
       this.setState({ currentCategory: newCategory });
       this.query.timeInterval = this.props.datasource.getDefaultTimeInterval(this.query);
+
       this.onRunQuery();
     }
   };
@@ -105,7 +106,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       this.setMetricPlaceholder(metrics.length);
     }
 
-    this.props.onChange(this.query);
     this.onRunQuery();
   };
 
@@ -193,11 +193,13 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       <div>
         <FormSelect
           queryKeyword
-          tooltip={'Select a metric category.'}
           label={'Category'}
+          tooltip={'Select a metric category.'}
+          inputWidth={0}
+          value={query.metricCategory}
           options={MetricCategories}
           onChange={onCategoryChange}
-          value={query.metricCategory} />
+        />
 
         {query.metricCategory.key === BUILT_IN_METRICS && (
           <InfrastructureBuiltIn

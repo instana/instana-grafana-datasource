@@ -142,7 +142,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
         </InlineFormLabel>
         <Select
           width={8}
-          isSearchable={false}
+          isSearchable={true}
           options={call_to_entities}
           defaultValue={call_to_entities[0]}
           value={query.applicationCallToEntity}
@@ -155,7 +155,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
         </InlineFormLabel>
         <Select
           width={8}
-          isSearchable={false}
+          isSearchable={true}
           value={query.callToEntity}
           options={call_to_entities}
           defaultValue={call_to_entities[0]}

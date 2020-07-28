@@ -106,7 +106,7 @@ export default class Metric extends React.Component<Props, MetricState> {
     return (
       <div className={'gf-form-inline'}>
         <FormSelect
-          queryKeyword searchable
+          queryKeyword
           label={'Metric'}
           value={query.metric}
           options={this.props.availableMetrics}

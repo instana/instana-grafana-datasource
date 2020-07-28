@@ -10,8 +10,8 @@ interface Props {
     value: string;
     options: SelectOptionGroup;
     hidden?: boolean;
-    searchable?: boolean;
     queryKeyword?: boolean;
+    searchable?: boolean | true;
     labelWidth?: number | 14;
     inputWidth?: number | 30;
     placeholder?: string | '-';
@@ -29,7 +29,7 @@ export default class FormSelect extends React.Component<Props, State> {
   }
 
   render() {
-    const { label, tooltip, searchable=false, queryKeyword, hidden, placeholder='-', labelWidth=14, inputWidth=30,...remaingProps } = this.props;
+    const { label, tooltip, searchable=true, queryKeyword, hidden, placeholder='-', labelWidth=14, inputWidth=30,...remaingProps } = this.props;
 
     return (
       <div className={'gf-form'} hidden={hidden}>

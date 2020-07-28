@@ -143,7 +143,6 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
       <div className={'gf-form-inline'}>
         <FormSelect
           queryKeyword
-          searchable
           label={'Website'}
           value={query.entity}
           options={this.state.websites}
@@ -163,7 +162,6 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
 
         <FormSelect
           queryKeyword
-          searchable
           label={'Group by'}
           labelWidth={6}
           value={query.group}

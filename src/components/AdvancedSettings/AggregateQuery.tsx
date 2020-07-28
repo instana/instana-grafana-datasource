@@ -59,7 +59,7 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
 
         <Select
           width={6}
-          isSearchable={false}
+          isSearchable={true}
           options={AggregationFunctions}
           value={query.aggregationFunction}
           isDisabled={!query.aggregateGraphs}
