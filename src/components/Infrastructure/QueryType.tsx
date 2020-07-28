@@ -155,6 +155,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
         <FormSelect
           queryKeyword
           label={'Type'}
+          labelWidth={6}
           tooltip={'Select an entity type for a list of available metrics.'}
           value={query.entityType}
           options={this.state.types}

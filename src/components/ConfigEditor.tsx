@@ -40,7 +40,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
     onOptionsChange({ ...options, jsonData });
 
     if ('url' === key || 'apiToken' === key) {
-      this.debouncedDetectFeatures(options):
+      this.debouncedDetectFeatures(options);
     }
   };
 
@@ -60,7 +60,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
     onOptionsChange({ ...options, jsonData });
   };
 
-  debouncedDetectFeatures = _.debounce(this.detectFeatures, 500);
+  debouncedDetectFeatures = _.debounce(() => this.detectFeatures(), 500);
+
   /**
    * Checks whether the provided tenant-unit is able to provide certain features such as querying offline snapshots.
    */
