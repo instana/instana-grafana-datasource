@@ -1,5 +1,11 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 
+import {
+  BUILT_IN_METRICS,
+  CUSTOM_METRICS,
+  SLO_INFORMATION
+} from '../../GlobalVariables';
+import { FreeTextMetrics } from '../Infrastructure/Custom/FreeTextMetrics';
 import { InstanaQuery } from '../../types/instana_query';
 import { AggregateQuery } from './AggregateQuery';
 import FormSwitch from '../FormField/FormSwitch';
@@ -150,7 +156,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
         </div>
 
         <div hidden={!this.state.showAdditionalSettings}>
-          <div className={'gf-form'} hidden={query.metricCategory.key === 7}>
+          <div className={'gf-form'} hidden={query.metricCategory.key === SLO_INFORMATION}>
             <FormInput
               queryKeyword
               inputWidth={0}
@@ -174,7 +180,11 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
             />
           </div>
 
-          <div hidden={query.metricCategory.key !== 0 && query.metricCategory.key !== 1}>
+          <div hiddden={query.metricCategory.key === CUSTOM_METRICS}>
+            <FreeTextMetrics  query={query} onRunQuery={onRunQuery} onChange={onChange} />
+          </div>
+
+          <div hidden={query.metricCategory.key !== BUILT_IN_METRICS && query.metricCategory.key !== CUSTOM_METRICS}>
             <AggregateQuery query={query} onRunQuery={onRunQuery} onChange={onChange} />
           </div>
         </div>
