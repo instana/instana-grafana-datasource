@@ -90,6 +90,9 @@ export default class Metric extends React.Component<Props, MetricState> {
     const { query, onChange, onRunQuery } = this.props;
     if (event && event.currentTarget && event.currentTarget.value) {
       query.showAllMetrics = !query.showAllMetrics;
+      if (query.showAllMetrics) {
+        query.metric = null;
+      }
       onChange(query);
       onRunQuery();
     }
@@ -161,7 +164,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           label={'Rollup'}
           tooltip={'Select the rollup value.'}
           value={query.timeInterval}
-          options={this.props.onTimeIntervalChange}
+          options={datasource.availableTimeIntervals}
           onChange={datasource.onTimeIntervalChange}
         />
 
