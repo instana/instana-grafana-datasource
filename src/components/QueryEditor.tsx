@@ -121,19 +121,22 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       // don't do any filtering if no custom filters are set.
       newAvailableMetrics = this.state.allMetrics;
       this.query.showAllMetrics = false;
-      this.query.customFilters = customFilters;
+      this.query.canShowAllMetrics = false;
     } else {
       newAvailableMetrics = this.applyFilterToMetricList(customFilters);
-      this.query.customFilters = customFilters;
-      !this.query.canShowAllMetrics ? (this.query.showAllMetrics = false) : (this.query.allMetrics = this.state.availableMetrics);
+      this.query.canShowAllMetrics = this.isAbleToShowAllMetrics();
+      if (!this.query.canShowAllMetrics) {
+        this.query.showAllMetrics = false;
+      }
+      this.query.allMetrics = this.state.availableMetrics
     }
+    this.query.customFilters = customFilters;
 
     this.setState((state) => ({ ...state, availableMetrics: newAvailableMetrics }));
-    if (!this.query.metric.key) {
+    if (!this.query.metric || !this.query.metric.key) {
       this.setMetricPlaceholder(newAvailableMetrics.length);
     }
 
-    this.query.canShowAllMetrics = this.isAbleToShowAllMetrics();
     this.props.onChange(this.query);
     this.checkMetricAndRefresh();
   };
