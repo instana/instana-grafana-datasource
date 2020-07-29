@@ -34,6 +34,8 @@ export default class FormSelect extends React.Component<Props, State> {
       <>
         <InlineFormLabel className={queryKeyword?'query-keyword':''} width={labelWidth} tooltip={tooltip}>{label}</InlineFormLabel>
         <Select
+          menuPlacement={'bottom'}
+          // maxMenuHeight={180}
           width={inputWidth}
           isSearchable={searchable}
           placeholder={placeholder}

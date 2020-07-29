@@ -56,6 +56,7 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
         />
 
         <Select
+          menuPlacement={'bottom'}
           width={12}
           isSearchable={true}
           options={AggregationFunctions}

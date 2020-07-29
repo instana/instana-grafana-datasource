@@ -195,6 +195,7 @@ export class DataSourceInfrastructure {
       catalogResponse.data.map((entry: any) => ({
         key: entry.metricId,
         label: entry.label,
+        description: entry.metricId,
         aggregations: ['MEAN', 'SUM'],
         entityType: entry.pluginId,
       }))

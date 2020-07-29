@@ -180,6 +180,7 @@ export class Filters extends React.Component<Props, FilterState> {
           </InlineFormLabel>
           {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
             <Select
+              menuPlacement={'bottom'}
               width={12}
               isSearchable={true}
               options={call_to_entities}
@@ -188,6 +189,7 @@ export class Filters extends React.Component<Props, FilterState> {
             />
           )}
           <Select
+            menuPlacement={'bottom'}
             width={30}
             isSearchable={true}
             value={query.filters[index].tag}
@@ -195,6 +197,7 @@ export class Filters extends React.Component<Props, FilterState> {
             onChange={(group) => this.onGroupChange(group, index)}
           />
           <Select
+            menuPlacement={'bottom'}
             width={12}
             isSearchable={true}
             value={query.filters[index].operator}
@@ -223,6 +226,7 @@ export class Filters extends React.Component<Props, FilterState> {
 
           {query.filters[index].tag.type === 'BOOLEAN' && (
             <Select
+              menuPlacement={'bottom'}
               width={30}
               isSearchable={true}
               onChange={(e) => this.onTagFilterBooleanValueChange(e, index)}

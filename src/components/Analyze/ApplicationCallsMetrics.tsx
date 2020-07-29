@@ -146,25 +146,27 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           Application
         </InlineFormLabel>
         <Select
+          menuPlacement={'bottom'}
           width={12}
           isSearchable={true}
           options={call_to_entities}
           value={query.applicationCallToEntity}
           onChange={this.onApplicationCallToEntityChange}
         />
-        <Select width={0} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
+        <Select menuPlacement={'bottom'} width={0} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
 
         <InlineFormLabel className={'query-keyword'} width={7} tooltip={'Group by tag.'}>
           Group by
         </InlineFormLabel>
         <Select
+          menuPlacement={'bottom'}
           width={12}
           isSearchable={true}
           value={query.callToEntity}
           options={call_to_entities}
           onChange={this.onCallToEntityChange}
         />
-        <Select width={0} isSearchable={true} options={groups} value={query.group} onChange={this.onGroupChange} />
+        <Select menuPlacement={'bottom'} width={0} isSearchable={true} options={groups} value={query.group} onChange={this.onGroupChange} />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
           <Input type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
