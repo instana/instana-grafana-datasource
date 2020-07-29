@@ -43,16 +43,6 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
     };
   }
 
-  setWebsitePlaceholder(nrOfTotalResults: number) {
-    const { query, onChange } = this.props;
-    query.entity = {
-      key: null,
-      label: 'Please select (' + nrOfTotalResults + ')',
-    };
-
-    onChange(query);
-  }
-
   componentDidMount() {
     const { query, datasource, onChange } = this.props;
     isUnmounting = false;
@@ -62,8 +52,11 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
           websites: websites,
         });
 
-        if (!query.entity || !query.entity.key) {
-          this.setWebsitePlaceholder(websites.length);
+         // select the most loaded website for default/replacement
+        if (!query.entity && websites) {
+          query.entity = websites[0];
+        } else if (query.entity && !_.find(websites, ['key', query.entity.key])) {
+          query.entity = websites[0];
         }
       }
     });

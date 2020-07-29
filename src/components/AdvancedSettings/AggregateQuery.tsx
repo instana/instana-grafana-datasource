@@ -48,6 +48,7 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
     return (
       <div className={'gf-form'}>
         <FormSwitch
+          queryKeyword
           label={'Aggregate query graphs'}
           tooltip={'Aggregate all graphs of a query.'}
           value={query.aggregateGraphs}
@@ -55,7 +56,7 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
         />
 
         <Select
-          width={6}
+          width={12}
           isSearchable={true}
           options={AggregationFunctions}
           value={query.aggregationFunction}
@@ -65,6 +66,7 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
 
         <div style={!query.aggregateGraphs ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
           <FormSwitch
+            queryKeyword
             labelWidth={10}
             label={'Hide original graphs'}
             tooltip={'Removes the original graphs resulted from the query and only shows the aggregated graph.'}

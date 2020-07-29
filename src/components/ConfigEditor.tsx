@@ -1,7 +1,7 @@
 import React, { ChangeEvent, PureComponent } from 'react';
 
 import { DataSourcePluginOptionsEditorProps, DataSourceSettings, SelectableValue } from '@grafana/data';
-import { Legend, Field, Input, Checkbox, Icon } from '@grafana/ui';
+import { Legend, Field, Input, Checkbox, Icon, Tooltip } from '@grafana/ui';
 import { InstanaOptions } from '../types/instana_options';
 import getVersion from '../util/instana_version';
 import proxyCheck from '../util/proxy_check';
@@ -90,7 +90,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal required label="URL" description="The URL of your Instana installation.">
           <Input
-            width={40}
+            width={30}
             value={jsonData.url}
             placeholder={'https://tools-acme.instana.io'}
             onChange={(event) => this.onInstanaOptionsChange(event, 'url')}
@@ -99,9 +99,11 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal required label="API Token" description="The API token to access the data.">
           <Input
-            width={40}
+            width={30}
             value={jsonData.apiToken}
-            suffix={<Icon name="info-circle"/>}
+            suffix={<Tooltip content={<p>You can create API tokens following the instructions at <a href="https://docs.instana.io/quick_start/api/#api-tokens">https://docs.instana.io/quick_start/api/#api-tokens</a></p>} theme={'info'}>
+                      <Icon name="info-circle"/>
+                    </Tooltip>}
             onChange={(event) => this.onInstanaOptionsChange(event, 'apiToken')}
           />
         </Field>
@@ -117,14 +119,14 @@ export class ConfigEditor extends PureComponent<Props, State> {
           label={'Enable offline snapshots'}
           value={jsonData.showOffline}
           onChange={(event) => this.onSwitchChange(event, 'showOffline')}
-          description={'Enables querying offline snapshots. Needs Instana 1.156+ and Instana datasource 2.3.0+'}
+          description={'Enables querying offline snapshots. Needs Instana release 156+ and Instana datasource 2.3.0+'}
         />
 
         <Checkbox
           label={'Enable SLO dashboards'}
           value={jsonData.allowSlo}
           onChange={(event) => this.onSwitchChange(event, 'allowSlo')}
-          description={'Adds a new category that allows retrieval of SLO information (feature flag required).'}
+          description={'Adds a new category that allows retrieval of SLO information. Needs Instana release 176+ and a explicit feature flag.'}
         />
 
         <br/>
@@ -138,7 +140,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Infrastructure metrics">
           <Input
-            width={40}
+            width={30}
             value={jsonData.queryinterval_limit_infra}
             placeholder={'optional: interval limit in hours'}
             onChange={(event) => this.onInstanaOptionsChange(event, 'queryinterval_limit_infra')}
@@ -147,7 +149,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Application metrics">
           <Input
-            width={40}
+            width={30}
             value={jsonData.queryinterval_limit_app_metrics}
             placeholder={'optional: interval limit in hours'}
             onChange={(event) => this.onInstanaOptionsChange(event, 'queryinterval_limit_app_metrics')}
@@ -156,7 +158,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Analyze application calls">
           <Input
-            width={40}
+            width={30}
             value={jsonData.queryinterval_limit_app_calls}
             placeholder={'optional: interval limit in hours'}
             onChange={(event) => this.onInstanaOptionsChange(event, 'queryinterval_limit_app_calls')}
@@ -165,7 +167,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Analyze website">
           <Input
-            width={40}
+            width={30}
             value={jsonData.queryinterval_limit_website_metrics}
             placeholder={'optional: interval limit in hours'}
             onChange={(event) => this.onInstanaOptionsChange(event, 'queryinterval_limit_website_metrics')}

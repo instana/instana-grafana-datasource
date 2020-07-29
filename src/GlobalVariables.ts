@@ -18,3 +18,6 @@ export const SLO_INFORMATION = 7;
 export const ALL_APPLICATIONS = '-- No Application Filter --';
 export const ALL_SERVICES = '-- No Service Filter --';
 export const ALL_ENDPOINTS = '-- No Endpoint Filter --';
+
+/* PLACEHOLDER */
+export const PLEASE_SPECIFY = 'Please specify';

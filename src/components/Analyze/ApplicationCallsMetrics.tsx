@@ -59,6 +59,12 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
         if (!query.entity || (!query.entity.key && !query.entity.label)) {
           query.entity = applications[0];
         }
+        if (!query.callToEntity) {
+          query.callToEntity = call_to_entities[0];
+        }
+        if (!query.applicationCallToEntity) {
+          query.applicationCallToEntity = call_to_entities[0];
+        }
 
         onChange(query);
       }
@@ -140,27 +146,25 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           Application
         </InlineFormLabel>
         <Select
-          width={8}
+          width={12}
           isSearchable={true}
           options={call_to_entities}
-          defaultValue={call_to_entities[0]}
           value={query.applicationCallToEntity}
           onChange={this.onApplicationCallToEntityChange}
         />
-        <Select width={20} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
+        <Select width={0} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
 
         <InlineFormLabel className={'query-keyword'} width={7} tooltip={'Group by tag.'}>
           Group by
         </InlineFormLabel>
         <Select
-          width={8}
+          width={12}
           isSearchable={true}
           value={query.callToEntity}
           options={call_to_entities}
-          defaultValue={call_to_entities[0]}
           onChange={this.onCallToEntityChange}
         />
-        <Select width={20} options={groups} value={query.group} isSearchable={true} onChange={this.onGroupChange} />
+        <Select width={0} isSearchable={true} options={groups} value={query.group} onChange={this.onGroupChange} />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
           <Input type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />

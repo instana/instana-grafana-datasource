@@ -1,5 +1,8 @@
 import React, { ChangeEvent } from 'react';
 
+import {
+  PLEASE_SPECIFY
+} from '../../../GlobalVariables';
 import { DataSource } from '../../../datasources/DataSource';
 import { InstanaQuery } from '../../../types/instana_query';
 import { Button, InlineFormLabel } from '@grafana/ui';
@@ -69,7 +72,7 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
             labelWidth={14}
             inputWidth={30}
             value={this.state.customFilters[index]}
-            placeholder={'Please specify'}
+            placeholder={PLEASE_SPECIFY}
             onChange={(event) => this.onFilterChange(event, index)}
             tooltip={'Type to suggest metrics.'}
           />

@@ -108,10 +108,15 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
     };
   }
 
+  deboundedRunQuery = _.debounce(this.props.onRunQuery, 500);
+
   onLegendFormatChange = (eventItem: FormEvent<HTMLInputElement>) => {
     const { query, onChange } = this.props;
     query.labelFormat = eventItem.currentTarget.value;
     onChange(query);
+
+    // onRunQuery with 500ms delay after last debounce
+    this.deboundedRunQuery();
   };
 
   onTimeShiftChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
@@ -154,7 +159,6 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
               value={query.labelFormat}
               placeholder={this.setLegendFormatPlaceholder()}
               onChange={(event) => this.onLegendFormatChange(event)}
-              onBlur={() => onRunQuery()}
             />
           </div>
 

@@ -9,7 +9,7 @@ interface State {}
 
 interface Props {
     label: string;
-    value: string;
+    value: boolean;
     queryKeyword?: boolean;
     labelWidth?: number | 14;
     tooltip?: PopoverContent;

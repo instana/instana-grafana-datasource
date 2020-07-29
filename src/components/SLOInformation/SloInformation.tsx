@@ -1,10 +1,11 @@
 import React, { ChangeEvent } from 'react';
 
-import { InlineFormLabel, Input, Select } from '@grafana/ui';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import SloSpecifics from '../../lists/slo_specifics';
+import FormSelect from '../FormField/FormSelect';
 import { SelectableValue } from '@grafana/data';
+import FormInput from '../FormField/FormInput';
 
 interface SloInformationState {
   sloReports: SelectableValue[];
@@ -79,14 +80,42 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
 
     return (
       <div className={'gf-form'}>
-        <InlineFormLabel className={'query-keyword'} width={14} tooltip={'SLI configuration used to compute error budget and SLI values.'}>Configured SLI</InlineFormLabel>
-        <Select width={30} isSearchable={true} value={query.sloReport} onChange={this.onSloChange} options={this.state.sloReports} />
+        <FormSelect
+          queryKeyword
+          inputWidth={0}
+          label={'Configured SLI'}
+          tooltip={'SLI configuration used to compute error budget and SLI values.'}
+          value={query.sloReport}
+          options={this.state.sloReports}
+          onChange={this.onSloChange}
+        />
 
-        <InlineFormLabel className={'query-keyword'} width={4} tooltip={'Type in your desired SLO threshold from 0 to 0.9999'}>SLO</InlineFormLabel>
-        <Input width={30} value={query.sloValue} placeholder={'0.99'} onChange={this.onSloValueChange} />
+        <FormInput
+          queryKeyword
+          labelWidth={6}
+          inputWidth={0}
+          label={'SLO'}
+          tooltip={'Type in your desired SLO threshold from 0 to 0.9999'}
+          value={query.sloValue}
+          placeholder={'0.99'}
+          onChange={this.onSloValueChange}
+        />
 
-        <InlineFormLabel className={'query-keyword'} width={6}>Value type</InlineFormLabel>
-        <Select width={30} isSearchable={true} options={SloSpecifics} value={query.sloSpecific} onChange={this.onSloSpecificChange} />
+        <FormSelect
+          queryKeyword
+          labelWidth={6}
+          inputWidth={0}
+          label={'Value type'}
+          tooltip={<div>Select your specific SLO information:
+            <ul>
+              <li>'SLI' requires Gauge visualization</li>
+              <li>'Remaining Error Budget' requires Singlestat visualization</li>
+              <li>'Timeseries' requires Bars draw mode on Graph visualization</li>
+            </ul></div>}
+          value={query.sloSpecific}
+          options={SloSpecifics}
+          onChange={this.onSloSpecificChange}
+        />
       </div>
     );
   }

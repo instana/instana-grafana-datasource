@@ -3,39 +3,28 @@
  */
 export default [
   {
-    label: 'Built in Metrics',
+    label: 'Infrastructure built-in metrics',
     key: 0,
   },
   {
-    label: 'Custom Metrics',
+    label: 'Infrastructure custom metrics',
     key: 1,
   },
   {
-    label: 'Analyze Application Metrics',
+    // replaces Application metrics(4) & Service metrics(5) & Endpoint metrics(6)
+    label: 'Application/service/endpoint metrics',
+    key: 4,
+  },
+  {
+    label: 'Analyze application calls',
     key: 2,
   },
   {
-    label: 'Analyze Website Metrics',
+    label: 'Analyze website',
     key: 3,
   },
   {
-    label: 'Application Service Endpoint Metrics',
-    key: 4,
-  },
-  /*{
-    label: 'Application Metrics',
-    key: 4,
-  },
-  {
-    label: 'Service Metrics',
-    key: 5,
-  },
-  {
-    label: 'Endpoint Metrics',
-    key: 6,
-  },*/
-  {
-    label: 'SLO Information',
+    label: 'SLO information',
     key: 7,
   },
 ];

@@ -1,7 +1,8 @@
 import React, { ChangeEvent } from 'react';
 
 import {
-  ANALYZE_APPLICATION_METRICS
+  ANALYZE_APPLICATION_METRICS,
+  PLEASE_SPECIFY
 } from '../../GlobalVariables';
 import { Button, InlineFormLabel, Input, Select } from '@grafana/ui';
 import call_to_entities from '../../lists/apply_call_to_entities';
@@ -46,16 +47,16 @@ export class Filters extends React.Component<Props, FilterState> {
   }
 
   addTagFilter = () => {
-    const { query, onChange, groups } = this.props;
+    const { query, onChange } = this.props;
     let cf = this.state.tagFilters;
     cf.push({
-      tag: groups[0],
-      entity: {},
+      tag: query.group,
+      entity: call_to_entities[0],
+      operator: this.filterOperatorsOnType(query.group.type)[0],
       booleanValue: false,
-      isValid: false,
-      numberValue: 0,
-      operator: this.filterOperatorsOnType(groups[0].type)[0],
+      numberValue: null,
       stringValue: '',
+      isValid: false,
     });
 
     this.setState({ tagFilters: cf });
@@ -179,23 +180,22 @@ export class Filters extends React.Component<Props, FilterState> {
           </InlineFormLabel>
           {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
             <Select
-              width={7}
+              width={12}
               isSearchable={true}
               options={call_to_entities}
-              defaultValue={call_to_entities[0]}
-              value={query.applicationCallToEntity}
+              value={query.filters[index].entity}
               onChange={(callToEntity) => this.onCallToEntityChange(callToEntity, index)}
             />
           )}
           <Select
-            width={20}
+            width={30}
             isSearchable={true}
             value={query.filters[index].tag}
             options={groups}
             onChange={(group) => this.onGroupChange(group, index)}
           />
           <Select
-            width={10}
+            width={12}
             isSearchable={true}
             value={query.filters[index].operator}
             options={this.filterOperatorsOnType(query.filters[index].tag.type)}
@@ -204,9 +204,9 @@ export class Filters extends React.Component<Props, FilterState> {
 
           {this.canShowStringInput(query.filters[index]) && (
             <Input
-              width={20}
+              width={30}
               value={query.filters[index].stringValue}
-              placeholder={query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : 'please specify'}
+              placeholder={query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : PLEASE_SPECIFY}
               onChange={(e) => this.onTagFilterStringValueChange(e, index)}
             />
           )}
@@ -214,16 +214,17 @@ export class Filters extends React.Component<Props, FilterState> {
           {query.filters[index].tag.type === 'NUMBER' && (
             <Input
               type={'number'}
-              width={20}
+              width={30}
               value={query.filters[index].numberValue}
-              placeholder={'please specify'}
+              placeholder={PLEASE_SPECIFY}
               onChange={(e) => this.onTagFilterNumberValueChange(e, index)}
             />
           )}
 
           {query.filters[index].tag.type === 'BOOLEAN' && (
             <Select
-              width={20}
+              width={30}
+              isSearchable={true}
               onChange={(e) => this.onTagFilterBooleanValueChange(e, index)}
               value={{ key: '' + query.filters[index].booleanValue, label: '' + query.filters[index].booleanValue }}
               options={[

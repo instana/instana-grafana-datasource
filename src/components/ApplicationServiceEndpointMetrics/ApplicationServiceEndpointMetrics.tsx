@@ -131,10 +131,10 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
 
         if (query.endpoint && query.endpoint.key) {
           if (!_.find(this.state.endpoints, (app) => app.key === query.endpoint.key)) {
-            query.endpoint = { key: null, label: '-- No Endpoint Filter --' };
+            query.endpoint = { key: null, label: ALL_ENDPOINTS };
           }
         } else {
-          query.endpoint = { key: null, label: '-- No Endpoint Filter --' };
+          query.endpoint = { key: null, label: ALL_ENDPOINTS };
         }
 
         onChange(query);
@@ -195,6 +195,7 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         <FormSelect
           queryKeyword
           labelWidth={6}
+          inputWidth={0}
           label={'Service'}
           tooltip={'Select your service.'}
           value={query.service}
@@ -204,7 +205,8 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
 
         <FormSelect
           queryKeyword
-          labelWidth={8}
+          labelWidth={6}
+          inputWidth={0}
           label={'Endpoints'}
           tooltip={'Select your endpoint.'}
           value={query.endpoint}

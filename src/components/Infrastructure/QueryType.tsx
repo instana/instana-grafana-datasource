@@ -1,5 +1,8 @@
 import React, { ChangeEvent } from 'react';
 
+import {
+  PLEASE_SPECIFY
+} from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import FormSelect from '../FormField/FormSelect';
@@ -148,7 +151,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
           label={'Query'}
           tooltip={<div>Specify a query for the entities you wish to plot. Use the dynamic focus syntax: <a href="https://docs.instana.io/core_concepts/dynamic_focus/#syntax">https://docs.instana.io/core_concepts/dynamic_focus/#syntax</a></div>}
           value={query.entityQuery}
-          placeholder={'Please specify'}
+          placeholder={PLEASE_SPECIFY}
           onChange={this.onQueryChange}
         />
 
