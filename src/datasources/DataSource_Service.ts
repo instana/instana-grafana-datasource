@@ -50,15 +50,15 @@ export class DataSourceService {
         })
       );
 
-      return _.compact(allResults).map((entry) => {
+      return _.orderBy(_.compact(allResults).map((entry) => {
         return {
           key: entry.id,
           label: entry.label,
         };
-      });
+      }), [service => service.label.toLowerCase()], ['asc']);
     });
-    this.servicesCache.put(key, services, 600000);
 
+    this.servicesCache.put(key, services, 600000);
     return services;
   }
 

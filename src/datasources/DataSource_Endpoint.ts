@@ -56,12 +56,12 @@ export class DataSourceEndpoint {
         })
       );
 
-      return _.compact(allResults).map((entry) => {
+      return _.orderBy(_.compact(allResults).map((entry) => {
         return {
           key: entry.id,
           label: entry.label,
         };
-      });
+      }), [endpoint => endpoint.label.toLowerCase()], ['asc']);
     });
 
     this.endpointsCache.put(key, endpoints, 600000);
