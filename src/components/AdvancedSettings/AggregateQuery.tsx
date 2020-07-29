@@ -26,14 +26,18 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
 
   onAggregateGraphs = (event: React.SyntheticEvent<HTMLInputElement> | undefined) => {
     const { query, onRunQuery } = this.props;
-    query.aggregateGraphs = !query.aggregateGraphs;
-    onRunQuery();
+    if (event && event.currentTarget) {
+      query.aggregateGraphs = event.currentTarget.checked;
+      onRunQuery();
+    }
   };
 
   onHideOriginalGraph = (event: React.SyntheticEvent<HTMLInputElement> | undefined) => {
     const { query, onRunQuery } = this.props;
-    query.hideOriginalGraphs = !query.hideOriginalGraphs;
-    onRunQuery();
+    if (event && event.currentTarget) {
+      query.hideOriginalGraphs = event.currentTarget.checked;
+      onRunQuery();
+    }
   };
 
   onAggregationFunctionChange = (event: SelectableValue) => {

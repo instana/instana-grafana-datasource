@@ -69,8 +69,6 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
         <div className={'gf-form'}>
           <FormInput
             label={index + 1 + '. filter metric select'}
-            labelWidth={14}
-            inputWidth={30}
             value={this.state.customFilters[index]}
             placeholder={PLEASE_SPECIFY}
             onChange={(event) => this.onFilterChange(event, index)}

@@ -79,8 +79,8 @@ export default class Metric extends React.Component<Props, MetricState> {
 
   onShowMaxValueChange = (event?: React.SyntheticEvent<HTMLInputElement>) => {
     const { query, onChange, onRunQuery } = this.props;
-    if (event && event.currentTarget && event.currentTarget.value) {
-      query.displayMaxMetricValue = !query.displayMaxMetricValue;
+    if (event && event.currentTarget) {
+      query.displayMaxMetricValue = event.currentTarget.checked;
       onChange(query);
       onRunQuery();
     }
@@ -88,8 +88,8 @@ export default class Metric extends React.Component<Props, MetricState> {
 
   onShowAllMetricsChange = (event?: React.SyntheticEvent<HTMLInputElement>) => {
     const { query, onChange, onRunQuery } = this.props;
-    if (event && event.currentTarget && event.currentTarget.value) {
-      query.showAllMetrics = !query.showAllMetrics;
+    if (event && event.currentTarget) {
+      query.showAllMetrics = event.currentTarget.checked;
       if (query.showAllMetrics) {
         query.metric = null;
       }
@@ -122,7 +122,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           <div style={!this.canShowMaxMetricValue() ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
             <FormSwitch
               queryKeyword
-              labelWidth={10}
+              labelWidth={8}
               label={'Show max value'}
               tooltip={"Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only."}
               value={query.displayMaxMetricValue}
