@@ -48,7 +48,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       customFilters: [],
     };
 
-    this.query = Object.assign({}, defaultQuery, props.query);
+    this.query = Object.assign(defaultQuery, props.query);
 
     migrate(this.query);
 
@@ -60,6 +60,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     };
 
     this.filterMetricsOnType = this.filterMetricsOnType.bind(this);
+    this.onMetricsFilter = this.onMetricsFilter.bind(this);
 
     this.props.onChange(this.query);
   }
@@ -102,6 +103,11 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       metric ? (this.query.metric = metric) : (this.query.metric = { key: null });
     }
 
+    // TODO??
+    if (this.query.metricCategory === this.CUSTOM_METRICS) {
+      this.onMetricsFilter(this.query.customFilters);
+    }
+
     if (!this.query.metric || !this.query.metric.key) {
       this.setMetricPlaceholder(metrics.length);
     }
@@ -115,7 +121,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     });
   };
 
-  onFilterChange = (customFilters: string[]) => {
+  onMetricsFilter = (customFilters: string[]) => {
     let newAvailableMetrics: SelectableValue[] = [];
     if (!customFilters || customFilters.length === 0) {
       newAvailableMetrics = this.state.allMetrics;
@@ -186,8 +192,87 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.onRunQuery();
   }
 
+  selectionReset() {
+    const { query } = this.props;
+    if (query.metricCategory.key > CUSTOM_METRICS) {
+      query.entityQuery = '';
+    }
+
+    this.setState({
+      availableMetrics: [],
+      allMetrics: [],
+      groups: [],
+    });
+
+    this.resetEntityTypeSelection();
+    this.resetEntitySelection();
+    this.resetMetricSelection();
+  }
+
+  resetEntityTypeSelection() {
+    const { query } = this.props;
+    query.entityType = {
+      key: null,
+      label: '-',
+    };
+    query.customFilters = [];
+  }
+
+  resetEntitySelection() {
+    const { query } = this.props;
+    query.entity = {};
+    query.group = {};
+    query.showGroupBySecondLevel = false;
+    query.groupbyTagSecondLevelKey = '';
+    query.aggregateGraphs = false;
+    query.aggregationFunction = AggregationFunctions[0];
+    query.hideOriginalGraphs = false;
+    query.filters = [];
+    query.showWarningCantShowAllResults = false;
+    query.showAllMetrics = false;
+    query.canShowAllMetrics = false;
+    query.displayMaxMetricValue = false;
+    query.applicationCallToEntity = {};
+    query.callToEntity = {};
+    this.resetServices();
+    this.resetEndpoints();
+    this.resetSLO();
+  }
+
+  resetMetricSelection() {
+    const { query } = this.props;
+    query.metric = {};
+    query.timeShift = '';
+    query.timeShiftIsValid = true;
+    query.showWarningCantShowAllResults = false;
+    query.showAllMetrics = false;
+    query.labelFormat = '';
+    query.freeTextMetrics = '';
+    query.useFreeTextMetrics = false;
+  }
+
+  resetServices() {
+    this.props.query.service = {};
+  }
+
+  resetEndpoints() {
+    this.props.query.endpoint = {};
+  }
+
+  resetSLO() {
+    const { query } = this.props;
+    query.sloValue = '';
+    query.sloReport = {};
+  }
+
   render() {
     const { query, onRunQuery, onCategoryChange } = this;
+
+    // TODO FIXME
+    if (!query.metricCategory) {
+      query.metricCategory = MetricCategories[0];
+      console.log('THIS SHOULD NOT HAPPEN');
+    }
     return (
       <div className={'gf-form-group'}>
         <div className={'gf-form'}>
@@ -277,7 +362,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
             query={query}
             onChange={this.props.onChange}
             onRunQuery={onRunQuery}
-            onFilterChange={this.onFilterChange}
+            onFilterChange={this.onMetricsFilter}
             availableMetrics={this.state.availableMetrics}
             datasource={this.props.datasource}
           />
@@ -296,78 +381,5 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         <AdvancedSettings query={query} onRunQuery={onRunQuery} onChange={this.props.onChange} />
       </div>
     );
-  }
-
-  selectionReset() {
-    const { query } = this.props;
-    if (query.metricCategory.key > CUSTOM_METRICS) {
-      query.entityQuery = '';
-    }
-
-    this.setState({
-      availableMetrics: [],
-      allMetrics: [],
-      groups: [],
-    });
-
-    this.resetEntityTypeSelection();
-    this.resetEntitySelection();
-    this.resetMetricSelection();
-  }
-
-  resetEntityTypeSelection() {
-    const { query } = this.props;
-    query.entityType = {
-      key: null,
-      label: '-',
-    };
-    query.customFilters = [];
-  }
-
-  resetEntitySelection() {
-    const { query } = this.props;
-    query.entity = {};
-    query.group = {};
-    query.showGroupBySecondLevel = false;
-    query.groupbyTagSecondLevelKey = '';
-    query.aggregateGraphs = false;
-    query.aggregationFunction = AggregationFunctions[0];
-    query.hideOriginalGraphs = false;
-    query.filters = [];
-    query.showWarningCantShowAllResults = false;
-    query.showAllMetrics = false;
-    query.canShowAllMetrics = false;
-    query.displayMaxMetricValue = false;
-    query.applicationCallToEntity = {};
-    query.callToEntity = {};
-    this.resetServices();
-    this.resetEndpoints();
-    this.resetSLO();
-  }
-
-  resetMetricSelection() {
-    const { query } = this.props;
-    query.metric = {};
-    query.timeShift = '';
-    query.timeShiftIsValid = true;
-    query.showWarningCantShowAllResults = false;
-    query.showAllMetrics = false;
-    query.labelFormat = '';
-    query.freeTextMetrics = '';
-    query.useFreeTextMetrics = false;
-  }
-
-  resetServices() {
-    this.props.query.service = {};
-  }
-
-  resetEndpoints() {
-    this.props.query.endpoint = {};
-  }
-
-  resetSLO() {
-    const { query } = this.props;
-    query.sloValue = '';
-    query.sloReport = {};
   }
 }

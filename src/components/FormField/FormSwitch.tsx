@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { InlineFormLabel, LegacyForms, PopoverContent, SelectOptionGroup } from '@grafana/ui';
-import FormDisabled from './FormDisabled';
+import FormWrapper from './FormWrapper';
 
 const { Switch } = LegacyForms;
 
@@ -29,10 +29,10 @@ export default class FormSwitch extends React.Component<Props, State> {
     const { label, tooltip, queryKeyword, disabled, labelWidth=14, value,...remaingProps } = this.props;
 
     return (
-      <FormDisabled disabled={disabled}>
+      <FormWrapper disabled={disabled}>
         <InlineFormLabel className={queryKeyword?'query-keyword':''} width={labelWidth} tooltip={tooltip}>{label}</InlineFormLabel>
         <Switch checked={value} disabled={disabled} {...remaingProps} />
-      </FormDisabled>
+      </FormWrapper>
     )
   }
 }

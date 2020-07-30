@@ -8,6 +8,7 @@ import call_to_entities from '../../lists/apply_call_to_entities';
 import { Input, Select, InlineFormLabel } from '@grafana/ui';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
+import FormWrapper from '../FormField/FormWrapper';
 import FormSelect from '../FormField/FormSelect';
 import FormSwitch from '../FormField/FormSwitch';
 import { SelectableValue } from '@grafana/data';
@@ -142,31 +143,35 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
 
     return (
       <div className={'gf-form'}>
-        <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your application.'}>
-          Application
-        </InlineFormLabel>
-        <Select
-          menuPlacement={'bottom'}
-          width={12}
-          isSearchable={true}
-          options={call_to_entities}
-          value={query.applicationCallToEntity}
-          onChange={this.onApplicationCallToEntityChange}
-        />
-        <Select menuPlacement={'bottom'} width={0} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
+        <FormWrapper stretch={true}>
+          <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your application.'}>
+            Application
+          </InlineFormLabel>
+          <Select
+            menuPlacement={'bottom'}
+            width={12}
+            isSearchable={true}
+            options={call_to_entities}
+            value={query.applicationCallToEntity}
+            onChange={this.onApplicationCallToEntityChange}
+          />
+          <Select menuPlacement={'bottom'} width={0} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
+        </FormWrapper>
 
-        <InlineFormLabel className={'query-keyword'} width={7} tooltip={'Group by tag.'}>
-          Group by
-        </InlineFormLabel>
-        <Select
-          menuPlacement={'bottom'}
-          width={12}
-          isSearchable={true}
-          value={query.callToEntity}
-          options={call_to_entities}
-          onChange={this.onCallToEntityChange}
-        />
-        <Select menuPlacement={'bottom'} width={0} isSearchable={true} options={groups} value={query.group} onChange={this.onGroupChange} />
+        <FormWrapper stretch={true}>
+          <InlineFormLabel className={'query-keyword'} width={7} tooltip={'Group by tag.'}>
+            Group by
+          </InlineFormLabel>
+          <Select
+            menuPlacement={'bottom'}
+            width={12}
+            isSearchable={true}
+            value={query.callToEntity}
+            options={call_to_entities}
+            onChange={this.onCallToEntityChange}
+          />
+          <Select menuPlacement={'bottom'} width={0} isSearchable={true} options={groups} value={query.group} onChange={this.onGroupChange} />
+        </FormWrapper>
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
           <Input type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />

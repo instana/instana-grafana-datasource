@@ -65,7 +65,7 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
           isSearchable={true}
           options={AggregationFunctions}
           value={query.aggregationFunction}
-          isDisabled={!query.aggregateGraphs}
+          disabled={!query.aggregateGraphs}
           onChange={this.onAggregationFunctionChange}
         />
 

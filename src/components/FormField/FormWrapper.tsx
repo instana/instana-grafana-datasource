@@ -1,12 +1,12 @@
 import React from 'react';
 
-export default function FormDisabled({ disabled, strech, children }) {
+export default function FormWrapper({ disabled, stretch, children }) {
   const style = { display: 'flex' };
   if (disabled) {
     style.opacity = '0.4';
     style.pointerEvents = 'none';
   }
-  if (strech) {
+  if (stretch) {
     style.width = '100%';
   }
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { InlineFormLabel, Input, PopoverContent } from '@grafana/ui';
-import FormDisabled from './FormDisabled';
+import FormWrapper from './FormWrapper';
 
 interface State {}
 
@@ -28,14 +28,14 @@ export default class FormInput extends React.Component<Props, State> {
   render() {
     const { label, tooltip, placeholder, queryKeyword, disabled, labelWidth=14, inputWidth=30,...remaingProps } = this.props;
     return (
-      <FormDisabled disabled={disabled} strech={!inputWidth}>
+      <FormWrapper disabled={disabled} stretch={!inputWidth}>
         <InlineFormLabel className={queryKeyword?'query-keyword':''} width={labelWidth} tooltip={tooltip}>{label}</InlineFormLabel>
         <Input
           width={inputWidth}
           disabled={disabled}
           {...remaingProps}
         />
-      </FormDisabled>
+      </FormWrapper>
     )
   }
 }
