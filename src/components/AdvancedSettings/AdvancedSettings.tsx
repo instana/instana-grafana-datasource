@@ -126,9 +126,12 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
   };
 
   onTimeShiftChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
-    const { query } = this.props;
+    const { query, onChange } = this.props;
     query.timeShift = eventItem.currentTarget.value;
-    this.props.onRunQuery();
+    onChange(query);
+
+    // onRunQuery with 500ms delay after last debounce
+    this.deboundedRunQuery();
   };
 
   setLegendFormatPlaceholder(): string {
@@ -180,8 +183,8 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
             />
           </div>
 
-          <div hiddden={query.metricCategory.key === CUSTOM_METRICS}>
-            <FreeTextMetrics  query={query} onRunQuery={onRunQuery} onChange={onChange} />
+          <div hidden={query.metricCategory.key !== CUSTOM_METRICS}>
+            <FreeTextMetrics query={query} onRunQuery={onRunQuery} onChange={onChange} />
           </div>
 
           <div hidden={query.metricCategory.key !== BUILT_IN_METRICS && query.metricCategory.key !== CUSTOM_METRICS}>

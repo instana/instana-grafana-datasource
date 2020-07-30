@@ -103,6 +103,11 @@ export default class Metric extends React.Component<Props, MetricState> {
     return query.metricCategory.key >= 2;
   }
 
+  canSelectAggregation() {
+    const { query } = this.props;
+    return query.metric && query.metric.aggregations && query.metric.aggregations.length <= 1;
+  }
+
   render() {
     const { query, datasource } = this.props;
 
@@ -110,6 +115,7 @@ export default class Metric extends React.Component<Props, MetricState> {
       <div className={'gf-form'}>
         <FormSelect
           queryKeyword
+          disabled={query.useFreeTextMetrics}
           inputWidth={0}
           label={'Metric'}
           tooltip={'Select the metric you wish to plot.'}
@@ -145,28 +151,32 @@ export default class Metric extends React.Component<Props, MetricState> {
         )}
 
         {this.canShowAggregation() && (
+          <div style={!this.canSelectAggregation() ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
+            <FormSelect
+              queryKeyword
+              labelWidth={6}
+              inputWidth={12}
+              label={'Aggregation'}
+              tooltip={'Select a metric aggregation.'}
+              value={query.aggregation}
+              options={query.metric.aggregations}
+              onChange={this.onAggregationChange}
+            />
+          </div>
+        )}
+
+        <div style={datasource.availableTimeIntervals.length <= 1 ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
           <FormSelect
             queryKeyword
             labelWidth={6}
             inputWidth={12}
-            label={'Aggregation'}
-            tooltip={'Select a metric aggregation.'}
-            value={query.aggregation}
-            options={query.metric.aggregations}
-            onChange={this.onAggregationChange}
+            label={'Rollup'}
+            tooltip={'Select the rollup value.'}
+            value={query.timeInterval}
+            options={datasource.availableTimeIntervals}
+            onChange={this.onTimeIntervalChange}
           />
-        )}
-
-        <FormSelect
-          queryKeyword
-          labelWidth={6}
-          inputWidth={12}
-          label={'Rollup'}
-          tooltip={'Select the rollup value.'}
-          value={query.timeInterval}
-          options={datasource.availableTimeIntervals}
-          onChange={datasource.onTimeIntervalChange}
-        />
+        </div>
 
       </div>
     );
