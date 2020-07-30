@@ -1,7 +1,7 @@
-
 import React from 'react';
 
 import { InlineFormLabel, LegacyForms, PopoverContent, SelectOptionGroup } from '@grafana/ui';
+import FormDisabled from './FormDisabled';
 
 const { Switch } = LegacyForms;
 
@@ -20,19 +20,19 @@ interface Props {
 /**
  * Default switch field including label. Switch element is grafana/ui <Switch />.
  */
-export default class FormSwtich extends React.Component<Props, State> {
+export default class FormSwitch extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
   }
 
   render() {
-    const { label, tooltip, queryKeyword, labelWidth=14, value,...remaingProps } = this.props;
+    const { label, tooltip, queryKeyword, disabled, labelWidth=14, value,...remaingProps } = this.props;
 
     return (
-      <div className={'gf-form'}>
+      <FormDisabled disabled={disabled}>
         <InlineFormLabel className={queryKeyword?'query-keyword':''} width={labelWidth} tooltip={tooltip}>{label}</InlineFormLabel>
-        <Switch checked={value} {...remaingProps} />
-      </div>
+        <Switch checked={value} disabled={disabled} {...remaingProps} />
+      </FormDisabled>
     )
   }
 }

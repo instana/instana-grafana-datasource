@@ -34,32 +34,34 @@ export class MetricFilter extends React.Component<Props, MetricFilterState> {
   componentDidMount() {
     const { query } = this.props;
     this.setState({ customFilters: query.customFilters });
+
+    this.props.onFilterChange(query.customFilters);
   }
 
   onFilterChange = (eventItem: ChangeEvent<HTMLInputElement>, index: number) => {
-    const { onFilterChange } = this.props;
-    const cf: string[] = this.state.customFilters;
-    cf[index] = eventItem.currentTarget.value;
-    this.setState({ customFilters: cf });
-    onFilterChange(cf);
+    const customFilters: string[] = this.state.customFilters;
+    customFilters[index] = eventItem.currentTarget.value;
+    this.setState({ customFilters: customFilters });
+
+    this.props.onFilterChange(customFilters);
   };
 
   addCustomFilter = () => {
-    let cf = this.state.customFilters;
-    cf.push('');
-    this.setState({ customFilters: cf });
+    let customFilters = this.state.customFilters;
+    customFilters.push('');
+    this.setState({ customFilters: customFilters });
 
     const { query, onChange } = this.props;
-    query.customFilters = cf;
+    query.customFilters = customFilters;
     onChange(query);
   };
 
   removeCustomFilter = (index: number) => {
-    let cf: string[] = this.state.customFilters;
-    cf.splice(index, 1);
-    this.setState({ customFilters: cf });
-    // removing a filter might result in more than 5 available metrics
-    this.props.onFilterChange(cf);
+    let customFilters: string[] = this.state.customFilters;
+    customFilters.splice(index, 1);
+    this.setState({ customFilters: customFilters });
+
+    this.props.onFilterChange(customFilters);
   };
 
   render() {

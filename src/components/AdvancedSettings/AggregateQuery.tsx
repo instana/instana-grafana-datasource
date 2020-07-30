@@ -69,16 +69,16 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
           onChange={this.onAggregationFunctionChange}
         />
 
-        <div style={!query.aggregateGraphs ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-          <FormSwitch
-            queryKeyword
-            labelWidth={10}
-            label={'Hide original graphs'}
-            tooltip={'Removes the original graphs resulted from the query and only shows the aggregated graph.'}
-            value={query.hideOriginalGraphs}
-            onChange={this.onHideOriginalGraph}
-          />
-        </div>
+        <FormSwitch
+          queryKeyword
+          disabled={!query.aggregateGraphs}
+          labelWidth={10}
+          label={'Hide original graphs'}
+          tooltip={'Removes the original graphs resulted from the query and only shows the aggregated graph.'}
+          value={query.hideOriginalGraphs}
+          onChange={this.onHideOriginalGraph}
+        />
+
       </div>
     );
   }

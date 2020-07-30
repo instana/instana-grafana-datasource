@@ -125,58 +125,54 @@ export default class Metric extends React.Component<Props, MetricState> {
         />
 
         {query.metricCategory.key === 0 && (
-          <div style={!this.canShowMaxMetricValue() ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-            <FormSwitch
-              queryKeyword
-              labelWidth={8}
-              label={'Show max value'}
-              tooltip={"Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only."}
-              value={query.displayMaxMetricValue}
-              onChange={this.onShowMaxValueChange}
-            />
-          </div>
+          <FormSwitch
+            queryKeyword
+            disabled={!this.canShowMaxMetricValue()}
+            labelWidth={8}
+            label={'Show max value'}
+            tooltip={"Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only."}
+            value={query.displayMaxMetricValue}
+            onChange={this.onShowMaxValueChange}
+          />
         )}
 
         {query.metricCategory.key === 1 && (
-          <div style={!query.canShowAllMetrics ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-            <FormSwitch
-              queryKeyword
-              labelWidth={8}
-              label={'Show all metrics'}
-              tooltip={'You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.'}
-              value={query.showAllMetrics}
-              onChange={this.onShowAllMetricsChange}
-            />
-          </div>
+          <FormSwitch
+            queryKeyword
+            disabled={!query.canShowAllMetrics}
+            labelWidth={8}
+            label={'Show all metrics'}
+            tooltip={'You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.'}
+            value={query.showAllMetrics}
+            onChange={this.onShowAllMetricsChange}
+          />
         )}
 
         {this.canShowAggregation() && (
-          <div style={!this.canSelectAggregation() ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
-            <FormSelect
-              queryKeyword
-              labelWidth={6}
-              inputWidth={12}
-              label={'Aggregation'}
-              tooltip={'Select a metric aggregation.'}
-              value={query.aggregation}
-              options={query.metric.aggregations}
-              onChange={this.onAggregationChange}
-            />
-          </div>
-        )}
-
-        <div style={datasource.availableTimeIntervals.length <= 1 ? { opacity: '0.4', pointerEvents: 'none' } : {}}>
           <FormSelect
             queryKeyword
+            disabled={!this.canSelectAggregation()}
             labelWidth={6}
             inputWidth={12}
-            label={'Rollup'}
-            tooltip={'Select the rollup value.'}
-            value={query.timeInterval}
-            options={datasource.availableTimeIntervals}
-            onChange={this.onTimeIntervalChange}
+            label={'Aggregation'}
+            tooltip={'Select a metric aggregation.'}
+            value={query.aggregation}
+            options={query.metric.aggregations}
+            onChange={this.onAggregationChange}
           />
-        </div>
+        )}
+
+        <FormSelect
+          queryKeyword
+          disabled={datasource.availableTimeIntervals.length <= 1}
+          labelWidth={6}
+          inputWidth={12}
+          label={'Rollup'}
+          tooltip={'Select the rollup value.'}
+          value={query.timeInterval}
+          options={datasource.availableTimeIntervals}
+          onChange={this.onTimeIntervalChange}
+        />
 
       </div>
     );

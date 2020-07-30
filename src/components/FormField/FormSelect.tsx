@@ -1,7 +1,7 @@
-
 import React from 'react';
 
 import { InlineFormLabel, Select, PopoverContent, SelectOptionGroup } from '@grafana/ui';
+import FormDisabled from './FormDisabled';
 
 interface State {}
 
@@ -28,20 +28,20 @@ export default class FormSelect extends React.Component<Props, State> {
   }
 
   render() {
-    const { label, tooltip, searchable=true, queryKeyword, placeholder='-', labelWidth=14, inputWidth=30,...remaingProps } = this.props;
+    const { label, tooltip, searchable=true, disabled, queryKeyword, placeholder='-', labelWidth=14, inputWidth=30,...remaingProps } = this.props;
 
     return (
-      <>
+      <FormDisabled disabled={disabled} strech={!inputWidth}>
         <InlineFormLabel className={queryKeyword?'query-keyword':''} width={labelWidth} tooltip={tooltip}>{label}</InlineFormLabel>
         <Select
           menuPlacement={'bottom'}
-          // maxMenuHeight={180}
+          disabled={disabled}
           width={inputWidth}
           isSearchable={searchable}
           placeholder={placeholder}
           {...remaingProps}
         />
-      </>
+      </FormDisabled>
     )
   }
 }
