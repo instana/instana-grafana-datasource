@@ -1,5 +1,8 @@
 import React, { ChangeEvent } from 'react';
 
+import {
+  SLO_INFORMATION
+} from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import SloSpecifics from '../../lists/slo_specifics';
@@ -59,7 +62,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
   };
 
   shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<SloInformationState>, nextContext: any): boolean {
-    return nextProps.query.metricCategory.key === 7;
+    return nextProps.query.metricCategory.key === SLO_INFORMATION;
   }
 
   loadSloReports() {

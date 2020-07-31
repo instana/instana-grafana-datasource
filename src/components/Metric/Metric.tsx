@@ -1,5 +1,10 @@
 import React from 'react';
 
+import {
+  BUILT_IN_METRICS,
+  CUSTOM_METRICS,
+  ANALYZE_APPLICATION_METRICS
+} from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import max_metrics from '../../lists/max_metrics';
@@ -100,7 +105,7 @@ export default class Metric extends React.Component<Props, MetricState> {
 
   canShowAggregation() {
     const { query } = this.props;
-    return query.metricCategory.key >= 2;
+    return query.metricCategory.key >= ANALYZE_APPLICATION_METRICS;
   }
 
   canSelectAggregation() {
@@ -124,7 +129,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           onChange={this.onMetricChange}
         />
 
-        {query.metricCategory.key === 0 && (
+        {query.metricCategory.key === BUILT_IN_METRICS && (
           <FormSwitch
             queryKeyword
             disabled={!this.canShowMaxMetricValue()}
@@ -136,7 +141,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           />
         )}
 
-        {query.metricCategory.key === 1 && (
+        {query.metricCategory.key === CUSTOM_METRICS && (
           <FormSwitch
             queryKeyword
             disabled={!query.canShowAllMetrics}

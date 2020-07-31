@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from 'react';
 
 import {
+  BUILT_IN_METRICS,
   PLEASE_SPECIFY
 } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
@@ -128,7 +129,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
     const { query } = this.props;
     // workaround as long the api does not support returning plugins with custom metrics only
     if (
-      query.metricCategory.key === 0 ||
+      query.metricCategory.key === BUILT_IN_METRICS ||
       entityType.key === 'statsd' ||
       entityType.key === 'prometheus' ||
       entityType.key === 'jvmRuntimePlatform' ||

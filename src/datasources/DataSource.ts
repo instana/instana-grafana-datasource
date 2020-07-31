@@ -6,6 +6,10 @@ import {
   SelectableValue,
 } from '@grafana/data';
 
+import {
+  BUILT_IN_METRICS,
+  CUSTOM_METRICS
+} from '../GlobalVariables';
 import { InstanaQuery } from '../types/instana_query';
 import { InstanaOptions } from '../types/instana_options';
 import { getRequest } from '../util/request_handler';
@@ -304,7 +308,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   getDefaultTimeInterval(query: InstanaQuery) {
-    if (query.metricCategory.key === 0 || query.metricCategory.key === 1) {
+    if (query.metricCategory.key === BUILT_IN_METRICS || query.metricCategory.key === CUSTOM_METRICS) {
       return getDefaultMetricRollupDuration(this.getTimeFilter());
     } else {
       return getDefaultChartGranularity(this.getTimeFilter().windowSize);
