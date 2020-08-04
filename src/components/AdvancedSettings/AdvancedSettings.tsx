@@ -10,6 +10,7 @@ import { InstanaQuery } from '../../types/instana_query';
 import { AggregateQuery } from './AggregateQuery';
 import FormSwitch from '../FormField/FormSwitch';
 import FormInput from '../FormField/FormInput';
+import _ from "lodash";
 
 const legendFormatPlaceholders = [
   '$label (on host $host)',

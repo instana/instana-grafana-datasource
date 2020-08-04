@@ -5,6 +5,7 @@ import { Legend, Field, Input, Checkbox, Icon, Tooltip } from '@grafana/ui';
 import { InstanaOptions } from '../types/instana_options';
 import getVersion from '../util/instana_version';
 import proxyCheck from '../util/proxy_check';
+import _ from 'lodash';
 
 interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {
 }
@@ -60,7 +61,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
     onOptionsChange({ ...options, jsonData });
   };
 
-  debouncedDetectFeatures = _.debounce(() => this.detectFeatures(), 500);
+  debouncedDetectFeatures = (settings?: DataSourceSettings<InstanaOptions, {}>) => {
+    _.debounce(() => this.detectFeatures(settings), 500);
+  }
 
   /**
    * Checks whether the provided tenant-unit is able to provide certain features such as querying offline snapshots.
@@ -90,6 +93,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal required label="URL" description="The URL of your Instana installation.">
           <Input
+            css=''
             width={30}
             value={jsonData.url}
             placeholder={'https://tools-acme.instana.io'}
@@ -99,6 +103,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal required label="API Token" description="The API token to access the data.">
           <Input
+            css=''
             width={30}
             value={jsonData.apiToken}
             suffix={<Tooltip content={<p>You can create API tokens following the instructions at <a href="https://docs.instana.io/quick_start/api/#api-tokens">https://docs.instana.io/quick_start/api/#api-tokens</a></p>} theme={'info'}>
@@ -109,6 +114,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
         </Field>
 
         <Checkbox
+          css=''
           label={'Use Proxy'}
           value={jsonData.useProxy}
           onChange={(event) => this.onSwitchChange(event, 'useProxy')}
@@ -116,6 +122,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
         />
 
         <Checkbox
+          css=''
           label={'Enable offline snapshots'}
           value={jsonData.showOffline}
           onChange={(event) => this.onSwitchChange(event, 'showOffline')}
@@ -123,6 +130,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
         />
 
         <Checkbox
+          css=''
           label={'Enable SLO dashboards'}
           value={jsonData.allowSlo}
           onChange={(event) => this.onSwitchChange(event, 'allowSlo')}
@@ -140,6 +148,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Infrastructure metrics">
           <Input
+            css=''
             width={30}
             value={jsonData.queryinterval_limit_infra}
             placeholder={'optional: interval limit in hours'}
@@ -149,6 +158,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Application metrics">
           <Input
+            css=''
             width={30}
             value={jsonData.queryinterval_limit_app_metrics}
             placeholder={'optional: interval limit in hours'}
@@ -158,6 +168,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Analyze application calls">
           <Input
+            css=''
             width={30}
             value={jsonData.queryinterval_limit_app_calls}
             placeholder={'optional: interval limit in hours'}
@@ -167,6 +178,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Analyze website">
           <Input
+            css=''
             width={30}
             value={jsonData.queryinterval_limit_website_metrics}
             placeholder={'optional: interval limit in hours'}

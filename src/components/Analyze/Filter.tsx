@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { FormEvent } from 'react';
 
 import {
   ANALYZE_APPLICATION_METRICS,
@@ -54,7 +54,7 @@ export class Filters extends React.Component<Props, FilterState> {
       entity: call_to_entities[0],
       operator: this.filterOperatorsOnType(query.group.type)[0],
       booleanValue: false,
-      numberValue: null,
+      numberValue: 0,
       stringValue: '',
       isValid: false,
     });
@@ -112,7 +112,7 @@ export class Filters extends React.Component<Props, FilterState> {
 
   deboundedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
-  onTagFilterStringValueChange = (value: ChangeEvent<HTMLInputElement>, index: number) => {
+  onTagFilterStringValueChange = (value: FormEvent<HTMLInputElement>, index: number) => {
     const { query, onChange } = this.props;
     query.filters[index].stringValue = value.currentTarget.value;
     onChange(query);
@@ -122,7 +122,7 @@ export class Filters extends React.Component<Props, FilterState> {
     this.deboundedRunQuery();
   };
 
-  onTagFilterNumberValueChange = (value: ChangeEvent<HTMLInputElement>, index: number) => {
+  onTagFilterNumberValueChange = (value: FormEvent<HTMLInputElement>, index: number) => {
     const { query, onChange } = this.props;
     query.filters[index].numberValue = value.currentTarget.valueAsNumber;
     onChange(query);
@@ -207,20 +207,22 @@ export class Filters extends React.Component<Props, FilterState> {
 
           {this.canShowStringInput(query.filters[index]) && (
             <Input
+              css=''
               width={30}
               value={query.filters[index].stringValue}
               placeholder={query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : PLEASE_SPECIFY}
-              onChange={(e) => this.onTagFilterStringValueChange(e, index)}
+              onChange={event => this.onTagFilterStringValueChange(event, index)}
             />
           )}
 
           {query.filters[index].tag.type === 'NUMBER' && (
             <Input
+              css=''
               type={'number'}
               width={30}
               value={query.filters[index].numberValue}
               placeholder={PLEASE_SPECIFY}
-              onChange={(e) => this.onTagFilterNumberValueChange(e, index)}
+              onChange={event => this.onTagFilterNumberValueChange(event, index)}
             />
           )}
 
@@ -238,7 +240,7 @@ export class Filters extends React.Component<Props, FilterState> {
             />
           )}
 
-          <Button variant={'secondary'} onClick={(event) => this.removeTagFilter(index)}>
+          <Button variant={'secondary'} onClick={() => this.removeTagFilter(index)}>
             -
           </Button>
         </div>

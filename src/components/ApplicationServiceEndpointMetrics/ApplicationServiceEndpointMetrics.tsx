@@ -215,7 +215,7 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input value={query.groupbyTagSecondLevelKey} onChange={this.debouncedGroupByTagSecondLevelKeyChange} />
+          <Input css='' value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );

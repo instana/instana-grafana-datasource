@@ -2,21 +2,24 @@ import React from 'react';
 
 import { InlineFormLabel, Select, PopoverContent, SelectOptionGroup } from '@grafana/ui';
 import FormWrapper from './FormWrapper';
+import { SelectableValue } from "@grafana/data";
 
 interface State {}
 
 interface Props {
     label: string;
-    value: string;
+    value: SelectableValue;
     options: SelectOptionGroup;
     queryKeyword?: boolean;
+    disabled?: boolean;
+    defaultValue?: SelectableValue;
     searchable?: boolean | true;
     labelWidth?: number | 14;
     inputWidth?: number | 30;
     placeholder?: string | '-';
     tooltip?: PopoverContent;
 
-    onChange();
+    onChange(event?: any): any;
 }
 
 /**

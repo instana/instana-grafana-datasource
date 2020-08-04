@@ -96,7 +96,7 @@ export default class Metric extends React.Component<Props, MetricState> {
     if (event && event.currentTarget) {
       query.showAllMetrics = event.currentTarget.checked;
       if (query.showAllMetrics) {
-        query.metric = null;
+        query.metric = { };
       }
       onChange(query);
       onRunQuery();
@@ -133,7 +133,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           <FormSwitch
             queryKeyword
             disabled={!this.canShowMaxMetricValue()}
-            labelWidth={8}
+            labelWidth={9}
             label={'Show max value'}
             tooltip={"Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only."}
             value={query.displayMaxMetricValue}
@@ -145,7 +145,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           <FormSwitch
             queryKeyword
             disabled={!query.canShowAllMetrics}
-            labelWidth={8}
+            labelWidth={9}
             label={'Show all metrics'}
             tooltip={'You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.'}
             value={query.showAllMetrics}

@@ -8,13 +8,14 @@ interface State {}
 interface Props {
     label: string;
     value: string;
+    disabled?: boolean;
     placeholder?: string;
     queryKeyword?: boolean;
     labelWidth?: number | 14;
     inputWidth?: number | 30;
     tooltip?: PopoverContent;
 
-    onChange();
+    onChange(event?: any): any;
 }
 
 /**
@@ -31,6 +32,7 @@ export default class FormInput extends React.Component<Props, State> {
       <FormWrapper disabled={disabled} stretch={!inputWidth}>
         <InlineFormLabel className={queryKeyword?'query-keyword':''} width={labelWidth} tooltip={tooltip}>{label}</InlineFormLabel>
         <Input
+          css=''
           width={inputWidth}
           disabled={disabled}
           {...remaingProps}

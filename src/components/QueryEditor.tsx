@@ -23,7 +23,6 @@ import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import { DataSource } from '../datasources/DataSource';
 import { InstanaQuery } from '../types/instana_query';
 import FormSelect from './FormField/FormSelect';
-import { InlineFormLabel } from '@grafana/ui';
 import { Filters } from './Analyze/Filter';
 import Metric from './Metric/Metric';
 import migrate from '../migration';
@@ -51,6 +50,12 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.query = Object.assign(defaultQuery, props.query);
 
     migrate(this.query);
+
+    // TODO FIXME
+    if (!this.query.metricCategory) {
+      this.query.metricCategory = MetricCategories[0];
+      console.log('THIS SHOULD NOT HAPPEN');
+    }
 
     this.state = {
       allMetrics: [],
@@ -271,11 +276,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   render() {
     const { query, onRunQuery, onCategoryChange } = this;
 
-    // TODO FIXME
-    if (!query.metricCategory) {
-      query.metricCategory = MetricCategories[0];
-      console.log('THIS SHOULD NOT HAPPEN');
-    }
     return (
       <div className={'gf-form-group'}>
         <div className={'gf-form'}>
@@ -290,7 +290,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         </div>
 
-        {query.metricCategory.key === BUILT_IN_METRICS && (
+        {(!query.metricCategory || query.metricCategory.key === BUILT_IN_METRICS) && (
           <InfrastructureBuiltIn
             query={query}
             onRunQuery={onRunQuery}

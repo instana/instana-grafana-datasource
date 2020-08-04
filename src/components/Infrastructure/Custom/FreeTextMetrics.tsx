@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
 import { InstanaQuery } from '../../../types/instana_query';
 import FormSwitch from '../../FormField/FormSwitch';
 import { Input } from '@grafana/ui';
+import _ from 'lodash';
 
 interface FreeTextMetricsState {}
 
@@ -24,7 +25,7 @@ export class FreeTextMetrics extends React.Component<Props, FreeTextMetricsState
     if (event && event.currentTarget) {
       query.useFreeTextMetrics = event.currentTarget.checked;
       if (query.useFreeTextMetrics) {
-        query.metric = null;
+        query.metric = { };
       }
       onChange(query);
     }
@@ -50,8 +51,10 @@ export class FreeTextMetrics extends React.Component<Props, FreeTextMetricsState
           tooltip={'Specify comma separated metrics directly in this text field. Once this field has a value, selected metrics from above will be ignored. Enabled as soon as a query is entered. Max 4 metrics supported.'}
           value={query.useFreeTextMetrics}
           onChange={this.onUseFreeTextMetricsChange}
+          disabled={false}
         />
         <Input
+          css=''
           width={0}
           disabled={!query.useFreeTextMetrics}
           value={query.freeTextMetrics}
