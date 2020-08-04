@@ -9,8 +9,6 @@ import { Input, Select, InlineFormLabel } from '@grafana/ui';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import FormWrapper from '../FormField/FormWrapper';
-import FormSelect from '../FormField/FormSelect';
-import FormSwitch from '../FormField/FormSwitch';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
 
@@ -60,10 +58,11 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
         if (!query.entity || (!query.entity.key && !query.entity.label)) {
           query.entity = applications[0];
         }
-        if (!query.callToEntity) {
+
+        if (!query.callToEntity || !query.callToEntity.key) {
           query.callToEntity = call_to_entities[0];
         }
-        if (!query.applicationCallToEntity) {
+        if (!query.applicationCallToEntity || !query.applicationCallToEntity.key) {
           query.applicationCallToEntity = call_to_entities[0];
         }
 
@@ -143,7 +142,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
 
     return (
       <div className={'gf-form'}>
-        <FormWrapper stretch={true}>
+        <FormWrapper stretch={true} disabled={false}>
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your application.'}>
             Application
           </InlineFormLabel>
@@ -158,7 +157,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           <Select menuPlacement={'bottom'} width={0} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
         </FormWrapper>
 
-        <FormWrapper stretch={true}>
+        <FormWrapper stretch={true} disabled={false}>
           <InlineFormLabel className={'query-keyword'} width={7} tooltip={'Group by tag.'}>
             Group by
           </InlineFormLabel>
@@ -174,7 +173,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
         </FormWrapper>
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
+          <Input css='' type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );
