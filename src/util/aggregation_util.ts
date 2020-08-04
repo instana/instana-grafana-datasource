@@ -2,6 +2,8 @@ import _ from 'lodash';
 import { InstanaQuery } from '../types/instana_query';
 
 export function aggregateTarget(data: any, target: InstanaQuery) {
+  const targetLabel = buildAggregationLabel(target);
+  data = _.filter(data, d => d.target !== targetLabel); // filter out any previously calculated aggregations
   let concatedTargetData = concatTargetData(data);
 
   let dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (d) {
@@ -15,7 +17,7 @@ export function aggregateTarget(data: any, target: InstanaQuery) {
     },
   ]);
 
-  return buildResult(aggregatedData, target.refId, buildAggregationLabel(target));
+  return buildResult(aggregatedData, target.refId, targetLabel);
 }
 
 function concatTargetData(data: any) {
