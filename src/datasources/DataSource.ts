@@ -6,10 +6,6 @@ import {
   SelectableValue,
 } from '@grafana/data';
 
-import {
-  BUILT_IN_METRICS,
-  CUSTOM_METRICS
-} from '../GlobalVariables';
 import { InstanaQuery } from '../types/instana_query';
 import { InstanaOptions } from '../types/instana_options';
 import { getRequest } from '../util/request_handler';
@@ -227,9 +223,14 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     let newData = [];
 
     if (target.aggregateGraphs) {
-      newData.push(aggregateTarget(data, target));
+      const aggregatedData = aggregateTarget(data, target);
+      newData.push(aggregatedData);
       if (!target.hideOriginalGraphs) {
-        _.each(data, (dt) => newData.push(dt));
+        _.each(data, (dt) => {
+          if (dt.target != aggregatedData.target) {
+            newData.push(dt)
+          }
+        });
       }
       return newData;
     }
