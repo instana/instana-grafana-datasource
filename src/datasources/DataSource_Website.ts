@@ -128,7 +128,7 @@ export class DataSourceWebsite {
           key: entry.metricId,
           label: entry.label,
           aggregations: entry.aggregations ? this.transformAggregations(entry.aggregations.sort()) : [],
-          beaconTypes: entry.beaconTypes ? entry.beaconTypes : ['pageLoad', 'resourceLoad', 'httpRequest', 'error'],
+          beaconTypes: entry.beaconTypes ? entry.beaconTypes : ['pageLoad', 'resourceLoad', 'httpRequest', 'error', 'custom', 'pageChange'],
         }))
     );
     this.miscCache.put('websiteCatalog', websiteCatalog);
