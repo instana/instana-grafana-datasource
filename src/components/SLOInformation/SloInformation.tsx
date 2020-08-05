@@ -97,7 +97,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
 
         <FormInput
           queryKeyword
-          labelWidth={6}
+          labelWidth={7}
           inputWidth={0}
           label={'SLO'}
           tooltip={'Type in your desired SLO threshold from 0 to 0.9999'}
@@ -108,7 +108,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
 
         <FormSelect
           queryKeyword
-          labelWidth={6}
+          labelWidth={7}
           inputWidth={0}
           label={'Value type'}
           tooltip={
