@@ -15,20 +15,14 @@ interface WebsiteMetricsState {
 
 interface Props {
   query: InstanaQuery;
-
   groups: SelectableValue[];
+  datasource: DataSource;
 
   updateGroups(groups: SelectableValue[]): void;
-
   onRunQuery(): void;
-
   onChange(value: InstanaQuery): void;
-
   updateMetrics(metrics: SelectableValue[]): void;
-
   filterMetricsOnType(type: string): any;
-
-  datasource: DataSource;
 }
 
 let isUnmounting = false;
@@ -51,11 +45,13 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
         });
 
         // select the most loaded website for default/replacement
-        if (!query.entity && websites) {
+        if ((!query.entity || !query.entity.key) && websites) {
           query.entity = websites[0];
         } else if (query.entity && !_.find(websites, ['key', query.entity.key])) {
           query.entity = websites[0];
         }
+
+        onChange(query);
       }
     });
 
