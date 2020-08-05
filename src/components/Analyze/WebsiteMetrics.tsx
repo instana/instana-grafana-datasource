@@ -1,8 +1,6 @@
 import React, { ChangeEvent } from 'react';
 
-import {
-  ANALYZE_WEBSITE_METRICS
-} from '../../GlobalVariables';
+import { ANALYZE_WEBSITE_METRICS } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import beacon_types from '../../lists/beacon_types';
@@ -52,7 +50,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
           websites: websites,
         });
 
-         // select the most loaded website for default/replacement
+        // select the most loaded website for default/replacement
         if (!query.entity && websites) {
           query.entity = websites[0];
         } else if (query.entity && !_.find(websites, ['key', query.entity.key])) {
@@ -165,7 +163,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
         />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input css='' value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
+          <Input css={''} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );

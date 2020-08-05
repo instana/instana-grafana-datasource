@@ -73,12 +73,16 @@ export class DataSourceApplication {
           })
         );
 
-        return _.orderBy(_.compact(allResults).map((entry) => {
-          return {
-            key: entry.id,
-            label: entry.label,
-          };
-        }), [application => application.label.toLowerCase()], ['asc']);
+        return _.orderBy(
+          _.compact(allResults).map((entry) => {
+            return {
+              key: entry.id,
+              label: entry.label,
+            };
+          }),
+          [(application) => application.label.toLowerCase()],
+          ['asc']
+        );
       }
     );
 

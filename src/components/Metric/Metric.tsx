@@ -1,10 +1,6 @@
 import React from 'react';
 
-import {
-  BUILT_IN_METRICS,
-  CUSTOM_METRICS,
-  ANALYZE_APPLICATION_METRICS
-} from '../../GlobalVariables';
+import { BUILT_IN_METRICS, CUSTOM_METRICS, ANALYZE_APPLICATION_METRICS } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import max_metrics from '../../lists/max_metrics';
@@ -65,7 +61,12 @@ export default class Metric extends React.Component<Props, MetricState> {
 
   canShowMaxMetricValue() {
     const { query } = this.props;
-    return query.entityType && query.entityType.key === 'host' && query.metric && _.find(max_metrics, (m) => m.key === query.metric.key);
+    return (
+      query.entityType &&
+      query.entityType.key === 'host' &&
+      query.metric &&
+      _.find(max_metrics, (m) => m.key === query.metric.key)
+    );
   }
 
   onTimeIntervalChange = (timeInterval: SelectableValue) => {
@@ -96,7 +97,7 @@ export default class Metric extends React.Component<Props, MetricState> {
     if (event && event.currentTarget) {
       query.showAllMetrics = event.currentTarget.checked;
       if (query.showAllMetrics) {
-        query.metric = { };
+        query.metric = {};
       }
       onChange(query);
       onRunQuery();
@@ -135,7 +136,10 @@ export default class Metric extends React.Component<Props, MetricState> {
             disabled={!this.canShowMaxMetricValue()}
             labelWidth={9}
             label={'Show max value'}
-            tooltip={"Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only."}
+            tooltip={
+              "Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, " +
+              'memory.used and openFiles.used only.'
+            }
             value={query.displayMaxMetricValue}
             onChange={this.onShowMaxValueChange}
           />
@@ -147,7 +151,10 @@ export default class Metric extends React.Component<Props, MetricState> {
             disabled={!query.canShowAllMetrics}
             labelWidth={9}
             label={'Show all metrics'}
-            tooltip={'You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.'}
+            tooltip={
+              'You have the option to show all metrics in the graph once the amount of possible, selectable ' +
+              'metrics is between 1 and 5.'
+            }
             value={query.showAllMetrics}
             onChange={this.onShowAllMetricsChange}
           />
@@ -178,7 +185,6 @@ export default class Metric extends React.Component<Props, MetricState> {
           options={datasource.availableTimeIntervals}
           onChange={this.onTimeIntervalChange}
         />
-
       </div>
     );
   }

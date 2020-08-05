@@ -27,11 +27,13 @@ export class InfrastructureCustom extends React.Component<Props, InfrastructureC
     isUnmounting = false;
 
     if (query.entityQuery && query.entityType && query.entityType.key) {
-      datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then((results) => {
-        if (!isUnmounting) {
-          this.props.updateMetrics(results);
-        }
-      });
+      datasource.dataSourceInfrastructure
+        .getMetricsCatalog(query.entityType, query.metricCategory.key)
+        .then((results) => {
+          if (!isUnmounting) {
+            this.props.updateMetrics(results);
+          }
+        });
     } else {
       query.metric = {
         key: null,
@@ -50,7 +52,13 @@ export class InfrastructureCustom extends React.Component<Props, InfrastructureC
     const { query, onRunQuery, onChange, updateMetrics, datasource } = this.props;
 
     return (
-      <QueryType query={query} onChange={onChange} onRunQuery={onRunQuery} datasource={datasource} updateMetrics={updateMetrics} />
+      <QueryType
+        query={query}
+        onChange={onChange}
+        onRunQuery={onRunQuery}
+        datasource={datasource}
+        updateMetrics={updateMetrics}
+      />
     );
   }
 }

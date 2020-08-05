@@ -1,8 +1,6 @@
 import React, { ChangeEvent } from 'react';
 
-import {
-  SLO_INFORMATION
-} from '../../GlobalVariables';
+import { SLO_INFORMATION } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import SloSpecifics from '../../lists/slo_specifics';
@@ -61,7 +59,11 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
     onRunQuery();
   };
 
-  shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<SloInformationState>, nextContext: any): boolean {
+  shouldComponentUpdate(
+    nextProps: Readonly<Props>,
+    nextState: Readonly<SloInformationState>,
+    nextContext: any
+  ): boolean {
     return nextProps.query.metricCategory.key === SLO_INFORMATION;
   }
 
@@ -109,12 +111,16 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
           labelWidth={6}
           inputWidth={0}
           label={'Value type'}
-          tooltip={<div>Select your specific SLO information:
-            <ul>
-              <li>'SLI' requires Gauge visualization</li>
-              <li>'Remaining Error Budget' requires Singlestat visualization</li>
-              <li>'Timeseries' requires Bars draw mode on Graph visualization</li>
-            </ul></div>}
+          tooltip={
+            <div>
+              Select your specific SLO information:
+              <ul>
+                <li>'SLI' requires Gauge visualization</li>
+                <li>'Remaining Error Budget' requires Singlestat visualization</li>
+                <li>'Timeseries' requires Bars draw mode on Graph visualization</li>
+              </ul>
+            </div>
+          }
           value={query.sloSpecific}
           options={SloSpecifics}
           onChange={this.onSloSpecificChange}

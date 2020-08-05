@@ -58,9 +58,14 @@ export default function (target: any) {
 
   //2.7.0 towards 3.0 (Angular to React Migration)
   if (typeof target.aggregation === 'string') {
-    target.aggregation ? (target.aggregation = { key: target.aggregation, label: target.aggregation }) : (target.aggregation = {});
+    target.aggregation
+      ? (target.aggregation = { key: target.aggregation, label: target.aggregation })
+      : (target.aggregation = {});
     target.aggregationFunction
-      ? (target.aggregationFunction = { key: target.aggregationFunction.label, label: target.aggregationFunction.label })
+      ? (target.aggregationFunction = {
+          key: target.aggregationFunction.label,
+          label: target.aggregationFunction.label,
+        })
       : (target.aggregationFunction = {});
     target.customFilters
       ? (target.customFilters = _.map(target.customFilters, (cf) => {
@@ -76,7 +81,12 @@ export default function (target: any) {
         type: filter.tag.type,
       };
     });
-    target.group ? (target.group = { key: target.group.key, label: target.group.key, type: target.group.type }) : (target.group = {});
-    target.metricCategory = _.find(metric_categories, (category) => category.key === parseInt(target.metricCategory, 10));
+    target.group
+      ? (target.group = { key: target.group.key, label: target.group.key, type: target.group.type })
+      : (target.group = {});
+    target.metricCategory = _.find(
+      metric_categories,
+      (category) => category.key === parseInt(target.metricCategory, 10)
+    );
   }
 }

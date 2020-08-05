@@ -78,7 +78,6 @@ export class AggregateQuery extends React.Component<Props, AggregateQueryState> 
           value={query.hideOriginalGraphs}
           onChange={this.onHideOriginalGraph}
         />
-
       </div>
     );
   }

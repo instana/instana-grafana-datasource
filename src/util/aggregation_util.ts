@@ -3,7 +3,7 @@ import { InstanaQuery } from '../types/instana_query';
 
 export function aggregateTarget(data: any, target: InstanaQuery) {
   const targetLabel = buildAggregationLabel(target);
-  data = _.filter(data, d => d.target !== targetLabel); // filter out any previously calculated aggregations
+  data = _.filter(data, (d) => d.target !== targetLabel); // filter out any previously calculated aggregations
   let concatedTargetData = concatTargetData(data);
 
   let dataGroupedByTimestamp = _.groupBy(concatedTargetData, function (d) {

@@ -1,16 +1,12 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 
-import {
-  BUILT_IN_METRICS,
-  CUSTOM_METRICS,
-  SLO_INFORMATION
-} from '../../GlobalVariables';
+import { BUILT_IN_METRICS, CUSTOM_METRICS, SLO_INFORMATION } from '../../GlobalVariables';
 import { FreeTextMetrics } from '../Infrastructure/Custom/FreeTextMetrics';
 import { InstanaQuery } from '../../types/instana_query';
 import { AggregateQuery } from './AggregateQuery';
 import FormSwitch from '../FormField/FormSwitch';
 import FormInput from '../FormField/FormInput';
-import _ from "lodash";
+import _ from 'lodash';
 
 const legendFormatPlaceholders = [
   '$label (on host $host)',
@@ -177,7 +173,10 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
               queryKeyword
               inputWidth={0}
               label={'Time shift'}
-              tooltip={'Specify the amount of hours that shall be used. The time shift function always go back in time, not forward. Accepts values such as 1s, 1m, 1h, 1d, 1w.'}
+              tooltip={
+                'Specify the amount of hours that shall be used. The time shift function always go back in time, ' +
+                'not forward. Accepts values such as 1s, 1m, 1h, 1d, 1w.'
+              }
               value={query.timeShift}
               placeholder={'1h'}
               onChange={(event) => this.onTimeShiftChange(event)}

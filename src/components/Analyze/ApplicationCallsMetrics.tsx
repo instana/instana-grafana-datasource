@@ -1,9 +1,6 @@
 import React, { ChangeEvent } from 'react';
 
-import {
-  ALL_APPLICATIONS,
-  ANALYZE_APPLICATION_METRICS
-} from '../../GlobalVariables';
+import { ALL_APPLICATIONS, ANALYZE_APPLICATION_METRICS } from '../../GlobalVariables';
 import call_to_entities from '../../lists/apply_call_to_entities';
 import { Input, Select, InlineFormLabel } from '@grafana/ui';
 import { DataSource } from '../../datasources/DataSource';
@@ -154,7 +151,14 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
             value={query.applicationCallToEntity}
             onChange={this.onApplicationCallToEntityChange}
           />
-          <Select menuPlacement={'bottom'} width={0} isSearchable={true} value={query.entity} options={this.state.applications} onChange={this.onApplicationChange} />
+          <Select
+            menuPlacement={'bottom'}
+            width={0}
+            isSearchable={true}
+            value={query.entity}
+            options={this.state.applications}
+            onChange={this.onApplicationChange}
+          />
         </FormWrapper>
 
         <FormWrapper stretch={true} disabled={false}>
@@ -169,11 +173,23 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
             options={call_to_entities}
             onChange={this.onCallToEntityChange}
           />
-          <Select menuPlacement={'bottom'} width={0} isSearchable={true} options={groups} value={query.group} onChange={this.onGroupChange} />
+          <Select
+            menuPlacement={'bottom'}
+            width={0}
+            isSearchable={true}
+            options={groups}
+            value={query.group}
+            onChange={this.onGroupChange}
+          />
         </FormWrapper>
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input css='' type={'text'} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
+          <Input
+            css={''}
+            type={'text'}
+            value={query.groupbyTagSecondLevelKey}
+            onChange={this.onGroupByTagSecondLevelKeyChange}
+          />
         </div>
       </div>
     );

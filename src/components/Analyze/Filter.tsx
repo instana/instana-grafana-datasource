@@ -1,9 +1,6 @@
 import React, { FormEvent } from 'react';
 
-import {
-  ANALYZE_APPLICATION_METRICS,
-  PLEASE_SPECIFY
-} from '../../GlobalVariables';
+import { ANALYZE_APPLICATION_METRICS, PLEASE_SPECIFY } from '../../GlobalVariables';
 import { Button, InlineFormLabel, Input, Select } from '@grafana/ui';
 import call_to_entities from '../../lists/apply_call_to_entities';
 import { DataSource } from '../../datasources/DataSource';
@@ -107,7 +104,9 @@ export class Filters extends React.Component<Props, FilterState> {
   };
 
   canShowStringInput(filter: TagFilter) {
-    return (filter.tag.type === 'STRING' || filter.tag.type === 'KEY_VALUE_PAIR') && !filter.operator.key.includes('EMPTY');
+    return (
+      !filter.operator.key.includes('EMPTY') && (filter.tag.type === 'STRING' || filter.tag.type === 'KEY_VALUE_PAIR')
+    );
   }
 
   deboundedRunQuery = _.debounce(this.props.onRunQuery, 500);
@@ -159,7 +158,8 @@ export class Filters extends React.Component<Props, FilterState> {
       } else if (this.OPERATOR_NUMBER === query.filters[index].tag.type && query.filters[index].numberValue !== null) {
         query.filters[index].isValid = true;
       } else {
-        query.filters[index].isValid = this.OPERATOR_BOOLEAN === query.filters[index].tag.type && query.filters[index].booleanValue;
+        query.filters[index].isValid =
+          this.OPERATOR_BOOLEAN === query.filters[index].tag.type && query.filters[index].booleanValue;
       }
     } else {
       query.filters[index].isValid = false;
@@ -176,7 +176,7 @@ export class Filters extends React.Component<Props, FilterState> {
       filter = (
         <div className={'gf-form'}>
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Filter by tag.'}>
-            {index+1}. filter
+            {index + 1}. filter
           </InlineFormLabel>
           {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
             <Select
@@ -207,22 +207,22 @@ export class Filters extends React.Component<Props, FilterState> {
 
           {this.canShowStringInput(query.filters[index]) && (
             <Input
-              css=''
+              css={''}
               width={30}
               value={query.filters[index].stringValue}
               placeholder={query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : PLEASE_SPECIFY}
-              onChange={event => this.onTagFilterStringValueChange(event, index)}
+              onChange={(event) => this.onTagFilterStringValueChange(event, index)}
             />
           )}
 
           {query.filters[index].tag.type === 'NUMBER' && (
             <Input
-              css=''
+              css={''}
               type={'number'}
               width={30}
               value={query.filters[index].numberValue}
               placeholder={PLEASE_SPECIFY}
-              onChange={event => this.onTagFilterNumberValueChange(event, index)}
+              onChange={(event) => this.onTagFilterNumberValueChange(event, index)}
             />
           )}
 

@@ -7,8 +7,7 @@ import getVersion from '../util/instana_version';
 import proxyCheck from '../util/proxy_check';
 import _ from 'lodash';
 
-interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {
-}
+interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {}
 
 interface State {
   canQueryOfflineSnapshots: boolean;
@@ -40,7 +39,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
     onOptionsChange({ ...options, jsonData });
 
-    if ('url' === key || 'apiToken' === key) {
+    if ('url' === key || 'apiToken' === key) {
       this.debouncedDetectFeatures(options);
     }
   };
@@ -63,7 +62,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
   debouncedDetectFeatures = (settings?: DataSourceSettings<InstanaOptions, {}>) => {
     _.debounce(() => this.detectFeatures(settings), 500);
-  }
+  };
 
   /**
    * Checks whether the provided tenant-unit is able to provide certain features such as querying offline snapshots.
@@ -79,7 +78,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
     this.setState({ canUseProxy: proxyCheck() });
     getVersion(settings.jsonData).then((version: any) => {
-      version ? this.setState({ canQueryOfflineSnapshots: version >= 156 }) : this.setState({ canQueryOfflineSnapshots: false });
+      version
+        ? this.setState({ canQueryOfflineSnapshots: version >= 156 })
+        : this.setState({ canQueryOfflineSnapshots: false });
     });
   };
 
@@ -91,9 +92,15 @@ export class ConfigEditor extends PureComponent<Props, State> {
       <div>
         <Legend>Instana configuration</Legend>
 
-        <Field className={'width-30'} horizontal required label="URL" description="The URL of your Instana installation.">
+        <Field
+          className={'width-30'}
+          horizontal
+          required
+          label="URL"
+          description="The URL of your Instana installation."
+        >
           <Input
-            css=''
+            css={''}
             width={30}
             value={jsonData.url}
             placeholder={'https://tools-acme.instana.io'}
@@ -101,20 +108,38 @@ export class ConfigEditor extends PureComponent<Props, State> {
           />
         </Field>
 
-        <Field className={'width-30'} horizontal required label="API Token" description="The API token to access the data.">
+        <Field
+          className={'width-30'}
+          horizontal
+          required
+          label="API Token"
+          description="The API token to access the data."
+        >
           <Input
-            css=''
+            css={''}
             width={30}
             value={jsonData.apiToken}
-            suffix={<Tooltip content={<p>You can create API tokens following the instructions at <a href="https://docs.instana.io/quick_start/api/#api-tokens">https://docs.instana.io/quick_start/api/#api-tokens</a></p>} theme={'info'}>
-                      <Icon name="info-circle"/>
-                    </Tooltip>}
+            suffix={
+              <Tooltip
+                content={
+                  <p>
+                    You can create API tokens following the instructions at
+                    <a href="https://docs.instana.io/quick_start/api/#api-tokens">
+                      https://docs.instana.io/quick_start/api/#api-tokens
+                    </a>
+                  </p>
+                }
+                theme={'info'}
+              >
+                <Icon name="info-circle" />
+              </Tooltip>
+            }
             onChange={(event) => this.onInstanaOptionsChange(event, 'apiToken')}
           />
         </Field>
 
         <Checkbox
-          css=''
+          css={''}
           label={'Use Proxy'}
           value={jsonData.useProxy}
           onChange={(event) => this.onSwitchChange(event, 'useProxy')}
@@ -122,7 +147,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
         />
 
         <Checkbox
-          css=''
+          css={''}
           label={'Enable offline snapshots'}
           value={jsonData.showOffline}
           onChange={(event) => this.onSwitchChange(event, 'showOffline')}
@@ -130,25 +155,27 @@ export class ConfigEditor extends PureComponent<Props, State> {
         />
 
         <Checkbox
-          css=''
+          css={''}
           label={'Enable SLO dashboards'}
           value={jsonData.allowSlo}
           onChange={(event) => this.onSwitchChange(event, 'allowSlo')}
-          description={'Adds a new category that allows retrieval of SLO information. Needs Instana release 176+ and a explicit feature flag.'}
+          description={
+            'Adds a new category that allows retrieval of SLO information. Needs Instana release 176+ and ' +
+            'a explicit feature flag.'
+          }
         />
 
-        <br/>
-        <br/>
+        <br />
+        <br />
         <b>Maximum query intervals in hours</b>
         <p className={'width-30'}>
           This settings are optional values to control the load of data queries, by defining the maximum allowed query
-          intervals against the Instana
-          API.
+          intervals against the Instana API.
         </p>
 
         <Field className={'width-30'} horizontal label="Infrastructure metrics">
           <Input
-            css=''
+            css={''}
             width={30}
             value={jsonData.queryinterval_limit_infra}
             placeholder={'optional: interval limit in hours'}
@@ -158,7 +185,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Application metrics">
           <Input
-            css=''
+            css={''}
             width={30}
             value={jsonData.queryinterval_limit_app_metrics}
             placeholder={'optional: interval limit in hours'}
@@ -168,7 +195,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Analyze application calls">
           <Input
-            css=''
+            css={''}
             width={30}
             value={jsonData.queryinterval_limit_app_calls}
             placeholder={'optional: interval limit in hours'}
@@ -178,7 +205,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Analyze website">
           <Input
-            css=''
+            css={''}
             width={30}
             value={jsonData.queryinterval_limit_website_metrics}
             placeholder={'optional: interval limit in hours'}

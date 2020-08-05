@@ -1,8 +1,6 @@
 import React, { ChangeEvent } from 'react';
 
-import {
-  PLEASE_SPECIFY
-} from '../../../GlobalVariables';
+import { PLEASE_SPECIFY } from '../../../GlobalVariables';
 import { DataSource } from '../../../datasources/DataSource';
 import { InstanaQuery } from '../../../types/instana_query';
 import { Button, InlineFormLabel } from '@grafana/ui';

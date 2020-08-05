@@ -227,8 +227,8 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       newData.push(aggregatedData);
       if (!target.hideOriginalGraphs) {
         _.each(data, (dt) => {
-          if (dt.target != aggregatedData.target) {
-            newData.push(dt)
+          if (dt.target !== aggregatedData.target) {
+            newData.push(dt);
           }
         });
       }

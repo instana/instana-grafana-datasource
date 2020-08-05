@@ -1,10 +1,6 @@
 import React, { ChangeEvent } from 'react';
 
-import {
-  ALL_APPLICATIONS,
-  ALL_ENDPOINTS,
-  ALL_SERVICES
-} from '../../GlobalVariables';
+import { ALL_APPLICATIONS, ALL_ENDPOINTS, ALL_SERVICES } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import FormSelect from '../FormField/FormSelect';
@@ -73,7 +69,11 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         }
 
         // replace removed application
-        if (query.entity && query.entity.key && !_.find(this.state.applications, (app) => app.key === query.entity.key)) {
+        if (
+          query.entity &&
+          query.entity.key &&
+          !_.find(this.state.applications, (app) => app.key === query.entity.key)
+        ) {
           query.entity = this.state.applications[0];
         } else if ((!query.entity || !query.entity.key) && applications) {
           query.entity = this.state.applications[0];
@@ -215,7 +215,7 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input css='' value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
+          <Input css={''} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );

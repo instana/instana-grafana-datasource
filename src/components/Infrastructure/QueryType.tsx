@@ -1,9 +1,6 @@
 import React, { ChangeEvent } from 'react';
 
-import {
-  BUILT_IN_METRICS,
-  PLEASE_SPECIFY
-} from '../../GlobalVariables';
+import { BUILT_IN_METRICS, PLEASE_SPECIFY } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import FormSelect from '../FormField/FormSelect';
@@ -75,9 +72,11 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
     query.entityType = eventItem;
     onChange(query);
 
-    datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then((results) => {
-      this.props.updateMetrics(results);
-    });
+    datasource.dataSourceInfrastructure
+      .getMetricsCatalog(query.entityType, query.metricCategory.key)
+      .then((results) => {
+        this.props.updateMetrics(results);
+      });
   };
 
   debouncedEntityTypes = _.debounce(this.loadEntityTypes, 500);
@@ -106,7 +105,11 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
         types: filteredEntityTypes,
       });
 
-      if (!query.entityType || !query.entityType.key || !_.find(this.state.types, (m) => m.key === query.entityType.key)) {
+      if (
+        !query.entityType ||
+        !query.entityType.key ||
+        !_.find(this.state.types, (m) => m.key === query.entityType.key)
+      ) {
         query.entityType = { key: null, label: 'Please select (' + filteredEntityTypes.length + ')' };
       }
 
@@ -150,7 +153,14 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
           queryKeyword
           inputWidth={0}
           label={'Query'}
-          tooltip={<div>Specify a query for the entities you wish to plot. Use the dynamic focus syntax: <a href="https://docs.instana.io/core_concepts/dynamic_focus/#syntax">https://docs.instana.io/core_concepts/dynamic_focus/#syntax</a></div>}
+          tooltip={
+            <div>
+              Specify a query for the entities you wish to plot. Use the dynamic focus syntax:
+              <a href="https://docs.instana.io/core_concepts/dynamic_focus/#syntax">
+                https://docs.instana.io/core_concepts/dynamic_focus/#syntax
+              </a>
+            </div>
+          }
           value={query.entityQuery}
           placeholder={PLEASE_SPECIFY}
           onChange={this.onQueryChange}
