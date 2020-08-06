@@ -9,8 +9,7 @@ import {
   SLO_INFORMATION,
 } from '../GlobalVariables';
 import { ApplicationServiceEndpointMetrics } from './ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics';
-import { InfrastructureBuiltIn } from './Infrastructure/BuiltIn/InfrastructureBuiltIn';
-import { InfrastructureCustom } from './Infrastructure/Custom/InfrastructureCustom';
+import { Infrastructure } from './Infrastructure/Infrastructure';
 import { ApplicationCallsMetrics } from './Analyze/ApplicationCallsMetrics';
 import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
 import AdvancedSettings from './AdvancedSettings/AdvancedSettings';
@@ -31,14 +30,16 @@ import _ from 'lodash';
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
 interface QueryState {
-  allMetrics: SelectableValue[];
-  availableMetrics: SelectableValue[];
   groups: SelectableValue[];
+  queryTypes: SelectableValue[];
+  allMetrics: SelectableValue[];
   currentCategory: SelectableValue;
+  availableMetrics: SelectableValue[];
 }
 
 export class QueryEditor extends PureComponent<Props, QueryState> {
   query: InstanaQuery;
+  snapshots: any;
 
   constructor(props: Props) {
     super(props);
@@ -58,13 +59,15 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     }
 
     this.state = {
-      allMetrics: [],
-      availableMetrics: [],
       groups: [],
+      allMetrics: [],
+      queryTypes: [],
+      availableMetrics: [],
       currentCategory: this.query.metricCategory,
     };
 
     this.filterMetricsOnType = this.filterMetricsOnType.bind(this);
+    this.loadEntityTypes = this.loadEntityTypes.bind(this);
 
     this.props.onChange(this.query);
   }
@@ -122,6 +125,82 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
     this.onRunQuery();
   };
+
+  loadEntityTypes(filterResult = true) {
+    const { query, datasource, onRunQuery } = this.props;
+
+    if (query.entityQuery) {
+      datasource.fetchTypesForTarget(query).then((response: any) => {
+        this.snapshots = response.data;
+        this.filterForEntityType(true, filterResult);
+        onRunQuery();
+      });
+    } else {
+      this.setState({ queryTypes: [], });
+    }
+  }
+
+  filterForEntityType = (findMatchingEntityTypes = true, filterResults = true) => {
+    const { query, datasource, onChange } = this.props;
+    datasource.getEntityTypes().then((entityTypes) => {
+      let queryTypes = entityTypes;
+      if (filterResults && !query.useFreeTextMetrics) {
+        queryTypes = this.filterEntityTypes(entityTypes, findMatchingEntityTypes);
+      }
+
+      this.setState({ queryTypes: queryTypes });
+
+      if (
+        !query.entityType ||
+        !query.entityType.key ||
+        !_.find(queryTypes, (m) => m.key === query.entityType.key)
+      ) {
+        query.entityType = { key: null, label: 'Please select (' + queryTypes.length + ')' };
+      }
+
+      onChange(query);
+    });
+  }
+
+  filterEntityTypes(entityTypes: SelectableValue[], findMatchingEntityTypes: boolean) {
+    if (findMatchingEntityTypes) {
+      return _.sortBy(
+        _.filter(entityTypes, (entityType) => this.findMatchingEntityTypes(entityType)),
+        'label'
+      );
+    }
+
+    return _.sortBy(entityTypes, 'label');
+  }
+
+  findMatchingEntityTypes(entityType: SelectableValue) {
+    const { query } = this.props;
+    // workaround as long the api does not support returning plugins with custom metrics only
+    if (
+      query.metricCategory.key === BUILT_IN_METRICS ||
+      entityType.key === 'statsd' ||
+      entityType.key === 'prometheus' ||
+      entityType.key === 'jvmRuntimePlatform' ||
+      entityType.key === 'dropwizardApplicationContainer'
+    ) {
+      return this.snapshots.find((type: any) => type === entityType.key) && entityType.label != null;
+    }
+
+    return false;
+  }
+
+  updateQueryTypes = (types: SelectableValue[]) => {
+    this.setState({
+      queryTypes: types,
+    });
+  };
+
+  showAllQueryTypes = () => {
+    const { datasource } = this.props;
+    datasource.getEntityTypes().then((entityTypes) => {
+      this.updateQueryTypes(entityTypes);
+    });
+  }
 
   updateGroups = (groups: SelectableValue[]) => {
     this.setState({
@@ -291,22 +370,28 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         </div>
 
         {(!query.metricCategory || query.metricCategory.key === BUILT_IN_METRICS) && (
-          <InfrastructureBuiltIn
+          <Infrastructure
             query={query}
+            queryTypes={this.state.queryTypes}
+            datasource={this.props.datasource}
             onRunQuery={onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
-            datasource={this.props.datasource}
+            loadEntityTypes={this.loadEntityTypes}
+            updateQueryTypes={this.updateQueryTypes}
           />
         )}
 
         {query.metricCategory.key === CUSTOM_METRICS && (
-          <InfrastructureCustom
+          <Infrastructure
             query={query}
+            queryTypes={this.state.queryTypes}
+            datasource={this.props.datasource}
             onRunQuery={onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
-            datasource={this.props.datasource}
+            loadEntityTypes={this.loadEntityTypes}
+            updateQueryTypes={this.updateQueryTypes}
           />
         )}
 
@@ -387,7 +472,12 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        <AdvancedSettings query={query} onRunQuery={onRunQuery} onChange={this.props.onChange} />
+        <AdvancedSettings
+          query={query}
+          onRunQuery={onRunQuery}
+          onChange={this.props.onChange}
+          loadEntityTypes={this.loadEntityTypes}
+        />
       </div>
     );
   }
