@@ -7,7 +7,7 @@ import { InstanaQuery } from '../types/instana_query';
 
 const options: InstanaOptions = buildInstanaOptions();
 
-describe('Given an application datasource', () => {
+describe('Given an sli datasource', () => {
   const dataSourceSlo: DataSourceSlo = new DataSourceSlo(options);
   let getRequestSpy: any;
   const timeFilter: TimeFilter = {
@@ -20,7 +20,7 @@ describe('Given an application datasource', () => {
     const definedSli = [
       {
         id: '1',
-        sloName: 'Slo 1',
+        sliName: 'Slo 1',
         initialEvaluationTimestamp: 1585046123732,
         metricName: 'latency',
         metricAggregation: 'P95',
@@ -32,7 +32,7 @@ describe('Given an application datasource', () => {
       },
       {
         id: '2',
-        sloName: 'Slo 2',
+        sliName: 'Slo 2',
         initialEvaluationTimestamp: 1585046123732,
         metricName: 'latency',
         metricAggregation: 'P95',
@@ -44,7 +44,7 @@ describe('Given an application datasource', () => {
       },
       {
         id: '3',
-        sloName: 'Slo 3',
+        sliName: 'Slo 3',
         initialEvaluationTimestamp: 1585046123732,
         metricName: 'latency',
         metricAggregation: 'P95',
