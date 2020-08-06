@@ -167,7 +167,9 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       });
     } else if (target.entity && target.entity.key) {
       return this.dataSourceApplication.fetchApplicationMetrics(target, timeFilter).then((response: any) => {
-        target.showWarningCantShowAllResults = response.data.canLoadMore;
+        if (response.data) {
+          target.showWarningCantShowAllResults = response.data.canLoadMore;
+        }
         return readItemMetrics(target, response, this.dataSourceApplication.buildApplicationMetricLabel);
       });
     }

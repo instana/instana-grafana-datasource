@@ -21,6 +21,10 @@ export function createTagFilter(filter: TagFilter) {
 }
 
 export function readItemMetrics(target: InstanaQuery, response: any, getLabel: any) {
+  if (!response.data) {
+    return response;
+  }
+
   // as we map two times we need to flatten the result
   return _.flatten(
     response.data.items.map((item: any, index: number) => {
