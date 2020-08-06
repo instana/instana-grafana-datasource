@@ -109,7 +109,7 @@ export class DataSourceEndpoint {
 
   fetchEndpointMetrics(target: InstanaQuery, timeFilter: TimeFilter) {
     // avoid invalid calls
-    if (!target || !target.metric) {
+    if (!target || !target.metric || !target.metric.key) {
       return Promise.resolve(emptyResultData(target.refId));
     }
 
