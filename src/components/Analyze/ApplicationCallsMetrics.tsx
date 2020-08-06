@@ -139,7 +139,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
 
     return (
       <div className={'gf-form'}>
-        <FormWrapper stretch={true} disabled={false}>
+        <FormWrapper stretch={true}>
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your application.'}>
             Application
           </InlineFormLabel>
@@ -161,7 +161,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           />
         </FormWrapper>
 
-        <FormWrapper stretch={true} disabled={false}>
+        <FormWrapper stretch={true}>
           <InlineFormLabel className={'query-keyword'} width={7} tooltip={'Group by tag.'}>
             Group by
           </InlineFormLabel>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { InlineFormLabel, Select, PopoverContent, SelectOptionGroup } from '@grafana/ui';
+import { InlineFormLabel, Select, PopoverContent } from '@grafana/ui';
 import FormWrapper from './FormWrapper';
 import { SelectableValue } from '@grafana/data';
 import './form.css';
@@ -10,7 +10,7 @@ interface State {}
 interface Props {
   label: string;
   value: SelectableValue;
-  options: SelectOptionGroup;
+  options: any;
   queryKeyword?: boolean;
   disabled?: boolean;
   defaultValue?: SelectableValue;
