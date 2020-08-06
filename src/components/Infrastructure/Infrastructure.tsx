@@ -60,7 +60,7 @@ export class Infrastructure extends React.Component<Props, InfrastructureBuiltIn
       loadEntityTypes,
       datasource,
       queryTypes,
-      updateQueryTypes
+      updateQueryTypes,
     } = this.props;
 
     return (

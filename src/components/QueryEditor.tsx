@@ -136,7 +136,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         onRunQuery();
       });
     } else {
-      this.setState({ queryTypes: [], });
+      this.setState({ queryTypes: [] });
     }
   }
 
@@ -150,19 +150,15 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
       this.setState({ queryTypes: queryTypes });
 
-      if (
-        !query.entityType ||
-        !query.entityType.key ||
-        !_.find(queryTypes, (m) => m.key === query.entityType.key)
-      ) {
+      if (!query.entityType || !query.entityType.key || !_.find(queryTypes, (m) => m.key === query.entityType.key)) {
         query.entityType = { key: null, label: 'Please select (' + queryTypes.length + ')' };
       }
 
       onChange(query);
     });
-  }
+  };
 
-  filterEntityTypes(entityTypes: SelectableValue[], findMatchingEntityTypes: boolean) {
+  filterEntityTypes = (entityTypes: SelectableValue[], findMatchingEntityTypes: boolean) => {
     if (findMatchingEntityTypes) {
       return _.sortBy(
         _.filter(entityTypes, (entityType) => this.findMatchingEntityTypes(entityType)),
@@ -171,9 +167,9 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     }
 
     return _.sortBy(entityTypes, 'label');
-  }
+  };
 
-  findMatchingEntityTypes(entityType: SelectableValue) {
+  findMatchingEntityTypes = (entityType: SelectableValue) => {
     const { query } = this.props;
     // workaround as long the api does not support returning plugins with custom metrics only
     if (
@@ -187,20 +183,13 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     }
 
     return false;
-  }
+  };
 
   updateQueryTypes = (types: SelectableValue[]) => {
     this.setState({
       queryTypes: types,
     });
   };
-
-  showAllQueryTypes = () => {
-    const { datasource } = this.props;
-    datasource.getEntityTypes().then((entityTypes) => {
-      this.updateQueryTypes(entityTypes);
-    });
-  }
 
   updateGroups = (groups: SelectableValue[]) => {
     this.setState({
