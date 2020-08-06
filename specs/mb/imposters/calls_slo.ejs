@@ -1,0 +1,29 @@
+{
+  "predicates": [{
+    "equals": {
+      "method": "GET",
+      "path": "/api/settings/sli"
+    }
+  }],
+  "responses": [{
+    "is": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json;charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+      },
+      "body": "[{\"id\":\"1\",\"sliName\":\"Sample SLO\",\"initialEvaluationTimestamp\":1585066443730,\"metricConfiguration\": {\"metricName\":\"memory.total\",\"metricAggregation\":\"P50\",\"threshold\":50},\"sliEntity\":{\"sliType\":\"custom\",\"instanceAggregation\":\"MEAN\",\"query\":\"entity.type.Host\"}}]"
+    }
+  }]
+},
+{
+  "predicates": [{
+    "startsWith": {
+      "path": "/api/settings/sli/report/1"
+    }
+  }],
+  "responses": [{
+    "inject": "<%- stringify(filename, 'slo_response.ejs') %>"
+  }]
+},
