@@ -8,6 +8,7 @@
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
     "up": "docker-compose up --remove-orphans",
+    "start": "yarn up -d; yarn watch",
     "format": "prettier src/**/*.ts --write"
   },
   "author": "Instana",
