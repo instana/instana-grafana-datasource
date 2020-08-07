@@ -90,6 +90,7 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
           labelWidth={6}
           label={'Type'}
           tooltip={'Select an entity type for a list of available metrics.'}
+          noOptionsMessage={'No types found with query'}
           value={query.entityType}
           options={queryTypes}
           onChange={this.onTypeChange}

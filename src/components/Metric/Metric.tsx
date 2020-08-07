@@ -126,6 +126,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           label={'Metric'}
           tooltip={'Select the metric you wish to plot.'}
           value={query.metric}
+          noOptionsMessage={'No metrics found'}
           options={this.props.availableMetrics}
           onChange={this.onMetricChange}
         />

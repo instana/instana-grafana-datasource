@@ -14,6 +14,7 @@ interface Props {
   queryKeyword?: boolean;
   disabled?: boolean;
   defaultValue?: SelectableValue;
+  noOptionsMessage?: string;
   searchable?: boolean | true;
   labelWidth?: number | 14;
   inputWidth?: number | 30;

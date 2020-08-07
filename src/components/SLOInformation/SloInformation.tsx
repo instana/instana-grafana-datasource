@@ -90,6 +90,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
           inputWidth={0}
           label={'Configured SLI'}
           tooltip={'SLI configuration used to compute error budget and SLI values.'}
+          noOptionsMessage={'No configured SLI found'}
           value={query.sloReport}
           options={this.state.sloReports}
           onChange={this.onSloChange}

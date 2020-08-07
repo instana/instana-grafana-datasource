@@ -133,6 +133,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
           inputWidth={0}
           label={'Website'}
           tooltip={'Select your website.'}
+          noOptionsMessage={'No websites found'}
           value={query.entity}
           options={this.state.websites}
           onChange={this.onWebsiteChange}
