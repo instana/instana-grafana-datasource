@@ -1,5 +1,5 @@
 import {describe, beforeEach, it, sinon, expect, angularMocks} from './lib/common';
-import InstanaDatasource from '../src/datasource';
+import InstanaDatasource from '../src/datasources';
 import TemplateSrvStub from './lib/template_srv_stub';
 import Q from 'q';
 import moment from 'moment';

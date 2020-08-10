@@ -6,8 +6,7 @@ services:
       - 3000:3000
     volumes:
       - ./dist:/var/lib/grafana/plugins/instana
-    environment:
-      GF_LOG_LEVEL: debug
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources
   mountebank:
     build: specs/mb
     image: ui-backend-mockserver
