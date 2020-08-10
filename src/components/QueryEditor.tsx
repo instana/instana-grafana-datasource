@@ -52,12 +52,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
     migrate(this.query);
 
-    // TODO FIXME
-    if (!this.query.metricCategory) {
-      this.query.metricCategory = MetricCategories[0];
-      console.log('THIS SHOULD NOT HAPPEN');
-    }
-
     this.state = {
       groups: [],
       allMetrics: [],
