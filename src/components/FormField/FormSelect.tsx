@@ -3,7 +3,6 @@ import React from 'react';
 import { InlineFormLabel, Select, PopoverContent } from '@grafana/ui';
 import FormWrapper from './FormWrapper';
 import { SelectableValue } from '@grafana/data';
-import './form.css';
 
 interface State {}
 
@@ -51,7 +50,6 @@ export default class FormSelect extends React.Component<Props, State> {
           {label}
         </InlineFormLabel>
         <Select
-          className={'select'}
           menuPlacement={'bottom'}
           disabled={disabled}
           width={inputWidth}

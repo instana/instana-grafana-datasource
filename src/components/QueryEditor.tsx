@@ -27,6 +27,8 @@ import Metric from './Metric/Metric';
 import migrate from '../migration';
 import _ from 'lodash';
 
+import '../instana-grafana.css';
+
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
 interface QueryState {
