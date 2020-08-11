@@ -126,7 +126,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
     query.timeShift = eventItem.currentTarget.value;
 
     if (query.timeShift) {
-      query.timeShiftIsValid = query.timeShift.match(/\d+[m,s,h,d,w]{1}/);
+      query.timeShiftIsValid = query.timeShift.match(/\d+[m,s,h,d,w]{1}/) ? true : false;
     } else {
       query.timeShiftIsValid = true;
     }

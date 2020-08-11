@@ -48,7 +48,7 @@ export default class Metric extends React.Component<Props, MetricState> {
     query.metric = metric;
 
     if (query.metric && query.metric.key && !_.includes(query.metric.aggregations, query.aggregation)) {
-      query.aggregation = { key: query.metric.aggregations[0], label: query.metric.aggregations[0] };
+      query.aggregation = query.metric.aggregations[0];
     }
 
     if (query.displayMaxMetricValue && !this.canShowMaxMetricValue()) {
@@ -111,7 +111,7 @@ export default class Metric extends React.Component<Props, MetricState> {
 
   canSelectAggregation() {
     const { query } = this.props;
-    return query.metric && query.metric.aggregations && query.metric.aggregations.length <= 1;
+    return query.metric && query.metric.aggregations && query.metric.aggregations.length > 1;
   }
 
   render() {

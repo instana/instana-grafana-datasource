@@ -58,6 +58,7 @@ export default function (target: any) {
 
   //2.7.0 towards 3.0 (Angular to React Migration)
   if (target.aggregation && typeof target.aggregation === 'string') {
+    console.log("target.aggregation", target.aggregation);
     target.aggregation
       ? (target.aggregation = { key: target.aggregation, label: target.aggregation })
       : (target.aggregation = {});
@@ -71,12 +72,12 @@ export default function (target: any) {
   if (target.customFilters && target.customFilters.length > 0 && target.customFilters[0].value) {
     target.customFilters = _.map(target.customFilters, cf => cf.value);
   }
-  if (target.filters && target.filters.length > 0 && !target.filters[0].label) {
+  if (target.filters && target.filters.length > 0 && !target.filters[0].tag.label) {
     _.forEach(target.filters, (filter) => {
       filter.tag.label = filter.tag.key;
     });
   }
-  if (target.group && !target.group.label) {
+  if (target.group && target.group.key && !target.group.label) {
     target.group.label = target.group.key;
   }
   if (target.metricCategory && typeof target.metricCategory === 'string') {
