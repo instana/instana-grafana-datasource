@@ -1,12 +1,15 @@
 version: "3"
 services:
   grafana:
-    image: grafana/grafana:7.1.0
+    image: grafana/grafana
     ports:
       - 3000:3000
     volumes:
       - ./dist:/var/lib/grafana/plugins/instana
       - ./provisioning/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - INSTANA_UI_BACKEND_URL=${INSTANA_UI_BACKEND_URL}
+      - INSTANA_API_TOKEN=${INSTANA_API_TOKEN}
   mountebank:
     build: specs/mb
     image: ui-backend-mockserver
