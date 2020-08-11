@@ -284,7 +284,7 @@ export class DataSourceInfrastructure {
   }
 
   readTimeSeries(values: any, aggregation: SelectableValue, timeFilter: TimeFilter) {
-    if (aggregation && aggregation.label === 'SUM') {
+    if (aggregation && aggregation.key === 'SUM') {
       return this.correctMeanToSum(values, timeFilter);
     }
     return values;

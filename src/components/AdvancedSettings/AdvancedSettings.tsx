@@ -124,10 +124,19 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
   onTimeShiftChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
     const { query, onChange } = this.props;
     query.timeShift = eventItem.currentTarget.value;
+
+    if (query.timeShift) {
+      query.timeShiftIsValid = query.timeShift.match(/\d+[m,s,h,d,w]{1}/);
+    } else {
+      query.timeShiftIsValid = true;
+    }
+
     onChange(query);
 
-    // onRunQuery with 500ms delay after last debounce
-    this.deboundedRunQuery();
+    if (query.timeShiftIsValid) {
+      // onRunQuery with 500ms delay after last debounce
+      this.deboundedRunQuery();
+    }
   };
 
   setLegendFormatPlaceholder(): string {
@@ -177,6 +186,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
                 'not forward. Accepts values such as 1s, 1m, 1h, 1d, 1w.'
               }
               value={query.timeShift}
+              invalid={!query.timeShiftIsValid}
               placeholder={'1h'}
               onChange={(event) => this.onTimeShiftChange(event)}
             />

@@ -57,7 +57,7 @@ export default function (target: any) {
   }
 
   //2.7.0 towards 3.0 (Angular to React Migration)
-  if (typeof target.aggregation === 'string') {
+  if (target.aggregation && typeof target.aggregation === 'string') {
     target.aggregation
       ? (target.aggregation = { key: target.aggregation, label: target.aggregation })
       : (target.aggregation = {});
@@ -67,23 +67,19 @@ export default function (target: any) {
           label: target.aggregationFunction.label,
         })
       : (target.aggregationFunction = {});
-    target.customFilters
-      ? (target.customFilters = _.map(target.customFilters, (cf) => {
-          return cf.value;
-        }))
-      : (target.customFilters = []);
+  }
+  if (target.customFilters && target.customFilters.length > 0 && target.customFilters[0].value) {
+    target.customFilters = _.map(target.customFilters, cf => cf.value);
+  }
+  if (target.filters && target.filters.length > 0 && !target.filters[0].label) {
     _.forEach(target.filters, (filter) => {
-      filter.tag = {
-        canApplyToDestination: filter.tag.canApplyToDestination,
-        canApplyToSource: filter.tag.canApplyToSource,
-        key: filter.tag.key,
-        label: filter.tag.key,
-        type: filter.tag.type,
-      };
+      filter.tag.label = filter.tag.key;
     });
-    target.group
-      ? (target.group = { key: target.group.key, label: target.group.key, type: target.group.type })
-      : (target.group = {});
+  }
+  if (target.group && !target.group.label) {
+    target.group.label = target.group.key;
+  }
+  if (target.metricCategory && typeof target.metricCategory === 'string') {
     target.metricCategory = _.find(
       metric_categories,
       (category) => category.key === parseInt(target.metricCategory, 10)

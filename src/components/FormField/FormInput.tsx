@@ -30,12 +30,11 @@ export default class FormInput extends React.Component<Props, State> {
     const {
       label,
       tooltip,
-      placeholder,
       queryKeyword,
       disabled,
       labelWidth = 14,
       inputWidth = 30,
-      ...remaingProps
+      ...remainingProps
     } = this.props;
 
     return (
@@ -43,7 +42,7 @@ export default class FormInput extends React.Component<Props, State> {
         <InlineFormLabel className={queryKeyword ? 'query-keyword' : ''} width={labelWidth} tooltip={tooltip}>
           {label}
         </InlineFormLabel>
-        <Input css={''} width={inputWidth} disabled={disabled} {...remaingProps} />
+        <Input css={''} width={inputWidth} disabled={disabled} {...remainingProps} />
       </FormWrapper>
     );
   }

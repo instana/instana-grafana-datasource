@@ -33,7 +33,6 @@ interface QueryState {
   groups: SelectableValue[];
   queryTypes: SelectableValue[];
   allMetrics: SelectableValue[];
-  currentCategory: SelectableValue;
   availableMetrics: SelectableValue[];
 }
 
@@ -57,7 +56,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       allMetrics: [],
       queryTypes: [],
       availableMetrics: [],
-      currentCategory: this.query.metricCategory,
     };
 
     this.filterMetricsOnType = this.filterMetricsOnType.bind(this);
@@ -67,12 +65,11 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   onCategoryChange = (newCategory: SelectableValue) => {
-    if (this.state.currentCategory === newCategory) {
+    if (this.query.metricCategory === newCategory) {
       // nothing needs to be done
     } else {
       this.selectionReset();
       this.query.metricCategory = newCategory;
-      this.setState({ currentCategory: newCategory });
       this.query.timeInterval = this.props.datasource.getDefaultTimeInterval(this.query);
 
       this.onRunQuery();
@@ -352,7 +349,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         </div>
 
-        {(!query.metricCategory || query.metricCategory.key === BUILT_IN_METRICS) && (
+        {query.metricCategory.key === BUILT_IN_METRICS && (
           <Infrastructure
             query={query}
             queryTypes={this.state.queryTypes}

@@ -259,6 +259,11 @@ export class Filters extends React.Component<Props, FilterState> {
           <Button variant={'secondary'} onClick={this.addTagFilter}>
             +
           </Button>
+          <div hidden={!query.showWarningCantShowAllResults}>
+            <InlineFormLabel width={8} tooltip={'Add Filter to narrow down the data.'}>
+              ⚠️ Can't show all results
+            </InlineFormLabel>
+          </div>
         </div>
       </div>
     );

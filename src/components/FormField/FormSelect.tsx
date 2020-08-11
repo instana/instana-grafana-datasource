@@ -42,7 +42,7 @@ export default class FormSelect extends React.Component<Props, State> {
       placeholder = '-',
       labelWidth = 14,
       inputWidth = 30,
-      ...remaingProps
+      ...remainingProps
     } = this.props;
 
     return (
@@ -57,7 +57,7 @@ export default class FormSelect extends React.Component<Props, State> {
           width={inputWidth}
           isSearchable={searchable}
           placeholder={placeholder}
-          {...remaingProps}
+          {...remainingProps}
         />
       </FormWrapper>
     );
