@@ -27,14 +27,14 @@ export default class FormSwitch extends React.Component<Props, State> {
   }
 
   render() {
-    const { label, tooltip, queryKeyword, disabled, labelWidth = 14, value, ...remaingProps } = this.props;
+    const { label, tooltip, queryKeyword, disabled, labelWidth = 14, value, ...remainingProps } = this.props;
 
     return (
       <FormWrapper disabled={disabled} stretch={false}>
         <InlineFormLabel className={queryKeyword ? 'query-keyword' : ''} width={labelWidth} tooltip={tooltip}>
           {label}
         </InlineFormLabel>
-        <Switch checked={value} label={''} {...remaingProps} />
+        <Switch checked={value} label={''} {...remainingProps} />
       </FormWrapper>
     );
   }
