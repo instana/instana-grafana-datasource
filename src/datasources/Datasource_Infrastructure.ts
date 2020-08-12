@@ -196,7 +196,7 @@ export class DataSourceInfrastructure {
         key: entry.metricId,
         label: entry.label,
         description: entry.metricId,
-        aggregations: ['MEAN', 'SUM'],
+        aggregations: [{ key:'MEAN', label: 'MEAN' }, { key:'SUM', label: 'SUM'}],
         entityType: entry.pluginId,
       }))
     );

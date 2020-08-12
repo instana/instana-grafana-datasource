@@ -9,11 +9,11 @@ import {
   SLO_INFORMATION,
 } from '../GlobalVariables';
 import { ApplicationServiceEndpointMetrics } from './ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics';
-import { Infrastructure } from './Infrastructure/Infrastructure';
 import { ApplicationCallsMetrics } from './Analyze/ApplicationCallsMetrics';
 import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
 import AdvancedSettings from './AdvancedSettings/AdvancedSettings';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
+import { Infrastructure } from './Infrastructure/Infrastructure';
 import { SloInformation } from './SLOInformation/SloInformation';
 import AggregationFunctions from '../lists/aggregation_function';
 import { InstanaOptions } from '../types/instana_options';
@@ -74,11 +74,11 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       this.query.metricCategory = newCategory;
       this.query.timeInterval = this.props.datasource.getDefaultTimeInterval(this.query);
 
-      this.onRunQuery();
+      this.changeAndRun();
     }
   };
 
-  onRunQuery = () => {
+  changeAndRun = () => {
     this.props.onChange(this.query);
     this.props.onRunQuery();
   };
@@ -116,7 +116,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       this.setMetricPlaceholder(metrics.length);
     }
 
-    this.onRunQuery();
+    this.changeAndRun();
   };
 
   loadEntityTypes(filterResult = true) {
@@ -239,7 +239,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       this.setMetricPlaceholder(filteredMetrics.length);
     }
 
-    this.onRunQuery();
+    this.changeAndRun();
   }
 
   isAbleToShowAllMetrics(metrics: SelectableValue[]) {
@@ -258,7 +258,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       this.resetMetricSelection();
     }
 
-    this.onRunQuery();
+    this.changeAndRun();
   }
 
   selectionReset() {
@@ -335,7 +335,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   render() {
-    const { query, onRunQuery, onCategoryChange } = this;
+    const { query, onCategoryChange } = this;
 
     return (
       <div className={'gf-form-group'}>
@@ -356,7 +356,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
             query={query}
             queryTypes={this.state.queryTypes}
             datasource={this.props.datasource}
-            onRunQuery={onRunQuery}
+            onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
             loadEntityTypes={this.loadEntityTypes}
@@ -369,7 +369,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
             query={query}
             queryTypes={this.state.queryTypes}
             datasource={this.props.datasource}
-            onRunQuery={onRunQuery}
+            onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
             loadEntityTypes={this.loadEntityTypes}
@@ -380,7 +380,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
           <ApplicationCallsMetrics
             query={query}
-            onRunQuery={onRunQuery}
+            onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
             groups={this.state.groups}
@@ -392,7 +392,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         {query.metricCategory.key === ANALYZE_WEBSITE_METRICS && (
           <WebsiteMetrics
             query={query}
-            onRunQuery={onRunQuery}
+            onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
             groups={this.state.groups}
@@ -405,7 +405,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         {query.metricCategory.key === APPLICATION_SERVICE_ENDPOINT_METRICS && (
           <ApplicationServiceEndpointMetrics
             query={query}
-            onRunQuery={onRunQuery}
+            onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
             datasource={this.props.datasource}
@@ -415,7 +415,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         {query.metricCategory.key === SLO_INFORMATION && (
           <SloInformation
             query={query}
-            onRunQuery={onRunQuery}
+            onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             datasource={this.props.datasource}
           />
@@ -425,7 +425,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           <Metric
             query={query}
             onChange={this.props.onChange}
-            onRunQuery={onRunQuery}
+            onRunQuery={this.props.onRunQuery}
             updateMetrics={this.updateMetrics}
             availableMetrics={this.state.availableMetrics}
             datasource={this.props.datasource}
@@ -436,7 +436,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           <MetricFilter
             query={query}
             onChange={this.props.onChange}
-            onRunQuery={onRunQuery}
+            onRunQuery={this.props.onRunQuery}
             onFilterChange={this.onMetricsFilter}
             availableMetrics={this.state.availableMetrics}
             datasource={this.props.datasource}
@@ -448,7 +448,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           <Filters
             query={query}
             onChange={this.props.onChange}
-            onRunQuery={onRunQuery}
+            onRunQuery={this.props.onRunQuery}
             datasource={this.props.datasource}
             groups={this.state.groups}
           />
@@ -456,7 +456,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
         <AdvancedSettings
           query={query}
-          onRunQuery={onRunQuery}
+          onRunQuery={this.props.onRunQuery}
           onChange={this.props.onChange}
           loadEntityTypes={this.loadEntityTypes}
         />

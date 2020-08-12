@@ -63,7 +63,7 @@ describe('Given a website datasource', () => {
       });
     });
   });
-  /*
+
   describe('when fetching website metrics catalog', () => {
     let postRequestSpy = jest.spyOn(RequestHandler, 'postRequest');
     const data: BeaconGroupBody = {
@@ -117,5 +117,5 @@ describe('Given a website datasource', () => {
         });
       });
     });
-  }); */
+  });
 });

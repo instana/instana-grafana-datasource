@@ -10,9 +10,7 @@ import TagFilter from '../../types/tag_filter';
 import operators from '../../lists/operators';
 import _ from 'lodash';
 
-interface FilterState {
-  tagFilters: TagFilter[];
-}
+interface FilterState {}
 
 interface Props {
   query: InstanaQuery;
@@ -30,23 +28,11 @@ export class Filters extends React.Component<Props, FilterState> {
 
   constructor(props: any) {
     super(props);
-
-    this.state = {
-      tagFilters: [],
-    };
-  }
-
-  componentDidMount() {
-    const { query } = this.props;
-    if (query.filters) {
-      this.setState({ tagFilters: query.filters });
-    }
   }
 
   addTagFilter = () => {
     const { query, onChange } = this.props;
-    let cf = this.state.tagFilters;
-    cf.push({
+    query.filters.push({
       tag: query.group,
       entity: call_to_entities[0],
       operator: this.filterOperatorsOnType(query.group.type)[0],
@@ -56,17 +42,12 @@ export class Filters extends React.Component<Props, FilterState> {
       isValid: false,
     });
 
-    this.setState({ tagFilters: cf });
-    query.filters = cf;
     onChange(query);
   };
 
   removeTagFilter = (index: number) => {
     const { query, onChange, onRunQuery } = this.props;
-    let cf: TagFilter[] = this.state.tagFilters;
-    cf.splice(index, 1);
-    this.setState({ tagFilters: cf });
-    query.filters = cf;
+    query.filters.splice(index, 1);
 
     onChange(query);
     onRunQuery();
@@ -77,7 +58,7 @@ export class Filters extends React.Component<Props, FilterState> {
   }
 
   onGroupChange(group: SelectableValue, index: number) {
-    const { query, onChange } = this.props;
+    const { query } = this.props;
     query.filters[index].tag = group;
 
     let ops = this.filterOperatorsOnType(group.type);
@@ -85,22 +66,21 @@ export class Filters extends React.Component<Props, FilterState> {
       query.filters[index].operator = ops[0];
     }
 
-    onChange(query);
-    this.isValid(index);
+    this.validateChangeAndRun(index);
   }
 
   onCallToEntityChange = (callToEntity: SelectableValue, index: number) => {
-    const { query, onChange } = this.props;
+    const { query } = this.props;
     query.filters[index].entity = callToEntity;
-    onChange(query);
-    this.isValid(index);
+
+    this.validateChangeAndRun(index);
   };
 
   onOperatorChange = (operator: SelectableValue, index: number) => {
-    const { query, onChange } = this.props;
+    const { query } = this.props;
     query.filters[index].operator = operator;
-    onChange(query);
-    this.isValid(index);
+
+    this.validateChangeAndRun(index);
   };
 
   canShowStringInput(filter: TagFilter) {
@@ -112,33 +92,27 @@ export class Filters extends React.Component<Props, FilterState> {
   deboundedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
   onTagFilterStringValueChange = (value: FormEvent<HTMLInputElement>, index: number) => {
-    const { query, onChange } = this.props;
+    const { query } = this.props;
     query.filters[index].stringValue = value.currentTarget.value;
-    onChange(query);
-    this.isValid(index);
 
-    // onRunQuery with 500ms delay after last debounce
-    this.deboundedRunQuery();
+    this.validateChangeAndRun(index, true);
   };
 
   onTagFilterNumberValueChange = (value: FormEvent<HTMLInputElement>, index: number) => {
-    const { query, onChange } = this.props;
+    const { query } = this.props;
     query.filters[index].numberValue = value.currentTarget.valueAsNumber;
-    onChange(query);
-    this.isValid(index);
 
-    // onRunQuery with 500ms delay after last debounce
-    this.deboundedRunQuery();
+    this.validateChangeAndRun(index, true);
   };
 
   onTagFilterBooleanValueChange(value: SelectableValue, index: number) {
-    const { query, onChange } = this.props;
+    const { query } = this.props;
     query.filters[index].booleanValue = value.key;
-    onChange(query);
-    this.isValid(index);
+
+    this.validateChangeAndRun(index);
   }
 
-  isValid(index: number) {
+  validateChangeAndRun(index: number, runDebounced: boolean = false) {
     const { query, onChange, onRunQuery } = this.props;
     if (query.filters[index].tag) {
       if (query.filters[index].operator.key.includes('EMPTY')) {
@@ -166,14 +140,19 @@ export class Filters extends React.Component<Props, FilterState> {
     }
 
     onChange(query);
-    onRunQuery();
+    if (runDebounced) {
+      // onRunQuery with 500ms delay after last debounce
+      this.deboundedRunQuery();
+    } else {
+      onRunQuery();
+    }
   }
 
   render() {
     const { query, groups } = this.props;
-    let filter = null;
-    let listFilter = this.state.tagFilters.map((filters, index) => {
-      filter = (
+
+    let listFilter = query.filters.map((singleFilter, index) => {
+      let filter = (
         <div className={'gf-form'}>
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Filter by tag.'}>
             {index + 1}. filter
@@ -260,7 +239,7 @@ export class Filters extends React.Component<Props, FilterState> {
             +
           </Button>
           <div hidden={!query.showWarningCantShowAllResults}>
-            <InlineFormLabel width={8} tooltip={'Add Filter to narrow down the data.'}>
+            <InlineFormLabel width={12} tooltip={'Add Filter to narrow down the data.'}>
               ⚠️ Can't show all results
             </InlineFormLabel>
           </div>

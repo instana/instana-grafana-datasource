@@ -54,8 +54,8 @@ export class FreeTextMetrics extends React.Component<Props, FreeTextMetricsState
           label={'Enable free text metrics'}
           tooltip={
             'Specify comma separated metrics directly in this text field. Once this field has a value,' +
-            ' selected metrics from above will be ignored. Enabled as soon as a query is entered. ' +
-            'Max 4 metrics supported.'
+            ' selected metrics from above will be ignored. Enabled as soon as a query is entered.' +
+            ' Max 4 metrics supported.'
           }
           value={query.useFreeTextMetrics}
           onChange={this.onUseFreeTextMetricsChange}
