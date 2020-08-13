@@ -4,7 +4,9 @@ This is a Grafana datasource for showing metrics from Instana AI-Powered APM for
 
 ## Requirements
 
-Attention: For On-premise customers Instana Release 146 is required.
+Attention: Grafana 7.0.0+ is required.
+
+For On-premise customers Instana Release 146 is required.
 
 ## Features
 

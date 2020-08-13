@@ -1,5 +1,5 @@
 import {describe, beforeEach, it, sinon, expect, angularMocks} from './lib/common';
-import InstanaDatasource from '../src/datasource';
+import InstanaDatasource from '../src/datasources';
 import TemplateSrvStub from './lib/template_srv_stub';
 import Q from 'q';
 import moment from 'moment';
@@ -104,7 +104,7 @@ describe('Given an InstanaDatasource', function() {
     const definedSli = [
       {
         "id": "1",
-        "sloName": "Slo 1",
+        "sliName": "Slo 1",
         "initialEvaluationTimestamp": 1585046123732,
         "metricName": "latency",
         "metricAggregation": "P95",
@@ -116,7 +116,7 @@ describe('Given an InstanaDatasource', function() {
       },
       {
         "id": "2",
-        "sloName": "Slo 2",
+        "sliName": "Slo 2",
         "initialEvaluationTimestamp": 1585046123732,
         "metricName": "latency",
         "metricAggregation": "P95",
@@ -128,7 +128,7 @@ describe('Given an InstanaDatasource', function() {
       },
       {
         "id": "3",
-        "sloName": "Slo 3",
+        "sliName": "Slo 3",
         "initialEvaluationTimestamp": 1585046123732,
         "metricName": "latency",
         "metricAggregation": "P95",
@@ -137,11 +137,11 @@ describe('Given an InstanaDatasource', function() {
         "serviceId": null,
         "endpointId": null,
         "lastUpdated": 1585066443732
-      } 
+      }
     ];
 
     const sliReportResponse = {
-      "data": { 
+      "data": {
         "sli":1.0,
         "slo":0.8,
         "errorBudgetRemaining":72,

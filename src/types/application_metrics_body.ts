@@ -28,7 +28,7 @@ export interface Pagination {
 
 export interface ApplicationMetricsBody {
   timeFrame: TimeFrame;
-  metrics: Array<Metric>;
+  metrics: Metric[];
   order?: Order;
   pagination?: Pagination;
 }

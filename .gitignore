@@ -1,8 +1,12 @@
 node_modules
+dist
+coverage
 npm-debug.log
+.env.test.local
 .DS_Store
 .vscode
 .idea
 *.swp
 results.txt
-.env.test.local
+*.js
+*.js.map

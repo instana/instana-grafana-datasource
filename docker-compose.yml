@@ -6,13 +6,16 @@ services:
       - 3000:3000
     volumes:
       - ./dist:/var/lib/grafana/plugins/instana
-    links:
-      - mountebank
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources
     environment:
+      INSTANA_UI_BACKEND_URL: ${INSTANA_UI_BACKEND_URL}
+      INSTANA_API_TOKEN: ${INSTANA_API_TOKEN}
       GF_LOG_LEVEL: debug
   mountebank:
     build: specs/mb
     image: ui-backend-mockserver
+    volumes:
+      - ./specs/mb/imposters:/imposters
     ports:
       - 2525:2525
       - 8010:8010

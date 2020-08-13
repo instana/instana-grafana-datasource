@@ -1,15 +1,12 @@
-import TagFilter from "../types/tag_filter";
-import _ from "lodash";
-import granularities from "../lists/granularities";
-import Granularity from "../types/granularity";
-
-const MAX_ALLOWED_DATA_POINTS = 1000;
+import TagFilter from '../types/tag_filter';
+import _ from 'lodash';
+import { InstanaQuery } from '../types/instana_query';
 
 export function createTagFilter(filter: TagFilter) {
   let tagFilter = {
     name: filter.tag.key,
     operator: filter.operator.key,
-    value: filter.stringValue
+    value: filter.stringValue,
   };
 
   if ('NUMBER' === filter.tag.type) {
@@ -23,16 +20,22 @@ export function createTagFilter(filter: TagFilter) {
   return tagFilter;
 }
 
-export function readItemMetrics(target, response, getLabel) {
+export function readItemMetrics(target: InstanaQuery, response: any, getLabel: any) {
+  if (!response.data) {
+    return response;
+  }
+
   // as we map two times we need to flatten the result
-  return _.flatten(response.data.items.map((item, index) => {
-    return _.map(item.metrics, (value, key) => {
-      return {
-        'target': getLabel(target, item, key, index),
-        'datapoints': _.map(value, metric => [metric[1], metric[0]]),
-        'refId': target.refId,
-        'key': target.stableHash
-      };
-    });
-  }));
+  return _.flatten(
+    response.data.items.map((item: any, index: number) => {
+      return _.map(item.metrics, (value, key) => {
+        return {
+          target: getLabel(target, item, key, index),
+          datapoints: _.map(value, (metric) => [metric[1], metric[0]]),
+          refId: target.refId,
+          key: target.stableHash,
+        };
+      });
+    })
+  );
 }

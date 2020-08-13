@@ -1,16 +1,11 @@
 {
+  "type": "datasource",
   "name": "Instana",
   "id": "instana-datasource",
-  "type": "datasource",
-
-  "partials": {
-    "config": "public/app/plugins/datasource/instana/partials/config.html"
-  },
-
   "metrics": true,
-  "annotations": true,
+  "annotations": false,
   "alerting": false,
-
+  "logs": false,
   "info": {
     "description": "Grafana datasource plugin for Instana: Automatic Infrastructure and Application Monitoring",
     "author": {
@@ -22,28 +17,42 @@
       "large": "https://www.instana.com/media/instana_icon_square.png"
     },
     "links": [
-      {"name": "Docs", "url": "https://docs.instana.io/ecosystem/grafana/" },
-      {"name": "Homepage", "url": "https://www.instana.com" },
-      {"name": "GitHub", "url": "https://github.com/instana/instana-grafana-datasource" },
-      {"name": "Apache License 2.0", "url": "https://github.com/instana/instana-grafana-datasource/blob/master/LICENSE" }
+      {
+        "name": "Docs",
+        "url": "https://docs.instana.io/ecosystem/grafana/"
+      },
+      {
+        "name": "Homepage",
+        "url": "https://www.instana.com"
+      },
+      {
+        "name": "GitHub",
+        "url": "https://github.com/instana/instana-grafana-datasource"
+      },
+      {
+        "name": "Apache License 2.0",
+        "url": "https://github.com/instana/instana-grafana-datasource/blob/master/LICENSE"
+      }
     ],
-    "version": "2.7.3",
-    "updated": "2020-07-15"
+    "screenshots": [],
+    "version": "3.0.0",
+    "updated": "2020-08-12"
   },
-
   "routes": [
     {
       "path": "instana",
       "method": "*",
       "url": "{{.JsonData.url}}",
       "headers": [
-          {"name": "Authorization", "content": "apiToken {{.JsonData.apiToken}}"}
+        {
+          "name": "Authorization",
+          "content": "apiToken {{.JsonData.apiToken}}"
+        }
       ]
     }
   ],
-
   "dependencies": {
-    "grafanaVersion": "3.x.x",
-    "plugins": [ ]
+    "grafanaVersion": "7.0.x",
+    "plugins": []
   }
 }

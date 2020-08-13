@@ -1,14 +1,14 @@
 export default [
   {
-    label: "SUM",
+    label: 'SUM',
   },
   {
-    label: "MEAN",
+    label: 'MEAN',
   },
   {
-    label: "MIN",
+    label: 'MIN',
   },
   {
-    label: "MAX",
-  }
+    label: 'MAX',
+  },
 ];

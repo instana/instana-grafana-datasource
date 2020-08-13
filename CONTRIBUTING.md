@@ -2,38 +2,48 @@
 
 # Contributing
 
-This plugin is a datasource plugin for Grafana and connects to the Instana API. End-users can create visualizations in Grafana for metrics on snapshots.
+This plugin is a datasource plugin for Grafana and connects to the Instana API.
+End-users can create visualizations in Grafana for metrics on snapshots.
 
 This plugin includes:
-
-- Karma and mocha for unit testing in TypeScript, puppeteer for browser based testing with chrome headless.
+- Jest for unit and integration testing
 - Mocks for testing and TypeScript typings to be able to compile the plugin.
-- A Grunt build script to build the plugin.
 
-The following yarn run scripts are available. You can also run them via Grunt directly. Running them through yarn (which will then use the locally installed grunt dependency of the package) is the preferred way, when running them via Grunt directly you would need to install Grunt globally via `yarn global add grunt`.
+This plugin makes heavily use of the toolkit provided by Grafana to build a datasource. The following yarn run scripts are available
+- `yarn build` (runs `grafana-toolkit plugin:build`) should run before every commit. It cleans the dist directory, executes the unit tests (building TypeScript on-the-fly), copies sources to the dist folder, transpiles TypeScript to javascript, copies static assets to the dist folder.
+- `yarn dev` (runs `grafana-toolkit plugin:dev`)
+- `yarn format` (runs `prettier src/**/*.ts --write`)
+- `yarn test` (runs `grafana-toolkit plugin:test`)
+- `yarn watch` (runs `grafana-toolkit plugin:dev --watch`)
+- `yarn up` (runs `docker-compose up --remove-orphans`)
+- `yarn start` (runs `yarn up -d; yarn watch`) this will essentially run your Grafana server locally and also a Mountebank server to emulate Instana server responses
 
-- `yarn run build` (runs the `grunt` default task) should run before every commit. It cleans the dist directory, executes the unit tests (building TypeScript on-the-fly), copies sources to the dist folder, transpiles TypeScript to javascript, copies static assets to the dist folder, builds the mountebank container, starts the grafana and the mountebank container, executes the functional tests and stops the containers afterwards.
-- `yarn test` (`grunt unit`) executes unit tests once.
-- `yarn run unit` alias for yarn test
-- `yarn run unit-watch` starts karma and keeps it running with file watcher enabled so that it reruns all the tests automatically when a file changes (to be used with yarn run watch, see below).
-- `yarn run watch` (`grunt watch`) will build the TypeScript files and copy everything to the dist directory automatically when a file changes. This is useful for when working on the code. To be used with `yarn run unit-watch` (see above).
-- `yarn run startup` (`grunt startup`) same as the default task but keeps the containers running.
-- `yarn run shutdown` (`grunt shutdown`) stops the containers.
-- `yarn run refresh` (`grunt refresh`) same as default but stops running containers first.
-- `yarn run functional` (`grunt functional`) (also available via ) executes the functional tests. Assumes that the grafana container is running. UI backend and api token are resolved respectively by the INSTANA_UI_BACKEND_URL and the INSTANA_API_TOKEN environment variables.
+UI backend and api token are resolved respectively by the INSTANA_UI_BACKEND_URL and the INSTANA_API_TOKEN environment variables.
 
 ## Getting Started
 
 1. Make sure `yarn` is installed (everything should work also with npm but YMMV)
 2. Install realpath and timeout (`brew install coreutils`, remember to put them on the `$PATH`: `export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"`)
-3. Run `yarn install`.
-4. Optionally, make sure grunt is installed globally.
-5. Run `yarn run startup`
-6. Goto http://localhost:3000 and login with admin/admin. Click 'Add data source' and select 'Instana' from the types dropdown. The mountebank server runs default at http://localhost:8010 and the only valid api token is 'valid-api-token'.
+3. Make sure environment variables are set through file: create a file called `setEnvVars.js` in the root of the repository. Insert environment variables as:
+
+```
+process.env.INSTANA_BACKEND_URL = 'http://localhost:8010';
+process.env.INSTANA_API_TOKEN = 'valid-api-token';
+```
+
+This will run integration tests against a certain tenant unit of Instana.
+
+4. Built the projec via `docker built`
+5. Run `yarn start`
+6. Goto http://localhost:3000 and login with admin/admin. A default Instana datasource was allready added using the provided env variables. The mountebank server runs default at http://localhost:8010 and the only valid api token is 'valid-api-token'.
 
 Changes should be made in the `src` directory. The build task transpiles the TypeScript code into JavaScript and copies it to the `dist` directory. Grafana will load the JavaScript from the `dist` directory and ignore the `src` directory. The `dist` directory is bind mounted in the Grafana container.
 
-After you made changes you should run `yarn run refresh` to see those changes reflected in your Grafana docker container. This will also trigger a build of the mountebank container which copies the imposters file from /specs/mb/importers into the container. If the container doesn't come up subscribing to docker events might reveal the error (`docker events &`).
+You should run `yarn watch` to directly see your changes reflected in your Grafana docker container. This will also trigger a build of the mountebank container which copies the imposters file from /specs/mb/importers into the container. If the container doesn't come up subscribing to docker events might reveal the error (`docker events &`).
+
+## Pushing changes
+
+Before making a pull request or pushing content please make sure the project builds properly. For that, run `yarn build` before committing. There is a chance there will be linting errors. You can fix most of them via `yarn format`. If not, please correct them in your preferred way, either manually or via another linting tool.
 
 ## Unit Testing with Karma and Mocha
 

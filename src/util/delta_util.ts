@@ -10,38 +10,32 @@ const omitLabels = [
   'timeShiftIsValid',
   'useFreeTextMetrics',
   'showGroupBySecondLevel',
-  'aggregateGraphs',
   'canShowAllMetrics',
-  'aggregationFunction',
   'timeFilter',
-  'stableHash'
+  'stableHash',
 ];
 
-export function generateStableHash(obj): string {
+export function generateStableHash(obj: any): string {
   let pseudoHash = _.omit(obj, omitLabels);
-  pseudoHash = _.mapValues(pseudoHash, value => {
-      // to reduce overhead of interface Selectable
-      if (value != null && typeof value === 'object' && 'key' in value) {
-        value = value.key;
-      }
-      return value;
+  pseudoHash = _.mapValues(pseudoHash, (value: any) => {
+    // to reduce overhead of interface Selectable
+    if (value != null && typeof value === 'object' && 'key' in value) {
+      value = value.key;
+    }
+
+    return value;
   });
   return JSON.stringify(pseudoHash);
 }
 
 /*
   Check if two time filters are overlapping.
-
   Return true when:
-
   from |-------------------| to (t2)
               from |--------------------| to (t1)
-
   Returns false when:
-
      from |-------------------| to (t2)
 from |----------------------------------------| to (t1)
-
   from |-------------------| to (t2)
                         from |-------------------| to (t1)
 */
@@ -54,13 +48,16 @@ export function hasIntersection(t1: TimeFilter, t2: TimeFilter): boolean {
   Also removes old data accordingly (e.g. if 4 new datapoints were added,
   the corresponding oldest four datapoints are removed).
 */
-export function appendData(newDeltaData, cachedData): any {
-  _.each(newDeltaData, (deltaData, index) => {
-    var matchingCachedData = _.find(cachedData, o => o.key === deltaData.key);
+export function appendData(newDeltaData: any, cachedData: any): any {
+  _.each(newDeltaData, (deltaData) => {
+    let matchingCachedData = _.find(cachedData, (o) => o.key === deltaData.key);
     if (matchingCachedData && deltaData.datapoints) {
       const size = matchingCachedData.datapoints.length;
       let datapoints = deltaData.datapoints.concat(matchingCachedData.datapoints);
-      datapoints = _.sortedUniqBy(datapoints.sort((a, b) => a[1] - b[1]), a => a[1]);
+      datapoints = _.sortedUniqBy(
+        datapoints.sort((a: any, b: any) => a[1] - b[1]),
+        (a: any) => a[1]
+      );
       matchingCachedData.datapoints = _.takeRight(datapoints, size);
       matchingCachedData.target = deltaData.target;
     } else {

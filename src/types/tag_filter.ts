@@ -1,13 +1,13 @@
-import Selectable from '../types/selectable';
+import { SelectableValue } from '@grafana/data';
 
 export interface TagFilter {
-  tag: Selectable;
-  operator: Selectable;
+  tag: SelectableValue;
+  operator: SelectableValue;
   stringValue: string;
   numberValue: number;
   booleanValue: boolean;
   isValid: boolean;
-  entity: Selectable;
+  entity: SelectableValue;
 }
 
 export default TagFilter;
