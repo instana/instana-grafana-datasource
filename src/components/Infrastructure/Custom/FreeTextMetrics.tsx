@@ -19,7 +19,7 @@ export class FreeTextMetrics extends React.Component<Props, FreeTextMetricsState
     super(props);
   }
 
-  deboundedRunQuery = _.debounce(this.props.onRunQuery, 500);
+  debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
   onUseFreeTextMetricsChange = (event: React.SyntheticEvent<HTMLInputElement> | undefined) => {
     const { query, onChange, loadEntityTypes } = this.props;
@@ -41,7 +41,7 @@ export class FreeTextMetrics extends React.Component<Props, FreeTextMetricsState
     onChange(query);
 
     // onRunQuery with 500ms delay after last debounce
-    this.deboundedRunQuery();
+    this.debouncedRunQuery();
   };
 
   render() {

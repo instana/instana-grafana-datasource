@@ -123,7 +123,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
     onRunQuery();
   };
 
-  deboundedRunQuery = _.debounce(this.props.onRunQuery, 500);
+  debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
   onGroupByTagSecondLevelKeyChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
     const { query, onChange } = this.props;
@@ -131,7 +131,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
     onChange(query);
 
     // onRunQuery with 500ms delay after last debounce
-    this.deboundedRunQuery();
+    this.debouncedRunQuery();
   };
 
   render() {

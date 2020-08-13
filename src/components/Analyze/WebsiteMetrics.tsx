@@ -112,7 +112,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
     onRunQuery();
   };
 
-  deboundedRunQuery = _.debounce(this.props.onRunQuery, 500);
+  debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
   onGroupByTagSecondLevelKeyChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
     const { query, onChange } = this.props;
@@ -120,7 +120,7 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
     onChange(query);
 
     // onRunQuery with 500ms delay after last debounce
-    this.deboundedRunQuery();
+    this.debouncedRunQuery();
   };
 
   render() {

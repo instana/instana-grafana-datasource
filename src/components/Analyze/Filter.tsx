@@ -89,7 +89,7 @@ export class Filters extends React.Component<Props, FilterState> {
     );
   }
 
-  deboundedRunQuery = _.debounce(this.props.onRunQuery, 500);
+  debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
   onTagFilterStringValueChange = (value: FormEvent<HTMLInputElement>, index: number) => {
     const { query } = this.props;
@@ -142,7 +142,7 @@ export class Filters extends React.Component<Props, FilterState> {
     onChange(query);
     if (runDebounced) {
       // onRunQuery with 500ms delay after last debounce
-      this.deboundedRunQuery();
+      this.debouncedRunQuery();
     } else {
       onRunQuery();
     }

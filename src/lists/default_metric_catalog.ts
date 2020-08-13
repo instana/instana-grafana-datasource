@@ -1,8 +1,9 @@
 export default [
-  { key: 'calls', label: 'Call count', aggregations: [{ key: 'SUM', label: 'SUM' }] },
+  { key: 'calls', label: 'Call count', description: 'calls', aggregations: [{ key: 'SUM', label: 'SUM' }] },
   {
     key: 'latency',
     label: 'Call latency',
+    description: 'latency',
     aggregations: [
       { key: 'MAX', label: 'MAX' },
       { key: 'MEAN', label: 'MEAN' },
@@ -16,6 +17,6 @@ export default [
       { key: 'P99', label: 'P99' },
     ],
   },
-  { key: 'errors', label: 'Error rate', aggregations: [{ key: 'MEAN', label: 'MEAN' }] },
-  { key: 'services', label: 'Service Count', aggregations: [{ key: 'DISTINCT_COUNT', label: 'DISTINCT_COUNT' }] },
+  { key: 'errors', label: 'Error rate', description: 'errors', aggregations: [{ key: 'MEAN', label: 'MEAN' }] },
+  { key: 'services', label: 'Service Count', description: 'services', aggregations: [{ key: 'DISTINCT_COUNT', label: 'DISTINCT_COUNT' }] },
 ];

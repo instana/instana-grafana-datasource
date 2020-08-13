@@ -8,8 +8,11 @@ import FormSelect from '../FormField/FormSelect';
 import { SelectableValue } from '@grafana/data';
 import FormInput from '../FormField/FormInput';
 
+const MAX_VAL = 0.9999;
+
 interface SloInformationState {
   sloReports: SelectableValue[];
+  isValidSlo: boolean;
 }
 
 interface Props {
@@ -29,17 +32,21 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
     super(props);
     this.state = {
       sloReports: [],
+      isValidSlo: true,
     };
   }
 
   componentDidMount() {
     isUnmounting = false;
     this.loadSloReports();
+    this.isValid(this.props.query.sloValue);
   }
 
   componentWillUnmount() {
     isUnmounting = true;
   }
+
+  debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
   onSloChange = (slo: SelectableValue) => {
     const { query, onRunQuery } = this.props;
@@ -50,7 +57,11 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
   onSloValueChange = (sloValue: ChangeEvent<HTMLInputElement>) => {
     const { query, onRunQuery } = this.props;
     query.sloValue = sloValue.currentTarget.value;
-    onRunQuery();
+
+    if (this.isValid(query.sloValue)) {
+      // onRunQuery with 500ms delay after last debounce
+      this.debouncedRunQuery();
+    }
   };
 
   onSloSpecificChange = (sloSpecific: SelectableValue) => {
@@ -58,6 +69,14 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
     query.sloSpecific = sloSpecific;
     onRunQuery();
   };
+
+  isValid(val: string): boolean {
+    const valid = !val || (+val >= 0 && +val <= MAX_VAL);
+    this.setState({
+      isValidSlo: valid,
+    });
+    return valid;
+  }
 
   shouldComponentUpdate(
     nextProps: Readonly<Props>,
@@ -101,8 +120,9 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
           labelWidth={7}
           inputWidth={0}
           label={'SLO'}
-          tooltip={'Type in your desired SLO threshold from 0 to 0.9999'}
+          tooltip={'Type in your desired SLO threshold from 0 to ' + MAX_VAL}
           value={query.sloValue}
+          invalid={!this.state.isValidSlo}
           placeholder={'0.99'}
           onChange={this.onSloValueChange}
         />
