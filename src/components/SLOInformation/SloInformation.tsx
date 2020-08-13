@@ -1,12 +1,13 @@
 import React, { ChangeEvent } from 'react';
 
-import { SLO_INFORMATION } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
+import { SLO_INFORMATION } from '../../GlobalVariables';
 import SloSpecifics from '../../lists/slo_specifics';
 import FormSelect from '../FormField/FormSelect';
 import { SelectableValue } from '@grafana/data';
 import FormInput from '../FormField/FormInput';
+import _ from 'lodash';
 
 const MAX_VAL = 0.9999;
 
@@ -55,7 +56,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
   };
 
   onSloValueChange = (sloValue: ChangeEvent<HTMLInputElement>) => {
-    const { query, onRunQuery } = this.props;
+    const { query } = this.props;
     query.sloValue = sloValue.currentTarget.value;
 
     if (this.isValid(query.sloValue)) {

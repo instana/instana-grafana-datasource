@@ -1,8 +1,8 @@
 import React, { ChangeEvent } from 'react';
 
-import { PLEASE_SPECIFY } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
+import { PLEASE_SPECIFY } from '../../GlobalVariables';
 import FormSelect from '../FormField/FormSelect';
 import { SelectableValue } from '@grafana/data';
 import FormInput from '../FormField/FormInput';

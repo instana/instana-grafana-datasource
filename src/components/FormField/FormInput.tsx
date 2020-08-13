@@ -8,6 +8,7 @@ interface State {}
 interface Props {
   label: string;
   value: string;
+  invalid?: boolean;
   disabled?: boolean;
   placeholder?: string;
   queryKeyword?: boolean;
