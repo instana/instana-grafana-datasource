@@ -2,6 +2,8 @@ import { buildInstanaOptions, buildTimeFilter } from '../util/test_util';
 import { DataSourceWebsite } from './DataSource_Website';
 import * as RequestHandler from '../util/request_handler';
 import _ from 'lodash';
+import TimeFilter from "../types/time_filter";
+import BeaconGroupBody from "../types/beacon_group_body";
 
 const options = buildInstanaOptions();
 const axios = require('axios');
