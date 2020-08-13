@@ -62,17 +62,20 @@ export default function (target: any) {
       ? (target.aggregation = { key: target.aggregation, label: target.aggregation })
       : (target.aggregation = {});
     target.aggregationFunction
-      ? (target.aggregationFunction = { key: target.aggregationFunction.label, label: target.aggregationFunction.label })
+      ? (target.aggregationFunction = {
+          key: target.aggregationFunction.label,
+          label: target.aggregationFunction.label,
+        })
       : (target.aggregationFunction = {});
   }
   if (target.customFilters && target.customFilters.length > 0 && target.customFilters[0].value) {
-    target.customFilters = _.map(target.customFilters, cf => cf.value);
+    target.customFilters = _.map(target.customFilters, (cf) => cf.value);
   }
   if (target.filters && target.filters.length > 0 && !target.filters[0].tag.key && !target.filters[0].tag.label) {
     _.forEach(target.filters, (filter) => {
       filter.tag.label = filter.tag.key;
     });
-    console.log("filters", target.filters);
+    console.log('filters', target.filters);
   }
   if (target.group && target.group.key && !target.group.label) {
     target.group.label = target.group.key;

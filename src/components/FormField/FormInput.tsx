@@ -27,15 +27,7 @@ export default class FormInput extends React.Component<Props, State> {
   }
 
   render() {
-    const {
-      label,
-      tooltip,
-      queryKeyword,
-      disabled,
-      labelWidth = 14,
-      inputWidth = 30,
-      ...remainingProps
-    } = this.props;
+    const { label, tooltip, queryKeyword, disabled, labelWidth = 14, inputWidth = 30, ...remainingProps } = this.props;
 
     return (
       <FormWrapper disabled={disabled} stretch={!inputWidth}>

@@ -6,7 +6,7 @@ This plugin is a datasource plugin for Grafana and connects to the Instana API.
 End-users can create visualizations in Grafana for metrics on snapshots.
 
 This plugin includes:
-- Jest for unit and integrationt testing
+- Jest for unit and integration testing
 - Mocks for testing and TypeScript typings to be able to compile the plugin.
 
 This plugin makes heavily use of the toolkit provided by Grafana to build a datasource. The following yarn run scripts are available
@@ -24,18 +24,18 @@ UI backend and api token are resolved respectively by the INSTANA_UI_BACKEND_URL
 
 1. Make sure `yarn` is installed (everything should work also with npm but YMMV)
 2. Install realpath and timeout (`brew install coreutils`, remember to put them on the `$PATH`: `export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"`)
-3. Make sure environment variables are set through file: create a file called `setEnvVars.js` in the root of the repository. Insert environment variables as: 
+3. Make sure environment variables are set through file: create a file called `setEnvVars.js` in the root of the repository. Insert environment variables as:
 
 ```
-process.env.INSTANA_BACKEND_URL = 'https://tenant-unit.instana.io';
-process.env.INSTANA_API_TOKEN = 'someApiToken';
+process.env.INSTANA_BACKEND_URL = 'http://localhost:8010';
+process.env.INSTANA_API_TOKEN = 'valid-api-token';
 ```
 
-This will run integration tests against a certain tenant unit of Instana. 
+This will run integration tests against a certain tenant unit of Instana.
 
 4. Built the projec via `docker built`
 5. Run `yarn start`
-6. Goto http://localhost:3000 and login with admin/admin. Click 'Add data source' and select 'Instana' from the types dropdown. The mountebank server runs default at http://localhost:8010 and the only valid api token is 'valid-api-token'.
+6. Goto http://localhost:3000 and login with admin/admin. A default Instana datasource was allready added using the provided env variables. The mountebank server runs default at http://localhost:8010 and the only valid api token is 'valid-api-token'.
 
 Changes should be made in the `src` directory. The build task transpiles the TypeScript code into JavaScript and copies it to the `dist` directory. Grafana will load the JavaScript from the `dist` directory and ignore the `src` directory. The `dist` directory is bind mounted in the Grafana container.
 

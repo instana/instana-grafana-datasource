@@ -152,7 +152,8 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     if (isInvalidQueryInterval(timeFilter.windowSize, hoursToMs(this.options.queryinterval_limit_app_metrics))) {
       throw new Error(
         'Limit for maximum selectable windowsize exceeded, max is: ' +
-          this.options.queryinterval_limit_app_metrics + ' hours'
+          this.options.queryinterval_limit_app_metrics +
+          ' hours'
       );
     }
 

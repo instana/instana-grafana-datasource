@@ -1,4 +1,4 @@
-import { buildInstanaOptions } from '../util/test_util';
+import { buildInstanaOptions, buildTimeFilter } from '../util/test_util';
 import { DataSourceWebsite } from './DataSource_Website';
 import * as RequestHandler from '../util/request_handler';
 import _ from 'lodash';
@@ -65,6 +65,7 @@ describe('Given a website datasource', () => {
   });
 
   describe('when fetching website metrics catalog', () => {
+    const timeFilter: TimeFilter = buildTimeFilter();
     let postRequestSpy = jest.spyOn(RequestHandler, 'postRequest');
     const data: BeaconGroupBody = {
       group: {

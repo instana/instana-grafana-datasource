@@ -18,5 +18,10 @@ export default [
     ],
   },
   { key: 'errors', label: 'Error rate', description: 'errors', aggregations: [{ key: 'MEAN', label: 'MEAN' }] },
-  { key: 'services', label: 'Service Count', description: 'services', aggregations: [{ key: 'DISTINCT_COUNT', label: 'DISTINCT_COUNT' }] },
+  {
+    key: 'services',
+    label: 'Service Count',
+    description: 'services',
+    aggregations: [{ key: 'DISTINCT_COUNT', label: 'DISTINCT_COUNT' }],
+  },
 ];

@@ -112,7 +112,7 @@ export class Filters extends React.Component<Props, FilterState> {
     this.validateChangeAndRun(index);
   }
 
-  validateChangeAndRun(index: number, runDebounced: boolean = false) {
+  validateChangeAndRun(index: number, runDebounced = false) {
     const { query, onChange, onRunQuery } = this.props;
     if (query.filters[index].tag) {
       if (query.filters[index].operator.key.includes('EMPTY')) {
