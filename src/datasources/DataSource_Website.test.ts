@@ -93,12 +93,13 @@ describe('Given a website datasource', () => {
       },
     };
 
+    const header = {
+      Authorization: 'apiToken ' + options.apiToken,
+    };
+
     postRequestSpy.mockImplementation(() => {
-      return axios.post(options.url + '/api/website-monitoring/analyze/beacon-groups', {
-        data: data,
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken,
-        },
+      return axios.post(options.url + '/api/website-monitoring/analyze/beacon-groups', data, {
+        headers: header,
       });
     });
 
