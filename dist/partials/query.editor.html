@@ -1,0 +1,682 @@
+<query-editor-row query-ctrl="ctrl" can-collapse="false">
+  <div class="min-width-56">
+
+    <div class="gf-form">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-category-{{ctrl.target.refId}}">
+        Category
+        <info-popover position="top center" mode="right-normal">
+          <p>Select a metric category.</p>
+        </info-popover>
+      </label>
+      <div class="gf-form-select-wrapper " style="width: 100%;">
+        <select id="in-category-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.metricCategory"
+                ng-change="ctrl.onMetricCategorySelect()">
+          <option value="0" selected>Infrastructure built-in metrics</option>
+          <option value="1">Infrastructure custom metrics</option>
+          <option value="4">Application/service/endpoint metrics</option>
+          <option value="2">Analyze application calls</option>
+          <option value="3">Analyze websites</option>
+          <option ng-show="ctrl.isSloEnabled()" value="7">SLO information</option>
+        </select>
+      </div>
+    </div>
+
+    <div ng-if="ctrl.target.metricCategory === '0'">
+      <div ng-include src="'queryAndType.html'"></div>
+      <div ng-include src="'metric.html'"></div>
+    </div>
+
+    <div ng-if="ctrl.target.metricCategory === '1'">
+      <div ng-include src="'queryAndType.html'"></div>
+      <div ng-include src="'metric.html'"></div>
+      <div ng-include src="'metric_filters.html'"></div>
+    </div>
+
+    <div ng-if="ctrl.target.metricCategory === '2'">
+      <div ng-include src="'website_application.html'"></div>
+      <div ng-include src="'metric.html'"></div>
+      <div ng-include src="'filters.html'"></div>
+    </div>
+
+    <div ng-if="ctrl.target.metricCategory === '3'">
+      <div ng-include src="'website_application.html'"></div>
+      <div ng-include src="'metric.html'"></div>
+      <div ng-include src="'filters.html'"></div>
+    </div>
+
+    <div ng-if="ctrl.target.metricCategory === '4'">
+      <div ng-include src="'application_service_endpoint.html'"></div>
+      <div ng-include src="'metric.html'"></div>
+    </div>
+
+    <div ng-if="ctrl.target.metricCategory === '7'">
+      <div ng-include src="'slo.html'"></div>
+    </div>
+
+    <div ng-include src="'advanced_settings.html'"></div>
+
+    <script type="text/ng-template" id="queryAndType.html">
+      <div class="gf-form">
+        <label class="gf-form-label query-keyword width-13 pointer" for="in-query-{{ctrl.target.refId}}">
+          Query
+          <info-popover position="top center" mode="right-normal">
+            <p>Specify a query for the entities you wish to plot. Use the dynamic focus syntax:
+              <a href="https://docs.instana.io/core_concepts/dynamic_focus/#syntax">https://docs.instana.io/core_concepts/dynamic_focus/#syntax</a>
+            </p>
+          </info-popover>
+        </label>
+        <input id="in-query-{{ctrl.target.refId}}"
+               class="gf-form-input full-width"
+               type="text"
+               ng-model='ctrl.target.entityQuery'
+               ng-class="ctrl.target.queryIsValid ? 'ng-valid' : 'ng-invalid'"
+               ng-model-options='{ debounce: 500 }'
+               ng-change="ctrl.onFilterChange(true)"
+               placeholder="please specify"
+               spellcheck='false'>
+        <label class="gf-form-label query-keyword pointer min-width-8" for="in-type-{{ctrl.target.refId}}">
+          Type
+          <info-popover position="top center" mode="right-normal">
+            <p>Select an entity type for a list of available metrics.</p>
+          </info-popover>
+        </label>
+        <div class="gf-form-select-wrapper width-24">
+          <select id="in-type-{{ctrl.target.refId}}"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                  ng-model="ctrl.target.entityType"
+                  ng-change="ctrl.onEntityTypeSelect(true)"
+                  ng-options="f as f.label for f in ctrl.uniqueEntityTypes track by f.key">
+            <option value="" disabled selected>{{ctrl.entitySelectionText}}</option>
+          </select>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="metric_filters.html">
+      <div ng-repeat="filter in ctrl.target.customFilters">
+        <div class="gf-form">
+          <label class="gf-form-label width-13 pointer query-keyword"
+                 for="in-metric-filter-{{ctrl.target.refId}}-{{$index}}">
+            {{$index+1}}. filter metric select
+            <info-popover position="top center" mode="right-normal">
+              <p>Type to suggest metrics.</p>
+            </info-popover>
+          </label>
+          <input class="gf-form-input width-19"
+                 id="in-metric-filter-{{ctrl.target.refId}}-{{$index}}"
+                 type="text"
+                 ng-model="ctrl.target.customFilters[$index].value"
+                 ng-model-options='{ debounce: 500 }'
+                 ng-change="ctrl.onMetricsFilter(true)"
+                 placeholder="please specify"
+                 spellcheck='false'/>
+          <button class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.removeCustomFilter($index)">
+            <i class="fa fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-13 pointer" for="in-metric-filter-{{ctrl.target.refId}}">
+          Add filter metric select
+          <info-popover position="top center" mode="right-normal">
+            <p>Add an additional metric select filter.</p>
+          </info-popover>
+        </label>
+        <button id="in-metric-filter-{{ctrl.target.refId}}" class="gf-form-input btn btn-inverse width-3"
+                ng-click="ctrl.addCustomFilter()">
+          <i class="fa fa-plus"></i>
+        </button>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="metric.html">
+      <div class="gf-form">
+        <label class="gf-form-label query-keyword width-13 pointer" for="in-metric-{{ctrl.target.refId}}">
+          Metric
+          <info-popover position="top center" mode="right-normal">
+            <p>Select the metric you wish to plot.</p>
+          </info-popover>
+        </label>
+        <div class="gf-form-select-wrapper full-width">
+          <select id="in-metric-{{ctrl.target.refId}}"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched "
+                  ng-disabled="(ctrl.target.canShowAllMetrics && ctrl.target.showAllMetrics) || ctrl.target.freeTextMetrics"
+                  ng-model="ctrl.target.metric"
+                  ng-change="ctrl.onMetricSelect()"
+                  ng-options="f as f.label + ' (' + f.key + ')' for f in ctrl.availableMetrics track by f.key">
+            <option value="" disabled selected>{{ctrl.metricSelectionText}}</option>
+          </select>
+        </div>
+        <label ng-show="ctrl.isBuiltInInfrastructure()"
+               class="gf-form-label query-keyword"
+               for="in-max-value-{{ctrl.target.refId}}">
+          Show max value
+          <info-popover position="top center" mode="right-normal">
+            <p>Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only.</p>
+          </info-popover>
+        </label>
+        <gf-form-switch ng-show="ctrl.isBuiltInInfrastructure()"
+                        ng-disabled="!ctrl.canShowMaxMetricValue()"
+                        id="in-max-value-{{ctrl.target.refId}}"
+                        checked="ctrl.target.displayMaxMetricValue"
+                        on-change="ctrl.onSelect()"></gf-form-switch>
+        <label ng-show="ctrl.target.metricCategory === '1'"
+               class="gf-form-label query-keyword"
+               for="in-all-metrics-{{ctrl.target.refId}}">
+          Show all metrics
+          <info-popover position="top center" mode="right-normal">
+            <p>You have the option to show all metrics in the graph once the amount of possible, selectable metrics is
+              between 1 and 5.</p>
+          </info-popover>
+        </label>
+        <gf-form-switch ng-show="ctrl.target.metricCategory === '1'"
+                        ng-disabled="!ctrl.target.canShowAllMetrics"
+                        checked="ctrl.target.showAllMetrics"
+                        on-change="ctrl.onAllMetricsSelect()"
+                        id="in-all-metrics-{{ctrl.target.refId}}"></gf-form-switch>
+        <label class="gf-form-label query-keyword pointer"
+               for="in-aggregation-{{ctrl.target.refId}}"
+               ng-show="ctrl.canShowAggregation()">
+          Aggregation
+          <info-popover position="top center" mode="right-normal">
+            <p>Select a metric aggretion.</p>
+          </info-popover>
+        </label>
+        <div class="gf-form-select-wrapper min-width-8"
+             ng-show="ctrl.canShowAggregation()">
+          <select id="in-aggregation-{{ctrl.target.refId}}"
+                  ng-disabled="!ctrl.target.metric || ctrl.target.metric.aggregations.length <= 1"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                  ng-model="ctrl.target.aggregation"
+                  ng-change="ctrl.onMetricSelect()"
+                  ng-options="f for f in ctrl.target.metric.aggregations">
+          </select>
+        </div>
+        <label class="gf-form-label query-keyword pointer" for="in-time-interval-{{ctrl.target.refId}}">
+          Rollup
+          <info-popover position="top center" mode="right-normal">
+            <p>Select the rollup value.</p>
+          </info-popover>
+        </label>
+        <div class="gf-form-select-wrapper min-width-6">
+          <select id="in-time-interval-{{ctrl.target.refId}}"
+                  ng-disabled="ctrl.getAvailableTimeIntervals().length <= 1"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                  ng-model="ctrl.target.timeInterval"
+                  ng-change="ctrl.onSelect()"
+                  ng-options="f as f.label for f in ctrl.getAvailableTimeIntervals() track by f.key">
+          </select>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="website_legend.html">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-website-legend-{{ctrl.target.refId}}">
+        Legend format
+        <info-popover position="top center" mode="right-normal">
+          Default: "$label ($website) - $key"
+          <ul>
+            <li>$label - entity label</li>
+            <li>$website - website label</li>
+            <li>$type - entity type</li>
+            <li>$timeShift - corresponding timeShift</li>
+            <li>$metric - displayed metric</li>
+            <li>$key - metric key with aggregation and rollup</li>
+            <li>$index - index in the list</li>
+          </ul>
+        </info-popover>
+      </label>
+      <input id="in-website-legend-{{ctrl.target.refId}}"
+             class="gf-form-input full-width"
+             type="text"
+             ng-model="ctrl.target.labelFormat"
+             ng-model-options='{ debounce: 500 }'
+             placeholder="$label ($website) - $key"
+             ng-change="ctrl.onSelect()"
+             spellcheck='false'/>
+    </script>
+
+    <script type="text/ng-template" id="application_legend.html">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-application-legend-{{ctrl.target.refId}}">
+        Legend format
+        <info-popover position="top center" mode="right-normal">
+          Default: $label ($application) - $key
+          <ul>
+            <li>$label - entity label</li>
+            <li>$application - application label</li>
+            <li>$timeShift - corresponding timeShift</li>
+            <li>$metric - displayed metric</li>
+            <li>$key - metric key with aggregation and rollup</li>
+            <li>$index - index in the list</li>
+          </ul>
+        </info-popover>
+      </label>
+      <input id="in-application-legend-{{ctrl.target.refId}}"
+             class="gf-form-input full-width"
+             type="text"
+             ng-model="ctrl.target.labelFormat"
+             ng-model-options='{ debounce: 500 }'
+             placeholder="$label ($application) - $key"
+             ng-change="ctrl.onSelect()"
+             spellcheck='false'/>
+    </script>
+
+    <script type="text/ng-template" id="application_service_endpoint_legend.html">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-application-service-endpoint-legend-{{ctrl.target.refId}}">
+        Legend format
+        <info-popover position="top center" mode="right-normal">
+          Default: $label ($application) - $key
+          <ul>
+            <li>$label - entity label</li>
+            <li>$application - application label</li>
+            <li>$service - service label</li>
+            <li>$endpoint - endpoint label</li>
+            <li>$timeShift - corresponding timeShift</li>
+            <li>$metric - displayed metric</li>
+            <li>$key - metric key with aggregation and rollup</li>
+            <li>$index - index in the list</li>
+          </ul>
+        </info-popover>
+      </label>
+      <input id="in-application-service-endpoint-legend-{{ctrl.target.refId}}"
+             class="gf-form-input full-width"
+             type="text"
+             ng-model="ctrl.target.labelFormat"
+             ng-model-options='{ debounce: 500 }'
+             placeholder="$label ($application) - $key"
+             ng-change="ctrl.onSelect()"
+             spellcheck='false'/>
+    </script>
+
+    <script type="text/ng-template" id="website_application.html">
+      <div class="gf-form">
+        <label class="gf-form-label query-keyword width-13 pointer"
+               for="in-{{ctrl.websiteApplicationLabel}}-{{ctrl.target.refId}}">
+          {{ctrl.websiteApplicationLabel}}
+          <info-popover position="top center" mode="right-normal">
+            <p>Select your {{ctrl.websiteApplicationLabel}}.</p>
+          </info-popover>
+        </label>
+        <div ng-show="ctrl.isAnalyzeApplication()" class="gf-form-select-wrapper min-width-6">
+          <select id="in-group-{{ctrl.target.refId}}"
+                  ng-disabled="ctrl.target.entity.key === null"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                  ng-model="ctrl.target.applicationCallToEntity"
+                  ng-change="ctrl.onSelect()"
+                  ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
+          </select>
+        </div>
+        <div class="gf-form-select-wrapper full-width min-width-12">
+          <select id="in-{{ctrl.websiteApplicationLabel}}-{{ctrl.target.refId}}"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                  ng-model="ctrl.target.entity"
+                  ng-change="ctrl.onEntitySelect()"
+                  ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
+          </select>
+        </div>
+        <label ng-show="ctrl.target.metricCategory === '3'" class="gf-form-label query-keyword pointer"
+               for="in-beacontype-{{ctrl.target.refId}}">
+          Type
+          <info-popover position="top center" mode="right-normal">
+            <p>Select a beacon type.</p>
+          </info-popover>
+        </label>
+        <div ng-show="ctrl.target.metricCategory === '3'"
+             class="gf-form-select-wrapper full-width min-width-12 ">
+          <select id="in-beacontype-{{ctrl.target.refId}}"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                  ng-model="ctrl.target.entityType"
+                  ng-change="ctrl.onBeaconTypeSelect()"
+                  ng-options="f as f.label for f in ctrl.uniqueBeaconTypes track by f.key">
+          </select>
+        </div>
+        <label ng-show="ctrl.isAnalyzeCategory()" class="gf-form-label query-keyword pointer"
+               for="in-group-{{ctrl.target.refId}}">
+          Group by
+          <info-popover position="top center" mode="right-normal">
+            <p>Group by tag.</p>
+          </info-popover>
+        </label>
+        <div ng-show="ctrl.isAnalyzeApplication()" class="gf-form-select-wrapper">
+          <select id="in-group-{{ctrl.target.refId}}"
+                  class="gf-form-input ng-pristine ng-valid min-width-6 ng-not-empty ng-touched"
+                  ng-model="ctrl.target.callToEntity"
+                  ng-change="ctrl.onSelect()"
+                  ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
+          </select>
+        </div>
+        <div ng-show="ctrl.isAnalyzeCategory()"
+             class="gf-form-select-wrapper full-width min-width-12 ">
+          <select id="in-group-{{ctrl.target.refId}}"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                  ng-model="ctrl.target.group"
+                  ng-change="ctrl.onGroupChange()"
+                  ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
+          </select>
+        </div>
+        <input id="group-by-second-level-{{ctrl.target.refId}}"
+               ng-hide="!ctrl.target.showGroupBySecondLevel"
+               class="gf-form-input min-width-12"
+               type="text"
+               ng-model='ctrl.target.groupbyTagSecondLevelKey'
+               ng-model-options='{ debounce: 500 }'
+               ng-change="ctrl.onSelect()"
+               placeholder="please specify"
+               spellcheck='false'/>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="application_service_endpoint.html">
+      <div class="gf-form">
+        <label class="gf-form-label query-keyword pointer width-13"
+               for="select-application-{{ctrl.target.refId}}">
+          Application
+          <info-popover position="top center" mode="right-normal">
+            <p>Select your application.</p>
+          </info-popover>
+        </label>
+        <select id="select-application-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.entity"
+                ng-change="ctrl.onApplicationSelect()"
+                ng-options="f as f.label for f in ctrl.uniqueEntities track by f.key">
+        </select>
+        <label class="gf-form-label query-keyword pointer"
+               for="select-service-{{ctrl.target.refId}}">
+           Service
+           <info-popover position="top center" mode="right-normal">
+             <p>Select your service.</p>
+           </info-popover>
+        </label>
+        <select id="select-service-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.service"
+                ng-change="ctrl.onServiceSelect()"
+                ng-options="f as f.label for f in ctrl.uniqueServices track by f.key">
+        </select>
+        <label class="gf-form-label query-keyword pointer"
+               for="select-endpoint-{{ctrl.target.refId}}">
+          Endpoint
+          <info-popover position="top center" mode="right-normal">
+            <p>Select your endpoint.</p>
+          </info-popover>
+        </label>
+        <select id="select-endpoint-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.endpoint"
+                ng-change="ctrl.onSelect()"
+                ng-options="f as f.label for f in ctrl.uniqueEndpoints track by f.key">
+        </select>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="filters.html">
+      <div ng-repeat="filter in ctrl.target.filters">
+        <div class="gf-form">
+          <label class="gf-form-label query-keyword width-13 pointer"
+                 for="in-filter-name-{{ctrl.target.refId}}-{{$index}}">
+            {{$index+1}}. filter
+            <info-popover position="top center" class="ng-invalid" mode="right-normal">
+              <p>Filter by tag.</p>
+            </info-popover>
+          </label>
+          <div class="gf-form-select-wrapper min-width-6">
+            <select id="in-group-{{ctrl.target.refId}}"
+                    class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                    ng-model="ctrl.target.filters[$index].entity"
+                    ng-change="ctrl.onSelect()"
+                    ng-options="f as f.label for f in ctrl.callToEntities track by f.key">
+            </select>
+          </div>
+          <div class="gf-form-select-wrapper width-14 ">
+            <select id="in-filter-name-{{ctrl.target.refId}}-{{$index}}"
+                    class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                    ng-model="ctrl.target.filters[$index].tag"
+                    ng-change="ctrl.onTagFilterChange($index)"
+                    ng-options="f as f.key for f in ctrl.uniqueTags track by f.key">
+            </select>
+          </div>
+          <div class="gf-form-select-wrapper width-8 ">
+            <select id="in-filter-operator-{{ctrl.target.refId}}-{{$index}}"
+                    class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                    ng-model="ctrl.target.filters[$index].operator"
+                    ng-change="ctrl.onTagFilterChange($index)"
+                    ng-options="f as f.label for f in ctrl.uniqueOperators | filter:{type:ctrl.target.filters[$index].tag.type} track by f.key + '_' + f.type">
+            </select>
+          </div>
+          <input id="in-filter-stringValue-{{ctrl.target.refId}}-{{$index}}"
+                 type="text"
+                 ng-show="(ctrl.target.filters[$index].tag.type === 'STRING' || ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR') && !ctrl.target.filters[$index].operator.key.includes('EMPTY')"
+                 class="gf-form-input width-22"
+                 ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
+                 ng-model="ctrl.target.filters[$index].stringValue"
+                 ng-model-options='{ debounce: 500 }'
+                 ng-change="ctrl.onTagFilterChange($index)"
+                 placeholder="{{ctrl.target.filters[$index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : 'please specify'}}"
+                 spellcheck='false'/>
+          <input id="in-filter-numberValue-{{ctrl.target.refId}}-{{$index}}"
+                 type="number"
+                 ng-show="ctrl.target.filters[$index].tag.type === 'NUMBER'"
+                 class="gf-form-input width-22"
+                 ng-class="ctrl.target.filters[$index].isValid ? 'ng-valid' : 'ng-invalid'"
+                 ng-model="ctrl.target.filters[$index].numberValue"
+                 ng-model-options='{ debounce: 500 }'
+                 ng-change="ctrl.onTagFilterChange($index)"
+                 placeholder="please specify"
+                 spellcheck='false'/>
+          <select id="in-filter-booleanValue-{{ctrl.target.refId}}"
+                  ng-show="ctrl.target.filters[$index].tag.type === 'BOOLEAN'"
+                  class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                  ng-model="ctrl.target.filters[$index].booleanValue"
+                  ng-model-options='{ debounce: 300 }'
+                  ng-change="ctrl.onTagFilterChange($index)">
+            <option value="true" selected>true</option>
+            <option value="false">false</option>
+          </select>
+          <button class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.removeFilter($index)">
+            <i class="fa fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-13 pointer" for="in-{{ctrl.target.analyzeType}}-{{ctrl.target.refId}}">
+          Add filter
+          <info-popover position="top center" mode="right-normal">
+            <p>Add an additional tag filter.</p>
+          </info-popover>
+        </label>
+        <button class="gf-form-input btn btn-inverse width-3" ng-click="ctrl.addFilter()">
+          <i class="fa fa-plus"></i>
+        </button>
+        <label class="gf-form-label query-keyword width-13 pointer"
+               for="in-{{ctrl.target.analyzeType}}-{{ctrl.target.refId}}"
+               ng-hide="!ctrl.target.showWarningCantShowAllResults">
+          ⚠️ Can't show all results
+          <info-popover position="top center" mode="right-normal">
+            <p>Add Filter to narrow down the data.</p>
+          </info-popover>
+        </label>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="slo.html">
+      <div class="gf-form">
+        <label class="gf-form-label query-keyword pointer width-13"
+               for="select-configured-slo-{{ctrl.target.refId}}">
+          Configured SLO
+          <info-popover position="top center" mode="right-normal">
+            <p>Select your configured SLO.</p>
+          </info-popover>
+        </label>
+        <select id="select-configured-slo-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.sloReport"
+                ng-change="ctrl.onSelect()"
+                ng-options="f as f.label for f in ctrl.configuredReports track by f.key">
+        </select>
+        <label class="gf-form-label query-keyword pointer"
+               for="select-slo-specific-{{ctrl.target.refId}}">
+          SLO value
+          <info-popover position="top center" mode="right-normal">
+            <p>Type in your desired SLO value. E.g, 0.9 for 90% SLO.</p>
+          </info-popover>
+        </label>
+        <input id="in-slo-value-{{ctrl.target.refId}}"
+               class="gf-form-input full-width"
+               type="number"
+               ng-model="ctrl.target.sloValue"
+               ng-model-options='{ debounce: 500 }'
+               placeholder="0.99"
+               ng-change="ctrl.onSloValueChange()"
+               spellcheck="false" />
+        <label class="gf-form-label query-keyword pointer"
+               for="select-slo-specific-{{ctrl.target.refId}}">
+          Specifics
+          <info-popover position="top center" mode="right-normal">
+            Select your specific SLO information:
+            <ul>
+              <li>'SLI' requires Gauge visualization</li>
+              <li>'Remaining Error Budget' requires Singlestat visualization</li>
+              <li>'Timeseries' requires Bars draw mode on Graph visualization</li>
+            </ul>
+          </info-popover>
+        </label>
+        <select id="select-slo-specific-{{ctrl.target.refId}}"
+                class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched"
+                ng-model="ctrl.target.sloSpecific"
+                ng-change="ctrl.onSelect()"
+                ng-options="f as f.key for f in ctrl.sloSpecifics track by f.key">
+        </select>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="advanced_settings.html">
+      <div class="gf-form">
+        <label class="gf-form-label width-13"
+               for="in-advanced-settings-{{ctrl.target.refId}}">
+          Show advanced settings
+          <info-popover position="top center" mode="right-normal">
+            <p>Show all additional settings.</p>
+          </info-popover>
+        </label>
+        <gf-form-switch id="in-advanced-settings-{{ctrl.target.refId}}"
+                        checked="ctrl.target.advancedSettingsSwitchChecked"
+                        on-change="ctrl.toggleAdvancedSettings()"></gf-form-switch>
+      </div>
+
+      <div class="gf-form full-width" ng-show="ctrl.target.showAdvancedSettings && ctrl.isInfrastructure()" ng-include src="'legend.html'"></div>
+      <div class="gf-form full-width" ng-show="ctrl.target.showAdvancedSettings && ctrl.isAnalyzeApplication()" ng-include src="'application_legend.html'"></div>
+      <div class="gf-form full-width" ng-show="ctrl.target.showAdvancedSettings && ctrl.isApplicationServiceEndpointMetric()" ng-include src="'application_service_endpoint_legend.html'"></div>
+      <div class="gf-form full-width" ng-show="ctrl.target.showAdvancedSettings && ctrl.isAnalyzeWebsite()" ng-include src="'website_legend.html'"></div>
+
+      <div class="gf-form full-width" ng-show="ctrl.target.showAdvancedSettings" ng-include src="'timeshift.html'"></div>
+
+      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings && ctrl.isCustomInfrastructure()" ng-include src="'freeTextMetrics.html'"></div>
+      <div class="gf-form" ng-show="ctrl.target.showAdvancedSettings && ctrl.isInfrastructure()" ng-include src="'aggregate_graphs.html'" ></div>
+    </script>
+
+    <script type="text/ng-template" id="legend.html">
+      <label class="gf-form-label query-keyword width-13 pointer" for="in-legend-{{ctrl.target.refId}}">
+        Legend format
+        <info-popover position="top center" mode="right-normal">
+          Default: $label (on host $host)
+          <ul>
+            <li>$label - entity label</li>
+            <li>$host - corresponding host</li>
+            <li>$pid - corresponding PID</li>
+            <li>$timeShift - corresponding timeShift</li>
+            <li>$metric - displayed metric</li>
+            <li>$type - entity type</li>
+            <li>$service - service label</li>
+            <li>$name - label alternative</li>
+            <li>$index - index in the list</li>
+          </ul>
+        </info-popover>
+      </label>
+      <input id="in-legend-{{ctrl.target.refId}}"
+             class="gf-form-input full-width"
+             type="text"
+             ng-model="ctrl.target.labelFormat"
+             ng-model-options='{ debounce: 500 }'
+             placeholder="$label (on host $host)"
+             ng-change="ctrl.onSelect()"
+             spellcheck='false'/>
+    </script>
+
+
+    <script type="text/ng-template" id="timeshift.html">
+      <label class="gf-form-label query-keyword pointer width-13" for="in-timeshift-{{ctrl.target.refId}}">
+        Time shift
+        <info-popover position="top center" mode="right-normal">
+          <p>Specify the amount of hours that shall be used. The time shift function always go back in time, not
+            forward. Accepts values such as 1s, 1m, 1h, 1d, 1w
+          </p>
+        </info-popover>
+      </label>
+      <input id="in-timeshift-{{ctrl.target.refId}}"
+             class="gf-form-input min-width-8"
+             type="text"
+             ng-class="ctrl.target.timeShiftIsValid || ctrl.target.timeShift === '' ? 'ng-valid' : 'ng-invalid'"
+             ng-model='ctrl.target.timeShift'
+             ng-model-options='{ debounce: 500 }'
+             ng-change="ctrl.onTimeShiftChange()"
+             placeholder="1h"/>
+    </script>
+
+    <script type="text/ng-template" id="freeTextMetrics.html">
+      <label class="gf-form-label query-keyword width-13"
+             for="in-free-text-metrics-{{ctrl.target.refId}}">
+        Enable free text metrics
+        <info-popover position="top center" mode="right-normal">
+          <p>Specify comma separated metrics directly in this text field. Once this field has a value, selected
+            metrics from above will be ignored. Enabled as soon as a query is entered. Max 4 metrics supported.
+          </p>
+        </info-popover>
+      </label>
+      <gf-form-switch id="in-free-text-metrics-toggle-{{ctrl.target.refId}}"
+                      checked="ctrl.target.useFreeTextMetrics"
+                      on-change="ctrl.onFilterChange(true, !ctrl.target.useFreeTextMetrics)"></gf-form-switch>
+      <input id="in-free-text-metrics-{{ctrl.target.refId}}"
+             class="gf-form-input full-width"
+             type="text"
+             ng-disabled="!ctrl.target.useFreeTextMetrics"
+             ng-model='ctrl.target.freeTextMetrics'
+             ng-model-options='{ debounce: 500 }'
+             ng-change="ctrl.onSelect()"
+             placeholder="metric.one,metric.two,metric.three"/>
+    </script>
+
+    <script type="text/ng-template" id="aggregate_graphs.html">
+      <label class="gf-form-label query-keyword width-13" for="in-aggregate-graphs-{{ctrl.target.refId}}">
+        Aggregate query graphs
+        <info-popover position="top center" mode="right-normal">
+          <p>Aggregate all graphs of a query.</p>
+        </info-popover>
+      </label>
+      <gf-form-switch id="in-aggregate-graphs-{{ctrl.target.refId}}"
+                      checked="ctrl.target.aggregateGraphs"
+                      on-change="ctrl.toggleGraphAggregation()"></gf-form-switch>
+      <select id="in-aggregation-function-{{ctrl.target.refId}}"
+              ng-disabled="!ctrl.target.aggregateGraphs"
+              class="gf-form-input ng-pristine ng-valid ng-not-empty ng-touched width-8"
+              ng-model="ctrl.target.aggregationFunction"
+              ng-model-options='{ debounce: 300 }'
+              ng-change="ctrl.onSelect()"
+              ng-options="f as f.label for f in ctrl.aggregationFunctions track by f.label">
+      </select>
+      <label class="gf-form-label query-keyword width-13"
+             for="in-hide-graphs-{{ctrl.target.refId}}">
+        Hide original graphs
+        <info-popover position="top center" mode="right-normal">
+          <p>Removes the original graphs resulted from the query and only shows the aggregated graph.</p>
+        </info-popover>
+      </label>
+      <gf-form-switch ng-disabled="!ctrl.target.aggregateGraphs"
+                      id="in-hide-graphs-{{ctrl.target.refId}}"
+                      checked="ctrl.target.hideOriginalGraphs"
+                      on-change="ctrl.onSelect()"></gf-form-switch>
+    </script>
+  </div>
+</query-editor-row>

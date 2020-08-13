@@ -8,8 +8,9 @@ services:
       - ./dist:/var/lib/grafana/plugins/instana
       - ./provisioning/datasources:/etc/grafana/provisioning/datasources
     environment:
-      - INSTANA_UI_BACKEND_URL=${INSTANA_UI_BACKEND_URL}
-      - INSTANA_API_TOKEN=${INSTANA_API_TOKEN}
+      INSTANA_UI_BACKEND_URL: ${INSTANA_UI_BACKEND_URL}
+      INSTANA_API_TOKEN: ${INSTANA_API_TOKEN}
+      GF_LOG_LEVEL: debug
   mountebank:
     build: specs/mb
     image: ui-backend-mockserver

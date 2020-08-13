@@ -95,7 +95,6 @@ This procedure is used to test the Instana Grafana data source before the versio
 * Query: `filler`
 * Type: `Process`
 * Metric: `Virtual (mem.virtual)`
-* Legend format: ``
 
 This should render a chart with two datasets (`node (on host "host-1")` and `node (on host "host-2)`).
 
@@ -111,13 +110,15 @@ This should render a chart with two datasets (`node (on host "host-1")` and `nod
 
 This should render a chart with one dataset (`host-3 (29042)`).
 
+##### Aggregation selection for Visualizations
+(deprecated) Switching the Visualization for the custom metric above to `Stat` and `Gauge` or `Table` will additional add an aggregation selection to Metric dropdown. Switch back to "Graph" visualization to continue.
+
 #### Application metrics
 * Category: `Application/Service/Endpoint metrics`
 * Application: `AWS instances`
 * Service: `-- No Service Filter --`
 * Endpoint: `-- No Endpoint Filter --`
 * Metric: `Call latency (latency)`
-* Legend format: ``
 
 This should render a chart with one dataset (`AWS instances (AWS instances) - latency.mean`).
 
@@ -127,7 +128,6 @@ This should render a chart with one dataset (`AWS instances (AWS instances) - la
 * Service: `AWS Lambda Service`
 * Endpoint: `-- No Endpoint Filter --`
 * Metric: `Call latency (latency)`
-* Legend format: ``
 
 This should render a chart with one dataset (`AWS Lambda Service (AWS Lambda Service) - latency.mean`).
 
@@ -137,19 +137,14 @@ This should render a chart with one dataset (`AWS Lambda Service (AWS Lambda Ser
 * Service: `-- No Service Filter --`
 * Endpoint: `GET /api`
 * Metric: `Call latency (latency)`
-* Legend format: ``
 
 This should render a chart with one dataset (`GET /api (GET /api) - latency.mean`).
-
-##### Aggregation selection for Visualizations
-Switching the Visualization for the custom metric above to `Singlestat` and `Gauge` or `Table` will additional add an aggregation selection to Metric dropdown. Switch back to "Graph" visualization to continue.
 
 #### Analyze application calls
 * Category: `Analyze application calls`
 * Application: `Dest` `AWS instances`
 * Group by: `Dest` `endpoint.name`
 * Metric: `Call latency (latency)` `MEAN`
-* Legend format: ``
 
 This should render a chart with one dataset (`GET (AWS instances) latency.mean`).
 
@@ -159,6 +154,5 @@ This should render a chart with one dataset (`GET (AWS instances) latency.mean`)
 * Type: `Page Loads`
 * Group by: `beacon.page.name`
 * Metric: `Beacon Count (beaconCount)`
-* Legend format: ``
 
 This should render a chart with one dataset (`home (www.instana.com) beaconCount.sum.300`).
