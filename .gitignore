@@ -1,5 +1,4 @@
 node_modules
-dist
 coverage
 npm-debug.log
 .env.test.local
@@ -8,5 +7,6 @@ npm-debug.log
 .idea
 *.swp
 results.txt
-*.js
-*.js.map
+.prettierrc.js
+jest.config.js
+setEnvVars.js
