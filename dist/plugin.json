@@ -34,7 +34,12 @@
         "url": "https://github.com/instana/instana-grafana-datasource/blob/master/LICENSE"
       }
     ],
-    "screenshots": [],
+    "screenshots": [
+      {
+        "name": "Infrastructure Built-In Metrics",
+        "path": "https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/built-in-metrics.gif"
+      }
+    ],
     "version": "3.0.0",
     "updated": "2020-08-12"
   },
