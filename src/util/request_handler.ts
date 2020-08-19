@@ -1,46 +1,42 @@
 import { getBackendSrv } from '@grafana/runtime';
 import { BackendSrvRequest } from '@grafana/runtime/services/backendSrv';
 import { InstanaOptions } from '../types/instana_options';
+import { DataSourceInstanceSettings } from '@grafana/data';
 
-export function getRequest(options: InstanaOptions, endpoint: string, swallowError = false, maxRetries = 1) {
+export function getRequest(options: InstanaOptions, endpoint: string, swallowError = false, maxRetries = 1): any {
   const request = {
     method: 'GET',
-    url: buildUrl(options, endpoint),
+    url: options.url + endpoint,
   };
 
   return doRequest(options, request, swallowError, maxRetries);
 }
 
-export function postRequest(options: InstanaOptions, endpoint: string, data: {}, swallowError = false, maxRetries = 0) {
+export function postRequest(
+  options: InstanaOptions,
+  endpoint: string,
+  data: {},
+  swallowError = false,
+  maxRetries = 0
+): any {
   const request = {
     method: 'POST',
-    url: buildUrl(options, endpoint),
+    url: options.url + endpoint,
     data: data,
   };
 
   return doRequest(options, request, swallowError, maxRetries);
 }
 
-function doRequest(options: InstanaOptions, request: BackendSrvRequest, swallowError: boolean, maxRetries: number) {
-  if (options.useProxy) {
-    return execute(request, swallowError, maxRetries, undefined);
-  } else {
-    return execute(request, swallowError, maxRetries, options.apiToken);
-  }
-}
-
-export function buildUrl(options: InstanaOptions, endpoint: string) {
-  if (options.useProxy) {
-    return options.url + '/instana' + endpoint; // to match proxy route in plugin.json
-  } else {
-    return options.url + endpoint;
-  }
-}
-
-function execute(request: BackendSrvRequest, swallowError: boolean, maxRetries: number, apiToken?: string): any {
-  if (apiToken) {
+function doRequest(
+  options: InstanaOptions,
+  request: BackendSrvRequest,
+  swallowError: boolean,
+  maxRetries: number
+): any {
+  if (!options.useProxy) {
     request['headers'] = {
-      Authorization: 'apiToken ' + apiToken,
+      Authorization: 'apiToken ' + options.apiToken,
     };
   }
 
@@ -57,8 +53,16 @@ function execute(request: BackendSrvRequest, swallowError: boolean, maxRetries: 
         return;
       }
       if (maxRetries > 0) {
-        return execute(request, swallowError, maxRetries - 1, apiToken);
+        return doRequest(options, request, swallowError, maxRetries - 1);
       }
       throw error;
     });
+}
+
+export function instanaUrl(instanceSettings: DataSourceInstanceSettings<InstanaOptions>): string {
+  if (instanceSettings.jsonData.useProxy) {
+    return instanceSettings.url + '/instana'; // to match proxy route in plugin.json
+  } else {
+    return instanceSettings.jsonData.url;
+  }
 }

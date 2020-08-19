@@ -5,10 +5,9 @@ import {
   DataSourceInstanceSettings,
   SelectableValue,
 } from '@grafana/data';
-
 import { InstanaQuery } from '../types/instana_query';
 import { InstanaOptions } from '../types/instana_options';
-import { getRequest } from '../util/request_handler';
+import { getRequest, instanaUrl } from '../util/request_handler';
 import { DataSourceSlo } from './DataSource_Slo';
 import MetricCategories from '../lists/metric_categories';
 import TimeFilter from '../types/time_filter';
@@ -59,6 +58,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   constructor(instanceSettings: DataSourceInstanceSettings<InstanaOptions>) {
     super(instanceSettings);
     this.options = instanceSettings.jsonData;
+    this.options.url = instanaUrl(instanceSettings);
     this.availableGranularities = [];
     this.availableRollups = [];
     this.availableTimeIntervals = [];
