@@ -37,7 +37,7 @@
     "screenshots": [
       {
         "name": "Infrastructure Built-In Metrics",
-        "path": "https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/empty-query.png"
+        "path": "../screenshots/empty-query.png"
       }
     ],
     "version": "3.0.0",
