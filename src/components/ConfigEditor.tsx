@@ -116,6 +116,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           description="The API token to access the data."
         >
           <Input
+            type="password"
             css={''}
             width={30}
             value={jsonData.apiToken}
