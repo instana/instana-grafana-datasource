@@ -6,7 +6,6 @@ const omitLabels = [
   'refId',
   'pluginId',
   'showWarningCantShowAllResults',
-  'labelFormat',
   'timeShiftIsValid',
   'useFreeTextMetrics',
   'showGroupBySecondLevel',
