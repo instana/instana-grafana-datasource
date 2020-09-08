@@ -163,11 +163,11 @@ export class DataSourceInfrastructure {
         const result = typesResponse.data.map((entry: any) => ({
           key: entry.plugin,
           label: entry.label,
-        }))
+        }));
 
         result.push({
           key: 'regionEntity',
-          label: 'Region'
+          label: 'Region',
         });
 
         return _.sortBy(result, 'label');

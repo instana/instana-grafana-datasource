@@ -90,6 +90,7 @@ describe('Given a delta', () => {
           group: {},
           groupbyTagSecondLevelKey: '',
           hideOriginalGraphs: false,
+          labelFormat: 'labelFormat',
           metric: {},
           metricCategory: {},
           service: null,
