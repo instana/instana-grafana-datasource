@@ -151,8 +151,9 @@ export class Filters extends React.Component<Props, FilterState> {
   render() {
     const { query, groups } = this.props;
 
+    console.log(query.filters);
     let listFilter = query.filters.map((singleFilter, index) => {
-      let filter = (
+      return (
         <div className={'gf-form'}>
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Filter by tag.'}>
             {index + 1}. filter
@@ -224,7 +225,6 @@ export class Filters extends React.Component<Props, FilterState> {
           </Button>
         </div>
       );
-      return filter;
     });
 
     return (

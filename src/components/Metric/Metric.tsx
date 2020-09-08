@@ -36,11 +36,13 @@ export default class Metric extends React.Component<Props, MetricState> {
   }
 
   componentDidMount() {
-    const { query, datasource } = this.props;
+    const { query, datasource, onChange } = this.props;
 
     if (!query.timeInterval || !query.timeInterval.key) {
       query.timeInterval = datasource.getDefaultTimeInterval(query);
     }
+
+    onChange(query);
   }
 
   onMetricChange = (metric: SelectableValue) => {
@@ -54,6 +56,9 @@ export default class Metric extends React.Component<Props, MetricState> {
     if (query.displayMaxMetricValue && !this.canShowMaxMetricValue()) {
       query.displayMaxMetricValue = false;
     }
+
+    query.allMetrics = [];
+    query.showAllMetrics = false;
 
     onChange(query);
     onRunQuery();
@@ -97,7 +102,8 @@ export default class Metric extends React.Component<Props, MetricState> {
     if (event && event.currentTarget) {
       query.showAllMetrics = event.currentTarget.checked;
       if (query.showAllMetrics) {
-        query.metric = {};
+        query.metric = { key: null, label: `Displaying ${this.props.availableMetrics.length} metrics` };
+        query.allMetrics = this.props.availableMetrics;
       }
       onChange(query);
       onRunQuery();
