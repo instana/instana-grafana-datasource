@@ -157,11 +157,19 @@ export class DataSourceInfrastructure {
     }
 
     entityTypes = getRequest(this.instanaOptions, '/api/infrastructure-monitoring/catalog/plugins').then(
-      (typesResponse: any) =>
-        typesResponse.data.map((entry: any) => ({
+      (typesResponse: any) => {
+        const result = typesResponse.data.map((entry: any) => ({
           key: entry.plugin,
           label: entry.label,
         }))
+
+        result.push({
+          key: 'regionEntity',
+          label: 'Region'
+        });
+
+        return _.sortBy(result, 'label');
+      }
     );
 
     this.typeCache.put('entityTypes', entityTypes);
