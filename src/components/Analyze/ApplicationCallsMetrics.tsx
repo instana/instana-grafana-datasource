@@ -8,6 +8,7 @@ import { InstanaQuery } from '../../types/instana_query';
 import FormWrapper from '../FormField/FormWrapper';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
+import '../plugin.css';
 
 interface ApplicationCallsMetricsState {
   applications: SelectableValue[];
@@ -146,6 +147,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           <Select
             menuPlacement={'bottom'}
             width={12}
+            className={'entityDropdown'}
             isSearchable={true}
             options={call_to_entities}
             value={query.applicationCallToEntity}
@@ -168,6 +170,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           <Select
             menuPlacement={'bottom'}
             width={12}
+            className={'entityDropdown'}
             isSearchable={true}
             value={query.callToEntity}
             options={call_to_entities}
