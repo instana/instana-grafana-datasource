@@ -78,7 +78,7 @@ describe('Given a delta', () => {
           callToEntity: {},
           aggregateGraphs: false,
           aggregation: {},
-          applicationCallToEntity: {},
+          applicationCallToEntity: '',
           customFilters: [],
           displayMaxMetricValue: false,
           endpoint: {},

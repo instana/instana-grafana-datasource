@@ -301,8 +301,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     query.showAllMetrics = false;
     query.canShowAllMetrics = false;
     query.displayMaxMetricValue = false;
-    query.applicationCallToEntity = {};
-    query.callToEntity = {};
+    query.applicationCallToEntity = '';
+    query.callToEntity = '';
     this.resetServices();
     this.resetEndpoints();
     this.resetSLO();

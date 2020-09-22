@@ -47,7 +47,6 @@ export class DataSourceInfrastructure {
     return this.fetchSnapshotsForTarget(target, timeFilter).then((snapshots) => {
       if (target.showAllMetrics) {
         // only available for custom metrics
-        console.log(target.allMetrics);
         return this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, target.allMetrics);
       } else if (target.freeTextMetrics) {
         // only available for custom metrics
@@ -74,7 +73,6 @@ export class DataSourceInfrastructure {
   fetchMultipleMetricsForSnapshots(target: InstanaQuery, snapshots: any, timeFilter: TimeFilter, metrics: any) {
     const resultPromises: any = [];
     _.forEach(metrics, (metric) => {
-      console.log(metric);
       resultPromises.push(this.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
     });
 

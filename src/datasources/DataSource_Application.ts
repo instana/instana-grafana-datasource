@@ -152,10 +152,7 @@ export class DataSourceApplication {
           name: 'application.name',
           operator: 'EQUALS',
           value: target.entity.label!,
-          entity:
-            target.applicationCallToEntity && target.applicationCallToEntity.key
-              ? target.applicationCallToEntity.key
-              : 'DESTINATION',
+          entity: target.applicationCallToEntity ? target.applicationCallToEntity : 'DESTINATION',
         });
       }
 
@@ -185,7 +182,7 @@ export class DataSourceApplication {
       };
       const tag: any = _.find(applicationTags, ['key', target.group.key]);
       if (tag.canApplyToDestination || tag.canApplyToSource) {
-        group['groupbyTagEntity'] = this.getTagEntity(target.group, tag);
+        group['groupbyTagEntity'] = target.callToEntity;
       }
       if (target.group.type === 'KEY_VALUE_PAIR' && target.groupbyTagSecondLevelKey) {
         group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;

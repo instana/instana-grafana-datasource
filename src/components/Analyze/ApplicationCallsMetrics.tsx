@@ -7,6 +7,7 @@ import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import FormWrapper from '../FormField/FormWrapper';
 import { SelectableValue } from '@grafana/data';
+import Entity from "../Entity/Entity";
 import _ from 'lodash';
 import '../plugin.css';
 
@@ -57,11 +58,11 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           query.entity = applications[0];
         }
 
-        if (!query.callToEntity || !query.callToEntity.key) {
-          query.callToEntity = call_to_entities[0];
+        if (!query.callToEntity) {
+          query.callToEntity = call_to_entities[0].key;
         }
-        if (!query.applicationCallToEntity || !query.applicationCallToEntity.key) {
-          query.applicationCallToEntity = call_to_entities[0];
+        if (!query.applicationCallToEntity) {
+          query.applicationCallToEntity = call_to_entities[0].key;
         }
 
         onChange(query);
@@ -74,7 +75,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
 
         // select a meaningful default group
         if (!query.group || !query.group.key) {
-          query.group = _.find(applicationTags, ['key', 'endpoint.name']);
+          query.group = _.find(applicationTags, [ 'key', 'endpoint.name' ]);
           onChange(query);
         }
       }
@@ -110,14 +111,14 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
     onRunQuery();
   };
 
-  onApplicationCallToEntityChange = (applicationCallToEntity: SelectableValue) => {
+  onApplicationCallToEntityChange = (applicationCallToEntity: string) => {
     const { query, onChange, onRunQuery } = this.props;
     query.applicationCallToEntity = applicationCallToEntity;
     onChange(query);
     onRunQuery();
   };
 
-  onCallToEntityChange = (callToEntity: SelectableValue) => {
+  onCallToEntityChange = (callToEntity: string) => {
     const { query, onChange, onRunQuery } = this.props;
     query.callToEntity = callToEntity;
     onChange(query);
@@ -144,15 +145,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your application.'}>
             Application
           </InlineFormLabel>
-          <Select
-            menuPlacement={'bottom'}
-            width={12}
-            className={'entityDropdown'}
-            isSearchable={true}
-            options={call_to_entities}
-            value={query.applicationCallToEntity}
-            onChange={this.onApplicationCallToEntityChange}
-          />
+          <Entity value={query.applicationCallToEntity} onChange={this.onApplicationCallToEntityChange}/>
           <Select
             menuPlacement={'bottom'}
             width={0}
@@ -167,15 +160,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           <InlineFormLabel className={'query-keyword'} width={7} tooltip={'Group by tag.'}>
             Group by
           </InlineFormLabel>
-          <Select
-            menuPlacement={'bottom'}
-            width={12}
-            className={'entityDropdown'}
-            isSearchable={true}
-            value={query.callToEntity}
-            options={call_to_entities}
-            onChange={this.onCallToEntityChange}
-          />
+          <Entity value={query.callToEntity} onChange={this.onCallToEntityChange}/>
           <Select
             menuPlacement={'bottom'}
             width={0}

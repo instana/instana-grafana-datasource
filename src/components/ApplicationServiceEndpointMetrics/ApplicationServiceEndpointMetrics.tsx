@@ -12,6 +12,7 @@ interface ApplicationServiceEndpointMetricsState {
   applications: SelectableValue[];
   services: SelectableValue[];
   endpoints: SelectableValue[];
+  value: SelectableValue
 }
 
 interface Props {
@@ -35,6 +36,10 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
       applications: [],
       services: [],
       endpoints: [],
+      value: {
+        value: 2,
+        imgUrl: '../../resources/dest.png',
+      }
     };
   }
 
@@ -215,7 +220,7 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input css={''} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
+          <Input css={''} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange}/>
         </div>
       </div>
     );

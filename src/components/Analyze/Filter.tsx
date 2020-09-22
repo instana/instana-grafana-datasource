@@ -151,7 +151,6 @@ export class Filters extends React.Component<Props, FilterState> {
   render() {
     const { query, groups } = this.props;
 
-    console.log(query.filters);
     let listFilter = query.filters.map((singleFilter, index) => {
       return (
         <div className={'gf-form'}>
