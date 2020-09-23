@@ -7,7 +7,7 @@ export interface TagFilter {
   numberValue: number;
   booleanValue: boolean;
   isValid: boolean;
-  entity: SelectableValue;
+  entity: string;
 }
 
 export default TagFilter;

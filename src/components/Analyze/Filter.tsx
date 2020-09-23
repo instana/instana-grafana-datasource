@@ -9,18 +9,19 @@ import { SelectableValue } from '@grafana/data';
 import TagFilter from '../../types/tag_filter';
 import operators from '../../lists/operators';
 import _ from 'lodash';
-
-interface FilterState {}
+import Entity from "../Entity/Entity";
 
 interface Props {
   query: InstanaQuery;
   datasource: DataSource;
   groups: SelectableValue[];
+
   onRunQuery(): void;
+
   onChange(value: InstanaQuery): void;
 }
 
-export class Filters extends React.Component<Props, FilterState> {
+export class Filters extends React.Component<Props, null> {
   OPERATOR_STRING = 'STRING';
   OPERATOR_NUMBER = 'NUMBER';
   OPERATOR_BOOLEAN = 'BOOLEAN';
@@ -69,7 +70,7 @@ export class Filters extends React.Component<Props, FilterState> {
     this.validateChangeAndRun(index);
   }
 
-  onCallToEntityChange = (callToEntity: SelectableValue, index: number) => {
+  onCallToEntityChange = (callToEntity: string, index: number) => {
     const { query } = this.props;
     query.filters[index].entity = callToEntity;
 
@@ -158,14 +159,8 @@ export class Filters extends React.Component<Props, FilterState> {
             {index + 1}. filter
           </InlineFormLabel>
           {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
-            <Select
-              menuPlacement={'bottom'}
-              width={12}
-              isSearchable={true}
-              options={call_to_entities}
-              value={query.filters[index].entity}
-              onChange={(callToEntity) => this.onCallToEntityChange(callToEntity, index)}
-            />
+            <Entity value={query.filters[index].entity}
+                    onChange={(callToEntity: string) => this.onCallToEntityChange(callToEntity, index)}/>
           )}
           <Select
             menuPlacement={'bottom'}

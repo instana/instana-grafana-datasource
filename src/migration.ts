@@ -93,4 +93,5 @@ export default function (target: any) {
   if (target.applicationCallToEntity && target.applicationCallToEntity.key) {
     target.applicationCallToEntity = target.applicationCallToEntity.key;
   }
+  // TODO migrate filters
 }

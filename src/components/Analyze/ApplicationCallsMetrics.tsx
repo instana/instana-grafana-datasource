@@ -59,10 +59,10 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
         }
 
         if (!query.callToEntity) {
-          query.callToEntity = call_to_entities[0].key;
+          query.callToEntity = call_to_entities[0];
         }
         if (!query.applicationCallToEntity) {
-          query.applicationCallToEntity = call_to_entities[0].key;
+          query.applicationCallToEntity = call_to_entities[0];
         }
 
         onChange(query);

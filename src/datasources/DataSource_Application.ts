@@ -205,11 +205,11 @@ export class DataSourceApplication {
     });
   }
 
-  getTagEntity(selectedEntity: any, tag: any): string {
-    if (selectedEntity && selectedEntity.key === 'DESTINATION' && tag.canApplyToDestination) {
+  getTagEntity(selectedEntity: string, tag: any): string {
+    if (selectedEntity === 'DESTINATION' && tag.canApplyToDestination) {
       return 'DESTINATION';
     }
-    if (selectedEntity && selectedEntity.key === 'SOURCE' && tag.canApplyToSource) {
+    if (selectedEntity === 'SOURCE' && tag.canApplyToSource) {
       return 'SOURCE';
     }
     return tag.canApplyToDestination ? 'DESTINATION' : 'SOURCE';
