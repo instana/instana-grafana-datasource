@@ -93,5 +93,11 @@ export default function (target: any) {
   if (target.applicationCallToEntity && target.applicationCallToEntity.key) {
     target.applicationCallToEntity = target.applicationCallToEntity.key;
   }
-  // TODO migrate filters
+  if (target.filters && target.filters.length > 0) {
+    target.filters.forEach((filter: any) => {
+      if (filter.entity && filter.entity.key) {
+        filter.entity = filter.entity.key;
+      }
+    });
+  }
 }
