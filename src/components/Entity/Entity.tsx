@@ -21,9 +21,8 @@ const dropdown__list = {
 } as React.CSSProperties;
 
 const dropdown__list__active = {
-  transition: "max-height .2s ease-out",
   overflow: "hidden",
-  zIndex: 1,
+  zIndex: 2, // we set a zIndex to ensure that the overlay is above other elements and does not move any DOM elements.
   position: "fixed",
   maxHeight: "1000px",
   opacity: 1
@@ -82,7 +81,9 @@ export default function Entity(props: any) {
     <div style={dropdown}>
       <div
         onClick={() => toggleDropdown()}
+        onBlur={() => setActive(false)}
         style={dropdown__list__item}
+        contentEditable
       >
         {props.value === DESTINATION ? destinationIcon : sourceIcon}
       </div>
