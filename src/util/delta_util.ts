@@ -49,7 +49,7 @@ export function hasIntersection(t1: TimeFilter, t2: TimeFilter): boolean {
 */
 export function appendData(newDeltaData: any, cachedData: any): any {
   _.each(newDeltaData, (deltaData) => {
-    let matchingCachedData = _.find(cachedData, (o) => o.key === deltaData.key);
+    let matchingCachedData = _.find(cachedData, (o) => o.key === deltaData.key && o.target === deltaData.target);
     if (matchingCachedData && deltaData.datapoints) {
       const size = matchingCachedData.datapoints.length;
       let datapoints = deltaData.datapoints.concat(matchingCachedData.datapoints);
