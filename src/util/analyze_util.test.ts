@@ -13,7 +13,7 @@ describe('Given a TagFilter object', () => {
         numberValue: 0,
         booleanValue: true,
         isValid: false,
-        entity: { key: 'entity' },
+        entity: 'entity',
       };
 
       const expected = {
@@ -35,7 +35,7 @@ describe('Given a TagFilter object', () => {
         numberValue: 0,
         booleanValue: true,
         isValid: false,
-        entity: { key: 'entity' },
+        entity: 'entity',
       };
 
       const expected = {
@@ -57,7 +57,7 @@ describe('Given a TagFilter object', () => {
         numberValue: 0,
         booleanValue: true,
         isValid: false,
-        entity: { key: 'entity' },
+        entity: 'entity',
       };
 
       const expected = {

@@ -79,6 +79,8 @@ export function buildTestTarget(): InstanaQuery {
     allMetrics: [],
     aggregationFunction: {},
     refId: 'A',
+    applicationBoundaryScope: '',
+    showAdvancedSettings: false,
   };
 }
 

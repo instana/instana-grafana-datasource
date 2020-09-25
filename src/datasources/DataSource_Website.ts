@@ -131,7 +131,7 @@ export class DataSourceWebsite {
             aggregations: entry.aggregations ? this.transformAggregations(entry.aggregations.sort()) : [],
             beaconTypes: entry.beaconTypes
               ? this.transformBeaconTypes(entry.beaconTypes)
-              : [ 'pageLoad', 'resourceLoad', 'httpRequest', 'error', 'custom', 'pageChange' ],
+              : ['pageLoad', 'resourceLoad', 'httpRequest', 'error', 'custom', 'pageChange'],
           };
         })
     );
@@ -142,7 +142,7 @@ export class DataSourceWebsite {
 
   transformBeaconTypes(beaconTypes: string[]) {
     if (beaconTypes.includes('pageChange')) {
-      let result = _.remove(beaconTypes, type => type !== 'pageChange');
+      let result = _.remove(beaconTypes, (type) => type !== 'pageChange');
       result.push('page_change');
       return result;
     }

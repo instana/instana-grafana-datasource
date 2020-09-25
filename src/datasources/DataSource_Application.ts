@@ -242,6 +242,7 @@ export class DataSourceApplication {
 
     if (target.entity.key !== null) {
       data['applicationId'] = target.entity.key;
+      data['applicationBoundaryScope'] = target.applicationBoundaryScope;
     }
 
     return postRequest(

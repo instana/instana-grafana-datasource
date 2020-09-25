@@ -1,18 +1,18 @@
 import React, { ChangeEvent } from 'react';
 
 import { ALL_APPLICATIONS, ALL_ENDPOINTS, ALL_SERVICES } from '../../GlobalVariables';
+import ApplicationBoundaryScope from './ApplicationBoundaryScope';
+import { InlineFormLabel, Input, Select } from '@grafana/ui';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
-import FormSelect from '../FormField/FormSelect';
 import { SelectableValue } from '@grafana/data';
-import { Input } from '@grafana/ui';
 import _ from 'lodash';
 
 interface ApplicationServiceEndpointMetricsState {
   applications: SelectableValue[];
   services: SelectableValue[];
   endpoints: SelectableValue[];
-  value: SelectableValue
+  value: SelectableValue;
 }
 
 interface Props {
@@ -39,7 +39,7 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
       value: {
         value: 2,
         imgUrl: '../../resources/dest.png',
-      }
+      },
     };
   }
 
@@ -150,6 +150,9 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
   onApplicationChange = (application: SelectableValue) => {
     const { query, onChange, onRunQuery } = this.props;
     query.entity = application;
+    if (query.applicationBoundaryScope !== 'ALL' && query.applicationBoundaryScope !== 'INBOUND') {
+      query.applicationBoundaryScope = 'INBOUND';
+    }
     onChange(query);
     this.loadServices();
     this.loadEndpoints();
@@ -182,45 +185,63 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
     this.debouncedRunQuery();
   };
 
+  onApplicationBoundaryScopeChange = (scope: string) => {
+    const { query, onChange, onRunQuery } = this.props;
+    query.applicationBoundaryScope = scope;
+    onChange(query);
+    this.loadServices();
+    this.loadEndpoints();
+    onRunQuery();
+  };
+
   render() {
     const { query } = this.props;
 
     return (
       <div className={'gf-form'}>
-        <FormSelect
-          queryKeyword
-          inputWidth={0}
-          label={'Application'}
-          tooltip={'Select your application.'}
+        <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your application.'}>
+          Application
+        </InlineFormLabel>
+        <ApplicationBoundaryScope
+          value={query.applicationBoundaryScope}
+          disabled={!query.entity.key}
+          onChange={this.onApplicationBoundaryScopeChange}
+        />
+        <Select
+          menuPlacement={'bottom'}
+          width={0}
+          isSearchable={true}
           value={query.entity}
           options={this.state.applications}
           onChange={this.onApplicationChange}
         />
 
-        <FormSelect
-          queryKeyword
-          labelWidth={6}
-          inputWidth={0}
-          label={'Service'}
-          tooltip={'Select your service.'}
+        <InlineFormLabel className={'query-keyword'} width={6} tooltip={'Select your service.'}>
+          Service
+        </InlineFormLabel>
+        <Select
+          menuPlacement={'bottom'}
+          width={0}
+          isSearchable={true}
           value={query.service}
           options={this.state.services}
           onChange={this.onServiceChange}
         />
 
-        <FormSelect
-          queryKeyword
-          labelWidth={6}
-          inputWidth={0}
-          label={'Endpoints'}
-          tooltip={'Select your endpoint.'}
+        <InlineFormLabel className={'query-keyword'} width={6} tooltip={'Select your endpoint.'}>
+          Endpoint
+        </InlineFormLabel>
+        <Select
+          menuPlacement={'bottom'}
+          width={0}
+          isSearchable={true}
           value={query.endpoint}
           options={this.state.endpoints}
           onChange={this.onEndpointChange}
         />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
-          <Input css={''} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange}/>
+          <Input css={''} value={query.groupbyTagSecondLevelKey} onChange={this.onGroupByTagSecondLevelKeyChange} />
         </div>
       </div>
     );

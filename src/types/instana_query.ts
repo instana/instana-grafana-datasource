@@ -37,4 +37,6 @@ export interface InstanaQuery extends DataQuery {
   useFreeTextMetrics: boolean;
   showGroupBySecondLevel: boolean;
   applicationCallToEntity: string;
+  applicationBoundaryScope: string;
+  showAdvancedSettings: boolean;
 }

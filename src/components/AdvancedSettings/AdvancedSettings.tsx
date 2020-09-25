@@ -90,7 +90,6 @@ const legendFormatTooltips = [
 ];
 
 interface AdvancedSettingsState {
-  showAdditionalSettings: boolean;
   legendFormatPlaceholder: string;
 }
 
@@ -105,7 +104,6 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
   constructor(props: any) {
     super(props);
     this.state = {
-      showAdditionalSettings: false,
       legendFormatPlaceholder: this.setLegendFormatPlaceholder(),
     };
   }
@@ -149,6 +147,12 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
     return legendFormatTooltips[query.metricCategory.key];
   }
 
+  onShowAdvancedSettingsChange() {
+    const { query, onChange } = this.props;
+    query.showAdvancedSettings = !query.showAdvancedSettings;
+    onChange(query);
+  }
+
   render() {
     const { query, onRunQuery, onChange, loadEntityTypes } = this.props;
 
@@ -158,12 +162,12 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
           <FormSwitch
             label={'Show advanced settings'}
             tooltip={'Show all additional settings'}
-            value={this.state.showAdditionalSettings}
-            onChange={() => this.setState({ showAdditionalSettings: !this.state.showAdditionalSettings })}
+            value={query.showAdvancedSettings}
+            onChange={() => this.onShowAdvancedSettingsChange}
           />
         </div>
 
-        <div hidden={!this.state.showAdditionalSettings}>
+        <div hidden={!query.showAdvancedSettings}>
           <div className={'gf-form'} hidden={query.metricCategory.key === SLO_INFORMATION}>
             <FormInput
               queryKeyword

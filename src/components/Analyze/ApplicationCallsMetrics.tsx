@@ -7,7 +7,7 @@ import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import FormWrapper from '../FormField/FormWrapper';
 import { SelectableValue } from '@grafana/data';
-import Entity from "../Entity/Entity";
+import Entity from '../Entity/Entity';
 import _ from 'lodash';
 import '../plugin.css';
 
@@ -75,7 +75,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
 
         // select a meaningful default group
         if (!query.group || !query.group.key) {
-          query.group = _.find(applicationTags, [ 'key', 'endpoint.name' ]);
+          query.group = _.find(applicationTags, ['key', 'endpoint.name']);
           onChange(query);
         }
       }
@@ -145,7 +145,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your application.'}>
             Application
           </InlineFormLabel>
-          <Entity value={query.applicationCallToEntity} onChange={this.onApplicationCallToEntityChange}/>
+          <Entity value={query.applicationCallToEntity} onChange={this.onApplicationCallToEntityChange} />
           <Select
             menuPlacement={'bottom'}
             width={0}
@@ -160,7 +160,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
           <InlineFormLabel className={'query-keyword'} width={7} tooltip={'Group by tag.'}>
             Group by
           </InlineFormLabel>
-          <Entity value={query.callToEntity} onChange={this.onCallToEntityChange}/>
+          <Entity value={query.callToEntity} onChange={this.onCallToEntityChange} />
           <Select
             menuPlacement={'bottom'}
             width={0}

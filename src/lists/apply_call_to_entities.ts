@@ -1,4 +1,1 @@
-export default [
-  'DESTINATION',
-  'SOURCE'
-];
+export default ['DESTINATION', 'SOURCE'];
