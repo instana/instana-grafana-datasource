@@ -73,8 +73,6 @@ export class Filters extends React.Component<Props, FilterState> {
   }
 
   onCallToEntityChange = (callToEntity: string, index: number) => {
-    console.log(callToEntity);
-    console.log(index);
     const { query } = this.props;
     query.filters[index].entity = callToEntity;
 
