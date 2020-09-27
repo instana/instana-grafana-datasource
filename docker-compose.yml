@@ -6,6 +6,7 @@ services:
       - 3000:3000
     volumes:
       - ./dist:/var/lib/grafana/plugins/instana
+      - ./conf/custom.ini:/etc/grafana/grafana.ini
       - ./provisioning/datasources:/etc/grafana/provisioning/datasources
     environment:
       INSTANA_UI_BACKEND_URL: ${INSTANA_UI_BACKEND_URL}

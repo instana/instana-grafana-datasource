@@ -3,9 +3,11 @@
   "name": "Instana",
   "id": "instana-datasource",
   "metrics": true,
+  "backend": true,
   "annotations": false,
   "alerting": false,
   "logs": false,
+  "executable": "instana-grafana-datasource",
   "info": {
     "description": "Grafana datasource plugin for Instana: Automatic Infrastructure and Application Monitoring",
     "author": {

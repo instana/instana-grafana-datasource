@@ -1,7 +1,5 @@
 import {
   DataQueryRequest,
-  DataQueryResponse,
-  DataSourceApi,
   DataSourceInstanceSettings,
   SelectableValue,
 } from '@grafana/data';
@@ -13,7 +11,6 @@ import MetricCategories from '../lists/metric_categories';
 import TimeFilter from '../types/time_filter';
 import { hoursToMs, readTime } from '../util/time_util';
 import Cache from '../cache';
-import { emptyResultData } from '../util/target_util';
 import _ from 'lodash';
 import { DataSourceInfrastructure } from './Datasource_Infrastructure';
 import {
@@ -24,9 +21,6 @@ import {
 } from '../util/rollup_granularity_util';
 import { appendData, generateStableHash, hasIntersection } from '../util/delta_util';
 import {
-  ANALYZE_APPLICATION_METRICS,
-  ANALYZE_WEBSITE_METRICS,
-  APPLICATION_SERVICE_ENDPOINT_METRICS,
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   SLO_INFORMATION,
@@ -40,8 +34,9 @@ import { DataSourceEndpoint } from './DataSource_Endpoint';
 import { isInvalidQueryInterval } from '../util/queryInterval_check';
 import { readItemMetrics } from '../util/analyze_util';
 import migrate from '../migration';
+import { DataSourceWithBackend } from '@grafana/runtime';
 
-export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
+export class DataSource extends DataSourceWithBackend<InstanaQuery, InstanaOptions> {
   options: InstanaOptions;
   dataSourceInfrastructure: DataSourceInfrastructure;
   dataSourceWebsite: DataSourceWebsite;
@@ -71,80 +66,45 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     this.resultCache = new Cache<any>();
   }
 
-  async query(options: DataQueryRequest<InstanaQuery>): Promise<DataQueryResponse> {
-    const { range } = options;
+  query(request: DataQueryRequest<InstanaQuery>) {
+    const { range } = request;
     this.timeFilter = readTime(range!);
     this.availableRollups = getPossibleRollups(this.timeFilter);
     this.availableGranularities = getPossibleGranularities(this.timeFilter.windowSize);
 
-    return Promise.all(
-      options.targets.map((target) => {
-        let targetTimeFilter = readTime(range!);
+    const targets = request.targets.map((target) => {
+      let targetTimeFilter = readTime(range!);
+      // grafana setting to disable query execution
+      if (target.hide) {
+        return target;
+      }
 
-        // grafana setting to disable query execution
-        if (target.hide) {
-          return { data: [], target: target };
+      migrate(target);
+
+      if (!target.metricCategory) {
+        target.metricCategory = MetricCategories[0];
+      }
+
+      this.setPossibleTimeIntervals(target);
+
+      // target migration for downwards compatibility
+      migrate(target);
+
+      if (target.timeShift) {
+        let millis = this.convertTimeShiftToMillis(target.timeShift);
+        if (millis) {
+          targetTimeFilter = this.applyTimeShiftOnTimeFilter(targetTimeFilter, millis);
         }
+      }
 
-        migrate(target);
-
-        if (!target.metricCategory) {
-          target.metricCategory = MetricCategories[0];
-        }
-
-        this.setPossibleTimeIntervals(target);
-
-        // target migration for downwards compatibility
-        migrate(target);
-
-        if (target.timeShift) {
-          let millis = this.convertTimeShiftToMillis(target.timeShift);
-          if (millis) {
-            targetTimeFilter = this.applyTimeShiftOnTimeFilter(targetTimeFilter, millis);
-          }
-        }
-
-        target.timeFilter = targetTimeFilter;
-        target.stableHash = generateStableHash(target);
-        targetTimeFilter = this.adjustTimeFilterIfCached(targetTimeFilter, target);
-
-        if (target.metricCategory.key === SLO_INFORMATION) {
-          return this.dataSourceSlo.runQuery(target, targetTimeFilter).then((data: any) => {
-            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
-          });
-        } else if (target.metricCategory.key === BUILT_IN_METRICS || target.metricCategory.key === CUSTOM_METRICS) {
-          return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
-            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
-          });
-        } else if (target.metricCategory.key === ANALYZE_WEBSITE_METRICS) {
-          return this.dataSourceWebsite.runQuery(target, targetTimeFilter).then((data: any) => {
-            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
-          });
-        } else if (target.metricCategory.key === ANALYZE_APPLICATION_METRICS) {
-          return this.dataSourceApplication.runQuery(target, targetTimeFilter).then((data: any) => {
-            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
-          });
-        } else if (target.metricCategory.key === APPLICATION_SERVICE_ENDPOINT_METRICS) {
-          return this.getApplicationServiceEndpointMetrics(target, targetTimeFilter).then((data: any) => {
-            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
-          });
-        }
-
-        return Promise.resolve(emptyResultData(target.refId));
-      })
-    ).then((targetData) => {
-      let result: any = [];
-      _.each(targetData, (targetAndData) => {
-        // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-        let resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
-        this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
-        resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
-        this.cacheResultIfNecessary(resultData, targetAndData.target);
-        result.push(resultData);
-      });
-
-      return { data: _.flatten(result) };
+      target.timeFilter = targetTimeFilter;
+      target.stableHash = generateStableHash(target);
+      targetTimeFilter = this.adjustTimeFilterIfCached(targetTimeFilter, target);
+      return target;
     });
+
+    request.targets = targets;
+    return super.query(request)
   }
 
   getApplicationServiceEndpointMetrics(target: InstanaQuery, timeFilter: TimeFilter) {
