@@ -150,9 +150,16 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
   onApplicationChange = (application: SelectableValue) => {
     const { query, onChange, onRunQuery } = this.props;
     query.entity = application;
-    if (query.applicationBoundaryScope !== 'ALL' && query.applicationBoundaryScope !== 'INBOUND') {
-      query.applicationBoundaryScope = 'INBOUND';
+    if (application.boundaryScope !== '') {
+      //set the default boundary scope that is configured for this application
+      query.applicationBoundaryScope = application.boundaryScope;
+    } else {
+      if (query.applicationBoundaryScope !== 'ALL' && query.applicationBoundaryScope !== 'INBOUND') {
+        //if no default is set, set it to INBOUND
+        query.applicationBoundaryScope = 'INBOUND';
+      }
     }
+
     onChange(query);
     this.loadServices();
     this.loadEndpoints();
