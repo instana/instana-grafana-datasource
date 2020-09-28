@@ -4501,31 +4501,6 @@ function (_super) {
     return this.timeFilter;
   };
 
-  DataSource.prototype.testDatasource = function () {
-    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(this.options, '/api/monitoringState').then(function () {
-      return {
-        status: 'success',
-        message: 'Successfully connected to the Instana API.',
-        title: 'Success'
-      };
-    }, function (error) {
-      if (error.status === 401) {
-        return {
-          status: 'error',
-          message: 'Unauthorized. Please verify the API Token.',
-          title: 'Error'
-        };
-      } else {
-        console.log(error);
-        return {
-          status: 'error',
-          message: 'Error (' + error.status + ') connecting to the Instana API: ' + error.statusText,
-          title: 'Error'
-        };
-      }
-    });
-  };
-
   return DataSource;
 }(_grafana_runtime__WEBPACK_IMPORTED_MODULE_20__["DataSourceWithBackend"]);
 

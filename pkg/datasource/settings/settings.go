@@ -30,13 +30,13 @@ type InstanaOptions struct {
 }
 
 // From converts a generic settings struct into InstanaSettings
-func From(settings *backend.DataSourceInstanceSettings) (*InstanaSettings, error) {
+func From(settings *backend.DataSourceInstanceSettings) (InstanaSettings, error) {
 	options := InstanaOptions{}
 	err := json.Unmarshal(settings.JSONData, &options)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to parse Instana settings: %s", err)
+		return InstanaSettings{}, fmt.Errorf("Failed to parse Instana settings: %s", err)
 	}
 
-	instanaSettings := &InstanaSettings{settings, &options, &http.Client{}}
+	instanaSettings := InstanaSettings{settings, &options, http.DefaultClient}
 	return instanaSettings, nil
 }

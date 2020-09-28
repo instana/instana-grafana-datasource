@@ -5,7 +5,7 @@ import {
 } from '@grafana/data';
 import { InstanaQuery } from '../types/instana_query';
 import { InstanaOptions } from '../types/instana_options';
-import { getRequest, instanaUrl } from '../util/request_handler';
+import { instanaUrl } from '../util/request_handler';
 import { DataSourceSlo } from './DataSource_Slo';
 import MetricCategories from '../lists/metric_categories';
 import TimeFilter from '../types/time_filter';
@@ -340,33 +340,5 @@ export class DataSource extends DataSourceWithBackend<InstanaQuery, InstanaOptio
     }
 
     return this.timeFilter;
-  }
-
-  testDatasource(): Promise<any> {
-    return getRequest(this.options, '/api/monitoringState').then(
-      () => {
-        return {
-          status: 'success',
-          message: 'Successfully connected to the Instana API.',
-          title: 'Success',
-        };
-      },
-      (error: any) => {
-        if (error.status === 401) {
-          return {
-            status: 'error',
-            message: 'Unauthorized. Please verify the API Token.',
-            title: 'Error',
-          };
-        } else {
-          console.log(error);
-          return {
-            status: 'error',
-            message: 'Error (' + error.status + ') connecting to the Instana API: ' + error.statusText,
-            title: 'Error',
-          };
-        }
-      }
-    );
   }
 }

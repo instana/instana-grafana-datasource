@@ -23,23 +23,23 @@ func (instana *InstanaDataSource) CheckHealth(ctx context.Context, req *backend.
 	if err != nil {
 		return &backend.CheckHealthResult{
 			Status:  backend.HealthStatusError,
-			Message: fmt.Sprintf("Issue reading Instana Settings: %s", err),
+			Message: fmt.Sprintf("Issue reading Instana Settings: %s.", err),
 		}, nil
 	}
-
 	settings, valid := instance.(settings.InstanaSettings)
 	if !valid {
 		return &backend.CheckHealthResult{
 			Status:  backend.HealthStatusError,
-			Message: fmt.Sprintf("Issue reading Instana Settings"),
+			Message: fmt.Sprintf("Issue reading Instana Settings. Unknown Error."),
 		}, nil
 	}
 
+	log.DefaultLogger.Info("CheckHealth", "url", settings.Options.URL, "hasToken", settings.Options.APIToken != "")
 	res, err := instana.GetRequest(settings, "/api/instana/health")
 	if err != nil {
 		return &backend.CheckHealthResult{
 			Status:  backend.HealthStatusError,
-			Message: fmt.Sprintf("Issue connecting to Instana: %s", err),
+			Message: fmt.Sprintf("Issue connecting to Instana: %s.", err),
 		}, nil
 	}
 
@@ -48,19 +48,19 @@ func (instana *InstanaDataSource) CheckHealth(ctx context.Context, req *backend.
 	if err != nil {
 		return &backend.CheckHealthResult{
 			Status:  backend.HealthStatusError,
-			Message: fmt.Sprintf("Invalid response from Instana: %s", err),
+			Message: fmt.Sprintf("Invalid response from Instana: %s.", err),
 		}, nil
 	}
 
 	if health.health == "RED" {
 		return &backend.CheckHealthResult{
 			Status:  backend.HealthStatusError,
-			Message: fmt.Sprintf("Instana reporting not healthy. Health: %s; Messages: [%s]", health.health, strings.Join(health.messages, ", ")),
+			Message: fmt.Sprintf("Instana reporting not healthy. Health: %s; Messages: [%s].", health.health, strings.Join(health.messages, ", ")),
 		}, nil
 	}
 
 	return &backend.CheckHealthResult{
 		Status:  backend.HealthStatusOk,
-		Message: "Instana OK",
+		Message: "Successfully connected to the Instana API.",
 	}, nil
 }
