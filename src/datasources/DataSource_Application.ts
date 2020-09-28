@@ -78,6 +78,7 @@ export class DataSourceApplication {
             return {
               key: entry.id,
               label: entry.label,
+              boundaryScope: entry.boundaryScope
             };
           }),
           [(application) => application.label.toLowerCase()],
