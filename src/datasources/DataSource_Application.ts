@@ -78,6 +78,7 @@ export class DataSourceApplication {
             return {
               key: entry.id,
               label: entry.label,
+              boundaryScope: entry.boundaryScope
             };
           }),
           [(application) => application.label.toLowerCase()],
@@ -152,10 +153,7 @@ export class DataSourceApplication {
           name: 'application.name',
           operator: 'EQUALS',
           value: target.entity.label!,
-          entity:
-            target.applicationCallToEntity && target.applicationCallToEntity.key
-              ? target.applicationCallToEntity.key
-              : 'DESTINATION',
+          entity: target.applicationCallToEntity ? target.applicationCallToEntity : 'DESTINATION',
         });
       }
 
@@ -185,7 +183,7 @@ export class DataSourceApplication {
       };
       const tag: any = _.find(applicationTags, ['key', target.group.key]);
       if (tag.canApplyToDestination || tag.canApplyToSource) {
-        group['groupbyTagEntity'] = this.getTagEntity(target.group, tag);
+        group['groupbyTagEntity'] = target.callToEntity;
       }
       if (target.group.type === 'KEY_VALUE_PAIR' && target.groupbyTagSecondLevelKey) {
         group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
@@ -208,11 +206,11 @@ export class DataSourceApplication {
     });
   }
 
-  getTagEntity(selectedEntity: any, tag: any): string {
-    if (selectedEntity && selectedEntity.key === 'DESTINATION' && tag.canApplyToDestination) {
+  getTagEntity(selectedEntity: string, tag: any): string {
+    if (selectedEntity === 'DESTINATION' && tag.canApplyToDestination) {
       return 'DESTINATION';
     }
-    if (selectedEntity && selectedEntity.key === 'SOURCE' && tag.canApplyToSource) {
+    if (selectedEntity === 'SOURCE' && tag.canApplyToSource) {
       return 'SOURCE';
     }
     return tag.canApplyToDestination ? 'DESTINATION' : 'SOURCE';
@@ -245,6 +243,7 @@ export class DataSourceApplication {
 
     if (target.entity.key !== null) {
       data['applicationId'] = target.entity.key;
+      data['applicationBoundaryScope'] = target.applicationBoundaryScope;
     }
 
     return postRequest(

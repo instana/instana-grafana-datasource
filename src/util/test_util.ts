@@ -44,10 +44,10 @@ export function generateTestData(amountOfTimeseries: number, numberOfEntries: nu
  */
 export function buildTestTarget(): InstanaQuery {
   return {
-    callToEntity: {},
+    callToEntity: '',
     aggregateGraphs: false,
     aggregation: {},
-    applicationCallToEntity: {},
+    applicationCallToEntity: '',
     canShowAllMetrics: false,
     customFilters: [],
     displayMaxMetricValue: false,
@@ -79,6 +79,8 @@ export function buildTestTarget(): InstanaQuery {
     allMetrics: [],
     aggregationFunction: {},
     refId: 'A',
+    applicationBoundaryScope: '',
+    showAdvancedSettings: false,
   };
 }
 

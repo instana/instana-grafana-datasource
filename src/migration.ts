@@ -75,7 +75,6 @@ export default function (target: any) {
     _.forEach(target.filters, (filter) => {
       filter.tag.label = filter.tag.key;
     });
-    console.log('filters', target.filters);
   }
   if (target.group && target.group.key && !target.group.label) {
     target.group.label = target.group.key;
@@ -85,5 +84,20 @@ export default function (target: any) {
       metric_categories,
       (category) => category.key === parseInt(target.metricCategory, 10)
     );
+  }
+
+  //3.0.1 towards 3.1.0
+  if (target.callToEntity && target.callToEntity.key) {
+    target.callToEntity = target.callToEntity.key;
+  }
+  if (target.applicationCallToEntity && target.applicationCallToEntity.key) {
+    target.applicationCallToEntity = target.applicationCallToEntity.key;
+  }
+  if (target.filters && target.filters.length > 0) {
+    target.filters.forEach((filter: any) => {
+      if (filter.entity && filter.entity.key) {
+        filter.entity = filter.entity.key;
+      }
+    });
   }
 }

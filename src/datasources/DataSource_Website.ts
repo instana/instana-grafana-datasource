@@ -124,18 +124,30 @@ export class DataSourceWebsite {
 
     websiteCatalog = getRequest(this.instanaOptions, '/api/website-monitoring/catalog/metrics').then(
       (catalogResponse: any) =>
-        catalogResponse.data.map((entry: any) => ({
-          key: entry.metricId,
-          label: entry.label,
-          aggregations: entry.aggregations ? this.transformAggregations(entry.aggregations.sort()) : [],
-          beaconTypes: entry.beaconTypes
-            ? entry.beaconTypes
-            : ['pageLoad', 'resourceLoad', 'httpRequest', 'error', 'custom', 'pageChange'],
-        }))
+        catalogResponse.data.map((entry: any) => {
+          return {
+            key: entry.metricId,
+            label: entry.label,
+            aggregations: entry.aggregations ? this.transformAggregations(entry.aggregations.sort()) : [],
+            beaconTypes: entry.beaconTypes
+              ? this.transformBeaconTypes(entry.beaconTypes)
+              : ['pageLoad', 'resourceLoad', 'httpRequest', 'error', 'custom', 'pageChange'],
+          };
+        })
     );
     this.miscCache.put('websiteCatalog', websiteCatalog);
 
     return websiteCatalog;
+  }
+
+  transformBeaconTypes(beaconTypes: string[]) {
+    if (beaconTypes.includes('pageChange')) {
+      let result = _.remove(beaconTypes, (type) => type !== 'pageChange');
+      result.push('page_change');
+      return result;
+    }
+
+    return beaconTypes;
   }
 
   transformAggregations(aggregations: string[]) {

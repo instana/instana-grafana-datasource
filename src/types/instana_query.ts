@@ -17,7 +17,7 @@ export interface InstanaQuery extends DataQuery {
   service: SelectableValue;
   endpoint: SelectableValue;
   aggregation: SelectableValue;
-  callToEntity: SelectableValue;
+  callToEntity: string;
   entityQuery: string;
   entityType: SelectableValue;
   showAllMetrics: boolean;
@@ -36,5 +36,7 @@ export interface InstanaQuery extends DataQuery {
   timeFilter: TimeFilter;
   useFreeTextMetrics: boolean;
   showGroupBySecondLevel: boolean;
-  applicationCallToEntity: SelectableValue;
+  applicationCallToEntity: string;
+  applicationBoundaryScope: string;
+  showAdvancedSettings: boolean;
 }

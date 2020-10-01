@@ -25,7 +25,7 @@ export class DataSourceService {
       applicationId = target.entity.key;
     }
 
-    const key = getTimeKey(timeFilter) + applicationId;
+    const key = getTimeKey(timeFilter) + applicationId + target.applicationBoundaryScope;
     let services = this.servicesCache.get(key);
     if (services) {
       return services;
@@ -40,6 +40,7 @@ export class DataSourceService {
       applicationId,
       windowSize,
       timeFilter.to,
+      target.applicationBoundaryScope,
       page,
       pageSize,
       PAGINATION_LIMIT
@@ -71,6 +72,7 @@ export class DataSourceService {
     applicationId: string,
     windowSize: number,
     to: number,
+    applicationBoundaryScope: string,
     page: number,
     pageSize: number,
     pageLimit: number
@@ -80,6 +82,9 @@ export class DataSourceService {
     }
 
     let queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
+    if (applicationBoundaryScope === 'ALL' || applicationBoundaryScope === 'INBOUND') {
+      queryParameters += '&applicationBoundaryScope=' + applicationBoundaryScope;
+    }
 
     let url =
       '/api/application-monitoring/applications;id=' +
@@ -91,7 +96,7 @@ export class DataSourceService {
       results.push(response.data);
       if (page * pageSize < response.data.totalHits) {
         page++;
-        return this.paginateServices(results, applicationId, windowSize, to, page, pageSize, pageLimit);
+        return this.paginateServices(results, applicationId, windowSize, to, applicationBoundaryScope, page, pageSize, pageLimit);
       } else {
         return results;
       }
@@ -125,8 +130,9 @@ export class DataSourceService {
     };
 
     if (target.entity && target.entity.key) {
-      //see migration.ts why "NO_SERVICE_FILTER"
       data['applicationId'] = target.entity.key;
+      // only set applicationBoundaryScope when an application is selected
+      data['applicationBoundaryScope'] = target.applicationBoundaryScope;
     }
 
     if (target.service && target.service.key) {

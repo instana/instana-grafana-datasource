@@ -75,10 +75,10 @@ describe('Given a delta', () => {
       let result = generateStableHash(target);
       expect(result).toEqual(
         JSON.stringify({
-          callToEntity: {},
+          callToEntity: '',
           aggregateGraphs: false,
           aggregation: {},
-          applicationCallToEntity: {},
+          applicationCallToEntity: '',
           customFilters: [],
           displayMaxMetricValue: false,
           endpoint: {},
@@ -102,6 +102,8 @@ describe('Given a delta', () => {
           showAllMetrics: false,
           allMetrics: [],
           aggregationFunction: {},
+          applicationBoundaryScope: '',
+          showAdvancedSettings: false,
         })
       );
     });

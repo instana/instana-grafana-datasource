@@ -46,6 +46,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     super(props);
     const defaultQuery: Partial<InstanaQuery> = {
       metricCategory: MetricCategories[0],
+      timeShiftIsValid: true,
       customFilters: [],
     };
 
@@ -301,8 +302,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     query.showAllMetrics = false;
     query.canShowAllMetrics = false;
     query.displayMaxMetricValue = false;
-    query.applicationCallToEntity = {};
-    query.callToEntity = {};
+    query.applicationCallToEntity = '';
+    query.callToEntity = '';
     this.resetServices();
     this.resetEndpoints();
     this.resetSLO();

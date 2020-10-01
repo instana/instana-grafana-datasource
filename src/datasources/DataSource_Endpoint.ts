@@ -30,7 +30,7 @@ export class DataSourceEndpoint {
       serviceId = target.service.key;
     }
 
-    const key = getTimeKey(timeFilter) + applicationId + serviceId;
+    const key = getTimeKey(timeFilter) + applicationId + serviceId + target.applicationBoundaryScope;
     let endpoints = this.endpointsCache.get(key);
     if (endpoints) {
       return endpoints;
@@ -45,13 +45,14 @@ export class DataSourceEndpoint {
       applicationId,
       serviceId,
       windowSize,
+      target.applicationBoundaryScope,
       timeFilter.to,
       page,
       pageSize,
       PAGINATION_LIMIT
     ).then((response: any) => {
       let allResults = _.flattenDeep(
-        _.map(response, (pageSet, index) => {
+        _.map(response, (pageSet) => {
           return pageSet.items;
         })
       );
@@ -77,6 +78,7 @@ export class DataSourceEndpoint {
     applicationId: string,
     serviceId: string,
     windowSize: number,
+    applicationBoundaryScope: string,
     to: number,
     page: number,
     pageSize: number,
@@ -86,9 +88,12 @@ export class DataSourceEndpoint {
       return results;
     }
 
-    var queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
+    let queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
+    if (applicationBoundaryScope === 'ALL' || applicationBoundaryScope === 'INBOUND') {
+      queryParameters += '&applicationBoundaryScope=' + applicationBoundaryScope;
+    }
 
-    var url =
+    let url =
       '/api/application-monitoring/applications;id=' +
       (applicationId ? applicationId : '') +
       '/services;id=' +
@@ -100,7 +105,7 @@ export class DataSourceEndpoint {
       results.push(response.data);
       if (page * pageSize < response.data.totalHits) {
         page++;
-        return this.paginateEndpoints(results, applicationId, serviceId, windowSize, to, page, pageSize, pageLimit);
+        return this.paginateEndpoints(results, applicationId, serviceId, windowSize, applicationBoundaryScope, to, page, pageSize, pageLimit);
       } else {
         return results;
       }
@@ -134,8 +139,9 @@ export class DataSourceEndpoint {
     };
 
     if (target.entity && target.entity.key) {
-      //see migration.ts why "ALL_SERVICES"
       data['applicationId'] = target.entity.key;
+      // only set applicationBoundaryScope when an application is selected
+      data['applicationBoundaryScope'] = target.applicationBoundaryScope;
     }
 
     if (target.service && target.service.key) {
