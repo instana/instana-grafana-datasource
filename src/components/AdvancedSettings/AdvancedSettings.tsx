@@ -147,11 +147,13 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
     return legendFormatTooltips[query.metricCategory.key];
   }
 
-  onShowAdvancedSettingsChange() {
-    const { query, onChange } = this.props;
-    query.showAdvancedSettings = !query.showAdvancedSettings;
-    onChange(query);
-  }
+  onShowAdvancedSettingsChange = (event: React.SyntheticEvent<HTMLInputElement> | undefined) => {
+    if (event && event.currentTarget) {
+      const { query, onChange } = this.props;
+      query.showAdvancedSettings = event.currentTarget.checked;
+      onChange(query);
+    }
+  };
 
   render() {
     const { query, onRunQuery, onChange, loadEntityTypes } = this.props;
@@ -163,7 +165,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
             label={'Show advanced settings'}
             tooltip={'Show all additional settings'}
             value={query.showAdvancedSettings}
-            onChange={() => this.onShowAdvancedSettingsChange}
+            onChange={(e) => this.onShowAdvancedSettingsChange(e)}
           />
         </div>
 

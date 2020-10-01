@@ -46,6 +46,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     super(props);
     const defaultQuery: Partial<InstanaQuery> = {
       metricCategory: MetricCategories[0],
+      timeShiftIsValid: true,
       customFilters: [],
     };
 
