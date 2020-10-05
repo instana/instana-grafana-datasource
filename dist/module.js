@@ -1,3 +1,7446 @@
-/*! For license information please see module.js.LICENSE.txt */
-define(["react","lodash","@grafana/ui","@grafana/data","@grafana/runtime"],(function(e,t,n,a,r){return function(e){var t={};function n(a){if(t[a])return t[a].exports;var r=t[a]={i:a,l:!1,exports:{}};return e[a].call(r.exports,r,r.exports,n),r.l=!0,r.exports}return n.m=e,n.c=t,n.d=function(e,t,a){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:a})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var a=Object.create(null);if(n.r(a),Object.defineProperty(a,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var r in e)n.d(a,r,function(t){return e[t]}.bind(null,r));return a},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="/",n(n.s=12)}([function(t,n){t.exports=e},function(e,n){e.exports=t},function(e,t){e.exports=n},function(e,t){e.exports=a},function(e,t,n){"use strict";e.exports=function(e){var t=[];return t.toString=function(){return this.map((function(t){var n=function(e,t){var n=e[1]||"",a=e[3];if(!a)return n;if(t&&"function"==typeof btoa){var r=(o=a,l=btoa(unescape(encodeURIComponent(JSON.stringify(o)))),s="sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(l),"/*# ".concat(s," */")),i=a.sources.map((function(e){return"/*# sourceURL=".concat(a.sourceRoot||"").concat(e," */")}));return[n].concat(i).concat([r]).join("\n")}var o,l,s;return[n].join("\n")}(t,e);return t[2]?"@media ".concat(t[2]," {").concat(n,"}"):n})).join("")},t.i=function(e,n,a){"string"==typeof e&&(e=[[null,e,""]]);var r={};if(a)for(var i=0;i<this.length;i++){var o=this[i][0];null!=o&&(r[o]=!0)}for(var l=0;l<e.length;l++){var s=[].concat(e[l]);a&&r[s[0]]||(n&&(s[2]?s[2]="".concat(n," and ").concat(s[2]):s[2]=n),t.push(s))}},t}},function(e,t,n){var a,r,i={},o=(a=function(){return window&&document&&document.all&&!window.atob},function(){return void 0===r&&(r=a.apply(this,arguments)),r}),l=function(e,t){return t?t.querySelector(e):document.querySelector(e)},s=function(e){var t={};return function(e,n){if("function"==typeof e)return e();if(void 0===t[e]){var a=l.call(this,e,n);if(window.HTMLIFrameElement&&a instanceof window.HTMLIFrameElement)try{a=a.contentDocument.head}catch(e){a=null}t[e]=a}return t[e]}}(),u=null,c=0,p=[],y=n(9);function h(e,t){for(var n=0;n<e.length;n++){var a=e[n],r=i[a.id];if(r){r.refs++;for(var o=0;o<r.parts.length;o++)r.parts[o](a.parts[o]);for(;o<a.parts.length;o++)r.parts.push(b(a.parts[o],t))}else{var l=[];for(o=0;o<a.parts.length;o++)l.push(b(a.parts[o],t));i[a.id]={id:a.id,refs:1,parts:l}}}}function d(e,t){for(var n=[],a={},r=0;r<e.length;r++){var i=e[r],o=t.base?i[0]+t.base:i[0],l={css:i[1],media:i[2],sourceMap:i[3]};a[o]?a[o].parts.push(l):n.push(a[o]={id:o,parts:[l]})}return n}function f(e,t){var n=s(e.insertInto);if(!n)throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");var a=p[p.length-1];if("top"===e.insertAt)a?a.nextSibling?n.insertBefore(t,a.nextSibling):n.appendChild(t):n.insertBefore(t,n.firstChild),p.push(t);else if("bottom"===e.insertAt)n.appendChild(t);else{if("object"!=typeof e.insertAt||!e.insertAt.before)throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");var r=s(e.insertAt.before,n);n.insertBefore(t,r)}}function g(e){if(null===e.parentNode)return!1;e.parentNode.removeChild(e);var t=p.indexOf(e);t>=0&&p.splice(t,1)}function m(e){var t=document.createElement("style");if(void 0===e.attrs.type&&(e.attrs.type="text/css"),void 0===e.attrs.nonce){var a=function(){0;return n.nc}();a&&(e.attrs.nonce=a)}return v(t,e.attrs),f(e,t),t}function v(e,t){Object.keys(t).forEach((function(n){e.setAttribute(n,t[n])}))}function b(e,t){var n,a,r,i;if(t.transform&&e.css){if(!(i="function"==typeof t.transform?t.transform(e.css):t.transform.default(e.css)))return function(){};e.css=i}if(t.singleton){var o=c++;n=u||(u=m(t)),a=E.bind(null,n,o,!1),r=E.bind(null,n,o,!0)}else e.sourceMap&&"function"==typeof URL&&"function"==typeof URL.createObjectURL&&"function"==typeof URL.revokeObjectURL&&"function"==typeof Blob&&"function"==typeof btoa?(n=function(e){var t=document.createElement("link");return void 0===e.attrs.type&&(e.attrs.type="text/css"),e.attrs.rel="stylesheet",v(t,e.attrs),f(e,t),t}(t),a=k.bind(null,n,t),r=function(){g(n),n.href&&URL.revokeObjectURL(n.href)}):(n=m(t),a=T.bind(null,n),r=function(){g(n)});return a(e),function(t){if(t){if(t.css===e.css&&t.media===e.media&&t.sourceMap===e.sourceMap)return;a(e=t)}else r()}}e.exports=function(e,t){if("undefined"!=typeof DEBUG&&DEBUG&&"object"!=typeof document)throw new Error("The style-loader cannot be used in a non-browser environment");(t=t||{}).attrs="object"==typeof t.attrs?t.attrs:{},t.singleton||"boolean"==typeof t.singleton||(t.singleton=o()),t.insertInto||(t.insertInto="head"),t.insertAt||(t.insertAt="bottom");var n=d(e,t);return h(n,t),function(e){for(var a=[],r=0;r<n.length;r++){var o=n[r];(l=i[o.id]).refs--,a.push(l)}e&&h(d(e,t),t);for(r=0;r<a.length;r++){var l;if(0===(l=a[r]).refs){for(var s=0;s<l.parts.length;s++)l.parts[s]();delete i[l.id]}}}};var S,C=(S=[],function(e,t){return S[e]=t,S.filter(Boolean).join("\n")});function E(e,t,n,a){var r=n?"":a.css;if(e.styleSheet)e.styleSheet.cssText=C(t,r);else{var i=document.createTextNode(r),o=e.childNodes;o[t]&&e.removeChild(o[t]),o.length?e.insertBefore(i,o[t]):e.appendChild(i)}}function T(e,t){var n=t.css,a=t.media;if(a&&e.setAttribute("media",a),e.styleSheet)e.styleSheet.cssText=n;else{for(;e.firstChild;)e.removeChild(e.firstChild);e.appendChild(document.createTextNode(n))}}function k(e,t,n){var a=n.css,r=n.sourceMap,i=void 0===t.convertToAbsoluteUrls&&r;(t.convertToAbsoluteUrls||i)&&(a=y(a)),r&&(a+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(r))))+" */");var o=new Blob([a],{type:"text/css"}),l=e.href;e.href=URL.createObjectURL(o),l&&URL.revokeObjectURL(l)}},function(e,t){e.exports=r},function(e,t,n){var a=n(8);"string"==typeof a&&(a=[[e.i,a,""]]);var r={hmr:!0,transform:void 0,insertInto:void 0};n(5)(a,r);a.locals&&(e.exports=a.locals)},function(e,t,n){(t=n(4)(!0)).push([e.i,".entityDropdown {\n  min-width: 80px; }\n","",{version:3,sources:["plugin.css"],names:[],mappings:"AAAA;EACE,eAAe,EAAE",file:"plugin.css",sourcesContent:[".entityDropdown {\n  min-width: 80px; }\n"]}]),e.exports=t},function(e,t){e.exports=function(e){var t="undefined"!=typeof window&&window.location;if(!t)throw new Error("fixUrls requires window.location");if(!e||"string"!=typeof e)return e;var n=t.protocol+"//"+t.host,a=n+t.pathname.replace(/\/[^\/]*$/,"/");return e.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi,(function(e,t){var r,i=t.trim().replace(/^"(.*)"$/,(function(e,t){return t})).replace(/^'(.*)'$/,(function(e,t){return t}));return/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(i)?e:(r=0===i.indexOf("//")?i:0===i.indexOf("/")?n+i:a+i.replace(/^\.\//,""),"url("+JSON.stringify(r)+")")}))}},function(e,t,n){var a=n(11);"string"==typeof a&&(a=[[e.i,a,""]]);var r={hmr:!0,transform:void 0,insertInto:void 0};n(5)(a,r);a.locals&&(e.exports=a.locals)},function(e,t,n){(t=n(4)(!0)).push([e.i,'path[d="M18.71,7.21a1,1,0,0,0-1.42,0L9.84,14.67,6.71,11.53A1,1,0,1,0,5.29,13l3.84,3.84a1,1,0,0,0,1.42,0l8.16-8.16A1,1,0,0,0,18.71,7.21Z"] {\n  display: none; }\n',"",{version:3,sources:["instana-grafana.css"],names:[],mappings:"AAAA;EACE,aAAa,EAAE",file:"instana-grafana.css",sourcesContent:['path[d="M18.71,7.21a1,1,0,0,0-1.42,0L9.84,14.67,6.71,11.53A1,1,0,1,0,5.29,13l3.84,3.84a1,1,0,0,0,1.42,0l8.16-8.16A1,1,0,0,0,18.71,7.21Z"] {\n  display: none; }\n']}]),e.exports=t},function(e,t,n){"use strict";n.r(t);var a=n(3),r=function(e,t){return(r=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n])})(e,t)};function i(e,t){function n(){this.constructor=e}r(e,t),e.prototype=null===t?Object.create(t):(n.prototype=t.prototype,new n)}var o=function(){return(o=Object.assign||function(e){for(var t,n=1,a=arguments.length;n<a;n++)for(var r in t=arguments[n])Object.prototype.hasOwnProperty.call(t,r)&&(e[r]=t[r]);return e}).apply(this,arguments)};function l(e,t){var n={};for(var a in e)Object.prototype.hasOwnProperty.call(e,a)&&t.indexOf(a)<0&&(n[a]=e[a]);if(null!=e&&"function"==typeof Object.getOwnPropertySymbols){var r=0;for(a=Object.getOwnPropertySymbols(e);r<a.length;r++)t.indexOf(a[r])<0&&Object.prototype.propertyIsEnumerable.call(e,a[r])&&(n[a[r]]=e[a[r]])}return n}function s(e,t,n,a){return new(n||(n=Promise))((function(r,i){function o(e){try{s(a.next(e))}catch(e){i(e)}}function l(e){try{s(a.throw(e))}catch(e){i(e)}}function s(e){var t;e.done?r(e.value):(t=e.value,t instanceof n?t:new n((function(e){e(t)}))).then(o,l)}s((a=a.apply(e,t||[])).next())}))}function u(e,t){var n,a,r,i,o={label:0,sent:function(){if(1&r[0])throw r[1];return r[1]},trys:[],ops:[]};return i={next:l(0),throw:l(1),return:l(2)},"function"==typeof Symbol&&(i[Symbol.iterator]=function(){return this}),i;function l(i){return function(l){return function(i){if(n)throw new TypeError("Generator is already executing.");for(;o;)try{if(n=1,a&&(r=2&i[0]?a.return:i[0]?a.throw||((r=a.return)&&r.call(a),0):a.next)&&!(r=r.call(a,i[1])).done)return r;switch(a=0,r&&(i=[2&i[0],r.value]),i[0]){case 0:case 1:r=i;break;case 4:return o.label++,{value:i[1],done:!1};case 5:o.label++,a=i[1],i=[0];continue;case 7:i=o.ops.pop(),o.trys.pop();continue;default:if(!(r=o.trys,(r=r.length>0&&r[r.length-1])||6!==i[0]&&2!==i[0])){o=0;continue}if(3===i[0]&&(!r||i[1]>r[0]&&i[1]<r[3])){o.label=i[1];break}if(6===i[0]&&o.label<r[1]){o.label=r[1],r=i;break}if(r&&o.label<r[2]){o.label=r[2],o.ops.push(i);break}r[2]&&o.ops.pop(),o.trys.pop();continue}i=t.call(e,o)}catch(e){i=[6,e],a=0}finally{n=r=0}if(5&i[0])throw i[1];return{value:i[0]?i[1]:void 0,done:!0}}([i,l])}}}function c(e,t){var n="function"==typeof Symbol&&e[Symbol.iterator];if(!n)return e;var a,r,i=n.call(e),o=[];try{for(;(void 0===t||t-- >0)&&!(a=i.next()).done;)o.push(a.value)}catch(e){r={error:e}}finally{try{a&&!a.done&&(n=i.return)&&n.call(i)}finally{if(r)throw r.error}}return o}var p=n(6);function y(e,t,n,a){return void 0===n&&(n=!1),void 0===a&&(a=1),d(e,{method:"GET",url:e.url+t},n,a)}function h(e,t,n,a,r){return void 0===a&&(a=!1),void 0===r&&(r=0),d(e,{method:"POST",url:e.url+t,data:n},a,r)}function d(e,t,n,a){return e.useProxy||(t.headers={Authorization:"apiToken "+e.apiToken}),Object(p.getBackendSrv)().datasourceRequest(t).catch((function(r){if(429===r.status)throw new Error("API limit is reached.");if(!n||!(r.status>=400||r.status<500)){if(a>0)return d(e,t,n,a-1);throw r}console.log(r)}))}function f(e){return{target:e,datapoints:[]}}function g(e,t,n){return{target:e,refId:t,datapoints:n}}var m="-- No Application Filter --",v="-- No Endpoint Filter --";function b(e){var t=1e3*Math.floor(new Date(e.from.valueOf()).getTime()/1e3),n=1e3*Math.floor(new Date(e.to.valueOf()).getTime()/1e3);return{from:t,to:n,windowSize:n-t}}function S(e){return e.from?e.to-e.from:e.windowSize}function C(e){return E(e.from)+"|"+E(e.to)}function E(e){return Math.floor(e/6e4)}function T(e){return e>0?60*e*60*1e3:0}var k=function(){function e(){this.store={}}return e.prototype.put=function(e,t,n){var a=this;void 0===n&&(n=6e4),void 0!==e&&void 0!==t&&(this.del(e),this.store[e]={value:t,expiry:Date.now()+n,timeout:setTimeout((function(){a.del(e)}),n)})},e.prototype.get=function(e){var t=this.store[e];return!t||t.expiry&&t.expiry>Date.now()||(this.del(e),t=void 0),t&&t.value},e.prototype.del=function(e){this.store.hasOwnProperty(e)&&(clearTimeout(this.store[e].timeout),delete this.store[e])},e}(),w=n(1),A=n.n(w),I=function(){function e(e){this.instanaOptions=e,this.sliReportsCache=new k}return e.prototype.getConfiguredSLIs=function(){var e=this.sliReportsCache.get("sliReports");return e||(e=y(this.instanaOptions,"/api/settings/sli").then((function(e){return A.a.map(e.data,(function(e){return{key:e.id,label:e.sliName}}))})),this.sliReportsCache.put("sliReports",e),e)},e.prototype.runQuery=function(e,t){var n=this;if(!(e&&e.sloReport&&e.sloReport.key&&e.sloSpecific&&e.sloSpecific.key&&e.sloValue))return Promise.resolve(f(e.refId));var a="/api/sli/report/"+e.sloReport.key+"?from="+t.from+"&to="+t.to+"&slo="+e.sloValue;return y(this.instanaOptions,a).then((function(a){return n.extractSpecificValueFromSLI(e,a.data,t)}))},e.prototype.extractSpecificValueFromSLI=function(e,t,n){return"SLI"===e.sloSpecific.key?[g(e.sloSpecific.label,e.refId,this.buildResultArray(t.sli,n.to))]:"Remaining Error Budget"===e.sloSpecific.key?[g(e.sloSpecific.label,e.refId,this.buildResultArray(t.errorBudgetRemaining,n.to))]:"Timeseries"===e.sloSpecific.key?this.buildViolationDistributionTimeSeries(e,t.violationDistribution,n):[f(e.refId)]},e.prototype.buildResultArray=function(e,t){return[[e,t]]},e.prototype.buildViolationDistributionTimeSeries=function(e,t,n){var a=[],r=[],i=[],o=S(n)/Object.keys(t).length;A.a.forEach(t,(function(e,t){1===e?a.push([1,n.from+t*o]):0===e?i.push([1,n.from+t*o]):-1===e&&r.push([1,n.from+t*o])}));var l=[];return l.push(g("No violation",e.refId,a)),l.push(g("Violation",e.refId,r)),l.push(g("No data",e.refId,i)),l},e}(),M=[{label:"Infrastructure built-in metrics",key:0},{label:"Infrastructure custom metrics",key:1},{label:"Application/service/endpoint metrics",key:4},{label:"Analyze application calls",key:2},{label:"Analyze website",key:3},{label:"SLO information",key:7}];function R(e,t){return!!t&&(t>0&&1e3*Math.floor(e/1e3)>t)}var q=[{value:1,label:"1s"},{value:5,label:"5s"},{value:10,label:"10s"},{value:60,label:"1min"},{value:300,label:"5min"},{value:600,label:"10min"},{value:3600,label:"1h"},{value:18e3,label:"5h"},{value:36e3,label:"10h"},{value:86400,label:"1d"},{value:432e3,label:"5d"},{value:864e3,label:"10d"}],L=[{availableFor:864e5,rollup:1e3,label:"1s"},{availableFor:864e5,rollup:5e3,label:"5s"},{availableFor:26784e5,rollup:6e4,label:"1min"},{availableFor:80352e5,rollup:3e5,label:"5min"},{availableFor:321408e5,rollup:36e5,label:"1h"}];function O(e){return F(e,80)[0]}function F(e,t){void 0===t&&(t=600);var n=q.filter((function(n){return e/1e3/n.value<=t&&1e3*n.value<=e}));return e>48000001&&(n=n.filter((function(e){return e.value>=3600}))),e>=18e5&&(n=n.filter((function(e){return e.value>=60}))),n.length>0?n.map((function(e){return{key:e.value.toString(),label:e.label}})):[{key:q[q.length-1].value.toString(),label:q[q.length-1].label}]}function x(e){return N(e)[0]}function N(e){var t=Date.now(),n=function(e){return e.from?e.to-e.from:e.windowSize}(e),a=L.filter((function(n){return e.from>=t-n.availableFor})).filter((function(e){return n>=e.rollup&&n/e.rollup<=800}));return a.length>0?a.map((function(e){return{key:e.rollup.toString(),label:e.label}})):[{key:L[L.length-1].rollup.toString(),label:L[L.length-1].label}]}var P=[{key:"cpu.used",value:"cpu.count",label:"cpu.max"},{key:"memory.used",value:"memory.total",label:"memory.max"},{key:"openFiles.used",value:"openFiles.max",label:"openFiles.max"}],Q=function(){function e(e){this.timeToLiveSnapshotInfoCache=36e5,this.instanaOptions=e,this.snapshotCache=new k,this.snapshotInfoCache=new k,this.catalogCache=new k,this.typeCache=new k}return e.prototype.runQuery=function(e,t){var n=this;if(R(t.windowSize,T(this.instanaOptions.queryinterval_limit_infra)))throw new Error("Limit for maximum selectable windowsize exceeded, max is: "+this.instanaOptions.queryinterval_limit_infra+" hours");return e.metric&&e.metric.key||e.showAllMetrics||e.freeTextMetrics?this.fetchSnapshotsForTarget(e,t).then((function(a){if(e.showAllMetrics)return n.fetchMultipleMetricsForSnapshots(e,a,t,e.allMetrics);if(e.freeTextMetrics){var r=n.extractMetricsFromText(e.freeTextMetrics);return n.fetchMultipleMetricsForSnapshots(e,a,t,r)}return n.fetchMetricsForSnapshots(e,a,t,e.metric)})):Promise.resolve(f(e.refId))},e.prototype.extractMetricsFromText=function(e){var t=e.replace(/\s/g,"").split(","),n=[];return A.a.each(t,(function(e){return n.push(JSON.parse('{ "key": "'+e+'"}'))})),n.length>4&&(n=n.slice(0,4)),n},e.prototype.fetchMultipleMetricsForSnapshots=function(e,t,n,a){var r=this,i=[];return A.a.forEach(a,(function(a){i.push(r.fetchMetricsForSnapshots(e,t,n,a))})),Promise.all(i).then((function(e){var t=[];return e.forEach((function(e){return e.forEach((function(e){return t.push(e)}))})),t}))},e.prototype.fetchMetricsForSnapshots=function(e,t,n,a){var r=this,i=[],o=A.a.map(t,(function(t,o){return r.fetchMetricsForSnapshot(t.snapshotId,n,e.timeInterval.key,a).then((function(l){var s=r.readTimeSeries(l.data.values,e.aggregation,n),u={target:r.buildLabel(t.response,t.host,e,o,a),datapoints:A.a.map(s,(function(e){return[e.value,e.timestamp]})),refId:e.refId,key:e.stableHash};if(e.displayMaxMetricValue){var c=r.getMaxMetricValue(e.metric,t);i.push(r.buildMaxMetricTarget(e,s,c,u.target)),u.datapoints=r.convertRelativeToAbsolute(u.datapoints,c)}return u}))}));return Promise.all(o).then((function(t){return e.displayMaxMetricValue&&(t=A.a.concat(o,i)),Promise.all(t)}))},e.prototype.getMaxMetricValue=function(e,t){var n=P;return t.response.data.data[A.a.find(n,(function(t){return t.key===e.key})).value]},e.prototype.buildMaxMetricTarget=function(e,t,n,a){var r=A.a.map(t,(function(e){return[n,e.timestamp]})),i=this.convertMetricNameToMaxLabel(e.metric);return{target:a+" "+i,datapoints:r,refId:e.refId,key:e.stableHash+i}},e.prototype.convertMetricNameToMaxLabel=function(e){var t=P;return A.a.find(t,(function(t){return t.key===e.key})).label},e.prototype.convertRelativeToAbsolute=function(e,t){return A.a.map(e,(function(e){return e[0]?[e[0]*t,e[1]]:[null,e[1]]}))},e.prototype.getEntityTypes=function(){var e=this.typeCache.get("entityTypes");return e||(e=y(this.instanaOptions,"/api/infrastructure-monitoring/catalog/plugins").then((function(e){var t=e.data.map((function(e){return{key:e.plugin,label:e.label}}));return t.push({key:"regionEntity",label:"Region"}),A.a.sortBy(t,"label")})),this.typeCache.put("entityTypes",e),e)},e.prototype.fetchTypesForTarget=function(e,t){var n="/api/snapshots/types?q="+encodeURIComponent(e.entityQuery)+"&from="+t.from+"&to="+t.to+(this.instanaOptions.showOffline?"":"&time="+t.to);return y(this.instanaOptions,n)},e.prototype.getMetricsCatalog=function(e,t){var n=e.key+"|"+t,a=this.catalogCache.get(n);if(a)return a;var r=1===t?"custom":"builtin";return a=y(this.instanaOptions,"/api/infrastructure-monitoring/catalog/metrics/"+e.key+"?filter="+r).then((function(e){return e.data.map((function(e){return{key:e.metricId,label:e.label,description:e.metricId,aggregations:[{key:"MEAN",label:"MEAN"},{key:"SUM",label:"SUM"}],entityType:e.pluginId}}))})),this.catalogCache.put(n,a),a},e.prototype.fetchSnapshotsForTarget=function(e,t){var n=this,a=this.buildQuery(e),r=this.buildSnapshotCacheKey(a,t),i=this.snapshotCache.get(r);if(i)return i;var o="/api/snapshots/context?q="+a+"&from="+t.from+"&to="+t.to+(this.instanaOptions.showOffline?"":"&time="+t.to+"&size=100");return i=y(this.instanaOptions,o).then((function(e){return Promise.all(e.data.map((function(e){var a=e.snapshotId,r=e.host,i=n.snapshotInfoCache.get(a);if(i)return i;var o="/api/snapshots/"+a+(n.instanaOptions.showOffline?"?from="+t.from+"&to="+t.to:"?time="+t.to);return i=y(n.instanaOptions,o,!0).then((function(e){return void 0!==e?{snapshotId:a,host:r,response:n.reduceSnapshot(e)}:null})),n.snapshotInfoCache.put(a,i,n.timeToLiveSnapshotInfoCache),i})))})).then((function(e){return A.a.compact(e)})),this.snapshotCache.put(r,i),i},e.prototype.buildQuery=function(e){return(""+e.entityQuery).includes("entity.pluginId:")||(""+e.entityQuery).includes("entity.selfType:")?encodeURIComponent(""+e.entityQuery):encodeURIComponent(e.entityQuery+" AND entity.pluginId:"+e.entityType.key)},e.prototype.buildSnapshotCacheKey=function(e,t){return e+"|"+C(t)},e.prototype.reduceSnapshot=function(e){return e.data=A.a.pick(e.data,["id","label","plugin","data"]),e},e.prototype.readTimeSeries=function(e,t,n){return t&&"SUM"===t.key?this.correctMeanToSum(e,n):e},e.prototype.correctMeanToSum=function(e,t){var n=parseInt(x(t).key,10)/1e3;return A.a.map(e,(function(e){return{value:e.value?e.value*n:null,timestamp:e.timestamp}}))},e.prototype.fetchMetricsForSnapshot=function(e,t,n,a){var r="/api/metrics?metric="+a.key+"&from="+t.from+"&to="+t.to+"&rollup="+n+"&fillTimeSeries=true&snapshotId="+e;return y(this.instanaOptions,r)},e.prototype.getHostSuffix=function(e){return e?' (on host "'+e+'")':""},e.prototype.buildLabel=function(e,t,n,a,r){if(n.labelFormat){var i=n.labelFormat;return i=A.a.replace(i,"$label",e.data.label),i=A.a.replace(i,"$plugin",e.data.plugin),i=A.a.replace(i,"$snapshot",e.data.id),i=A.a.replace(i,"$host",t||"unknown"),i=A.a.replace(i,"$pid",A.a.get(e.data,["data","pid"],"")),i=A.a.replace(i,"$type",A.a.get(e.data,["data","type"],"")),i=A.a.replace(i,"$name",A.a.get(e.data,["data","name"],"")),i=A.a.replace(i,"$service",A.a.get(e.data,["data","service_name"],"")),i=n.freeTextMetrics?A.a.replace(i,"$metric",r.key):A.a.replace(i,"$metric",A.a.get(n,["metric","key"],"n/a")),i=A.a.replace(i,"$index",a+1),i=A.a.replace(i,"$timeShift",n.timeShift)}return n.timeShift&&n.timeShiftIsValid?e.data.label+this.getHostSuffix(t)+" - "+n.timeShift:e.data.label+this.getHostSuffix(t)},e}();function _(e){return(_="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}var $=["refId","pluginId","showWarningCantShowAllResults","timeShiftIsValid","useFreeTextMetrics","showGroupBySecondLevel","canShowAllMetrics","timeFilter","stableHash"];var U=new k;function B(e){var t=U.get("version");return t?Promise.resolve(t):y(e,"/api/instana/version").then((function(t){if(t.data&&t.data.imageTag){var n=parseInt(t.data.imageTag.split(".",2)[1],10)||null;return n&&U.put(e.url,n,6e5),n}return null}),(function(e){return null}))}function D(e,t){var n=function(e){if(e.showAllMetrics){if(e.allMetrics.length>1){if(e.customFilters&&e.customFilters.length>0){var t="";return A.a.each(e.customFilters,(function(n,a){t+=n,a!==e.customFilters.length-1&&(t+=".")})),t=t+" ("+e.aggregationFunction.label+")"}return e.aggregationFunction.label}return e.allMetrics[0].key+" ("+e.aggregationFunction.label+")"}return e.metric.key+" ("+e.aggregationFunction.label+")"}(t),a=function(e){var t=[];return A.a.each(e,(function(e){t=A.a.concat(t,e.datapoints)})),t}(e=A.a.filter(e,(function(e){return e.target!==n}))),r=function(e,t){var n=[];return A.a.each(e,(function(e,a){var r,i,o=A.a.map(e,(function(e){return e[0]})),l=(i=o,"sum"===(r=t).toLowerCase()?A.a.sum(i):"mean"===r.toLowerCase()?A.a.mean(i):"min"===r.toLowerCase()?A.a.min(i):"max"===r.toLowerCase()?A.a.max(i):i);n.push([l,parseInt(a,10)])})),n}(A.a.groupBy(a,(function(e){return e[1]})),t.aggregationFunction.label);return function(e,t,n){return{datapoints:e,refId:t,target:n}}(r=A.a.sortBy(r,[function(e){return e[1]}]),t.refId,n)}function V(e){var t={name:e.tag.key,operator:e.operator.key,value:e.stringValue};return"NUMBER"===e.tag.type?null!==e.numberValue&&(t.value=e.numberValue.toString()):"BOOLEAN"===e.tag.type&&(t.value=e.booleanValue.toString()),t}function W(e,t,n){return t.data?A.a.flatten(t.data.items.map((function(t,a){return A.a.map(t.metrics,(function(r,i){return{target:n(e,t,i,a),datapoints:A.a.map(r,(function(e){return[e[1],e[0]]})),refId:e.refId,key:e.stableHash}}))}))):t}var G=function(){function e(e){this.instanaOptions=e,this.websitesCache=new k,this.miscCache=new k}return e.prototype.runQuery=function(e,t){var n=this;if(R(t.windowSize,T(this.instanaOptions.queryinterval_limit_website_metrics)))throw new Error("Limit for maximum selectable windowsize exceeded, max is: "+this.instanaOptions.queryinterval_limit_website_metrics+" hours");return e&&e.metric&&e.metric.key&&e.group&&e.group.key&&e.entity&&e.entity.key?this.fetchAnalyzeMetricsForWebsite(e,t).then((function(t){return W(e,t,n.buildAnalyzeWebsiteLabel)})):Promise.resolve(f(e.refId))},e.prototype.getWebsites=function(e){var t=C(e),n=this.websitesCache.get(t);if(n)return n;var a=S(e),r={group:{groupbyTag:"beacon.website.name"},timeFrame:{to:e.to,windowSize:a},type:"PAGELOAD",metrics:[{metric:"pageLoads",aggregation:"SUM"}],order:{by:"pageLoads",direction:"desc"},pagination:{ingestionTime:0,offset:0,retrievalSize:200}};return n=h(this.instanaOptions,"/api/website-monitoring/analyze/beacon-groups",r).then((function(e){return e.data.items.map((function(e){return{key:e.name,label:e.name}}))})),this.websitesCache.put(t,n),n},e.prototype.getWebsiteTags=function(){var e=this.miscCache.get("websiteTags");return e||(e=y(this.instanaOptions,"/api/website-monitoring/catalog/tags").then((function(e){return e.data.map((function(e){return{key:e.name,label:e.name,type:e.type}}))})),this.miscCache.put("websiteTags",e),e)},e.prototype.getWebsiteMetricsCatalog=function(){var e=this,t=this.miscCache.get("websiteCatalog");return t||(t=y(this.instanaOptions,"/api/website-monitoring/catalog/metrics").then((function(t){return t.data.map((function(t){return{key:t.metricId,label:t.label,aggregations:t.aggregations?e.transformAggregations(t.aggregations.sort()):[],beaconTypes:t.beaconTypes?e.transformBeaconTypes(t.beaconTypes):["pageLoad","resourceLoad","httpRequest","error","custom","pageChange"]}}))})),this.miscCache.put("websiteCatalog",t),t)},e.prototype.transformBeaconTypes=function(e){if(e.includes("pageChange")){var t=A.a.remove(e,(function(e){return"pageChange"!==e}));return t.push("page_change"),t}return e},e.prototype.transformAggregations=function(e){return A.a.map(e,(function(e){return{key:e,label:e}}))},e.prototype.fetchAnalyzeMetricsForWebsite=function(e,t){var n=S(t),a=[{name:"beacon.website.name",operator:"EQUALS",value:e.entity.key}];A.a.forEach(e.filters,(function(e){e.isValid&&a.push(V(e))}));var r={metric:e.metric.key,aggregation:e.aggregation.key?e.aggregation.key:"SUM"};e.timeInterval||(e.timeInterval=O(n)),r.granularity=e.timeInterval.key;var i={groupbyTag:e.group.key};"KEY_VALUE_PAIR"===e.group.type&&e.groupbyTagSecondLevelKey&&(i.groupbyTagSecondLevelKey=e.groupbyTagSecondLevelKey);var o={group:i,timeFrame:{to:t.to,windowSize:n},tagFilters:a,type:e.entityType.key,metrics:[r]};return h(this.instanaOptions,"/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true",o)},e.prototype.buildAnalyzeWebsiteLabel=function(e,t,n,a){if(e.labelFormat){var r=e.labelFormat;return r=A.a.replace(r,"$label",t.name),r=A.a.replace(r,"$website",e.entity.label),r=A.a.replace(r,"$type",e.entityType.label),r=A.a.replace(r,"$metric",e.metric.label),r=A.a.replace(r,"$key",n),r=A.a.replace(r,"$index",""+a+1),r=A.a.replace(r,"$timeShift",e.timeShift)}return e.timeShift&&e.timeShiftIsValid?t.name+" ("+e.entity.label+") - "+n+" - "+e.timeShift:t.name+" ("+e.entity.label+") - "+n},e}(),z=[{key:"calls",label:"Call count",description:"calls",aggregations:[{key:"SUM",label:"SUM"}]},{key:"latency",label:"Call latency",description:"latency",aggregations:[{key:"MAX",label:"MAX"},{key:"MEAN",label:"MEAN"},{key:"MIN",label:"MIN"},{key:"P25",label:"P25"},{key:"P50",label:"P50"},{key:"P75",label:"P75"},{key:"P90",label:"P90"},{key:"P95",label:"P95"},{key:"P98",label:"P98"},{key:"P99",label:"P99"}]},{key:"errors",label:"Error rate",description:"errors",aggregations:[{key:"MEAN",label:"MEAN"}]},{key:"services",label:"Service Count",description:"services",aggregations:[{key:"DISTINCT_COUNT",label:"DISTINCT_COUNT"}]}],K=function(){function e(e){this.instanaOptions=e,this.applicationsCache=new k,this.miscCache=new k}return e.prototype.runQuery=function(e,t){var n=this;if(R(t.windowSize,T(this.instanaOptions.queryinterval_limit_app_calls)))throw new Error("Limit for maximum selectable windowsize exceeded, max is: "+this.instanaOptions.queryinterval_limit_app_calls+" hours");return e&&e.metric&&e.metric.key&&e.group&&e.group.key&&e.entity&&(e.entity.key||e.entity.label)?this.fetchAnalyzeMetricsForApplication(e,t).then((function(t){return e.showWarningCantShowAllResults=t.data.canLoadMore,W(e,t,n.buildAnalyzeApplicationLabel)})):Promise.resolve(f(e.refId))},e.prototype.getApplications=function(e){var t=C(e),n=this.applicationsCache.get(t);if(n)return n;var a=S(e);return n=this.paginateApplications([],a,e.to,1,200,15).then((function(e){var t=A.a.flattenDeep(A.a.map(e,(function(e){return e.items})));return A.a.orderBy(A.a.compact(t).map((function(e){return{key:e.id,label:e.label,boundaryScope:e.boundaryScope}})),[function(e){return e.label.toLowerCase()}],["asc"])})),this.applicationsCache.put(t,n,6e5),n},e.prototype.paginateApplications=function(e,t,n,a,r,i){var o=this;if(a>i)return e;var l="windowSize="+t+"&to="+n+"&page="+a+"&pageSize="+r;return y(this.instanaOptions,"/api/application-monitoring/applications?"+l).then((function(l){return e.push(l.data),a*r<l.data.totalHits?(a++,o.paginateApplications(e,t,n,a,r,i)):e}))},e.prototype.getApplicationTags=function(){var e=this.miscCache.get("applicationTags");return e||(e=y(this.instanaOptions,"/api/application-monitoring/catalog/tags").then((function(e){return e.data.map((function(e){return{key:e.name,label:e.name,type:e.type,canApplyToSource:e.canApplyToSource,canApplyToDestination:e.canApplyToDestination}}))})),this.miscCache.put("applicationTags",e),e)},e.prototype.getApplicationMetricsCatalog=function(){return z},e.prototype.fetchAnalyzeMetricsForApplication=function(e,t){var n=this,a=S(t),r=[];return Promise.resolve(this.getApplicationTags()).then((function(i){e.entity.key&&r.push({name:"application.name",operator:"EQUALS",value:e.entity.label,entity:e.applicationCallToEntity?e.applicationCallToEntity:"DESTINATION"}),A.a.forEach(e.filters,(function(e){if(e.isValid){var t=V(e),a=A.a.find(i,["key",e.tag.key]);(a.canApplyToDestination||a.canApplyToSource)&&(t.entity=n.getTagEntity(e.entity,a)),r.push(t)}}));var o={metric:e.metric.key,aggregation:e.aggregation&&e.aggregation.key?e.aggregation.key:"SUM"};e.timeInterval||(e.timeInterval=O(a)),o.granularity=e.timeInterval.key;var l={groupbyTag:e.group.key},s=A.a.find(i,["key",e.group.key]);(s.canApplyToDestination||s.canApplyToSource)&&(l.groupbyTagEntity=e.callToEntity),"KEY_VALUE_PAIR"===e.group.type&&e.groupbyTagSecondLevelKey&&(l.groupbyTagSecondLevelKey=e.groupbyTagSecondLevelKey);var u={group:l,timeFrame:{to:t.to,windowSize:a},tagFilters:r,metrics:[o]};return h(n.instanaOptions,"/api/application-monitoring/analyze/call-groups?fillTimeSeries=true",u)}))},e.prototype.getTagEntity=function(e,t){return"DESTINATION"===e&&t.canApplyToDestination?"DESTINATION":"SOURCE"===e&&t.canApplyToSource?"SOURCE":t.canApplyToDestination?"DESTINATION":"SOURCE"},e.prototype.fetchApplicationMetrics=function(e,t){if(!e||!e.metric||!e.metric.key)return Promise.resolve(f(e.refId));var n=S(t),a={metric:e.metric.key,aggregation:e.aggregation&&e.aggregation.key?e.aggregation.key:"SUM"};e.timeInterval||(e.timeInterval=O(n)),a.granularity=e.timeInterval.key;var r={timeFrame:{to:t.to,windowSize:n},metrics:[a]};return null!==e.entity.key&&(r.applicationId=e.entity.key,r.applicationBoundaryScope=e.applicationBoundaryScope),h(this.instanaOptions,"/api/application-monitoring/metrics/applications?fillTimeSeries=true",r)},e.prototype.buildAnalyzeApplicationLabel=function(e,t,n,a){if(e.labelFormat){var r=e.labelFormat;return r=A.a.replace(r,"$label",t.name),r=A.a.replace(r,"$application",e.entity.label),r=A.a.replace(r,"$metric",e.metric.label),r=A.a.replace(r,"$key",n),r=A.a.replace(r,"$index",""+a+1),r=A.a.replace(r,"$timeShift",e.timeShift)}return e.entity.label===m?e.timeShift?t.name+" - "+n+" - "+e.timeShift:t.name+" - "+n:e.timeShift&&e.timeShiftIsValid?t.name+" ("+e.entity.label+") - "+n+" - "+e.timeShift:t.name+" ("+e.entity.label+") - "+n},e.prototype.buildApplicationMetricLabel=function(e,t,n,a){if(e.labelFormat){var r=e.labelFormat;return r=A.a.replace(r,"$label",t.application.label),r=A.a.replace(r,"$application",e.entity.label),r=A.a.replace(r,"$metric",e.metric.label),r=A.a.replace(r,"$key",n),r=A.a.replace(r,"$index",""+a+1),r=A.a.replace(r,"$timeShift",e.timeShift)}return e.entity.label===m?e.timeShift?t.application.label+" - "+n+" - "+e.timeShift:t.application.label+" - "+n:e.timeShift&&e.timeShiftIsValid?t.application.label+" ("+e.entity.label+") - "+n+" - "+e.timeShift:t.application.label+" ("+e.entity.label+") - "+n},e}(),j=function(){function e(e){this.instanaOptions=e,this.servicesCache=new k}return e.prototype.getServicesOfApplication=function(e,t){var n="";e.entity&&e.entity.key&&(n=e.entity.key);var a=C(t)+n+e.applicationBoundaryScope,r=this.servicesCache.get(a);if(r)return r;var i=S(t);return r=this.paginateServices([],n,i,t.to,e.applicationBoundaryScope,1,200,15).then((function(e){var t=A.a.flattenDeep(A.a.map(e,(function(e){return e.items})));return A.a.orderBy(A.a.compact(t).map((function(e){return{key:e.id,label:e.label}})),[function(e){return e.label.toLowerCase()}],["asc"])})),this.servicesCache.put(a,r,6e5),r},e.prototype.paginateServices=function(e,t,n,a,r,i,o,l){var s=this;if(i>l)return e;var u="windowSize="+n+"&to="+a+"&page="+i+"&pageSize="+o;"ALL"!==r&&"INBOUND"!==r||(u+="&applicationBoundaryScope="+r);var c="/api/application-monitoring/applications;id="+(t||"")+"/services?"+u;return y(this.instanaOptions,c).then((function(u){return e.push(u.data),i*o<u.data.totalHits?(i++,s.paginateServices(e,t,n,a,r,i,o,l)):e}))},e.prototype.fetchServiceMetrics=function(e,t){if(!e||!e.metric||!e.metric.key)return Promise.resolve(f(e.refId));var n=S(t);e.timeInterval||(e.timeInterval=O(n));var a={metric:e.metric.key,aggregation:e.aggregation&&e.aggregation.key?e.aggregation.key:"SUM",granularity:e.timeInterval.key},r={timeFrame:{to:t.to,windowSize:n},metrics:[a]};return e.entity&&e.entity.key&&(r.applicationId=e.entity.key,r.applicationBoundaryScope=e.applicationBoundaryScope),e.service&&e.service.key&&(r.serviceId=e.service.key),h(this.instanaOptions,"/api/application-monitoring/metrics/services?fillTimeSeries=true",r)},e.prototype.buildServiceMetricLabel=function(e,t,n,a){if(e.labelFormat){var r=e.labelFormat;return r=A.a.replace(r,"$label",t.service.label),r=A.a.replace(r,"$service",e.service.label),r=A.a.replace(r,"$application",e.entity.label),r=A.a.replace(r,"$metric",e.metric.label),r=A.a.replace(r,"$key",n),r=A.a.replace(r,"$index",a+1+""),r=A.a.replace(r,"$timeShift",e.timeShift)}return null===e.service.key?e.timeShift?t.service.label+" - "+n+" - "+e.timeShift:t.service.label+" - "+n:e.timeShift&&e.timeShiftIsValid?t.service.label+" ("+e.service.label+") - "+n+" - "+e.timeShift:t.service.label+" ("+e.service.label+") - "+n},e}(),H=function(){function e(e){this.instanaOptions=e,this.endpointsCache=new k}return e.prototype.getEndpointsOfService=function(e,t){var n="";e.entity&&e.entity.key&&(n=e.entity.key);var a="";e.service&&(a=e.service.key);var r=C(t)+n+a+e.applicationBoundaryScope,i=this.endpointsCache.get(r);if(i)return i;var o=S(t);return i=this.paginateEndpoints([],n,a,o,e.applicationBoundaryScope,t.to,1,200,15).then((function(e){var t=A.a.flattenDeep(A.a.map(e,(function(e){return e.items})));return A.a.orderBy(A.a.compact(t).map((function(e){return{key:e.id,label:e.label}})),[function(e){return e.label.toLowerCase()}],["asc"])})),this.endpointsCache.put(r,i,6e5),i},e.prototype.paginateEndpoints=function(e,t,n,a,r,i,o,l,s){var u=this;if(o>s)return e;var c="windowSize="+a+"&to="+i+"&page="+o+"&pageSize="+l;"ALL"!==r&&"INBOUND"!==r||(c+="&applicationBoundaryScope="+r);var p="/api/application-monitoring/applications;id="+(t||"")+"/services;id="+(n||"")+"/endpoints?"+c;return y(this.instanaOptions,p).then((function(c){return e.push(c.data),o*l<c.data.totalHits?(o++,u.paginateEndpoints(e,t,n,a,r,i,o,l,s)):e}))},e.prototype.fetchEndpointMetrics=function(e,t){if(!e||!e.metric||!e.metric.key)return Promise.resolve(f(e.refId));var n=S(t),a={metric:e.metric.key,aggregation:e.aggregation&&e.aggregation.key?e.aggregation.key:"SUM"};e.timeInterval||(e.timeInterval=O(n)),a.granularity=e.timeInterval.key;var r={endpointId:e.endpoint.key,timeFrame:{to:t.to,windowSize:n},metrics:[a]};return e.entity&&e.entity.key&&(r.applicationId=e.entity.key,r.applicationBoundaryScope=e.applicationBoundaryScope),e.service&&e.service.key&&(r.serviceId=e.service.key),h(this.instanaOptions,"/api/application-monitoring/metrics/endpoints?fillTimeSeries=true",r)},e.prototype.buildEndpointMetricLabel=function(e,t,n,a){if(e.labelFormat){var r=e.labelFormat;return r=A.a.replace(r,"$label",t.endpoint.label),r=A.a.replace(r,"$endpoint",e.endpoint.label),r=A.a.replace(r,"$service",e.service.label),r=A.a.replace(r,"$application",e.entity.label),r=A.a.replace(r,"$metric",e.metric.label),r=A.a.replace(r,"$key",n),r=A.a.replace(r,"$index",""+a+1),r=A.a.replace(r,"$timeShift",e.timeShift)}return e.endpoint.label===v?e.timeShift?t.endpoint.label+" - "+n+" - "+e.timeShift:t.endpoint.label+" - "+n:e.timeShift&&e.timeShiftIsValid?t.endpoint.label+" ("+e.endpoint.label+") - "+n+" - "+e.timeShift:t.endpoint.label+" ("+e.endpoint.label+") - "+n},e}(),Y=function(e){e.entityType&&"string"==typeof e.entityType&&(e.entityType={key:e.entityType,label:e.entityType}),e.filter&&""!==e.filter&&(e.customFilters||(e.customFilters=[],e.customFilters.push({value:e.filter}))),e.timeInterval&&(e.timeInterval.value?e.timeInterval={key:e.timeInterval.value,label:e.timeInterval.label}:e.timeInterval.rollup&&(e.timeInterval={key:e.timeInterval.rollup,label:e.timeInterval.label})),"5"===e.metricCategory&&(e.metricCategory="4",e.service={},e.service.key=e.entity.key,e.service.label=e.entity.label,e.selectedApplication&&e.selectedApplication.key?(e.entity.key=e.selectedApplication.key,e.entity.label=e.selectedApplication.label):(e.entity.key=null,e.entity.label="Test")),"6"===e.metricCategory&&(e.metricCategory="4",e.endpoint={},e.endpoint.key=e.entity.key,e.selectedApplication&&e.selectedApplication.key?(e.entity.key=e.selectedApplication.key,e.entity.label=e.selectedApplication.label):(e.entity.key=null,e.entity.label="Test")),e.aggregation&&"string"==typeof e.aggregation&&(e.aggregation?e.aggregation={key:e.aggregation,label:e.aggregation}:e.aggregation={},e.aggregationFunction?e.aggregationFunction={key:e.aggregationFunction.label,label:e.aggregationFunction.label}:e.aggregationFunction={}),e.customFilters&&e.customFilters.length>0&&e.customFilters[0].value&&(e.customFilters=A.a.map(e.customFilters,(function(e){return e.value}))),e.filters&&e.filters.length>0&&!e.filters[0].tag.key&&!e.filters[0].tag.label&&A.a.forEach(e.filters,(function(e){e.tag.label=e.tag.key})),e.group&&e.group.key&&!e.group.label&&(e.group.label=e.group.key),e.metricCategory&&"string"==typeof e.metricCategory&&(e.metricCategory=A.a.find(M,(function(t){return t.key===parseInt(e.metricCategory,10)}))),e.callToEntity&&e.callToEntity.key&&(e.callToEntity=e.callToEntity.key),e.applicationCallToEntity&&e.applicationCallToEntity.key&&(e.applicationCallToEntity=e.applicationCallToEntity.key),e.filters&&e.filters.length>0&&e.filters.forEach((function(e){e.entity&&e.entity.key&&(e.entity=e.entity.key)}))},Z=function(e){function t(t){var n=e.call(this,t)||this;return n.options=t.jsonData,n.options.url=function(e){return e.jsonData.useProxy?e.url+"/instana":e.jsonData.url}(t),n.availableGranularities=[],n.availableRollups=[],n.availableTimeIntervals=[],n.dataSourceSlo=new I(t.jsonData),n.dataSourceInfrastructure=new Q(t.jsonData),n.dataSourceWebsite=new G(t.jsonData),n.dataSourceApplication=new K(t.jsonData),n.dataSourceService=new j(t.jsonData),n.dataSourceEndpoint=new H(t.jsonData),n.resultCache=new k,n}return i(t,e),t.prototype.query=function(e){return s(this,void 0,Promise,(function(){var t,n=this;return u(this,(function(a){return t=e.range,this.timeFilter=b(t),this.availableRollups=N(this.timeFilter),this.availableGranularities=F(this.timeFilter.windowSize),[2,Promise.all(e.targets.map((function(e){var a,r,i=b(t);if(e.hide)return{data:[],target:e};if(Y(e),e.metricCategory||(e.metricCategory=M[0]),n.setPossibleTimeIntervals(e),Y(e),e.timeShift){var o=n.convertTimeShiftToMillis(e.timeShift);o&&(i=n.applyTimeShiftOnTimeFilter(i,o))}return e.timeFilter=i,e.stableHash=(a=e,r=A.a.omit(a,$),r=A.a.mapValues(r,(function(e){return null!=e&&"object"===_(e)&&"key"in e&&(e=e.key),e})),JSON.stringify(r)),i=n.adjustTimeFilterIfCached(i,e),7===e.metricCategory.key?n.dataSourceSlo.runQuery(e,i).then((function(t){return n.buildTargetWithAppendedDataResult(e,i,t)})):0===e.metricCategory.key||1===e.metricCategory.key?n.dataSourceInfrastructure.runQuery(e,i).then((function(t){return n.buildTargetWithAppendedDataResult(e,i,t)})):3===e.metricCategory.key?n.dataSourceWebsite.runQuery(e,i).then((function(t){return n.buildTargetWithAppendedDataResult(e,i,t)})):2===e.metricCategory.key?n.dataSourceApplication.runQuery(e,i).then((function(t){return n.buildTargetWithAppendedDataResult(e,i,t)})):4===e.metricCategory.key?n.getApplicationServiceEndpointMetrics(e,i).then((function(t){return n.buildTargetWithAppendedDataResult(e,i,t)})):Promise.resolve(f(e.refId))}))).then((function(e){var t=[];return A.a.each(e,(function(e){var a=A.a.compact(A.a.flatten(e.data));n.applyTimeShiftIfNecessary(a,e.target),a=n.aggregateDataIfNecessary(a,e.target),n.cacheResultIfNecessary(a,e.target),t.push(a)})),{data:A.a.flatten(t)}}))]}))}))},t.prototype.getApplicationServiceEndpointMetrics=function(e,t){var n=this;if(R(t.windowSize,T(this.options.queryinterval_limit_app_metrics)))throw new Error("Limit for maximum selectable windowsize exceeded, max is: "+this.options.queryinterval_limit_app_metrics+" hours");return e.endpoint&&e.endpoint.key?this.dataSourceEndpoint.fetchEndpointMetrics(e,t).then((function(t){return W(e,t,n.dataSourceEndpoint.buildEndpointMetricLabel)})):e.service&&e.service.key?this.dataSourceService.fetchServiceMetrics(e,t).then((function(t){return W(e,t,n.dataSourceService.buildServiceMetricLabel)})):e.entity&&e.entity.key?this.dataSourceApplication.fetchApplicationMetrics(e,t).then((function(t){return t.data&&(e.showWarningCantShowAllResults=t.data.canLoadMore),W(e,t,n.dataSourceApplication.buildApplicationMetricLabel)})):Promise.resolve({data:{items:[]}})},t.prototype.applyTimeShiftIfNecessary=function(e,t){var n=this;e.forEach((function(e){t.timeShift&&n.applyTimeShiftOnData(e,n.convertTimeShiftToMillis(t.timeShift))}))},t.prototype.cacheResultIfNecessary=function(e,t){if(this.supportsDeltaRequests(t)&&this.hasResult(e)){var n={timeFilter:t.timeFilter,results:e};this.resultCache.put(t.stableHash,n,4e5)}},t.prototype.supportsDeltaRequests=function(e){var t=this;if(e.metricCategory&&7===e.metricCategory.key)return!1;var n=this.resultCache.get("version");return n?n>=171:B(this.options).then((function(e){return t.resultCache.put("version",e,36e5),e>=171}))},t.prototype.hasResult=function(e){return e&&e.length>0},t.prototype.applyTimeShiftOnData=function(e,t){e.datapoints.forEach((function(e){e[1]=e[1]+t}))},t.prototype.aggregateDataIfNecessary=function(e,t){var n=[];if(t.aggregateGraphs){var a=D(e,t);return n.push(a),t.hideOriginalGraphs||A.a.each(e,(function(e){e.target!==a.target&&n.push(e)})),n}return e},t.prototype.buildTargetWithAppendedDataResult=function(e,t,n){return t.from!==e.timeFilter.from&&n&&(n=this.appendResult(n,e)),{target:e,data:n}},t.prototype.appendResult=function(e,t){var n,a,r=this.resultCache.get(t.stableHash);return r&&r.results&&(n=e,a=r.results,A.a.each(n,(function(e){var t=A.a.find(a,(function(t){return t.key===e.key&&t.target===e.target}));if(t&&e.datapoints){var n=t.datapoints.length,r=e.datapoints.concat(t.datapoints);r=A.a.sortedUniqBy(r.sort((function(e,t){return e[1]-t[1]})),(function(e){return e[1]})),t.datapoints=A.a.takeRight(r,n),t.target=e.target}else a.push(e)})),e=a),e},t.prototype.adjustTimeFilterIfCached=function(e,t){var n,a,r=this.resultCache.get(t.stableHash);if(r&&(n=e,a=r.timeFilter,n.from<a.to&&n.from>=a.from)){var i=this.getDeltaRequestTimestamp(r.results,r.timeFilter.from),o=1e4*Math.floor(e.to/1e4);return{from:i,to:o,windowSize:o-i}}return e},t.prototype.getDeltaRequestTimestamp=function(e,t){var n=e[0].datapoints.length;if(0===n)return t;var a=n>1?n-2:1;return e[0].datapoints[a][1]},t.prototype.getSloReports=function(){return this.dataSourceSlo.getConfiguredSLIs()},t.prototype.getEntityTypes=function(){return this.dataSourceInfrastructure.getEntityTypes()},t.prototype.fetchApplications=function(){return this.dataSourceApplication.getApplications(this.getTimeFilter())},t.prototype.fetchServices=function(e){return this.dataSourceService.getServicesOfApplication(e,this.getTimeFilter())},t.prototype.fetchEndpoints=function(e){return this.dataSourceEndpoint.getEndpointsOfService(e,this.getTimeFilter())},t.prototype.fetchTypesForTarget=function(e){return this.dataSourceInfrastructure.fetchTypesForTarget(e,this.getTimeFilter())},t.prototype.fetchWebsites=function(){return this.dataSourceWebsite.getWebsites(this.getTimeFilter())},t.prototype.getDefaultTimeInterval=function(e){return 0===e.metricCategory.key||1===e.metricCategory.key?x(this.getTimeFilter()):O(this.getTimeFilter().windowSize)},t.prototype.convertTimeShiftToMillis=function(e){if(!e)return null;try{return this.parseTimeShift(e)}catch(e){return null}},t.prototype.parseTimeShift=function(e){return e.endsWith("s")?1e3*parseInt(e.split("s")[0],10):e.endsWith("m")?60*parseInt(e.split("m")[0],10)*1e3:e.endsWith("h")?60*parseInt(e.split("h")[0],10)*60*1e3:e.endsWith("d")?60*parseInt(e.split("d")[0],10)*60*24*1e3:e.endsWith("w")?60*parseInt(e.split("w")[0],10)*60*24*7*1e3:null},t.prototype.applyTimeShiftOnTimeFilter=function(e,t){return t?{from:e.from-t,to:e.to-t,windowSize:e.windowSize}:e},t.prototype.setPossibleTimeIntervals=function(e){0===e.metricCategory.key||1===e.metricCategory.key?this.availableTimeIntervals=this.availableRollups:this.availableTimeIntervals=this.availableGranularities},t.prototype.getTimeFilter=function(){if(!this.timeFilter||!this.timeFilter.from){var e=1e3*Math.floor(Date.now()/1e3);this.timeFilter={from:e-216e5,to:e,windowSize:216e5}}return this.timeFilter},t.prototype.testDatasource=function(){return y(this.options,"/api/monitoringState").then((function(){return{status:"success",message:"Successfully connected to the Instana API.",title:"Success"}}),(function(e){return 401===e.status?{status:"error",message:"Unauthorized. Please verify the API Token.",title:"Error"}:(console.log(e),{status:"error",message:"Error ("+e.status+") connecting to the Instana API: "+e.statusText,title:"Error"})}))},t}(a.DataSourceApi),J=n(0),X=n.n(J),ee=n(2),te=function(){var e=A.a.get(window,["grafanaBootData","settings","buildInfo","version"],"3.0.0"),t=A.a.split(e,".",2).map((function(e){return parseInt(e,10)}));return e[0]>=6||t[0]>=5&&t[1]>=3},ne=function(e){function t(t){var n=e.call(this,t)||this;n.onInstanaOptionsChange=function(e,t){var a,r=n.props,i=r.options,l=r.onOptionsChange,s=o(o({},i.jsonData),((a={})[t]=e.currentTarget.value,a));l(o(o({},i),{jsonData:s})),"url"!==t&&"apiToken"!==t||n.debouncedDetectFeatures(i)},n.onSwitchChange=function(e,t){var a,r=n.props,i=r.options,l=r.onOptionsChange,s=!1;e&&e.currentTarget&&(s=!i.jsonData[t]);var u=o(o({},i.jsonData),((a={})[t]=s,a));l(o(o({},i),{jsonData:u}))},n.debouncedDetectFeatures=function(e){A.a.debounce((function(){return n.detectFeatures(e)}),500)},n.detectFeatures=function(e){e||(e=n.props.options),e.id&&(n.setState({canUseProxy:te()}),B(e.jsonData).then((function(e){e?n.setState({canQueryOfflineSnapshots:e>=156}):n.setState({canQueryOfflineSnapshots:!1})})))},n.state={canQueryOfflineSnapshots:!1,canUseProxy:!1},n.detectFeatures();var a=n.props.options.jsonData;return void 0===a.useProxy&&(a.useProxy=te()),n}return i(t,e),t.prototype.render=function(){var e=this,t=this.props.options.jsonData;return X.a.createElement("div",null,X.a.createElement(ee.Legend,null,"Instana configuration"),X.a.createElement(ee.Field,{className:"width-30",horizontal:!0,required:!0,label:"URL",description:"The URL of your Instana installation."},X.a.createElement(ee.Input,{css:"",width:30,value:t.url,placeholder:"https://tools-acme.instana.io",onChange:function(t){return e.onInstanaOptionsChange(t,"url")}})),X.a.createElement(ee.Field,{className:"width-30",horizontal:!0,required:!0,label:"API Token",description:"The API token to access the data."},X.a.createElement(ee.Input,{type:"password",css:"",width:30,value:t.apiToken,suffix:X.a.createElement(ee.Tooltip,{content:X.a.createElement("p",null,"You can create API tokens following the instructions at",X.a.createElement("a",{href:"https://docs.instana.io/quick_start/api/#api-tokens"},"https://docs.instana.io/quick_start/api/#api-tokens")),theme:"info"},X.a.createElement(ee.Icon,{name:"info-circle"})),onChange:function(t){return e.onInstanaOptionsChange(t,"apiToken")}})),X.a.createElement(ee.Checkbox,{css:"",label:"Use Proxy",value:t.useProxy,onChange:function(t){return e.onSwitchChange(t,"useProxy")},description:"Use Grafana server as proxy. Needs Grafana 5.3+ and Instana datasource 2.0.0+"}),X.a.createElement(ee.Checkbox,{css:"",label:"Enable offline snapshots",value:t.showOffline,onChange:function(t){return e.onSwitchChange(t,"showOffline")},description:"Enables querying offline snapshots. Needs Instana release 156+ and Instana datasource 2.3.0+"}),X.a.createElement(ee.Checkbox,{css:"",label:"Enable SLO dashboards",value:t.allowSlo,onChange:function(t){return e.onSwitchChange(t,"allowSlo")},description:"Adds a new category that allows retrieval of SLO information. Needs Instana release 176+ and a explicit feature flag."}),X.a.createElement("br",null),X.a.createElement("br",null),X.a.createElement("b",null,"Maximum query intervals in hours"),X.a.createElement("p",{className:"width-30"},"This settings are optional values to control the load of data queries, by defining the maximum allowed query intervals against the Instana API."),X.a.createElement(ee.Field,{className:"width-30",horizontal:!0,label:"Infrastructure metrics"},X.a.createElement(ee.Input,{css:"",width:30,value:t.queryinterval_limit_infra,placeholder:"optional: interval limit in hours",onChange:function(t){return e.onInstanaOptionsChange(t,"queryinterval_limit_infra")}})),X.a.createElement(ee.Field,{className:"width-30",horizontal:!0,label:"Application metrics"},X.a.createElement(ee.Input,{css:"",width:30,value:t.queryinterval_limit_app_metrics,placeholder:"optional: interval limit in hours",onChange:function(t){return e.onInstanaOptionsChange(t,"queryinterval_limit_app_metrics")}})),X.a.createElement(ee.Field,{className:"width-30",horizontal:!0,label:"Analyze application calls"},X.a.createElement(ee.Input,{css:"",width:30,value:t.queryinterval_limit_app_calls,placeholder:"optional: interval limit in hours",onChange:function(t){return e.onInstanaOptionsChange(t,"queryinterval_limit_app_calls")}})),X.a.createElement(ee.Field,{className:"width-30",horizontal:!0,label:"Analyze website"},X.a.createElement(ee.Input,{css:"",width:30,value:t.queryinterval_limit_website_metrics,placeholder:"optional: interval limit in hours",onChange:function(t){return e.onInstanaOptionsChange(t,"queryinterval_limit_website_metrics")}})))},t}(J.PureComponent),ae={position:"relative",background:"transparent",width:"32px",height:"32px",marginRight:"4px"},re={transition:"max-height .2s ease-out",maxHeight:0,overflow:"hidden",zIndex:1,position:"fixed"},ie={overflow:"hidden",zIndex:2,position:"fixed",maxHeight:"1000px",opacity:1},oe={display:"flex",alignItems:"center",justifyContent:"center"},le=X.a.createElement("svg",{style:oe,height:30,width:30},X.a.createElement("path",{transform:"translate(3, 5)",fill:"#33a2e5",d:"M12.7891666,14.6051302 L12.7751756,19.8293818 L11.4691127,19.8328795 L11.4776628,16.6402814 L6.96695389,21.1509902 L6.2433066,20.427343 L10.7540155,15.9166341 L7.56141732,15.9251842 L7.56491507,14.6191213 L12.7891666,14.6051302 Z M15.754133,9.38135895 C17.1795716,9.38135895 18.3857119,10.5874993 18.3857119,12.0129379 C18.3857119,13.4383765 17.1795716,14.6445168 15.754133,14.6445168 C14.3286944,14.6445168 13.122554,13.4383765 13.122554,12.0129379 C13.122554,10.5874993 14.3286944,9.38135895 15.754133,9.38135895 Z M6.96695389,3.2433066 L11.4776628,7.75401547 L11.4691127,4.56141732 L12.7751756,4.56491507 L12.7891666,9.7891666 L7.56491507,9.77517557 L7.56141732,8.46911269 L10.7540155,8.47766276 L6.2433066,3.96695389 L6.96695389,3.2433066 Z"})),se=X.a.createElement("svg",{style:oe,height:30,width:30},X.a.createElement("path",{transform:"translate(3, 5)",fill:"#33a2e5",d:"M7.54586,15 L7.53186897,20.2242515 L6.22580608,20.2277493 L6.23435616,17.0351511 L1.72364729,21.54586 L1,20.8222127 L5.51070887,16.3115038 L2.31811071,16.3200539 L2.32160847,15.013991 L7.54586,15 Z M14.1975552,7.94441147 L17.901552,11.628622 L14.1975552,15.3128325 L13.271556,14.3917799 L15.5351096,12.1403179 L12.4724561,12.1407167 C12.2827518,13.474447 11.1361413,14.5 9.75,14.5 C8.23121694,14.5 7,13.2687831 7,11.75 C7,10.2312169 8.23121694,9 9.75,9 C11.0508538,9 12.1407461,9.90323356 12.4267385,11.1167623 L15.5351096,11.1169261 L13.271556,8.8654641 L14.1975552,7.94441147 Z M20.75,9 C22.2687831,9 23.5,10.2312169 23.5,11.75 C23.5,13.2687831 22.2687831,14.5 20.75,14.5 C19.2312169,14.5 18,13.2687831 18,11.75 C18,10.2312169 19.2312169,9 20.75,9 Z M1.72364729,2 L6.23435616,6.51070887 L6.22580608,3.31811071 L7.53186897,3.32160847 L7.54586,8.54586 L2.32160847,8.53186897 L2.31811071,7.22580608 L5.51070887,7.23435616 L1,2.72364729 L1.72364729,2 Z"}));function ue(e){var t=Object(ee.useTheme)(),n=e.disabled?.5:1,a={background:t.colors.bg2,cursor:"pointer",listStyle:"none",borderRadius:"3px",height:"32px",opacity:n},r=c(Object(J.useState)(!1),2),i=r[0],o=r[1];function l(t){e.onChange(t),o(!1)}return X.a.createElement("div",{style:ae},X.a.createElement("div",{onClick:function(){e.disabled||o(!i)},onBlur:function(){return o(!1)},style:a,contentEditable:!0},"INBOUND"===e.value?le:se),X.a.createElement("ul",{style:i?ie:re},X.a.createElement("li",{onClick:function(){return l("INBOUND")},key:"INBOUND",style:a},le),X.a.createElement("li",{onClick:function(){return l("ALL")},key:"ALL",style:a},se)))}var ce=!1,pe=function(e){function t(t){var n=e.call(this,t)||this;return n.onApplicationChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;a.entity=e,""!==e.boundaryScope?a.applicationBoundaryScope=e.boundaryScope:"ALL"!==a.applicationBoundaryScope&&"INBOUND"!==a.applicationBoundaryScope&&(a.applicationBoundaryScope="INBOUND"),r(a),n.loadServices(),n.loadEndpoints(),i()},n.onServiceChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;a.service=e,r(a),n.loadEndpoints(),i()},n.onEndpointChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;a.endpoint=e,r(a),i()},n.debouncedRunQuery=A.a.debounce(n.props.onRunQuery,500),n.onGroupByTagSecondLevelKeyChange=function(e){var t=n.props,a=t.query,r=t.onChange;a.groupbyTagSecondLevelKey=e.currentTarget.value,r(a),n.debouncedRunQuery()},n.onApplicationBoundaryScopeChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;a.applicationBoundaryScope=e,r(a),n.loadServices(),n.loadEndpoints(),i()},n.state={applications:[],services:[],endpoints:[],value:{value:2,imgUrl:"../../resources/dest.png"}},n}return i(t,e),t.prototype.componentDidMount=function(){ce=!1,this.loadApplications(),this.loadServices(),this.loadEndpoints();var e=this.props.datasource;this.props.updateMetrics(e.dataSourceApplication.getApplicationMetricsCatalog())},t.prototype.componentWillUnmount=function(){ce=!0},t.prototype.loadApplications=function(){var e=this,t=this.props,n=t.query,a=t.onChange;t.datasource.fetchApplications().then((function(t){if(!ce){if(e.setState({applications:t}),!A.a.find(e.state.applications,{key:null})){var r=e.state.applications;r.unshift({key:null,label:m}),e.setState({applications:r})}n.entity&&n.entity.key&&!A.a.find(e.state.applications,(function(e){return e.key===n.entity.key}))?n.entity=e.state.applications[0]:n.entity&&n.entity.key||!t||(n.entity=e.state.applications[0]),a(n)}}))},t.prototype.loadServices=function(){var e=this,t=this.props,n=t.query,a=t.onChange;t.datasource.fetchServices(n).then((function(t){if(!ce){if(e.setState({services:t}),!A.a.find(e.state.services,{key:null})){var r=e.state.services;r.unshift({key:null,label:"-- No Service Filter --"}),e.setState({services:r})}n.service&&n.service.key&&A.a.find(e.state.services,(function(e){return e.key===n.service.key}))||(n.service=e.state.services[0]),a(n)}}))},t.prototype.loadEndpoints=function(){var e=this,t=this.props,n=t.query,a=t.onChange;t.datasource.fetchEndpoints(n).then((function(t){if(!ce){if(e.setState({endpoints:t}),!A.a.find(e.state.endpoints,{key:null})){var r=e.state.endpoints;r.unshift({key:null,label:v}),e.setState({endpoints:r})}n.endpoint&&n.endpoint.key&&A.a.find(e.state.endpoints,(function(e){return e.key===n.endpoint.key}))||(n.endpoint={key:null,label:v}),a(n)}}))},t.prototype.render=function(){var e=this.props.query;return X.a.createElement("div",{className:"gf-form"},X.a.createElement(ee.InlineFormLabel,{className:"query-keyword",width:14,tooltip:"Select your application."},"Application"),X.a.createElement(ue,{value:e.applicationBoundaryScope,disabled:!e.entity.key,onChange:this.onApplicationBoundaryScopeChange}),X.a.createElement(ee.Select,{menuPlacement:"bottom",width:0,isSearchable:!0,value:e.entity,options:this.state.applications,onChange:this.onApplicationChange}),X.a.createElement(ee.InlineFormLabel,{className:"query-keyword",width:6,tooltip:"Select your service."},"Service"),X.a.createElement(ee.Select,{menuPlacement:"bottom",width:0,isSearchable:!0,value:e.service,options:this.state.services,onChange:this.onServiceChange}),X.a.createElement(ee.InlineFormLabel,{className:"query-keyword",width:6,tooltip:"Select your endpoint."},"Endpoint"),X.a.createElement(ee.Select,{menuPlacement:"bottom",width:0,isSearchable:!0,value:e.endpoint,options:this.state.endpoints,onChange:this.onEndpointChange}),X.a.createElement("div",{style:e.showGroupBySecondLevel?{}:{display:"none"}},X.a.createElement(ee.Input,{css:"",value:e.groupbyTagSecondLevelKey,onChange:this.onGroupByTagSecondLevelKeyChange})))},t}(X.a.Component),ye=["DESTINATION","SOURCE"];function he(e){var t={display:"flex"};return e.disabled&&(t.opacity="0.4",t.pointerEvents="none"),e.stretch&&(t.width="100%"),X.a.createElement("div",{style:t},e.children)}var de={position:"relative",background:"transparent",width:"32px",height:"32px",marginRight:"4px"},fe={transition:"max-height .2s ease-out",maxHeight:0,overflow:"hidden",zIndex:1,position:"fixed"},ge={overflow:"hidden",zIndex:2,position:"fixed",maxHeight:"1000px",opacity:1},me={display:"flex",alignItems:"center",justifyContent:"center"},ve=X.a.createElement("svg",{style:me,height:30,width:30},X.a.createElement("path",{transform:"translate(3, 5)",fill:"#33a2e5",d:"M4 11.173h6.38L8.115 8.92 9.042 8l3.704 3.684-3.704 3.684-.926-.92 2.263-2.252H4zM16.43 14.316c-1.426 0-2.632-1.206-2.632-2.632 0-1.425 1.206-2.631 2.632-2.631 1.425 0 2.631 1.206 2.631 2.631 0 1.426-1.206 2.632-2.631 2.632z"})),be=X.a.createElement("svg",{style:me,height:30,width:30},X.a.createElement("path",{transform:"translate(3, 5)",fill:"#33a2e5",d:"M9.939 11.173h6.379L14.054 8.92 14.98 8l3.704 3.684-3.704 3.684-.926-.92 2.264-2.252h-6.38c-.308 1.023-1.234 1.842-2.366 1.842C6.132 14.243 5 13.117 5 11.787c0-1.33 1.132-2.457 2.47-2.457 1.234 0 2.16.717 2.469 1.843z"}));function Se(e){var t={background:Object(ee.useTheme)().colors.bg2,cursor:"pointer",listStyle:"none",borderRadius:"3px",height:"32px"},n=c(Object(J.useState)(!1),2),a=n[0],r=n[1];function i(t){e.onChange(t),r(!1)}return X.a.createElement("div",{style:de},X.a.createElement("div",{onClick:function(){r(!a)},onBlur:function(){return r(!1)},style:t,contentEditable:!0},"DESTINATION"===e.value?ve:be),X.a.createElement("ul",{style:a?ge:fe},X.a.createElement("li",{onClick:function(){return i("DESTINATION")},key:"DESTINATION",style:t},ve),X.a.createElement("li",{onClick:function(){return i("SOURCE")},key:"SOURCE",style:t},be)))}n(7);var Ce=!1,Ee=function(e){function t(t){var n=e.call(this,t)||this;return n.onApplicationChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;a.entity=e,r(a),i()},n.onGroupChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;a.group=e,a.group&&2===a.metricCategory.key&&(a.showGroupBySecondLevel="KEY_VALUE_PAIR"===a.group.type),a.showGroupBySecondLevel||(a.groupbyTagSecondLevelKey=""),r(a),i()},n.onApplicationCallToEntityChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;a.applicationCallToEntity=e,r(a),i()},n.onCallToEntityChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;a.callToEntity=e,r(a),i()},n.debouncedRunQuery=A.a.debounce(n.props.onRunQuery,500),n.onGroupByTagSecondLevelKeyChange=function(e){var t=n.props,a=t.query,r=t.onChange;a.groupbyTagSecondLevelKey=e.currentTarget.value,r(a),n.debouncedRunQuery()},n.state={applications:[]},n}return i(t,e),t.prototype.componentDidMount=function(){var e=this,t=this.props,n=t.query,a=t.datasource,r=t.onChange;Ce=!1,a.fetchApplications().then((function(t){Ce||(A.a.find(t,{key:null})||t.unshift({key:null,label:m}),e.setState({applications:t}),n.entity&&(n.entity.key||n.entity.label)||(n.entity=t[0]),n.callToEntity||(n.callToEntity=ye[0]),n.applicationCallToEntity||(n.applicationCallToEntity=ye[0]),r(n))})),a.dataSourceApplication.getApplicationTags().then((function(t){Ce||(e.props.updateGroups(A.a.sortBy(t,"key")),n.group&&n.group.key||(n.group=A.a.find(t,["key","endpoint.name"]),r(n)))})),this.props.updateMetrics(a.dataSourceApplication.getApplicationMetricsCatalog())},t.prototype.componentWillUnmount=function(){Ce=!0},t.prototype.render=function(){var e=this.props,t=e.query,n=e.groups;return X.a.createElement("div",{className:"gf-form"},X.a.createElement(he,{stretch:!0},X.a.createElement(ee.InlineFormLabel,{className:"query-keyword",width:14,tooltip:"Select your application."},"Application"),X.a.createElement(Se,{value:t.applicationCallToEntity,onChange:this.onApplicationCallToEntityChange}),X.a.createElement(ee.Select,{menuPlacement:"bottom",width:0,isSearchable:!0,value:t.entity,options:this.state.applications,onChange:this.onApplicationChange})),X.a.createElement(he,{stretch:!0},X.a.createElement(ee.InlineFormLabel,{className:"query-keyword",width:7,tooltip:"Group by tag."},"Group by"),X.a.createElement(Se,{value:t.callToEntity,onChange:this.onCallToEntityChange}),X.a.createElement(ee.Select,{menuPlacement:"bottom",width:0,isSearchable:!0,options:n,value:t.group,onChange:this.onGroupChange})),X.a.createElement("div",{style:t.showGroupBySecondLevel?{}:{display:"none"}},X.a.createElement(ee.Input,{css:"",type:"text",value:t.groupbyTagSecondLevelKey,onChange:this.onGroupByTagSecondLevelKeyChange})))},t}(X.a.Component),Te=function(e){function t(t){return e.call(this,t)||this}return i(t,e),t.prototype.render=function(){var e=this.props,t=e.label,n=e.tooltip,a=e.queryKeyword,r=e.disabled,i=e.labelWidth,s=void 0===i?14:i,u=e.inputWidth,c=void 0===u?30:u,p=l(e,["label","tooltip","queryKeyword","disabled","labelWidth","inputWidth"]);return X.a.createElement(he,{disabled:r,stretch:!c},X.a.createElement(ee.InlineFormLabel,{className:a?"query-keyword":"",width:s,tooltip:n},t),X.a.createElement(ee.Input,o({css:"",width:c,disabled:r},p)))},t}(X.a.Component),ke=function(e){function t(t){var n=e.call(this,t)||this;return n.onFilterChange=function(e,t){var a=n.state.customFilters;a[t]=e.currentTarget.value,n.setState({customFilters:a}),n.props.onFilterChange(a)},n.addCustomFilter=function(){var e=n.state.customFilters;e.push(""),n.setState({customFilters:e});var t=n.props,a=t.query,r=t.onChange;a.customFilters=e,r(a)},n.removeCustomFilter=function(e){var t=n.state.customFilters;t.splice(e,1),n.setState({customFilters:t}),n.props.onFilterChange(t)},n.state={customFilters:[]},n}return i(t,e),t.prototype.componentDidMount=function(){var e=this.props.query;this.setState({customFilters:e.customFilters})},t.prototype.render=function(){var e=this,t=this.state.customFilters.map((function(t,n){return X.a.createElement("div",{className:"gf-form"},X.a.createElement(Te,{label:n+1+". filter metric select",value:e.state.customFilters[n],placeholder:"Please specify",onChange:function(t){return e.onFilterChange(t,n)},tooltip:"Type to suggest metrics."}),X.a.createElement(ee.Button,{variant:"secondary",onClick:function(){return e.removeCustomFilter(n)}},"-"))}));return X.a.createElement("div",null,t,X.a.createElement("div",{className:"gf-form"},X.a.createElement(ee.InlineFormLabel,{width:14,tooltip:"Add an additional metric select filter."},"Add filter metric select"),X.a.createElement(ee.Button,{variant:"secondary",onClick:this.addCustomFilter},"+")))},t}(X.a.Component),we=ee.LegacyForms.Switch,Ae=function(e){function t(t){return e.call(this,t)||this}return i(t,e),t.prototype.render=function(){var e=this.props,t=e.label,n=e.tooltip,a=e.queryKeyword,r=e.disabled,i=e.labelWidth,s=void 0===i?14:i,u=e.value,c=l(e,["label","tooltip","queryKeyword","disabled","labelWidth","value"]);return X.a.createElement(he,{disabled:r,stretch:!1},X.a.createElement(ee.InlineFormLabel,{className:a?"query-keyword":"",width:s,tooltip:n},t),X.a.createElement(we,o({checked:u,label:""},c)))},t}(X.a.Component),Ie=function(e){function t(t){var n=e.call(this,t)||this;return n.debouncedRunQuery=A.a.debounce(n.props.onRunQuery,500),n.onUseFreeTextMetricsChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.loadEntityTypes;e&&e.currentTarget&&(a.useFreeTextMetrics=e.currentTarget.checked,a.useFreeTextMetrics?(i(!1),a.metric={}):i(!0),r(a))},n.onFreeTextMetricsChange=function(e){var t=n.props,a=t.query,r=t.onChange;a.freeTextMetrics=e.currentTarget.value,r(a),n.debouncedRunQuery()},n}return i(t,e),t.prototype.render=function(){var e=this.props.query;return X.a.createElement("div",{className:"gf-form"},X.a.createElement(Ae,{queryKeyword:!0,label:"Enable free text metrics",tooltip:"Specify comma separated metrics directly in this text field. Once this field has a value, selected metrics from above will be ignored. Enabled as soon as a query is entered. Max 4 metrics supported.",value:e.useFreeTextMetrics,onChange:this.onUseFreeTextMetricsChange,disabled:!1}),X.a.createElement(ee.Input,{css:"",width:0,disabled:!e.useFreeTextMetrics,value:e.freeTextMetrics,placeholder:"metric.one,metric.two,metric.three",onChange:this.onFreeTextMetricsChange}))},t}(X.a.Component),Me=[{label:"SUM"},{label:"MEAN"},{label:"MIN"},{label:"MAX"}],Re=function(e){function t(t){var n=e.call(this,t)||this;n.onAggregateGraphs=function(e){var t=n.props,a=t.query,r=t.onRunQuery;e&&e.currentTarget&&(a.aggregateGraphs=e.currentTarget.checked,r())},n.onHideOriginalGraph=function(e){var t=n.props,a=t.query,r=t.onRunQuery;e&&e.currentTarget&&(a.hideOriginalGraphs=e.currentTarget.checked,r())},n.onAggregationFunctionChange=function(e){var t=n.props,a=t.query,r=t.onRunQuery;a.aggregationFunction=e,r()},n.state={showAdditionalSettings:!1,legendFormat:""};var a=n.props.query;return a.aggregationFunction||(a.aggregationFunction=Me[0]),n}return i(t,e),t.prototype.render=function(){var e=this.props.query;return X.a.createElement("div",{className:"gf-form"},X.a.createElement(Ae,{queryKeyword:!0,label:"Aggregate query graphs",tooltip:"Aggregate all graphs of a query.",value:e.aggregateGraphs,onChange:this.onAggregateGraphs}),X.a.createElement(ee.Select,{menuPlacement:"bottom",width:12,isSearchable:!0,options:Me,value:e.aggregationFunction,disabled:!e.aggregateGraphs,onChange:this.onAggregationFunctionChange}),X.a.createElement(Ae,{queryKeyword:!0,disabled:!e.aggregateGraphs,labelWidth:10,label:"Hide original graphs",tooltip:"Removes the original graphs resulted from the query and only shows the aggregated graph.",value:e.hideOriginalGraphs,onChange:this.onHideOriginalGraph}))},t}(X.a.Component),qe=["$label (on host $host)","$label (on host $host)","$label ($application) - $key","$label ($website) - $key","$label ($application) - $key","","",""],Le=[X.a.createElement("div",null,"Default: $label (on host $host)",X.a.createElement("ul",null,X.a.createElement("li",null,"• $label - entity label"),X.a.createElement("li",null,"• $host - corresponding host"),X.a.createElement("li",null,"• $pid - corresponding PID"),X.a.createElement("li",null,"• $timeShift - corresponding timeShift"),X.a.createElement("li",null,"• $metric - displayed metric"),X.a.createElement("li",null,"• $type - entity type"),X.a.createElement("li",null,"• $service - service label"),X.a.createElement("li",null,"• $name - label alternative"),X.a.createElement("li",null,"• $index - index in the list"))),X.a.createElement("div",null,"Default: $label (on host $host)",X.a.createElement("ul",null,X.a.createElement("li",null,"• $label - entity label"),X.a.createElement("li",null,"• $host - corresponding host"),X.a.createElement("li",null,"• $pid - corresponding PID"),X.a.createElement("li",null,"• $timeShift - corresponding timeShift"),X.a.createElement("li",null,"• $metric - displayed metric"),X.a.createElement("li",null,"• $type - entity type"),X.a.createElement("li",null,"• $service - service label"),X.a.createElement("li",null,"• $name - label alternative"),X.a.createElement("li",null,"• $index - index in the list"))),X.a.createElement("div",null,"Default: $label ($application) - $key",X.a.createElement("ul",null,X.a.createElement("li",null,"• $label - entity label"),X.a.createElement("li",null,"• $application - application label"),X.a.createElement("li",null,"• $timeShift - corresponding timeShift"),X.a.createElement("li",null,"• $metric - displayed metric"),X.a.createElement("li",null,"• $key - metric key with aggregation and rollup"),X.a.createElement("li",null,"• $index - index in the list"))),X.a.createElement("div",null,"Default: $label ($website) - $key",X.a.createElement("ul",null,X.a.createElement("li",null,"• $label - entity label"),X.a.createElement("li",null,"• $website - application label"),X.a.createElement("li",null,"• $type - entity type"),X.a.createElement("li",null,"• $timeShift - corresponding timeShift"),X.a.createElement("li",null,"• $metric - displayed metric"),X.a.createElement("li",null,"• $key - metric key with aggregation and rollup"),X.a.createElement("li",null,"• $index - index in the list"))),X.a.createElement("div",null,"Default: $label ($application) - $key",X.a.createElement("ul",null,X.a.createElement("li",null,"• $label - entity label"),X.a.createElement("li",null,"• $application - application label"),X.a.createElement("li",null,"• $service - service label"),X.a.createElement("li",null,"• $endpoint - endpoint label"),X.a.createElement("li",null,"• $timeShift - corresponding timeShift"),X.a.createElement("li",null,"• $metric - displayed metric"),X.a.createElement("li",null,"• $key - metric key with aggregation and rollup"),X.a.createElement("li",null,"• $index - index in the list"))),"","",""],Oe=function(e){function t(t){var n=e.call(this,t)||this;return n.debouncedRunQuery=A.a.debounce(n.props.onRunQuery,500),n.onLegendFormatChange=function(e){var t=n.props,a=t.query,r=t.onChange;a.labelFormat=e.currentTarget.value,r(a),n.debouncedRunQuery()},n.onTimeShiftChange=function(e){var t=n.props,a=t.query,r=t.onChange;a.timeShift=e.currentTarget.value,a.timeShift?a.timeShiftIsValid=!!a.timeShift.match(/\d+[m,s,h,d,w]{1}/):a.timeShiftIsValid=!0,r(a),a.timeShiftIsValid&&n.debouncedRunQuery()},n.onShowAdvancedSettingsChange=function(e){if(e&&e.currentTarget){var t=n.props,a=t.query,r=t.onChange;a.showAdvancedSettings=e.currentTarget.checked,r(a)}},n.state={legendFormatPlaceholder:n.setLegendFormatPlaceholder()},n}return i(t,e),t.prototype.setLegendFormatPlaceholder=function(){var e=this.props.query;return qe[e.metricCategory.key]},t.prototype.setLegendFormatTooltip=function(){var e=this.props.query;return Le[e.metricCategory.key]},t.prototype.render=function(){var e=this,t=this.props,n=t.query,a=t.onRunQuery,r=t.onChange,i=t.loadEntityTypes;return X.a.createElement("div",null,X.a.createElement("div",{className:"gf-form"},X.a.createElement(Ae,{label:"Show advanced settings",tooltip:"Show all additional settings",value:n.showAdvancedSettings,onChange:function(t){return e.onShowAdvancedSettingsChange(t)}})),X.a.createElement("div",{hidden:!n.showAdvancedSettings},X.a.createElement("div",{className:"gf-form",hidden:7===n.metricCategory.key},X.a.createElement(Te,{queryKeyword:!0,inputWidth:0,label:"Legend format",tooltip:this.setLegendFormatTooltip(),value:n.labelFormat,placeholder:this.setLegendFormatPlaceholder(),onChange:function(t){return e.onLegendFormatChange(t)}})),X.a.createElement("div",{className:"gf-form"},X.a.createElement(Te,{queryKeyword:!0,inputWidth:0,label:"Time shift",tooltip:"Specify the amount of hours that shall be used. The time shift function always go back in time, not forward. Accepts values such as 1s, 1m, 1h, 1d, 1w.",value:n.timeShift,invalid:!n.timeShiftIsValid,placeholder:"1h",onChange:function(t){return e.onTimeShiftChange(t)}})),X.a.createElement("div",{hidden:1!==n.metricCategory.key},X.a.createElement(Ie,{query:n,onRunQuery:a,onChange:r,loadEntityTypes:i})),X.a.createElement("div",{hidden:0!==n.metricCategory.key&&1!==n.metricCategory.key},X.a.createElement(Re,{query:n,onRunQuery:a,onChange:r}))))},t}(X.a.Component),Fe=function(e){function t(t){return e.call(this,t)||this}return i(t,e),t.prototype.render=function(){var e=this.props,t=e.label,n=e.tooltip,a=e.searchable,r=void 0===a||a,i=e.disabled,s=e.queryKeyword,u=e.placeholder,c=void 0===u?"-":u,p=e.labelWidth,y=void 0===p?14:p,h=e.inputWidth,d=void 0===h?30:h,f=l(e,["label","tooltip","searchable","disabled","queryKeyword","placeholder","labelWidth","inputWidth"]);return X.a.createElement(he,{disabled:i,stretch:!d},X.a.createElement(ee.InlineFormLabel,{className:s?"query-keyword":"",width:y,tooltip:n},t),X.a.createElement(ee.Select,o({menuPlacement:"bottom",disabled:i,width:d,isSearchable:r,placeholder:c},f)))},t}(X.a.Component),xe=function(e){function t(t){var n=e.call(this,t)||this;return n.onQueryChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.updateQueryTypes;e.currentTarget&&e.currentTarget.value?a.entityQuery=e.currentTarget.value:(i([]),a.entityQuery="",a.entityType={key:null,label:"-"}),r(a),n.debouncedEntityTypes()},n.onTypeChange=function(e){var t=n.props,a=t.query,r=t.datasource,i=t.onChange;a.entityType=e,i(a),r.dataSourceInfrastructure.getMetricsCatalog(a.entityType,a.metricCategory.key).then((function(e){n.props.updateMetrics(e)}))},n.debouncedEntityTypes=A.a.debounce(n.props.loadEntityTypes,500),n}return i(t,e),t.prototype.componentDidMount=function(){var e=this.props,t=e.query,n=e.loadEntityTypes;t.entityQuery&&n()},t.prototype.render=function(){var e=this.props,t=e.query,n=e.queryTypes;return X.a.createElement("div",{className:"gf-form"},X.a.createElement(Te,{queryKeyword:!0,inputWidth:0,label:"Query",tooltip:X.a.createElement("div",null,"Specify a query for the entities you wish to plot. Use the dynamic focus syntax:",X.a.createElement("a",{href:"https://docs.instana.io/core_concepts/dynamic_focus/#syntax"},"https://docs.instana.io/core_concepts/dynamic_focus/#syntax")),value:t.entityQuery,placeholder:"Please specify",onChange:this.onQueryChange}),X.a.createElement(Fe,{queryKeyword:!0,labelWidth:6,label:"Type",tooltip:"Select an entity type for a list of available metrics.",noOptionsMessage:"No types found with query",value:t.entityType,options:n,onChange:this.onTypeChange}))},t}(X.a.Component),Ne=!1,Pe=function(e){function t(t){return e.call(this,t)||this}return i(t,e),t.prototype.componentDidMount=function(){var e=this,t=this.props,n=t.query,a=t.onChange,r=t.datasource;Ne=!1,n.entityQuery&&n.entityType&&n.entityType.key?r.dataSourceInfrastructure.getMetricsCatalog(n.entityType,n.metricCategory.key).then((function(t){Ne||e.props.updateMetrics(t)})):n.metric={key:null,label:"-"},a(n)},t.prototype.componentWillUnmount=function(){Ne=!0},t.prototype.render=function(){var e=this.props,t=e.query,n=e.onRunQuery,a=e.onChange,r=e.updateMetrics,i=e.loadEntityTypes,o=e.datasource,l=e.queryTypes,s=e.updateQueryTypes;return X.a.createElement(xe,{query:t,onChange:a,queryTypes:l,onRunQuery:n,datasource:o,updateMetrics:r,loadEntityTypes:i,updateQueryTypes:s})},t}(X.a.Component),Qe=[{key:"SLI",label:"SLI"},{key:"Remaining Error Budget",label:"Remaining Error Budget"},{key:"Timeseries",label:"Timeseries"}],_e=!1,$e=function(e){function t(t){var n=e.call(this,t)||this;return n.debouncedRunQuery=A.a.debounce(n.props.onRunQuery,500),n.onSloChange=function(e){var t=n.props,a=t.query,r=t.onRunQuery;a.sloReport=e,r()},n.onSloValueChange=function(e){var t=n.props.query;t.sloValue=e.currentTarget.value,n.isValid(t.sloValue)&&n.debouncedRunQuery()},n.onSloSpecificChange=function(e){var t=n.props,a=t.query,r=t.onRunQuery;a.sloSpecific=e,r()},n.state={sloReports:[],isValidSlo:!0},n}return i(t,e),t.prototype.componentDidMount=function(){_e=!1,this.loadSloReports(),this.isValid(this.props.query.sloValue)},t.prototype.componentWillUnmount=function(){_e=!0},t.prototype.isValid=function(e){var t=!e||+e>=0&&+e<=.9999;return this.setState({isValidSlo:t}),t},t.prototype.shouldComponentUpdate=function(e,t,n){return 7===e.query.metricCategory.key},t.prototype.loadSloReports=function(){var e=this,t=this.props.query;this.props.datasource.getSloReports().then((function(n){_e||(e.setState({sloReports:n}),!t.sloReport&&n.length>=1&&(t.sloReport=n[0]))}))},t.prototype.render=function(){var e=this.props.query;return X.a.createElement("div",{className:"gf-form"},X.a.createElement(Fe,{queryKeyword:!0,inputWidth:0,label:"Configured SLI",tooltip:"SLI configuration used to compute error budget and SLI values.",noOptionsMessage:"No configured SLI found",value:e.sloReport,options:this.state.sloReports,onChange:this.onSloChange}),X.a.createElement(Te,{queryKeyword:!0,labelWidth:7,inputWidth:0,label:"SLO",tooltip:"Type in your desired SLO threshold from 0 to 0.9999",value:e.sloValue,invalid:!this.state.isValidSlo,placeholder:"0.99",onChange:this.onSloValueChange}),X.a.createElement(Fe,{queryKeyword:!0,labelWidth:7,inputWidth:0,label:"Value type",tooltip:X.a.createElement("div",null,"Select your specific SLO information:",X.a.createElement("ul",null,X.a.createElement("li",null,"'SLI' requires Gauge visualization"),X.a.createElement("li",null,"'Remaining Error Budget' requires Singlestat visualization"),X.a.createElement("li",null,"'Timeseries' requires Bars draw mode on Graph visualization"))),value:e.sloSpecific,options:Qe,onChange:this.onSloSpecificChange}))},t}(X.a.Component),Ue=[{key:"pageLoad",label:"Page Loads"},{key:"page_change",label:"Page Transitions"},{key:"resourceLoad",label:"Resources"},{key:"httpRequest",label:"HTTP Requests"},{key:"error",label:"Errors"},{key:"custom",label:"Custom Events"}],Be=!1,De=function(e){function t(t){var n=e.call(this,t)||this;return n.onWebsiteChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;a.entity=e,r(a),i()},n.onBeaconTypeChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.filterMetricsOnType;a.entityType=e,r(a),i(a.entityType.key)},n.onGroupChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;a.group=e,a.group&&3===a.metricCategory.key&&(a.showGroupBySecondLevel="KEY_VALUE_PAIR"===a.group.type),a.showGroupBySecondLevel||(a.groupbyTagSecondLevelKey=""),r(a),i()},n.debouncedRunQuery=A.a.debounce(n.props.onRunQuery,500),n.onGroupByTagSecondLevelKeyChange=function(e){var t=n.props,a=t.query,r=t.onChange;a.groupbyTagSecondLevelKey=e.currentTarget.value,r(a),n.debouncedRunQuery()},n.state={websites:[]},n}return i(t,e),t.prototype.componentDidMount=function(){var e=this,t=this.props,n=t.query,a=t.datasource,r=t.onChange;Be=!1,a.fetchWebsites().then((function(t){Be||(e.setState({websites:t}),n.entity&&n.entity.key||!t?n.entity&&!A.a.find(t,["key",n.entity.key])&&(n.entity=t[0]):n.entity=t[0],r(n))})),a.dataSourceWebsite.getWebsiteTags().then((function(t){Be||(e.props.updateGroups(A.a.sortBy(t,"key")),n.group&&n.group.key||(n.group=A.a.find(t,["key","beacon.page.name"]),r(n)))})),n.entityType&&n.entityType.key||(n.entityType=Ue[0],r(n)),a.dataSourceWebsite.getWebsiteMetricsCatalog().then((function(t){Be||e.props.updateMetrics(A.a.filter(t,(function(e){return e.beaconTypes.includes(n.entityType.key)})))}))},t.prototype.componentWillUnmount=function(){Be=!0},t.prototype.render=function(){var e=this.props,t=e.query,n=e.groups;return X.a.createElement("div",{className:"gf-form"},X.a.createElement(Fe,{queryKeyword:!0,inputWidth:0,label:"Website",tooltip:"Select your website.",noOptionsMessage:"No websites found",value:t.entity,options:this.state.websites,onChange:this.onWebsiteChange}),X.a.createElement(Fe,{queryKeyword:!0,labelWidth:6,label:"Type",tooltip:"Select a beacon type.",value:t.entityType,options:Ue,onChange:this.onBeaconTypeChange}),X.a.createElement(Fe,{queryKeyword:!0,labelWidth:6,label:"Group by",tooltip:"Group by tag.",value:t.group,options:n,onChange:this.onGroupChange}),X.a.createElement("div",{style:t.showGroupBySecondLevel?{}:{display:"none"}},X.a.createElement(ee.Input,{css:"",value:t.groupbyTagSecondLevelKey,onChange:this.onGroupByTagSecondLevelKeyChange})))},t}(X.a.Component),Ve=[{key:"EQUALS",label:"equals",type:"STRING"},{key:"NOT_EQUAL",label:"does not equal",type:"STRING"},{key:"CONTAINS",label:"contains",type:"STRING"},{key:"NOT_CONTAIN",label:"does not contain",type:"STRING"},{key:"NOT_EMPTY",label:"is present",type:"STRING"},{key:"IS_EMPTY",label:"is not present",type:"STRING"},{key:"EQUALS",label:"=",type:"NUMBER"},{key:"NOT_EQUAL",label:"!=",type:"NUMBER"},{key:"LESS_THAN",label:"<",type:"NUMBER"},{key:"GREATER_THAN",label:">",type:"NUMBER"},{key:"IS_EMPTY",label:"is empty",type:"NUMBER"},{key:"EQUALS",label:"is",type:"BOOLEAN"},{key:"EQUALS",label:"equals",type:"KEY_VALUE_PAIR"},{key:"NOT_EQUAL",label:"does not equal",type:"KEY_VALUE_PAIR"},{key:"CONTAINS",label:"contains",type:"KEY_VALUE_PAIR"},{key:"NOT_CONTAIN",label:"does not contain",type:"KEY_VALUE_PAIR"},{key:"NOT_EMPTY",label:"is present",type:"KEY_VALUE_PAIR"},{key:"IS_EMPTY",label:"is not present",type:"KEY_VALUE_PAIR"}],We=function(e){function t(t){var n=e.call(this,t)||this;return n.OPERATOR_STRING="STRING",n.OPERATOR_NUMBER="NUMBER",n.OPERATOR_BOOLEAN="BOOLEAN",n.OPERATOR_KEY_VALUE="KEY_VALUE_PAIR",n.addTagFilter=function(){var e=n.props,t=e.query,a=e.onChange;t.filters.push({tag:t.group,entity:ye[0],operator:n.filterOperatorsOnType(t.group.type)[0],booleanValue:!1,numberValue:0,stringValue:"",isValid:!1}),a(t)},n.removeTagFilter=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;a.filters.splice(e,1),r(a),i()},n.onCallToEntityChange=function(e,t){n.props.query.filters[t].entity=e,n.validateChangeAndRun(t)},n.onOperatorChange=function(e,t){n.props.query.filters[t].operator=e,n.validateChangeAndRun(t)},n.debouncedRunQuery=A.a.debounce(n.props.onRunQuery,500),n.onTagFilterStringValueChange=function(e,t){n.props.query.filters[t].stringValue=e.currentTarget.value,n.validateChangeAndRun(t,!0)},n.onTagFilterNumberValueChange=function(e,t){n.props.query.filters[t].numberValue=e.currentTarget.valueAsNumber,n.validateChangeAndRun(t,!0)},n}return i(t,e),t.prototype.filterOperatorsOnType=function(e){return A.a.filter(Ve,(function(t){return t.type===e}))},t.prototype.onGroupChange=function(e,t){var n=this.props.query;n.filters[t].tag=e;var a=this.filterOperatorsOnType(e.type);A.a.includes(a,n.filters[t].operator)||(n.filters[t].operator=a[0]),this.validateChangeAndRun(t)},t.prototype.canShowStringInput=function(e){return!e.operator.key.includes("EMPTY")&&("STRING"===e.tag.type||"KEY_VALUE_PAIR"===e.tag.type)},t.prototype.onTagFilterBooleanValueChange=function(e,t){this.props.query.filters[t].booleanValue=e.key,this.validateChangeAndRun(t)},t.prototype.validateChangeAndRun=function(e,t){void 0===t&&(t=!1);var n=this.props,a=n.query,r=n.onChange,i=n.onRunQuery;a.filters[e].tag?a.filters[e].operator.key.includes("EMPTY")?(a.filters[e].isValid=!0,a.filters[e].stringValue="",a.filters[e].numberValue=0,a.filters[e].booleanValue=!0):this.OPERATOR_STRING===a.filters[e].tag.type&&a.filters[e].stringValue||this.OPERATOR_KEY_VALUE===a.filters[e].tag.type&&a.filters[e].stringValue&&a.filters[e].stringValue.includes("=")||this.OPERATOR_NUMBER===a.filters[e].tag.type&&null!==a.filters[e].numberValue?a.filters[e].isValid=!0:a.filters[e].isValid=this.OPERATOR_BOOLEAN===a.filters[e].tag.type&&a.filters[e].booleanValue:a.filters[e].isValid=!1,r(a),t?this.debouncedRunQuery():i()},t.prototype.render=function(){var e=this,t=this.props,n=t.query,a=t.groups,r=n.filters.map((function(t,r){return X.a.createElement("div",{className:"gf-form"},X.a.createElement(ee.InlineFormLabel,{className:"query-keyword",width:14,tooltip:"Filter by tag."},r+1,". filter"),2===n.metricCategory.key&&X.a.createElement(Se,{value:n.filters[r].entity,onChange:function(t){return e.onCallToEntityChange(t,r)}}),X.a.createElement(ee.Select,{menuPlacement:"bottom",width:30,isSearchable:!0,value:n.filters[r].tag,options:a,onChange:function(t){return e.onGroupChange(t,r)}}),X.a.createElement(ee.Select,{menuPlacement:"bottom",width:12,isSearchable:!0,value:n.filters[r].operator,options:e.filterOperatorsOnType(n.filters[r].tag.type),onChange:function(t){return e.onOperatorChange(t,r)}}),e.canShowStringInput(n.filters[r])&&X.a.createElement(ee.Input,{css:"",width:30,value:n.filters[r].stringValue,placeholder:"KEY_VALUE_PAIR"===n.filters[r].tag.type?"key=value":"Please specify",onChange:function(t){return e.onTagFilterStringValueChange(t,r)}}),"NUMBER"===n.filters[r].tag.type&&X.a.createElement(ee.Input,{css:"",type:"number",width:30,value:n.filters[r].numberValue,placeholder:"Please specify",onChange:function(t){return e.onTagFilterNumberValueChange(t,r)}}),"BOOLEAN"===n.filters[r].tag.type&&X.a.createElement(ee.Select,{menuPlacement:"bottom",width:30,isSearchable:!0,onChange:function(t){return e.onTagFilterBooleanValueChange(t,r)},value:{key:""+n.filters[r].booleanValue,label:""+n.filters[r].booleanValue},options:[{key:"false",label:"false"},{key:"true",label:"true"}]}),X.a.createElement(ee.Button,{variant:"secondary",onClick:function(){return e.removeTagFilter(r)}},"-"))}));return X.a.createElement("div",null,r,X.a.createElement("div",{className:"gf-form"},X.a.createElement(ee.InlineFormLabel,{width:14,tooltip:"Add an additional tag filter."},"Add filter"),X.a.createElement(ee.Button,{variant:"secondary",onClick:this.addTagFilter},"+"),X.a.createElement("div",{hidden:!n.showWarningCantShowAllResults},X.a.createElement(ee.InlineFormLabel,{width:12,tooltip:"Add Filter to narrow down the data."},"⚠️ Can't show all results"))))},t}(X.a.Component),Ge=function(e){function t(t){var n=e.call(this,t)||this;return n.onMetricChange=function(e){var t=n.props,a=t.query,r=t.onRunQuery,i=t.onChange;a.metric=e,a.metric&&a.metric.key&&!A.a.includes(a.metric.aggregations,a.aggregation)&&(a.aggregation=a.metric.aggregations[0]),a.displayMaxMetricValue&&!n.canShowMaxMetricValue()&&(a.displayMaxMetricValue=!1),a.allMetrics=[],a.showAllMetrics=!1,i(a),r()},n.onTimeIntervalChange=function(e){var t=n.props,a=t.query,r=t.onRunQuery,i=t.onChange;a.timeInterval=e,i(a),r()},n.onAggregationChange=function(e){var t=n.props,a=t.query,r=t.onRunQuery,i=t.onChange;a.aggregation=e,i(a),r()},n.onShowMaxValueChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;e&&e.currentTarget&&(a.displayMaxMetricValue=e.currentTarget.checked,r(a),i())},n.onShowAllMetricsChange=function(e){var t=n.props,a=t.query,r=t.onChange,i=t.onRunQuery;e&&e.currentTarget&&(a.showAllMetrics=e.currentTarget.checked,a.showAllMetrics&&(a.metric={key:null,label:"Displaying "+n.props.availableMetrics.length+" metrics"},a.allMetrics=n.props.availableMetrics),r(a),i())},n.state={possibleTimeIntervals:[],possibleAggregations:[]},n}return i(t,e),t.prototype.componentDidMount=function(){var e=this.props,t=e.query,n=e.datasource,a=e.onChange;t.timeInterval&&t.timeInterval.key||(t.timeInterval=n.getDefaultTimeInterval(t)),a(t)},t.prototype.canShowMaxMetricValue=function(){var e=this.props.query;return e.entityType&&"host"===e.entityType.key&&e.metric&&A.a.find(P,(function(t){return t.key===e.metric.key}))},t.prototype.canShowAggregation=function(){return this.props.query.metricCategory.key>=2},t.prototype.canSelectAggregation=function(){var e=this.props.query;return e.metric&&e.metric.aggregations&&e.metric.aggregations.length>1},t.prototype.render=function(){var e=this.props,t=e.query,n=e.datasource;return X.a.createElement("div",{className:"gf-form"},X.a.createElement(Fe,{queryKeyword:!0,disabled:t.useFreeTextMetrics,inputWidth:0,label:"Metric",tooltip:"Select the metric you wish to plot.",value:t.metric,noOptionsMessage:"No metrics found",options:this.props.availableMetrics,onChange:this.onMetricChange}),0===t.metricCategory.key&&X.a.createElement(Ae,{queryKeyword:!0,disabled:!this.canShowMaxMetricValue(),labelWidth:9,label:"Show max value",tooltip:"Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only.",value:t.displayMaxMetricValue,onChange:this.onShowMaxValueChange}),1===t.metricCategory.key&&X.a.createElement(Ae,{queryKeyword:!0,disabled:!t.canShowAllMetrics,labelWidth:9,label:"Show all metrics",tooltip:"You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.",value:t.showAllMetrics,onChange:this.onShowAllMetricsChange}),this.canShowAggregation()&&X.a.createElement(Fe,{queryKeyword:!0,disabled:!this.canSelectAggregation(),labelWidth:6,inputWidth:12,label:"Aggregation",tooltip:"Select a metric aggregation.",value:t.aggregation,options:t.metric.aggregations,onChange:this.onAggregationChange}),X.a.createElement(Fe,{queryKeyword:!0,disabled:n.availableTimeIntervals.length<=1,labelWidth:6,inputWidth:12,label:"Rollup",tooltip:"Select the rollup value.",value:t.timeInterval,options:n.availableTimeIntervals,onChange:this.onTimeIntervalChange}))},t}(X.a.Component),ze=(n(10),function(e){function t(t){var n=e.call(this,t)||this;n.onCategoryChange=function(e){n.query.metricCategory===e||(n.selectionReset(),n.query.metricCategory=e,n.query.timeInterval=n.props.datasource.getDefaultTimeInterval(n.query),n.changeAndRun())},n.changeAndRun=function(){n.props.onChange(n.query),n.props.onRunQuery()},n.updateMetrics=function(e){if(n.setState({availableMetrics:A.a.sortBy(e,"key"),allMetrics:A.a.sortBy(e,"key")}),n.query.metric&&n.query.metric.key||n.query.showAllMetrics){var t=A.a.find(e,(function(e){return e.key===n.query.metric.key}));n.query.metric=t||{key:null}}1===n.query.metricCategory.key?n.onMetricsFilter(n.query.customFilters):n.query.metric&&n.query.metric.key||n.setMetricPlaceholder(e.length),n.changeAndRun()},n.filterForEntityType=function(e,t){void 0===e&&(e=!0),void 0===t&&(t=!0);var a=n.props,r=a.query,i=a.datasource,o=a.onChange;i.getEntityTypes().then((function(a){var i=a;t&&!r.useFreeTextMetrics&&(i=n.filterEntityTypes(a,e)),n.setState({queryTypes:i}),r.entityType&&r.entityType.key&&A.a.find(i,(function(e){return e.key===r.entityType.key}))||(r.entityType={key:null,label:"Please select ("+i.length+")"}),o(r)}))},n.filterEntityTypes=function(e,t){return t?A.a.sortBy(A.a.filter(e,(function(e){return n.findMatchingEntityTypes(e)})),"label"):A.a.sortBy(e,"label")},n.findMatchingEntityTypes=function(e){return(0===n.props.query.metricCategory.key||"statsd"===e.key||"prometheus"===e.key||"jvmRuntimePlatform"===e.key||"dropwizardApplicationContainer"===e.key)&&(n.snapshots.find((function(t){return t===e.key}))&&null!=e.label)},n.updateQueryTypes=function(e){n.setState({queryTypes:e})},n.updateGroups=function(e){n.setState({groups:e})},n.onMetricsFilter=function(e){var t=[];t=e&&0!==e.length?n.applyFilterToMetricList(e):n.state.allMetrics,n.query.canShowAllMetrics=n.isAbleToShowAllMetrics(t),n.query.canShowAllMetrics||(n.query.showAllMetrics=!1),n.query.customFilters=e,n.query.metric&&n.query.metric.key||n.setMetricPlaceholder(t.length),n.setState((function(e){return o(o({},e),{availableMetrics:t})})),n.props.onChange(n.query),n.checkMetricAndRefresh()};var a={metricCategory:M[0],timeShiftIsValid:!0,customFilters:[]};return n.query=Object.assign(a,t.query),Y(n.query),n.state={groups:[],allMetrics:[],queryTypes:[],availableMetrics:[]},n.filterMetricsOnType=n.filterMetricsOnType.bind(n),n.loadEntityTypes=n.loadEntityTypes.bind(n),n.props.onChange(n.query),n}return i(t,e),t.prototype.setMetricPlaceholder=function(e){1===this.query.metricCategory.key?this.query.metric={key:null,label:"Please select ("+e+"/"+this.state.allMetrics.length+")"}:this.query.metric={key:null,label:"Please select ("+e+")"},this.props.onChange(this.query)},t.prototype.loadEntityTypes=function(e){var t=this;void 0===e&&(e=!0);var n=this.props,a=n.query,r=n.datasource,i=n.onRunQuery;a.entityQuery?r.fetchTypesForTarget(a).then((function(n){t.snapshots=n.data,t.filterForEntityType(!0,e),i()})):this.setState({queryTypes:[]})},t.prototype.applyFilterToMetricList=function(e){var t=this.state.allMetrics;return A.a.forEach(e,(function(e){""!==e&&(t=A.a.sortBy(A.a.filter(t,(function(t){return t.key.toLowerCase().includes(e.toLowerCase())})),"key"))})),t},t.prototype.filterMetricsOnType=function(e){var t=this.state.allMetrics.filter((function(t){return t.beaconTypes.includes(e)}));this.setState({availableMetrics:t}),this.query.metric&&this.query.metric.key&&this.query.metric.beaconTypes.includes(e)||this.setMetricPlaceholder(t.length),this.changeAndRun()},t.prototype.isAbleToShowAllMetrics=function(e){return 1===this.query.metricCategory.key&&e.length>0&&e.length<=5},t.prototype.checkMetricAndRefresh=function(){this.query.metric&&this.query.metric.key&&!A.a.includes(A.a.map(this.state.availableMetrics,(function(e){return e.key})),this.query.metric.key)&&this.resetMetricSelection(),this.changeAndRun()},t.prototype.selectionReset=function(){var e=this.props.query;e.metricCategory.key>1&&(e.entityQuery=""),this.setState({availableMetrics:[],allMetrics:[],groups:[]}),this.resetEntityTypeSelection(),this.resetEntitySelection(),this.resetMetricSelection()},t.prototype.resetEntityTypeSelection=function(){var e=this.props.query;e.entityType={key:null,label:"-"},e.customFilters=[]},t.prototype.resetEntitySelection=function(){var e=this.props.query;e.entity={},e.group={},e.showGroupBySecondLevel=!1,e.groupbyTagSecondLevelKey="",e.aggregateGraphs=!1,e.aggregationFunction=Me[0],e.hideOriginalGraphs=!1,e.filters=[],e.showWarningCantShowAllResults=!1,e.showAllMetrics=!1,e.canShowAllMetrics=!1,e.displayMaxMetricValue=!1,e.applicationCallToEntity="",e.callToEntity="",this.resetServices(),this.resetEndpoints(),this.resetSLO()},t.prototype.resetMetricSelection=function(){var e=this.props.query;e.metric={},e.timeShift="",e.timeShiftIsValid=!0,e.showWarningCantShowAllResults=!1,e.showAllMetrics=!1,e.labelFormat="",e.freeTextMetrics="",e.useFreeTextMetrics=!1},t.prototype.resetServices=function(){this.props.query.service={}},t.prototype.resetEndpoints=function(){this.props.query.endpoint={}},t.prototype.resetSLO=function(){var e=this.props.query;e.sloValue="",e.sloReport={}},t.prototype.render=function(){var e=this.query,t=this.onCategoryChange;return X.a.createElement("div",{className:"gf-form-group"},X.a.createElement("div",{className:"gf-form"},X.a.createElement(Fe,{queryKeyword:!0,inputWidth:0,label:"Category",tooltip:"Select a metric category.",value:e.metricCategory,options:M,onChange:t})),0===e.metricCategory.key&&X.a.createElement(Pe,{query:e,queryTypes:this.state.queryTypes,datasource:this.props.datasource,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,loadEntityTypes:this.loadEntityTypes,updateQueryTypes:this.updateQueryTypes}),1===e.metricCategory.key&&X.a.createElement(Pe,{query:e,queryTypes:this.state.queryTypes,datasource:this.props.datasource,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,loadEntityTypes:this.loadEntityTypes,updateQueryTypes:this.updateQueryTypes}),2===e.metricCategory.key&&X.a.createElement(Ee,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,groups:this.state.groups,updateGroups:this.updateGroups,datasource:this.props.datasource}),3===e.metricCategory.key&&X.a.createElement(De,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,groups:this.state.groups,updateGroups:this.updateGroups,filterMetricsOnType:this.filterMetricsOnType,datasource:this.props.datasource}),4===e.metricCategory.key&&X.a.createElement(pe,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,datasource:this.props.datasource}),7===e.metricCategory.key&&X.a.createElement($e,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,datasource:this.props.datasource}),7!==e.metricCategory.key&&X.a.createElement(Ge,{query:e,onChange:this.props.onChange,onRunQuery:this.props.onRunQuery,updateMetrics:this.updateMetrics,availableMetrics:this.state.availableMetrics,datasource:this.props.datasource}),1===e.metricCategory.key&&X.a.createElement(ke,{query:e,onChange:this.props.onChange,onRunQuery:this.props.onRunQuery,onFilterChange:this.onMetricsFilter,availableMetrics:this.state.availableMetrics,datasource:this.props.datasource}),(2===e.metricCategory.key||3===e.metricCategory.key)&&X.a.createElement(We,{query:e,onChange:this.props.onChange,onRunQuery:this.props.onRunQuery,datasource:this.props.datasource,groups:this.state.groups}),X.a.createElement(Oe,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,loadEntityTypes:this.loadEntityTypes}))},t}(J.PureComponent));n.d(t,"plugin",(function(){return Ke}));var Ke=new a.DataSourcePlugin(Z).setConfigEditor(ne).setQueryEditor(ze)}])}));
+define(["@grafana/data","@grafana/runtime","@grafana/ui","lodash","react"], function(__WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_runtime__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_lodash__, __WEBPACK_EXTERNAL_MODULE_react__) { return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./module.ts");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "../node_modules/css-loader/dist/cjs.js?!../node_modules/postcss-loader/src/index.js?!../node_modules/sass-loader/lib/loader.js!./components/plugin.css":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ../node_modules/css-loader/dist/cjs.js??ref--8-1!../node_modules/postcss-loader/src??ref--8-2!../node_modules/sass-loader/lib/loader.js!./components/plugin.css ***!
+  \***********************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
+exports = ___CSS_LOADER_API_IMPORT___(true);
+// Module
+exports.push([module.i, ".entityDropdown {\n  min-width: 80px; }\n", "",{"version":3,"sources":["plugin.css"],"names":[],"mappings":"AAAA;EACE,eAAe,EAAE","file":"plugin.css","sourcesContent":[".entityDropdown {\n  min-width: 80px; }\n"]}]);
+// Exports
+module.exports = exports;
+
+
+/***/ }),
+
+/***/ "../node_modules/css-loader/dist/cjs.js?!../node_modules/postcss-loader/src/index.js?!../node_modules/sass-loader/lib/loader.js!./instana-grafana.css":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ../node_modules/css-loader/dist/cjs.js??ref--8-1!../node_modules/postcss-loader/src??ref--8-2!../node_modules/sass-loader/lib/loader.js!./instana-grafana.css ***!
+  \*********************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
+exports = ___CSS_LOADER_API_IMPORT___(true);
+// Module
+exports.push([module.i, "path[d=\"M18.71,7.21a1,1,0,0,0-1.42,0L9.84,14.67,6.71,11.53A1,1,0,1,0,5.29,13l3.84,3.84a1,1,0,0,0,1.42,0l8.16-8.16A1,1,0,0,0,18.71,7.21Z\"] {\n  display: none; }\n", "",{"version":3,"sources":["instana-grafana.css"],"names":[],"mappings":"AAAA;EACE,aAAa,EAAE","file":"instana-grafana.css","sourcesContent":["path[d=\"M18.71,7.21a1,1,0,0,0-1.42,0L9.84,14.67,6.71,11.53A1,1,0,1,0,5.29,13l3.84,3.84a1,1,0,0,0,1.42,0l8.16-8.16A1,1,0,0,0,18.71,7.21Z\"] {\n  display: none; }\n"]}]);
+// Exports
+module.exports = exports;
+
+
+/***/ }),
+
+/***/ "../node_modules/css-loader/dist/runtime/api.js":
+/*!******************************************************!*\
+  !*** ../node_modules/css-loader/dist/runtime/api.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+// eslint-disable-next-line func-names
+module.exports = function (useSourceMap) {
+  var list = []; // return the list of modules as css string
+
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = cssWithMappingToString(item, useSourceMap);
+
+      if (item[2]) {
+        return "@media ".concat(item[2], " {").concat(content, "}");
+      }
+
+      return content;
+    }).join('');
+  }; // import a list of modules into the list
+  // eslint-disable-next-line func-names
+
+
+  list.i = function (modules, mediaQuery, dedupe) {
+    if (typeof modules === 'string') {
+      // eslint-disable-next-line no-param-reassign
+      modules = [[null, modules, '']];
+    }
+
+    var alreadyImportedModules = {};
+
+    if (dedupe) {
+      for (var i = 0; i < this.length; i++) {
+        // eslint-disable-next-line prefer-destructuring
+        var id = this[i][0];
+
+        if (id != null) {
+          alreadyImportedModules[id] = true;
+        }
+      }
+    }
+
+    for (var _i = 0; _i < modules.length; _i++) {
+      var item = [].concat(modules[_i]);
+
+      if (dedupe && alreadyImportedModules[item[0]]) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      if (mediaQuery) {
+        if (!item[2]) {
+          item[2] = mediaQuery;
+        } else {
+          item[2] = "".concat(mediaQuery, " and ").concat(item[2]);
+        }
+      }
+
+      list.push(item);
+    }
+  };
+
+  return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+  var content = item[1] || ''; // eslint-disable-next-line prefer-destructuring
+
+  var cssMapping = item[3];
+
+  if (!cssMapping) {
+    return content;
+  }
+
+  if (useSourceMap && typeof btoa === 'function') {
+    var sourceMapping = toComment(cssMapping);
+    var sourceURLs = cssMapping.sources.map(function (source) {
+      return "/*# sourceURL=".concat(cssMapping.sourceRoot || '').concat(source, " */");
+    });
+    return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+  }
+
+  return [content].join('\n');
+} // Adapted from convert-source-map (MIT)
+
+
+function toComment(sourceMap) {
+  // eslint-disable-next-line no-undef
+  var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+  var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
+  return "/*# ".concat(data, " */");
+}
+
+/***/ }),
+
+/***/ "../node_modules/style-loader/lib/addStyles.js":
+/*!*****************************************************!*\
+  !*** ../node_modules/style-loader/lib/addStyles.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getTarget = function (target, parent) {
+  if (parent){
+    return parent.querySelector(target);
+  }
+  return document.querySelector(target);
+};
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(target, parent) {
+                // If passing function in options, then use it for resolve "head" element.
+                // Useful for Shadow Root style i.e
+                // {
+                //   insertInto: function () { return document.querySelector("#foo").shadowRoot }
+                // }
+                if (typeof target === 'function') {
+                        return target();
+                }
+                if (typeof memo[target] === "undefined") {
+			var styleTarget = getTarget.call(this, target, parent);
+			// Special case to return head of iframe instead of iframe itself
+			if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[target] = styleTarget;
+		}
+		return memo[target]
+	};
+})();
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(/*! ./urls */ "../node_modules/style-loader/lib/urls.js");
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+        if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertAt.before, target);
+		target.insertBefore(style, nextSibling);
+	} else {
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
+
+	if(options.attrs.nonce === undefined) {
+		var nonce = getNonce();
+		if (nonce) {
+			options.attrs.nonce = nonce;
+		}
+	}
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function getNonce() {
+	if (false) {}
+
+	return __webpack_require__.nc;
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = typeof options.transform === 'function'
+		 ? options.transform(obj.css) 
+		 : options.transform.default(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+
+/***/ "../node_modules/style-loader/lib/urls.js":
+/*!************************************************!*\
+  !*** ../node_modules/style-loader/lib/urls.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/tslib/tslib.es6.js":
+/*!******************************************!*\
+  !*** ../node_modules/tslib/tslib.es6.js ***!
+  \******************************************/
+/*! exports provided: __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __createBinding, __exportStar, __values, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__extends", function() { return __extends; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__assign", function() { return __assign; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__rest", function() { return __rest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__decorate", function() { return __decorate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__param", function() { return __param; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__metadata", function() { return __metadata; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__awaiter", function() { return __awaiter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__generator", function() { return __generator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__createBinding", function() { return __createBinding; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__exportStar", function() { return __exportStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__values", function() { return __values; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__read", function() { return __read; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spread", function() { return __spread; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spreadArrays", function() { return __spreadArrays; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__await", function() { return __await; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncGenerator", function() { return __asyncGenerator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncDelegator", function() { return __asyncDelegator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncValues", function() { return __asyncValues; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__makeTemplateObject", function() { return __makeTemplateObject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importStar", function() { return __importStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importDefault", function() { return __importDefault; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldGet", function() { return __classPrivateFieldGet; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldSet", function() { return __classPrivateFieldSet; });
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    }
+    return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+function __createBinding(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}
+
+function __exportStar(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+
+function __values(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result.default = mod;
+    return result;
+}
+
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+}
+
+
+/***/ }),
+
+/***/ "./GlobalVariables.ts":
+/*!****************************!*\
+  !*** ./GlobalVariables.ts ***!
+  \****************************/
+/*! exports provided: PAGINATION_LIMIT, CACHE_MAX_AGE, SEPARATOR, BUILT_IN_METRICS, CUSTOM_METRICS, ANALYZE_APPLICATION_METRICS, ANALYZE_WEBSITE_METRICS, APPLICATION_SERVICE_ENDPOINT_METRICS, SLO_INFORMATION, ALL_APPLICATIONS, ALL_SERVICES, ALL_ENDPOINTS, PLEASE_SPECIFY */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PAGINATION_LIMIT", function() { return PAGINATION_LIMIT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CACHE_MAX_AGE", function() { return CACHE_MAX_AGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEPARATOR", function() { return SEPARATOR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BUILT_IN_METRICS", function() { return BUILT_IN_METRICS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CUSTOM_METRICS", function() { return CUSTOM_METRICS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ANALYZE_APPLICATION_METRICS", function() { return ANALYZE_APPLICATION_METRICS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ANALYZE_WEBSITE_METRICS", function() { return ANALYZE_WEBSITE_METRICS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "APPLICATION_SERVICE_ENDPOINT_METRICS", function() { return APPLICATION_SERVICE_ENDPOINT_METRICS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SLO_INFORMATION", function() { return SLO_INFORMATION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ALL_APPLICATIONS", function() { return ALL_APPLICATIONS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ALL_SERVICES", function() { return ALL_SERVICES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ALL_ENDPOINTS", function() { return ALL_ENDPOINTS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLEASE_SPECIFY", function() { return PLEASE_SPECIFY; });
+/* CONFIG */
+var PAGINATION_LIMIT = 15; // pagesize=200 => 3000 results in dropdown (~30sec.)
+
+var CACHE_MAX_AGE = 60000;
+var SEPARATOR = '|';
+/* CATEGORIES */
+
+var BUILT_IN_METRICS = 0;
+var CUSTOM_METRICS = 1;
+var ANALYZE_APPLICATION_METRICS = 2;
+var ANALYZE_WEBSITE_METRICS = 3;
+var APPLICATION_SERVICE_ENDPOINT_METRICS = 4; // replaces previous ->
+// APPLICATION_METRICS = '4';
+// SERVICE_METRICS = '5';
+// ENDPOINT_METRICS = '6';
+
+var SLO_INFORMATION = 7;
+/* DROPDOWN DEFAULTS */
+
+var ALL_APPLICATIONS = '-- No Application Filter --';
+var ALL_SERVICES = '-- No Service Filter --';
+var ALL_ENDPOINTS = '-- No Endpoint Filter --';
+/* PLACEHOLDER */
+
+var PLEASE_SPECIFY = 'Please specify';
+
+/***/ }),
+
+/***/ "./cache.ts":
+/*!******************!*\
+  !*** ./cache.ts ***!
+  \******************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var Cache =
+/** @class */
+function () {
+  function Cache() {
+    this.store = {};
+  }
+
+  Cache.prototype.put = function (key, value, ttl) {
+    var _this = this;
+
+    if (ttl === void 0) {
+      ttl = 60000;
+    }
+
+    if (key === undefined || value === undefined) {
+      return;
+    }
+
+    this.del(key);
+    this.store[key] = {
+      value: value,
+      expiry: Date.now() + ttl,
+      timeout: setTimeout(function () {
+        _this.del(key);
+      }, ttl)
+    };
+  };
+
+  Cache.prototype.get = function (key) {
+    var item = this.store[key];
+
+    if (item && !(item.expiry && item.expiry > Date.now())) {
+      this.del(key);
+      item = undefined;
+    }
+
+    return item && item.value;
+  };
+
+  Cache.prototype.del = function (key) {
+    if (this.store.hasOwnProperty(key)) {
+      clearTimeout(this.store[key].timeout);
+      delete this.store[key];
+    }
+  };
+
+  return Cache;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (Cache);
+
+/***/ }),
+
+/***/ "./components/AdvancedSettings/AdvancedSettings.tsx":
+/*!**********************************************************!*\
+  !*** ./components/AdvancedSettings/AdvancedSettings.tsx ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _Infrastructure_Custom_FreeTextMetrics__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Infrastructure/Custom/FreeTextMetrics */ "./components/Infrastructure/Custom/FreeTextMetrics.tsx");
+/* harmony import */ var _AggregateQuery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./AggregateQuery */ "./components/AdvancedSettings/AggregateQuery.tsx");
+/* harmony import */ var _FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../FormField/FormSwitch */ "./components/FormField/FormSwitch.tsx");
+/* harmony import */ var _FormField_FormInput__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../FormField/FormInput */ "./components/FormField/FormInput.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+
+
+
+
+
+
+
+
+var legendFormatPlaceholders = ['$label (on host $host)', '$label (on host $host)', '$label ($application) - $key', '$label ($website) - $key', '$label ($application) - $key', '', '', ''];
+var legendFormatTooltips = [react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Default: $label (on host $host)", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $label - entity label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $host - corresponding host"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $pid - corresponding PID"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $timeShift - corresponding timeShift"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $metric - displayed metric"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $type - entity type"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $service - service label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $name - label alternative"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $index - index in the list"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Default: $label (on host $host)", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $label - entity label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $host - corresponding host"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $pid - corresponding PID"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $timeShift - corresponding timeShift"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $metric - displayed metric"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $type - entity type"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $service - service label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $name - label alternative"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $index - index in the list"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Default: $label ($application) - $key", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $label - entity label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $application - application label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $timeShift - corresponding timeShift"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $metric - displayed metric"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $key - metric key with aggregation and rollup"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $index - index in the list"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Default: $label ($website) - $key", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $label - entity label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $website - application label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $type - entity type"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $timeShift - corresponding timeShift"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $metric - displayed metric"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $key - metric key with aggregation and rollup"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $index - index in the list"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Default: $label ($application) - $key", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $label - entity label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $application - application label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $service - service label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $endpoint - endpoint label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $timeShift - corresponding timeShift"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $metric - displayed metric"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $key - metric key with aggregation and rollup"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $index - index in the list"))), '', '', ''];
+
+var AdvancedSettings =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(AdvancedSettings, _super);
+
+  function AdvancedSettings(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_7___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onLegendFormatChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.labelFormat = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    _this.onTimeShiftChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.timeShift = eventItem.currentTarget.value;
+
+      if (query.timeShift) {
+        query.timeShiftIsValid = query.timeShift.match(/\d+[m,s,h,d,w]{1}/) ? true : false;
+      } else {
+        query.timeShiftIsValid = true;
+      }
+
+      onChange(query);
+
+      if (query.timeShiftIsValid) {
+        // onRunQuery with 500ms delay after last debounce
+        _this.debouncedRunQuery();
+      }
+    };
+
+    _this.onShowAdvancedSettingsChange = function (event) {
+      if (event && event.currentTarget) {
+        var _a = _this.props,
+            query = _a.query,
+            onChange = _a.onChange;
+        query.showAdvancedSettings = event.currentTarget.checked;
+        onChange(query);
+      }
+    };
+
+    _this.state = {
+      legendFormatPlaceholder: _this.setLegendFormatPlaceholder()
+    };
+    return _this;
+  }
+
+  AdvancedSettings.prototype.setLegendFormatPlaceholder = function () {
+    var query = this.props.query;
+    return legendFormatPlaceholders[query.metricCategory.key];
+  };
+
+  AdvancedSettings.prototype.setLegendFormatTooltip = function () {
+    var query = this.props.query;
+    return legendFormatTooltips[query.metricCategory.key];
+  };
+
+  AdvancedSettings.prototype.render = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        onRunQuery = _a.onRunQuery,
+        onChange = _a.onChange,
+        loadEntityTypes = _a.loadEntityTypes;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      label: 'Show advanced settings',
+      tooltip: 'Show all additional settings',
+      value: query.showAdvancedSettings,
+      onChange: function onChange(e) {
+        return _this.onShowAdvancedSettingsChange(e);
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      hidden: !query.showAdvancedSettings
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form',
+      hidden: query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"]
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormInput__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Legend format',
+      tooltip: this.setLegendFormatTooltip(),
+      value: query.labelFormat,
+      placeholder: this.setLegendFormatPlaceholder(),
+      onChange: function onChange(event) {
+        return _this.onLegendFormatChange(event);
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormInput__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Time shift',
+      tooltip: 'Specify the amount of hours that shall be used. The time shift function always go back in time, ' + 'not forward. Accepts values such as 1s, 1m, 1h, 1d, 1w.',
+      value: query.timeShift,
+      invalid: !query.timeShiftIsValid,
+      placeholder: '1h',
+      onChange: function onChange(event) {
+        return _this.onTimeShiftChange(event);
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      hidden: query.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"]
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Infrastructure_Custom_FreeTextMetrics__WEBPACK_IMPORTED_MODULE_3__["FreeTextMetrics"], {
+      query: query,
+      onRunQuery: onRunQuery,
+      onChange: onChange,
+      loadEntityTypes: loadEntityTypes
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      hidden: query.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["BUILT_IN_METRICS"] && query.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"]
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_AggregateQuery__WEBPACK_IMPORTED_MODULE_4__["AggregateQuery"], {
+      query: query,
+      onRunQuery: onRunQuery,
+      onChange: onChange
+    }))));
+  };
+
+  return AdvancedSettings;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (AdvancedSettings);
+
+/***/ }),
+
+/***/ "./components/AdvancedSettings/AggregateQuery.tsx":
+/*!********************************************************!*\
+  !*** ./components/AdvancedSettings/AggregateQuery.tsx ***!
+  \********************************************************/
+/*! exports provided: AggregateQuery */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AggregateQuery", function() { return AggregateQuery; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _lists_aggregation_function__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lists/aggregation_function */ "./lists/aggregation_function.ts");
+/* harmony import */ var _FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../FormField/FormSwitch */ "./components/FormField/FormSwitch.tsx");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+
+var AggregateQuery =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(AggregateQuery, _super);
+
+  function AggregateQuery(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onAggregateGraphs = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery;
+
+      if (event && event.currentTarget) {
+        query.aggregateGraphs = event.currentTarget.checked;
+        onRunQuery();
+      }
+    };
+
+    _this.onHideOriginalGraph = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery;
+
+      if (event && event.currentTarget) {
+        query.hideOriginalGraphs = event.currentTarget.checked;
+        onRunQuery();
+      }
+    };
+
+    _this.onAggregationFunctionChange = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery;
+      query.aggregationFunction = event;
+      onRunQuery();
+    };
+
+    _this.state = {
+      showAdditionalSettings: false,
+      legendFormat: ''
+    };
+    var query = _this.props.query;
+
+    if (!query.aggregationFunction) {
+      query.aggregationFunction = _lists_aggregation_function__WEBPACK_IMPORTED_MODULE_2__["default"][0];
+    }
+
+    return _this;
+  }
+
+  AggregateQuery.prototype.render = function () {
+    var query = this.props.query;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      queryKeyword: true,
+      label: 'Aggregate query graphs',
+      tooltip: 'Aggregate all graphs of a query.',
+      value: query.aggregateGraphs,
+      onChange: this.onAggregateGraphs
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Select"], {
+      menuPlacement: 'bottom',
+      width: 12,
+      isSearchable: true,
+      options: _lists_aggregation_function__WEBPACK_IMPORTED_MODULE_2__["default"],
+      value: query.aggregationFunction,
+      disabled: !query.aggregateGraphs,
+      onChange: this.onAggregationFunctionChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      queryKeyword: true,
+      disabled: !query.aggregateGraphs,
+      labelWidth: 10,
+      label: 'Hide original graphs',
+      tooltip: 'Removes the original graphs resulted from the query and only shows the aggregated graph.',
+      value: query.hideOriginalGraphs,
+      onChange: this.onHideOriginalGraph
+    }));
+  };
+
+  return AggregateQuery;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Analyze/ApplicationCallsMetrics.tsx":
+/*!********************************************************!*\
+  !*** ./components/Analyze/ApplicationCallsMetrics.tsx ***!
+  \********************************************************/
+/*! exports provided: ApplicationCallsMetrics */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ApplicationCallsMetrics", function() { return ApplicationCallsMetrics; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lists/apply_call_to_entities */ "./lists/apply_call_to_entities.ts");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../FormField/FormWrapper */ "./components/FormField/FormWrapper.tsx");
+/* harmony import */ var _Entity_Entity__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Entity/Entity */ "./components/Entity/Entity.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _plugin_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../plugin.css */ "./components/plugin.css");
+/* harmony import */ var _plugin_css__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_plugin_css__WEBPACK_IMPORTED_MODULE_8__);
+
+
+
+
+
+
+
+
+
+var isUnmounting = false;
+
+var ApplicationCallsMetrics =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(ApplicationCallsMetrics, _super);
+
+  function ApplicationCallsMetrics(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onApplicationChange = function (application) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.entity = application;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onGroupChange = function (group) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.group = group;
+
+      if (query.group && query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"]) {
+        query.showGroupBySecondLevel = query.group.type === 'KEY_VALUE_PAIR';
+      }
+
+      if (!query.showGroupBySecondLevel) {
+        query.groupbyTagSecondLevelKey = '';
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onApplicationCallToEntityChange = function (applicationCallToEntity) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.applicationCallToEntity = applicationCallToEntity;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onCallToEntityChange = function (callToEntity) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.callToEntity = callToEntity;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_7___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onGroupByTagSecondLevelKeyChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    _this.state = {
+      applications: []
+    };
+    return _this;
+  }
+
+  ApplicationCallsMetrics.prototype.componentDidMount = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        datasource = _a.datasource,
+        onChange = _a.onChange;
+    isUnmounting = false;
+    datasource.fetchApplications().then(function (applications) {
+      if (!isUnmounting) {
+        if (!lodash__WEBPACK_IMPORTED_MODULE_7___default.a.find(applications, {
+          key: null
+        })) {
+          applications.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ALL_APPLICATIONS"]
+          });
+        }
+
+        _this.setState({
+          applications: applications
+        });
+
+        if (!query.entity || !query.entity.key && !query.entity.label) {
+          query.entity = applications[0];
+        }
+
+        if (!query.callToEntity) {
+          query.callToEntity = _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_3__["default"][0];
+        }
+
+        if (!query.applicationCallToEntity) {
+          query.applicationCallToEntity = _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_3__["default"][0];
+        }
+
+        onChange(query);
+      }
+    });
+    datasource.dataSourceApplication.getApplicationTags().then(function (applicationTags) {
+      if (!isUnmounting) {
+        _this.props.updateGroups(lodash__WEBPACK_IMPORTED_MODULE_7___default.a.sortBy(applicationTags, 'key')); // select a meaningful default group
+
+
+        if (!query.group || !query.group.key) {
+          query.group = lodash__WEBPACK_IMPORTED_MODULE_7___default.a.find(applicationTags, ['key', 'endpoint.name']);
+          onChange(query);
+        }
+      }
+    });
+    this.props.updateMetrics(datasource.dataSourceApplication.getApplicationMetricsCatalog());
+  };
+
+  ApplicationCallsMetrics.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  ApplicationCallsMetrics.prototype.render = function () {
+    var _a = this.props,
+        query = _a.query,
+        groups = _a.groups;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      stretch: true
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 14,
+      tooltip: 'Select your application.'
+    }, "Application"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Entity_Entity__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      value: query.applicationCallToEntity,
+      onChange: this.onApplicationCallToEntityChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      value: query.entity,
+      options: this.state.applications,
+      onChange: this.onApplicationChange
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      stretch: true
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 7,
+      tooltip: 'Group by tag.'
+    }, "Group by"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Entity_Entity__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      value: query.callToEntity,
+      onChange: this.onCallToEntityChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      options: groups,
+      value: query.group,
+      onChange: this.onGroupChange
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      style: !query.showGroupBySecondLevel ? {
+        display: 'none'
+      } : {}
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Input"], {
+      css: '',
+      type: 'text',
+      value: query.groupbyTagSecondLevelKey,
+      onChange: this.onGroupByTagSecondLevelKeyChange
+    })));
+  };
+
+  return ApplicationCallsMetrics;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Analyze/Filter.tsx":
+/*!***************************************!*\
+  !*** ./components/Analyze/Filter.tsx ***!
+  \***************************************/
+/*! exports provided: Filters */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Filters", function() { return Filters; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lists/apply_call_to_entities */ "./lists/apply_call_to_entities.ts");
+/* harmony import */ var _lists_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../lists/operators */ "./lists/operators.ts");
+/* harmony import */ var _Entity_Entity__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Entity/Entity */ "./components/Entity/Entity.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+
+
+
+
+
+
+
+
+
+var Filters =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(Filters, _super);
+
+  function Filters(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.OPERATOR_STRING = 'STRING';
+    _this.OPERATOR_NUMBER = 'NUMBER';
+    _this.OPERATOR_BOOLEAN = 'BOOLEAN';
+    _this.OPERATOR_KEY_VALUE = 'KEY_VALUE_PAIR';
+
+    _this.addTagFilter = function () {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.filters.push({
+        tag: query.group,
+        entity: _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_4__["default"][0],
+        operator: _this.filterOperatorsOnType(query.group.type)[0],
+        booleanValue: false,
+        numberValue: 0,
+        stringValue: '',
+        isValid: false
+      });
+      onChange(query);
+    };
+
+    _this.removeTagFilter = function (index) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.filters.splice(index, 1);
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onCallToEntityChange = function (callToEntity, index) {
+      var query = _this.props.query;
+      query.filters[index].entity = callToEntity;
+
+      _this.validateChangeAndRun(index);
+    };
+
+    _this.onOperatorChange = function (operator, index) {
+      var query = _this.props.query;
+      query.filters[index].operator = operator;
+
+      _this.validateChangeAndRun(index);
+    };
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_7___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onTagFilterStringValueChange = function (value, index) {
+      var query = _this.props.query;
+      query.filters[index].stringValue = value.currentTarget.value;
+
+      _this.validateChangeAndRun(index, true);
+    };
+
+    _this.onTagFilterNumberValueChange = function (value, index) {
+      var query = _this.props.query;
+      query.filters[index].numberValue = value.currentTarget.valueAsNumber;
+
+      _this.validateChangeAndRun(index, true);
+    };
+
+    return _this;
+  }
+
+  Filters.prototype.filterOperatorsOnType = function (type) {
+    return lodash__WEBPACK_IMPORTED_MODULE_7___default.a.filter(_lists_operators__WEBPACK_IMPORTED_MODULE_5__["default"], function (o) {
+      return o.type === type;
+    });
+  };
+
+  Filters.prototype.onGroupChange = function (group, index) {
+    var query = this.props.query;
+    query.filters[index].tag = group;
+    var ops = this.filterOperatorsOnType(group.type);
+
+    if (!lodash__WEBPACK_IMPORTED_MODULE_7___default.a.includes(ops, query.filters[index].operator)) {
+      query.filters[index].operator = ops[0];
+    }
+
+    this.validateChangeAndRun(index);
+  };
+
+  Filters.prototype.canShowStringInput = function (filter) {
+    return !filter.operator.key.includes('EMPTY') && (filter.tag.type === 'STRING' || filter.tag.type === 'KEY_VALUE_PAIR');
+  };
+
+  Filters.prototype.onTagFilterBooleanValueChange = function (value, index) {
+    var query = this.props.query;
+    query.filters[index].booleanValue = value.key;
+    this.validateChangeAndRun(index);
+  };
+
+  Filters.prototype.validateChangeAndRun = function (index, runDebounced) {
+    if (runDebounced === void 0) {
+      runDebounced = false;
+    }
+
+    var _a = this.props,
+        query = _a.query,
+        onChange = _a.onChange,
+        onRunQuery = _a.onRunQuery;
+
+    if (query.filters[index].tag) {
+      if (query.filters[index].operator.key.includes('EMPTY')) {
+        query.filters[index].isValid = true; // to avoid sending value with query.filters[index] operators that do not require a value (such as is-present/is-not-present)
+
+        query.filters[index].stringValue = '';
+        query.filters[index].numberValue = 0;
+        query.filters[index].booleanValue = true;
+      } else if (this.OPERATOR_STRING === query.filters[index].tag.type && query.filters[index].stringValue) {
+        query.filters[index].isValid = true;
+      } else if (this.OPERATOR_KEY_VALUE === query.filters[index].tag.type && query.filters[index].stringValue && query.filters[index].stringValue.includes('=')) {
+        query.filters[index].isValid = true;
+      } else if (this.OPERATOR_NUMBER === query.filters[index].tag.type && query.filters[index].numberValue !== null) {
+        query.filters[index].isValid = true;
+      } else {
+        query.filters[index].isValid = this.OPERATOR_BOOLEAN === query.filters[index].tag.type && query.filters[index].booleanValue;
+      }
+    } else {
+      query.filters[index].isValid = false;
+    }
+
+    onChange(query);
+
+    if (runDebounced) {
+      // onRunQuery with 500ms delay after last debounce
+      this.debouncedRunQuery();
+    } else {
+      onRunQuery();
+    }
+  };
+
+  Filters.prototype.render = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        groups = _a.groups;
+    var listFilter = query.filters.map(function (singleFilter, index) {
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: 'gf-form'
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["InlineFormLabel"], {
+        className: 'query-keyword',
+        width: 14,
+        tooltip: 'Filter by tag.'
+      }, index + 1, ". filter"), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Entity_Entity__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        value: query.filters[index].entity,
+        onChange: function onChange(callToEntity) {
+          return _this.onCallToEntityChange(callToEntity, index);
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Select"], {
+        menuPlacement: 'bottom',
+        width: 30,
+        isSearchable: true,
+        value: query.filters[index].tag,
+        options: groups,
+        onChange: function onChange(group) {
+          return _this.onGroupChange(group, index);
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Select"], {
+        menuPlacement: 'bottom',
+        width: 12,
+        isSearchable: true,
+        value: query.filters[index].operator,
+        options: _this.filterOperatorsOnType(query.filters[index].tag.type),
+        onChange: function onChange(operator) {
+          return _this.onOperatorChange(operator, index);
+        }
+      }), _this.canShowStringInput(query.filters[index]) && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Input"], {
+        css: '',
+        width: 30,
+        value: query.filters[index].stringValue,
+        placeholder: query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["PLEASE_SPECIFY"],
+        onChange: function onChange(event) {
+          return _this.onTagFilterStringValueChange(event, index);
+        }
+      }), query.filters[index].tag.type === 'NUMBER' && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Input"], {
+        css: '',
+        type: 'number',
+        width: 30,
+        value: query.filters[index].numberValue,
+        placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["PLEASE_SPECIFY"],
+        onChange: function onChange(event) {
+          return _this.onTagFilterNumberValueChange(event, index);
+        }
+      }), query.filters[index].tag.type === 'BOOLEAN' && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Select"], {
+        menuPlacement: 'bottom',
+        width: 30,
+        isSearchable: true,
+        onChange: function onChange(e) {
+          return _this.onTagFilterBooleanValueChange(e, index);
+        },
+        value: {
+          key: '' + query.filters[index].booleanValue,
+          label: '' + query.filters[index].booleanValue
+        },
+        options: [{
+          key: 'false',
+          label: 'false'
+        }, {
+          key: 'true',
+          label: 'true'
+        }]
+      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+        variant: 'secondary',
+        onClick: function onClick() {
+          return _this.removeTagFilter(index);
+        }
+      }, "-"));
+    });
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, listFilter, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["InlineFormLabel"], {
+      width: 14,
+      tooltip: 'Add an additional tag filter.'
+    }, "Add filter"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+      variant: 'secondary',
+      onClick: this.addTagFilter
+    }, "+"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      hidden: !query.showWarningCantShowAllResults
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["InlineFormLabel"], {
+      width: 12,
+      tooltip: 'Add Filter to narrow down the data.'
+    }, "\u26A0\uFE0F Can't show all results"))));
+  };
+
+  return Filters;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Analyze/WebsiteMetrics.tsx":
+/*!***********************************************!*\
+  !*** ./components/Analyze/WebsiteMetrics.tsx ***!
+  \***********************************************/
+/*! exports provided: WebsiteMetrics */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WebsiteMetrics", function() { return WebsiteMetrics; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _lists_beacon_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lists/beacon_types */ "./lists/beacon_types.ts");
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
+
+
+
+
+
+
+
+var isUnmounting = false;
+
+var WebsiteMetrics =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(WebsiteMetrics, _super);
+
+  function WebsiteMetrics(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onWebsiteChange = function (website) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.entity = website;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onBeaconTypeChange = function (type) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          filterMetricsOnType = _a.filterMetricsOnType;
+      query.entityType = type;
+      onChange(query);
+      filterMetricsOnType(query.entityType.key);
+    };
+
+    _this.onGroupChange = function (group) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.group = group;
+
+      if (query.group && query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"]) {
+        query.showGroupBySecondLevel = query.group.type === 'KEY_VALUE_PAIR';
+      }
+
+      if (!query.showGroupBySecondLevel) {
+        query.groupbyTagSecondLevelKey = '';
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_6___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onGroupByTagSecondLevelKeyChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    _this.state = {
+      websites: []
+    };
+    return _this;
+  }
+
+  WebsiteMetrics.prototype.componentDidMount = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        datasource = _a.datasource,
+        onChange = _a.onChange;
+    isUnmounting = false;
+    datasource.fetchWebsites().then(function (websites) {
+      if (!isUnmounting) {
+        _this.setState({
+          websites: websites
+        }); // select the most loaded website for default/replacement
+
+
+        if ((!query.entity || !query.entity.key) && websites) {
+          query.entity = websites[0];
+        } else if (query.entity && !lodash__WEBPACK_IMPORTED_MODULE_6___default.a.find(websites, ['key', query.entity.key])) {
+          query.entity = websites[0];
+        }
+
+        onChange(query);
+      }
+    });
+    datasource.dataSourceWebsite.getWebsiteTags().then(function (websiteTags) {
+      if (!isUnmounting) {
+        _this.props.updateGroups(lodash__WEBPACK_IMPORTED_MODULE_6___default.a.sortBy(websiteTags, 'key')); // select a meaningful default group
+
+
+        if (!query.group || !query.group.key) {
+          query.group = lodash__WEBPACK_IMPORTED_MODULE_6___default.a.find(websiteTags, ['key', 'beacon.page.name']);
+          onChange(query);
+        }
+      }
+    });
+
+    if (!query.entityType || !query.entityType.key) {
+      query.entityType = _lists_beacon_types__WEBPACK_IMPORTED_MODULE_3__["default"][0];
+      onChange(query);
+    }
+
+    datasource.dataSourceWebsite.getWebsiteMetricsCatalog().then(function (websiteMetrics) {
+      if (!isUnmounting) {
+        _this.props.updateMetrics(lodash__WEBPACK_IMPORTED_MODULE_6___default.a.filter(websiteMetrics, function (m) {
+          return m.beaconTypes.includes(query.entityType.key);
+        }));
+      }
+    });
+  };
+
+  WebsiteMetrics.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  WebsiteMetrics.prototype.render = function () {
+    var _a = this.props,
+        query = _a.query,
+        groups = _a.groups;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Website',
+      tooltip: 'Select your website.',
+      noOptionsMessage: 'No websites found',
+      value: query.entity,
+      options: this.state.websites,
+      onChange: this.onWebsiteChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      labelWidth: 6,
+      label: 'Type',
+      tooltip: 'Select a beacon type.',
+      value: query.entityType,
+      options: _lists_beacon_types__WEBPACK_IMPORTED_MODULE_3__["default"],
+      onChange: this.onBeaconTypeChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      labelWidth: 6,
+      label: 'Group by',
+      tooltip: 'Group by tag.',
+      value: query.group,
+      options: groups,
+      onChange: this.onGroupChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      style: !query.showGroupBySecondLevel ? {
+        display: 'none'
+      } : {}
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_5__["Input"], {
+      css: '',
+      value: query.groupbyTagSecondLevelKey,
+      onChange: this.onGroupByTagSecondLevelKeyChange
+    })));
+  };
+
+  return WebsiteMetrics;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/ApplicationServiceEndpointMetrics/ApplicationBoundaryScope.tsx":
+/*!***********************************************************************************!*\
+  !*** ./components/ApplicationServiceEndpointMetrics/ApplicationBoundaryScope.tsx ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ApplicationBoundaryScope; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+var INBOUND = 'INBOUND';
+var ALL = 'ALL';
+var dropdown = {
+  position: 'relative',
+  background: 'transparent',
+  width: '32px',
+  height: '32px',
+  marginRight: '4px'
+};
+var dropdown__list = {
+  transition: 'max-height .2s ease-out',
+  maxHeight: 0,
+  overflow: 'hidden',
+  zIndex: 1,
+  position: 'fixed'
+};
+var dropdown__list__active = {
+  overflow: 'hidden',
+  zIndex: 2,
+  position: 'fixed',
+  maxHeight: '1000px',
+  opacity: 1
+};
+var iconStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
+};
+var iconSize = 30;
+var inboundIcon = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("svg", {
+  style: iconStyle,
+  height: iconSize,
+  width: iconSize
+}, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("path", {
+  transform: "translate(3, 5)",
+  fill: "#33a2e5",
+  d: "M12.7891666,14.6051302 L12.7751756,19.8293818 L11.4691127,19.8328795 L11.4776628,16.6402814 L6.96695389,21.1509902 L6.2433066,20.427343 L10.7540155,15.9166341 L7.56141732,15.9251842 L7.56491507,14.6191213 L12.7891666,14.6051302 Z M15.754133,9.38135895 C17.1795716,9.38135895 18.3857119,10.5874993 18.3857119,12.0129379 C18.3857119,13.4383765 17.1795716,14.6445168 15.754133,14.6445168 C14.3286944,14.6445168 13.122554,13.4383765 13.122554,12.0129379 C13.122554,10.5874993 14.3286944,9.38135895 15.754133,9.38135895 Z M6.96695389,3.2433066 L11.4776628,7.75401547 L11.4691127,4.56141732 L12.7751756,4.56491507 L12.7891666,9.7891666 L7.56491507,9.77517557 L7.56141732,8.46911269 L10.7540155,8.47766276 L6.2433066,3.96695389 L6.96695389,3.2433066 Z"
+}));
+var allIcon = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("svg", {
+  style: iconStyle,
+  height: iconSize,
+  width: iconSize
+}, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("path", {
+  transform: "translate(3, 5)",
+  fill: "#33a2e5",
+  d: "M7.54586,15 L7.53186897,20.2242515 L6.22580608,20.2277493 L6.23435616,17.0351511 L1.72364729,21.54586 L1,20.8222127 L5.51070887,16.3115038 L2.31811071,16.3200539 L2.32160847,15.013991 L7.54586,15 Z M14.1975552,7.94441147 L17.901552,11.628622 L14.1975552,15.3128325 L13.271556,14.3917799 L15.5351096,12.1403179 L12.4724561,12.1407167 C12.2827518,13.474447 11.1361413,14.5 9.75,14.5 C8.23121694,14.5 7,13.2687831 7,11.75 C7,10.2312169 8.23121694,9 9.75,9 C11.0508538,9 12.1407461,9.90323356 12.4267385,11.1167623 L15.5351096,11.1169261 L13.271556,8.8654641 L14.1975552,7.94441147 Z M20.75,9 C22.2687831,9 23.5,10.2312169 23.5,11.75 C23.5,13.2687831 22.2687831,14.5 20.75,14.5 C19.2312169,14.5 18,13.2687831 18,11.75 C18,10.2312169 19.2312169,9 20.75,9 Z M1.72364729,2 L6.23435616,6.51070887 L6.22580608,3.31811071 L7.53186897,3.32160847 L7.54586,8.54586 L2.32160847,8.53186897 L2.31811071,7.22580608 L5.51070887,7.23435616 L1,2.72364729 L1.72364729,2 Z"
+}));
+/**
+ * Props have to be:
+ *   value: string
+ *   onChange: function that accepts a string as a parameter and returns void
+ *   disabled: boolean
+ */
+
+function ApplicationBoundaryScope(props) {
+  var theme = Object(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["useTheme"])();
+  var opacity = props.disabled ? 0.5 : 1;
+  var dropdown__list__item = {
+    background: theme.colors.bg2,
+    cursor: 'pointer',
+    listStyle: 'none',
+    borderRadius: '3px',
+    height: '32px',
+    opacity: opacity
+  };
+
+  var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false), 2),
+      active = _a[0],
+      setActive = _a[1];
+
+  function toggleDropdown() {
+    if (!props.disabled) {
+      setActive(!active);
+    }
+  }
+
+  function handleClick(entity) {
+    props.onChange(entity);
+    setActive(false);
+  }
+
+  return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    style: dropdown
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    onClick: function onClick() {
+      return toggleDropdown();
+    },
+    onBlur: function onBlur() {
+      return setActive(false);
+    },
+    style: dropdown__list__item,
+    contentEditable: true
+  }, props.value === INBOUND ? inboundIcon : allIcon), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", {
+    style: active ? dropdown__list__active : dropdown__list
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+    onClick: function onClick() {
+      return handleClick(INBOUND);
+    },
+    key: INBOUND,
+    style: dropdown__list__item
+  }, inboundIcon), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+    onClick: function onClick() {
+      return handleClick(ALL);
+    },
+    key: ALL,
+    style: dropdown__list__item
+  }, allIcon)));
+}
+
+/***/ }),
+
+/***/ "./components/ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics.tsx":
+/*!********************************************************************************************!*\
+  !*** ./components/ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics.tsx ***!
+  \********************************************************************************************/
+/*! exports provided: ApplicationServiceEndpointMetrics */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ApplicationServiceEndpointMetrics", function() { return ApplicationServiceEndpointMetrics; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _ApplicationBoundaryScope__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ApplicationBoundaryScope */ "./components/ApplicationServiceEndpointMetrics/ApplicationBoundaryScope.tsx");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+var isUnmounting = false;
+
+var ApplicationServiceEndpointMetrics =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(ApplicationServiceEndpointMetrics, _super);
+
+  function ApplicationServiceEndpointMetrics(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onApplicationChange = function (application) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.entity = application;
+
+      if (application.boundaryScope !== '') {
+        //set the default boundary scope that is configured for this application
+        query.applicationBoundaryScope = application.boundaryScope;
+      } else {
+        if (query.applicationBoundaryScope !== 'ALL' && query.applicationBoundaryScope !== 'INBOUND') {
+          //if no default is set, set it to INBOUND
+          query.applicationBoundaryScope = 'INBOUND';
+        }
+      }
+
+      onChange(query);
+
+      _this.loadServices();
+
+      _this.loadEndpoints();
+
+      onRunQuery();
+    };
+
+    _this.onServiceChange = function (service) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.service = service;
+      onChange(query);
+
+      _this.loadEndpoints();
+
+      onRunQuery();
+    };
+
+    _this.onEndpointChange = function (endpoint) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.endpoint = endpoint;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onGroupByTagSecondLevelKeyChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    _this.onApplicationBoundaryScopeChange = function (scope) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.applicationBoundaryScope = scope;
+      onChange(query);
+
+      _this.loadServices();
+
+      _this.loadEndpoints();
+
+      onRunQuery();
+    };
+
+    _this.state = {
+      applications: [],
+      services: [],
+      endpoints: [],
+      value: {
+        value: 2,
+        imgUrl: '../../resources/dest.png'
+      }
+    };
+    return _this;
+  }
+
+  ApplicationServiceEndpointMetrics.prototype.componentDidMount = function () {
+    isUnmounting = false;
+    this.loadApplications();
+    this.loadServices();
+    this.loadEndpoints();
+    var datasource = this.props.datasource;
+    this.props.updateMetrics(datasource.dataSourceApplication.getApplicationMetricsCatalog());
+  };
+
+  ApplicationServiceEndpointMetrics.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  ApplicationServiceEndpointMetrics.prototype.loadApplications = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        onChange = _a.onChange,
+        datasource = _a.datasource;
+    datasource.fetchApplications().then(function (applications) {
+      if (!isUnmounting) {
+        _this.setState({
+          applications: applications
+        });
+
+        if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(_this.state.applications, {
+          key: null
+        })) {
+          var apps = _this.state.applications;
+          apps.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ALL_APPLICATIONS"]
+          });
+
+          _this.setState({
+            applications: apps
+          });
+        } // replace removed application
+
+
+        if (query.entity && query.entity.key && !lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(_this.state.applications, function (app) {
+          return app.key === query.entity.key;
+        })) {
+          query.entity = _this.state.applications[0];
+        } else if ((!query.entity || !query.entity.key) && applications) {
+          query.entity = _this.state.applications[0];
+        }
+
+        onChange(query);
+      }
+    });
+  };
+
+  ApplicationServiceEndpointMetrics.prototype.loadServices = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        onChange = _a.onChange,
+        datasource = _a.datasource;
+    datasource.fetchServices(query).then(function (services) {
+      if (!isUnmounting) {
+        _this.setState({
+          services: services
+        });
+
+        if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(_this.state.services, {
+          key: null
+        })) {
+          var s = _this.state.services;
+          s.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ALL_SERVICES"]
+          });
+
+          _this.setState({
+            services: s
+          });
+        }
+
+        if (query.service && query.service.key) {
+          if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(_this.state.services, function (app) {
+            return app.key === query.service.key;
+          })) {
+            query.service = _this.state.services[0];
+          }
+        } else {
+          query.service = _this.state.services[0];
+        }
+
+        onChange(query);
+      }
+    });
+  };
+
+  ApplicationServiceEndpointMetrics.prototype.loadEndpoints = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        onChange = _a.onChange,
+        datasource = _a.datasource;
+    datasource.fetchEndpoints(query).then(function (endpoints) {
+      if (!isUnmounting) {
+        _this.setState({
+          endpoints: endpoints
+        });
+
+        if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(_this.state.endpoints, {
+          key: null
+        })) {
+          var e = _this.state.endpoints;
+          e.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ALL_ENDPOINTS"]
+          });
+
+          _this.setState({
+            endpoints: e
+          });
+        }
+
+        if (query.endpoint && query.endpoint.key) {
+          if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(_this.state.endpoints, function (app) {
+            return app.key === query.endpoint.key;
+          })) {
+            query.endpoint = {
+              key: null,
+              label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ALL_ENDPOINTS"]
+            };
+          }
+        } else {
+          query.endpoint = {
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ALL_ENDPOINTS"]
+          };
+        }
+
+        onChange(query);
+      }
+    });
+  };
+
+  ApplicationServiceEndpointMetrics.prototype.render = function () {
+    var query = this.props.query;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 14,
+      tooltip: 'Select your application.'
+    }, "Application"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ApplicationBoundaryScope__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      value: query.applicationBoundaryScope,
+      disabled: !query.entity.key,
+      onChange: this.onApplicationBoundaryScopeChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      value: query.entity,
+      options: this.state.applications,
+      onChange: this.onApplicationChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 6,
+      tooltip: 'Select your service.'
+    }, "Service"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      value: query.service,
+      options: this.state.services,
+      onChange: this.onServiceChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 6,
+      tooltip: 'Select your endpoint.'
+    }, "Endpoint"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      value: query.endpoint,
+      options: this.state.endpoints,
+      onChange: this.onEndpointChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      style: !query.showGroupBySecondLevel ? {
+        display: 'none'
+      } : {}
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Input"], {
+      css: '',
+      value: query.groupbyTagSecondLevelKey,
+      onChange: this.onGroupByTagSecondLevelKeyChange
+    })));
+  };
+
+  return ApplicationServiceEndpointMetrics;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/ConfigEditor.tsx":
+/*!*************************************!*\
+  !*** ./components/ConfigEditor.tsx ***!
+  \*************************************/
+/*! exports provided: ConfigEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ConfigEditor", function() { return ConfigEditor; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _util_instana_version__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/instana_version */ "./util/instana_version.ts");
+/* harmony import */ var _util_proxy_check__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/proxy_check */ "./util/proxy_check.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+
+var ConfigEditor =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(ConfigEditor, _super);
+
+  function ConfigEditor(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onInstanaOptionsChange = function (eventItem, key) {
+      var _a;
+
+      var _b = _this.props,
+          options = _b.options,
+          onOptionsChange = _b.onOptionsChange;
+
+      var jsonData = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options.jsonData), (_a = {}, _a[key] = eventItem.currentTarget.value, _a));
+
+      onOptionsChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options), {
+        jsonData: jsonData
+      }));
+
+      if ('url' === key || 'apiToken' === key) {
+        _this.debouncedDetectFeatures(options);
+      }
+    };
+
+    _this.onSwitchChange = function (eventItem, key) {
+      var _a;
+
+      var _b = _this.props,
+          options = _b.options,
+          onOptionsChange = _b.onOptionsChange;
+      var value = false;
+
+      if (eventItem && eventItem.currentTarget) {
+        value = !options.jsonData[key];
+      }
+
+      var jsonData = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options.jsonData), (_a = {}, _a[key] = value, _a));
+
+      onOptionsChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options), {
+        jsonData: jsonData
+      }));
+    };
+
+    _this.debouncedDetectFeatures = function (settings) {
+      lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(function () {
+        return _this.detectFeatures(settings);
+      }, 500);
+    };
+    /**
+     * Checks whether the provided tenant-unit is able to provide certain features such as querying offline snapshots.
+     */
+
+
+    _this.detectFeatures = function (settings) {
+      if (!settings) {
+        settings = _this.props.options;
+      }
+
+      if (!settings.id) {
+        return;
+      }
+
+      _this.setState({
+        canUseProxy: Object(_util_proxy_check__WEBPACK_IMPORTED_MODULE_4__["default"])()
+      });
+
+      Object(_util_instana_version__WEBPACK_IMPORTED_MODULE_3__["default"])(settings.jsonData).then(function (version) {
+        version ? _this.setState({
+          canQueryOfflineSnapshots: version >= 156
+        }) : _this.setState({
+          canQueryOfflineSnapshots: false
+        });
+      });
+    };
+
+    _this.state = {
+      canQueryOfflineSnapshots: false,
+      canUseProxy: false
+    }; // check possibility every time
+
+    _this.detectFeatures();
+
+    var options = _this.props.options;
+    var jsonData = options.jsonData;
+
+    if (jsonData.useProxy === undefined) {
+      jsonData.useProxy = Object(_util_proxy_check__WEBPACK_IMPORTED_MODULE_4__["default"])();
+    }
+
+    return _this;
+  }
+
+  ConfigEditor.prototype.render = function () {
+    var _this = this;
+
+    var options = this.props.options;
+    var jsonData = options.jsonData;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Legend"], null, "Instana configuration"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      required: true,
+      label: "URL",
+      description: "The URL of your Instana installation."
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+      css: '',
+      width: 30,
+      value: jsonData.url,
+      placeholder: 'https://tools-acme.instana.io',
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'url');
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      required: true,
+      label: "API Token",
+      description: "The API token to access the data."
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+      type: "password",
+      css: '',
+      width: 30,
+      value: jsonData.apiToken,
+      suffix: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Tooltip"], {
+        content: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", null, "You can create API tokens following the instructions at", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
+          href: "https://docs.instana.io/quick_start/api/#api-tokens"
+        }, "https://docs.instana.io/quick_start/api/#api-tokens")),
+        theme: 'info'
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Icon"], {
+        name: "info-circle"
+      })),
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'apiToken');
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
+      css: '',
+      label: 'Use Proxy',
+      value: jsonData.useProxy,
+      onChange: function onChange(event) {
+        return _this.onSwitchChange(event, 'useProxy');
+      },
+      description: 'Use Grafana server as proxy. Needs Grafana 5.3+ and Instana datasource 2.0.0+'
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
+      css: '',
+      label: 'Enable offline snapshots',
+      value: jsonData.showOffline,
+      onChange: function onChange(event) {
+        return _this.onSwitchChange(event, 'showOffline');
+      },
+      description: 'Enables querying offline snapshots. Needs Instana release 156+ and Instana datasource 2.3.0+'
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
+      css: '',
+      label: 'Enable SLO dashboards',
+      value: jsonData.allowSlo,
+      onChange: function onChange(event) {
+        return _this.onSwitchChange(event, 'allowSlo');
+      },
+      description: 'Adds a new category that allows retrieval of SLO information. Needs Instana release 176+ and ' + 'a explicit feature flag.'
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, "Maximum query intervals in hours"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", {
+      className: 'width-30'
+    }, "This settings are optional values to control the load of data queries, by defining the maximum allowed query intervals against the Instana API."), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      label: "Infrastructure metrics"
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+      css: '',
+      width: 30,
+      value: jsonData.queryinterval_limit_infra,
+      placeholder: 'optional: interval limit in hours',
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'queryinterval_limit_infra');
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      label: "Application metrics"
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+      css: '',
+      width: 30,
+      value: jsonData.queryinterval_limit_app_metrics,
+      placeholder: 'optional: interval limit in hours',
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'queryinterval_limit_app_metrics');
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      label: "Analyze application calls"
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+      css: '',
+      width: 30,
+      value: jsonData.queryinterval_limit_app_calls,
+      placeholder: 'optional: interval limit in hours',
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'queryinterval_limit_app_calls');
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      label: "Analyze website"
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+      css: '',
+      width: 30,
+      value: jsonData.queryinterval_limit_website_metrics,
+      placeholder: 'optional: interval limit in hours',
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'queryinterval_limit_website_metrics');
+      }
+    })));
+  };
+
+  return ConfigEditor;
+}(react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"]);
+
+
+
+/***/ }),
+
+/***/ "./components/Entity/Entity.tsx":
+/*!**************************************!*\
+  !*** ./components/Entity/Entity.tsx ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Entity; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+var DESTINATION = 'DESTINATION';
+var SOURCE = 'SOURCE';
+var dropdown = {
+  position: 'relative',
+  background: 'transparent',
+  width: '32px',
+  height: '32px',
+  marginRight: '4px'
+};
+var dropdown__list = {
+  transition: 'max-height .2s ease-out',
+  maxHeight: 0,
+  overflow: 'hidden',
+  zIndex: 1,
+  position: 'fixed'
+};
+var dropdown__list__active = {
+  overflow: 'hidden',
+  zIndex: 2,
+  position: 'fixed',
+  maxHeight: '1000px',
+  opacity: 1
+};
+var iconStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
+};
+var iconSize = 30;
+var destinationIcon = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("svg", {
+  style: iconStyle,
+  height: iconSize,
+  width: iconSize
+}, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("path", {
+  transform: "translate(3, 5)",
+  fill: "#33a2e5",
+  d: "M4 11.173h6.38L8.115 8.92 9.042 8l3.704 3.684-3.704 3.684-.926-.92 2.263-2.252H4zM16.43 14.316c-1.426 0-2.632-1.206-2.632-2.632 0-1.425 1.206-2.631 2.632-2.631 1.425 0 2.631 1.206 2.631 2.631 0 1.426-1.206 2.632-2.631 2.632z"
+}));
+var sourceIcon = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("svg", {
+  style: iconStyle,
+  height: iconSize,
+  width: iconSize
+}, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("path", {
+  transform: "translate(3, 5)",
+  fill: "#33a2e5",
+  d: "M9.939 11.173h6.379L14.054 8.92 14.98 8l3.704 3.684-3.704 3.684-.926-.92 2.264-2.252h-6.38c-.308 1.023-1.234 1.842-2.366 1.842C6.132 14.243 5 13.117 5 11.787c0-1.33 1.132-2.457 2.47-2.457 1.234 0 2.16.717 2.469 1.843z"
+}));
+/**
+ * Props have to be:
+ *   value: string
+ *   onChange: function that accepts a string as a parameter and returns void
+ */
+
+function Entity(props) {
+  var theme = Object(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["useTheme"])();
+  var dropdown__list__item = {
+    background: theme.colors.bg2,
+    cursor: 'pointer',
+    listStyle: 'none',
+    borderRadius: '3px',
+    height: '32px'
+  };
+
+  var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false), 2),
+      active = _a[0],
+      setActive = _a[1];
+
+  function toggleDropdown() {
+    setActive(!active);
+  }
+
+  function handleClick(entity) {
+    props.onChange(entity);
+    setActive(false);
+  }
+
+  return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    style: dropdown
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    onClick: function onClick() {
+      return toggleDropdown();
+    },
+    onBlur: function onBlur() {
+      return setActive(false);
+    },
+    style: dropdown__list__item,
+    contentEditable: true
+  }, props.value === DESTINATION ? destinationIcon : sourceIcon), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", {
+    style: active ? dropdown__list__active : dropdown__list
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+    onClick: function onClick() {
+      return handleClick(DESTINATION);
+    },
+    key: DESTINATION,
+    style: dropdown__list__item
+  }, destinationIcon), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+    onClick: function onClick() {
+      return handleClick('SOURCE');
+    },
+    key: SOURCE,
+    style: dropdown__list__item
+  }, sourceIcon)));
+}
+
+/***/ }),
+
+/***/ "./components/FormField/FormInput.tsx":
+/*!********************************************!*\
+  !*** ./components/FormField/FormInput.tsx ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _FormWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FormWrapper */ "./components/FormField/FormWrapper.tsx");
+
+
+
+
+/**
+ * Default input field including label. Input element is grafana/ui <Input />.
+ */
+
+var FormInput =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(FormInput, _super);
+
+  function FormInput(props) {
+    return _super.call(this, props) || this;
+  }
+
+  FormInput.prototype.render = function () {
+    var _a = this.props,
+        label = _a.label,
+        tooltip = _a.tooltip,
+        queryKeyword = _a.queryKeyword,
+        disabled = _a.disabled,
+        _b = _a.labelWidth,
+        labelWidth = _b === void 0 ? 14 : _b,
+        _c = _a.inputWidth,
+        inputWidth = _c === void 0 ? 30 : _c,
+        remainingProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"])(_a, ["label", "tooltip", "queryKeyword", "disabled", "labelWidth", "inputWidth"]);
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      disabled: disabled,
+      stretch: !inputWidth
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: queryKeyword ? 'query-keyword' : '',
+      width: labelWidth,
+      tooltip: tooltip
+    }, label), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({
+      css: '',
+      width: inputWidth,
+      disabled: disabled
+    }, remainingProps)));
+  };
+
+  return FormInput;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (FormInput);
+
+/***/ }),
+
+/***/ "./components/FormField/FormSelect.tsx":
+/*!*********************************************!*\
+  !*** ./components/FormField/FormSelect.tsx ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _FormWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FormWrapper */ "./components/FormField/FormWrapper.tsx");
+
+
+
+
+/**
+ * Default select field including label. Select element is grafana/ui <Select />.
+ */
+
+var FormSelect =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(FormSelect, _super);
+
+  function FormSelect(props) {
+    return _super.call(this, props) || this;
+  }
+
+  FormSelect.prototype.render = function () {
+    var _a = this.props,
+        label = _a.label,
+        tooltip = _a.tooltip,
+        _b = _a.searchable,
+        searchable = _b === void 0 ? true : _b,
+        disabled = _a.disabled,
+        queryKeyword = _a.queryKeyword,
+        _c = _a.placeholder,
+        placeholder = _c === void 0 ? '-' : _c,
+        _d = _a.labelWidth,
+        labelWidth = _d === void 0 ? 14 : _d,
+        _e = _a.inputWidth,
+        inputWidth = _e === void 0 ? 30 : _e,
+        remainingProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"])(_a, ["label", "tooltip", "searchable", "disabled", "queryKeyword", "placeholder", "labelWidth", "inputWidth"]);
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      disabled: disabled,
+      stretch: !inputWidth
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: queryKeyword ? 'query-keyword' : '',
+      width: labelWidth,
+      tooltip: tooltip
+    }, label), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({
+      menuPlacement: 'bottom',
+      disabled: disabled,
+      width: inputWidth,
+      isSearchable: searchable,
+      placeholder: placeholder
+    }, remainingProps)));
+  };
+
+  return FormSelect;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (FormSelect);
+
+/***/ }),
+
+/***/ "./components/FormField/FormSwitch.tsx":
+/*!*********************************************!*\
+  !*** ./components/FormField/FormSwitch.tsx ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _FormWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FormWrapper */ "./components/FormField/FormWrapper.tsx");
+
+
+
+
+var Switch = _grafana_ui__WEBPACK_IMPORTED_MODULE_2__["LegacyForms"].Switch;
+/**
+ * Default switch field including label. Switch element is grafana/ui <Switch />.
+ */
+
+var FormSwitch =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(FormSwitch, _super);
+
+  function FormSwitch(props) {
+    return _super.call(this, props) || this;
+  }
+
+  FormSwitch.prototype.render = function () {
+    var _a = this.props,
+        label = _a.label,
+        tooltip = _a.tooltip,
+        queryKeyword = _a.queryKeyword,
+        disabled = _a.disabled,
+        _b = _a.labelWidth,
+        labelWidth = _b === void 0 ? 14 : _b,
+        value = _a.value,
+        remainingProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"])(_a, ["label", "tooltip", "queryKeyword", "disabled", "labelWidth", "value"]);
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      disabled: disabled,
+      stretch: false
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: queryKeyword ? 'query-keyword' : '',
+      width: labelWidth,
+      tooltip: tooltip
+    }, label), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Switch, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({
+      checked: value,
+      label: ''
+    }, remainingProps)));
+  };
+
+  return FormSwitch;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (FormSwitch);
+
+/***/ }),
+
+/***/ "./components/FormField/FormWrapper.tsx":
+/*!**********************************************!*\
+  !*** ./components/FormField/FormWrapper.tsx ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FormWrapper; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function FormWrapper(props) {
+  var style = {
+    display: 'flex'
+  };
+
+  if (props.disabled) {
+    style.opacity = '0.4';
+    style.pointerEvents = 'none';
+  }
+
+  if (props.stretch) {
+    style.width = '100%';
+  }
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    style: style
+  }, props.children);
+}
+
+/***/ }),
+
+/***/ "./components/Infrastructure/Custom/FreeTextMetrics.tsx":
+/*!**************************************************************!*\
+  !*** ./components/Infrastructure/Custom/FreeTextMetrics.tsx ***!
+  \**************************************************************/
+/*! exports provided: FreeTextMetrics */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FreeTextMetrics", function() { return FreeTextMetrics; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../FormField/FormSwitch */ "./components/FormField/FormSwitch.tsx");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+
+var FreeTextMetrics =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(FreeTextMetrics, _super);
+
+  function FreeTextMetrics(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onUseFreeTextMetricsChange = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          loadEntityTypes = _a.loadEntityTypes;
+
+      if (event && event.currentTarget) {
+        query.useFreeTextMetrics = event.currentTarget.checked;
+
+        if (query.useFreeTextMetrics) {
+          loadEntityTypes(false);
+          query.metric = {};
+        } else {
+          loadEntityTypes(true);
+        }
+
+        onChange(query);
+      }
+    };
+
+    _this.onFreeTextMetricsChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.freeTextMetrics = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    return _this;
+  }
+
+  FreeTextMetrics.prototype.render = function () {
+    var query = this.props.query;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      queryKeyword: true,
+      label: 'Enable free text metrics',
+      tooltip: 'Specify comma separated metrics directly in this text field. Once this field has a value,' + ' selected metrics from above will be ignored. Enabled as soon as a query is entered.' + ' Max 4 metrics supported.',
+      value: query.useFreeTextMetrics,
+      onChange: this.onUseFreeTextMetricsChange,
+      disabled: false
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Input"], {
+      css: '',
+      width: 0,
+      disabled: !query.useFreeTextMetrics,
+      value: query.freeTextMetrics,
+      placeholder: 'metric.one,metric.two,metric.three',
+      onChange: this.onFreeTextMetricsChange
+    }));
+  };
+
+  return FreeTextMetrics;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Infrastructure/Custom/MetricFilter.tsx":
+/*!***********************************************************!*\
+  !*** ./components/Infrastructure/Custom/MetricFilter.tsx ***!
+  \***********************************************************/
+/*! exports provided: MetricFilter */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MetricFilter", function() { return MetricFilter; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _FormField_FormInput__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../FormField/FormInput */ "./components/FormField/FormInput.tsx");
+
+
+
+
+
+
+var MetricFilter =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(MetricFilter, _super);
+
+  function MetricFilter(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onFilterChange = function (eventItem, index) {
+      var customFilters = _this.state.customFilters;
+      customFilters[index] = eventItem.currentTarget.value;
+
+      _this.setState({
+        customFilters: customFilters
+      });
+
+      _this.props.onFilterChange(customFilters);
+    };
+
+    _this.addCustomFilter = function () {
+      var customFilters = _this.state.customFilters;
+      customFilters.push('');
+
+      _this.setState({
+        customFilters: customFilters
+      });
+
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.customFilters = customFilters;
+      onChange(query);
+    };
+
+    _this.removeCustomFilter = function (index) {
+      var customFilters = _this.state.customFilters;
+      customFilters.splice(index, 1);
+
+      _this.setState({
+        customFilters: customFilters
+      });
+
+      _this.props.onFilterChange(customFilters);
+    };
+
+    _this.state = {
+      customFilters: []
+    };
+    return _this;
+  }
+
+  MetricFilter.prototype.componentDidMount = function () {
+    var query = this.props.query;
+    this.setState({
+      customFilters: query.customFilters
+    });
+  };
+
+  MetricFilter.prototype.render = function () {
+    var _this = this;
+
+    var filter = null;
+    var listFilter = this.state.customFilters.map(function (filters, index) {
+      filter = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: 'gf-form'
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormInput__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        label: index + 1 + '. filter metric select',
+        value: _this.state.customFilters[index],
+        placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["PLEASE_SPECIFY"],
+        onChange: function onChange(event) {
+          return _this.onFilterChange(event, index);
+        },
+        tooltip: 'Type to suggest metrics.'
+      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+        variant: 'secondary',
+        onClick: function onClick() {
+          return _this.removeCustomFilter(index);
+        }
+      }, "-"));
+      return filter;
+    });
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, listFilter, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["InlineFormLabel"], {
+      width: 14,
+      tooltip: 'Add an additional metric select filter.'
+    }, "Add filter metric select"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+      variant: 'secondary',
+      onClick: this.addCustomFilter
+    }, "+")));
+  };
+
+  return MetricFilter;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Infrastructure/Infrastructure.tsx":
+/*!******************************************************!*\
+  !*** ./components/Infrastructure/Infrastructure.tsx ***!
+  \******************************************************/
+/*! exports provided: Infrastructure */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Infrastructure", function() { return Infrastructure; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _QueryType__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./QueryType */ "./components/Infrastructure/QueryType.tsx");
+
+
+
+var isUnmounting = false;
+
+var Infrastructure =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(Infrastructure, _super);
+
+  function Infrastructure(props) {
+    return _super.call(this, props) || this;
+  }
+
+  Infrastructure.prototype.componentDidMount = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        onChange = _a.onChange,
+        datasource = _a.datasource;
+    isUnmounting = false;
+
+    if (query.entityQuery && query.entityType && query.entityType.key) {
+      datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(function (results) {
+        if (!isUnmounting) {
+          _this.props.updateMetrics(results);
+        }
+      });
+    } else {
+      query.metric = {
+        key: null,
+        label: '-'
+      };
+    }
+
+    onChange(query);
+  };
+
+  Infrastructure.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  Infrastructure.prototype.render = function () {
+    var _a = this.props,
+        query = _a.query,
+        onRunQuery = _a.onRunQuery,
+        onChange = _a.onChange,
+        updateMetrics = _a.updateMetrics,
+        loadEntityTypes = _a.loadEntityTypes,
+        datasource = _a.datasource,
+        queryTypes = _a.queryTypes,
+        updateQueryTypes = _a.updateQueryTypes;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_QueryType__WEBPACK_IMPORTED_MODULE_2__["QueryType"], {
+      query: query,
+      onChange: onChange,
+      queryTypes: queryTypes,
+      onRunQuery: onRunQuery,
+      datasource: datasource,
+      updateMetrics: updateMetrics,
+      loadEntityTypes: loadEntityTypes,
+      updateQueryTypes: updateQueryTypes
+    });
+  };
+
+  return Infrastructure;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Infrastructure/QueryType.tsx":
+/*!*************************************************!*\
+  !*** ./components/Infrastructure/QueryType.tsx ***!
+  \*************************************************/
+/*! exports provided: QueryType */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QueryType", function() { return QueryType; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _FormField_FormInput__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../FormField/FormInput */ "./components/FormField/FormInput.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+
+var QueryType =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(QueryType, _super);
+
+  function QueryType(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onQueryChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          updateQueryTypes = _a.updateQueryTypes;
+
+      if (eventItem.currentTarget && eventItem.currentTarget.value) {
+        query.entityQuery = eventItem.currentTarget.value;
+      } else {
+        updateQueryTypes([]);
+        query.entityQuery = '';
+        query.entityType = {
+          key: null,
+          label: '-'
+        };
+      }
+
+      onChange(query); // loadEntityTypes with 500ms delay after last debounce
+
+      _this.debouncedEntityTypes();
+    };
+
+    _this.onTypeChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          datasource = _a.datasource,
+          onChange = _a.onChange;
+      query.entityType = eventItem;
+      onChange(query);
+      datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(function (results) {
+        _this.props.updateMetrics(results);
+      });
+    };
+
+    _this.debouncedEntityTypes = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.loadEntityTypes, 500);
+    return _this;
+  }
+
+  QueryType.prototype.componentDidMount = function () {
+    var _a = this.props,
+        query = _a.query,
+        loadEntityTypes = _a.loadEntityTypes;
+
+    if (query.entityQuery) {
+      loadEntityTypes();
+    }
+  };
+
+  QueryType.prototype.render = function () {
+    var _a = this.props,
+        query = _a.query,
+        queryTypes = _a.queryTypes;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormInput__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Query',
+      tooltip: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Specify a query for the entities you wish to plot. Use the dynamic focus syntax:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
+        href: "https://docs.instana.io/core_concepts/dynamic_focus/#syntax"
+      }, "https://docs.instana.io/core_concepts/dynamic_focus/#syntax")),
+      value: query.entityQuery,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["PLEASE_SPECIFY"],
+      onChange: this.onQueryChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      queryKeyword: true,
+      labelWidth: 6,
+      label: 'Type',
+      tooltip: 'Select an entity type for a list of available metrics.',
+      noOptionsMessage: 'No types found with query',
+      value: query.entityType,
+      options: queryTypes,
+      onChange: this.onTypeChange
+    }));
+  };
+
+  return QueryType;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Metric/Metric.tsx":
+/*!**************************************!*\
+  !*** ./components/Metric/Metric.tsx ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _lists_max_metrics__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lists/max_metrics */ "./lists/max_metrics.ts");
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../FormField/FormSwitch */ "./components/FormField/FormSwitch.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
+
+
+
+
+
+
+
+
+var Metric =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(Metric, _super);
+
+  function Metric(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onMetricChange = function (metric) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery,
+          onChange = _a.onChange;
+      query.metric = metric;
+
+      if (query.metric && query.metric.key && !lodash__WEBPACK_IMPORTED_MODULE_6___default.a.includes(query.metric.aggregations, query.aggregation)) {
+        query.aggregation = query.metric.aggregations[0];
+      }
+
+      if (query.displayMaxMetricValue && !_this.canShowMaxMetricValue()) {
+        query.displayMaxMetricValue = false;
+      }
+
+      query.allMetrics = [];
+      query.showAllMetrics = false;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onTimeIntervalChange = function (timeInterval) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery,
+          onChange = _a.onChange;
+      query.timeInterval = timeInterval;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onAggregationChange = function (aggregation) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery,
+          onChange = _a.onChange;
+      query.aggregation = aggregation;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onShowMaxValueChange = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+
+      if (event && event.currentTarget) {
+        query.displayMaxMetricValue = event.currentTarget.checked;
+        onChange(query);
+        onRunQuery();
+      }
+    };
+
+    _this.onShowAllMetricsChange = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+
+      if (event && event.currentTarget) {
+        query.showAllMetrics = event.currentTarget.checked;
+
+        if (query.showAllMetrics) {
+          query.metric = {
+            key: null,
+            label: "Displaying " + _this.props.availableMetrics.length + " metrics"
+          };
+          query.allMetrics = _this.props.availableMetrics;
+        }
+
+        onChange(query);
+        onRunQuery();
+      }
+    };
+
+    _this.state = {
+      possibleTimeIntervals: [],
+      possibleAggregations: []
+    };
+    return _this;
+  }
+
+  Metric.prototype.componentDidMount = function () {
+    var _a = this.props,
+        query = _a.query,
+        datasource = _a.datasource,
+        onChange = _a.onChange;
+
+    if (!query.timeInterval || !query.timeInterval.key) {
+      query.timeInterval = datasource.getDefaultTimeInterval(query);
+    }
+
+    onChange(query);
+  };
+
+  Metric.prototype.canShowMaxMetricValue = function () {
+    var query = this.props.query;
+    return query.entityType && query.entityType.key === 'host' && query.metric && lodash__WEBPACK_IMPORTED_MODULE_6___default.a.find(_lists_max_metrics__WEBPACK_IMPORTED_MODULE_3__["default"], function (m) {
+      return m.key === query.metric.key;
+    });
+  };
+
+  Metric.prototype.canShowAggregation = function () {
+    var query = this.props.query;
+    return query.metricCategory.key >= _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"];
+  };
+
+  Metric.prototype.canSelectAggregation = function () {
+    var query = this.props.query;
+    return query.metric && query.metric.aggregations && query.metric.aggregations.length > 1;
+  };
+
+  Metric.prototype.render = function () {
+    var _a = this.props,
+        query = _a.query,
+        datasource = _a.datasource;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      disabled: query.useFreeTextMetrics,
+      inputWidth: 0,
+      label: 'Metric',
+      tooltip: 'Select the metric you wish to plot.',
+      value: query.metric,
+      noOptionsMessage: 'No metrics found',
+      options: this.props.availableMetrics,
+      onChange: this.onMetricChange
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["BUILT_IN_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      queryKeyword: true,
+      disabled: !this.canShowMaxMetricValue(),
+      labelWidth: 9,
+      label: 'Show max value',
+      tooltip: "Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, " + 'memory.used and openFiles.used only.',
+      value: query.displayMaxMetricValue,
+      onChange: this.onShowMaxValueChange
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      queryKeyword: true,
+      disabled: !query.canShowAllMetrics,
+      labelWidth: 9,
+      label: 'Show all metrics',
+      tooltip: 'You have the option to show all metrics in the graph once the amount of possible, selectable ' + 'metrics is between 1 and 5.',
+      value: query.showAllMetrics,
+      onChange: this.onShowAllMetricsChange
+    }), this.canShowAggregation() && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      disabled: !this.canSelectAggregation(),
+      labelWidth: 6,
+      inputWidth: 12,
+      label: 'Aggregation',
+      tooltip: 'Select a metric aggregation.',
+      value: query.aggregation,
+      options: query.metric.aggregations,
+      onChange: this.onAggregationChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      disabled: datasource.availableTimeIntervals.length <= 1,
+      labelWidth: 6,
+      inputWidth: 12,
+      label: 'Rollup',
+      tooltip: 'Select the rollup value.',
+      value: query.timeInterval,
+      options: datasource.availableTimeIntervals,
+      onChange: this.onTimeIntervalChange
+    }));
+  };
+
+  return Metric;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Metric);
+
+/***/ }),
+
+/***/ "./components/QueryEditor.tsx":
+/*!************************************!*\
+  !*** ./components/QueryEditor.tsx ***!
+  \************************************/
+/*! exports provided: QueryEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QueryEditor", function() { return QueryEditor; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _ApplicationServiceEndpointMetrics_ApplicationServiceEndpointMetrics__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics */ "./components/ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics.tsx");
+/* harmony import */ var _Analyze_ApplicationCallsMetrics__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Analyze/ApplicationCallsMetrics */ "./components/Analyze/ApplicationCallsMetrics.tsx");
+/* harmony import */ var _Infrastructure_Custom_MetricFilter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Infrastructure/Custom/MetricFilter */ "./components/Infrastructure/Custom/MetricFilter.tsx");
+/* harmony import */ var _AdvancedSettings_AdvancedSettings__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AdvancedSettings/AdvancedSettings */ "./components/AdvancedSettings/AdvancedSettings.tsx");
+/* harmony import */ var _Infrastructure_Infrastructure__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Infrastructure/Infrastructure */ "./components/Infrastructure/Infrastructure.tsx");
+/* harmony import */ var _SLOInformation_SloInformation__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./SLOInformation/SloInformation */ "./components/SLOInformation/SloInformation.tsx");
+/* harmony import */ var _lists_aggregation_function__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../lists/aggregation_function */ "./lists/aggregation_function.ts");
+/* harmony import */ var _lists_metric_categories__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../lists/metric_categories */ "./lists/metric_categories.ts");
+/* harmony import */ var _Analyze_WebsiteMetrics__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Analyze/WebsiteMetrics */ "./components/Analyze/WebsiteMetrics.tsx");
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _Analyze_Filter__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Analyze/Filter */ "./components/Analyze/Filter.tsx");
+/* harmony import */ var _Metric_Metric__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Metric/Metric */ "./components/Metric/Metric.tsx");
+/* harmony import */ var _migration__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../migration */ "./migration.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _instana_grafana_css__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../instana-grafana.css */ "./instana-grafana.css");
+/* harmony import */ var _instana_grafana_css__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_instana_grafana_css__WEBPACK_IMPORTED_MODULE_17__);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var QueryEditor =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(QueryEditor, _super);
+
+  function QueryEditor(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onCategoryChange = function (newCategory) {
+      if (_this.query.metricCategory === newCategory) {// nothing needs to be done
+      } else {
+        _this.selectionReset();
+
+        _this.query.metricCategory = newCategory;
+        _this.query.timeInterval = _this.props.datasource.getDefaultTimeInterval(_this.query);
+
+        _this.changeAndRun();
+      }
+    };
+
+    _this.changeAndRun = function () {
+      _this.props.onChange(_this.query);
+
+      _this.props.onRunQuery();
+    };
+
+    _this.updateMetrics = function (metrics) {
+      _this.setState({
+        availableMetrics: lodash__WEBPACK_IMPORTED_MODULE_16___default.a.sortBy(metrics, 'key'),
+        allMetrics: lodash__WEBPACK_IMPORTED_MODULE_16___default.a.sortBy(metrics, 'key')
+      });
+
+      if (_this.query.metric && _this.query.metric.key || _this.query.showAllMetrics) {
+        var metric = lodash__WEBPACK_IMPORTED_MODULE_16___default.a.find(metrics, function (m) {
+          return m.key === _this.query.metric.key;
+        });
+
+        metric ? _this.query.metric = metric : _this.query.metric = {
+          key: null
+        };
+      }
+
+      if (_this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"]) {
+        _this.onMetricsFilter(_this.query.customFilters); // this contains setMetricPlaceholder
+
+      } else if (!_this.query.metric || !_this.query.metric.key) {
+        _this.setMetricPlaceholder(metrics.length);
+      }
+
+      _this.changeAndRun();
+    };
+
+    _this.filterForEntityType = function (findMatchingEntityTypes, filterResults) {
+      if (findMatchingEntityTypes === void 0) {
+        findMatchingEntityTypes = true;
+      }
+
+      if (filterResults === void 0) {
+        filterResults = true;
+      }
+
+      var _a = _this.props,
+          query = _a.query,
+          datasource = _a.datasource,
+          onChange = _a.onChange;
+      datasource.getEntityTypes().then(function (entityTypes) {
+        var queryTypes = entityTypes;
+
+        if (filterResults && !query.useFreeTextMetrics) {
+          queryTypes = _this.filterEntityTypes(entityTypes, findMatchingEntityTypes);
+        }
+
+        _this.setState({
+          queryTypes: queryTypes
+        });
+
+        if (!query.entityType || !query.entityType.key || !lodash__WEBPACK_IMPORTED_MODULE_16___default.a.find(queryTypes, function (m) {
+          return m.key === query.entityType.key;
+        })) {
+          query.entityType = {
+            key: null,
+            label: 'Please select (' + queryTypes.length + ')'
+          };
+        }
+
+        onChange(query);
+      });
+    };
+
+    _this.filterEntityTypes = function (entityTypes, findMatchingEntityTypes) {
+      if (findMatchingEntityTypes) {
+        return lodash__WEBPACK_IMPORTED_MODULE_16___default.a.sortBy(lodash__WEBPACK_IMPORTED_MODULE_16___default.a.filter(entityTypes, function (entityType) {
+          return _this.findMatchingEntityTypes(entityType);
+        }), 'label');
+      }
+
+      return lodash__WEBPACK_IMPORTED_MODULE_16___default.a.sortBy(entityTypes, 'label');
+    };
+
+    _this.findMatchingEntityTypes = function (entityType) {
+      var query = _this.props.query; // workaround as long the api does not support returning plugins with custom metrics only
+
+      if (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["BUILT_IN_METRICS"] || entityType.key === 'statsd' || entityType.key === 'prometheus' || entityType.key === 'jvmRuntimePlatform' || entityType.key === 'dropwizardApplicationContainer') {
+        return _this.snapshots.find(function (type) {
+          return type === entityType.key;
+        }) && entityType.label != null;
+      }
+
+      return false;
+    };
+
+    _this.updateQueryTypes = function (types) {
+      _this.setState({
+        queryTypes: types
+      });
+    };
+
+    _this.updateGroups = function (groups) {
+      _this.setState({
+        groups: groups
+      });
+    };
+
+    _this.onMetricsFilter = function (customFilters) {
+      var newAvailableMetrics = [];
+
+      if (!customFilters || customFilters.length === 0) {
+        newAvailableMetrics = _this.state.allMetrics;
+      } else {
+        newAvailableMetrics = _this.applyFilterToMetricList(customFilters);
+      }
+
+      _this.query.canShowAllMetrics = _this.isAbleToShowAllMetrics(newAvailableMetrics);
+
+      if (!_this.query.canShowAllMetrics) {
+        _this.query.showAllMetrics = false;
+      }
+
+      _this.query.customFilters = customFilters;
+
+      if (!_this.query.metric || !_this.query.metric.key) {
+        _this.setMetricPlaceholder(newAvailableMetrics.length);
+      }
+
+      _this.setState(function (state) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, state), {
+          availableMetrics: newAvailableMetrics
+        });
+      });
+
+      _this.props.onChange(_this.query);
+
+      _this.checkMetricAndRefresh();
+    };
+
+    var defaultQuery = {
+      metricCategory: _lists_metric_categories__WEBPACK_IMPORTED_MODULE_10__["default"][0],
+      timeShiftIsValid: true,
+      customFilters: []
+    };
+    _this.query = Object.assign(defaultQuery, props.query);
+    Object(_migration__WEBPACK_IMPORTED_MODULE_15__["default"])(_this.query);
+    _this.state = {
+      groups: [],
+      allMetrics: [],
+      queryTypes: [],
+      availableMetrics: []
+    };
+    _this.filterMetricsOnType = _this.filterMetricsOnType.bind(_this);
+    _this.loadEntityTypes = _this.loadEntityTypes.bind(_this);
+
+    _this.props.onChange(_this.query);
+
+    return _this;
+  }
+
+  QueryEditor.prototype.setMetricPlaceholder = function (nrOfTotalResults) {
+    if (this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"]) {
+      this.query.metric = {
+        key: null,
+        label: 'Please select (' + nrOfTotalResults + '/' + this.state.allMetrics.length + ')'
+      };
+    } else {
+      this.query.metric = {
+        key: null,
+        label: 'Please select (' + nrOfTotalResults + ')'
+      };
+    }
+
+    this.props.onChange(this.query);
+  };
+
+  QueryEditor.prototype.loadEntityTypes = function (filterResult) {
+    var _this = this;
+
+    if (filterResult === void 0) {
+      filterResult = true;
+    }
+
+    var _a = this.props,
+        query = _a.query,
+        datasource = _a.datasource,
+        onRunQuery = _a.onRunQuery;
+
+    if (query.entityQuery) {
+      datasource.fetchTypesForTarget(query).then(function (response) {
+        _this.snapshots = response.data;
+
+        _this.filterForEntityType(true, filterResult);
+
+        onRunQuery();
+      });
+    } else {
+      this.setState({
+        queryTypes: []
+      });
+    }
+  };
+
+  QueryEditor.prototype.applyFilterToMetricList = function (filters) {
+    var filteredMetrics = this.state.allMetrics;
+
+    lodash__WEBPACK_IMPORTED_MODULE_16___default.a.forEach(filters, function (filter) {
+      if (filter !== '') {
+        filteredMetrics = lodash__WEBPACK_IMPORTED_MODULE_16___default.a.sortBy(lodash__WEBPACK_IMPORTED_MODULE_16___default.a.filter(filteredMetrics, function (metric) {
+          return metric.key.toLowerCase().includes(filter.toLowerCase());
+        }), 'key');
+      }
+    });
+
+    return filteredMetrics;
+  };
+
+  QueryEditor.prototype.filterMetricsOnType = function (type) {
+    var filteredMetrics = this.state.allMetrics.filter(function (metric) {
+      return metric.beaconTypes.includes(type);
+    });
+    this.setState({
+      availableMetrics: filteredMetrics
+    });
+
+    if (!this.query.metric || !this.query.metric.key || !this.query.metric.beaconTypes.includes(type)) {
+      this.setMetricPlaceholder(filteredMetrics.length);
+    }
+
+    this.changeAndRun();
+  };
+
+  QueryEditor.prototype.isAbleToShowAllMetrics = function (metrics) {
+    return this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"] && metrics.length > 0 && metrics.length <= 5;
+  };
+
+  QueryEditor.prototype.checkMetricAndRefresh = function () {
+    if (this.query.metric && this.query.metric.key && !lodash__WEBPACK_IMPORTED_MODULE_16___default.a.includes(lodash__WEBPACK_IMPORTED_MODULE_16___default.a.map(this.state.availableMetrics, function (m) {
+      return m.key;
+    }), this.query.metric.key)) {
+      this.resetMetricSelection();
+    }
+
+    this.changeAndRun();
+  };
+
+  QueryEditor.prototype.selectionReset = function () {
+    var query = this.props.query;
+
+    if (query.metricCategory.key > _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"]) {
+      query.entityQuery = '';
+    }
+
+    this.setState({
+      availableMetrics: [],
+      allMetrics: [],
+      groups: []
+    });
+    this.resetEntityTypeSelection();
+    this.resetEntitySelection();
+    this.resetMetricSelection();
+  };
+
+  QueryEditor.prototype.resetEntityTypeSelection = function () {
+    var query = this.props.query;
+    query.entityType = {
+      key: null,
+      label: '-'
+    };
+    query.customFilters = [];
+  };
+
+  QueryEditor.prototype.resetEntitySelection = function () {
+    var query = this.props.query;
+    query.entity = {};
+    query.group = {};
+    query.showGroupBySecondLevel = false;
+    query.groupbyTagSecondLevelKey = '';
+    query.aggregateGraphs = false;
+    query.aggregationFunction = _lists_aggregation_function__WEBPACK_IMPORTED_MODULE_9__["default"][0];
+    query.hideOriginalGraphs = false;
+    query.filters = [];
+    query.showWarningCantShowAllResults = false;
+    query.showAllMetrics = false;
+    query.canShowAllMetrics = false;
+    query.displayMaxMetricValue = false;
+    query.applicationCallToEntity = '';
+    query.callToEntity = '';
+    this.resetServices();
+    this.resetEndpoints();
+    this.resetSLO();
+  };
+
+  QueryEditor.prototype.resetMetricSelection = function () {
+    var query = this.props.query;
+    query.metric = {};
+    query.timeShift = '';
+    query.timeShiftIsValid = true;
+    query.showWarningCantShowAllResults = false;
+    query.showAllMetrics = false;
+    query.labelFormat = '';
+    query.freeTextMetrics = '';
+    query.useFreeTextMetrics = false;
+  };
+
+  QueryEditor.prototype.resetServices = function () {
+    this.props.query.service = {};
+  };
+
+  QueryEditor.prototype.resetEndpoints = function () {
+    this.props.query.endpoint = {};
+  };
+
+  QueryEditor.prototype.resetSLO = function () {
+    var query = this.props.query;
+    query.sloValue = '';
+    query.sloReport = {};
+  };
+
+  QueryEditor.prototype.render = function () {
+    var _a = this,
+        query = _a.query,
+        onCategoryChange = _a.onCategoryChange;
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form-group'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_12__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Category',
+      tooltip: 'Select a metric category.',
+      value: query.metricCategory,
+      options: _lists_metric_categories__WEBPACK_IMPORTED_MODULE_10__["default"],
+      onChange: onCategoryChange
+    })), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["BUILT_IN_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Infrastructure_Infrastructure__WEBPACK_IMPORTED_MODULE_7__["Infrastructure"], {
+      query: query,
+      queryTypes: this.state.queryTypes,
+      datasource: this.props.datasource,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      loadEntityTypes: this.loadEntityTypes,
+      updateQueryTypes: this.updateQueryTypes
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Infrastructure_Infrastructure__WEBPACK_IMPORTED_MODULE_7__["Infrastructure"], {
+      query: query,
+      queryTypes: this.state.queryTypes,
+      datasource: this.props.datasource,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      loadEntityTypes: this.loadEntityTypes,
+      updateQueryTypes: this.updateQueryTypes
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Analyze_ApplicationCallsMetrics__WEBPACK_IMPORTED_MODULE_4__["ApplicationCallsMetrics"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      groups: this.state.groups,
+      updateGroups: this.updateGroups,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Analyze_WebsiteMetrics__WEBPACK_IMPORTED_MODULE_11__["WebsiteMetrics"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      groups: this.state.groups,
+      updateGroups: this.updateGroups,
+      filterMetricsOnType: this.filterMetricsOnType,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["APPLICATION_SERVICE_ENDPOINT_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ApplicationServiceEndpointMetrics_ApplicationServiceEndpointMetrics__WEBPACK_IMPORTED_MODULE_3__["ApplicationServiceEndpointMetrics"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_SLOInformation_SloInformation__WEBPACK_IMPORTED_MODULE_8__["SloInformation"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      datasource: this.props.datasource
+    }), query.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Metric_Metric__WEBPACK_IMPORTED_MODULE_14__["default"], {
+      query: query,
+      onChange: this.props.onChange,
+      onRunQuery: this.props.onRunQuery,
+      updateMetrics: this.updateMetrics,
+      availableMetrics: this.state.availableMetrics,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Infrastructure_Custom_MetricFilter__WEBPACK_IMPORTED_MODULE_5__["MetricFilter"], {
+      query: query,
+      onChange: this.props.onChange,
+      onRunQuery: this.props.onRunQuery,
+      onFilterChange: this.onMetricsFilter,
+      availableMetrics: this.state.availableMetrics,
+      datasource: this.props.datasource
+    }), (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"]) && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Analyze_Filter__WEBPACK_IMPORTED_MODULE_13__["Filters"], {
+      query: query,
+      onChange: this.props.onChange,
+      onRunQuery: this.props.onRunQuery,
+      datasource: this.props.datasource,
+      groups: this.state.groups
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_AdvancedSettings_AdvancedSettings__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      loadEntityTypes: this.loadEntityTypes
+    }));
+  };
+
+  return QueryEditor;
+}(react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"]);
+
+
+
+/***/ }),
+
+/***/ "./components/SLOInformation/SloInformation.tsx":
+/*!******************************************************!*\
+  !*** ./components/SLOInformation/SloInformation.tsx ***!
+  \******************************************************/
+/*! exports provided: SloInformation */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SloInformation", function() { return SloInformation; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _lists_slo_specifics__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lists/slo_specifics */ "./lists/slo_specifics.ts");
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _FormField_FormInput__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../FormField/FormInput */ "./components/FormField/FormInput.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
+
+
+
+
+
+
+
+var MAX_VAL = 0.9999;
+var isUnmounting = false;
+
+var SloInformation =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(SloInformation, _super);
+
+  function SloInformation(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_6___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onSloChange = function (slo) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery;
+      query.sloReport = slo;
+      onRunQuery();
+    };
+
+    _this.onSloValueChange = function (sloValue) {
+      var query = _this.props.query;
+      query.sloValue = sloValue.currentTarget.value;
+
+      if (_this.isValid(query.sloValue)) {
+        // onRunQuery with 500ms delay after last debounce
+        _this.debouncedRunQuery();
+      }
+    };
+
+    _this.onSloSpecificChange = function (sloSpecific) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery;
+      query.sloSpecific = sloSpecific;
+      onRunQuery();
+    };
+
+    _this.state = {
+      sloReports: [],
+      isValidSlo: true
+    };
+    return _this;
+  }
+
+  SloInformation.prototype.componentDidMount = function () {
+    isUnmounting = false;
+    this.loadSloReports();
+    this.isValid(this.props.query.sloValue);
+  };
+
+  SloInformation.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  SloInformation.prototype.isValid = function (val) {
+    var valid = !val || +val >= 0 && +val <= MAX_VAL;
+    this.setState({
+      isValidSlo: valid
+    });
+    return valid;
+  };
+
+  SloInformation.prototype.shouldComponentUpdate = function (nextProps, nextState, nextContext) {
+    return nextProps.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"];
+  };
+
+  SloInformation.prototype.loadSloReports = function () {
+    var _this = this;
+
+    var query = this.props.query;
+    this.props.datasource.getSloReports().then(function (sloReports) {
+      if (!isUnmounting) {
+        _this.setState({
+          sloReports: sloReports
+        });
+
+        if (!query.sloReport && sloReports.length >= 1) {
+          query.sloReport = sloReports[0];
+        }
+      }
+    });
+  };
+
+  SloInformation.prototype.render = function () {
+    var query = this.props.query;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Configured SLI',
+      tooltip: 'SLI configuration used to compute error budget and SLI values.',
+      noOptionsMessage: 'No configured SLI found',
+      value: query.sloReport,
+      options: this.state.sloReports,
+      onChange: this.onSloChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormInput__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      queryKeyword: true,
+      labelWidth: 7,
+      inputWidth: 0,
+      label: 'SLO',
+      tooltip: 'Type in your desired SLO threshold from 0 to ' + MAX_VAL,
+      value: query.sloValue,
+      invalid: !this.state.isValidSlo,
+      placeholder: '0.99',
+      onChange: this.onSloValueChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      labelWidth: 7,
+      inputWidth: 0,
+      label: 'Value type',
+      tooltip: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Select your specific SLO information:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'SLI' requires Gauge visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Remaining Error Budget' requires Singlestat visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Timeseries' requires Bars draw mode on Graph visualization"))),
+      value: query.sloSpecific,
+      options: _lists_slo_specifics__WEBPACK_IMPORTED_MODULE_3__["default"],
+      onChange: this.onSloSpecificChange
+    }));
+  };
+
+  return SloInformation;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/plugin.css":
+/*!*******************************!*\
+  !*** ./components/plugin.css ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js??ref--8-1!../../node_modules/postcss-loader/src??ref--8-2!../../node_modules/sass-loader/lib/loader.js!./plugin.css */ "../node_modules/css-loader/dist/cjs.js?!../node_modules/postcss-loader/src/index.js?!../node_modules/sass-loader/lib/loader.js!./components/plugin.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "../node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./datasources/DataSource.ts":
+/*!***********************************!*\
+  !*** ./datasources/DataSource.ts ***!
+  \***********************************/
+/*! exports provided: DataSource */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSource", function() { return DataSource; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/data */ "@grafana/data");
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_data__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _DataSource_Slo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DataSource_Slo */ "./datasources/DataSource_Slo.ts");
+/* harmony import */ var _lists_metric_categories__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../lists/metric_categories */ "./lists/metric_categories.ts");
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _Datasource_Infrastructure__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Datasource_Infrastructure */ "./datasources/Datasource_Infrastructure.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var _util_delta_util__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../util/delta_util */ "./util/delta_util.ts");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _util_instana_version__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../util/instana_version */ "./util/instana_version.ts");
+/* harmony import */ var _util_aggregation_util__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../util/aggregation_util */ "./util/aggregation_util.ts");
+/* harmony import */ var _DataSource_Website__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./DataSource_Website */ "./datasources/DataSource_Website.ts");
+/* harmony import */ var _DataSource_Application__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./DataSource_Application */ "./datasources/DataSource_Application.ts");
+/* harmony import */ var _DataSource_Service__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./DataSource_Service */ "./datasources/DataSource_Service.ts");
+/* harmony import */ var _DataSource_Endpoint__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./DataSource_Endpoint */ "./datasources/DataSource_Endpoint.ts");
+/* harmony import */ var _util_queryInterval_check__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../util/queryInterval_check */ "./util/queryInterval_check.ts");
+/* harmony import */ var _util_analyze_util__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../util/analyze_util */ "./util/analyze_util.ts");
+/* harmony import */ var _migration__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../migration */ "./migration.ts");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var DataSource =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(DataSource, _super);
+
+  function DataSource(instanceSettings) {
+    var _this = _super.call(this, instanceSettings) || this;
+
+    _this.options = instanceSettings.jsonData;
+    _this.options.url = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["instanaUrl"])(instanceSettings);
+    _this.availableGranularities = [];
+    _this.availableRollups = [];
+    _this.availableTimeIntervals = [];
+    _this.dataSourceSlo = new _DataSource_Slo__WEBPACK_IMPORTED_MODULE_3__["DataSourceSlo"](instanceSettings.jsonData);
+    _this.dataSourceInfrastructure = new _Datasource_Infrastructure__WEBPACK_IMPORTED_MODULE_9__["DataSourceInfrastructure"](instanceSettings.jsonData);
+    _this.dataSourceWebsite = new _DataSource_Website__WEBPACK_IMPORTED_MODULE_15__["DataSourceWebsite"](instanceSettings.jsonData);
+    _this.dataSourceApplication = new _DataSource_Application__WEBPACK_IMPORTED_MODULE_16__["DataSourceApplication"](instanceSettings.jsonData);
+    _this.dataSourceService = new _DataSource_Service__WEBPACK_IMPORTED_MODULE_17__["DataSourceService"](instanceSettings.jsonData);
+    _this.dataSourceEndpoint = new _DataSource_Endpoint__WEBPACK_IMPORTED_MODULE_18__["DataSourceEndpoint"](instanceSettings.jsonData);
+    _this.resultCache = new _cache__WEBPACK_IMPORTED_MODULE_6__["default"]();
+    return _this;
+  }
+
+  DataSource.prototype.query = function (options) {
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, Promise, function () {
+      var range;
+
+      var _this = this;
+
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+        range = options.range;
+        this.timeFilter = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_5__["readTime"])(range);
+        this.availableRollups = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_10__["getPossibleRollups"])(this.timeFilter);
+        this.availableGranularities = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_10__["getPossibleGranularities"])(this.timeFilter.windowSize);
+        return [2
+        /*return*/
+        , Promise.all(options.targets.map(function (target) {
+          var targetTimeFilter = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_5__["readTime"])(range); // grafana setting to disable query execution
+
+          if (target.hide) {
+            return {
+              data: [],
+              target: target
+            };
+          }
+
+          Object(_migration__WEBPACK_IMPORTED_MODULE_21__["default"])(target);
+
+          if (!target.metricCategory) {
+            target.metricCategory = _lists_metric_categories__WEBPACK_IMPORTED_MODULE_4__["default"][0];
+          }
+
+          _this.setPossibleTimeIntervals(target); // target migration for downwards compatibility
+
+
+          Object(_migration__WEBPACK_IMPORTED_MODULE_21__["default"])(target);
+
+          if (target.timeShift) {
+            var millis = _this.convertTimeShiftToMillis(target.timeShift);
+
+            if (millis) {
+              targetTimeFilter = _this.applyTimeShiftOnTimeFilter(targetTimeFilter, millis);
+            }
+          }
+
+          target.timeFilter = targetTimeFilter;
+          target.stableHash = Object(_util_delta_util__WEBPACK_IMPORTED_MODULE_11__["generateStableHash"])(target);
+          targetTimeFilter = _this.adjustTimeFilterIfCached(targetTimeFilter, target);
+
+          if (target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_12__["SLO_INFORMATION"]) {
+            return _this.dataSourceSlo.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          } else if (target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_12__["BUILT_IN_METRICS"] || target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_12__["CUSTOM_METRICS"]) {
+            return _this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          } else if (target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_12__["ANALYZE_WEBSITE_METRICS"]) {
+            return _this.dataSourceWebsite.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          } else if (target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_12__["ANALYZE_APPLICATION_METRICS"]) {
+            return _this.dataSourceApplication.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          } else if (target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_12__["APPLICATION_SERVICE_ENDPOINT_METRICS"]) {
+            return _this.getApplicationServiceEndpointMetrics(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          }
+
+          return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_7__["emptyResultData"])(target.refId));
+        })).then(function (targetData) {
+          var result = [];
+
+          lodash__WEBPACK_IMPORTED_MODULE_8___default.a.each(targetData, function (targetAndData) {
+            // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+            var resultData = lodash__WEBPACK_IMPORTED_MODULE_8___default.a.compact(lodash__WEBPACK_IMPORTED_MODULE_8___default.a.flatten(targetAndData.data)); // Also remove empty data items
+
+
+            _this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
+
+            resultData = _this.aggregateDataIfNecessary(resultData, targetAndData.target);
+
+            _this.cacheResultIfNecessary(resultData, targetAndData.target);
+
+            result.push(resultData);
+          });
+
+          return {
+            data: lodash__WEBPACK_IMPORTED_MODULE_8___default.a.flatten(result)
+          };
+        })];
+      });
+    });
+  };
+
+  DataSource.prototype.getApplicationServiceEndpointMetrics = function (target, timeFilter) {
+    var _this = this; // do not try to execute too big queries
+
+
+    if (Object(_util_queryInterval_check__WEBPACK_IMPORTED_MODULE_19__["isInvalidQueryInterval"])(timeFilter.windowSize, Object(_util_time_util__WEBPACK_IMPORTED_MODULE_5__["hoursToMs"])(this.options.queryinterval_limit_app_metrics))) {
+      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.options.queryinterval_limit_app_metrics + ' hours');
+    }
+
+    if (target.endpoint && target.endpoint.key) {
+      return this.dataSourceEndpoint.fetchEndpointMetrics(target, timeFilter).then(function (response) {
+        return Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_20__["readItemMetrics"])(target, response, _this.dataSourceEndpoint.buildEndpointMetricLabel);
+      });
+    } else if (target.service && target.service.key) {
+      return this.dataSourceService.fetchServiceMetrics(target, timeFilter).then(function (response) {
+        return Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_20__["readItemMetrics"])(target, response, _this.dataSourceService.buildServiceMetricLabel);
+      });
+    } else if (target.entity && target.entity.key) {
+      return this.dataSourceApplication.fetchApplicationMetrics(target, timeFilter).then(function (response) {
+        if (response.data) {
+          target.showWarningCantShowAllResults = response.data.canLoadMore;
+        }
+
+        return Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_20__["readItemMetrics"])(target, response, _this.dataSourceApplication.buildApplicationMetricLabel);
+      });
+    }
+
+    return Promise.resolve({
+      data: {
+        items: []
+      }
+    });
+  };
+
+  DataSource.prototype.applyTimeShiftIfNecessary = function (data, target) {
+    var _this = this;
+
+    data.forEach(function (data) {
+      if (target.timeShift) {
+        _this.applyTimeShiftOnData(data, _this.convertTimeShiftToMillis(target.timeShift));
+      }
+    });
+  };
+
+  DataSource.prototype.cacheResultIfNecessary = function (result, target) {
+    if (this.supportsDeltaRequests(target) && this.hasResult(result)) {
+      var cachedObj = {
+        timeFilter: target.timeFilter,
+        results: result
+      };
+      this.resultCache.put(target.stableHash, cachedObj, 400000); // to cover at least 5 min refreshs
+    }
+  };
+
+  DataSource.prototype.supportsDeltaRequests = function (target) {
+    var _this = this;
+
+    if (target.metricCategory && target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_12__["SLO_INFORMATION"]) {
+      return false;
+    }
+
+    var version = this.resultCache.get('version');
+
+    if (!version) {
+      return Object(_util_instana_version__WEBPACK_IMPORTED_MODULE_13__["default"])(this.options).then(function (version) {
+        _this.resultCache.put('version', version, 3600000); // one hour
+
+
+        return version >= 171;
+      });
+    }
+
+    return version >= 171;
+  };
+
+  DataSource.prototype.hasResult = function (result) {
+    return result && result.length > 0;
+  };
+
+  DataSource.prototype.applyTimeShiftOnData = function (data, timeshift) {
+    data.datapoints.forEach(function (datapoint) {
+      datapoint[1] = datapoint[1] + timeshift;
+    });
+  };
+
+  DataSource.prototype.aggregateDataIfNecessary = function (data, target) {
+    var newData = [];
+
+    if (target.aggregateGraphs) {
+      var aggregatedData_1 = Object(_util_aggregation_util__WEBPACK_IMPORTED_MODULE_14__["aggregateTarget"])(data, target);
+      newData.push(aggregatedData_1);
+
+      if (!target.hideOriginalGraphs) {
+        lodash__WEBPACK_IMPORTED_MODULE_8___default.a.each(data, function (dt) {
+          if (dt.target !== aggregatedData_1.target) {
+            newData.push(dt);
+          }
+        });
+      }
+
+      return newData;
+    }
+
+    return data;
+  };
+
+  DataSource.prototype.buildTargetWithAppendedDataResult = function (target, timeFilter, data) {
+    if (timeFilter.from !== target.timeFilter.from && data) {
+      data = this.appendResult(data, target);
+    }
+
+    return {
+      target: target,
+      data: data
+    };
+  };
+
+  DataSource.prototype.appendResult = function (data, target) {
+    var cachedResult = this.resultCache.get(target.stableHash);
+
+    if (cachedResult && cachedResult.results) {
+      data = Object(_util_delta_util__WEBPACK_IMPORTED_MODULE_11__["appendData"])(data, cachedResult.results);
+    }
+
+    return data;
+  };
+
+  DataSource.prototype.adjustTimeFilterIfCached = function (timeFilter, target) {
+    var cachedResult = this.resultCache.get(target.stableHash);
+
+    if (cachedResult && Object(_util_delta_util__WEBPACK_IMPORTED_MODULE_11__["hasIntersection"])(timeFilter, cachedResult.timeFilter)) {
+      var newFrom = this.getDeltaRequestTimestamp(cachedResult.results, cachedResult.timeFilter.from);
+      var newTo = Math.floor(timeFilter.to / 10000) * 10000;
+      return {
+        from: newFrom,
+        to: newTo,
+        windowSize: newTo - newFrom
+      };
+    }
+
+    return timeFilter;
+  };
+
+  DataSource.prototype.getDeltaRequestTimestamp = function (series, fromDefault) {
+    var length = series[0].datapoints.length;
+
+    if (length === 0) {
+      return fromDefault;
+    }
+
+    var penultimate = length > 1 ? length - 2 : 1;
+    return series[0].datapoints[penultimate][1];
+  };
+
+  DataSource.prototype.getSloReports = function () {
+    return this.dataSourceSlo.getConfiguredSLIs();
+  };
+
+  DataSource.prototype.getEntityTypes = function () {
+    return this.dataSourceInfrastructure.getEntityTypes();
+  };
+
+  DataSource.prototype.fetchApplications = function () {
+    return this.dataSourceApplication.getApplications(this.getTimeFilter());
+  };
+
+  DataSource.prototype.fetchServices = function (target) {
+    return this.dataSourceService.getServicesOfApplication(target, this.getTimeFilter());
+  };
+
+  DataSource.prototype.fetchEndpoints = function (target) {
+    return this.dataSourceEndpoint.getEndpointsOfService(target, this.getTimeFilter());
+  };
+
+  DataSource.prototype.fetchTypesForTarget = function (query) {
+    return this.dataSourceInfrastructure.fetchTypesForTarget(query, this.getTimeFilter());
+  };
+
+  DataSource.prototype.fetchWebsites = function () {
+    return this.dataSourceWebsite.getWebsites(this.getTimeFilter());
+  };
+
+  DataSource.prototype.getDefaultTimeInterval = function (query) {
+    if (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_12__["BUILT_IN_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_12__["CUSTOM_METRICS"]) {
+      return Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_10__["getDefaultMetricRollupDuration"])(this.getTimeFilter());
+    } else {
+      return Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_10__["getDefaultChartGranularity"])(this.getTimeFilter().windowSize);
+    }
+  };
+
+  DataSource.prototype.convertTimeShiftToMillis = function (timeShift) {
+    if (!timeShift) {
+      return null;
+    }
+
+    try {
+      return this.parseTimeShift(timeShift);
+    } catch (e) {
+      return null;
+    }
+  };
+
+  DataSource.prototype.parseTimeShift = function (timeShift) {
+    var milliSeconds = 1000;
+
+    if (timeShift.endsWith('s')) {
+      return parseInt(timeShift.split('s')[0], 10) * milliSeconds;
+    } else if (timeShift.endsWith('m')) {
+      return parseInt(timeShift.split('m')[0], 10) * 60 * milliSeconds;
+    } else if (timeShift.endsWith('h')) {
+      return parseInt(timeShift.split('h')[0], 10) * 60 * 60 * milliSeconds;
+    } else if (timeShift.endsWith('d')) {
+      return parseInt(timeShift.split('d')[0], 10) * 60 * 60 * 24 * milliSeconds;
+    } else if (timeShift.endsWith('w')) {
+      return parseInt(timeShift.split('w')[0], 10) * 60 * 60 * 24 * 7 * milliSeconds;
+    }
+
+    return null;
+  };
+
+  DataSource.prototype.applyTimeShiftOnTimeFilter = function (timeFilter, timeShift) {
+    if (timeShift) {
+      return {
+        from: timeFilter.from - timeShift,
+        to: timeFilter.to - timeShift,
+        windowSize: timeFilter.windowSize
+      };
+    } else {
+      return timeFilter;
+    }
+  };
+
+  DataSource.prototype.setPossibleTimeIntervals = function (target) {
+    if (target.metricCategory.key === 0 || target.metricCategory.key === 1) {
+      this.availableTimeIntervals = this.availableRollups;
+    } else {
+      this.availableTimeIntervals = this.availableGranularities;
+    }
+  };
+
+  DataSource.prototype.getTimeFilter = function () {
+    if (!this.timeFilter || !this.timeFilter.from) {
+      var now = Math.floor(Date.now() / 1000) * 1000;
+      var windowSize = 6 * 60 * 60 * 1000; // 6h
+
+      this.timeFilter = {
+        from: now - windowSize,
+        to: now,
+        windowSize: windowSize
+      };
+    }
+
+    return this.timeFilter;
+  };
+
+  DataSource.prototype.testDatasource = function () {
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["getRequest"])(this.options, '/api/monitoringState').then(function () {
+      return {
+        status: 'success',
+        message: 'Successfully connected to the Instana API.',
+        title: 'Success'
+      };
+    }, function (error) {
+      if (error.status === 401) {
+        return {
+          status: 'error',
+          message: 'Unauthorized. Please verify the API Token.',
+          title: 'Error'
+        };
+      } else {
+        console.log(error);
+        return {
+          status: 'error',
+          message: 'Error (' + error.status + ') connecting to the Instana API: ' + error.statusText,
+          title: 'Error'
+        };
+      }
+    });
+  };
+
+  return DataSource;
+}(_grafana_data__WEBPACK_IMPORTED_MODULE_1__["DataSourceApi"]);
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_Application.ts":
+/*!***********************************************!*\
+  !*** ./datasources/DataSource_Application.ts ***!
+  \***********************************************/
+/*! exports provided: DataSourceApplication */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceApplication", function() { return DataSourceApplication; });
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var _util_analyze_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/analyze_util */ "./util/analyze_util.ts");
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _lists_default_metric_catalog__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../lists/default_metric_catalog */ "./lists/default_metric_catalog.ts");
+/* harmony import */ var _util_queryInterval_check__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../util/queryInterval_check */ "./util/queryInterval_check.ts");
+
+
+
+
+
+
+
+
+
+
+
+var DataSourceApplication =
+/** @class */
+function () {
+  function DataSourceApplication(options) {
+    this.instanaOptions = options;
+    this.applicationsCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    this.miscCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  }
+
+  DataSourceApplication.prototype.runQuery = function (target, timeFilter) {
+    var _this = this; // do not try to execute to big queries
+
+
+    if (Object(_util_queryInterval_check__WEBPACK_IMPORTED_MODULE_9__["isInvalidQueryInterval"])(timeFilter.windowSize, Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["hoursToMs"])(this.instanaOptions.queryinterval_limit_app_calls))) {
+      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_app_calls + ' hours');
+    } // avoid invalid calls
+
+
+    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key || !target.entity || !target.entity.key && !target.entity.label) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_6__["emptyResultData"])(target.refId));
+    }
+
+    return this.fetchAnalyzeMetricsForApplication(target, timeFilter).then(function (response) {
+      target.showWarningCantShowAllResults = response.data.canLoadMore;
+      return Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_5__["readItemMetrics"])(target, response, _this.buildAnalyzeApplicationLabel);
+    });
+  };
+
+  DataSourceApplication.prototype.getApplications = function (timeFilter) {
+    var key = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getTimeKey"])(timeFilter);
+    var applications = this.applicationsCache.get(key);
+
+    if (applications) {
+      return applications;
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var page = 1;
+    var pageSize = 200;
+    applications = this.paginateApplications([], windowSize, timeFilter.to, page, pageSize, _GlobalVariables__WEBPACK_IMPORTED_MODULE_7__["PAGINATION_LIMIT"]).then(function (response) {
+      var allResults = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.flattenDeep(lodash__WEBPACK_IMPORTED_MODULE_1___default.a.map(response, function (pageSet) {
+        return pageSet.items;
+      }));
+
+      return lodash__WEBPACK_IMPORTED_MODULE_1___default.a.orderBy(lodash__WEBPACK_IMPORTED_MODULE_1___default.a.compact(allResults).map(function (entry) {
+        return {
+          key: entry.id,
+          label: entry.label,
+          boundaryScope: entry.boundaryScope
+        };
+      }), [function (application) {
+        return application.label.toLowerCase();
+      }], ['asc']);
+    });
+    this.applicationsCache.put(key, applications, 600000);
+    return applications;
+  };
+
+  DataSourceApplication.prototype.paginateApplications = function (results, windowSize, to, page, pageSize, pageLimit) {
+    var _this = this;
+
+    if (page > pageLimit) {
+      return results;
+    }
+
+    var queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, '/api/application-monitoring/applications?' + queryParameters).then(function (response) {
+      results.push(response.data);
+
+      if (page * pageSize < response.data.totalHits) {
+        page++;
+        return _this.paginateApplications(results, windowSize, to, page, pageSize, pageLimit);
+      } else {
+        return results;
+      }
+    });
+  };
+
+  DataSourceApplication.prototype.getApplicationTags = function () {
+    var applicationTags = this.miscCache.get('applicationTags');
+
+    if (applicationTags) {
+      return applicationTags;
+    }
+
+    applicationTags = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, '/api/application-monitoring/catalog/tags').then(function (tagsResponse) {
+      return tagsResponse.data.map(function (entry) {
+        return {
+          key: entry.name,
+          label: entry.name,
+          type: entry.type,
+          canApplyToSource: entry.canApplyToSource,
+          canApplyToDestination: entry.canApplyToDestination
+        };
+      });
+    });
+    this.miscCache.put('applicationTags', applicationTags);
+    return applicationTags;
+  };
+
+  DataSourceApplication.prototype.getApplicationMetricsCatalog = function () {
+    return _lists_default_metric_catalog__WEBPACK_IMPORTED_MODULE_8__["default"];
+  };
+
+  DataSourceApplication.prototype.fetchAnalyzeMetricsForApplication = function (target, timeFilter) {
+    var _this = this;
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var tagFilters = [];
+    return Promise.resolve(this.getApplicationTags()).then(function (applicationTags) {
+      if (target.entity.key) {
+        tagFilters.push({
+          name: 'application.name',
+          operator: 'EQUALS',
+          value: target.entity.label,
+          entity: target.applicationCallToEntity ? target.applicationCallToEntity : 'DESTINATION'
+        });
+      }
+
+      lodash__WEBPACK_IMPORTED_MODULE_1___default.a.forEach(target.filters, function (filter) {
+        if (filter.isValid) {
+          var tagFilter = Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_5__["createTagFilter"])(filter);
+
+          var tag_1 = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.find(applicationTags, ['key', filter.tag.key]);
+
+          if (tag_1.canApplyToDestination || tag_1.canApplyToSource) {
+            tagFilter['entity'] = _this.getTagEntity(filter.entity, tag_1);
+          }
+
+          tagFilters.push(tagFilter);
+        }
+      });
+
+      var metric = {
+        metric: target.metric.key,
+        aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM'
+      };
+
+      if (!target.timeInterval) {
+        target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_4__["getDefaultChartGranularity"])(windowSize);
+      }
+
+      metric['granularity'] = target.timeInterval.key;
+      var group = {
+        groupbyTag: target.group.key
+      };
+
+      var tag = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.find(applicationTags, ['key', target.group.key]);
+
+      if (tag.canApplyToDestination || tag.canApplyToSource) {
+        group['groupbyTagEntity'] = target.callToEntity;
+      }
+
+      if (target.group.type === 'KEY_VALUE_PAIR' && target.groupbyTagSecondLevelKey) {
+        group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
+      }
+
+      var data = {
+        group: group,
+        timeFrame: {
+          to: timeFilter.to,
+          windowSize: windowSize
+        },
+        tagFilters: tagFilters,
+        metrics: [metric]
+      };
+      return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(_this.instanaOptions, '/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
+    });
+  };
+
+  DataSourceApplication.prototype.getTagEntity = function (selectedEntity, tag) {
+    if (selectedEntity === 'DESTINATION' && tag.canApplyToDestination) {
+      return 'DESTINATION';
+    }
+
+    if (selectedEntity === 'SOURCE' && tag.canApplyToSource) {
+      return 'SOURCE';
+    }
+
+    return tag.canApplyToDestination ? 'DESTINATION' : 'SOURCE';
+  };
+
+  DataSourceApplication.prototype.fetchApplicationMetrics = function (target, timeFilter) {
+    // avoid invalid calls
+    if (!target || !target.metric || !target.metric.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_6__["emptyResultData"])(target.refId));
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM'
+    };
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_4__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    metric['granularity'] = target.timeInterval.key;
+    var data = {
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: windowSize
+      },
+      metrics: [metric]
+    };
+
+    if (target.entity.key !== null) {
+      data['applicationId'] = target.entity.key;
+      data['applicationBoundaryScope'] = target.applicationBoundaryScope;
+    }
+
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, '/api/application-monitoring/metrics/applications?fillTimeSeries=true', data);
+  };
+
+  DataSourceApplication.prototype.buildAnalyzeApplicationLabel = function (target, item, key, index) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$label', item.name);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$application', target.entity.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$metric', target.metric.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$key', key);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$index', '' + index + 1);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    if (target.entity.label === _GlobalVariables__WEBPACK_IMPORTED_MODULE_7__["ALL_APPLICATIONS"]) {
+      return target.timeShift ? item.name + ' - ' + key + ' - ' + target.timeShift : item.name + ' - ' + key;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? item.name + ' (' + target.entity.label + ')' + ' - ' + key + ' - ' + target.timeShift : item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+  };
+
+  DataSourceApplication.prototype.buildApplicationMetricLabel = function (target, item, key, index) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$label', item.application.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$application', target.entity.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$metric', target.metric.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$key', key);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$index', '' + index + 1);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    if (target.entity.label === _GlobalVariables__WEBPACK_IMPORTED_MODULE_7__["ALL_APPLICATIONS"]) {
+      return target.timeShift ? item.application.label + ' - ' + key + ' - ' + target.timeShift : item.application.label + ' - ' + key;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? item.application.label + ' (' + target.entity.label + ')' + ' - ' + key + ' - ' + target.timeShift : item.application.label + ' (' + target.entity.label + ')' + ' - ' + key;
+  };
+
+  return DataSourceApplication;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_Endpoint.ts":
+/*!********************************************!*\
+  !*** ./datasources/DataSource_Endpoint.ts ***!
+  \********************************************/
+/*! exports provided: DataSourceEndpoint */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceEndpoint", function() { return DataSourceEndpoint; });
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+
+
+
+
+
+
+
+
+var DataSourceEndpoint =
+/** @class */
+function () {
+  function DataSourceEndpoint(options) {
+    this.instanaOptions = options;
+    this.endpointsCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  }
+
+  DataSourceEndpoint.prototype.getEndpointsOfService = function (target, timeFilter) {
+    var applicationId = '';
+
+    if (target.entity && target.entity.key) {
+      applicationId = target.entity.key;
+    }
+
+    var serviceId = '';
+
+    if (target.service) {
+      serviceId = target.service.key;
+    }
+
+    var key = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getTimeKey"])(timeFilter) + applicationId + serviceId + target.applicationBoundaryScope;
+    var endpoints = this.endpointsCache.get(key);
+
+    if (endpoints) {
+      return endpoints;
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var page = 1;
+    var pageSize = 200;
+    endpoints = this.paginateEndpoints([], applicationId, serviceId, windowSize, target.applicationBoundaryScope, timeFilter.to, page, pageSize, _GlobalVariables__WEBPACK_IMPORTED_MODULE_4__["PAGINATION_LIMIT"]).then(function (response) {
+      var allResults = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.flattenDeep(lodash__WEBPACK_IMPORTED_MODULE_1___default.a.map(response, function (pageSet) {
+        return pageSet.items;
+      }));
+
+      return lodash__WEBPACK_IMPORTED_MODULE_1___default.a.orderBy(lodash__WEBPACK_IMPORTED_MODULE_1___default.a.compact(allResults).map(function (entry) {
+        return {
+          key: entry.id,
+          label: entry.label
+        };
+      }), [function (endpoint) {
+        return endpoint.label.toLowerCase();
+      }], ['asc']);
+    });
+    this.endpointsCache.put(key, endpoints, 600000);
+    return endpoints;
+  };
+
+  DataSourceEndpoint.prototype.paginateEndpoints = function (results, applicationId, serviceId, windowSize, applicationBoundaryScope, to, page, pageSize, pageLimit) {
+    var _this = this;
+
+    if (page > pageLimit) {
+      return results;
+    }
+
+    var queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
+
+    if (applicationBoundaryScope === 'ALL' || applicationBoundaryScope === 'INBOUND') {
+      queryParameters += '&applicationBoundaryScope=' + applicationBoundaryScope;
+    }
+
+    var url = '/api/application-monitoring/applications;id=' + (applicationId ? applicationId : '') + '/services;id=' + (serviceId ? serviceId : '') + '/endpoints?' + queryParameters;
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, url).then(function (response) {
+      results.push(response.data);
+
+      if (page * pageSize < response.data.totalHits) {
+        page++;
+        return _this.paginateEndpoints(results, applicationId, serviceId, windowSize, applicationBoundaryScope, to, page, pageSize, pageLimit);
+      } else {
+        return results;
+      }
+    });
+  };
+
+  DataSourceEndpoint.prototype.fetchEndpointMetrics = function (target, timeFilter) {
+    // avoid invalid calls
+    if (!target || !target.metric || !target.metric.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_5__["emptyResultData"])(target.refId));
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM'
+    };
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_6__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    metric['granularity'] = target.timeInterval.key;
+    var data = {
+      endpointId: target.endpoint.key,
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: windowSize
+      },
+      metrics: [metric]
+    };
+
+    if (target.entity && target.entity.key) {
+      data['applicationId'] = target.entity.key; // only set applicationBoundaryScope when an application is selected
+
+      data['applicationBoundaryScope'] = target.applicationBoundaryScope;
+    }
+
+    if (target.service && target.service.key) {
+      data['serviceId'] = target.service.key;
+    }
+
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, '/api/application-monitoring/metrics/endpoints?fillTimeSeries=true', data);
+  };
+
+  DataSourceEndpoint.prototype.buildEndpointMetricLabel = function (target, item, key, index) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$label', item.endpoint.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$endpoint', target.endpoint.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$service', target.service.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$application', target.entity.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$metric', target.metric.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$key', key);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$index', '' + index + 1);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    if (target.endpoint.label === _GlobalVariables__WEBPACK_IMPORTED_MODULE_4__["ALL_ENDPOINTS"]) {
+      return target.timeShift ? item.endpoint.label + ' - ' + key + ' - ' + target.timeShift : item.endpoint.label + ' - ' + key;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? item.endpoint.label + ' (' + target.endpoint.label + ')' + ' - ' + key + ' - ' + target.timeShift : item.endpoint.label + ' (' + target.endpoint.label + ')' + ' - ' + key;
+  };
+
+  return DataSourceEndpoint;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_Service.ts":
+/*!*******************************************!*\
+  !*** ./datasources/DataSource_Service.ts ***!
+  \*******************************************/
+/*! exports provided: DataSourceService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceService", function() { return DataSourceService; });
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+
+
+
+
+
+
+
+
+var DataSourceService =
+/** @class */
+function () {
+  function DataSourceService(options) {
+    this.instanaOptions = options;
+    this.servicesCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  }
+
+  DataSourceService.prototype.getServicesOfApplication = function (target, timeFilter) {
+    var applicationId = '';
+
+    if (target.entity && target.entity.key) {
+      applicationId = target.entity.key;
+    }
+
+    var key = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getTimeKey"])(timeFilter) + applicationId + target.applicationBoundaryScope;
+    var services = this.servicesCache.get(key);
+
+    if (services) {
+      return services;
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var page = 1;
+    var pageSize = 200;
+    services = this.paginateServices([], applicationId, windowSize, timeFilter.to, target.applicationBoundaryScope, page, pageSize, _GlobalVariables__WEBPACK_IMPORTED_MODULE_5__["PAGINATION_LIMIT"]).then(function (response) {
+      var allResults = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.flattenDeep(lodash__WEBPACK_IMPORTED_MODULE_1___default.a.map(response, function (pageSet) {
+        return pageSet.items;
+      }));
+
+      return lodash__WEBPACK_IMPORTED_MODULE_1___default.a.orderBy(lodash__WEBPACK_IMPORTED_MODULE_1___default.a.compact(allResults).map(function (entry) {
+        return {
+          key: entry.id,
+          label: entry.label
+        };
+      }), [function (service) {
+        return service.label.toLowerCase();
+      }], ['asc']);
+    });
+    this.servicesCache.put(key, services, 600000);
+    return services;
+  };
+
+  DataSourceService.prototype.paginateServices = function (results, applicationId, windowSize, to, applicationBoundaryScope, page, pageSize, pageLimit) {
+    var _this = this;
+
+    if (page > pageLimit) {
+      return results;
+    }
+
+    var queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
+
+    if (applicationBoundaryScope === 'ALL' || applicationBoundaryScope === 'INBOUND') {
+      queryParameters += '&applicationBoundaryScope=' + applicationBoundaryScope;
+    }
+
+    var url = '/api/application-monitoring/applications;id=' + (applicationId ? applicationId : '') + '/services?' + queryParameters;
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, url).then(function (response) {
+      results.push(response.data);
+
+      if (page * pageSize < response.data.totalHits) {
+        page++;
+        return _this.paginateServices(results, applicationId, windowSize, to, applicationBoundaryScope, page, pageSize, pageLimit);
+      } else {
+        return results;
+      }
+    });
+  };
+
+  DataSourceService.prototype.fetchServiceMetrics = function (target, timeFilter) {
+    // avoid invalid calls
+    if (!target || !target.metric || !target.metric.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_6__["emptyResultData"])(target.refId));
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_4__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    var metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+      granularity: target.timeInterval.key
+    };
+    var data = {
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: windowSize
+      },
+      metrics: [metric]
+    };
+
+    if (target.entity && target.entity.key) {
+      data['applicationId'] = target.entity.key; // only set applicationBoundaryScope when an application is selected
+
+      data['applicationBoundaryScope'] = target.applicationBoundaryScope;
+    }
+
+    if (target.service && target.service.key) {
+      data['serviceId'] = target.service.key;
+    }
+
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, '/api/application-monitoring/metrics/services?fillTimeSeries=true', data);
+  };
+
+  DataSourceService.prototype.buildServiceMetricLabel = function (target, item, key, index) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$label', item.service.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$service', target.service.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$application', target.entity.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$metric', target.metric.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$key', key);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$index', index + 1 + '');
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    if (target.service.key === null) {
+      return target.timeShift ? item.service.label + ' - ' + key + ' - ' + target.timeShift : item.service.label + ' - ' + key;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? item.service.label + ' (' + target.service.label + ')' + ' - ' + key + ' - ' + target.timeShift : item.service.label + ' (' + target.service.label + ')' + ' - ' + key;
+  };
+
+  return DataSourceService;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_Slo.ts":
+/*!***************************************!*\
+  !*** ./datasources/DataSource_Slo.ts ***!
+  \***************************************/
+/*! exports provided: DataSourceSlo */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceSlo", function() { return DataSourceSlo; });
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+
+var DataSourceSlo =
+/** @class */
+function () {
+  function DataSourceSlo(options) {
+    this.instanaOptions = options;
+    this.sliReportsCache = new _cache__WEBPACK_IMPORTED_MODULE_3__["default"]();
+  }
+
+  DataSourceSlo.prototype.getConfiguredSLIs = function () {
+    var sliReports = this.sliReportsCache.get('sliReports');
+
+    if (sliReports) {
+      return sliReports;
+    }
+
+    sliReports = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(this.instanaOptions, '/api/settings/sli').then(function (response) {
+      return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(response.data, function (r) {
+        return {
+          key: r.id,
+          label: r.sliName
+        };
+      });
+    });
+    this.sliReportsCache.put('sliReports', sliReports);
+    return sliReports;
+  };
+
+  DataSourceSlo.prototype.runQuery = function (target, timeFilter) {
+    var _this = this; //avoid involid calls
+
+
+    if (!target || !target.sloReport || !target.sloReport.key || !target.sloSpecific || !target.sloSpecific.key || !target.sloValue) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["emptyResultData"])(target.refId));
+    }
+
+    var endpoint = '/api/sli/report/' + target.sloReport.key + '?from=' + timeFilter.from + '&to=' + timeFilter.to + '&slo=' + target.sloValue;
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(this.instanaOptions, endpoint).then(function (response) {
+      return _this.extractSpecificValueFromSLI(target, response.data, timeFilter);
+    });
+  };
+
+  DataSourceSlo.prototype.extractSpecificValueFromSLI = function (target, sliResult, timeFilter) {
+    if (target.sloSpecific.key === 'SLI') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.sloSpecific.label, target.refId, this.buildResultArray(sliResult.sli, timeFilter.to))];
+    } else if (target.sloSpecific.key === 'Remaining Error Budget') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.sloSpecific.label, target.refId, this.buildResultArray(sliResult.errorBudgetRemaining, timeFilter.to))];
+    } else if (target.sloSpecific.key === 'Timeseries') {
+      return this.buildViolationDistributionTimeSeries(target, sliResult.violationDistribution, timeFilter);
+    }
+
+    return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["emptyResultData"])(target.refId)];
+  };
+
+  DataSourceSlo.prototype.buildResultArray = function (result, timestamp) {
+    return [[result, timestamp]];
+  };
+
+  DataSourceSlo.prototype.buildViolationDistributionTimeSeries = function (target, series, timeFilter) {
+    var greens = [];
+    var reds = [];
+    var greys = [];
+    var granularity = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter) / Object.keys(series).length;
+
+    lodash__WEBPACK_IMPORTED_MODULE_4___default.a.forEach(series, function (value, index) {
+      if (value === 1) {
+        greens.push([1, timeFilter.from + index * granularity]);
+      } else if (value === 0) {
+        greys.push([1, timeFilter.from + index * granularity]);
+      } else if (value === -1) {
+        reds.push([1, timeFilter.from + index * granularity]);
+      }
+    });
+
+    var result = [];
+    result.push(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])('No violation', target.refId, greens));
+    result.push(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])('Violation', target.refId, reds));
+    result.push(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])('No data', target.refId, greys));
+    return result;
+  };
+
+  return DataSourceSlo;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_Website.ts":
+/*!*******************************************!*\
+  !*** ./datasources/DataSource_Website.ts ***!
+  \*******************************************/
+/*! exports provided: DataSourceWebsite */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceWebsite", function() { return DataSourceWebsite; });
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var _util_analyze_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/analyze_util */ "./util/analyze_util.ts");
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _util_queryInterval_check__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util/queryInterval_check */ "./util/queryInterval_check.ts");
+
+
+
+
+
+
+
+
+
+var DataSourceWebsite =
+/** @class */
+function () {
+  function DataSourceWebsite(options) {
+    this.instanaOptions = options;
+    this.websitesCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    this.miscCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  }
+
+  DataSourceWebsite.prototype.runQuery = function (target, timeFilter) {
+    var _this = this;
+
+    if (Object(_util_queryInterval_check__WEBPACK_IMPORTED_MODULE_7__["isInvalidQueryInterval"])(timeFilter.windowSize, Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["hoursToMs"])(this.instanaOptions.queryinterval_limit_website_metrics))) {
+      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_website_metrics + ' hours');
+    } // avoid invalid calls
+
+
+    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key || !target.entity || !target.entity.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_6__["emptyResultData"])(target.refId));
+    }
+
+    return this.fetchAnalyzeMetricsForWebsite(target, timeFilter).then(function (response) {
+      return Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_5__["readItemMetrics"])(target, response, _this.buildAnalyzeWebsiteLabel);
+    });
+  };
+
+  DataSourceWebsite.prototype.getWebsites = function (timeFilter) {
+    var key = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getTimeKey"])(timeFilter);
+    var websites = this.websitesCache.get(key);
+
+    if (websites) {
+      return websites;
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var data = {
+      group: {
+        groupbyTag: 'beacon.website.name'
+      },
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: windowSize
+      },
+      type: 'PAGELOAD',
+      metrics: [{
+        metric: 'pageLoads',
+        aggregation: 'SUM'
+      }],
+      order: {
+        by: 'pageLoads',
+        direction: 'desc'
+      },
+      pagination: {
+        ingestionTime: 0,
+        offset: 0,
+        retrievalSize: 200
+      }
+    };
+    websites = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, '/api/website-monitoring/analyze/beacon-groups', data).then(function (websitesResponse) {
+      return websitesResponse.data.items.map(function (entry) {
+        return {
+          key: entry.name,
+          label: entry.name
+        };
+      });
+    });
+    this.websitesCache.put(key, websites);
+    return websites;
+  };
+
+  DataSourceWebsite.prototype.getWebsiteTags = function () {
+    var websiteTags = this.miscCache.get('websiteTags');
+
+    if (websiteTags) {
+      return websiteTags;
+    }
+
+    websiteTags = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, '/api/website-monitoring/catalog/tags').then(function (tagsResponse) {
+      return tagsResponse.data.map(function (entry) {
+        return {
+          key: entry.name,
+          label: entry.name,
+          type: entry.type
+        };
+      });
+    });
+    this.miscCache.put('websiteTags', websiteTags);
+    return websiteTags;
+  };
+
+  DataSourceWebsite.prototype.getWebsiteMetricsCatalog = function () {
+    var _this = this;
+
+    var websiteCatalog = this.miscCache.get('websiteCatalog');
+
+    if (websiteCatalog) {
+      return websiteCatalog;
+    }
+
+    websiteCatalog = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, '/api/website-monitoring/catalog/metrics').then(function (catalogResponse) {
+      return catalogResponse.data.map(function (entry) {
+        return {
+          key: entry.metricId,
+          label: entry.label,
+          aggregations: entry.aggregations ? _this.transformAggregations(entry.aggregations.sort()) : [],
+          beaconTypes: entry.beaconTypes ? _this.transformBeaconTypes(entry.beaconTypes) : ['pageLoad', 'resourceLoad', 'httpRequest', 'error', 'custom', 'pageChange']
+        };
+      });
+    });
+    this.miscCache.put('websiteCatalog', websiteCatalog);
+    return websiteCatalog;
+  };
+
+  DataSourceWebsite.prototype.transformBeaconTypes = function (beaconTypes) {
+    if (beaconTypes.includes('pageChange')) {
+      var result = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.remove(beaconTypes, function (type) {
+        return type !== 'pageChange';
+      });
+
+      result.push('page_change');
+      return result;
+    }
+
+    return beaconTypes;
+  };
+
+  DataSourceWebsite.prototype.transformAggregations = function (aggregations) {
+    return lodash__WEBPACK_IMPORTED_MODULE_1___default.a.map(aggregations, function (a) {
+      return {
+        key: a,
+        label: a
+      };
+    });
+  };
+
+  DataSourceWebsite.prototype.fetchAnalyzeMetricsForWebsite = function (target, timeFilter) {
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var tagFilters = [{
+      name: 'beacon.website.name',
+      operator: 'EQUALS',
+      value: target.entity.key
+    }];
+
+    lodash__WEBPACK_IMPORTED_MODULE_1___default.a.forEach(target.filters, function (filter) {
+      if (filter.isValid) {
+        tagFilters.push(Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_5__["createTagFilter"])(filter));
+      }
+    });
+
+    var metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation.key ? target.aggregation.key : 'SUM'
+    };
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_4__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    metric['granularity'] = target.timeInterval.key;
+    var group = {
+      groupbyTag: target.group.key
+    };
+
+    if (target.group.type === 'KEY_VALUE_PAIR' && target.groupbyTagSecondLevelKey) {
+      group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
+    }
+
+    var data = {
+      group: group,
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: windowSize
+      },
+      tagFilters: tagFilters,
+      type: target.entityType.key,
+      metrics: [metric]
+    };
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, '/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
+  };
+
+  DataSourceWebsite.prototype.buildAnalyzeWebsiteLabel = function (target, item, key, index) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$label', item.name);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$website', target.entity.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$type', target.entityType.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$metric', target.metric.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$key', key);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$index', '' + index + 1);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? item.name + ' (' + target.entity.label + ')' + ' - ' + key + ' - ' + target.timeShift : item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+  };
+
+  return DataSourceWebsite;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/Datasource_Infrastructure.ts":
+/*!**************************************************!*\
+  !*** ./datasources/Datasource_Infrastructure.ts ***!
+  \**************************************************/
+/*! exports provided: DataSourceInfrastructure */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceInfrastructure", function() { return DataSourceInfrastructure; });
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _util_queryInterval_check__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/queryInterval_check */ "./util/queryInterval_check.ts");
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var _lists_max_metrics__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../lists/max_metrics */ "./lists/max_metrics.ts");
+
+
+
+
+
+
+
+
+
+
+var DataSourceInfrastructure =
+/** @class */
+function () {
+  function DataSourceInfrastructure(options) {
+    this.timeToLiveSnapshotInfoCache = 60 * 60 * 1000;
+    this.instanaOptions = options;
+    this.snapshotCache = new _cache__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    this.snapshotInfoCache = new _cache__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    this.catalogCache = new _cache__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    this.typeCache = new _cache__WEBPACK_IMPORTED_MODULE_1__["default"]();
+  }
+
+  DataSourceInfrastructure.prototype.runQuery = function (target, timeFilter) {
+    var _this = this; // do not try to execute to big queries
+
+
+    if (Object(_util_queryInterval_check__WEBPACK_IMPORTED_MODULE_5__["isInvalidQueryInterval"])(timeFilter.windowSize, Object(_util_time_util__WEBPACK_IMPORTED_MODULE_4__["hoursToMs"])(this.instanaOptions.queryinterval_limit_infra))) {
+      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_infra + ' hours');
+    } // do not try to retrieve data without selected metric
+
+
+    if ((!target.metric || !target.metric.key) && !target.showAllMetrics && !target.freeTextMetrics) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_6__["emptyResultData"])(target.refId));
+    } // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
+
+
+    return this.fetchSnapshotsForTarget(target, timeFilter).then(function (snapshots) {
+      if (target.showAllMetrics) {
+        // only available for custom metrics
+        return _this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, target.allMetrics);
+      } else if (target.freeTextMetrics) {
+        // only available for custom metrics
+        var metrics = _this.extractMetricsFromText(target.freeTextMetrics);
+
+        return _this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics);
+      } else {
+        return _this.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
+      }
+    });
+  };
+
+  DataSourceInfrastructure.prototype.extractMetricsFromText = function (freeText) {
+    var metricsString = freeText.replace(/\s/g, '').split(',');
+    var metrics = [];
+
+    lodash__WEBPACK_IMPORTED_MODULE_3___default.a.each(metricsString, function (metricString) {
+      return metrics.push(JSON.parse('{ "key": "' + metricString + '"}'));
+    });
+
+    if (metrics.length > 4) {
+      metrics = metrics.slice(0, 4); // API supports up to 4 metrics at once
+    }
+
+    return metrics;
+  };
+
+  DataSourceInfrastructure.prototype.fetchMultipleMetricsForSnapshots = function (target, snapshots, timeFilter, metrics) {
+    var _this = this;
+
+    var resultPromises = [];
+
+    lodash__WEBPACK_IMPORTED_MODULE_3___default.a.forEach(metrics, function (metric) {
+      resultPromises.push(_this.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
+    });
+
+    return Promise.all(resultPromises).then(function (allResults) {
+      var allMetrics = [];
+      allResults.forEach(function (result) {
+        return result.forEach(function (s) {
+          return allMetrics.push(s);
+        });
+      });
+      return allMetrics;
+    });
+  };
+
+  DataSourceInfrastructure.prototype.fetchMetricsForSnapshots = function (target, snapshots, timeFilter, metric) {
+    var _this = this;
+
+    var maxValues = [];
+
+    var res = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.map(snapshots, function (snapshot, index) {
+      // ...fetch the metric data for every snapshot in the results.
+      return _this.fetchMetricsForSnapshot(snapshot.snapshotId, timeFilter, target.timeInterval.key, metric).then(function (response) {
+        var timeseries = _this.readTimeSeries(response.data.values, target.aggregation, timeFilter);
+
+        var result = {
+          target: _this.buildLabel(snapshot.response, snapshot.host, target, index, metric),
+          datapoints: lodash__WEBPACK_IMPORTED_MODULE_3___default.a.map(timeseries, function (value) {
+            return [value.value, value.timestamp];
+          }),
+          refId: target.refId,
+          key: target.stableHash
+        };
+
+        if (target.displayMaxMetricValue) {
+          var maxValue = _this.getMaxMetricValue(target.metric, snapshot);
+
+          maxValues.push(_this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
+          result.datapoints = _this.convertRelativeToAbsolute(result.datapoints, maxValue);
+        }
+
+        return result;
+      });
+    });
+
+    return Promise.all(res).then(function (allResults) {
+      if (target.displayMaxMetricValue) {
+        allResults = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.concat(res, maxValues);
+      }
+
+      return Promise.all(allResults);
+    });
+  };
+
+  DataSourceInfrastructure.prototype.getMaxMetricValue = function (metric, snapshot) {
+    var maxMetrics = _lists_max_metrics__WEBPACK_IMPORTED_MODULE_8__["default"];
+    return snapshot.response.data.data[lodash__WEBPACK_IMPORTED_MODULE_3___default.a.find(maxMetrics, function (m) {
+      return m.key === metric.key;
+    }).value];
+  };
+
+  DataSourceInfrastructure.prototype.buildMaxMetricTarget = function (target, timeseries, maxValue, resultLabel) {
+    var datapoints = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.map(timeseries, function (series) {
+      return [maxValue, series.timestamp];
+    });
+
+    var maxLabel = this.convertMetricNameToMaxLabel(target.metric);
+    return {
+      target: resultLabel + ' ' + maxLabel,
+      datapoints: datapoints,
+      refId: target.refId,
+      key: target.stableHash + maxLabel
+    };
+  };
+
+  DataSourceInfrastructure.prototype.convertMetricNameToMaxLabel = function (metric) {
+    var maxMetrics = _lists_max_metrics__WEBPACK_IMPORTED_MODULE_8__["default"];
+    return lodash__WEBPACK_IMPORTED_MODULE_3___default.a.find(maxMetrics, function (m) {
+      return m.key === metric.key;
+    }).label;
+  };
+
+  DataSourceInfrastructure.prototype.convertRelativeToAbsolute = function (datapoints, maxValue) {
+    return lodash__WEBPACK_IMPORTED_MODULE_3___default.a.map(datapoints, function (datapoint) {
+      if (datapoint[0]) {
+        return [datapoint[0] * maxValue, datapoint[1]];
+      }
+
+      return [null, datapoint[1]];
+    });
+  };
+
+  DataSourceInfrastructure.prototype.getEntityTypes = function () {
+    var entityTypes = this.typeCache.get('entityTypes');
+
+    if (entityTypes) {
+      return entityTypes;
+    }
+
+    entityTypes = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_0__["getRequest"])(this.instanaOptions, '/api/infrastructure-monitoring/catalog/plugins').then(function (typesResponse) {
+      var result = typesResponse.data.map(function (entry) {
+        return {
+          key: entry.plugin,
+          label: entry.label
+        };
+      });
+      result.push({
+        key: 'regionEntity',
+        label: 'Region'
+      });
+      return lodash__WEBPACK_IMPORTED_MODULE_3___default.a.sortBy(result, 'label');
+    });
+    this.typeCache.put('entityTypes', entityTypes);
+    return entityTypes;
+  };
+
+  DataSourceInfrastructure.prototype.fetchTypesForTarget = function (query, timeFilter) {
+    var fetchSnapshotTypesUrl = "/api/snapshots/types" + ("?q=" + encodeURIComponent(query.entityQuery)) + ("&from=" + timeFilter.from) + ("&to=" + timeFilter.to) + (this.instanaOptions.showOffline ? "" : "&time=" + timeFilter.to);
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_0__["getRequest"])(this.instanaOptions, fetchSnapshotTypesUrl);
+  };
+
+  DataSourceInfrastructure.prototype.getMetricsCatalog = function (plugin, metricCategory) {
+    var key = plugin.key + '|' + metricCategory;
+    var metrics = this.catalogCache.get(key);
+
+    if (metrics) {
+      return metrics;
+    }
+
+    var filter = metricCategory === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"] ? 'custom' : 'builtin';
+    metrics = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_0__["getRequest"])(this.instanaOptions, "/api/infrastructure-monitoring/catalog/metrics/" + plugin.key + "?filter=" + filter).then(function (catalogResponse) {
+      return catalogResponse.data.map(function (entry) {
+        return {
+          key: entry.metricId,
+          label: entry.label,
+          description: entry.metricId,
+          aggregations: [{
+            key: 'MEAN',
+            label: 'MEAN'
+          }, {
+            key: 'SUM',
+            label: 'SUM'
+          }],
+          entityType: entry.pluginId
+        };
+      });
+    });
+    this.catalogCache.put(key, metrics);
+    return metrics;
+  };
+
+  DataSourceInfrastructure.prototype.fetchSnapshotsForTarget = function (target, timeFilter) {
+    var _this = this;
+
+    var query = this.buildQuery(target);
+    var key = this.buildSnapshotCacheKey(query, timeFilter);
+    var snapshots = this.snapshotCache.get(key);
+
+    if (snapshots) {
+      return snapshots;
+    }
+
+    var fetchSnapshotContextsUrl = "/api/snapshots/context" + ("?q=" + query) + ("&from=" + timeFilter.from) + ("&to=" + timeFilter.to) + (this.instanaOptions.showOffline ? "" : "&time=" + timeFilter.to + "&size=100");
+    snapshots = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_0__["getRequest"])(this.instanaOptions, fetchSnapshotContextsUrl).then(function (contextsResponse) {
+      return Promise.all(contextsResponse.data.map(function (_a) {
+        var snapshotId = _a.snapshotId,
+            host = _a.host;
+
+        var snapshotInfo = _this.snapshotInfoCache.get(snapshotId);
+
+        if (snapshotInfo) {
+          return snapshotInfo;
+        }
+
+        var fetchSnapshotUrl = "/api/snapshots/" + snapshotId + (_this.instanaOptions.showOffline ? "?from=" + timeFilter.from + "&to=" + timeFilter.to : "?time=" + timeFilter.to); // @see SnapshotApiResource#getSnapshot
+
+        snapshotInfo = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_0__["getRequest"])(_this.instanaOptions, fetchSnapshotUrl, true).then(function (snapshotResponse) {
+          // check for undefined because the fetchSnapshotContexts is buggy
+          if (snapshotResponse !== undefined) {
+            return {
+              snapshotId: snapshotId,
+              host: host,
+              response: _this.reduceSnapshot(snapshotResponse)
+            };
+          }
+
+          return null;
+        });
+
+        _this.snapshotInfoCache.put(snapshotId, snapshotInfo, _this.timeToLiveSnapshotInfoCache);
+
+        return snapshotInfo;
+      }));
+    }).then(function (response) {
+      // undefined items need to be removed, because the fetchSnapshotContexts is buggy in the backend, maybe can be removed in the future
+      return lodash__WEBPACK_IMPORTED_MODULE_3___default.a.compact(response);
+    });
+    this.snapshotCache.put(key, snapshots);
+    return snapshots;
+  };
+
+  DataSourceInfrastructure.prototype.buildQuery = function (target) {
+    // check for entity.pluginId or entity.selfType, because otherwise the backend has a problem with `AND entity.pluginId`
+    if (("" + target.entityQuery).includes('entity.pluginId:') || ("" + target.entityQuery).includes('entity.selfType:')) {
+      return encodeURIComponent("" + target.entityQuery);
+    } else {
+      return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType.key);
+    }
+  };
+
+  DataSourceInfrastructure.prototype.buildSnapshotCacheKey = function (query, timeFilter) {
+    return query + _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SEPARATOR"] + Object(_util_time_util__WEBPACK_IMPORTED_MODULE_4__["getTimeKey"])(timeFilter);
+  };
+
+  DataSourceInfrastructure.prototype.reduceSnapshot = function (snapshotResponse) {
+    // reduce data to used label formatting values
+    snapshotResponse.data = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.pick(snapshotResponse.data, ['id', 'label', 'plugin', 'data']);
+    return snapshotResponse;
+  };
+
+  DataSourceInfrastructure.prototype.readTimeSeries = function (values, aggregation, timeFilter) {
+    if (aggregation && aggregation.key === 'SUM') {
+      return this.correctMeanToSum(values, timeFilter);
+    }
+
+    return values;
+  };
+
+  DataSourceInfrastructure.prototype.correctMeanToSum = function (values, timeFilter) {
+    var secondMultiplier = parseInt(Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_7__["getDefaultMetricRollupDuration"])(timeFilter).key, 10) / 1000;
+    return lodash__WEBPACK_IMPORTED_MODULE_3___default.a.map(values, function (value) {
+      return {
+        value: value.value ? value.value * secondMultiplier : null,
+        timestamp: value.timestamp
+      };
+    });
+  };
+
+  DataSourceInfrastructure.prototype.fetchMetricsForSnapshot = function (snapshotId, timeFilter, rollup, metric) {
+    var url = "/api/metrics?metric=" + metric.key + ("&from=" + timeFilter.from) + ("&to=" + timeFilter.to) + ("&rollup=" + rollup) + "&fillTimeSeries=true" + ("&snapshotId=" + snapshotId);
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_0__["getRequest"])(this.instanaOptions, url);
+  };
+
+  DataSourceInfrastructure.prototype.getHostSuffix = function (host) {
+    if (host) {
+      return ' (on host "' + host + '")';
+    }
+
+    return '';
+  };
+
+  DataSourceInfrastructure.prototype.buildLabel = function (snapshotResponse, host, target, index, metric) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$label', snapshotResponse.data.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$plugin', snapshotResponse.data.plugin); // not documented
+
+      label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$snapshot', snapshotResponse.data.id); // not documented
+
+      label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$host', host ? host : 'unknown');
+      label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$pid', lodash__WEBPACK_IMPORTED_MODULE_3___default.a.get(snapshotResponse.data, ['data', 'pid'], ''));
+      label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$type', lodash__WEBPACK_IMPORTED_MODULE_3___default.a.get(snapshotResponse.data, ['data', 'type'], ''));
+      label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$name', lodash__WEBPACK_IMPORTED_MODULE_3___default.a.get(snapshotResponse.data, ['data', 'name'], ''));
+      label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$service', lodash__WEBPACK_IMPORTED_MODULE_3___default.a.get(snapshotResponse.data, ['data', 'service_name'], ''));
+
+      if (target.freeTextMetrics) {
+        label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$metric', metric.key);
+      } else {
+        label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$metric', lodash__WEBPACK_IMPORTED_MODULE_3___default.a.get(target, ['metric', 'key'], 'n/a'));
+      }
+
+      label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$index', index + 1);
+      label = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? snapshotResponse.data.label + this.getHostSuffix(host) + ' - ' + target.timeShift : snapshotResponse.data.label + this.getHostSuffix(host);
+  };
+
+  return DataSourceInfrastructure;
+}();
+
+
+
+/***/ }),
+
+/***/ "./instana-grafana.css":
+/*!*****************************!*\
+  !*** ./instana-grafana.css ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../node_modules/css-loader/dist/cjs.js??ref--8-1!../node_modules/postcss-loader/src??ref--8-2!../node_modules/sass-loader/lib/loader.js!./instana-grafana.css */ "../node_modules/css-loader/dist/cjs.js?!../node_modules/postcss-loader/src/index.js?!../node_modules/sass-loader/lib/loader.js!./instana-grafana.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../node_modules/style-loader/lib/addStyles.js */ "../node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./lists/aggregation_function.ts":
+/*!***************************************!*\
+  !*** ./lists/aggregation_function.ts ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  label: 'SUM'
+}, {
+  label: 'MEAN'
+}, {
+  label: 'MIN'
+}, {
+  label: 'MAX'
+}]);
+
+/***/ }),
+
+/***/ "./lists/apply_call_to_entities.ts":
+/*!*****************************************!*\
+  !*** ./lists/apply_call_to_entities.ts ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (['DESTINATION', 'SOURCE']);
+
+/***/ }),
+
+/***/ "./lists/beacon_types.ts":
+/*!*******************************!*\
+  !*** ./lists/beacon_types.ts ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  key: 'pageLoad',
+  label: 'Page Loads'
+}, {
+  key: 'page_change',
+  label: 'Page Transitions'
+}, {
+  key: 'resourceLoad',
+  label: 'Resources'
+}, {
+  key: 'httpRequest',
+  label: 'HTTP Requests'
+}, {
+  key: 'error',
+  label: 'Errors'
+}, {
+  key: 'custom',
+  label: 'Custom Events'
+}]);
+
+/***/ }),
+
+/***/ "./lists/default_metric_catalog.ts":
+/*!*****************************************!*\
+  !*** ./lists/default_metric_catalog.ts ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  key: 'calls',
+  label: 'Call count',
+  description: 'calls',
+  aggregations: [{
+    key: 'SUM',
+    label: 'SUM'
+  }]
+}, {
+  key: 'latency',
+  label: 'Call latency',
+  description: 'latency',
+  aggregations: [{
+    key: 'MAX',
+    label: 'MAX'
+  }, {
+    key: 'MEAN',
+    label: 'MEAN'
+  }, {
+    key: 'MIN',
+    label: 'MIN'
+  }, {
+    key: 'P25',
+    label: 'P25'
+  }, {
+    key: 'P50',
+    label: 'P50'
+  }, {
+    key: 'P75',
+    label: 'P75'
+  }, {
+    key: 'P90',
+    label: 'P90'
+  }, {
+    key: 'P95',
+    label: 'P95'
+  }, {
+    key: 'P98',
+    label: 'P98'
+  }, {
+    key: 'P99',
+    label: 'P99'
+  }]
+}, {
+  key: 'errors',
+  label: 'Error rate',
+  description: 'errors',
+  aggregations: [{
+    key: 'MEAN',
+    label: 'MEAN'
+  }]
+}, {
+  key: 'services',
+  label: 'Service Count',
+  description: 'services',
+  aggregations: [{
+    key: 'DISTINCT_COUNT',
+    label: 'DISTINCT_COUNT'
+  }]
+}]);
+
+/***/ }),
+
+/***/ "./lists/granularities.ts":
+/*!********************************!*\
+  !*** ./lists/granularities.ts ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  value: 1,
+  label: '1s'
+}, {
+  value: 5,
+  label: '5s'
+}, {
+  value: 10,
+  label: '10s'
+}, {
+  value: 60,
+  label: '1min'
+}, {
+  value: 60 * 5,
+  label: '5min'
+}, {
+  value: 60 * 10,
+  label: '10min'
+}, {
+  value: 60 * 60,
+  label: '1h'
+}, {
+  value: 60 * 60 * 5,
+  label: '5h'
+}, {
+  value: 60 * 60 * 10,
+  label: '10h'
+}, {
+  value: 60 * 60 * 24,
+  label: '1d'
+}, {
+  value: 60 * 60 * 24 * 5,
+  label: '5d'
+}, {
+  value: 60 * 60 * 24 * 10,
+  label: '10d'
+}]);
+
+/***/ }),
+
+/***/ "./lists/max_metrics.ts":
+/*!******************************!*\
+  !*** ./lists/max_metrics.ts ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  key: 'cpu.used',
+  value: 'cpu.count',
+  label: 'cpu.max'
+}, {
+  key: 'memory.used',
+  value: 'memory.total',
+  label: 'memory.max'
+}, {
+  key: 'openFiles.used',
+  value: 'openFiles.max',
+  label: 'openFiles.max'
+}]);
+
+/***/ }),
+
+/***/ "./lists/metric_categories.ts":
+/*!************************************!*\
+  !*** ./lists/metric_categories.ts ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/**
+ * Do not remove the commented stuff.
+ */
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  label: 'Infrastructure built-in metrics',
+  key: 0
+}, {
+  label: 'Infrastructure custom metrics',
+  key: 1
+}, {
+  // replaces Application metrics(4) & Service metrics(5) & Endpoint metrics(6)
+  label: 'Application/service/endpoint metrics',
+  key: 4
+}, {
+  label: 'Analyze application calls',
+  key: 2
+}, {
+  label: 'Analyze website',
+  key: 3
+}, {
+  label: 'SLO information',
+  key: 7
+}]);
+
+/***/ }),
+
+/***/ "./lists/operators.ts":
+/*!****************************!*\
+  !*** ./lists/operators.ts ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  key: 'EQUALS',
+  label: 'equals',
+  type: 'STRING'
+}, {
+  key: 'NOT_EQUAL',
+  label: 'does not equal',
+  type: 'STRING'
+}, {
+  key: 'CONTAINS',
+  label: 'contains',
+  type: 'STRING'
+}, {
+  key: 'NOT_CONTAIN',
+  label: 'does not contain',
+  type: 'STRING'
+}, {
+  key: 'NOT_EMPTY',
+  label: 'is present',
+  type: 'STRING'
+}, {
+  key: 'IS_EMPTY',
+  label: 'is not present',
+  type: 'STRING'
+}, {
+  key: 'EQUALS',
+  label: '=',
+  type: 'NUMBER'
+}, {
+  key: 'NOT_EQUAL',
+  label: '!=',
+  type: 'NUMBER'
+}, {
+  key: 'LESS_THAN',
+  label: '<',
+  type: 'NUMBER'
+}, {
+  key: 'GREATER_THAN',
+  label: '>',
+  type: 'NUMBER'
+}, {
+  key: 'IS_EMPTY',
+  label: 'is empty',
+  type: 'NUMBER'
+}, {
+  key: 'EQUALS',
+  label: 'is',
+  type: 'BOOLEAN'
+}, {
+  key: 'EQUALS',
+  label: 'equals',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'NOT_EQUAL',
+  label: 'does not equal',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'CONTAINS',
+  label: 'contains',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'NOT_CONTAIN',
+  label: 'does not contain',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'NOT_EMPTY',
+  label: 'is present',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'IS_EMPTY',
+  label: 'is not present',
+  type: 'KEY_VALUE_PAIR'
+}]);
+
+/***/ }),
+
+/***/ "./lists/rollups.ts":
+/*!**************************!*\
+  !*** ./lists/rollups.ts ***!
+  \**************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  availableFor: 1000 * 60 * 60 * 24,
+  rollup: 1000,
+  label: '1s'
+}, {
+  availableFor: 1000 * 60 * 60 * 24,
+  rollup: 1000 * 5,
+  label: '5s'
+}, {
+  availableFor: 1000 * 60 * 60 * 24 * 31,
+  rollup: 1000 * 60,
+  label: '1min'
+}, {
+  availableFor: 1000 * 60 * 60 * 24 * 31 * 3,
+  rollup: 1000 * 60 * 5,
+  label: '5min'
+}, {
+  availableFor: 1000 * 60 * 60 * 24 * 31 * 12,
+  rollup: 1000 * 60 * 60,
+  label: '1h'
+}]);
+
+/***/ }),
+
+/***/ "./lists/slo_specifics.ts":
+/*!********************************!*\
+  !*** ./lists/slo_specifics.ts ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  key: 'SLI',
+  label: 'SLI'
+}, {
+  key: 'Remaining Error Budget',
+  label: 'Remaining Error Budget'
+}, {
+  key: 'Timeseries',
+  label: 'Timeseries'
+}]);
+
+/***/ }),
+
+/***/ "./migration.ts":
+/*!**********************!*\
+  !*** ./migration.ts ***!
+  \**********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _lists_metric_categories__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lists/metric_categories */ "./lists/metric_categories.ts");
+// can be removed once mixpanel shows no old plugins around
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function (target) {
+  // 1.3.1 towards 2.0.0
+  if (target.entityType && typeof target.entityType === 'string') {
+    target.entityType = {
+      key: target.entityType,
+      label: target.entityType
+    };
+  } // 2.3.1 towards 2.4.0
+
+
+  if (target.filter && target.filter !== '') {
+    if (!target.customFilters) {
+      target.customFilters = [];
+      target.customFilters.push({
+        value: target.filter
+      });
+    }
+  } // 2.4.2 towards 2.4.3
+
+
+  if (target.timeInterval) {
+    if (target.timeInterval.value) {
+      target.timeInterval = {
+        key: target.timeInterval.value,
+        label: target.timeInterval.label
+      };
+    } else if (target.timeInterval.rollup) {
+      target.timeInterval = {
+        key: target.timeInterval.rollup,
+        label: target.timeInterval.label
+      };
+    }
+  } //2.4.4 towards 2.5.0
+
+
+  if (target.metricCategory === '5') {
+    //old service metric view
+    target.metricCategory = '4';
+    target.service = {}; //because target.service does not exist yet.
+
+    target.service.key = target.entity.key;
+    target.service.label = target.entity.label;
+
+    if (target.selectedApplication && target.selectedApplication.key) {
+      target.entity.key = target.selectedApplication.key;
+      target.entity.label = target.selectedApplication.label;
+    } else {
+      target.entity.key = null;
+      target.entity.label = 'Test';
+    }
+  } //2.4.4 towards 2.5.0
+
+
+  if (target.metricCategory === '6') {
+    //old endpoint metric view
+    target.metricCategory = '4';
+    target.endpoint = {}; //because target.endpoint does not exist yet.
+
+    target.endpoint.key = target.entity.key;
+
+    if (target.selectedApplication && target.selectedApplication.key) {
+      target.entity.key = target.selectedApplication.key;
+      target.entity.label = target.selectedApplication.label;
+    } else {
+      target.entity.key = null;
+      target.entity.label = 'Test';
+    }
+  } //2.7.3 towards 3.0 (Angular to React Migration)
+
+
+  if (target.aggregation && typeof target.aggregation === 'string') {
+    target.aggregation ? target.aggregation = {
+      key: target.aggregation,
+      label: target.aggregation
+    } : target.aggregation = {};
+    target.aggregationFunction ? target.aggregationFunction = {
+      key: target.aggregationFunction.label,
+      label: target.aggregationFunction.label
+    } : target.aggregationFunction = {};
+  }
+
+  if (target.customFilters && target.customFilters.length > 0 && target.customFilters[0].value) {
+    target.customFilters = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.map(target.customFilters, function (cf) {
+      return cf.value;
+    });
+  }
+
+  if (target.filters && target.filters.length > 0 && !target.filters[0].tag.key && !target.filters[0].tag.label) {
+    lodash__WEBPACK_IMPORTED_MODULE_0___default.a.forEach(target.filters, function (filter) {
+      filter.tag.label = filter.tag.key;
+    });
+  }
+
+  if (target.group && target.group.key && !target.group.label) {
+    target.group.label = target.group.key;
+  }
+
+  if (target.metricCategory && typeof target.metricCategory === 'string') {
+    target.metricCategory = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.find(_lists_metric_categories__WEBPACK_IMPORTED_MODULE_1__["default"], function (category) {
+      return category.key === parseInt(target.metricCategory, 10);
+    });
+  } //3.0.1 towards 3.1.0
+
+
+  if (target.callToEntity && target.callToEntity.key) {
+    target.callToEntity = target.callToEntity.key;
+  }
+
+  if (target.applicationCallToEntity && target.applicationCallToEntity.key) {
+    target.applicationCallToEntity = target.applicationCallToEntity.key;
+  }
+
+  if (target.filters && target.filters.length > 0) {
+    target.filters.forEach(function (filter) {
+      if (filter.entity && filter.entity.key) {
+        filter.entity = filter.entity.key;
+      }
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./module.ts":
+/*!*******************!*\
+  !*** ./module.ts ***!
+  \*******************/
+/*! exports provided: plugin */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "plugin", function() { return plugin; });
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @grafana/data */ "@grafana/data");
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_grafana_data__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _datasources_DataSource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./datasources/DataSource */ "./datasources/DataSource.ts");
+/* harmony import */ var _components_ConfigEditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/ConfigEditor */ "./components/ConfigEditor.tsx");
+/* harmony import */ var _components_QueryEditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/QueryEditor */ "./components/QueryEditor.tsx");
+
+
+
+
+var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["DataSourcePlugin"](_datasources_DataSource__WEBPACK_IMPORTED_MODULE_1__["DataSource"]).setConfigEditor(_components_ConfigEditor__WEBPACK_IMPORTED_MODULE_2__["ConfigEditor"]).setQueryEditor(_components_QueryEditor__WEBPACK_IMPORTED_MODULE_3__["QueryEditor"]);
+
+/***/ }),
+
+/***/ "./util/aggregation_util.ts":
+/*!**********************************!*\
+  !*** ./util/aggregation_util.ts ***!
+  \**********************************/
+/*! exports provided: aggregateTarget */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aggregateTarget", function() { return aggregateTarget; });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+
+function aggregateTarget(data, target) {
+  var targetLabel = buildAggregationLabel(target);
+  data = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.filter(data, function (d) {
+    return d.target !== targetLabel;
+  }); // filter out any previously calculated aggregations
+
+  var concatedTargetData = concatTargetData(data);
+
+  var dataGroupedByTimestamp = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.groupBy(concatedTargetData, function (d) {
+    return d[1];
+  });
+
+  var aggregatedData = aggregateDataOfTimestamp(dataGroupedByTimestamp, target.aggregationFunction.label);
+  aggregatedData = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.sortBy(aggregatedData, [function (datapoint) {
+    return datapoint[1];
+  }]);
+  return buildResult(aggregatedData, target.refId, targetLabel);
+}
+
+function concatTargetData(data) {
+  var result = [];
+
+  lodash__WEBPACK_IMPORTED_MODULE_0___default.a.each(data, function (entry) {
+    result = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.concat(result, entry.datapoints);
+  });
+
+  return result;
+}
+
+function aggregateDataOfTimestamp(dataGroupedByTimestamp, aggregationLabel) {
+  var result = [];
+
+  lodash__WEBPACK_IMPORTED_MODULE_0___default.a.each(dataGroupedByTimestamp, function (timestampData, timestamp) {
+    var valuesOfTimestamp = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.map(timestampData, function (datapoint) {
+      return datapoint[0];
+    });
+
+    var aggregatedValue = aggregate(aggregationLabel, valuesOfTimestamp);
+    result.push([aggregatedValue, parseInt(timestamp, 10)]);
+  });
+
+  return result;
+}
+
+function aggregate(aggregation, data) {
+  if (aggregation.toLowerCase() === 'sum') {
+    return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.sum(data);
+  } else if (aggregation.toLowerCase() === 'mean') {
+    return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.mean(data);
+  } else if (aggregation.toLowerCase() === 'min') {
+    return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.min(data);
+  } else if (aggregation.toLowerCase() === 'max') {
+    return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.max(data);
+  } else {
+    //apply not aggregation
+    return data;
+  }
+}
+
+function buildResult(aggregatedData, refId, target) {
+  return {
+    datapoints: aggregatedData,
+    refId: refId,
+    target: target
+  };
+}
+
+function buildAggregationLabel(target) {
+  if (target.showAllMetrics) {
+    if (target.allMetrics.length > 1) {
+      if (target.customFilters && target.customFilters.length > 0) {
+        var label_1 = '';
+
+        lodash__WEBPACK_IMPORTED_MODULE_0___default.a.each(target.customFilters, function (filter, index) {
+          label_1 += filter;
+
+          if (index !== target.customFilters.length - 1) {
+            label_1 += '.';
+          }
+        });
+
+        label_1 = label_1 + ' (' + target.aggregationFunction.label + ')';
+        return label_1;
+      } else {
+        return target.aggregationFunction.label;
+      }
+    } else {
+      return target.allMetrics[0].key + ' (' + target.aggregationFunction.label + ')';
+    }
+  } else {
+    return target.metric.key + ' (' + target.aggregationFunction.label + ')';
+  }
+}
+
+/***/ }),
+
+/***/ "./util/analyze_util.ts":
+/*!******************************!*\
+  !*** ./util/analyze_util.ts ***!
+  \******************************/
+/*! exports provided: createTagFilter, readItemMetrics */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createTagFilter", function() { return createTagFilter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "readItemMetrics", function() { return readItemMetrics; });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+
+function createTagFilter(filter) {
+  var tagFilter = {
+    name: filter.tag.key,
+    operator: filter.operator.key,
+    value: filter.stringValue
+  };
+
+  if ('NUMBER' === filter.tag.type) {
+    if (filter.numberValue !== null) {
+      tagFilter.value = filter.numberValue.toString();
+    }
+  } else if ('BOOLEAN' === filter.tag.type) {
+    tagFilter.value = filter.booleanValue.toString();
+  }
+
+  return tagFilter;
+}
+function readItemMetrics(target, response, getLabel) {
+  if (!response.data) {
+    return response;
+  } // as we map two times we need to flatten the result
+
+
+  return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.flatten(response.data.items.map(function (item, index) {
+    return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.map(item.metrics, function (value, key) {
+      return {
+        target: getLabel(target, item, key, index),
+        datapoints: lodash__WEBPACK_IMPORTED_MODULE_0___default.a.map(value, function (metric) {
+          return [metric[1], metric[0]];
+        }),
+        refId: target.refId,
+        key: target.stableHash
+      };
+    });
+  }));
+}
+
+/***/ }),
+
+/***/ "./util/delta_util.ts":
+/*!****************************!*\
+  !*** ./util/delta_util.ts ***!
+  \****************************/
+/*! exports provided: generateStableHash, hasIntersection, appendData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateStableHash", function() { return generateStableHash; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hasIntersection", function() { return hasIntersection; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "appendData", function() { return appendData; });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+
+var omitLabels = ['refId', 'pluginId', 'showWarningCantShowAllResults', 'timeShiftIsValid', 'useFreeTextMetrics', 'showGroupBySecondLevel', 'canShowAllMetrics', 'timeFilter', 'stableHash'];
+function generateStableHash(obj) {
+  var pseudoHash = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.omit(obj, omitLabels);
+
+  pseudoHash = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.mapValues(pseudoHash, function (value) {
+    // to reduce overhead of interface Selectable
+    if (value != null && _typeof(value) === 'object' && 'key' in value) {
+      value = value.key;
+    }
+
+    return value;
+  });
+  return JSON.stringify(pseudoHash);
+}
+/*
+  Check if two time filters are overlapping.
+  Return true when:
+  from |-------------------| to (t2)
+              from |--------------------| to (t1)
+  Returns false when:
+     from |-------------------| to (t2)
+from |----------------------------------------| to (t1)
+  from |-------------------| to (t2)
+                        from |-------------------| to (t1)
+*/
+
+function hasIntersection(t1, t2) {
+  return t1.from < t2.to && t1.from >= t2.from; // t1.windowSize === t2.windowSize
+}
+/*
+  Appends new found items to already existing data in cache.
+  Also removes old data accordingly (e.g. if 4 new datapoints were added,
+  the corresponding oldest four datapoints are removed).
+*/
+
+function appendData(newDeltaData, cachedData) {
+  lodash__WEBPACK_IMPORTED_MODULE_0___default.a.each(newDeltaData, function (deltaData) {
+    var matchingCachedData = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.find(cachedData, function (o) {
+      return o.key === deltaData.key && o.target === deltaData.target;
+    });
+
+    if (matchingCachedData && deltaData.datapoints) {
+      var size = matchingCachedData.datapoints.length;
+      var datapoints = deltaData.datapoints.concat(matchingCachedData.datapoints);
+      datapoints = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.sortedUniqBy(datapoints.sort(function (a, b) {
+        return a[1] - b[1];
+      }), function (a) {
+        return a[1];
+      });
+      matchingCachedData.datapoints = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.takeRight(datapoints, size);
+      matchingCachedData.target = deltaData.target;
+    } else {
+      cachedData.push(deltaData);
+    }
+  });
+
+  return cachedData;
+}
+
+/***/ }),
+
+/***/ "./util/instana_version.ts":
+/*!*********************************!*\
+  !*** ./util/instana_version.ts ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getVersion; });
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var _request_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./request_handler */ "./util/request_handler.ts");
+
+
+var versionCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+/*
+  Get version of current Instana backend and cache it for 10 minutes.
+  This should be the ONLY way to retrieve any information about the Instana backend version.
+ */
+
+function getVersion(options) {
+  var cachedVersion = versionCache.get('version');
+
+  if (cachedVersion) {
+    return Promise.resolve(cachedVersion);
+  }
+
+  return Object(_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(options, '/api/instana/version').then(function (result) {
+    if (result.data && result.data.imageTag) {
+      var majorVersion = parseInt(result.data.imageTag.split('.', 2)[1], 10) || null;
+
+      if (majorVersion) {
+        versionCache.put(options.url, majorVersion, 600000);
+      }
+
+      return majorVersion;
+    }
+
+    return null;
+  }, function (error) {
+    return null;
+  });
+}
+
+/***/ }),
+
+/***/ "./util/proxy_check.ts":
+/*!*****************************!*\
+  !*** ./util/proxy_check.ts ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+ // check grafana version (5.3+)
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  var version = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
+
+  var versions = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.split(version, '.', 2).map(function (v) {
+    return parseInt(v, 10);
+  });
+
+  return version[0] >= 6 || versions[0] >= 5 && versions[1] >= 3;
+});
+
+/***/ }),
+
+/***/ "./util/queryInterval_check.ts":
+/*!*************************************!*\
+  !*** ./util/queryInterval_check.ts ***!
+  \*************************************/
+/*! exports provided: isInvalidQueryInterval */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isInvalidQueryInterval", function() { return isInvalidQueryInterval; });
+/**
+ * Util method to validate query intervals which are too big.
+ *
+ * @param windowSize in ms
+ * @param queryIntervalLimit in ms
+ */
+function isInvalidQueryInterval(windowSize, queryIntervalLimit) {
+  if (queryIntervalLimit) {
+    if (queryIntervalLimit > 0) {
+      return Math.floor(windowSize / 1000) * 1000 > queryIntervalLimit;
+    }
+
+    return false;
+  }
+
+  return false;
+}
+
+/***/ }),
+
+/***/ "./util/request_handler.ts":
+/*!*********************************!*\
+  !*** ./util/request_handler.ts ***!
+  \*********************************/
+/*! exports provided: getRequest, postRequest, instanaUrl */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRequest", function() { return getRequest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "postRequest", function() { return postRequest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "instanaUrl", function() { return instanaUrl; });
+/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @grafana/runtime */ "@grafana/runtime");
+/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_grafana_runtime__WEBPACK_IMPORTED_MODULE_0__);
+
+function getRequest(options, endpoint, swallowError, maxRetries) {
+  if (swallowError === void 0) {
+    swallowError = false;
+  }
+
+  if (maxRetries === void 0) {
+    maxRetries = 1;
+  }
+
+  var request = {
+    method: 'GET',
+    url: options.url + endpoint
+  };
+  return doRequest(options, request, swallowError, maxRetries);
+}
+function postRequest(options, endpoint, data, swallowError, maxRetries) {
+  if (swallowError === void 0) {
+    swallowError = false;
+  }
+
+  if (maxRetries === void 0) {
+    maxRetries = 0;
+  }
+
+  var request = {
+    method: 'POST',
+    url: options.url + endpoint,
+    data: data
+  };
+  return doRequest(options, request, swallowError, maxRetries);
+}
+
+function doRequest(options, request, swallowError, maxRetries) {
+  if (!options.useProxy) {
+    request['headers'] = {
+      Authorization: 'apiToken ' + options.apiToken
+    };
+  }
+
+  return Object(_grafana_runtime__WEBPACK_IMPORTED_MODULE_0__["getBackendSrv"])().datasourceRequest(request)["catch"](function (error) {
+    if (error.status === 429) {
+      throw new Error('API limit is reached.');
+      return;
+    }
+
+    if (swallowError && (error.status >= 400 || error.status < 500)) {
+      console.log(error);
+      return;
+    }
+
+    if (maxRetries > 0) {
+      return doRequest(options, request, swallowError, maxRetries - 1);
+    }
+
+    throw error;
+  });
+}
+
+function instanaUrl(instanceSettings) {
+  if (instanceSettings.jsonData.useProxy) {
+    return instanceSettings.url + '/instana'; // to match proxy route in plugin.json
+  } else {
+    return instanceSettings.jsonData.url;
+  }
+}
+
+/***/ }),
+
+/***/ "./util/rollup_granularity_util.ts":
+/*!*****************************************!*\
+  !*** ./util/rollup_granularity_util.ts ***!
+  \*****************************************/
+/*! exports provided: getDefaultChartGranularity, getPossibleGranularities, getDefaultMetricRollupDuration, getPossibleRollups */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDefaultChartGranularity", function() { return getDefaultChartGranularity; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPossibleGranularities", function() { return getPossibleGranularities; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDefaultMetricRollupDuration", function() { return getDefaultMetricRollupDuration; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPossibleRollups", function() { return getPossibleRollups; });
+/* harmony import */ var _lists_granularities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lists/granularities */ "./lists/granularities.ts");
+/* harmony import */ var _lists_rollups__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lists/rollups */ "./lists/rollups.ts");
+
+
+var MAX_DATAPOINTS_ANALYZE = 600;
+var MAX_DATAPOINTS_INFRASTRUCTURE = 800;
+var UI_DATAPOINTS_ANALYZE = 80;
+
+function currentTime() {
+  return Date.now();
+}
+
+function getWindowSize(timeFilter) {
+  return timeFilter.from ? timeFilter.to - timeFilter.from : timeFilter.windowSize;
+}
+
+function getDefaultChartGranularity(windowSize) {
+  return getPossibleGranularities(windowSize, UI_DATAPOINTS_ANALYZE)[0];
+}
+function getPossibleGranularities(windowSize, maxValues) {
+  if (maxValues === void 0) {
+    maxValues = MAX_DATAPOINTS_ANALYZE;
+  }
+
+  var possibleGranularities = _lists_granularities__WEBPACK_IMPORTED_MODULE_0__["default"].filter(function (granularity) {
+    return windowSize / 1000 / granularity.value <= maxValues && granularity.value * 1000 <= windowSize;
+  }); // window sizes of this length and up have a granularity of at least 1h
+
+  if (windowSize > 48000001) {
+    possibleGranularities = possibleGranularities.filter(function (granularity) {
+      return granularity.value >= 3600;
+    });
+  }
+
+  if (windowSize >= 1800000) {
+    possibleGranularities = possibleGranularities.filter(function (granularity) {
+      return granularity.value >= 60;
+    });
+  }
+
+  if (possibleGranularities.length > 0) {
+    return possibleGranularities.map(function (granularity) {
+      return {
+        key: granularity.value.toString(),
+        label: granularity.label
+      };
+    });
+  }
+
+  return [{
+    key: _lists_granularities__WEBPACK_IMPORTED_MODULE_0__["default"][_lists_granularities__WEBPACK_IMPORTED_MODULE_0__["default"].length - 1].value.toString(),
+    label: _lists_granularities__WEBPACK_IMPORTED_MODULE_0__["default"][_lists_granularities__WEBPACK_IMPORTED_MODULE_0__["default"].length - 1].label
+  }];
+}
+function getDefaultMetricRollupDuration(timeFilter) {
+  return getPossibleRollups(timeFilter)[0];
+}
+function getPossibleRollups(timeFilter) {
+  // Ignoring time differences for now since small time differences
+  // can be accepted. This time is only used to calculate the rollup.
+  var now = currentTime();
+  var windowSize = getWindowSize(timeFilter);
+  var possibleRollups = _lists_rollups__WEBPACK_IMPORTED_MODULE_1__["default"].filter(function (rollupDefinition) {
+    return timeFilter.from >= now - rollupDefinition.availableFor;
+  }).filter(function (rollUp) {
+    return windowSize >= rollUp.rollup && windowSize / rollUp.rollup <= MAX_DATAPOINTS_INFRASTRUCTURE;
+  });
+
+  if (possibleRollups.length > 0) {
+    return possibleRollups.map(function (rollup) {
+      return {
+        key: rollup.rollup.toString(),
+        label: rollup.label
+      };
+    });
+  }
+
+  return [{
+    key: _lists_rollups__WEBPACK_IMPORTED_MODULE_1__["default"][_lists_rollups__WEBPACK_IMPORTED_MODULE_1__["default"].length - 1].rollup.toString(),
+    label: _lists_rollups__WEBPACK_IMPORTED_MODULE_1__["default"][_lists_rollups__WEBPACK_IMPORTED_MODULE_1__["default"].length - 1].label
+  }];
+}
+
+/***/ }),
+
+/***/ "./util/target_util.ts":
+/*!*****************************!*\
+  !*** ./util/target_util.ts ***!
+  \*****************************/
+/*! exports provided: emptyResultData, buildTimeSeries */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "emptyResultData", function() { return emptyResultData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "buildTimeSeries", function() { return buildTimeSeries; });
+function emptyResultData(refId) {
+  return {
+    target: refId,
+    datapoints: []
+  };
+}
+function buildTimeSeries(label, refId, datapoints) {
+  return {
+    target: label,
+    refId: refId,
+    datapoints: datapoints
+  };
+}
+
+/***/ }),
+
+/***/ "./util/time_util.ts":
+/*!***************************!*\
+  !*** ./util/time_util.ts ***!
+  \***************************/
+/*! exports provided: readTime, getWindowSize, getTimeKey, hoursToMs */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "readTime", function() { return readTime; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getWindowSize", function() { return getWindowSize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTimeKey", function() { return getTimeKey; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hoursToMs", function() { return hoursToMs; });
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+
+function readTime(time) {
+  var from = Math.floor(new Date(time.from.valueOf()).getTime() / 1000) * 1000;
+  var to = Math.floor(new Date(time.to.valueOf()).getTime() / 1000) * 1000;
+  return {
+    from: from,
+    to: to,
+    windowSize: to - from
+  };
+}
+function getWindowSize(timeFilter) {
+  return timeFilter.from ? timeFilter.to - timeFilter.from : timeFilter.windowSize;
+}
+function getTimeKey(timeFilter) {
+  // time might be part of a cache key as this can cause different results
+  return msToMin(timeFilter.from) + _GlobalVariables__WEBPACK_IMPORTED_MODULE_0__["SEPARATOR"] + msToMin(timeFilter.to);
+}
+
+function msToMin(time) {
+  return Math.floor(time / 60000);
+}
+
+function hoursToMs(hours) {
+  if (hours > 0) {
+    return hours * 60 * 60 * 1000;
+  }
+
+  return 0;
+}
+
+/***/ }),
+
+/***/ "@grafana/data":
+/*!********************************!*\
+  !*** external "@grafana/data" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_data__;
+
+/***/ }),
+
+/***/ "@grafana/runtime":
+/*!***********************************!*\
+  !*** external "@grafana/runtime" ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_runtime__;
+
+/***/ }),
+
+/***/ "@grafana/ui":
+/*!******************************!*\
+  !*** external "@grafana/ui" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_ui__;
+
+/***/ }),
+
+/***/ "lodash":
+/*!*************************!*\
+  !*** external "lodash" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_lodash__;
+
+/***/ }),
+
+/***/ "react":
+/*!************************!*\
+  !*** external "react" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_react__;
+
+/***/ })
+
+/******/ })});;
 //# sourceMappingURL=module.js.map
