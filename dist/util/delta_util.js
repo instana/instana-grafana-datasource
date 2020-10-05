@@ -30,7 +30,7 @@ System.register(['lodash'], function(exports_1) {
                             from |-------------------| to (t1)
     */
     function hasIntersection(t1, t2) {
-        return t1.from < t2.to && t1.from > t2.from; // t1.windowSize === t2.windowSize
+        return t1.from < t2.to && t1.from >= t2.from; // t1.windowSize === t2.windowSize
     }
     exports_1("hasIntersection", hasIntersection);
     /*
