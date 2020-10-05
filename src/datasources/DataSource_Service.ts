@@ -96,7 +96,16 @@ export class DataSourceService {
       results.push(response.data);
       if (page * pageSize < response.data.totalHits) {
         page++;
-        return this.paginateServices(results, applicationId, windowSize, to, applicationBoundaryScope, page, pageSize, pageLimit);
+        return this.paginateServices(
+          results,
+          applicationId,
+          windowSize,
+          to,
+          applicationBoundaryScope,
+          page,
+          pageSize,
+          pageLimit
+        );
       } else {
         return results;
       }

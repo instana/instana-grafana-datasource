@@ -105,7 +105,17 @@ export class DataSourceEndpoint {
       results.push(response.data);
       if (page * pageSize < response.data.totalHits) {
         page++;
-        return this.paginateEndpoints(results, applicationId, serviceId, windowSize, applicationBoundaryScope, to, page, pageSize, pageLimit);
+        return this.paginateEndpoints(
+          results,
+          applicationId,
+          serviceId,
+          windowSize,
+          applicationBoundaryScope,
+          to,
+          page,
+          pageSize,
+          pageLimit
+        );
       } else {
         return results;
       }
