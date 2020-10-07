@@ -13,8 +13,8 @@
       "url": "https://www.instana.com"
     },
     "logos": {
-      "small": "https://www.instana.com/media/instana_icon_square.png",
-      "large": "https://www.instana.com/media/instana_icon_square.png"
+      "small": "img/stan.png",
+      "large": "img/stan.png"
     },
     "links": [
       {
@@ -34,9 +34,10 @@
         "url": "https://github.com/instana/instana-grafana-datasource/blob/master/LICENSE"
       }
     ],
+    "keywords": ["instana", "apm", "application", "performance", "monitoring", "metrics", "tracing"],
     "screenshots": [],
     "version": "3.1.0",
-    "updated": "2020-10-05"
+    "updated": "2020-10-07"
   },
   "routes": [
     {
