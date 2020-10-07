@@ -22,6 +22,7 @@ import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import { DataSource } from '../datasources/DataSource';
 import { InstanaQuery } from '../types/instana_query';
 import FormSelect from './FormField/FormSelect';
+import { readTime } from '../util/time_util';
 import { Filters } from './Analyze/Filter';
 import Metric from './Metric/Metric';
 import migrate from '../migration';
@@ -36,6 +37,7 @@ interface QueryState {
   queryTypes: SelectableValue[];
   allMetrics: SelectableValue[];
   availableMetrics: SelectableValue[];
+  selectedWindowSize: number;
 }
 
 export class QueryEditor extends PureComponent<Props, QueryState> {
@@ -59,12 +61,30 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       allMetrics: [],
       queryTypes: [],
       availableMetrics: [],
+      selectedWindowSize: this.props.range ? readTime(this.props.range).windowSize : 21600000,
     };
 
     this.filterMetricsOnType = this.filterMetricsOnType.bind(this);
     this.loadEntityTypes = this.loadEntityTypes.bind(this);
 
     this.props.onChange(this.query);
+  }
+
+  componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<QueryState>, snapshot?: any) {
+    const { onChange, range, datasource } = this.props;
+    if (range && this.state.selectedWindowSize !== readTime(range).windowSize) {
+      this.setState({
+        ...this.state,
+        selectedWindowSize: readTime(range).windowSize,
+      });
+      datasource.setPossibleTimeIntervals(this.query);
+      if (!datasource.availableTimeIntervals.find(i => i.key === this.query.timeInterval.key)) {
+        this.query.timeInterval = datasource.getDefaultTimeInterval(this.query);
+        onChange(this.query);
+        // no need to execute onRunQuery() here because the change of time frame triggers
+        // datasource.query() anyways and datasource will take care of correcting the timeInterval
+      }
+    }
   }
 
   onCategoryChange = (newCategory: SelectableValue) => {
