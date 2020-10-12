@@ -93,6 +93,9 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         }
 
         this.setPossibleTimeIntervals(target);
+        if (!this.availableTimeIntervals.find(i => i.key === target.timeInterval.key)) {
+          target.timeInterval = this.getDefaultTimeInterval(target);
+        }
 
         // target migration for downwards compatibility
         migrate(target);
