@@ -59,6 +59,7 @@ The actual screenshots are from "Quick Check" example below. Do not delete old s
 
 ## Publishing a New Version
 
+* Before publishing a new version ask yourself the question: did I introduce a change that might require some kind of documentation? Is one of the gifs provided in the current README obsolete due to some visual improvements? If so, please change the README accordingly. 
 * Run `yarn install`.
 * Run the full build with `yarn build`.
 * Make sure that the quick check scenario described below works against:
