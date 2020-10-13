@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTheme } from '@grafana/ui';
+import { Tooltip, useTheme } from '@grafana/ui';
 
 const INBOUND = 'INBOUND';
 const ALL = 'ALL';
@@ -28,11 +28,19 @@ const dropdown__list__active = {
   opacity: 1,
 } as React.CSSProperties;
 
+const iconTextContainer = {
+  display: 'inline-flex',
+}
+
 const iconStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
 };
+
+const iconTextStyle = {
+  padding: '7px',
+}
 
 const iconSize = 30;
 
@@ -97,14 +105,21 @@ export default function ApplicationBoundaryScope(props: any) {
         style={dropdown__list__item}
         contentEditable
       >
-        {props.value === INBOUND ? inboundIcon : allIcon}
+        <Tooltip content={props.value ? props.value : ALL} theme={'info'} placement={'top'}>
+          {props.value === INBOUND ? inboundIcon : allIcon}
+        </Tooltip>
       </div>
+
       <ul style={active ? dropdown__list__active : dropdown__list}>
         <li onClick={() => handleClick(INBOUND)} key={INBOUND} style={dropdown__list__item}>
-          {inboundIcon}
+          <div style={iconTextContainer}>
+            {inboundIcon} <span style={iconTextStyle}>{INBOUND}</span>
+          </div>
         </li>
         <li onClick={() => handleClick(ALL)} key={ALL} style={dropdown__list__item}>
-          {allIcon}
+          <div style={iconTextContainer}>
+            {allIcon} <span style={iconTextStyle}>{ALL}</span>
+          </div>
         </li>
       </ul>
     </div>

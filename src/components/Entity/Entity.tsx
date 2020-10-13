@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTheme } from '@grafana/ui';
+import { Tooltip, useTheme } from '@grafana/ui';
 
 const DESTINATION = 'DESTINATION';
 const SOURCE = 'SOURCE';
@@ -28,11 +28,19 @@ const dropdown__list__active = {
   opacity: 1,
 } as React.CSSProperties;
 
+const iconTextContainer = {
+  display: 'inline-flex',
+}
+
 const iconStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
 };
+
+const iconTextStyle = {
+  padding: '7px',
+}
 
 const iconSize = 30;
 
@@ -91,14 +99,21 @@ export default function Entity(props: any) {
         style={dropdown__list__item}
         contentEditable
       >
-        {props.value === DESTINATION ? destinationIcon : sourceIcon}
+        <Tooltip content={props.value} theme={'info'} placement={'top'}>
+          {props.value === DESTINATION ? destinationIcon : sourceIcon}
+        </Tooltip>
       </div>
+
       <ul style={active ? dropdown__list__active : dropdown__list}>
         <li onClick={() => handleClick(DESTINATION)} key={DESTINATION} style={dropdown__list__item}>
-          {destinationIcon}
+          <div style={iconTextContainer}>
+            {destinationIcon} <span style={iconTextStyle}>{DESTINATION}</span>
+          </div>
         </li>
         <li onClick={() => handleClick('SOURCE')} key={SOURCE} style={dropdown__list__item}>
-          {sourceIcon}
+          <div style={iconTextContainer}>
+            {sourceIcon} <span style={iconTextStyle}>{SOURCE}</span>
+          </div>
         </li>
       </ul>
     </div>
