@@ -171,7 +171,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           <FormSelect
             queryKeyword
             disabled={!this.canSelectAggregation()}
-            labelWidth={6}
+            labelWidth={7}
             inputWidth={12}
             label={'Aggregation'}
             tooltip={'Select a metric aggregation.'}
@@ -184,7 +184,7 @@ export default class Metric extends React.Component<Props, MetricState> {
         <FormSelect
           queryKeyword
           disabled={datasource.availableTimeIntervals.length <= 1}
-          labelWidth={6}
+          labelWidth={5}
           inputWidth={12}
           label={'Rollup'}
           tooltip={'Select the rollup value.'}
