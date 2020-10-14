@@ -24,19 +24,19 @@ To use the Grafana server as a proxy for querying Instana REST API please check 
 
 To enable metrics for offline snapshots please check `Enable offline snapshots`. For On-premise customers Instana Release 156 is required.
 
-The configuration allows the setting of a limit for the different categories that this plugin offers. Numeric values can be entered in order to make sure that queries do not exceed a certain amount of window size that they query. This can be useful when experiencing Grafana performance issues. See the gif below on how this limit exactly works.
+The configuration allows the setting of a limit for the different categories that this plugin offers. Numeric values can be entered in order to make sure that queries do not exceed a certain amount of window size that they query. This can be useful when experiencing Grafana performance issues. 
 
-![datasource configuration](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/limit_configuration.gif)
+![datasource configuration](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/configuration.png)
 
 ## Usage
 
 ### Query Editor
 
-![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/empty-query.png)
+![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/empty-query.png)
 
 To start, enter the [Dynamic Focus](https://docs.instana.io/core_concepts/dynamic_focus/) query. This is exactly the same as used in the Instana dashboard; you can test your queries in Instana and then copy and paste them into Grafana. *NOTE* Saved filters are not currently supported by the Grafana datasource plugin.
 
-#### Infrastructure built-in metrics
+### Infrastructure built-in metrics
 
 Once you filled in the query the available types dropdown will be automatically populated, select the type you want.
 
@@ -44,9 +44,9 @@ As you select the type, the available metrics dropdown will be automatically pop
 
 If your Dynamic Focus query matches multiple instances then, the returned dataset will include metrics from all those matching instances, providing graphs with multiple plots like the example below.
 
-![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/built-in-metrics.gif)
+![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/built-in-metrics.gif)
 
-#### Infrastructure custom metrics
+### Infrastructure custom metrics
 
 To choose custom metrics matching your query you need to select "Infrastructure custom metrics" from the category dropdown, which will automatically populate the available types dropdown.
 
@@ -54,7 +54,7 @@ As you select the type, the available metrics dropdown will be automatically pop
 
 If your Dynamic Focus query matches, the returned dataset will include metrics providing graphs like the example below.
 
-![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/custom-metrics.gif)
+![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/custom-metrics.gif)
 
 #### Change legend format
 
@@ -70,11 +70,11 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 - $name - a label alternative
 - $index - index in the list
 
-#### Application metrics
+### Application metrics
 
-A simple version of getting metrics related to one or multiple applications. Once an application and a metric are selected, the graphs will be drawn (see example below).
+A simple version of getting metrics related to one or multiple applications. Once an application and a metric are selected, the graphs will be drawn (see example below). The icon next to the application indicates whether the displayed information is based on calls that are performed by the consumers of the application (INBOUND) or based on all calls that are performed within this application, by both consumers as well as internally (ALL). These options are only enabled once an application is selected.
 
-![application metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application_metrics.gif)
+![application metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/application_metrics.gif)
 
 #### Change legend format
 
@@ -89,13 +89,11 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 If no custom format is provided the default label '_$label ($application) $metric_' will be shown.
 
-#### Service metrics
+### Service metrics
 
-Allows to show metrics related to a service. Services can either be selected as standalone (first gif) or in combination with an Application Perspective (second gif) to show more detailed metric data. As soon as an application is selected the dropdown menu of possible services reloads and only shows services that are actually being used by the selected application.
+Allows to show metrics related to a service. Services can either be selected as standalone or in combination with an Application Perspective to show more detailed metric data. As soon as an application is selected the dropdown menu of possible services reloads and only shows services that are actually being used by the selected application. Together with an application it is possible to indicate whether the displayed information is based on calls that are performed by the consumers of the application (INBOUND) or based on all calls that are performed within this application, by both consumers as well as internally (ALL). These options are only enabled once an application is selected. In case only a service is selected (without any application) the displayed information will be based on all calls that are performed within this application, by both consumers as well as internally.
 
-![service metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/service_metrics.gif)
-
-![application service metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application_service_metrics.gif)
+![service metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/service_metrics.gif)
 
 #### Change legend format
 
@@ -111,13 +109,11 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 If no custom format is provided the default label '_$label ($service) $metric_' will be shown.
 
-#### Endpoint metrics
+### Endpoint metrics
 
-Allows to show metrics related to an endpoint. Endpoints can either be selected as standalone or in combination with an Application Perspective and service to show more detailed metric data. Since multiple endpoints can have the same name, it is recommended to select an application, then a service, and finally an endpoint in order to be sure to select the correct endpoint. Possible selectable items are reloaded and cached each time a service and an application is changed.
+Allows to show metrics related to an endpoint. Endpoints can either be selected as standalone or in combination with an Application Perspective and service to show more detailed metric data. Since multiple endpoints can have the same name, it is recommended to select an application, then a service, and finally an endpoint in order to be sure to select the correct endpoint. Possible selectable items are reloaded and cached each time a service and an application is changed. Together with an application it is possible to indicate whether the displayed information is based on calls that are performed by the consumers of the application (INBOUND) or based on all calls that are performed within this application, by both consumers as well as internally (ALL). These options are only enabled once an application is selected. In case only an endpoint is selected (without any application) the displayed information will be based on all calls that are performed within this application, by both consumers as well as internally. This is independent on a selected service.
 
-![endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/endpoint_metrics.gif)
-
-![application service endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application_service_endpoint_metrics.gif)
+![endpoint metric plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/endpoint_metrics.gif)
 
 #### Change legend format
 
@@ -134,7 +130,7 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 If no custom format is provided the default label '_$label ($endpoint) $metric_' will be shown.
 
-#### Analyze application calls
+### Analyze application calls
 
 To choose application metrics you need to select "Analyze application calls" from the category dropdown. This will populate the other dropdown lists.
 
@@ -146,7 +142,7 @@ It's also possible to add additional filters via "add Filter". Multiple filters 
 
 If your selection matches, the returned dataset will include metrics providing graphs like the example below.
 
-![application plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/application.gif)
+![application plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/application.gif)
 
 If more then 20 metics are fetched, a warning appears that not all results are shown. Add Filter to narrow down the data.
 
@@ -163,7 +159,7 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 If no custom format is provided the default label '_$label ($application) $metric_' will be shown.
 
-#### Analyze websites
+### Analyze websites
 
 To choose EUM website metrics you need to select "Analyze websites" from the category dropdown. This will populate the other dropdown lists.
 
@@ -193,7 +189,7 @@ To adjust the legend display you can provide an own "Legend format". Supported v
 
 If no custom format is provided the default label '_$label ($website) $metric_' will be shown.
 
-#### SLO Information
+### SLO Information
 
 Display specific SLO/SLI information in Grafana based on Instana. This category can be enabled by going into the Instana Grafana plugin's settings and enable the `Enable SLO Dashboards` toggle. Then, the category will be visible next to the others.
 
@@ -210,7 +206,7 @@ The image below shows how such a dashboard could look like.
 
 ![slo_dashboard](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/slo_dashboard.png)
 
-#### Singlestat visualization
+### Singlestat visualization
 
 While using the "Singlestat" visualization an additional metric aggregation is selectable.
 For showing a correct SUM metric, configuration on two different places is needed:
@@ -219,27 +215,27 @@ For showing a correct SUM metric, configuration on two different places is neede
 
 ![singlestat](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/singlestat.png)
 
-#### Table visualization
+### Table visualization
 
 While using the "Table" visualization an additional metric aggregation is selectable.
 
 ![table](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/table-visualization.png)
 
-#### Use time shift option
+### Use time shift option
 
 The time shift option allows going back in different points of time for each query.
 
 This new feature can be used to compare two identical queries while one shows the query's outcome of a day earlier.
 
-![time shift](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/timeshift.gif)
+![time shift](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/timeshift.gif)
 
-#### Custom Granularity
+### Custom Granularity
 
 This plugin also supports the ability to select different granularity values to provide a even deeper look into metrics.
 
 ![Granularity Support](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/granularity.gif)
 
-#### Aggregation support
+### Aggregation support
 
 Aggregate graphs on query level and choose to show everything or only the aggregated graph.
 
