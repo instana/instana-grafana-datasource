@@ -25,6 +25,7 @@ import FormSelect from './FormField/FormSelect';
 import { readTime } from '../util/time_util';
 import { Filters } from './Analyze/Filter';
 import Metric from './Metric/Metric';
+import { Badge } from "@grafana/ui";
 import migrate from '../migration';
 import _ from 'lodash';
 
@@ -480,6 +481,11 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           onRunQuery={this.props.onRunQuery}
           onChange={this.props.onChange}
           loadEntityTypes={this.loadEntityTypes}
+        />
+
+        <Badge
+          text={'3.1.1'}
+          color={'blue'}
         />
       </div>
     );

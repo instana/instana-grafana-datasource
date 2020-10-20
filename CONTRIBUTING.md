@@ -67,6 +67,7 @@ The actual screenshots are from "Quick Check" example below. Do not delete old s
 * - test-instana.pink (with proxy)
 * - qa-onprem (without proxy)
 * Update `src/plugin.json` with the new version number and the version date.
+* Update `src/components/QueryEditor.tsx` (check the bottom of the file) with the new version number.
 * Run the full build again, this should update `dist/plugin.json`.
 * Commit this with a matching commit message (like `Bumped version to x.x.x`) and push this commit.
 * Note the commit hash of this commit (to extend repo.json in plugin-repository).

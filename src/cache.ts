@@ -5,7 +5,7 @@ export default class Cache<T> {
     this.store = {};
   }
 
-  put(key: string, value: T, ttl = 60000): void {
+  put(key: string, value: T, ttl = 70000): void {
     if (key === undefined || value === undefined) {
       return;
     }
