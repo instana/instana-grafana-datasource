@@ -194,7 +194,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         timeFilter: target.timeFilter,
         results: result,
       };
-      this.resultCache.put(target.stableHash, cachedObj, 3600000); // set to one hour to increase performance
+      this.resultCache.put(target.stableHash, cachedObj, 4000000); // set to at least one hour to increase performance
     }
   }
 
