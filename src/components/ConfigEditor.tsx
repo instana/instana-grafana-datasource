@@ -124,8 +124,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
               <Tooltip
                 content={
                   <p>
-                    You can create API tokens following the instructions at
-                    <a href="https://docs.instana.io/quick_start/api/#api-tokens">
+                    You can create API tokens following the instructions at <a href="https://docs.instana.io/quick_start/api/#api-tokens">
                       https://docs.instana.io/quick_start/api/#api-tokens
                     </a>
                   </p>
@@ -162,7 +161,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           onChange={(event) => this.onSwitchChange(event, 'allowSlo')}
           description={
             'Adds a new category that allows retrieval of SLO information. Needs Instana release 176+ and ' +
-            'a explicit feature flag.'
+            'an explicit feature flag.'
           }
         />
 

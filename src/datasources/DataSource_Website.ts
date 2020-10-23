@@ -201,7 +201,7 @@ export class DataSourceWebsite {
       type: target.entityType.key,
       metrics: [metric],
     };
-    return postRequest(this.instanaOptions, '/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
+    return postRequest(this.instanaOptions, '/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data, false, 5);
   }
 
   buildAnalyzeWebsiteLabel(target: InstanaQuery, item: any, key: string, index: number): string {

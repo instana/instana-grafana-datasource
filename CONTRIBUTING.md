@@ -33,7 +33,7 @@ process.env.INSTANA_API_TOKEN = 'valid-api-token';
 
 This will run integration tests against a certain tenant unit of Instana.
 
-4. Built the projec via `docker built`
+4. Build the project via `docker build`
 5. Run `yarn start`
 6. Goto http://localhost:3000 and login with admin/admin. A default Instana datasource was allready added using the provided env variables. The mountebank server runs default at http://localhost:8010 and the only valid api token is 'valid-api-token'.
 
@@ -59,7 +59,7 @@ The actual screenshots are from "Quick Check" example below. Do not delete old s
 
 ## Publishing a New Version
 
-* Before publishing a new version ask yourself the question: did I introduce a change that might require some kind of documentation? Is one of the gifs provided in the current README obsolete due to some visual improvements? If so, please change the README accordingly. 
+* Before publishing a new version ask yourself the question: did I introduce a change that might require some kind of documentation? Is one of the gifs provided in the current README obsolete due to some visual improvements? If so, please change the README accordingly.
 * Run `yarn install`.
 * Run the full build with `yarn build`.
 * Make sure that the quick check scenario described below works against:

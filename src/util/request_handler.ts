@@ -3,7 +3,12 @@ import { BackendSrvRequest } from '@grafana/runtime/services/backendSrv';
 import { InstanaOptions } from '../types/instana_options';
 import { DataSourceInstanceSettings } from '@grafana/data';
 
-export function getRequest(options: InstanaOptions, endpoint: string, swallowError = false, maxRetries = 1): any {
+export function getRequest(
+  options: InstanaOptions,
+  endpoint: string,
+  swallowError = false,
+  maxRetries = 1
+): any {
   const request = {
     method: 'GET',
     url: options.url + endpoint,
@@ -44,6 +49,13 @@ function doRequest(
     .datasourceRequest(request)
     .catch((error) => {
       if (error.status === 429) {
+        // if the error was caused by a concurrent execution limit, we will retry
+        if (error.statusText && error.statusText.includes == "concurrent" && maxRetries > 0) {
+          console.log("reload in " + 2000 ** maxRetries + " ms");
+          return sleep(2000 ** maxRetries).then(() => {
+            return doRequest(options, request, swallowError, maxRetries - 1);
+          });
+        }
         throw new Error('API limit is reached.');
         return;
       }
@@ -57,6 +69,10 @@ function doRequest(
       }
       throw error;
     });
+}
+
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export function instanaUrl(instanceSettings: DataSourceInstanceSettings<InstanaOptions>): string {
