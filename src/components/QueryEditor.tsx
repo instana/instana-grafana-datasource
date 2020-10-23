@@ -25,6 +25,7 @@ import FormSelect from './FormField/FormSelect';
 import { readTime } from '../util/time_util';
 import { Filters } from './Analyze/Filter';
 import Metric from './Metric/Metric';
+import { Badge } from '@grafana/ui';
 import migrate from '../migration';
 import _ from 'lodash';
 
@@ -78,7 +79,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         selectedWindowSize: readTime(range).windowSize,
       });
       datasource.setPossibleTimeIntervals(this.query);
-      if (!datasource.availableTimeIntervals.find(i => i.key === this.query.timeInterval.key)) {
+      if (!datasource.availableTimeIntervals.find((i) => i.key === this.query.timeInterval.key)) {
         this.query.timeInterval = datasource.getDefaultTimeInterval(this.query);
         onChange(this.query);
         // no need to execute onRunQuery() here because the change of time frame triggers
@@ -481,6 +482,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           onChange={this.props.onChange}
           loadEntityTypes={this.loadEntityTypes}
         />
+
+        <Badge text={'3.1.1'} color={'blue'} />
       </div>
     );
   }

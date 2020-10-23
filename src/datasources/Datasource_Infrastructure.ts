@@ -18,7 +18,7 @@ export class DataSourceInfrastructure {
   snapshotInfoCache: Cache<Promise<SelectableValue[]>>;
   catalogCache: Cache<Promise<SelectableValue[]>>;
   typeCache: Cache<Promise<SelectableValue[]>>;
-  timeToLiveSnapshotInfoCache: number = 60 * 60 * 1000;
+  timeToLiveSnapshotInfoCache = 4000000; // set to 1,11 hour
 
   constructor(options: InstanaOptions) {
     this.instanaOptions = options;
