@@ -44,15 +44,14 @@ function doRequest(
       Authorization: 'apiToken ' + options.apiToken,
     };
   }
-
   return getBackendSrv()
     .datasourceRequest(request)
     .catch((error) => {
       if (error.status === 429) {
         // if the error was caused by a concurrent execution limit, we will retry
-        if (error.statusText && error.statusText.includes == "concurrent" && maxRetries > 0) {
-          console.log("reload in " + 2000 ** maxRetries + " ms");
-          return sleep(2000 ** maxRetries).then(() => {
+        if (maxRetries > 0 && error.data?.errors && error.data.errors[0] && error.data.errors[0].includes("concurrent")) {
+          const backoff = maxRetries >= 4 ? 10000 : (4 - maxRetries) * 20000; // something between 10 and 60 seconds
+          return new Promise(resolve => setTimeout(resolve, backoff)).then(() => {
             return doRequest(options, request, swallowError, maxRetries - 1);
           });
         }
@@ -69,10 +68,6 @@ function doRequest(
       }
       throw error;
     });
-}
-
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export function instanaUrl(instanceSettings: DataSourceInstanceSettings<InstanaOptions>): string {

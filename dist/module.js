@@ -7266,11 +7266,16 @@ function doRequest(options, request, swallowError, maxRetries) {
   }
 
   return Object(_grafana_runtime__WEBPACK_IMPORTED_MODULE_0__["getBackendSrv"])().datasourceRequest(request)["catch"](function (error) {
+    var _a;
+
     if (error.status === 429) {
       // if the error was caused by a concurrent execution limit, we will retry
-      if (error.statusText && error.statusText.includes == "concurrent" && maxRetries > 0) {
-        console.log("reload in " + Math.pow(2000, maxRetries) + " ms");
-        return sleep(Math.pow(2000, maxRetries)).then(function () {
+      if (maxRetries > 0 && ((_a = error.data) === null || _a === void 0 ? void 0 : _a.errors) && error.data.errors[0] && error.data.errors[0].includes("concurrent")) {
+        var backoff_1 = maxRetries >= 4 ? 10000 : (4 - maxRetries) * 20000; // something between 10 and 60 seconds
+
+        return new Promise(function (resolve) {
+          return setTimeout(resolve, backoff_1);
+        }).then(function () {
           return doRequest(options, request, swallowError, maxRetries - 1);
         });
       }
@@ -7289,12 +7294,6 @@ function doRequest(options, request, swallowError, maxRetries) {
     }
 
     throw error;
-  });
-}
-
-function sleep(ms) {
-  return new Promise(function (resolve) {
-    return setTimeout(resolve, ms);
   });
 }
 
