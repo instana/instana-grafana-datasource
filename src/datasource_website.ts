@@ -58,7 +58,7 @@ export default class InstanaWebsiteDataSource extends AbstractDatasource {
         'label': entry.name
       }))
     );
-    this.websitesCache.put(key, websites);
+    this.websitesCache.put(key, websites, 600000);
 
     return websites;
   }

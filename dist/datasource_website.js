@@ -69,7 +69,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                             'label': entry.name
                         }); });
                     });
-                    this.websitesCache.put(key, websites);
+                    this.websitesCache.put(key, websites, 600000);
                     return websites;
                 };
                 InstanaWebsiteDataSource.prototype.getWebsiteTags = function () {

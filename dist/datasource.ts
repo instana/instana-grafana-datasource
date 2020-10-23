@@ -434,7 +434,7 @@ export default class InstanaDatasource extends AbstractDatasource {
     let version = this.resultCache.get('version');
     if (!version) {
         return this.getVersion().then(version => {
-          this.resultCache.put('version', version, 3600000); // one hour
+          this.resultCache.put('version', version, 4000000); // this is over an hour and 11 minutes
           return version >= 171;
         });
     }

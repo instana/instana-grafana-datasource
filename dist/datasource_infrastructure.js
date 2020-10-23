@@ -29,7 +29,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', './l
                 /** @ngInject */
                 function InstanaInfrastructureDataSource(instanceSettings, backendSrv, templateSrv, $q) {
                     _super.call(this, instanceSettings, backendSrv, templateSrv, $q);
-                    this.timeToLiveSnapshotInfoCache = 60 * 60 * 1000;
+                    this.timeToLiveSnapshotInfoCache = 4000000; // this is over an hour and 11 minutes
                     this.showOffline = instanceSettings.jsonData.showOffline;
                     this.snapshotCache = new cache_1.default();
                     this.snapshotInfoCache = new cache_1.default();

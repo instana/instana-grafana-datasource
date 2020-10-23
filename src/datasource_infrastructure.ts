@@ -12,7 +12,7 @@ export default class InstanaInfrastructureDataSource extends AbstractDatasource 
   snapshotInfoCache: Cache<Promise<Array<Selectable>>>;
   catalogCache: Cache<Promise<Array<Selectable>>>;
   showOffline: boolean;
-  timeToLiveSnapshotInfoCache = 60*60*1000;
+  timeToLiveSnapshotInfoCache = 4000000; // this is over an hour and 11 minutes
 
   /** @ngInject */
   constructor(instanceSettings, backendSrv, templateSrv, $q) {
