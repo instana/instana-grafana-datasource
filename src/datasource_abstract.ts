@@ -102,9 +102,9 @@ export default class AbstractDatasource {
       .catch(error => {
         if (error.status === 429) {
           // if the error was caused by a concurrent execution limit, we will retry
-          if (error.statusText && error.statusText.includes === "concurrent" && maxRetries > 0) {
-            console.log("reload in 30000 ms, TODO: this should be exponential backoff");
-            return new Promise(resolve => setTimeout(resolve, 30000)).then(() => {
+          if (maxRetries > 0 && error.data && error.data.errors && error.data.errors[0] && error.data.errors[0].includes("concurrent")) {
+            const backoff = maxRetries >= 4 ? 10000 : (4 - maxRetries) * 20000; // something between 10 and 60 seconds
+            return new Promise(resolve => setTimeout(resolve, backoff)).then(() => {
               return this.execute(request, swallowError, maxRetries - 1);
             });
           }

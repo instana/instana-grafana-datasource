@@ -96,9 +96,9 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
                         .catch(function (error) {
                         if (error.status === 429) {
                             // if the error was caused by a concurrent execution limit, we will retry
-                            if (error.statusText && error.statusText.includes === "concurrent" && maxRetries > 0) {
-                                console.log("reload in " + 2000 * maxRetries + " ms");
-                                return _this.sleep(2000 * maxRetries).then(function () {
+                            if (maxRetries > 0 && error.data && error.data.errors && error.data.errors[0] && error.data.errors[0].includes("concurrent")) {
+                                var backoff = maxRetries >= 4 ? 10000 : (4 - maxRetries) * 20000; // something between 10 and 60 seconds
+                                return new Promise(function (resolve) { return setTimeout(resolve, backoff); }).then(function () {
                                     return _this.execute(request, swallowError, maxRetries - 1);
                                 });
                             }
@@ -119,9 +119,6 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
                     return lodash_1.default.sortBy(datapoints, [function (o) {
                             return o[1];
                         }]);
-                };
-                AbstractDatasource.prototype.sleep = function (ms) {
-                    return new Promise(function (resolve) { return setTimeout(resolve, ms); });
                 };
                 return AbstractDatasource;
             })();

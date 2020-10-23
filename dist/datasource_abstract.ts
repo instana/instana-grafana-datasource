@@ -102,9 +102,9 @@ export default class AbstractDatasource {
       .catch(error => {
         if (error.status === 429) {
           // if the error was caused by a concurrent execution limit, we will retry
-          if (error.statusText && error.statusText.includes === "concurrent" && maxRetries > 0) {
-            console.log("reload in " + 2000 * maxRetries + " ms");
-            return this.sleep(2000 * maxRetries).then(() => {
+          if (maxRetries > 0 && error.data && error.data.errors && error.data.errors[0] && error.data.errors[0].includes("concurrent")) {
+            const backoff = maxRetries >= 4 ? 10000 : (4 - maxRetries) * 20000; // something between 10 and 60 seconds
+            return new Promise(resolve => setTimeout(resolve, backoff)).then(() => {
               return this.execute(request, swallowError, maxRetries - 1);
             });
           }
@@ -127,9 +127,5 @@ export default class AbstractDatasource {
     return _.sortBy(datapoints, [function (o) {
       return o[1];
     }]);
-  }
-
-  sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
