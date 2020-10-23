@@ -144,7 +144,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                         type: target.entityType.key,
                         metrics: [metric]
                     };
-                    return this.postRequest('/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data);
+                    return this.postRequest('/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data, false, 5);
                 };
                 InstanaWebsiteDataSource.prototype.buildAnalyzeWebsiteLabel = function (target, item, key, index) {
                     if (target.labelFormat) {

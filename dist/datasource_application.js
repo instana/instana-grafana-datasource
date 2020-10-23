@@ -174,7 +174,7 @@ System.register(["./util/rollup_granularity_util", './datasource_abstract', "./u
                             tagFilters: tagFilters,
                             metrics: [metric]
                         };
-                        return _this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
+                        return _this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data, false, 5);
                     });
                 };
                 InstanaApplicationDataSource.prototype.getTagEntity = function (selectedEntity, tag) {

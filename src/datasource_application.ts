@@ -184,7 +184,7 @@ export default class InstanaApplicationDataSource extends AbstractDatasource {
           tagFilters: tagFilters,
           metrics: [metric]
         };
-        return this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data);
+        return this.postRequest('/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data, false, 5);
       }
     );
   }

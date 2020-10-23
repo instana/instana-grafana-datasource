@@ -95,6 +95,13 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
                         .datasourceRequest(request)
                         .catch(function (error) {
                         if (error.status === 429) {
+                            // if the error was caused by a concurrent execution limit, we will retry
+                            if (error.statusText && error.statusText.includes === "concurrent" && maxRetries > 0) {
+                                console.log("reload in " + 2000 * maxRetries + " ms");
+                                return _this.sleep(2000 * maxRetries).then(function () {
+                                    return _this.execute(request, swallowError, maxRetries - 1);
+                                });
+                            }
                             throw new Error("API limit is reached.");
                             return;
                         }
@@ -112,6 +119,9 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
                     return lodash_1.default.sortBy(datapoints, [function (o) {
                             return o[1];
                         }]);
+                };
+                AbstractDatasource.prototype.sleep = function (ms) {
+                    return new Promise(function (resolve) { return setTimeout(resolve, ms); });
                 };
                 return AbstractDatasource;
             })();

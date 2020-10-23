@@ -101,6 +101,13 @@ export default class AbstractDatasource {
       .datasourceRequest(request)
       .catch(error => {
         if (error.status === 429) {
+          // if the error was caused by a concurrent execution limit, we will retry
+          if (error.statusText && error.statusText.includes === "concurrent" && maxRetries > 0) {
+            console.log("reload in " + 2000 * maxRetries + " ms");
+            return this.sleep(2000 * maxRetries).then(() => {
+              return this.execute(request, swallowError, maxRetries - 1);
+            });
+          }
           throw new Error("API limit is reached.");
           return;
         }
@@ -120,5 +127,9 @@ export default class AbstractDatasource {
     return _.sortBy(datapoints, [function (o) {
       return o[1];
     }]);
+  }
+
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
