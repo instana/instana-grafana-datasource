@@ -93,7 +93,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         }
 
         this.setPossibleTimeIntervals(target);
-        if (!this.availableTimeIntervals.find(i => i.key === target.timeInterval.key)) {
+        if (!this.availableTimeIntervals.find((i) => i.key === target.timeInterval.key)) {
           target.timeInterval = this.getDefaultTimeInterval(target);
         }
 
@@ -194,7 +194,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         timeFilter: target.timeFilter,
         results: result,
       };
-      this.resultCache.put(target.stableHash, cachedObj, 4000000); // set to at least one hour to increase performance
+      this.resultCache.put(target.stableHash, cachedObj, 4000000); // set to 1,11 hour
     }
   }
 
@@ -206,7 +206,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     let version = this.resultCache.get('version');
     if (!version) {
       return getVersion(this.options).then((version: any) => {
-        this.resultCache.put('version', version, 3600000); // one hour
+        this.resultCache.put('version', version, 4000000); // set to 1,11 hour
         return version >= 171;
       });
     }

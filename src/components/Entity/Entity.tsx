@@ -30,7 +30,7 @@ const dropdown__list__active = {
 
 const iconTextContainer = {
   display: 'inline-flex',
-}
+};
 
 const iconStyle = {
   display: 'flex',
@@ -40,7 +40,7 @@ const iconStyle = {
 
 const iconTextStyle = {
   padding: '7px',
-}
+};
 
 const iconSize = 30;
 
