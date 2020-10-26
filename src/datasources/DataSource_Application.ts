@@ -201,7 +201,9 @@ export class DataSourceApplication {
       return postRequest(
         this.instanaOptions,
         '/api/application-monitoring/analyze/call-groups?fillTimeSeries=true',
-        data, false, 5
+        data,
+        false,
+        5
       );
     });
   }

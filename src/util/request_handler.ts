@@ -3,12 +3,7 @@ import { BackendSrvRequest } from '@grafana/runtime/services/backendSrv';
 import { InstanaOptions } from '../types/instana_options';
 import { DataSourceInstanceSettings } from '@grafana/data';
 
-export function getRequest(
-  options: InstanaOptions,
-  endpoint: string,
-  swallowError = false,
-  maxRetries = 1
-): any {
+export function getRequest(options: InstanaOptions, endpoint: string, swallowError = false, maxRetries = 1): any {
   const request = {
     method: 'GET',
     url: options.url + endpoint,
@@ -49,9 +44,14 @@ function doRequest(
     .catch((error) => {
       if (error.status === 429) {
         // if the error was caused by a concurrent execution limit, we will retry
-        if (maxRetries > 0 && error.data?.errors && error.data.errors[0] && error.data.errors[0].includes("concurrent")) {
+        if (
+          maxRetries > 0 &&
+          error.data?.errors &&
+          error.data.errors[0] &&
+          error.data.errors[0].includes('concurrent')
+        ) {
           const backoff = maxRetries >= 4 ? 10000 : (4 - maxRetries) * 20000; // something between 10 and 60 seconds
-          return new Promise(resolve => setTimeout(resolve, backoff)).then(() => {
+          return new Promise((resolve) => setTimeout(resolve, backoff)).then(() => {
             return doRequest(options, request, swallowError, maxRetries - 1);
           });
         }
