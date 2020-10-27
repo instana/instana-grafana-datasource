@@ -63,7 +63,7 @@ function doRequest(
         console.log(error);
         return;
       }
-      if (maxRetries > 0) {
+      if (maxRetries > 0 && error.status >= 500) {
         return doRequest(options, request, swallowError, maxRetries - 1);
       }
       throw error;
