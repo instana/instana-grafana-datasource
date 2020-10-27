@@ -116,7 +116,7 @@ export default class AbstractDatasource {
           console.log(error);
           return;
         }
-        if (maxRetries > 0) {
+        if (maxRetries > 0 && error.status >= 500) {
           return this.execute(request, swallowError, maxRetries - 1);
         }
         throw error;

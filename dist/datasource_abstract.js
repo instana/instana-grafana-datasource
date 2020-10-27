@@ -109,7 +109,7 @@ System.register(['./proxy_check', './cache', 'lodash'], function(exports_1) {
                             console.log(error);
                             return;
                         }
-                        if (maxRetries > 0) {
+                        if (maxRetries > 0 && error.status >= 500) {
                             return _this.execute(request, swallowError, maxRetries - 1);
                         }
                         throw error;
