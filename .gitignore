@@ -9,4 +9,3 @@ npm-debug.log
 results.txt
 .prettierrc.js
 jest.config.js
-setEnvVars.js
