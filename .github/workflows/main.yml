@@ -20,6 +20,9 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Docker compose
+        run: yarn up -d
+
       - name: Build plugin
         run: yarn build
 
