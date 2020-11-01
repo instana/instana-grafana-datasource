@@ -4,11 +4,14 @@ import {
   ANALYZE_APPLICATION_METRICS,
   ANALYZE_WEBSITE_METRICS,
   APPLICATION_SERVICE_ENDPOINT_METRICS,
+  ANALYZE_APPLICATION_QUERY_BUILDER_METRICS,
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   SLO_INFORMATION,
+  INFRASTRUCTURE_EXPLORE,
 } from '../GlobalVariables';
 import { ApplicationServiceEndpointMetrics } from './ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics';
+import { ApplicationCallsQueryBuilderMetrics } from './Analyze/ApplicationCallsQueryBuilderMetrics';
 import { ApplicationCallsMetrics } from './Analyze/ApplicationCallsMetrics';
 import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
 import AdvancedSettings from './AdvancedSettings/AdvancedSettings';
@@ -21,6 +24,7 @@ import MetricCategories from '../lists/metric_categories';
 import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import { DataSource } from '../datasources/DataSource';
 import { InstanaQuery } from '../types/instana_query';
+import { Explore } from './Infrastructure/Explore';
 import FormSelect from './FormField/FormSelect';
 import { readTime } from '../util/time_util';
 import { Filters } from './Analyze/Filter';
@@ -325,6 +329,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     query.displayMaxMetricValue = false;
     query.applicationCallToEntity = '';
     query.callToEntity = '';
+    query.tagFilterExpression = '';
     this.resetServices();
     this.resetEndpoints();
     this.resetSLO();
@@ -399,8 +404,32 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
+        {query.metricCategory.key === INFRASTRUCTURE_EXPLORE && (
+          <Explore
+            query={query}
+            queryTypes={this.state.queryTypes}
+            datasource={this.props.datasource}
+            onRunQuery={this.props.onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
+            updateQueryTypes={this.updateQueryTypes}
+          />
+        )}
+
         {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
           <ApplicationCallsMetrics
+            query={query}
+            onRunQuery={this.props.onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
+            groups={this.state.groups}
+            updateGroups={this.updateGroups}
+            datasource={this.props.datasource}
+          />
+        )}
+
+        {query.metricCategory.key === ANALYZE_APPLICATION_QUERY_BUILDER_METRICS && (
+          <ApplicationCallsQueryBuilderMetrics
             query={query}
             onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}

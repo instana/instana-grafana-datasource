@@ -39,4 +39,5 @@ export interface InstanaQuery extends DataQuery {
   applicationCallToEntity: string;
   applicationBoundaryScope: string;
   showAdvancedSettings: boolean;
+  tagFilterExpression: string;
 }

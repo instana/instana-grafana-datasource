@@ -11,6 +11,10 @@ export default [
     key: 1,
   },
   {
+    label: 'Infrastructure explore',
+    key: 9,
+  },
+  {
     // replaces Application metrics(4) & Service metrics(5) & Endpoint metrics(6)
     label: 'Application/service/endpoint metrics',
     key: 4,
@@ -18,6 +22,10 @@ export default [
   {
     label: 'Analyze application calls',
     key: 2,
+  },
+  {
+    label: 'Analyze application calls (QueryBuilder)',
+    key: 8,
   },
   {
     label: 'Analyze website',

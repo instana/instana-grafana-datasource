@@ -81,6 +81,7 @@ export function buildTestTarget(): InstanaQuery {
     refId: 'A',
     applicationBoundaryScope: '',
     showAdvancedSettings: false,
+    tagFilterExpression: '',
   };
 }
 

@@ -30,6 +30,8 @@ import {
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   SLO_INFORMATION,
+  ANALYZE_APPLICATION_QUERY_BUILDER_METRICS,
+  INFRASTRUCTURE_EXPLORE,
 } from '../GlobalVariables';
 import getVersion from '../util/instana_version';
 import { aggregateTarget } from '../util/aggregation_util';
@@ -110,24 +112,25 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         target.timeFilter = targetTimeFilter;
         target.stableHash = generateStableHash(target);
         targetTimeFilter = this.adjustTimeFilterIfCached(targetTimeFilter, target);
+        const category = target.metricCategory.key;
 
-        if (target.metricCategory.key === SLO_INFORMATION) {
+        if (category === SLO_INFORMATION) {
           return this.dataSourceSlo.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (target.metricCategory.key === BUILT_IN_METRICS || target.metricCategory.key === CUSTOM_METRICS) {
+        } else if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_EXPLORE) {
           return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (target.metricCategory.key === ANALYZE_WEBSITE_METRICS) {
+        } else if (category === ANALYZE_WEBSITE_METRICS) {
           return this.dataSourceWebsite.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (target.metricCategory.key === ANALYZE_APPLICATION_METRICS) {
+        } else if (category === ANALYZE_APPLICATION_METRICS || category === ANALYZE_APPLICATION_QUERY_BUILDER_METRICS) {
           return this.dataSourceApplication.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (target.metricCategory.key === APPLICATION_SERVICE_ENDPOINT_METRICS) {
+        } else if (category === APPLICATION_SERVICE_ENDPOINT_METRICS) {
           return this.getApplicationServiceEndpointMetrics(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
@@ -309,12 +312,21 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     return this.dataSourceInfrastructure.fetchTypesForTarget(query, this.getTimeFilter());
   }
 
+  fetchExploreTypes() {
+    return this.dataSourceInfrastructure.fetchExploreTypes(this.getTimeFilter());
+  }
+
+  fetchExploreMetrics(type: SelectableValue) {
+    return this.dataSourceInfrastructure.fetchExploreMetrics(type, this.getTimeFilter());
+  }
+
   fetchWebsites(): Promise<SelectableValue[]> {
     return this.dataSourceWebsite.getWebsites(this.getTimeFilter());
   }
 
   getDefaultTimeInterval(query: InstanaQuery) {
-    if (query.metricCategory.key === BUILT_IN_METRICS || query.metricCategory.key === CUSTOM_METRICS) {
+    const category = query.metricCategory.key;
+    if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_EXPLORE) {
       return getDefaultMetricRollupDuration(this.getTimeFilter());
     } else {
       return getDefaultChartGranularity(this.getTimeFilter().windowSize);
@@ -364,7 +376,8 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   setPossibleTimeIntervals(target: InstanaQuery) {
-    if (target.metricCategory.key === 0 || target.metricCategory.key === 1) {
+    const category = target.metricCategory.key;
+    if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_EXPLORE) {
       this.availableTimeIntervals = this.availableRollups;
     } else {
       this.availableTimeIntervals = this.availableGranularities;

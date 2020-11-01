@@ -40,9 +40,7 @@ export class DataSourceApplication {
       !target.metric ||
       !target.metric.key ||
       !target.group ||
-      !target.group.key ||
-      !target.entity ||
-      (!target.entity.key && !target.entity.label)
+      !target.group.key
     ) {
       return Promise.resolve(emptyResultData(target.refId));
     }
@@ -145,28 +143,31 @@ export class DataSourceApplication {
 
   fetchAnalyzeMetricsForApplication(target: InstanaQuery, timeFilter: TimeFilter) {
     const windowSize = getWindowSize(timeFilter);
-    const tagFilters: any[] = [];
+    const useTagFilterExpression = target.tagFilterExpression && target.tagFilterExpression !== '';
+    let tagFilters: any[] = [];
 
     return Promise.resolve(this.getApplicationTags()).then((applicationTags) => {
-      if (target.entity.key) {
-        tagFilters.push({
-          name: 'application.name',
-          operator: 'EQUALS',
-          value: target.entity.label!,
-          entity: target.applicationCallToEntity ? target.applicationCallToEntity : 'DESTINATION',
+      if (!useTagFilterExpression) {
+        if (target.entity.key) {
+          tagFilters.push({
+            name: 'application.name',
+            operator: 'EQUALS',
+            value: target.entity.label!,
+            entity: target.applicationCallToEntity ? target.applicationCallToEntity : 'DESTINATION',
+          });
+        }
+
+        _.forEach(target.filters, (filter) => {
+          if (filter.isValid) {
+            let tagFilter: any = createTagFilter(filter);
+            const tag = _.find(applicationTags, ['key', filter.tag.key]);
+            if (tag.canApplyToDestination || tag.canApplyToSource) {
+              tagFilter['entity'] = this.getTagEntity(filter.entity, tag);
+            }
+            tagFilters.push(tagFilter);
+          }
         });
       }
-
-      _.forEach(target.filters, (filter) => {
-        if (filter.isValid) {
-          let tagFilter: any = createTagFilter(filter);
-          const tag = _.find(applicationTags, ['key', filter.tag.key]);
-          if (tag.canApplyToDestination || tag.canApplyToSource) {
-            tagFilter['entity'] = this.getTagEntity(filter.entity, tag);
-          }
-          tagFilters.push(tagFilter);
-        }
-      });
 
       const metric: any = {
         metric: target.metric.key,
@@ -195,9 +196,14 @@ export class DataSourceApplication {
           to: timeFilter.to,
           windowSize: windowSize,
         },
-        tagFilters: tagFilters,
         metrics: [metric],
+        tagFilters: tagFilters,
       };
+
+      if (useTagFilterExpression) {
+        data['tagFilterExpressionElement'] = JSON.parse(target.tagFilterExpression);
+      }
+
       return postRequest(
         this.instanaOptions,
         '/api/application-monitoring/analyze/call-groups?fillTimeSeries=true',
