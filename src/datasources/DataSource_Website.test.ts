@@ -7,7 +7,6 @@ import _ from 'lodash';
 
 const options = buildInstanaOptions();
 const axios = require('axios');
-
 beforeAll(() => {
   axios.defaults.adapter = require('axios/lib/adapters/http');
 });

@@ -1,16 +1,19 @@
 import { buildInstanaOptions, buildTestTarget, buildTimeFilter } from '../util/test_util';
 import { DataSourceInfrastructure } from './Datasource_Infrastructure';
-import * as RequestHandler from '../util/request_handler';
-import _ from 'lodash';
-import { SelectableValue } from '@grafana/data';
 import { BUILT_IN_METRICS, CUSTOM_METRICS } from '../GlobalVariables';
-import TimeFilter from '../types/time_filter';
-import { InstanaQuery } from '../types/instana_query';
+import * as RequestHandler from '../util/request_handler';
 import { InstanaOptions } from '../types/instana_options';
+import { InstanaQuery } from '../types/instana_query';
+import { SelectableValue } from '@grafana/data';
+import TimeFilter from '../types/time_filter';
 import Cache from '../cache';
+import _ from 'lodash';
 
 const options = buildInstanaOptions();
 const axios = require('axios');
+beforeAll(() => {
+  axios.defaults.adapter = require('axios/lib/adapters/http');
+});
 
 describe('Given an infrastructure datasource', () => {
   const dataSourceInfrastructure: DataSourceInfrastructure = new DataSourceInfrastructure(options);
@@ -29,7 +32,7 @@ describe('Given an infrastructure datasource', () => {
     });
 
     it('should ignore white spaces and return result as a string array', () => {
-      freeText = 'metric16,      metric09,        metric1997';
+      freeText = 'metric16,      metric09,        metric1997      ';
       const result = dataSourceInfrastructure.extractMetricsFromText(freeText);
       expect(result.length).toEqual(3);
       expect(result[0]).toEqual({ key: 'metric16' });
@@ -38,7 +41,7 @@ describe('Given an infrastructure datasource', () => {
     });
 
     it('should return a maximum of four metrics', () => {
-      freeText = 'metric01,metric02,  metric03,      metric04,metric05,metric06';
+      freeText = 'metric01,metric02,metric03,metric04,metric05,metric06';
       const result = dataSourceInfrastructure.extractMetricsFromText(freeText);
       expect(result.length).toEqual(4);
       expect(result[0]).toEqual({ key: 'metric01' });
@@ -143,7 +146,7 @@ describe('Given an infrastructure datasource', () => {
         });
     });
 
-    it('should return cache a catalog', () => {
+    it('should cache the catalog', () => {
       let metricCategory: number = CUSTOM_METRICS;
       return axios
         .get(options.url + '/api/infrastructure-monitoring/catalog/metrics/jvmRuntimePlatform?filter=custom', {

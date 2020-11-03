@@ -20,11 +20,14 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Docker compose
+      - name: Docker compose up
         run: yarn up -d
 
       - name: Build plugin
         run: yarn build
+
+      - name: Docker compose down
+        run: yarn down
 
       - name: Sign plugin
         run: npx @grafana/toolkit plugin:sign

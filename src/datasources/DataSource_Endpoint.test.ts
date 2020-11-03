@@ -1,13 +1,15 @@
 import { buildInstanaOptions, buildTestTarget, buildTimeFilter } from '../util/test_util';
+import { DataSourceEndpoint } from './DataSource_Endpoint';
 import TimeFilter from '../types/time_filter';
 import _ from 'lodash';
-import { DataSourceEndpoint } from './DataSource_Endpoint';
 
 const options = buildInstanaOptions();
 const axios = require('axios');
-
 const dataSourceEndpoint: DataSourceEndpoint = new DataSourceEndpoint(options);
 const timeFilter: TimeFilter = buildTimeFilter();
+beforeAll(() => {
+  axios.defaults.adapter = require('axios/lib/adapters/http');
+});
 
 describe('Given an endpoint datasource', () => {
   it('should return endpoints', () => {

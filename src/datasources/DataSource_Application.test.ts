@@ -1,13 +1,16 @@
 import { buildInstanaOptions, buildTimeFilter } from '../util/test_util';
-import TimeFilter from '../types/time_filter';
 import { DataSourceApplication } from './DataSource_Application';
 import * as RequestHandler from '../util/request_handler';
-import _ from 'lodash';
-import Cache from '../cache';
 import { SelectableValue } from '@grafana/data';
+import TimeFilter from '../types/time_filter';
+import Cache from '../cache';
+import _ from 'lodash';
 
 const options = buildInstanaOptions();
 const axios = require('axios');
+beforeAll(() => {
+  axios.defaults.adapter = require('axios/lib/adapters/http');
+});
 
 describe('Given an application datasource', () => {
   const dataSourceApplication: DataSourceApplication = new DataSourceApplication(options);
