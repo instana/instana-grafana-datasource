@@ -13,6 +13,7 @@ describe('Given a delta', () => {
     };
 
     it('should find after overlap', () => {
+      // pre= from: 10300000,to: 10600000
       let newTimeFilter: TimeFilter = {
         from: 10500000,
         to: 10700000,
@@ -23,7 +24,80 @@ describe('Given a delta', () => {
       expect(result).toEqual(true);
     });
 
+    it('should find same', () => {
+      // pre= from: 10300000,to: 10600000
+      let newTimeFilter: TimeFilter = {
+        from: 10300000,
+        to: 10600000,
+        windowSize: 300000,
+      };
+
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
+      expect(result).toEqual(true);
+    });
+
+    it('should find after overlap same to', () => {
+      // pre= from: 10300000,to: 10600000
+      let newTimeFilter: TimeFilter = {
+        from: 10500000,
+        to: 10600000,
+        windowSize: 100000,
+      };
+
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
+      expect(result).toEqual(true);
+    });
+
+    it('should not find after outerlap from=to', () => {
+      // pre= from: 10300000,to: 10600000
+      let newTimeFilter: TimeFilter = {
+        from: 10600000,
+        to: 10800000,
+        windowSize: 200000,
+      };
+
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
+      expect(result).toEqual(false);
+    });
+
+    it('should not find innerlap', () => {
+      // pre= from: 10300000,to: 10600000
+      let newTimeFilter: TimeFilter = {
+        from: 10400000,
+        to: 10500000,
+        windowSize: 100000,
+      };
+
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
+      expect(result).toEqual(false);
+    });
+
+    it('should not find innerlap same from', () => {
+      // pre= from: 10300000,to: 10600000
+      let newTimeFilter: TimeFilter = {
+        from: 10300000,
+        to: 10500000,
+        windowSize: 300000,
+      };
+
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
+      expect(result).toEqual(false);
+    });
+
+    it('should not find before and after overlap', () => {
+      // pre= from: 10300000,to: 10600000
+      let newTimeFilter: TimeFilter = {
+        from: 10200000,
+        to: 10800000,
+        windowSize: 600000,
+      };
+
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
+      expect(result).toEqual(false);
+    });
+
     it('should not find before overlap', () => {
+      // pre= from: 10300000,to: 10600000
       let newTimeFilter: TimeFilter = {
         from: 10200000,
         to: 10400000,
@@ -34,18 +108,32 @@ describe('Given a delta', () => {
       expect(result).toEqual(false);
     });
 
-    it('should not find innerlap', () => {
+    it('should not find before overlap to=from', () => {
+      // pre= from: 10300000,to: 10600000
       let newTimeFilter: TimeFilter = {
-        from: 10400000,
-        to: 10500000,
+        from: 10200000,
+        to: 10300000,
         windowSize: 100000,
       };
 
       let result = hasIntersection(newTimeFilter, preTimeFilter);
-      expect(result).toEqual(true);
+      expect(result).toEqual(false);
+    });
+
+    it('should not find before outerlap', () => {
+      // pre= from: 10300000,to: 10600000
+      let newTimeFilter: TimeFilter = {
+        from: 10100000,
+        to: 10200000,
+        windowSize: 100000,
+      };
+
+      let result = hasIntersection(newTimeFilter, preTimeFilter);
+      expect(result).toEqual(false);
     });
 
     it('should not find after outerlap', () => {
+      // pre= from: 10300000,to: 10600000
       let newTimeFilter: TimeFilter = {
         from: 10700000,
         to: 10800000,
@@ -56,16 +144,6 @@ describe('Given a delta', () => {
       expect(result).toEqual(false);
     });
 
-    it('should not find before outerlap', () => {
-      let newTimeFilter: TimeFilter = {
-        from: 10100000,
-        to: 10200000,
-        windowSize: 100000,
-      };
-
-      let result = hasIntersection(newTimeFilter, preTimeFilter);
-      expect(result).toEqual(false);
-    });
   });
 
   describe('with a target', () => {
