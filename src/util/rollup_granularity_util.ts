@@ -1,7 +1,8 @@
 import granularities from '../lists/granularities';
 import TimeFilter from '../types/time_filter';
-import rollups from '../lists/rollups';
 import Selectable from '../types/selectable';
+import { getWindowSize } from './time_util';
+import rollups from '../lists/rollups';
 
 const MAX_DATAPOINTS_ANALYZE = 600;
 const MAX_DATAPOINTS_INFRASTRUCTURE = 800;
@@ -9,10 +10,6 @@ const UI_DATAPOINTS_ANALYZE = 80;
 
 function currentTime() {
   return Date.now();
-}
-
-function getWindowSize(timeFilter: TimeFilter): number {
-  return timeFilter.from ? timeFilter.to - timeFilter.from : timeFilter.windowSize;
 }
 
 export function getDefaultChartGranularity(windowSize: number): Selectable {
