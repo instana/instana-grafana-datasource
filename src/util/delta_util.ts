@@ -67,7 +67,7 @@ k)
   from |----------| to (t1)
 */
 export function hasIntersection(t1: TimeFilter, t2: TimeFilter): boolean {
-  return t1.from < t2.to && (t1.from >= t2.from && t1.to >= t2.to);
+  return t1.from < t2.to && t1.from >= t2.from && t1.to >= t2.to;
 }
 
 /*

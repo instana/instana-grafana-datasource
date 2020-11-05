@@ -143,7 +143,6 @@ describe('Given a delta', () => {
       let result = hasIntersection(newTimeFilter, preTimeFilter);
       expect(result).toEqual(false);
     });
-
   });
 
   describe('with a target', () => {
