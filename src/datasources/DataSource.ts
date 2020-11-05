@@ -86,6 +86,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
           return { data: [], target: target };
         }
 
+        // target migration for downwards compatibility
         migrate(target);
 
         if (!target.metricCategory) {
@@ -97,12 +98,9 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
           target.timeInterval = this.getDefaultTimeInterval(target);
         }
 
-        // target migration for downwards compatibility
-        migrate(target);
-
         if (target.timeShift) {
           let millis = this.convertTimeShiftToMillis(target.timeShift);
-          if (millis) {
+          if (millis > 0) {
             targetTimeFilter = this.applyTimeShiftOnTimeFilter(targetTimeFilter, millis);
           }
         }
@@ -140,9 +138,9 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       _.each(targetData, (targetAndData) => {
         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
         let resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
-        this.applyTimeShiftIfNecessary(resultData, targetAndData.target);
+        this.cacheResultIfNecessary(_.cloneDeep(resultData), targetAndData.target); // clone to store results without timeshift re-calculation
+        this.applyTimeShiftIfNecessary(resultData, targetAndData.target); // adjust resultdata after caching the result
         resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
-        this.cacheResultIfNecessary(resultData, targetAndData.target);
         result.push(resultData);
       });
 
@@ -181,11 +179,14 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   applyTimeShiftIfNecessary(data: any, target: InstanaQuery) {
-    data.forEach((data: any) => {
-      if (target.timeShift) {
-        this.applyTimeShiftOnData(data, this.convertTimeShiftToMillis(target.timeShift));
+    if (target.timeShift) {
+      let millis = this.convertTimeShiftToMillis(target.timeShift);
+      if (millis > 0) {
+        data.forEach((data: any) => {
+          this.applyTimeShiftOnData(data, millis);
+        });
       }
-    });
+    }
   }
 
   cacheResultIfNecessary(result: any, target: InstanaQuery) {
@@ -218,7 +219,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     return result && result.length > 0;
   }
 
-  applyTimeShiftOnData(data: any, timeshift: any) {
+  applyTimeShiftOnData(data: any, timeshift: number) {
     data.datapoints.forEach((datapoint: any) => {
       datapoint[1] = datapoint[1] + timeshift;
     });
@@ -277,11 +278,12 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   getDeltaRequestTimestamp(series: any, fromDefault: number): number {
+    // the found series can have multiple results, it's ok just to use the first one
     const length = series[0].datapoints.length;
-    if (length === 0) {
+    if (length < 2) {
       return fromDefault;
     }
-    const penultimate = length > 1 ? length - 2 : 1;
+    const penultimate = length - 2;
     return series[0].datapoints[penultimate][1];
   }
 
@@ -321,19 +323,19 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     }
   }
 
-  convertTimeShiftToMillis(timeShift: string) {
+  convertTimeShiftToMillis(timeShift: string): number {
     if (!timeShift) {
-      return null;
+      return 0;
     }
 
     try {
       return this.parseTimeShift(timeShift);
     } catch (e) {
-      return null;
+      return 0;
     }
   }
 
-  parseTimeShift(timeShift: string) {
+  parseTimeShift(timeShift: string): number {
     let milliSeconds = 1000;
 
     if (timeShift.endsWith('s')) {
@@ -347,20 +349,15 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     } else if (timeShift.endsWith('w')) {
       return parseInt(timeShift.split('w')[0], 10) * 60 * 60 * 24 * 7 * milliSeconds;
     }
-
-    return null;
+    return 0;
   }
 
   applyTimeShiftOnTimeFilter(timeFilter: TimeFilter, timeShift: number): TimeFilter {
-    if (timeShift) {
-      return {
-        from: timeFilter.from - timeShift,
-        to: timeFilter.to - timeShift,
-        windowSize: timeFilter.windowSize,
-      };
-    } else {
-      return timeFilter;
-    }
+    return {
+      from: timeFilter.from - timeShift,
+      to: timeFilter.to - timeShift,
+      windowSize: timeFilter.windowSize,
+    };
   }
 
   setPossibleTimeIntervals(target: InstanaQuery) {

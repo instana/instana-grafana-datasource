@@ -27,19 +27,47 @@ export function generateStableHash(obj: any): string {
   return JSON.stringify(pseudoHash);
 }
 
-/*
-  Check if two time filters are overlapping.
-  Return true when:
+/* Check if two time filters are overlapping.
+
+Return true when:
+a)
   from |-------------------| to (t2)
               from |--------------------| to (t1)
-  Returns false when:
+b)
+  from |-------------------| to (t2)
+  from |-------------------| to (t1)
+c)
+  from |-------------------| to (t2)
+              from |-------| to (t1)
+
+Returns false when:
+d)
+  from |-------------------| to (t2)
+                      from |-------| to (t1)
+e)
+  from |-------------------| to (t2)
+       from |--------| to (t1)
+f)
      from |-------------------| to (t2)
 from |----------------------------------------| to (t1)
+g)
+                from |-------------------| to (t2)
+  from |--------------------| to (t1)
+h)
+                from |-------------------| to (t2)
+  from |-------------| to (t1)
+i)
+                from |-------------------| to (t2)
+  from |--------| to (t1)
+j)
   from |-------------------| to (t2)
-                        from |-------------------| to (t1)
+                        from |----------| to (t1)
+k)
+  from |-------------------| to (t2)
+  from |----------| to (t1)
 */
 export function hasIntersection(t1: TimeFilter, t2: TimeFilter): boolean {
-  return t1.from < t2.to && t1.from >= t2.from; // t1.windowSize === t2.windowSize
+  return t1.from < t2.to && t1.from >= t2.from && t1.to >= t2.to;
 }
 
 /*
