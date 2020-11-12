@@ -198,31 +198,29 @@ export class DataSourceInfrastructure {
     }
 
     const payload = {
-      filter: {
-        timeConfig: {
-          to: timeFilter.to,
-          windowSize: timeFilter.windowSize
-        },
-        tagFilterExpression: {
-          type: "EXPRESSION",
-          logicalOperator: "OR",
-          elements: []
-        }
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: timeFilter.windowSize
+      },
+      tagFilterExpression: {
+        type: "EXPRESSION",
+        logicalOperator: "OR",
+        elements: []
       }
     }
 
     const url = "/api/infrastructure-monitoring/explore/plugins";
-    return postRequest(this.instanaOptions, url, payload).then((res: any) => {
-      const result = res.data.data.plugins.map((plugin: string) => {
+    const plugins = postRequest(this.instanaOptions, url, payload).then((res: any) => {
+      return res.data.data.plugins.map((plugin: string) => {
         return {
           key: plugin,
           label: plugin
         }
       });
-
-      this.typeCache.put('explorePlugins', result);
-      return result;
     });
+
+    this.typeCache.put('explorePlugins', plugins);
+    return plugins;
   }
 
   fetchExploreMetrics(selectedPlugin: SelectableValue, timeFilter: TimeFilter): Promise<SelectableValue[]> {

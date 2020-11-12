@@ -38,16 +38,18 @@ export class Explore extends React.Component<Props, State> {
     isUnmounting = false;
 
     datasource.fetchExploreTypes().then(result => {
-      result.unshift({key: null, label: "Please select (" + result.length + ")"})
+      if (!isUnmounting) {
+        result.unshift({ key: null, label: "Please select (" + result.length + ")" })
 
-      if (!query.entityType || query.entityType?.key === null) {
-        query.entityType = result[0];
-        onChange(query);
+        if (!query.entityType || query.entityType?.key === null) {
+          query.entityType = result[0];
+          onChange(query);
+        }
+
+        this.setState({
+          queryTypes: result
+        });
       }
-
-      this.setState({
-        queryTypes: result
-      })
     });
 
     if (query.entityType?.key) {
