@@ -54,43 +54,16 @@ export class DataSourceWebsite {
 
   getWebsites(timeFilter: TimeFilter) {
     const key = getTimeKey(timeFilter);
-
     let websites = this.websitesCache.get(key);
     if (websites) {
       return websites;
     }
 
-    const windowSize = getWindowSize(timeFilter);
-    const data: BeaconGroupBody = {
-      group: {
-        groupbyTag: 'beacon.website.name',
-      },
-      timeFrame: {
-        to: timeFilter.to,
-        windowSize: windowSize,
-      },
-      type: 'PAGELOAD',
-      metrics: [
-        {
-          metric: 'pageLoads',
-          aggregation: 'SUM',
-        },
-      ],
-      order: {
-        by: 'pageLoads',
-        direction: 'desc',
-      },
-      pagination: {
-        ingestionTime: 0,
-        offset: 0,
-        retrievalSize: 200,
-      },
-    };
-    websites = postRequest(this.instanaOptions, '/api/website-monitoring/analyze/beacon-groups', data).then(
+    websites = getRequest(this.instanaOptions, '/api/website-monitoring/config').then(
       (websitesResponse: any) =>
-        websitesResponse.data.items.map((entry: any) => ({
-          key: entry.name,
-          label: entry.name,
+        websitesResponse.data.map((website: any) => ({
+          key: website.name, // use name as key because a website name can only be configured once
+          label: website.name,
         }))
     );
     this.websitesCache.put(key, websites, 600000);

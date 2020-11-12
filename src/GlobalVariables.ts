@@ -16,6 +16,7 @@ export const SLO_INFORMATION = 7;
 
 /* DROPDOWN DEFAULTS */
 export const ALL_APPLICATIONS = '-- No Application Filter --';
+export const ALL_WEBSITES = '-- No Website Filter --';
 export const ALL_SERVICES = '-- No Service Filter --';
 export const ALL_ENDPOINTS = '-- No Endpoint Filter --';
 
