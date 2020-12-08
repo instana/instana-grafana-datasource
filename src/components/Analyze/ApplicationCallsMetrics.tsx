@@ -69,7 +69,7 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
       }
     });
 
-    datasource.dataSourceApplication.getApplicationTags().then((applicationTags: any) => {
+    datasource.fetchApplicationTags().then((applicationTags: any) => {
       if (!isUnmounting) {
         this.props.updateGroups(_.sortBy(applicationTags, 'key'));
 

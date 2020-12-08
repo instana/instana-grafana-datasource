@@ -33,10 +33,10 @@ describe('Given an application datasource', () => {
       return axios
         .get(
           options.url +
-            '/api/application-monitoring/applications?windowSize' +
-            timeFilter.windowSize +
-            '&to=' +
-            timeFilter.to,
+          '/api/application-monitoring/applications?windowSize' +
+          timeFilter.windowSize +
+          '&to=' +
+          timeFilter.to,
           {
             headers: {
               Authorization: 'apiToken ' + options.apiToken,
@@ -58,7 +58,32 @@ describe('Given an application datasource', () => {
         })
         .then((tags: any) => {
           getRequestSpy.mockResolvedValue(tags);
-          getApplicationTagsAndVerifyFormat(dataSourceApplication);
+          getApplicationTagsAndVerifyFormat(dataSourceApplication, timeFilter);
+        });
+    });
+  });
+
+  describe('and fetch application tag catalog', () => {
+    let catalogSpy = jest.spyOn(dataSourceApplication, 'getCatalog');
+    // let deprecatedCatalogSpy = jest.spyOn(dataSourceApplication, 'getCatalogFromDeprecatedEndpoint');
+    getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
+
+    it('should retrieve new catalog when Instana version is at least 191', () => {
+      const versionMock = jest.fn();
+      versionMock.mockReturnValueOnce(191);
+      jest.mock('../util/instana_version', () => { return 191 });
+
+      return axios
+        .get(options.url + '/api/application-monitoring/catalog', {
+          headers: {
+            Authorization: 'apiToken ' + options.apiToken,
+          },
+        })
+        .then((tags: any) => {
+          getRequestSpy.mockResolvedValue(tags);
+          dataSourceApplication.getCatalog(timeFilter);
+          getApplicationTagsAndVerifyFormat(dataSourceApplication, timeFilter);
+          expect(catalogSpy).toHaveBeenCalledTimes(1);
         });
     });
   });
@@ -71,10 +96,10 @@ describe('Given an application datasource', () => {
       return axios
         .get(
           options.url +
-            '/api/application-monitoring/applications?windowSize' +
-            timeFilter.windowSize +
-            '&to=' +
-            timeFilter.to,
+          '/api/application-monitoring/applications?windowSize' +
+          timeFilter.windowSize +
+          '&to=' +
+          timeFilter.to,
           {
             headers: {
               Authorization: 'apiToken ' + options.apiToken,
@@ -98,9 +123,9 @@ describe('Given an application datasource', () => {
         })
         .then((tags: any) => {
           getRequestSpy.mockResolvedValue(tags);
-          getApplicationTagsAndVerifyFormat(dataSourceApplication);
-          getApplicationTagsAndVerifyFormat(dataSourceApplication);
-          return expect(getRequestSpy).toHaveBeenCalledTimes(1);
+          getApplicationTagsAndVerifyFormat(dataSourceApplication, timeFilter);
+          getApplicationTagsAndVerifyFormat(dataSourceApplication, timeFilter);
+          return expect(getRequestSpy).toHaveBeenCalledTimes(2); // once for the version and once for the catalog
         });
     });
   });
@@ -114,8 +139,8 @@ describe('Given an application datasource', () => {
     });
   }
 
-  function getApplicationTagsAndVerifyFormat(dataSourceApplication: DataSourceApplication) {
-    return dataSourceApplication.getApplicationTags().then((appTags: any) => {
+  function getApplicationTagsAndVerifyFormat(dataSourceApplication: DataSourceApplication, timeFilter: TimeFilter) {
+    return dataSourceApplication.getApplicationTags(timeFilter).then((appTags: any) => {
       _.map(appTags, (tag) => {
         expect(tag).toHaveProperty('key');
         expect(tag).toHaveProperty('label');

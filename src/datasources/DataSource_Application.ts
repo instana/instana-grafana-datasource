@@ -12,6 +12,7 @@ import { emptyResultData } from '../util/target_util';
 import { ALL_APPLICATIONS, PAGINATION_LIMIT } from '../GlobalVariables';
 import defaultApplicationMetricCatalog from '../lists/default_metric_catalog';
 import { isInvalidQueryInterval } from '../util/queryInterval_check';
+import getVersion from '../util/instana_version';
 
 export class DataSourceApplication {
   instanaOptions: InstanaOptions;
@@ -118,25 +119,47 @@ export class DataSourceApplication {
     );
   }
 
-  getApplicationTags() {
+  getApplicationTags(timeFilter: TimeFilter) {
     let applicationTags = this.miscCache.get('applicationTags');
     if (applicationTags) {
       return applicationTags;
     }
 
-    applicationTags = getRequest(this.instanaOptions, '/api/application-monitoring/catalog/tags').then(
-      (tagsResponse: any) =>
-        tagsResponse.data.map((entry: any) => ({
-          key: entry.name,
-          label: entry.name,
-          type: entry.type,
-          canApplyToSource: entry.canApplyToSource,
-          canApplyToDestination: entry.canApplyToDestination,
-        }))
-    );
-    this.miscCache.put('applicationTags', applicationTags);
+    return getVersion(this.instanaOptions).then((version: number) => {
+      if (version >= 191) {
+        applicationTags = this.getCatalog(timeFilter).then(
+          (catalog: any) =>
+            this.mapCatalogResponse(catalog.data.tags)
+        );
+      } else {
+        applicationTags = this.getCatalogFromDeprecatedEndpoint().then(
+          (tagsResponse: any) =>
+            this.mapCatalogResponse(tagsResponse.data)
+        );
+      }
 
-    return applicationTags;
+      this.miscCache.put('applicationTags', applicationTags);
+      return applicationTags;
+    });
+  }
+
+  getCatalog(timeFilter: TimeFilter) {
+    const endpoint = '/api/application-monitoring/catalog?dataSource=CALLS&useCase=FILTERING&from=' + timeFilter.from;
+    return getRequest(this.instanaOptions, endpoint);
+  }
+
+  getCatalogFromDeprecatedEndpoint() {
+    return getRequest(this.instanaOptions, '/api/application-monitoring/catalog/tags');
+  }
+
+  mapCatalogResponse(catalog: any) {
+    return catalog.map((entry: any) => ({
+      key: entry.name,
+      label: entry.name,
+      type: entry.type,
+      canApplyToSource: entry.canApplyToSource,
+      canApplyToDestination: entry.canApplyToDestination,
+    }));
   }
 
   getApplicationMetricsCatalog() {
@@ -147,7 +170,7 @@ export class DataSourceApplication {
     const windowSize = getWindowSize(timeFilter);
     const tagFilters: any[] = [];
 
-    return Promise.resolve(this.getApplicationTags()).then((applicationTags) => {
+    return Promise.resolve(this.getApplicationTags(timeFilter)).then((applicationTags) => {
       if (target.entity.key) {
         tagFilters.push({
           name: 'application.name',
