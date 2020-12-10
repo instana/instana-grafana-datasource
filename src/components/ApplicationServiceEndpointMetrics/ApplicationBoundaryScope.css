@@ -1,0 +1,37 @@
+.dropdown {
+  position: relative;
+  background: transparent;
+  width: '32px';
+  height: '32px';
+  margin-right: '4px';
+}
+
+.dropdown-list  {
+  transition: max-height .2s ease-out;
+  max-height: 0;
+  overflow: hidden;
+  z-index: 2;
+  position: absolute;
+}
+
+.dropdown-list-active {
+  overflow: hidden;
+  z-index: 2; /* we set a zIndex to ensure that the overlay is above other elements and does not move any DOM elements. */
+  max-height: 1000px;
+  opacity: 1;
+  position: absolute;
+}
+
+.iconTextContainer {
+  display: inline-flex,
+};
+
+.iconStyle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+};
+
+.iconTextStyle {
+  padding: 7px;
+};
