@@ -53,6 +53,10 @@ The settings for Karma are in the karma.conf.js file in the root. If you add any
 
 `yarn test` will start the karma runner and execute all tests in the specs folder.
 
+## Integration Testing
+
+We need to ensure that every Instana backend request, that is invoked through this plugin, is tested on availability and response payload. If you add a feature that makes use of a new public Instana API endpoint then please make sure that the endpoint is tested.
+
 ## Screenshots
 
 The actual screenshots are from "Quick Check" example below. Do not delete old screenshots. Grafana uses those in order to display older README versions (hardcoded links).
