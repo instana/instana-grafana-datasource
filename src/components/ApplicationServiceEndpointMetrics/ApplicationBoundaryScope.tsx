@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
 import { Tooltip, useTheme } from '@grafana/ui';
+import React, { useState } from 'react';
+
+import './ApplicationBoundaryScope.css';
 
 const INBOUND = 'INBOUND';
 const ALL = 'ALL';
@@ -12,40 +14,10 @@ const dropdown = {
   marginRight: '4px',
 } as React.CSSProperties;
 
-const dropdown__list = {
-  transition: 'max-height .2s ease-out',
-  maxHeight: 0,
-  overflow: 'hidden',
-  zIndex: 1,
-  position: 'fixed',
-} as React.CSSProperties;
-
-const dropdown__list__active = {
-  overflow: 'hidden',
-  zIndex: 2, // we set a zIndex to ensure that the overlay is above other elements and does not move any DOM elements.
-  position: 'fixed',
-  maxHeight: '1000px',
-  opacity: 1,
-} as React.CSSProperties;
-
-const iconTextContainer = {
-  display: 'inline-flex',
-};
-
-const iconStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-};
-
-const iconTextStyle = {
-  padding: '7px',
-};
-
 const iconSize = 30;
 
 const inboundIcon = (
-  <svg style={iconStyle} height={iconSize} width={iconSize}>
+  <svg className={'iconStyle'} height={iconSize} width={iconSize}>
     <path
       transform="translate(3, 5)"
       fill="#33a2e5"
@@ -55,7 +27,7 @@ const inboundIcon = (
 );
 
 const allIcon = (
-  <svg style={iconStyle} height={iconSize} width={iconSize}>
+  <svg className={'iconStyle'} height={iconSize} width={iconSize}>
     <path
       transform="translate(3, 5)"
       fill="#33a2e5"
@@ -110,15 +82,15 @@ export default function ApplicationBoundaryScope(props: any) {
         </Tooltip>
       </div>
 
-      <ul style={active ? dropdown__list__active : dropdown__list}>
+      <ul className={active ? 'dropdown-list-active' : 'dropdown-list'}>
         <li onClick={() => handleClick(INBOUND)} key={INBOUND} style={dropdown__list__item}>
-          <div style={iconTextContainer}>
-            {inboundIcon} <span style={iconTextStyle}>{INBOUND}</span>
+          <div className={'iconTextContainer'}>
+            {inboundIcon} <span className={'iconTextStyle'}>{INBOUND}</span>
           </div>
         </li>
         <li onClick={() => handleClick(ALL)} key={ALL} style={dropdown__list__item}>
-          <div style={iconTextContainer}>
-            {allIcon} <span style={iconTextStyle}>{ALL}</span>
+          <div className={'iconTextContainer'}>
+            {allIcon} <span className={'iconTextStyle'}>{ALL}</span>
           </div>
         </li>
       </ul>
