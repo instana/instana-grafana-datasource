@@ -1,3 +1,5 @@
+[![Latest](https://img.shields.io/badge/dynamic/json?color=blue&label=Latest&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22instana-datasource%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/instana-datasource)
+
 # Instana Data Source
 
 This is a Grafana datasource for showing metrics from Instana AI-Powered APM for dynamic applications.
