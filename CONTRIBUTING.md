@@ -81,6 +81,8 @@ The actual screenshots are from "Quick Check" example below. Do not delete old s
 * If you haven't already, `git remote add grafana git@github.com:grafana/grafana-plugin-repository.git`.
 * `git checkout master && git fetch && git pull && git fetch grafana && git merge grafana/master --ff`
 * Create a branch for the new release (`instana-datasource-plugin-x.x.x`) and add the new version to `repo.json`.
+* - check the corresponding release build at <https://github.com/instana/instana-grafana-datasource/actions>
+* - copy repo.json extension from `Publish to Grafana.com` build step
 * Commit, push and create a PR `Instana datasource plugin x.x.x` at <https://github.com/grafana/grafana-plugin-repository>
 
 ### Quick Check
