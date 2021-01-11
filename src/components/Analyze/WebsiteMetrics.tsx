@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 
-import {  ALL_WEBSITES, ANALYZE_WEBSITE_METRICS } from '../../GlobalVariables';
+import { ALL_WEBSITES, ANALYZE_WEBSITE_METRICS } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import beacon_types from '../../lists/beacon_types';

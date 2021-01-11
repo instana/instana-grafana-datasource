@@ -3,22 +3,22 @@ import { BackendSrvRequest } from '@grafana/runtime/services/backendSrv';
 import { InstanaOptions } from '../types/instana_options';
 import { DataSourceInstanceSettings } from '@grafana/data';
 
-export function getRequest(options: InstanaOptions, endpoint: string, swallowError = false, maxRetries = 1): any {
+export const getRequest = (options: InstanaOptions, endpoint: string, swallowError = false, maxRetries = 1) => {
   const request = {
     method: 'GET',
     url: options.url + endpoint,
   };
 
   return doRequest(options, request, swallowError, maxRetries);
-}
+};
 
-export function postRequest(
+export const postRequest = (
   options: InstanaOptions,
   endpoint: string,
   data: {},
   swallowError = false,
   maxRetries = 0
-): any {
+) => {
   const request = {
     method: 'POST',
     url: options.url + endpoint,
@@ -26,7 +26,7 @@ export function postRequest(
   };
 
   return doRequest(options, request, swallowError, maxRetries);
-}
+};
 
 function doRequest(
   options: InstanaOptions,

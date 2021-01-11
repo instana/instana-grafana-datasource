@@ -127,14 +127,12 @@ export class DataSourceApplication {
 
     return getVersion(this.instanaOptions).then((version: number) => {
       if (version >= 191) {
-        applicationTags = this.getCatalog(timeFilter).then(
-          (catalog: any) =>
-            this.mapCatalogResponse(catalog.data.tags)
+        applicationTags = this.getCatalog(timeFilter).then((catalog: any) =>
+          this.mapCatalogResponse(catalog.data.tags)
         );
       } else {
-        applicationTags = this.getCatalogFromDeprecatedEndpoint().then(
-          (tagsResponse: any) =>
-            this.mapCatalogResponse(tagsResponse.data)
+        applicationTags = this.getCatalogFromDeprecatedEndpoint().then((tagsResponse: any) =>
+          this.mapCatalogResponse(tagsResponse.data)
         );
       }
 

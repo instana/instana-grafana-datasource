@@ -1,30 +1,31 @@
 import { buildInstanaOptions, buildTimeFilter } from '../util/test_util';
 import * as RequestHandler from '../util/request_handler';
 import { DataSourceWebsite } from './DataSource_Website';
-import BeaconGroupBody from '../types/beacon_group_body';
 import TimeFilter from '../types/time_filter';
 import _ from 'lodash';
 
 const options = buildInstanaOptions();
-const axios = require('axios');
-beforeAll(() => {
-  axios.defaults.adapter = require('axios/lib/adapters/http');
-});
 
 describe('Given a website datasource', () => {
   const dataSourceWebsite: DataSourceWebsite = new DataSourceWebsite(options);
+  let getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
+
+  afterEach(() => {
+    getRequestSpy.mockReset();
+  });
 
   describe('when fetching website tags', () => {
-    let getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
-    getRequestSpy.mockImplementation(() => {
-      return axios.get(options.url + '/api/website-monitoring/catalog/tags', {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken,
-        },
-      });
-    });
-
     it('should return tags as selectable values with a type', () => {
+      getRequestSpy.mockResolvedValue({
+        data: [
+          {
+            name: 'name',
+            type: 'type',
+            category: 'category',
+          },
+        ],
+      });
+
       return dataSourceWebsite.getWebsiteTags().then((result: any) => {
         _.map(result, (tag) => {
           expect(tag).toHaveProperty('key');
@@ -33,27 +34,21 @@ describe('Given a website datasource', () => {
         });
       });
     });
-
-    it('should cache website tags', () => {
-      return dataSourceWebsite.getWebsiteTags().then(() => {
-        return dataSourceWebsite.getWebsiteTags().then(() => {
-          expect(getRequestSpy).toBeCalledTimes(1);
-        });
-      });
-    });
   });
 
   describe('when fetching website metrics catalog', () => {
-    let getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
-    getRequestSpy.mockImplementation(() => {
-      return axios.get(options.url + '/api/website-monitoring/catalog/metrics', {
-        headers: {
-          Authorization: 'apiToken ' + options.apiToken,
-        },
-      });
-    });
-
     it('should return the catalog as an array of selectable values with aggregations and beaconTypes', () => {
+      getRequestSpy.mockResolvedValue({
+        data: [
+          {
+            metricId: 'metricId',
+            label: 'label',
+            aggregations: ['MEAN', 'SUM'],
+            beaconTypes: ['pageLoad', 'resourceLoad', 'httpRequest', 'error', 'custom', 'pageChange'],
+          },
+        ],
+      });
+
       return dataSourceWebsite.getWebsiteMetricsCatalog().then((catalog: any) => {
         return _.map(catalog, (metric) => {
           expect(metric).toHaveProperty('key');
@@ -65,58 +60,25 @@ describe('Given a website datasource', () => {
     });
   });
 
-  describe('when fetching website metrics catalog', () => {
+  describe('when fetching configured websites', () => {
     const timeFilter: TimeFilter = buildTimeFilter();
-    let postRequestSpy = jest.spyOn(RequestHandler, 'postRequest');
-    const data: BeaconGroupBody = {
-      group: {
-        groupbyTag: 'beacon.website.name',
-      },
-      timeFrame: {
-        to: timeFilter.to,
-        windowSize: timeFilter.windowSize,
-      },
-      type: 'PAGELOAD',
-      metrics: [
-        {
-          metric: 'pageLoads',
-          aggregation: 'SUM',
-        },
-      ],
-      order: {
-        by: 'pageLoads',
-        direction: 'desc',
-      },
-      pagination: {
-        ingestionTime: 0,
-        offset: 0,
-        retrievalSize: 200,
-      },
-    };
 
-    const header = {
-      Authorization: 'apiToken ' + options.apiToken,
-    };
-
-    postRequestSpy.mockImplementation(() => {
-      return axios.post(options.url + '/api/website-monitoring/analyze/beacon-groups', data, {
-        headers: header,
+    it('should cache websites and return as selectable values', () => {
+      getRequestSpy.mockResolvedValue({
+        data: [
+          {
+            name: 'myWebsiteConfig',
+          },
+        ],
       });
-    });
 
-    it('should return websites as selectable values', () => {
-      return dataSourceWebsite.getWebsites(timeFilter).then((result) => {
-        _.map(result, (website) => {
-          expect(website).toHaveProperty('key');
-          expect(website).toHaveProperty('label');
-        });
-      });
-    });
-
-    it('should cache websites', () => {
       return dataSourceWebsite.getWebsites(timeFilter).then(() => {
-        return dataSourceWebsite.getWebsites(timeFilter).then(() => {
-          expect(postRequestSpy).toBeCalledTimes(1);
+        return dataSourceWebsite.getWebsites(timeFilter).then((result) => {
+          expect(getRequestSpy).toBeCalledTimes(1);
+          _.map(result, (website) => {
+            expect(website).toHaveProperty('key');
+            expect(website).toHaveProperty('label');
+          });
         });
       });
     });

@@ -59,12 +59,11 @@ export class DataSourceWebsite {
       return websites;
     }
 
-    websites = getRequest(this.instanaOptions, '/api/website-monitoring/config').then(
-      (websitesResponse: any) =>
-        websitesResponse.data.map((website: any) => ({
-          key: website.name, // use name as key because a website name can only be configured once
-          label: website.name,
-        }))
+    websites = getRequest(this.instanaOptions, '/api/website-monitoring/config').then((websitesResponse: any) =>
+      websitesResponse.data.map((website: any) => ({
+        key: website.name, // use name as key because a website name can only be configured once
+        label: website.name,
+      }))
     );
     this.websitesCache.put(key, websites, 600000);
 
