@@ -118,7 +118,11 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
           return this.dataSourceSlo.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_EXPLORE) {
+        } else if (category === INFRASTRUCTURE_EXPLORE) {
+          return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
+            return this.buildTarget(target, data);
+          });
+        } else if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS) {
           return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
@@ -202,8 +206,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   supportsDeltaRequests(target: InstanaQuery): boolean {
-    if (target.metricCategory && target.metricCategory.key === SLO_INFORMATION) {
-      return false;
+    if (target.metricCategory) {
+      if (target.metricCategory.key === SLO_INFORMATION || target.metricCategory.key === INFRASTRUCTURE_EXPLORE) {
+        return false;
+      }
     }
 
     let version = this.resultCache.get('version');
@@ -246,15 +252,19 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     return data;
   }
 
+  buildTarget(target: InstanaQuery, data: any) {
+    return {
+      target: target,
+      data: data,
+    };
+  }
+
   buildTargetWithAppendedDataResult(target: InstanaQuery, timeFilter: TimeFilter, data: any) {
     if (timeFilter.from !== target.timeFilter.from && data) {
       data = this.appendResult(data, target);
     }
 
-    return {
-      target: target,
-      data: data,
-    };
+    return this.buildTarget(target, data);
   }
 
   appendResult(data: any, target: InstanaQuery) {
@@ -310,14 +320,6 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
   fetchTypesForTarget(query: InstanaQuery) {
     return this.dataSourceInfrastructure.fetchTypesForTarget(query, this.getTimeFilter());
-  }
-
-  fetchExploreTypes() {
-    return this.dataSourceInfrastructure.fetchExploreTypes(this.getTimeFilter());
-  }
-
-  fetchExploreMetrics(type: SelectableValue) {
-    return this.dataSourceInfrastructure.fetchExploreMetrics(type, this.getTimeFilter());
   }
 
   fetchWebsites(): Promise<SelectableValue[]> {

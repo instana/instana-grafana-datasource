@@ -38,13 +38,13 @@ export class DataSourceInfrastructure {
       );
     }
 
+    if (target.tagFilterExpression) {
+      return this.fetchExploreEntities(target, timeFilter);
+    }
+
     // do not try to retrieve data without selected metric
     if ((!target.metric || !target.metric.key) && !target.showAllMetrics && !target.freeTextMetrics) {
       return Promise.resolve(emptyResultData(target.refId));
-    }
-
-    if (target.tagFilterExpression) {
-      return this.fetchExploreEntities(target, timeFilter);
     }
 
     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
@@ -191,111 +191,38 @@ export class DataSourceInfrastructure {
     return getRequest(this.instanaOptions, fetchSnapshotTypesUrl);
   }
 
-  fetchExploreTypes(timeFilter: TimeFilter): Promise<SelectableValue[]> {
-    let explorePlugins = this.typeCache.get('explorePlugins');
-    if (explorePlugins) {
-      return explorePlugins;
-    }
-
-    const payload = {
-      timeFrame: {
-        to: timeFilter.to,
-        windowSize: timeFilter.windowSize
-      },
-      tagFilterExpression: {
-        type: "EXPRESSION",
-        logicalOperator: "OR",
-        elements: []
-      }
-    }
-
-    const url = "/api/infrastructure-monitoring/explore/plugins";
-    const plugins = postRequest(this.instanaOptions, url, payload).then((res: any) => {
-      return res.data.data.plugins.map((plugin: string) => {
-        return {
-          key: plugin,
-          label: plugin
-        }
-      });
-    });
-
-    this.typeCache.put('explorePlugins', plugins);
-    return plugins;
-  }
-
-  fetchExploreMetrics(selectedPlugin: SelectableValue, timeFilter: TimeFilter): Promise<SelectableValue[]> {
-    let exploreMetrics = this.typeCache.get('exploreMetrics' + selectedPlugin.key);
-    if (exploreMetrics) {
-      return exploreMetrics;
-    }
-
-    const payload = {
-      filter: {
-        timeConfig: {
-          to: timeFilter.to,
-          windowSize: timeFilter.windowSize
-        },
-        tagFilterExpression: {
-          type: "EXPRESSION",
-          logicalOperator: "OR",
-          elements: []
-        }
-      },
-      type: selectedPlugin.key
-    }
-
-    const url = "/api/infrastructure-monitoring/explore/metrics";
-    return postRequest(this.instanaOptions, url, payload).then((res: any) => {
-      const result = res.data.data.metrics.map((metric: any) => {
-        return {
-          key: metric.id,
-          label: metric.label,
-          aggregations: [
-            { key: 'MEAN', label: 'MEAN' },
-            { key: 'SUM', label: 'SUM' },
-          ],
-        }
-      });
-
-      this.catalogCache.put('exploreMetrics' + selectedPlugin.key, result);
-      return result;
-    });
-  }
-
   fetchExploreEntities(target: InstanaQuery, timeFilter: TimeFilter) {
+    const data = JSON.parse(target.tagFilterExpression);
+
     const payload = {
-      filter: {
-        timeConfig: {
-          to: timeFilter.to,
-          windowSize: timeFilter.windowSize
-        },
-        tagFilterExpression: JSON.parse(target.tagFilterExpression),
-      },
+      tagFilterExpression: data.tagFilterExpression,
       pagination: {
         retrievalSize: 200
       },
-      type: target.entityType.key,
-      metrics: {
-        [target.metric.key]: {
-          metric: target.metric.key,
-          granularity: target.timeInterval.key,
-          aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM'
-        }
+      groupBy: data.groupBy,
+      type: data.type,
+      metrics: data.metrics,
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: timeFilter.windowSize
       }
     }
 
-    return postRequest(this.instanaOptions, "/api/infrastructure-monitoring/explore/entities", payload).then((res: any) => {
+    return postRequest(this.instanaOptions, "/api/infrastructure-monitoring/explore/groups", payload).then((res: any) => {
       let result: any = [];
-      res.data.data.items.map((entity: any) => {
-        result.push({
-          target: entity.label,
-          datapoints: entity.metrics[target.metric.key] ?
-            entity.metrics[target.metric.key].map((datapoint: any) => [datapoint[1],datapoint[0]])
+      console.log(res.data.data);
+      res.data.data.items.forEach((entity: any) => {
+        for (var metric in entity.metrics) {
+          result.push({
+            target: entity.tags[data.groupBy] + " - " + metric,
+            datapoints: entity.metrics[metric] ?
+            entity.metrics[metric].map((datapoint: any) => [datapoint[1],datapoint[0]])
             :
             [],
-          refId: target.refId,
-          key: target.stableHash,
-        });
+            refId: target.refId,
+            key: target.stableHash,
+          });
+        }
       });
 
       return result;

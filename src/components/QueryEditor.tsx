@@ -472,7 +472,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key !== SLO_INFORMATION && (
+        {(query.metricCategory.key !== SLO_INFORMATION &&
+          query.metricCategory.key !== INFRASTRUCTURE_EXPLORE) && (
           <Metric
             query={query}
             onChange={this.props.onChange}
