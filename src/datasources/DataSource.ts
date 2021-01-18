@@ -137,10 +137,16 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       let result: any = [];
       _.each(targetData, (targetAndData) => {
         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-        let resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
+        let resultData: any = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
         this.cacheResultIfNecessary(_.cloneDeep(resultData), targetAndData.target); // clone to store results without timeshift re-calculation
         this.applyTimeShiftIfNecessary(resultData, targetAndData.target); // adjust resultdata after caching the result
         resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
+
+        // only show data that is relevant for the selected timeFrame
+        resultData.forEach((target: any) => {
+          target.datapoints = target.datapoints.filter((d: any) => d[1] >= this.timeFilter.from);
+        });
+
         result.push(resultData);
       });
 
@@ -225,7 +231,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     });
   }
 
-  aggregateDataIfNecessary(data: any, target: InstanaQuery) {
+  aggregateDataIfNecessary(data: any, target: InstanaQuery): any[] {
     let newData = [];
 
     if (target.aggregateGraphs) {
