@@ -210,7 +210,6 @@ export class DataSourceInfrastructure {
 
     return postRequest(this.instanaOptions, "/api/infrastructure-monitoring/explore/groups", payload).then((res: any) => {
       let result: any = [];
-      console.log(res.data.data);
       res.data.data.items.forEach((entity: any) => {
         for (var metric in entity.metrics) {
           result.push({
