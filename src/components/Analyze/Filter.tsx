@@ -138,16 +138,24 @@ export class Filters extends React.Component<Props, FilterState> {
       ) {
         query.filters[index].isValid = true;
       } else if (
+        query.filters[index].operator.key.includes('EMPTY') &&
+        this.OPERATOR_KEY_VALUE === query.filters[index].tag.type &&
+        query.filters[index].stringValue
+      ) {
+        query.filters[index].isValid = true;
+      } else if (
         this.OPERATOR_KEY_VALUE === query.filters[index].tag.type &&
         query.filters[index].stringValue &&
         query.filters[index].stringValue.includes('=')
       ) {
         query.filters[index].isValid = true;
-      } else if (this.OPERATOR_NUMBER === query.filters[index].tag.type && query.filters[index].numberValue !== null) {
+      } else if (this.OPERATOR_NUMBER === query.filters[index].tag.type && !isNaN(query.filters[index].numberValue)) {
         query.filters[index].isValid = true;
-      } else {
-        query.filters[index].isValid =
-          this.OPERATOR_BOOLEAN === query.filters[index].tag.type && query.filters[index].booleanValue;
+      } else if (
+        this.OPERATOR_BOOLEAN === query.filters[index].tag.type &&
+        query.filters[index].booleanValue !== undefined
+      ) {
+        query.filters[index].isValid = true;
       }
     } else {
       query.filters[index].isValid = false;
