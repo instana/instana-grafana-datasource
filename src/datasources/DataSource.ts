@@ -141,12 +141,6 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         this.cacheResultIfNecessary(_.cloneDeep(resultData), targetAndData.target); // clone to store results without timeshift re-calculation
         this.applyTimeShiftIfNecessary(resultData, targetAndData.target); // adjust resultdata after caching the result
         resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
-
-        // only show data that is relevant for the selected timeFrame
-        resultData.forEach((target: any) => {
-          target.datapoints = target.datapoints.filter((d: any) => d[1] >= this.timeFilter.from);
-        });
-
         result.push(resultData);
       });
 
@@ -255,6 +249,26 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       data = this.appendResult(data, target);
     }
 
+    console.log("timeFilter", {
+      from: new Date(timeFilter.from),
+      to: new Date(timeFilter.to)
+    });
+
+    console.log("target.timeFilter", {
+      from: new Date(target.timeFilter.from),
+      to: new Date(target.timeFilter.to)
+    });
+
+    console.log("this.timeFilter", {
+      from: new Date(this.timeFilter.from),
+      to: new Date(this.timeFilter.to)
+    });
+
+    // only show data that is relevant for the selected timeFrame
+    data.forEach((t: any) => {
+      t.datapoints = t.datapoints.filter((d: any) => d[1] >= target.timeFilter.from);
+    });
+
     return {
       target: target,
       data: data,
@@ -286,10 +300,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   getDeltaRequestTimestamp(series: any, fromDefault: number): number {
     // the found series can have multiple results, it's ok just to use the first one
     const length = series[0].datapoints.length;
-    if (length < 2) {
+    if (length < 10) {
       return fromDefault;
     }
-    const penultimate = length - 2;
+    const penultimate = length - 10;
     return series[0].datapoints[penultimate][1];
   }
 
