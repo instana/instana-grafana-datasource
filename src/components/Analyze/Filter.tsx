@@ -25,6 +25,7 @@ interface Props {
 
 export class Filters extends React.Component<Props, FilterState> {
   OPERATOR_STRING = 'STRING';
+  OPERATOR_STRING_SET = 'STRING_SET';
   OPERATOR_NUMBER = 'NUMBER';
   OPERATOR_BOOLEAN = 'BOOLEAN';
   OPERATOR_KEY_VALUE = 'KEY_VALUE_PAIR';
@@ -88,7 +89,9 @@ export class Filters extends React.Component<Props, FilterState> {
 
   canShowStringInput(filter: TagFilter) {
     return (
-      !filter.operator.key.includes('EMPTY') && (filter.tag.type === 'STRING' || filter.tag.type === 'KEY_VALUE_PAIR')
+      filter.tag.type === this.OPERATOR_KEY_VALUE ||
+      (!filter.operator.key.includes('EMPTY') &&
+        (filter.tag.type === this.OPERATOR_STRING || filter.tag.type === this.OPERATOR_STRING_SET))
     );
   }
 
@@ -118,13 +121,27 @@ export class Filters extends React.Component<Props, FilterState> {
   validateChangeAndRun(index: number, runDebounced = false) {
     const { query, onChange, onRunQuery } = this.props;
     if (query.filters[index].tag) {
-      if (query.filters[index].operator.key.includes('EMPTY')) {
+      if (
+        query.filters[index].operator.key.includes('EMPTY') &&
+        (this.OPERATOR_STRING === query.filters[index].tag.type ||
+          this.OPERATOR_STRING_SET === query.filters[index].tag.type)
+      ) {
         query.filters[index].isValid = true;
         // to avoid sending value with query.filters[index] operators that do not require a value (such as is-present/is-not-present)
         query.filters[index].stringValue = '';
         query.filters[index].numberValue = 0;
         query.filters[index].booleanValue = true;
-      } else if (this.OPERATOR_STRING === query.filters[index].tag.type && query.filters[index].stringValue) {
+      } else if (
+        (this.OPERATOR_STRING === query.filters[index].tag.type ||
+          this.OPERATOR_STRING_SET === query.filters[index].tag.type) &&
+        query.filters[index].stringValue
+      ) {
+        query.filters[index].isValid = true;
+      } else if (
+        query.filters[index].operator.key.includes('EMPTY') &&
+        this.OPERATOR_KEY_VALUE === query.filters[index].tag.type &&
+        query.filters[index].stringValue
+      ) {
         query.filters[index].isValid = true;
       } else if (
         this.OPERATOR_KEY_VALUE === query.filters[index].tag.type &&
@@ -132,11 +149,13 @@ export class Filters extends React.Component<Props, FilterState> {
         query.filters[index].stringValue.includes('=')
       ) {
         query.filters[index].isValid = true;
-      } else if (this.OPERATOR_NUMBER === query.filters[index].tag.type && query.filters[index].numberValue !== null) {
+      } else if (this.OPERATOR_NUMBER === query.filters[index].tag.type && !isNaN(query.filters[index].numberValue)) {
         query.filters[index].isValid = true;
-      } else {
-        query.filters[index].isValid =
-          this.OPERATOR_BOOLEAN === query.filters[index].tag.type && query.filters[index].booleanValue;
+      } else if (
+        this.OPERATOR_BOOLEAN === query.filters[index].tag.type &&
+        query.filters[index].booleanValue !== undefined
+      ) {
+        query.filters[index].isValid = true;
       }
     } else {
       query.filters[index].isValid = false;
