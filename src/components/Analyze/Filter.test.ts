@@ -1,5 +1,3 @@
-import { SelectableValue } from '@grafana/data';
-import { isNull } from 'lodash';
 import { InstanaQuery } from '../../types/instana_query';
 import TagFilter from '../../types/tag_filter';
 import { Filters } from './Filter';
@@ -421,7 +419,6 @@ describe('Given a filter', () => {
   });
 
   describe('for validateChangeAndRun', () => {
-    
     describe('with STRING type', () => {
       let typeUnderTest = 'STRING';
 
@@ -438,7 +435,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.stringValue).toEqual('');
       });
@@ -456,7 +453,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.stringValue).toEqual('');
       });
@@ -474,7 +471,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.stringValue).toEqual('value');
       });
@@ -492,12 +489,12 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(false);
         expect(filter.stringValue).toEqual('');
       });
     });
-    
+
     describe('with STRING_SET type', () => {
       let typeUnderTest = 'STRING_SET';
 
@@ -514,7 +511,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.stringValue).toEqual('');
       });
@@ -532,7 +529,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.stringValue).toEqual('');
       });
@@ -550,7 +547,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.stringValue).toEqual('value');
       });
@@ -568,7 +565,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(false);
         expect(filter.stringValue).toEqual('');
       });
@@ -590,7 +587,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.stringValue).toEqual('key=value');
       });
@@ -608,7 +605,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(false);
         expect(filter.stringValue).toEqual('');
       });
@@ -626,12 +623,12 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(false);
         expect(filter.stringValue).toEqual('key');
       });
 
-        it('should be valid for IS_EMPTY operator with string key only', () => {
+      it('should be valid for IS_EMPTY operator with string key only', () => {
         let filter: TagFilter = {
           tag: { key: 'any.key', type: typeUnderTest },
           operator: { key: 'IS_EMPTY', type: typeUnderTest },
@@ -644,7 +641,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.stringValue).toEqual('key');
       });
@@ -662,7 +659,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(false);
         expect(filter.stringValue).toEqual('');
       });
@@ -684,7 +681,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.numberValue).toEqual(0);
       });
@@ -702,7 +699,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.numberValue).toEqual(42);
       });
@@ -720,7 +717,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(false);
         expect(filter.numberValue).toEqual(NaN);
       });
@@ -742,7 +739,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.booleanValue).toEqual(true);
       });
@@ -760,7 +757,7 @@ describe('Given a filter', () => {
         filters.props.query.filters[0] = filter;
 
         filters.validateChangeAndRun(0);
-        
+
         expect(filter.isValid).toEqual(true);
         expect(filter.booleanValue).toEqual(false);
       });
