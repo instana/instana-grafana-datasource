@@ -1,8 +1,194 @@
 import TimeFilter from '../types/time_filter';
-import { appendData, generateStableHash, hasIntersection } from './delta_util';
+import { appendData, generateStableHash, getDeltaRequestTimestamp, hasIntersection } from './delta_util';
 import _ from 'lodash';
 import { InstanaQuery } from '../types/instana_query';
 import { buildTestTarget } from './test_util';
+
+describe('Test getDeltaRequestTimestamp', () => {
+
+  const oneSecondGranularity = {
+    key: '1'
+  };
+
+  const oneSecondRollup = {
+    key: '1000'
+  };
+
+  it('should return fromDefault when timeInterval is one second', () => {
+    let series: any = [
+      {
+        datapoints: [
+          [1, 100000001],
+          [2, 100000002],
+          [3, 100000003]
+        ]
+      }
+    ];
+
+    const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondGranularity);
+    expect(deltaRequestTimestap).toEqual(12345);
+  });
+
+  it('should return fromDefault when less than 2 datapoints', () => {
+    let series: any = [
+      {
+        datapoints: [
+          [1, 100000001],
+        ]
+      }
+    ];
+
+    const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
+    expect(deltaRequestTimestap).toEqual(12345);
+  });
+
+  it('should return fromDefault when no datapoints', () => {
+    let series: any = [
+      {
+        datapoints: []
+      }
+    ];
+
+    const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
+    expect(deltaRequestTimestap).toEqual(12345);
+  });
+
+  it('should return penultimate timestamp when enough datapoints are present', () => {
+    let series: any = [
+      {
+        datapoints: [
+          [0, 100000000],
+          [1, 100000001],
+          [2, 100000002],
+          [3, 100000003],
+          [4, 100000004],
+          [5, 100000005],
+          [6, 100000006]
+        ]
+      }
+    ];
+
+    const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
+    expect(deltaRequestTimestap).toEqual(100000005);
+  });
+
+
+  it('should return penulimate timestamp when enough datapoints are present and last value is null', () => {
+    let series: any = [
+      {
+        datapoints: [
+          [0, 100000000],
+          [1, 100000001],
+          [2, 100000002],
+          [3, 100000003],
+          [4, 100000004],
+          [5, 100000005],
+          [null, 100000006]
+        ]
+      }
+    ];
+
+    const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
+    expect(deltaRequestTimestap).toEqual(100000005);
+  });
+
+
+  it('should return penulimate timestamp when enough datapoints are present and several null values (1)', () => {
+    let series: any = [
+      {
+        datapoints: [
+          [0, 100000000],
+          [1, 100000001],
+          [null, 100000002],
+          [3, 100000003],
+          [null, 100000004],
+          [5, 100000005],
+          [null, 100000006]
+        ]
+      }
+    ];
+
+    const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
+    expect(deltaRequestTimestap).toEqual(100000005);
+  });
+
+  it('should return correct timestamp when enough datapoints are present and several null values (3)', () => {
+    let series: any = [
+      {
+        datapoints: [
+          [0, 100000000],
+          [1, 100000001],
+          [null, 100000002],
+          [null, 100000003],
+          [null, 100000004],
+          [null, 100000005],
+          [null, 100000006]
+        ]
+      }
+    ];
+
+    const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
+    expect(deltaRequestTimestap).toEqual(100000005);
+  });
+
+  it('should return correct timestamp when enough datapoints are present and several null values (4)', () => {
+    let series: any = [
+      {
+        datapoints: [
+          [0, 100000000],
+          [1, 100000001],
+          [2, 100000002],
+          [null, 100000003],
+          [4, 100000004],
+          [null, 100000005],
+          [null, 100000006]
+        ]
+      }
+    ];
+
+    const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
+    expect(deltaRequestTimestap).toEqual(100000005);
+  });
+
+  it('should return correct timestamp when enough datapoints are present and several null values (5)', () => {
+    let series: any = [
+      {
+        datapoints: [
+          [0, 100000000],
+          [null, 100000001],
+          [null, 100000002],
+          [null, 100000003],
+          [4, 100000004],
+          [null, 100000005],
+          [null, 100000006]
+        ]
+      }
+    ];
+
+    const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
+    expect(deltaRequestTimestap).toEqual(100000005);
+  });
+
+  it('should return correct timestamp when enough datapoints are present and several null values (6)', () => {
+    let series: any = [
+      {
+        datapoints: [
+          [0, 100000000],
+          [1, 100000001],
+          [2, 100000002],
+          [3, 100000003],
+          [4, 100000004],
+          [null, 100000005],
+          [null, 100000006]
+        ]
+      }
+    ];
+
+    const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
+    expect(deltaRequestTimestap).toEqual(100000005);
+  });
+
+});
 
 describe('Given a delta', () => {
   describe('with two overlapping timeFilter', () => {

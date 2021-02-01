@@ -94,3 +94,21 @@ export function appendData(newDeltaData: any, cachedData: any): any {
 
   return cachedData;
 }
+
+export function getDeltaRequestTimestamp(series: any, fromDefault: number, timeInterval: any): number {
+  // we do not apply any delta for requests that contain a one second granularity (application requests)
+  if (timeInterval.key === '1') {
+    return fromDefault;
+  }
+
+  // the found series can have multiple results, it's ok just to use the first one
+  // because data is written in batches and we know that once there is a datapoint
+  // for a series, the other series' datapoints are up-to-date as well.
+  const length = series[0].datapoints.length;
+  if (length < 2) {
+    return fromDefault;
+  }
+
+  const penultimate = length - 2;
+  return series[0].datapoints[penultimate][1];
+}

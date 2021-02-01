@@ -22,7 +22,7 @@ import {
   getPossibleGranularities,
   getPossibleRollups,
 } from '../util/rollup_granularity_util';
-import { appendData, generateStableHash, hasIntersection } from '../util/delta_util';
+import { appendData, generateStableHash, hasIntersection, getDeltaRequestTimestamp } from '../util/delta_util';
 import {
   ANALYZE_APPLICATION_METRICS,
   ANALYZE_WEBSITE_METRICS,
@@ -249,25 +249,12 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       data = this.appendResult(data, target);
     }
 
-    console.log("timeFilter", {
-      from: new Date(timeFilter.from),
-      to: new Date(timeFilter.to)
-    });
-
-    console.log("target.timeFilter", {
-      from: new Date(target.timeFilter.from),
-      to: new Date(target.timeFilter.to)
-    });
-
-    console.log("this.timeFilter", {
-      from: new Date(this.timeFilter.from),
-      to: new Date(this.timeFilter.to)
-    });
-
-    // only show data that is relevant for the selected timeFrame
-    data.forEach((t: any) => {
-      t.datapoints = t.datapoints.filter((d: any) => d[1] >= target.timeFilter.from);
-    });
+    if (data && data.length > 0) {
+      // only show data that is relevant for the selected timeFrame
+      data.forEach((t: any) => {
+        t.datapoints = t.datapoints.filter((d: any) => d[1] >= target.timeFilter.from);
+      });
+    }
 
     return {
       target: target,
@@ -286,7 +273,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   adjustTimeFilterIfCached(timeFilter: TimeFilter, target: InstanaQuery): TimeFilter {
     let cachedResult = this.resultCache.get(target.stableHash);
     if (cachedResult && hasIntersection(timeFilter, cachedResult.timeFilter)) {
-      let newFrom = this.getDeltaRequestTimestamp(cachedResult.results, cachedResult.timeFilter.from);
+      let newFrom = getDeltaRequestTimestamp(cachedResult.results, cachedResult.timeFilter.from, target.timeInterval);
       let newTo = Math.floor(timeFilter.to / 10000) * 10000;
       return {
         from: newFrom,
@@ -295,22 +282,6 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       };
     }
     return timeFilter;
-  }
-
-  getDeltaRequestTimestamp(series: any, fromDefault: number): number {
-     // the found series can have multiple results, it's ok just to use the first one
-     const length = series[0].datapoints.length;
-     if (length < 2) {
-       return fromDefault;
-     }
-
-     const lastNotNullDatapoint = _.findLast(series[0].datapoints, d => d[0] != null);
-     if (lastNotNullDatapoint) {
-       return lastNotNullDatapoint[1];
-     }
-
-     const penultimate = length - 2;
-     return series[0].datapoints[penultimate][1];
   }
 
   getSloReports(): Promise<SelectableValue[]> {
