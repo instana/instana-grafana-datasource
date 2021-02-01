@@ -22,7 +22,7 @@ import {
   getPossibleGranularities,
   getPossibleRollups,
 } from '../util/rollup_granularity_util';
-import { appendData, generateStableHash, hasIntersection } from '../util/delta_util';
+import { appendData, generateStableHash, hasIntersection, getDeltaRequestTimestamp } from '../util/delta_util';
 import {
   ANALYZE_APPLICATION_METRICS,
   ANALYZE_WEBSITE_METRICS,
@@ -137,7 +137,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       let result: any = [];
       _.each(targetData, (targetAndData) => {
         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
-        let resultData = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
+        let resultData: any = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
         this.cacheResultIfNecessary(_.cloneDeep(resultData), targetAndData.target); // clone to store results without timeshift re-calculation
         this.applyTimeShiftIfNecessary(resultData, targetAndData.target); // adjust resultdata after caching the result
         resultData = this.aggregateDataIfNecessary(resultData, targetAndData.target);
@@ -225,7 +225,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     });
   }
 
-  aggregateDataIfNecessary(data: any, target: InstanaQuery) {
+  aggregateDataIfNecessary(data: any, target: InstanaQuery): any[] {
     let newData = [];
 
     if (target.aggregateGraphs) {
@@ -247,6 +247,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   buildTargetWithAppendedDataResult(target: InstanaQuery, timeFilter: TimeFilter, data: any) {
     if (timeFilter.from !== target.timeFilter.from && data) {
       data = this.appendResult(data, target);
+
+      data.forEach((t: any) => {
+        t.datapoints = t.datapoints.filter((d: any) => d[1] >= target.timeFilter.from);
+      });
     }
 
     return {
@@ -266,7 +270,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   adjustTimeFilterIfCached(timeFilter: TimeFilter, target: InstanaQuery): TimeFilter {
     let cachedResult = this.resultCache.get(target.stableHash);
     if (cachedResult && hasIntersection(timeFilter, cachedResult.timeFilter)) {
-      let newFrom = this.getDeltaRequestTimestamp(cachedResult.results, cachedResult.timeFilter.from);
+      let newFrom = getDeltaRequestTimestamp(cachedResult.results, cachedResult.timeFilter.from, target.timeInterval);
       let newTo = Math.floor(timeFilter.to / 10000) * 10000;
       return {
         from: newFrom,
@@ -275,16 +279,6 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       };
     }
     return timeFilter;
-  }
-
-  getDeltaRequestTimestamp(series: any, fromDefault: number): number {
-    // the found series can have multiple results, it's ok just to use the first one
-    const length = series[0].datapoints.length;
-    if (length < 2) {
-      return fromDefault;
-    }
-    const penultimate = length - 2;
-    return series[0].datapoints[penultimate][1];
   }
 
   getSloReports(): Promise<SelectableValue[]> {
