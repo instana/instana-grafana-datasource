@@ -298,13 +298,19 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   getDeltaRequestTimestamp(series: any, fromDefault: number): number {
-    // the found series can have multiple results, it's ok just to use the first one
-    const length = series[0].datapoints.length;
-    if (length < 10) {
-      return fromDefault;
-    }
-    const penultimate = length - 10;
-    return series[0].datapoints[penultimate][1];
+     // the found series can have multiple results, it's ok just to use the first one
+     const length = series[0].datapoints.length;
+     if (length < 2) {
+       return fromDefault;
+     }
+
+     const lastNotNullDatapoint = _.findLast(series[0].datapoints, d => d[0] != null);
+     if (lastNotNullDatapoint) {
+       return lastNotNullDatapoint[1];
+     }
+
+     const penultimate = length - 2;
+     return series[0].datapoints[penultimate][1];
   }
 
   getSloReports(): Promise<SelectableValue[]> {
