@@ -247,10 +247,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   buildTargetWithAppendedDataResult(target: InstanaQuery, timeFilter: TimeFilter, data: any) {
     if (timeFilter.from !== target.timeFilter.from && data) {
       data = this.appendResult(data, target);
-    }
 
-    if (data && data.length > 0) {
-      // only show data that is relevant for the selected timeFrame
       data.forEach((t: any) => {
         t.datapoints = t.datapoints.filter((d: any) => d[1] >= target.timeFilter.from);
       });
