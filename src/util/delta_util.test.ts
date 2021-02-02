@@ -5,13 +5,12 @@ import { InstanaQuery } from '../types/instana_query';
 import { buildTestTarget } from './test_util';
 
 describe('Test getDeltaRequestTimestamp', () => {
-
   const oneSecondGranularity = {
-    key: '1'
+    key: '1',
   };
 
   const oneSecondRollup = {
-    key: '1000'
+    key: '1000',
   };
 
   it('should return fromDefault when timeInterval is one second', () => {
@@ -20,9 +19,9 @@ describe('Test getDeltaRequestTimestamp', () => {
         datapoints: [
           [1, 100000001],
           [2, 100000002],
-          [3, 100000003]
-        ]
-      }
+          [3, 100000003],
+        ],
+      },
     ];
 
     const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondGranularity);
@@ -32,10 +31,8 @@ describe('Test getDeltaRequestTimestamp', () => {
   it('should return fromDefault when less than 2 datapoints', () => {
     let series: any = [
       {
-        datapoints: [
-          [1, 100000001],
-        ]
-      }
+        datapoints: [[1, 100000001]],
+      },
     ];
 
     const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
@@ -45,8 +42,8 @@ describe('Test getDeltaRequestTimestamp', () => {
   it('should return fromDefault when no datapoints', () => {
     let series: any = [
       {
-        datapoints: []
-      }
+        datapoints: [],
+      },
     ];
 
     const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
@@ -63,15 +60,14 @@ describe('Test getDeltaRequestTimestamp', () => {
           [3, 100000003],
           [4, 100000004],
           [5, 100000005],
-          [6, 100000006]
-        ]
-      }
+          [6, 100000006],
+        ],
+      },
     ];
 
     const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
     expect(deltaRequestTimestap).toEqual(100000005);
   });
-
 
   it('should return penulimate timestamp when enough datapoints are present and last value is null', () => {
     let series: any = [
@@ -83,15 +79,14 @@ describe('Test getDeltaRequestTimestamp', () => {
           [3, 100000003],
           [4, 100000004],
           [5, 100000005],
-          [null, 100000006]
-        ]
-      }
+          [null, 100000006],
+        ],
+      },
     ];
 
     const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
     expect(deltaRequestTimestap).toEqual(100000005);
   });
-
 
   it('should return penulimate timestamp when enough datapoints are present and several null values (1)', () => {
     let series: any = [
@@ -103,9 +98,9 @@ describe('Test getDeltaRequestTimestamp', () => {
           [3, 100000003],
           [null, 100000004],
           [5, 100000005],
-          [null, 100000006]
-        ]
-      }
+          [null, 100000006],
+        ],
+      },
     ];
 
     const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
@@ -122,9 +117,9 @@ describe('Test getDeltaRequestTimestamp', () => {
           [null, 100000003],
           [null, 100000004],
           [null, 100000005],
-          [null, 100000006]
-        ]
-      }
+          [null, 100000006],
+        ],
+      },
     ];
 
     const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
@@ -141,9 +136,9 @@ describe('Test getDeltaRequestTimestamp', () => {
           [null, 100000003],
           [4, 100000004],
           [null, 100000005],
-          [null, 100000006]
-        ]
-      }
+          [null, 100000006],
+        ],
+      },
     ];
 
     const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
@@ -160,9 +155,9 @@ describe('Test getDeltaRequestTimestamp', () => {
           [null, 100000003],
           [4, 100000004],
           [null, 100000005],
-          [null, 100000006]
-        ]
-      }
+          [null, 100000006],
+        ],
+      },
     ];
 
     const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
@@ -179,15 +174,14 @@ describe('Test getDeltaRequestTimestamp', () => {
           [3, 100000003],
           [4, 100000004],
           [null, 100000005],
-          [null, 100000006]
-        ]
-      }
+          [null, 100000006],
+        ],
+      },
     ];
 
     const deltaRequestTimestap = getDeltaRequestTimestamp(series, 12345, oneSecondRollup);
     expect(deltaRequestTimestap).toEqual(100000005);
   });
-
 });
 
 describe('Given a delta', () => {
