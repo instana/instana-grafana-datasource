@@ -77,19 +77,38 @@ export function hasIntersection(t1: TimeFilter, t2: TimeFilter): boolean {
 */
 export function appendData(newDeltaData: any, cachedData: any): any {
   _.each(newDeltaData, (deltaData) => {
-    let matchingCachedData = _.find(cachedData, (o) => o.key === deltaData.key && o.target === deltaData.target);
-    if (matchingCachedData && deltaData.datapoints) {
-      const size = matchingCachedData.datapoints.length;
-      let datapoints = deltaData.datapoints.concat(matchingCachedData.datapoints);
+    let matchingCachedDataIndex = _.findIndex(cachedData, (o: any) => o.key === deltaData.key && o.target === deltaData.target);
+    if (cachedData[matchingCachedDataIndex] && deltaData.datapoints) {
+      // const size = matchingCachedData.datapoints.length;
+      let datapoints = deltaData.datapoints.concat(cachedData[matchingCachedDataIndex].datapoints);
       datapoints = _.sortedUniqBy(
         datapoints.sort((a: any, b: any) => a[1] - b[1]),
         (a: any) => a[1]
       );
-      matchingCachedData.datapoints = _.takeRight(datapoints, size);
-      matchingCachedData.target = deltaData.target;
+      cachedData[matchingCachedDataIndex].datapoints = _.takeRight(datapoints, 800);
+      cachedData[matchingCachedDataIndex].target = deltaData.target;
     } else {
-      cachedData.push(deltaData);
-    }
-  });
+        cachedData.push(deltaData);
+      }
+    });
+
   return cachedData;
+}
+
+export function getDeltaRequestTimestamp(series: any, fromDefault: number, timeInterval: any): number {
+  // we do not apply any delta for requests that contain a one second granularity (application requests)
+  if (timeInterval.key === '1') {
+    return fromDefault;
+  }
+
+  // the found series can have multiple results, it's ok just to use the first one
+  // because data is written in batches and we know that once there is a datapoint
+  // for a series, the other series' datapoints are up-to-date as well.
+  const length = series[0].datapoints.length;
+  if (length < 2) {
+    return fromDefault;
+  }
+
+  const penultimate = length - 2;
+  return series[0].datapoints[penultimate][1];
 }
