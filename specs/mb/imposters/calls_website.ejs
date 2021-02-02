@@ -55,6 +55,25 @@
   "predicates": [{
     "equals": {
       "method": "GET",
+      "path": "/api/website-monitoring/config"
+    }
+  }],
+  "responses": [{
+    "is": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json;charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+      },
+      "body": "[{ \"id\": \"someId\", \"name\": \"www.instana.com\" }]"
+    }
+  }]
+},
+{
+  "predicates": [{
+    "equals": {
+      "method": "GET",
       "path": "/api/website-monitoring/catalog/metrics"
     }
   }],
