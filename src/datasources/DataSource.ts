@@ -30,7 +30,6 @@ import {
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   SLO_INFORMATION,
-  ANALYZE_APPLICATION_QUERY_BUILDER_METRICS,
   INFRASTRUCTURE_EXPLORE,
 } from '../GlobalVariables';
 import getVersion from '../util/instana_version';
@@ -130,7 +129,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
           return this.dataSourceWebsite.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (category === ANALYZE_APPLICATION_METRICS || category === ANALYZE_APPLICATION_QUERY_BUILDER_METRICS) {
+        } else if (category === ANALYZE_APPLICATION_METRICS) {
           return this.dataSourceApplication.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });

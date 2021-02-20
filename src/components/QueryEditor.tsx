@@ -4,14 +4,12 @@ import {
   ANALYZE_APPLICATION_METRICS,
   ANALYZE_WEBSITE_METRICS,
   APPLICATION_SERVICE_ENDPOINT_METRICS,
-  ANALYZE_APPLICATION_QUERY_BUILDER_METRICS,
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   SLO_INFORMATION,
   INFRASTRUCTURE_EXPLORE,
 } from '../GlobalVariables';
 import { ApplicationServiceEndpointMetrics } from './ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics';
-import { ApplicationCallsQueryBuilderMetrics } from './Analyze/ApplicationCallsQueryBuilderMetrics';
 import { ApplicationCallsMetrics } from './Analyze/ApplicationCallsMetrics';
 import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
 import AdvancedSettings from './AdvancedSettings/AdvancedSettings';
@@ -423,18 +421,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
         {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
           <ApplicationCallsMetrics
-            query={query}
-            onRunQuery={this.props.onRunQuery}
-            onChange={this.props.onChange}
-            updateMetrics={this.updateMetrics}
-            groups={this.state.groups}
-            updateGroups={this.updateGroups}
-            datasource={this.props.datasource}
-          />
-        )}
-
-        {query.metricCategory.key === ANALYZE_APPLICATION_QUERY_BUILDER_METRICS && (
-          <ApplicationCallsQueryBuilderMetrics
             query={query}
             onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
