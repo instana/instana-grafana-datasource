@@ -91,7 +91,7 @@ export function buildInstanaOptions(): InstanaOptions {
     apiToken: process.env.INSTANA_API_TOKEN || 'valid-api-token',
     useProxy: true,
     showOffline: true,
-    allowSlo: true,
+    allowInfraExplore: true,
   };
 }
 

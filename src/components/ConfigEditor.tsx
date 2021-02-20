@@ -6,6 +6,7 @@ import { InstanaOptions } from '../types/instana_options';
 import getVersion from '../util/instana_version';
 import proxyCheck from '../util/proxy_check';
 import _ from 'lodash';
+import './plugin.css';
 
 interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {}
 
@@ -89,7 +90,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
     const { jsonData } = options;
 
     return (
-      <div>
+      <div className="settings">
         <Legend>Instana configuration</Legend>
 
         <Field
@@ -157,12 +158,13 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Checkbox
           css={''}
-          label={'Enable SLO dashboards'}
-          value={jsonData.allowSlo}
-          onChange={(event) => this.onSwitchChange(event, 'allowSlo')}
+          label={'Enable Infrastructure Explore category'}
+          value={jsonData.allowInfraExplore}
+          onChange={(event) => this.onSwitchChange(event, 'allowInfraExplore')}
           description={
-            'Adds a new category that allows retrieval of SLO information. Needs Instana release 176+ and ' +
-            'an explicit feature flag.'
+            'Beta feature. Adds a new category that allows usage of Infrastructure Explore functionality.Needs Instana release ' +
+            '195+ and an explicit feature flag. If you are interested in this technology, please submit a request via ' +
+            'our support system at https://support.instana.com/.'
           }
         />
 
