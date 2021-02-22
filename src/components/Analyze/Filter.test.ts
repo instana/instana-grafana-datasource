@@ -1,4 +1,5 @@
 import { InstanaQuery } from '../../types/instana_query';
+import Operators from '../../lists/operators';
 import TagFilter from '../../types/tag_filter';
 import { Filters } from './Filter';
 
@@ -413,6 +414,144 @@ describe('Given a filter', () => {
 
         const show = filters.canShowStringInput(filter);
 
+        expect(show).toEqual(false);
+      });
+    });
+  });
+
+  describe('for canShowNumberInput', () => {
+    let typeUnderTest = 'NUMBER';
+    describe('with any type except NUMBER', () => {
+      it('should not show input for any operator at all', () => {
+        Operators.forEach((element: any) => {
+          if (element.type !== typeUnderTest) {
+            let filter: TagFilter = {
+              tag: { key: 'any.key', type: element.type },
+              operator: { key: element.key, type: element.type },
+              stringValue: '',
+              numberValue: 0,
+              booleanValue: false,
+              isValid: false,
+              entity: '',
+            };
+
+            const show = filters.canShowNumberInput(filter);
+            expect(show).toEqual(false);
+          }
+        });
+      });
+    });
+
+    describe('with NUMBER type', () => {
+      it('should show input for any EQUALS', () => {
+        let filter: TagFilter = {
+          tag: { key: 'any.key', type: typeUnderTest },
+          operator: { key: 'EQUALS', type: typeUnderTest },
+          stringValue: '',
+          numberValue: 0,
+          booleanValue: false,
+          isValid: false,
+          entity: '',
+        }
+        const show = filters.canShowNumberInput(filter);
+        expect(show).toEqual(true);
+      });
+
+      it('should show input for any NOT_EQUAL', () => {
+        let filter: TagFilter = {
+          tag: { key: 'any.key', type: typeUnderTest },
+          operator: { key: 'NOT_EQUAL', type: typeUnderTest },
+          stringValue: '',
+          numberValue: 0,
+          booleanValue: false,
+          isValid: false,
+          entity: '',
+        }
+        const show = filters.canShowNumberInput(filter);
+        expect(show).toEqual(true);
+      });
+
+      it('should show input for any LESS_THAN', () => {
+        let filter: TagFilter = {
+          tag: { key: 'any.key', type: typeUnderTest },
+          operator: { key: 'LESS_THAN', type: typeUnderTest },
+          stringValue: '',
+          numberValue: 0,
+          booleanValue: false,
+          isValid: false,
+          entity: '',
+        }
+        const show = filters.canShowNumberInput(filter);
+        expect(show).toEqual(true);
+      });
+
+      it('should show input for any GREATER_THAN', () => {
+        let filter: TagFilter = {
+          tag: { key: 'any.key', type: typeUnderTest },
+          operator: { key: 'GREATER_THAN', type: typeUnderTest },
+          stringValue: '',
+          numberValue: 0,
+          booleanValue: false,
+          isValid: false,
+          entity: '',
+        }
+        const show = filters.canShowNumberInput(filter);
+        expect(show).toEqual(true);
+      });
+
+      it('should show input for any LESS_OR_EQUAL_THAN', () => {
+        let filter: TagFilter = {
+          tag: { key: 'any.key', type: typeUnderTest },
+          operator: { key: 'LESS_OR_EQUAL_THAN', type: typeUnderTest },
+          stringValue: '',
+          numberValue: 0,
+          booleanValue: false,
+          isValid: false,
+          entity: '',
+        }
+        const show = filters.canShowNumberInput(filter);
+        expect(show).toEqual(true);
+      });
+
+      it('should show input for any GREATER_OR_EQUAL_THAN', () => {
+        let filter: TagFilter = {
+          tag: { key: 'any.key', type: typeUnderTest },
+          operator: { key: 'GREATER_OR_EQUAL_THAN', type: typeUnderTest },
+          stringValue: '',
+          numberValue: 0,
+          booleanValue: false,
+          isValid: false,
+          entity: '',
+        }
+        const show = filters.canShowNumberInput(filter);
+        expect(show).toEqual(true);
+      });
+
+      it('should show input for any NOT_EMPTY', () => {
+        let filter: TagFilter = {
+          tag: { key: 'any.key', type: typeUnderTest },
+          operator: { key: 'NOT_EMPTY', type: typeUnderTest },
+          stringValue: '',
+          numberValue: 0,
+          booleanValue: false,
+          isValid: false,
+          entity: '',
+        }
+        const show = filters.canShowNumberInput(filter);
+        expect(show).toEqual(false);
+      });
+
+      it('should show input for any IS_EMPTY', () => {
+        let filter: TagFilter = {
+          tag: { key: 'any.key', type: typeUnderTest },
+          operator: { key: 'IS_EMPTY', type: typeUnderTest },
+          stringValue: '',
+          numberValue: 0,
+          booleanValue: false,
+          isValid: false,
+          entity: '',
+        }
+        const show = filters.canShowNumberInput(filter);
         expect(show).toEqual(false);
       });
     });
