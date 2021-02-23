@@ -30,6 +30,7 @@ import {
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   SLO_INFORMATION,
+  INFRASTRUCTURE_EXPLORE,
 } from '../GlobalVariables';
 import getVersion from '../util/instana_version';
 import { aggregateTarget } from '../util/aggregation_util';
@@ -108,24 +109,29 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         target.timeFilter = targetTimeFilter;
         target.stableHash = generateStableHash(target);
         targetTimeFilter = this.adjustTimeFilterIfCached(targetTimeFilter, target);
+        const category = target.metricCategory.key;
 
-        if (target.metricCategory.key === SLO_INFORMATION) {
+        if (category === SLO_INFORMATION) {
           return this.dataSourceSlo.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (target.metricCategory.key === BUILT_IN_METRICS || target.metricCategory.key === CUSTOM_METRICS) {
+        } else if (category === INFRASTRUCTURE_EXPLORE) {
+          return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
+            return this.buildTarget(target, data);
+          });
+        } else if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS) {
           return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (target.metricCategory.key === ANALYZE_WEBSITE_METRICS) {
+        } else if (category === ANALYZE_WEBSITE_METRICS) {
           return this.dataSourceWebsite.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (target.metricCategory.key === ANALYZE_APPLICATION_METRICS) {
+        } else if (category === ANALYZE_APPLICATION_METRICS) {
           return this.dataSourceApplication.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (target.metricCategory.key === APPLICATION_SERVICE_ENDPOINT_METRICS) {
+        } else if (category === APPLICATION_SERVICE_ENDPOINT_METRICS) {
           return this.getApplicationServiceEndpointMetrics(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
@@ -200,8 +206,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   supportsDeltaRequests(target: InstanaQuery): boolean {
-    if (target.metricCategory && target.metricCategory.key === SLO_INFORMATION) {
-      return false;
+    if (target.metricCategory) {
+      if (target.metricCategory.key === SLO_INFORMATION || target.metricCategory.key === INFRASTRUCTURE_EXPLORE) {
+        return false;
+      }
     }
 
     let version = this.resultCache.get('version');
@@ -244,6 +252,13 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     return data;
   }
 
+  buildTarget(target: InstanaQuery, data: any) {
+    return {
+      target: target,
+      data: data,
+    };
+  }
+
   buildTargetWithAppendedDataResult(target: InstanaQuery, timeFilter: TimeFilter, data: any) {
     if (timeFilter.from !== target.timeFilter.from && data) {
       data = this.appendResult(data, target);
@@ -253,10 +268,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       });
     }
 
-    return {
-      target: target,
-      data: data,
-    };
+    return this.buildTarget(target, data);
   }
 
   appendResult(data: any, target: InstanaQuery) {
@@ -314,7 +326,8 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   getDefaultTimeInterval(query: InstanaQuery) {
-    if (query.metricCategory.key === BUILT_IN_METRICS || query.metricCategory.key === CUSTOM_METRICS) {
+    const category = query.metricCategory.key;
+    if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_EXPLORE) {
       return getDefaultMetricRollupDuration(this.getTimeFilter());
     } else {
       return getDefaultChartGranularity(this.getTimeFilter().windowSize);
@@ -359,7 +372,8 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   setPossibleTimeIntervals(target: InstanaQuery) {
-    if (target.metricCategory.key === 0 || target.metricCategory.key === 1) {
+    const category = target.metricCategory.key;
+    if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_EXPLORE) {
       this.availableTimeIntervals = this.availableRollups;
     } else {
       this.availableTimeIntervals = this.availableGranularities;

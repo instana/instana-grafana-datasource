@@ -20,7 +20,7 @@ datasources:
       apiToken: ${INSTANA_API_TOKEN}
       useProxy: false
       showOffline: true
-      allowSlo: true
+      allowInfraExplore: true
     # <bool> allow users to edit datasources from the UI.
     version: 1
     editable: true

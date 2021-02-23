@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 
-import { BUILT_IN_METRICS, CUSTOM_METRICS, SLO_INFORMATION } from '../../GlobalVariables';
+import { BUILT_IN_METRICS, CUSTOM_METRICS, INFRASTRUCTURE_EXPLORE, SLO_INFORMATION } from '../../GlobalVariables';
 import { FreeTextMetrics } from '../Infrastructure/Custom/FreeTextMetrics';
 import { InstanaQuery } from '../../types/instana_query';
 import { AggregateQuery } from './AggregateQuery';
@@ -157,6 +157,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
 
   render() {
     const { query, onRunQuery, onChange, loadEntityTypes } = this.props;
+    const category = query.metricCategory.key;
 
     return (
       <div>
@@ -170,7 +171,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
         </div>
 
         <div hidden={!query.showAdvancedSettings}>
-          <div className={'gf-form'} hidden={query.metricCategory.key === SLO_INFORMATION}>
+          <div className={'gf-form'} hidden={category === SLO_INFORMATION || category === INFRASTRUCTURE_EXPLORE}>
             <FormInput
               queryKeyword
               inputWidth={0}
@@ -198,7 +199,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
             />
           </div>
 
-          <div hidden={query.metricCategory.key !== CUSTOM_METRICS}>
+          <div hidden={category !== CUSTOM_METRICS}>
             <FreeTextMetrics
               query={query}
               onRunQuery={onRunQuery}
@@ -207,7 +208,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
             />
           </div>
 
-          <div hidden={query.metricCategory.key !== BUILT_IN_METRICS && query.metricCategory.key !== CUSTOM_METRICS}>
+          <div hidden={category !== BUILT_IN_METRICS && category !== CUSTOM_METRICS}>
             <AggregateQuery query={query} onRunQuery={onRunQuery} onChange={onChange} />
           </div>
         </div>

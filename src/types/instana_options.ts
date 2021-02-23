@@ -8,7 +8,7 @@ export interface InstanaOptions extends DataSourceJsonData {
   apiToken: string;
   useProxy: boolean;
   showOffline: boolean;
-  allowSlo: boolean;
+  allowInfraExplore: boolean;
   queryinterval_limit_infra?: number;
   queryinterval_limit_app_metrics?: number;
   queryinterval_limit_app_calls?: number;

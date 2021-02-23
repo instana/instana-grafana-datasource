@@ -7,6 +7,7 @@ import {
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   SLO_INFORMATION,
+  INFRASTRUCTURE_EXPLORE,
 } from '../GlobalVariables';
 import { ApplicationServiceEndpointMetrics } from './ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics';
 import { ApplicationCallsMetrics } from './Analyze/ApplicationCallsMetrics';
@@ -17,10 +18,11 @@ import { Infrastructure } from './Infrastructure/Infrastructure';
 import { SloInformation } from './SLOInformation/SloInformation';
 import AggregationFunctions from '../lists/aggregation_function';
 import { InstanaOptions } from '../types/instana_options';
-import MetricCategories from '../lists/metric_categories';
+import metricCategories from '../lists/metric_categories';
 import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import { DataSource } from '../datasources/DataSource';
 import { InstanaQuery } from '../types/instana_query';
+import { Explore } from './Infrastructure/Explore';
 import FormSelect from './FormField/FormSelect';
 import { readTime } from '../util/time_util';
 import { Filters } from './Analyze/Filter';
@@ -44,11 +46,12 @@ interface QueryState {
 export class QueryEditor extends PureComponent<Props, QueryState> {
   query: InstanaQuery;
   snapshots: any;
+  allowInfraExplore: boolean;
 
   constructor(props: Props) {
     super(props);
     const defaultQuery: Partial<InstanaQuery> = {
-      metricCategory: MetricCategories[0],
+      metricCategory: metricCategories[0],
       timeShiftIsValid: true,
       customFilters: [],
     };
@@ -62,13 +65,14 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       allMetrics: [],
       queryTypes: [],
       availableMetrics: [],
-      selectedWindowSize: this.props.range ? readTime(this.props.range).windowSize : 21600000,
+      selectedWindowSize: props.range ? readTime(props.range).windowSize : 21600000,
     };
 
     this.filterMetricsOnType = this.filterMetricsOnType.bind(this);
     this.loadEntityTypes = this.loadEntityTypes.bind(this);
+    this.allowInfraExplore = props.datasource.options.allowInfraExplore;
 
-    this.props.onChange(this.query);
+    props.onChange(this.query);
   }
 
   componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<QueryState>, snapshot?: any) {
@@ -157,7 +161,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   filterForEntityType = (findMatchingEntityTypes = true, filterResults = true) => {
     const { query, datasource, onChange } = this.props;
-    datasource.getEntityTypes().then((entityTypes) => {
+    datasource.getEntityTypes().then((entityTypes: any) => {
       let queryTypes = entityTypes;
       if (filterResults && !query.useFreeTextMetrics) {
         queryTypes = this.filterEntityTypes(entityTypes, findMatchingEntityTypes);
@@ -325,6 +329,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     query.displayMaxMetricValue = false;
     query.applicationCallToEntity = '';
     query.callToEntity = '';
+    query.tagFilterExpression = '';
     this.resetServices();
     this.resetEndpoints();
     this.resetSLO();
@@ -358,6 +363,9 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   render() {
     const { query, onCategoryChange } = this;
+    const categories = this.allowInfraExplore
+      ? metricCategories
+      : metricCategories.filter(category => category.key != INFRASTRUCTURE_EXPLORE);
 
     return (
       <div className={'gf-form-group'}>
@@ -368,7 +376,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
             label={'Category'}
             tooltip={'Select a metric category.'}
             value={query.metricCategory}
-            options={MetricCategories}
+            options={categories}
             onChange={onCategoryChange}
           />
         </div>
@@ -395,6 +403,18 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
             loadEntityTypes={this.loadEntityTypes}
+            updateQueryTypes={this.updateQueryTypes}
+          />
+        )}
+
+        {query.metricCategory.key === INFRASTRUCTURE_EXPLORE && (
+          <Explore
+            query={query}
+            queryTypes={this.state.queryTypes}
+            datasource={this.props.datasource}
+            onRunQuery={this.props.onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
             updateQueryTypes={this.updateQueryTypes}
           />
         )}
@@ -443,7 +463,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key !== SLO_INFORMATION && (
+        {(query.metricCategory.key !== SLO_INFORMATION &&
+          query.metricCategory.key !== INFRASTRUCTURE_EXPLORE) && (
           <Metric
             query={query}
             onChange={this.props.onChange}

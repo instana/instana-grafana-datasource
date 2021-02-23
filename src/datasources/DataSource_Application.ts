@@ -41,9 +41,7 @@ export class DataSourceApplication {
       !target.metric ||
       !target.metric.key ||
       !target.group ||
-      !target.group.key ||
-      !target.entity ||
-      (!target.entity.key && !target.entity.label)
+      !target.group.key
     ) {
       return Promise.resolve(emptyResultData(target.refId));
     }
@@ -166,7 +164,7 @@ export class DataSourceApplication {
 
   fetchAnalyzeMetricsForApplication(target: InstanaQuery, timeFilter: TimeFilter) {
     const windowSize = getWindowSize(timeFilter);
-    const tagFilters: any[] = [];
+    let tagFilters: any[] = [];
 
     return Promise.resolve(this.getApplicationTags(timeFilter)).then((applicationTags) => {
       if (target.entity.key) {
@@ -216,9 +214,10 @@ export class DataSourceApplication {
           to: timeFilter.to,
           windowSize: windowSize,
         },
-        tagFilters: tagFilters,
         metrics: [metric],
+        tagFilters: tagFilters,
       };
+
       return postRequest(
         this.instanaOptions,
         '/api/application-monitoring/analyze/call-groups?fillTimeSeries=true',

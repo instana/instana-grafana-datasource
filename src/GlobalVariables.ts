@@ -13,6 +13,7 @@ export const APPLICATION_SERVICE_ENDPOINT_METRICS = 4; // replaces previous ->
 // SERVICE_METRICS = '5';
 // ENDPOINT_METRICS = '6';
 export const SLO_INFORMATION = 7;
+export const INFRASTRUCTURE_EXPLORE = 8;
 
 /* DROPDOWN DEFAULTS */
 export const ALL_APPLICATIONS = '-- No Application Filter --';

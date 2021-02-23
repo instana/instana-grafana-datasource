@@ -1,7 +1,7 @@
 import { SelectableValue } from '@grafana/data';
 import { InstanaOptions } from '../types/instana_options';
 import { InstanaQuery } from '../types/instana_query';
-import { getRequest } from '../util/request_handler';
+import { getRequest, postRequest } from '../util/request_handler';
 import TimeFilter from '../types/time_filter';
 import Cache from '../cache';
 import { CUSTOM_METRICS, SEPARATOR } from '../GlobalVariables';
@@ -36,6 +36,10 @@ export class DataSourceInfrastructure {
           this.instanaOptions.queryinterval_limit_infra +
           ' hours'
       );
+    }
+
+    if (target.tagFilterExpression) {
+      return this.fetchExploreEntities(target, timeFilter);
     }
 
     // do not try to retrieve data without selected metric
@@ -185,6 +189,43 @@ export class DataSourceInfrastructure {
       `&to=${timeFilter.to}` +
       (this.instanaOptions.showOffline ? `` : `&time=${timeFilter.to}`);
     return getRequest(this.instanaOptions, fetchSnapshotTypesUrl);
+  }
+
+  fetchExploreEntities(target: InstanaQuery, timeFilter: TimeFilter) {
+    const data = JSON.parse(target.tagFilterExpression);
+
+    const payload = {
+      tagFilterExpression: data.tagFilterExpression,
+      pagination: {
+        retrievalSize: 200
+      },
+      groupBy: data.groupBy,
+      type: data.type,
+      metrics: data.metrics,
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: timeFilter.windowSize
+      }
+    }
+
+    return postRequest(this.instanaOptions, "/api/infrastructure-monitoring/explore/groups", payload).then((res: any) => {
+      let result: any = [];
+      res.data.data.items.forEach((entity: any) => {
+        for (var metric in entity.metrics) {
+          result.push({
+            target: entity.tags[data.groupBy] + " - " + metric,
+            datapoints: entity.metrics[metric] ?
+            entity.metrics[metric].map((datapoint: any) => [datapoint[1],datapoint[0]])
+            :
+            [],
+            refId: target.refId,
+            key: target.stableHash,
+          });
+        }
+      });
+
+      return result;
+    });
   }
 
   getMetricsCatalog(plugin: SelectableValue, metricCategory: number): Promise<SelectableValue[]> {

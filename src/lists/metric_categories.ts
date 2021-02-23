@@ -11,6 +11,10 @@ export default [
     key: 1,
   },
   {
+    label: 'Infrastructure explore (beta)',
+    key: 8,
+  },
+  {
     // replaces Application metrics(4) & Service metrics(5) & Endpoint metrics(6)
     label: 'Application/service/endpoint metrics',
     key: 4,
