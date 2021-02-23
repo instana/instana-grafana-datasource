@@ -95,6 +95,10 @@ export class Filters extends React.Component<Props, FilterState> {
     );
   }
 
+  canShowNumberInput(filter: TagFilter) {
+    return filter.tag.type === this.OPERATOR_NUMBER && !filter.operator.key.includes('EMPTY');
+  }
+
   debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
   onTagFilterStringValueChange = (value: FormEvent<HTMLInputElement>, index: number) => {
@@ -195,7 +199,7 @@ export class Filters extends React.Component<Props, FilterState> {
           />
           <Select
             menuPlacement={'bottom'}
-            width={12}
+            width={20}
             isSearchable={true}
             value={query.filters[index].operator}
             options={this.filterOperatorsOnType(query.filters[index].tag.type)}
@@ -212,7 +216,7 @@ export class Filters extends React.Component<Props, FilterState> {
             />
           )}
 
-          {query.filters[index].tag.type === 'NUMBER' && (
+          {this.canShowNumberInput(query.filters[index]) && (
             <Input
               css={''}
               type={'number'}

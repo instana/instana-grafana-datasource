@@ -6,12 +6,19 @@ export default [
   { key: 'NOT_CONTAIN', label: 'does not contain', type: 'STRING' },
   { key: 'NOT_EMPTY', label: 'is present', type: 'STRING' },
   { key: 'IS_EMPTY', label: 'is not present', type: 'STRING' },
+  { key: 'STARTS_WITH', label: 'starts with', type: 'STRING' },
+  { key: 'ENDS_WITH', label: 'ends with', type: 'STRING' },
+  { key: 'NOT_STARTS_WITH', label: 'does not start with', type: 'STRING' },
+  { key: 'NOT_ENDS_WITH', label: 'does not end with', type: 'STRING' },
   // NUMBER
   { key: 'EQUALS', label: '=', type: 'NUMBER' },
   { key: 'NOT_EQUAL', label: '!=', type: 'NUMBER' },
   { key: 'LESS_THAN', label: '<', type: 'NUMBER' },
   { key: 'GREATER_THAN', label: '>', type: 'NUMBER' },
   { key: 'IS_EMPTY', label: 'is empty', type: 'NUMBER' },
+  { key: 'NOT_EMPTY', label: 'is not empty', type: 'NUMBER' },
+  { key: 'LESS_OR_EQUAL_THAN', label: 'less or equal than', type: 'NUMBER' },
+  { key: 'GREATER_OR_EQUAL_THAN', label: 'greater or equal than', type: 'NUMBER' },
   // BOOLEAN
   { key: 'EQUALS', label: 'is', type: 'BOOLEAN' },
   // KEY_VALUE_PAIR
@@ -21,6 +28,10 @@ export default [
   { key: 'NOT_CONTAIN', label: 'does not contain', type: 'KEY_VALUE_PAIR' },
   { key: 'NOT_EMPTY', label: 'is present', type: 'KEY_VALUE_PAIR' },
   { key: 'IS_EMPTY', label: 'is not present', type: 'KEY_VALUE_PAIR' },
+  { key: 'STARTS_WITH', label: 'starts with', type: 'KEY_VALUE_PAIR' },
+  { key: 'ENDS_WITH', label: 'ends with', type: 'KEY_VALUE_PAIR' },
+  { key: 'IS_BLANK', label: 'is blank', type: 'KEY_VALUE_PAIR' },
+  { key: 'NOT_BLANK', label: 'is not blank', type: 'KEY_VALUE_PAIR' },
   // STRING_SET
   { key: 'EQUALS', label: 'equals', type: 'STRING_SET' },
   { key: 'NOT_EQUAL', label: 'does not equal', type: 'STRING_SET' },
