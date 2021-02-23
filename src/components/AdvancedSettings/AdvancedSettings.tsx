@@ -157,7 +157,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
 
   render() {
     const { query, onRunQuery, onChange, loadEntityTypes } = this.props;
-    const key = query.metricCategory.key;
+    const category = query.metricCategory.key;
 
     return (
       <div>
@@ -171,7 +171,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
         </div>
 
         <div hidden={!query.showAdvancedSettings}>
-          <div className={'gf-form'} hidden={key === SLO_INFORMATION || key === INFRASTRUCTURE_EXPLORE}>
+          <div className={'gf-form'} hidden={category === SLO_INFORMATION || category === INFRASTRUCTURE_EXPLORE}>
             <FormInput
               queryKeyword
               inputWidth={0}
@@ -199,7 +199,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
             />
           </div>
 
-          <div hidden={key !== CUSTOM_METRICS}>
+          <div hidden={category !== CUSTOM_METRICS}>
             <FreeTextMetrics
               query={query}
               onRunQuery={onRunQuery}
@@ -208,7 +208,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
             />
           </div>
 
-          <div hidden={key !== BUILT_IN_METRICS && key !== CUSTOM_METRICS}>
+          <div hidden={category !== BUILT_IN_METRICS && category !== CUSTOM_METRICS}>
             <AggregateQuery query={query} onRunQuery={onRunQuery} onChange={onChange} />
           </div>
         </div>

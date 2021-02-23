@@ -162,7 +162,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           value={jsonData.allowInfraExplore}
           onChange={(event) => this.onSwitchChange(event, 'allowInfraExplore')}
           description={
-            'Beta feature. Adds a new category that allows usage of Infrastructure Explore functionality.Needs Instana release ' +
+            'Beta feature. Adds a new category that allows usage of Infrastructure Explore functionality. Needs Instana release ' +
             '195+ and an explicit feature flag. If you are interested in this technology, please submit a request via ' +
             'our support system at https://support.instana.com/.'
           }
