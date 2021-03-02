@@ -33,7 +33,7 @@ export class Explore extends React.Component<Props, State> {
 
     // onRunQuery with 500ms delay after last debounce
     this.debouncedRunQuery();
-  }
+  };
 
   isValidJson = (tagFilterExpression: string): boolean => {
     if (tagFilterExpression) {
@@ -47,7 +47,7 @@ export class Explore extends React.Component<Props, State> {
 
     // no need to invalidate an empty input field
     return true;
-  }
+  };
 
   debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
@@ -61,7 +61,9 @@ export class Explore extends React.Component<Props, State> {
             queryKeyword
             inputWidth={0}
             label={'Filter'}
-            tooltip={'This is currently a beta feature and only available for selected customers. If you are interested in this technology, please submit a request via our support system at https://support.instana.com/. '}
+            tooltip={
+              'This is currently a beta feature and only available for selected customers. If you are interestedin this technology, please submit a request via our support system at https://support.instana.com/.'
+            }
             value={query.tagFilterExpression}
             invalid={!this.isValidJson(query.tagFilterExpression)}
             onChange={this.onFilterChange}

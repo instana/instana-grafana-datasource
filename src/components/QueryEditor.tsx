@@ -365,7 +365,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     const { query, onCategoryChange } = this;
     const categories = this.allowInfraExplore
       ? metricCategories
-      : metricCategories.filter(category => category.key != INFRASTRUCTURE_EXPLORE);
+      : metricCategories.filter((category) => category.key !== INFRASTRUCTURE_EXPLORE);
 
     return (
       <div className={'gf-form-group'}>
@@ -463,8 +463,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {(query.metricCategory.key !== SLO_INFORMATION &&
-          query.metricCategory.key !== INFRASTRUCTURE_EXPLORE) && (
+        {query.metricCategory.key !== SLO_INFORMATION && query.metricCategory.key !== INFRASTRUCTURE_EXPLORE && (
           <Metric
             query={query}
             onChange={this.props.onChange}
@@ -504,7 +503,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           loadEntityTypes={this.loadEntityTypes}
         />
 
-        <Badge text={'3.1.4'} color={'blue'} />
+        <Badge text={'3.2.0'} color={'blue'} />
       </div>
     );
   }

@@ -327,7 +327,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
   getDefaultTimeInterval(query: InstanaQuery) {
     const category = query.metricCategory.key;
-    if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_EXPLORE) {
+    if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_EXPLORE) {
       return getDefaultMetricRollupDuration(this.getTimeFilter());
     } else {
       return getDefaultChartGranularity(this.getTimeFilter().windowSize);

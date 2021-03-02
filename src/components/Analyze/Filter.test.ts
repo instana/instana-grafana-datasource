@@ -452,7 +452,7 @@ describe('Given a filter', () => {
           booleanValue: false,
           isValid: false,
           entity: '',
-        }
+        };
         const show = filters.canShowNumberInput(filter);
         expect(show).toEqual(true);
       });
@@ -466,7 +466,7 @@ describe('Given a filter', () => {
           booleanValue: false,
           isValid: false,
           entity: '',
-        }
+        };
         const show = filters.canShowNumberInput(filter);
         expect(show).toEqual(true);
       });
@@ -480,7 +480,7 @@ describe('Given a filter', () => {
           booleanValue: false,
           isValid: false,
           entity: '',
-        }
+        };
         const show = filters.canShowNumberInput(filter);
         expect(show).toEqual(true);
       });
@@ -494,7 +494,7 @@ describe('Given a filter', () => {
           booleanValue: false,
           isValid: false,
           entity: '',
-        }
+        };
         const show = filters.canShowNumberInput(filter);
         expect(show).toEqual(true);
       });
@@ -508,7 +508,7 @@ describe('Given a filter', () => {
           booleanValue: false,
           isValid: false,
           entity: '',
-        }
+        };
         const show = filters.canShowNumberInput(filter);
         expect(show).toEqual(true);
       });
@@ -522,7 +522,7 @@ describe('Given a filter', () => {
           booleanValue: false,
           isValid: false,
           entity: '',
-        }
+        };
         const show = filters.canShowNumberInput(filter);
         expect(show).toEqual(true);
       });
@@ -536,7 +536,7 @@ describe('Given a filter', () => {
           booleanValue: false,
           isValid: false,
           entity: '',
-        }
+        };
         const show = filters.canShowNumberInput(filter);
         expect(show).toEqual(false);
       });
@@ -550,7 +550,7 @@ describe('Given a filter', () => {
           booleanValue: false,
           isValid: false,
           entity: '',
-        }
+        };
         const show = filters.canShowNumberInput(filter);
         expect(show).toEqual(false);
       });

@@ -361,6 +361,7 @@ describe('Given a delta', () => {
           aggregationFunction: {},
           applicationBoundaryScope: '',
           showAdvancedSettings: false,
+          tagFilterExpression: '',
         })
       );
     });
