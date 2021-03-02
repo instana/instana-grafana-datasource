@@ -73,7 +73,7 @@ The actual screenshots are from "Quick Check" example below. Do not delete old s
 * Update `src/plugin.json` with the new version number and the version date.
 * Update `src/components/QueryEditor.tsx` (check the bottom of the file) with the new version number.
 * Run the full build again, this should update `dist/plugin.json`.
-* Commit this with a matching commit message (like `Bumped version to x.x.x`) and push this commit.
+* Commit this with a matching commit message and push this commit: `git commit -a -m "Bumped version to x.x.x" && git push` 
 * Note the commit hash of this commit (to extend repo.json in plugin-repository).
 * Tag your version with `git tag -a vx.x.x -m "plugin x.x.x" $commit && git push origin vx.x.x`
 * If you haven't already, `git clone github.com:instana/grafana-plugin-repository.git`
