@@ -311,3 +311,16 @@
     "inject": "<%- stringify(filename, 'metrics_factory_3.ejs') %>"
   }]
 },
+{
+  "predicates": [{
+    "equals": {
+      "method": "POST",
+      "path": "/api/infrastructure-monitoring/explore/groups"
+    }
+  },{
+    "contains": { "body": "tagFilterExpression" }
+  }],
+  "responses": [{
+    "inject": "<%- stringify(filename, 'infraExplore_response.ejs') %>"
+  }]
+},
