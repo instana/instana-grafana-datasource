@@ -18,6 +18,10 @@ For On-premise customers Instana Release 146 is required.
 - Utilizes Instana REST API
 - Security via access token
 
+## Troubleshooting 
+
+When troubleshooting, please open a ticket at https://support.instana.com/hc/en-us/requests/new to get your issues/questions resolved the fastest way possible.
+
 ## Configuration
 
 This datasource uses the Instana REST API to query the metric values. First of all you will need to generate an API [token](https://docs.instana.io/quick_start/api/). Use this token along with the URL for your Instana account e.g. *https://prod-acme.instana.io*
