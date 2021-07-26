@@ -33,9 +33,8 @@ process.env.INSTANA_API_TOKEN = 'valid-api-token';
 
 This will run integration tests against a certain tenant unit of Instana.
 
-4. Build the project via `docker build`
-5. Run `yarn start`
-6. Goto http://localhost:3000 and login with admin/admin. A default Instana datasource was allready added using the provided env variables. The mountebank server runs default at http://localhost:8010 and the only valid api token is 'valid-api-token'.
+4. Run `yarn start`
+5. Goto http://localhost:3000 and login with admin/admin. A default Instana datasource was allready added using the provided env variables. The mountebank server runs default at http://localhost:8010 and the only valid api token is 'valid-api-token'.
 
 Changes should be made in the `src` directory. The build task transpiles the TypeScript code into JavaScript and copies it to the `dist` directory. Grafana will load the JavaScript from the `dist` directory and ignore the `src` directory. The `dist` directory is bind mounted in the Grafana container.
 
@@ -87,18 +86,23 @@ The actual screenshots are from "Quick Check" example below. Do not delete old s
 
 ### Quick Check
 
-This procedure is used to test the Instana Grafana data source before the version update PR is accepted by Grafana. That is, directory names as `instana-datasource` are valid in a Grafana workspace with this plugin installed, not in this repository. To run this scenario directly in this repository, simply omit `cd instana-datasource` and replace `docker-compose up mountebank` by `docker-compose up`.
+This procedure is used to test the Instana Grafana data source before the version update PR is accepted by Grafana. That is, directory names as `instana-datasource` are valid in a Grafana workspace with this plugin installed, not in this repository.
 
 * `cd instana-datasource`
-* the Grafana server needs to run at `http://localhost:3000` for the the Instana datasource
-* `docker-compose up mountebank`
+* `yarn start`
 * Create a datasource for Instana in Grafana
-    * URL with proxy (Grafana 5.3+): `http://mountebank:8010`
-    * URL with out proxy (Grafana <5.3): `http://localhost:8010`
+    * for Grafana 5.3+ URL with proxy: `http://mountebank:8010`
+    * for Grafana <5.3 URL with out proxy: `http://localhost:8010`
     * API Token: `valid-api-token`
+    * check `Enable Infrastructure Explore category`
+    * Name: `Instana-1`
 * Create a new dashboard with a graph panel
 
 #### Built-in metrics
+
+Values for each label:
+
+* Data source: `Instana-1`
 * Category: `Infrastructure built-in metrics`
 * Query: `filler`
 * Type: `Process`
@@ -107,6 +111,10 @@ This procedure is used to test the Instana Grafana data source before the versio
 This should render a chart with two datasets (`node (on host "host-1")` and `node (on host "host-2)`).
 
 #### Custom metrics
+
+Values for each label in order:
+
+* Data source: `Instana-1`
 * Category: `Infrastructure custom metrics`
 * Query: `filler`
 * Type: `Dropwizard`
@@ -120,7 +128,11 @@ This should render a chart with one dataset (`host-3 (29042)`).
 
 #### Infrastructure Explore
 
-* Category: `Infrastructure explore (beta)`
+Values for each label in order:
+The category `Infrastructure custom metrics` will only show up if you have checked `Enable Infrastructure Explore category` in the data source options.
+
+* Data source: `Instana-1`
+* Category: `Infrastructure custom metrics`
 * Filter: 
 ```
 {
@@ -131,10 +143,11 @@ This should render a chart with one dataset (`host-3 (29042)`).
 
 This should render a chart with three dataset (`You - cpu.total_usage.P99`, `are - cpu.total_usage.P99`, `awesome - cpu.total_usage.P99`).
 
-##### Aggregation selection for Visualizations
-(deprecated) Switching the Visualization for the custom metric above to `Stat` and `Gauge` or `Table` will additional add an aggregation selection to Metric dropdown. Switch back to "Graph" visualization to continue.
-
 #### Application metrics
+
+Values for each label in order:
+
+* Data source: `Instana-1`
 * Category: `Application/Service/Endpoint metrics`
 * Application: `AWS instances`
 * Service: `-- No Service Filter --`
@@ -144,6 +157,8 @@ This should render a chart with three dataset (`You - cpu.total_usage.P99`, `are
 This should render a chart with one dataset (`AWS instances (AWS instances) - latency.mean`).
 
 #### Service metrics
+
+* Data source: `Instana-1`
 * Category: `Application/Service/Endpoint metrics`
 * Application: `-- No Application Filter --`
 * Service: `AWS Lambda Service`
@@ -153,6 +168,8 @@ This should render a chart with one dataset (`AWS instances (AWS instances) - la
 This should render a chart with one dataset (`AWS Lambda Service (AWS Lambda Service) - latency.mean`).
 
 #### Endpoint metrics
+
+* Data source: `Instana-1`
 * Category: `Application/Service/Endpoint metrics`
 * Application: `-- No Application Filter --`
 * Service: `-- No Service Filter --`
@@ -162,14 +179,18 @@ This should render a chart with one dataset (`AWS Lambda Service (AWS Lambda Ser
 This should render a chart with one dataset (`GET /api (GET /api) - latency.mean`).
 
 #### Analyze application calls
+
+* Data source: `Instana-1`
 * Category: `Analyze application calls`
 * Application: `Dest` `AWS instances`
 * Group by: `Dest` `endpoint.name`
-* Metric: `Call latency (latency)` `MEAN`
+* Metric: `Call latency (latency)`
 
 This should render a chart with one dataset (`GET (AWS instances) latency.mean`).
 
 #### Analyze websites
+
+* Data source: `Instana-1`
 * Category: `Analyze websites`
 * Website: `www.instana.com`
 * Type: `Page Loads`
