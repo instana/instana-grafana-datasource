@@ -209,7 +209,11 @@ export class DataSourceApplication {
           windowSize: windowSize,
         },
         metrics: [metric],
-        tagFilters: tagFilters,
+        tagFilterExpression: {
+          type: "EXPRESSION",
+          logicalOperator: "AND",
+          elements: tagFilters
+        }
       };
 
       return postRequest(
