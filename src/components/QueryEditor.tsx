@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import '../instana-grafana.css';
 
 import {
   ANALYZE_APPLICATION_METRICS,
@@ -6,32 +6,32 @@ import {
   APPLICATION_SERVICE_ENDPOINT_METRICS,
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
-  SLO_INFORMATION,
   INFRASTRUCTURE_EXPLORE,
+  SLO_INFORMATION,
 } from '../GlobalVariables';
-import { ApplicationServiceEndpointMetrics } from './ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics';
-import { ApplicationCallsMetrics } from './Analyze/ApplicationCallsMetrics';
-import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
-import AdvancedSettings from './AdvancedSettings/AdvancedSettings';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
-import { Infrastructure } from './Infrastructure/Infrastructure';
-import { SloInformation } from './SLOInformation/SloInformation';
-import AggregationFunctions from '../lists/aggregation_function';
-import { InstanaOptions } from '../types/instana_options';
-import metricCategories from '../lists/metric_categories';
-import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
-import { DataSource } from '../datasources/DataSource';
-import { InstanaQuery } from '../types/instana_query';
-import { Explore } from './Infrastructure/Explore';
-import FormSelect from './FormField/FormSelect';
-import { readTime } from '../util/time_util';
-import { Filters } from './Analyze/Filter';
-import Metric from './Metric/Metric';
-import { Badge } from '@grafana/ui';
-import migrate from '../migration';
-import _ from 'lodash';
+import React, { PureComponent } from 'react';
 
-import '../instana-grafana.css';
+import AdvancedSettings from './AdvancedSettings/AdvancedSettings';
+import AggregationFunctions from '../lists/aggregation_function';
+import { ApplicationCallsMetrics } from './Analyze/ApplicationCallsMetrics';
+import { ApplicationServiceEndpointMetrics } from './ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics';
+import { Badge } from '@grafana/ui';
+import { DataSource } from '../datasources/DataSource';
+import { Explore } from './Infrastructure/Explore';
+import { Filters } from './Analyze/Filter';
+import FormSelect from './FormField/FormSelect';
+import { Infrastructure } from './Infrastructure/Infrastructure';
+import { InstanaOptions } from '../types/instana_options';
+import { InstanaQuery } from '../types/instana_query';
+import Metric from './Metric/Metric';
+import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
+import { SloInformation } from './SLOInformation/SloInformation';
+import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
+import _ from 'lodash';
+import metricCategories from '../lists/metric_categories';
+import migrate from '../migration';
+import { readTime } from '../util/time_util';
 
 type Props = QueryEditorProps<DataSource, InstanaQuery, InstanaOptions>;
 
@@ -503,7 +503,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           loadEntityTypes={this.loadEntityTypes}
         />
 
-        <Badge text={'3.3.0'} color={'blue'} />
+        <Badge text={'3.3.1'} color={'blue'} />
       </div>
     );
   }
