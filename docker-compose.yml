@@ -1,12 +1,13 @@
 version: "3"
 services:
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:8.1.0-beta2
     ports:
       - 3000:3000
     volumes:
       - ./dist:/var/lib/grafana/plugins/instana
       - ./provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana.ini:/etc/grafana/grafana.ini
     environment:
       INSTANA_UI_BACKEND_URL: ${INSTANA_UI_BACKEND_URL}
       INSTANA_API_TOKEN: ${INSTANA_API_TOKEN}
