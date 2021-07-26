@@ -210,10 +210,10 @@ export class DataSourceApplication {
         },
         metrics: [metric],
         tagFilterExpression: {
-          type: "EXPRESSION",
-          logicalOperator: "AND",
-          elements: tagFilters
-        }
+          type: 'EXPRESSION',
+          logicalOperator: 'AND',
+          elements: tagFilters,
+        },
       };
 
       return postRequest(
