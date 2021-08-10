@@ -211,7 +211,7 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         </InlineFormLabel>
         <ApplicationBoundaryScope
           value={query.applicationBoundaryScope}
-          disabled={!query.entity.key}
+          disabled={!query.entity?.key}
           onChange={this.onApplicationBoundaryScopeChange}
         />
         <Select

@@ -177,7 +177,7 @@ export class Filters extends React.Component<Props, FilterState> {
   render() {
     const { query, groups } = this.props;
 
-    let listFilter = query.filters.map((singleFilter, index) => {
+    let listFilter = query.filters?.map((singleFilter, index) => {
       return (
         <div className={'gf-form'}>
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Filter by tag.'}>
