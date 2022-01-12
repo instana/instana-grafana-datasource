@@ -126,8 +126,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
                 content={
                   <p>
                     You can create API tokens following the instructions at&nbsp;
-                    <a href="https://docs.instana.io/quick_start/api/#api-tokens">
-                      https://docs.instana.io/quick_start/api/#api-tokens
+                    <a href="https://www.ibm.com/docs/en/obi/current?topic=apis-web-rest-api#unit-specific-api-tokens">
+                      https://www.ibm.com/docs/en/obi/current?topic=apis-web-rest-api
                     </a>
                   </p>
                 }
