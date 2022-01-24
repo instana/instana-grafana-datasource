@@ -3,7 +3,7 @@ import { InstanaOptions } from '../types/instana_options';
 import Cache from '../cache';
 import _ from 'lodash';
 import TimeFilter from '../types/time_filter';
-import { getTimeKey, getWindowSize, hoursToMs } from '../util/time_util';
+import { getTimeKey, getWindowSize, hoursToMs, floorToGranularity, ceilToGranularity } from '../util/time_util';
 import { getRequest, postRequest } from '../util/request_handler';
 import { getDefaultChartGranularity } from '../util/rollup_granularity_util';
 import { InstanaQuery } from '../types/instana_query';
@@ -181,15 +181,14 @@ export class DataSourceApplication {
         }
       });
 
-      const metric: any = {
-        metric: target.metric.key,
-        aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
-      };
-
       if (!target.timeInterval) {
         target.timeInterval = getDefaultChartGranularity(windowSize);
       }
-      metric['granularity'] = target.timeInterval.key;
+      const metric: any = {
+        metric: target.metric.key,
+        aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+        granularity: target.timeInterval.key,
+      };
 
       const group: any = {
         groupbyTag: target.group.key,
@@ -205,8 +204,8 @@ export class DataSourceApplication {
       const data: any = {
         group: group,
         timeFrame: {
-          to: timeFilter.to,
-          windowSize: windowSize,
+          to: floorToGranularity(timeFilter.to, metric.granularity),
+          windowSize: ceilToGranularity(windowSize, metric.granularity),
         },
         metrics: [metric],
         tagFilterExpression: {

@@ -31,3 +31,13 @@ export function hoursToMs(hours: any): number {
   }
   return 0;
 }
+
+export function floorToGranularity(millis: number, granularity: number): number {
+  const granularityInMs = granularity * 1000;
+  return Math.floor(millis / granularityInMs) * granularityInMs;
+}
+
+export function ceilToGranularity(millis: number, granularity: number): number {
+  const granularityInMs = granularity * 1000;
+  return Math.ceil(millis / granularityInMs) * granularityInMs;
+}
