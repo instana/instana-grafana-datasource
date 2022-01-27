@@ -242,20 +242,19 @@ export class DataSourceApplication {
     }
 
     const windowSize = getWindowSize(timeFilter);
-    const metric: any = {
-      metric: target.metric.key,
-      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
-    };
-
     if (!target.timeInterval) {
       target.timeInterval = getDefaultChartGranularity(windowSize);
     }
-    metric['granularity'] = target.timeInterval.key;
+    const metric: any = {
+      metric: target.metric.key,
+      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+      granularity: target.timeInterval.key,
+    };
 
     const data: any = {
       timeFrame: {
-        to: timeFilter.to,
-        windowSize: windowSize,
+        to: floorToGranularity(timeFilter.to, metric.granularity),
+        windowSize: ceilToGranularity(windowSize, metric.granularity),
       },
       metrics: [metric],
     };
