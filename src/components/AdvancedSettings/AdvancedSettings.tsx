@@ -20,7 +20,7 @@ const legendFormatPlaceholders = [
 ];
 
 const legendFormatTooltips = [
-  <div>
+  <div key="builtIn">
     Default: $label (on host $host)
     <ul>
       <li>• $label - entity label</li>
@@ -34,7 +34,7 @@ const legendFormatTooltips = [
       <li>• $index - index in the list</li>
     </ul>
   </div>,
-  <div>
+  <div key="custom">
     Default: $label (on host $host)
     <ul>
       <li>• $label - entity label</li>
@@ -48,7 +48,7 @@ const legendFormatTooltips = [
       <li>• $index - index in the list</li>
     </ul>
   </div>,
-  <div>
+  <div key="application">
     Default: $label ($application) - $key
     <ul>
       <li>• $label - entity label</li>
@@ -59,7 +59,7 @@ const legendFormatTooltips = [
       <li>• $index - index in the list</li>
     </ul>
   </div>,
-  <div>
+  <div key="website">
     Default: $label ($website) - $key
     <ul>
       <li>• $label - entity label</li>
@@ -71,7 +71,7 @@ const legendFormatTooltips = [
       <li>• $index - index in the list</li>
     </ul>
   </div>,
-  <div>
+  <div key="endpoint">
     Default: $label ($application) - $key
     <ul>
       <li>• $label - entity label</li>

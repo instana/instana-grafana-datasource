@@ -101,7 +101,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
           description="The URL of your Instana installation."
         >
           <Input
-            css={''}
             width={30}
             value={jsonData.url}
             placeholder={'https://tools-acme.instana.io'}
@@ -118,7 +117,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
         >
           <Input
             type="password"
-            css={''}
             width={30}
             value={jsonData.apiToken}
             suffix={
@@ -141,7 +139,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
         </Field>
 
         <Checkbox
-          css={''}
           label={'Use Proxy'}
           value={jsonData.useProxy}
           onChange={(event) => this.onSwitchChange(event, 'useProxy')}
@@ -149,7 +146,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
         />
 
         <Checkbox
-          css={''}
           label={'Enable offline snapshots'}
           value={jsonData.showOffline}
           onChange={(event) => this.onSwitchChange(event, 'showOffline')}
@@ -157,7 +153,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
         />
 
         <Checkbox
-          css={''}
           label={'Enable Infrastructure Explore category'}
           value={jsonData.allowInfraExplore}
           onChange={(event) => this.onSwitchChange(event, 'allowInfraExplore')}
@@ -178,7 +173,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Infrastructure metrics">
           <Input
-            css={''}
             width={30}
             value={jsonData.queryinterval_limit_infra}
             placeholder={'optional: interval limit in hours'}
@@ -188,7 +182,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Application metrics">
           <Input
-            css={''}
             width={30}
             value={jsonData.queryinterval_limit_app_metrics}
             placeholder={'optional: interval limit in hours'}
@@ -198,7 +191,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Analyze application calls">
           <Input
-            css={''}
             width={30}
             value={jsonData.queryinterval_limit_app_calls}
             placeholder={'optional: interval limit in hours'}
@@ -208,7 +200,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Field className={'width-30'} horizontal label="Analyze website">
           <Input
-            css={''}
             width={30}
             value={jsonData.queryinterval_limit_website_metrics}
             placeholder={'optional: interval limit in hours'}

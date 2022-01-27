@@ -35,7 +35,7 @@ export default class FormInput extends React.Component<Props, State> {
         <InlineFormLabel className={queryKeyword ? 'query-keyword' : ''} width={labelWidth} tooltip={tooltip}>
           {label}
         </InlineFormLabel>
-        <Input css={''} width={inputWidth} disabled={disabled} {...remainingProps} />
+        <Input width={inputWidth} disabled={disabled} {...remainingProps} />
       </FormWrapper>
     );
   }

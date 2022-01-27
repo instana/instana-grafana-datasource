@@ -179,7 +179,7 @@ export class Filters extends React.Component<Props, FilterState> {
 
     let listFilter = query.filters?.map((singleFilter, index) => {
       return (
-        <div className={'gf-form'}>
+        <div key={'filter_' + index} className={'gf-form'}>
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Filter by tag.'}>
             {index + 1}. filter
           </InlineFormLabel>
@@ -208,7 +208,6 @@ export class Filters extends React.Component<Props, FilterState> {
 
           {this.canShowStringInput(query.filters[index]) && (
             <Input
-              css={''}
               width={30}
               value={query.filters[index].stringValue}
               placeholder={query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : PLEASE_SPECIFY}
@@ -218,7 +217,6 @@ export class Filters extends React.Component<Props, FilterState> {
 
           {this.canShowNumberInput(query.filters[index]) && (
             <Input
-              css={''}
               type={'number'}
               width={30}
               value={query.filters[index].numberValue}
@@ -261,7 +259,7 @@ export class Filters extends React.Component<Props, FilterState> {
           </Button>
           <div hidden={!query.showWarningCantShowAllResults}>
             <InlineFormLabel width={12} tooltip={'Add Filter to narrow down the data.'}>
-              ⚠️ Can't show all results
+              ⚠️ Can&apos;t show all results
             </InlineFormLabel>
           </div>
         </div>

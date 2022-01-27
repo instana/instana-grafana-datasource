@@ -137,9 +137,9 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
             <div>
               Select your specific SLO information:
               <ul>
-                <li>'SLI' requires Gauge visualization</li>
-                <li>'Remaining Error Budget' requires Singlestat visualization</li>
-                <li>'Timeseries' requires Bars draw mode on Graph visualization</li>
+                <li>&apos;SLI&apos; requires Gauge visualization</li>
+                <li>&apos;Remaining Error Budget&apos; requires Singlestat visualization</li>
+                <li>&apos;Timeseries&apos; drequires Bars draw mode on Graph visualization</li>
               </ul>
             </div>
           }

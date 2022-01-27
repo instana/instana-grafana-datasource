@@ -62,7 +62,6 @@ export class FreeTextMetrics extends React.Component<Props, FreeTextMetricsState
           disabled={false}
         />
         <Input
-          css={''}
           width={0}
           disabled={!query.useFreeTextMetrics}
           value={query.freeTextMetrics}

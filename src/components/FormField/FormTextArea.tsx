@@ -35,7 +35,7 @@ export default class FormTextArea extends React.Component<Props, State> {
         <InlineFormLabel className={queryKeyword ? 'query-keyword' : ''} width={labelWidth} tooltip={tooltip}>
           {label}
         </InlineFormLabel>
-        <TextArea css={''} rows={4} width={inputWidth} disabled={disabled} {...remainingProps} />
+        <TextArea rows={4} width={inputWidth} disabled={disabled} {...remainingProps} />
       </FormWrapper>
     );
   }

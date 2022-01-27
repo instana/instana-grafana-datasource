@@ -173,7 +173,6 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>
           <Input
-            css={''}
             type={'text'}
             value={query.groupbyTagSecondLevelKey}
             onChange={this.onGroupByTagSecondLevelKeyChange}

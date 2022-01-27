@@ -24,7 +24,7 @@ When troubleshooting, please open a ticket at https://support.instana.com/hc/en-
 
 ## Configuration
 
-This datasource uses the Instana REST API to query the metric values. First of all you will need to generate an API [token](https://docs.instana.io/quick_start/api/). Use this token along with the URL for your Instana account e.g. *https://prod-acme.instana.io*
+This datasource uses the Instana REST API to query the metric values. First of all you will need to generate an API [token](https://www.ibm.com/docs/en/obi/current?topic=apis-web-rest-api#unit-specific-api-tokens). Use this token along with the URL for your Instana account e.g. *https://prod-acme.instana.io*
 
 To use the Grafana server as a proxy for querying Instana REST API please check `Use proxy`.
 
@@ -40,7 +40,7 @@ The configuration allows the setting of a limit for the different categories tha
 
 ![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/empty-query.png)
 
-To start, enter the [Dynamic Focus](https://docs.instana.io/core_concepts/dynamic_focus/) query. This is exactly the same as used in the Instana dashboard; you can test your queries in Instana and then copy and paste them into Grafana. *NOTE* Saved filters are not currently supported by the Grafana datasource plugin.
+To start, enter the [Dynamic Focus](https://www.ibm.com/docs/en/obi/current?topic=instana-filtering-dynamic-focus) query. This is exactly the same as used in the Instana dashboard; you can test your queries in Instana and then copy and paste them into Grafana. *NOTE* Saved filters are not currently supported by the Grafana datasource plugin.
 
 ### Infrastructure built-in metrics
 
