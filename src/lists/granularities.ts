@@ -1,3 +1,4 @@
+// accoring to metrics/BaseGranularity.java
 export default [
   {
     value: 1, // 1s
@@ -24,16 +25,28 @@ export default [
     label: '10min',
   },
   {
+    value: 60 * 30, // 30m
+    label: '30min',
+  },
+  {
     value: 60 * 60, // 1h
     label: '1h',
   },
   {
-    value: 60 * 60 * 5, // 5h
-    label: '5h',
+    value: 60 * 60 * 4, // 4h
+    label: '4h',
   },
   {
-    value: 60 * 60 * 10, // 10h
-    label: '10h',
+    value: 60 * 60 * 6, // 6h
+    label: '6h',
+  },
+  {
+    value: 60 * 60 * 8, // 8h
+    label: '8h',
+  },
+  {
+    value: 60 * 60 * 12, // 12h
+    label: '12h',
   },
   {
     value: 60 * 60 * 24, // 1d

@@ -3,7 +3,7 @@ import { InstanaOptions } from '../types/instana_options';
 import Cache from '../cache';
 import _ from 'lodash';
 import TimeFilter from '../types/time_filter';
-import { getTimeKey, getWindowSize, hoursToMs, floorToGranularity, ceilToGranularity } from '../util/time_util';
+import { getTimeKey, getWindowSize, hoursToMs, atLeastGranularity } from '../util/time_util';
 import { getRequest, postRequest } from '../util/request_handler';
 import { getDefaultChartGranularity } from '../util/rollup_granularity_util';
 import { InstanaQuery } from '../types/instana_query';
@@ -204,8 +204,8 @@ export class DataSourceApplication {
       const data: any = {
         group: group,
         timeFrame: {
-          to: floorToGranularity(timeFilter.to, metric.granularity),
-          windowSize: ceilToGranularity(windowSize, metric.granularity),
+          to: timeFilter.to,
+          windowSize: atLeastGranularity(windowSize, metric.granularity),
         },
         metrics: [metric],
         tagFilterExpression: {
@@ -253,8 +253,8 @@ export class DataSourceApplication {
 
     const data: any = {
       timeFrame: {
-        to: floorToGranularity(timeFilter.to, metric.granularity),
-        windowSize: ceilToGranularity(windowSize, metric.granularity),
+        to: timeFilter.to,
+        windowSize: Math.max(windowSize, metric.granularity),
       },
       metrics: [metric],
     };

@@ -3,7 +3,7 @@ import { InstanaOptions } from '../types/instana_options';
 import Cache from '../cache';
 import _ from 'lodash';
 import TimeFilter from '../types/time_filter';
-import { getTimeKey, getWindowSize, floorToGranularity, ceilToGranularity } from '../util/time_util';
+import { getTimeKey, getWindowSize, atLeastGranularity } from '../util/time_util';
 import { getRequest, postRequest } from '../util/request_handler';
 import { InstanaQuery } from '../types/instana_query';
 import { ALL_ENDPOINTS, PAGINATION_LIMIT } from '../GlobalVariables';
@@ -141,8 +141,8 @@ export class DataSourceEndpoint {
     const data: any = {
       endpointId: target.endpoint.key,
       timeFrame: {
-        to: floorToGranularity(timeFilter.to, metric.granularity),
-        windowSize: ceilToGranularity(windowSize, metric.granularity),
+        to: timeFilter.to,
+        windowSize: atLeastGranularity(windowSize, metric.granularity),
       },
       metrics: [metric],
     };

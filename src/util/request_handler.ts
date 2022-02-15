@@ -66,6 +66,10 @@ function doRequest(
       if (maxRetries > 0 && error.status >= 500) {
         return doRequest(options, request, swallowError, maxRetries - 1);
       }
+      // in order to display a reasonable error message text inside ui
+      if (!error.statusText && error.data?.errors && error.data.errors[0]) {
+        throw new Error(error.data.errors[0]);
+      }
       throw error;
     });
 }
