@@ -254,7 +254,7 @@ export class DataSourceApplication {
     const data: any = {
       timeFrame: {
         to: timeFilter.to,
-        windowSize: Math.max(windowSize, metric.granularity),
+        windowSize: atLeastGranularity(windowSize, metric.granularity),
       },
       metrics: [metric],
     };
