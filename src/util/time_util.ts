@@ -32,12 +32,8 @@ export function hoursToMs(hours: any): number {
   return 0;
 }
 
-export function floorToGranularity(millis: number, granularity: number): number {
+export function atLeastGranularity(windowSize: number, granularity: number): number {
+  // api does not support a windowSize smaller than queried granularity in ms
   const granularityInMs = granularity * 1000;
-  return Math.floor(millis / granularityInMs) * granularityInMs;
-}
-
-export function ceilToGranularity(millis: number, granularity: number): number {
-  const granularityInMs = granularity * 1000;
-  return Math.ceil(millis / granularityInMs) * granularityInMs;
+  return Math.max(windowSize, granularityInMs);
 }

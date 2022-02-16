@@ -35,7 +35,7 @@ describe('Given a timeInterval', () => {
     it('should allow 1s infrastructure rollup', () => {
       const expected = [
         {
-          key: '1000', // 1s
+          key: '1000',
           label: '1s',
         },
       ];
@@ -44,7 +44,7 @@ describe('Given a timeInterval', () => {
     });
     it('should default to 1s infrastructure rollup', () => {
       const expected = {
-        key: '1000', // 1s
+        key: '1000',
         label: '1s',
       };
       let result = getDefaultMetricRollupDuration(timeFilter);
@@ -100,7 +100,7 @@ describe('Given a timeInterval', () => {
     it('should allow 1s, 5s, 1min, 5min, infrastructure rollup', () => {
       const expected = [
         {
-          key: '1000', // 1s
+          key: '1000',
           label: '1s',
         },
         {
@@ -112,7 +112,7 @@ describe('Given a timeInterval', () => {
           label: '1min',
         },
         {
-          key: '300000', // 5m
+          key: '300000',
           label: '5min',
         },
       ];
@@ -121,7 +121,7 @@ describe('Given a timeInterval', () => {
     });
     it('should default to 1s infrastructure rollup', () => {
       const expected = {
-        key: '1000', // 1s
+        key: '1000',
         label: '1s',
       };
       let result = getDefaultMetricRollupDuration(timeFilter);
@@ -136,7 +136,7 @@ describe('Given a timeInterval', () => {
       to: Date.now(),
       windowSize: windowSize,
     };
-    it('should allow 1min, 5min, 10min, 1h analyze granularity', () => {
+    it('should allow 1min, 5min, 10min, 30min, 1h analyze granularity', () => {
       const expected = [
         {
           key: '60',
@@ -149,6 +149,10 @@ describe('Given a timeInterval', () => {
         {
           key: '600',
           label: '10min',
+        },
+        {
+          key: '1800',
+          label: '30min',
         },
         {
           key: '3600',
@@ -169,19 +173,19 @@ describe('Given a timeInterval', () => {
     it('should allow 5s, 1min, 5min, infrastructure rollup', () => {
       const expected = [
         {
-          key: '5000', // 5s
+          key: '5000',
           label: '5s',
         },
         {
-          key: '60000', // 1m
+          key: '60000',
           label: '1min',
         },
         {
-          key: '300000', // 5m
+          key: '300000',
           label: '5min',
         },
         {
-          key: '3600000', // 1h
+          key: '3600000',
           label: '1h',
         },
       ];
@@ -205,7 +209,7 @@ describe('Given a timeInterval', () => {
       to: Date.now(),
       windowSize: windowSize,
     };
-    it('should allow 1min, 5min, 10min, 1h, 5h analyze granularity', () => {
+    it('should allow 1min, 5min, 10min, 30min, 1h, 4h, 6h analyze granularity', () => {
       const expected = [
         {
           key: '60',
@@ -220,12 +224,20 @@ describe('Given a timeInterval', () => {
           label: '10min',
         },
         {
+          key: '1800',
+          label: '30min',
+        },
+        {
           key: '3600',
           label: '1h',
         },
         {
-          key: '18000',
-          label: '5h',
+          key: '14400',
+          label: '4h',
+        },
+        {
+          key: '21600',
+          label: '6h',
         },
       ];
       let result = getPossibleGranularities(windowSize);
@@ -242,15 +254,15 @@ describe('Given a timeInterval', () => {
     it('should allow 1min, 5min, 1h infrastructure rollup', () => {
       const expected = [
         {
-          key: '60000', // 1m
+          key: '60000',
           label: '1min',
         },
         {
-          key: '300000', // 5m
+          key: '300000',
           label: '5min',
         },
         {
-          key: '3600000', // 1h
+          key: '3600000',
           label: '1h',
         },
       ];
@@ -274,19 +286,27 @@ describe('Given a timeInterval', () => {
       to: Date.now(),
       windowSize: windowSize,
     };
-    it('should allow 1h, 5h, 10h, 1d analyze granularity', () => {
+    it('should allow 1h, 4h, 6h, 8h, 12h, 1d analyze granularity', () => {
       const expected = [
         {
           key: '3600',
           label: '1h',
         },
         {
-          key: '18000',
-          label: '5h',
+          key: '14400',
+          label: '4h',
         },
         {
-          key: '36000',
-          label: '10h',
+          key: '21600',
+          label: '6h',
+        },
+        {
+          key: '28800',
+          label: '8h',
+        },
+        {
+          key: '43200',
+          label: '12h',
         },
         {
           key: '86400',
@@ -307,11 +327,11 @@ describe('Given a timeInterval', () => {
     it('should allow 5min, 1h infrastructure rollup', () => {
       const expected = [
         {
-          key: '300000', // 5m
+          key: '300000',
           label: '5min',
         },
         {
-          key: '3600000', // 1h
+          key: '3600000',
           label: '1h',
         },
       ];
@@ -320,7 +340,7 @@ describe('Given a timeInterval', () => {
     });
     it('should default to 5min infrastructure rollup', () => {
       const expected = {
-        key: '300000', // 5m
+        key: '300000',
         label: '5min',
       };
       let result = getDefaultMetricRollupDuration(timeFilter);
@@ -335,19 +355,27 @@ describe('Given a timeInterval', () => {
       to: Date.now(),
       windowSize: windowSize,
     };
-    it('should allow 1h, 5h, 10h, 1d analyze granularity', () => {
+    it('should allow 1h, 4h, 6h, 8h, 12h, 1d analyze granularity', () => {
       const expected = [
         {
           key: '3600',
           label: '1h',
         },
         {
-          key: '18000',
-          label: '5h',
+          key: '14400',
+          label: '4h',
         },
         {
-          key: '36000',
-          label: '10h',
+          key: '21600',
+          label: '6h',
+        },
+        {
+          key: '28800',
+          label: '8h',
+        },
+        {
+          key: '43200',
+          label: '12h',
         },
         {
           key: '86400',
@@ -365,14 +393,14 @@ describe('Given a timeInterval', () => {
       let result = getDefaultChartGranularity(windowSize);
       expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
     });
-    it('should allow 5min, infrastructure rollup', () => {
+    it('should allow 5min, 1h infrastructure rollup', () => {
       const expected = [
         {
-          key: '300000', // 5m
+          key: '300000',
           label: '5min',
         },
         {
-          key: '3600000', // 1h
+          key: '3600000',
           label: '1h',
         },
       ];
@@ -381,7 +409,7 @@ describe('Given a timeInterval', () => {
     });
     it('should default to 1h infrastructure rollup', () => {
       const expected = {
-        key: '300000', // 5m
+        key: '300000',
         label: '5min',
       };
       let result = getDefaultMetricRollupDuration(timeFilter);
@@ -396,36 +424,44 @@ describe('Given a timeInterval', () => {
       to: Date.now(),
       windowSize: windowSize,
     };
-    it('should allow 5h, 10h, 1d, 5d, 10d, analyze granularity', () => {
+    it('should allow 4h, 6h, 8h, 12h, 1d, 5d, 10d, analyze granularity', () => {
       const expected = [
         {
-          key: '18000', // 5h
-          label: '5h',
+          key: '14400',
+          label: '4h',
         },
         {
-          key: '36000', // 10h
-          label: '10h',
+          key: '21600',
+          label: '6h',
         },
         {
-          key: '86400', // 1d
+          key: '28800',
+          label: '8h',
+        },
+        {
+          key: '43200',
+          label: '12h',
+        },
+        {
+          key: '86400',
           label: '1d',
         },
         {
-          key: '432000', // 5d
+          key: '432000',
           label: '5d',
         },
         {
-          key: '864000', // 10d
+          key: '864000',
           label: '10d',
         },
       ];
       let result = getPossibleGranularities(windowSize);
       expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
     });
-    it('should default to 10h analyze granularity', () => {
+    it('should default to 12h analyze granularity', () => {
       const expected = {
-        key: '36000',
-        label: '10h',
+        key: '43200',
+        label: '12h',
       };
       let result = getDefaultChartGranularity(windowSize);
       expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
@@ -433,7 +469,7 @@ describe('Given a timeInterval', () => {
     it('should allow 1h infrastructure rollup', () => {
       const expected = [
         {
-          key: '3600000', // 1h
+          key: '3600000',
           label: '1h',
         },
       ];
@@ -442,7 +478,7 @@ describe('Given a timeInterval', () => {
     });
     it('should default to 1h infrastructure rollup', () => {
       const expected = {
-        key: '3600000', // 1h
+        key: '3600000',
         label: '1h',
       };
       let result = getDefaultMetricRollupDuration(timeFilter);
@@ -460,15 +496,15 @@ describe('Given a timeInterval', () => {
     it('should allow 1d, 5d, 10d, analyze granularity', () => {
       const expected = [
         {
-          key: '86400', // 1d
+          key: '86400',
           label: '1d',
         },
         {
-          key: '432000', // 5d
+          key: '432000',
           label: '5d',
         },
         {
-          key: '864000', // 10d
+          key: '864000',
           label: '10d',
         },
       ];
@@ -477,7 +513,7 @@ describe('Given a timeInterval', () => {
     });
     it('should default to 5d analyze granularity', () => {
       const expected = {
-        key: '432000', // 10d
+        key: '432000',
         label: '5d',
       };
       let result = getDefaultChartGranularity(windowSize);
@@ -486,7 +522,7 @@ describe('Given a timeInterval', () => {
     it('should allow 1h infrastructure rollup', () => {
       const expected = [
         {
-          key: '3600000', // 1h
+          key: '3600000',
           label: '1h',
         },
       ];
@@ -495,7 +531,7 @@ describe('Given a timeInterval', () => {
     });
     it('should default to 1h infrastructure rollup', function () {
       const expected = {
-        key: '3600000', // 1h
+        key: '3600000',
         label: '1h',
       };
       let result = getDefaultMetricRollupDuration(timeFilter);
