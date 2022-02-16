@@ -128,10 +128,10 @@ This should render a chart with one dataset (`host-3 (29042)`).
 #### Infrastructure Explore
 
 Values for each label in order:
-The category `Infrastructure custom metrics` will only show up if you have checked `Enable Infrastructure Explore category` in the data source options.
+The category `Infrastructure explore (beta)` will only show up if you have checked `Enable Infrastructure Explore category` in the data source options.
 
 * Data source: `Instana-1`
-* Category: `Infrastructure custom metrics`
+* Category: `Infrastructure explore (beta)`
 * Filter: 
 ```
 {
@@ -181,8 +181,8 @@ This should render a chart with one dataset (`GET /api (GET /api) - latency.mean
 
 * Data source: `Instana-1`
 * Category: `Analyze application calls`
-* Application: `Dest` `AWS instances`
-* Group by: `Dest` `endpoint.name`
+* Application: `DESTINATION` `AWS instances`
+* Group by: `DESTINATION` `endpoint.name`
 * Metric: `Call latency (latency)`
 
 This should render a chart with one dataset (`GET (AWS instances) latency.mean`).
