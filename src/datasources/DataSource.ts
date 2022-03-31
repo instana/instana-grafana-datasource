@@ -395,7 +395,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   testDatasource(): Promise<any> {
-    return getRequest(this.options, '/api/monitoringState').then(
+    return getRequest(this.options, '/api/infrastructure-monitoring/monitoring-state').then(
       () => {
         return {
           status: 'success',

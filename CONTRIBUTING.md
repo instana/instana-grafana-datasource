@@ -74,14 +74,14 @@ The actual screenshots are from "Quick Check" example below. Do not delete old s
 * Run the full build again, this should update `dist/plugin.json`.
 * Commit this with a matching commit message and push this commit: `git commit -a -m "Bumped version to x.x.x" && git push` 
 * Tag your version with `git tag -a vx.x.x -m "plugin x.x.x" $commit && git push origin vx.x.x`
-* If you haven't already, `git clone github.com:instana/grafana-plugin-repository.git`
-* `cd ../grafana-plugin-repository`
-* If you haven't already, `git remote add grafana git@github.com:grafana/grafana-plugin-repository.git`.
-* `git checkout master && git fetch && git pull && git fetch grafana && git merge grafana/master --ff`
-* Create a branch for the new release (`instana-datasource-plugin-x.x.x`) and add the new version to `repo.json`.
-* - check the corresponding release build at <https://github.com/instana/instana-grafana-datasource/actions>
-* - copy repo.json extension from `Publish to Grafana.com` build step
-* Commit, push and create a PR `Instana datasource plugin x.x.x` at <https://github.com/grafana/grafana-plugin-repository>
+* Goto https://github.com/instana/instana-grafana-datasource/actions
+* Wait for `Publish to Grafana.com` to be finshed
+* Copy the `versions.download.any.url` and `versions.download.any.md5`
+* Access https://grafana.com/orgs/instana/plugins with a Instana organization related account
+* Press `Submit Update` on the already published Instana plugin
+* Fill URL and MD5 previously copied and press `Submit`
+* New `Submitted Plugins` should occur with Status `Received`
+* Once the plugin is published you will get an email notification
 
 ### Quick Check
 
