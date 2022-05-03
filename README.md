@@ -22,6 +22,8 @@ For On-premise customers Instana Release 146 is required.
 
 When troubleshooting, please open a ticket at https://support.instana.com/hc/en-us/requests/new to get your issues/questions resolved the fastest way possible.
 
+Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).
+
 ## Configuration
 
 This datasource uses the Instana REST API to query the metric values. First of all you will need to generate an API [token](https://www.ibm.com/docs/en/obi/current?topic=apis-web-rest-api#unit-specific-api-tokens). Use this token along with the URL for your Instana account e.g. *https://prod-acme.instana.io*
