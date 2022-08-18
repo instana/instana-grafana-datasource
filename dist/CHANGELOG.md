@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.4
+- encode infrastructure metrics to support custom metrics including special characters
+- fix datasource configuration with instana urls ending with `/`
 ## 3.3.3
 - adjust supported granularites for analyze queries to match Instana UI for better comparability
     - removed: `5h`, `10h`
