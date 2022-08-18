@@ -360,7 +360,7 @@ export class DataSourceInfrastructure {
 
   fetchMetricsForSnapshot(snapshotId: string, timeFilter: TimeFilter, rollup: number, metric: any) {
     let url =
-      `/api/metrics?metric=${metric.key}` +
+      `/api/metrics?metric=${encodeURIComponent(metric.key)}` +
       `&from=${timeFilter.from}` +
       `&to=${timeFilter.to}` +
       `&rollup=${rollup}` +

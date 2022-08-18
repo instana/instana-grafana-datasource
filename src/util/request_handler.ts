@@ -2,6 +2,7 @@ import { getBackendSrv } from '@grafana/runtime';
 import { BackendSrvRequest } from '@grafana/runtime/services/backendSrv';
 import { InstanaOptions } from '../types/instana_options';
 import { DataSourceInstanceSettings } from '@grafana/data';
+import _ from 'lodash';
 
 export const getRequest = (options: InstanaOptions, endpoint: string, swallowError = false, maxRetries = 1) => {
   const request = {
@@ -76,8 +77,8 @@ function doRequest(
 
 export function instanaUrl(instanceSettings: DataSourceInstanceSettings<InstanaOptions>): string {
   if (instanceSettings.jsonData.useProxy) {
-    return instanceSettings.url + '/instana'; // to match proxy route in plugin.json
+    return _.trimEnd(instanceSettings.url, '/ ') + '/instana'; // to match proxy route in plugin.json
   } else {
-    return instanceSettings.jsonData.url;
+    return _.trimEnd(instanceSettings.jsonData.url, '/ ');
   }
 }
