@@ -75,8 +75,8 @@ export class QueryType extends React.Component<Props, QueryTypeState> {
           tooltip={
             <div>
               Specify a query for the entities you wish to plot. Use the dynamic focus syntax:
-              <a href="https://docs.instana.io/core_concepts/dynamic_focus/#syntax">
-                https://docs.instana.io/core_concepts/dynamic_focus/#syntax
+              <a href="https://www.ibm.com/docs/en/instana-observability/current?topic=instana-filtering-dynamic-focus#syntax">
+                https://www.ibm.com/docs/en/instana-observability/current?topic=instana-filtering-dynamic-focus#syntax
               </a>
             </div>
           }
