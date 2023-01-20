@@ -79,7 +79,8 @@ The actual screenshots are from "Quick Check" example below. Do not delete old s
 * Copy the `versions.download.any.url` and `versions.download.any.md5`
 * Access https://grafana.com/orgs/instana/plugins with a Instana organization related account
 * Press `Submit Update` on the already published Instana plugin
-* Fill URL and MD5 previously copied and press `Submit`
+* Fill URL and MD5 previously copied 
+* use `https://github.com/instana/instana-grafana-datasource`as source code and press `Submit`
 * New `Submitted Plugins` should occur with Status `Received`
 * Once the plugin is published you will get an email notification
 
