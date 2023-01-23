@@ -208,15 +208,15 @@ export class DataSourceInfrastructure {
       },
     };
 
-    return postRequest(this.instanaOptions, '/api/infrastructure-monitoring/explore/groups', payload).then(
+    return postRequest(this.instanaOptions, '/api/infrastructure-monitoring/analyze/entity-groups', payload).then(
       (res: any) => {
         let result: any = [];
 
-        if (!res.data.data && res.data.errors.length >= 1) {
-          throw new Error(res.data.errors[0].message || res.data.errors[0]);
+        if (!res.data && res.errors.length >= 1) {
+          throw new Error(res.errors[0].message || res.errors[0]);
         }
 
-        res.data.data.items.forEach((entity: any) => {
+        res.data.items.forEach((entity: any) => {
           for (var metric in entity.metrics) {
             result.push({
               target: entity.tags[data.groupBy] + ' - ' + metric,
