@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.6
+- fix available metrics in Analyze websites
+
 ## 3.3.5
 - fix docs url for dynamic focus query
 

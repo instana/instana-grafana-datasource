@@ -77,7 +77,9 @@ export class WebsiteMetrics extends React.Component<Props, WebsiteMetricsState> 
 
     datasource.dataSourceWebsite.getWebsiteMetricsCatalog().then((websiteMetrics: any) => {
       if (!isUnmounting) {
-        this.props.updateMetrics(_.filter(websiteMetrics, (m) => m.beaconTypes.includes(query.entityType.key)));
+        // store all available metrics first and filter by type afterwards
+        this.props.updateMetrics(websiteMetrics);
+        this.props.filterMetricsOnType(query.entityType.key);
       }
     });
   }

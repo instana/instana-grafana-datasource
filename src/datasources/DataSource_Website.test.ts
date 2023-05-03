@@ -46,10 +46,21 @@ describe('Given a website datasource', () => {
             aggregations: ['MEAN', 'SUM'],
             beaconTypes: ['pageLoad', 'resourceLoad', 'httpRequest', 'error', 'custom', 'pageChange'],
           },
+          {
+            metricId: 'singleId',
+            label: 'single',
+            aggregations: ['MEAN'],
+            beaconTypes: ['httpRequest'],
+          },
+          {
+            metricId: 'noArrayId',
+            label: 'noArrays',
+          },
         ],
       });
 
       return dataSourceWebsite.getWebsiteMetricsCatalog().then((catalog: any) => {
+        expect(catalog).toHaveLength(3);
         return _.map(catalog, (metric) => {
           expect(metric).toHaveProperty('key');
           expect(metric).toHaveProperty('label');
