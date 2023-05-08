@@ -70,6 +70,7 @@ The actual screenshots are from "Quick Check" example below. Do not delete old s
 * - test-instana.pink (with proxy)
 * - qa-onprem (without proxy)
 * Update `src/plugin.json` with the new version number and the version date.
+* Update `package.json` with the new version number.
 * Update `src/components/QueryEditor.tsx` (check the bottom of the file) with the new version number.
 * Update `CHANGELOG.md` with short information about the current changes for this version.
 * Run the full build again, this should update `dist/plugin.json`...
