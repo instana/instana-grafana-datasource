@@ -1,8 +1,8 @@
+import { ALL_APPLICATIONS, ALL_ENDPOINTS, ALL_SERVICES } from '../../GlobalVariables';
+import { InlineFormLabel, Input, Select } from '@grafana/ui';
 import React, { ChangeEvent } from 'react';
 
-import { ALL_APPLICATIONS, ALL_ENDPOINTS, ALL_SERVICES } from '../../GlobalVariables';
 import ApplicationBoundaryScope from './ApplicationBoundaryScope';
-import { InlineFormLabel, Input, Select } from '@grafana/ui';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import { SelectableValue } from '@grafana/data';
@@ -61,27 +61,18 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
     const { query, onChange, datasource } = this.props;
     datasource.fetchApplications().then((applications) => {
       if (!isUnmounting) {
+        if (!_.find(applications, { key: null })) {
+          applications.unshift({ key: null, label: ALL_APPLICATIONS });
+        }
         this.setState({
           applications: applications,
         });
 
-        if (!_.find(this.state.applications, { key: null })) {
-          let apps = this.state.applications;
-          apps.unshift({ key: null, label: ALL_APPLICATIONS });
-          this.setState({
-            applications: apps,
-          });
-        }
-
-        // replace removed application
-        if (
-          query.entity &&
-          query.entity.key &&
-          !_.find(this.state.applications, (app) => app.key === query.entity.key)
-        ) {
-          query.entity = this.state.applications[0];
+        // replace removed application and preselect entity
+        if (query.entity && query.entity.key && !_.find(applications, (app) => app.key === query.entity.key)) {
+          query.entity = applications[0];
         } else if ((!query.entity || !query.entity.key) && applications) {
-          query.entity = this.state.applications[0];
+          query.entity = applications[0];
         }
 
         onChange(query);
@@ -93,24 +84,20 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
     const { query, onChange, datasource } = this.props;
     datasource.fetchServices(query).then((services) => {
       if (!isUnmounting) {
+        if (!_.find(services, { key: null })) {
+          services.unshift({ key: null, label: ALL_SERVICES });
+        }
         this.setState({
           services: services,
         });
 
-        if (!_.find(this.state.services, { key: null })) {
-          let s = this.state.services;
-          s.unshift({ key: null, label: ALL_SERVICES });
-          this.setState({
-            services: s,
-          });
-        }
-
+        // replace removed service and preselect service
         if (query.service && query.service.key) {
-          if (!_.find(this.state.services, (app) => app.key === query.service.key)) {
-            query.service = this.state.services[0];
+          if (!_.find(services, (app) => app.key === query.service.key)) {
+            query.service = services[0];
           }
         } else {
-          query.service = this.state.services[0];
+          query.service = services[0];
         }
 
         onChange(query);
@@ -122,20 +109,16 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
     const { query, onChange, datasource } = this.props;
     datasource.fetchEndpoints(query).then((endpoints) => {
       if (!isUnmounting) {
+        if (!_.find(endpoints, { key: null })) {
+          endpoints.unshift({ key: null, label: ALL_ENDPOINTS });
+        }
         this.setState({
           endpoints: endpoints,
         });
 
-        if (!_.find(this.state.endpoints, { key: null })) {
-          let e = this.state.endpoints;
-          e.unshift({ key: null, label: ALL_ENDPOINTS });
-          this.setState({
-            endpoints: e,
-          });
-        }
-
+        // replace removed endpoint and preselect endpoint
         if (query.endpoint && query.endpoint.key) {
-          if (!_.find(this.state.endpoints, (app) => app.key === query.endpoint.key)) {
+          if (!_.find(endpoints, (app) => app.key === query.endpoint.key)) {
             query.endpoint = { key: null, label: ALL_ENDPOINTS };
           }
         } else {
