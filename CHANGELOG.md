@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.7
+- fix application, service and endpoint selection in corresponding metrics category
+
 ## 3.3.6
 - fix available metrics in Analyze websites
 

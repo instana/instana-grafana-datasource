@@ -1,6 +1,6 @@
 {
   "name": "instana-datasource",
-  "version": "3.3.6",
+  "version": "3.3.7",
   "description": "Instana Data Source for Grafana",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
