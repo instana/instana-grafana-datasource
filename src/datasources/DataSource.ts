@@ -135,7 +135,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         } else if (category === ANALYZE_MOBILE_APP_METRICS) {
           return this.dataSourceMobileapp.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
-          })
+          });
         } else if (category === ANALYZE_APPLICATION_METRICS) {
           return this.dataSourceApplication.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);

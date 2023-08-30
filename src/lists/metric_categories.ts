@@ -30,7 +30,7 @@ export default [
   {
     label: 'Analyze mobile app',
     key: 9,
-  }
+  },
   {
     label: 'SLO information',
     key: 7,

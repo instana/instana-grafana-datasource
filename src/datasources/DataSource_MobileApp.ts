@@ -26,7 +26,10 @@ export class DataSourceMobileApp {
 
   runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
     if (
-      isInvalidQueryInterval(timeFilter.windowSize, hoursToMs(this.instanaOptions.queryinterval_limit_mobileapp_metrics))
+      isInvalidQueryInterval(
+        timeFilter.windowSize,
+        hoursToMs(this.instanaOptions.queryinterval_limit_mobileapp_metrics)
+      )
     ) {
       throw new Error(
         'Limit for maximum selectable windowsize exceeded, max is: ' +
@@ -77,12 +80,13 @@ export class DataSourceMobileApp {
       return mobileappTags;
     }
 
-    mobileappTags = getRequest(this.instanaOptions, '/api/mobile-app-monitoring/catalog/tags').then((tagsResponse: any) =>
-      tagsResponse.data.map((entry: any) => ({
-        key: entry.name,
-        label: entry.name,
-        type: entry.type,
-      }))
+    mobileappTags = getRequest(this.instanaOptions, '/api/mobile-app-monitoring/catalog/tags').then(
+      (tagsResponse: any) =>
+        tagsResponse.data.map((entry: any) => ({
+          key: entry.name,
+          label: entry.name,
+          type: entry.type,
+        }))
     );
     this.miscCache.put('mobileappTags', mobileappTags);
 
