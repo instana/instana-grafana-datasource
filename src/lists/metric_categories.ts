@@ -28,6 +28,10 @@ export default [
     key: 3,
   },
   {
+    label: 'Analyze mobile app',
+    key: 9,
+  }
+  {
     label: 'SLO information',
     key: 7,
   },

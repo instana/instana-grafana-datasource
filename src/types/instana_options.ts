@@ -13,4 +13,5 @@ export interface InstanaOptions extends DataSourceJsonData {
   queryinterval_limit_app_metrics?: number;
   queryinterval_limit_app_calls?: number;
   queryinterval_limit_website_metrics?: number;
+  queryinterval_limit_mobileapp_metrics?: number;
 }
