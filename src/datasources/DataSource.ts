@@ -1,51 +1,55 @@
 import {
+  ANALYZE_APPLICATION_METRICS,
+  ANALYZE_MOBILE_APP_METRICS,
+  ANALYZE_WEBSITE_METRICS,
+  APPLICATION_SERVICE_ENDPOINT_METRICS,
+  BUILT_IN_METRICS,
+  CUSTOM_METRICS,
+  INFRASTRUCTURE_EXPLORE,
+  SLO_INFORMATION,
+} from '../GlobalVariables';
+import {
   DataQueryRequest,
   DataQueryResponse,
   DataSourceApi,
   DataSourceInstanceSettings,
   SelectableValue,
 } from '@grafana/data';
-import { InstanaQuery } from '../types/instana_query';
-import { InstanaOptions } from '../types/instana_options';
-import { getRequest, instanaUrl } from '../util/request_handler';
-import { DataSourceSlo } from './DataSource_Slo';
-import MetricCategories from '../lists/metric_categories';
-import TimeFilter from '../types/time_filter';
-import { hoursToMs, readTime } from '../util/time_util';
-import Cache from '../cache';
-import { emptyResultData } from '../util/target_util';
-import _ from 'lodash';
-import { DataSourceInfrastructure } from './Datasource_Infrastructure';
+import { appendData, generateStableHash, getDeltaRequestTimestamp, hasIntersection } from '../util/delta_util';
 import {
   getDefaultChartGranularity,
   getDefaultMetricRollupDuration,
   getPossibleGranularities,
   getPossibleRollups,
 } from '../util/rollup_granularity_util';
-import { appendData, generateStableHash, hasIntersection, getDeltaRequestTimestamp } from '../util/delta_util';
-import {
-  ANALYZE_APPLICATION_METRICS,
-  ANALYZE_WEBSITE_METRICS,
-  APPLICATION_SERVICE_ENDPOINT_METRICS,
-  BUILT_IN_METRICS,
-  CUSTOM_METRICS,
-  SLO_INFORMATION,
-  INFRASTRUCTURE_EXPLORE,
-} from '../GlobalVariables';
-import getVersion from '../util/instana_version';
-import { aggregateTarget } from '../util/aggregation_util';
-import { DataSourceWebsite } from './DataSource_Website';
+import { getRequest, instanaUrl } from '../util/request_handler';
+import { hoursToMs, readTime } from '../util/time_util';
+
+import Cache from '../cache';
 import { DataSourceApplication } from './DataSource_Application';
-import { DataSourceService } from './DataSource_Service';
 import { DataSourceEndpoint } from './DataSource_Endpoint';
+import { DataSourceInfrastructure } from './Datasource_Infrastructure';
+import { DataSourceMobileApp } from './DataSource_MobileApp';
+import { DataSourceService } from './DataSource_Service';
+import { DataSourceSlo } from './DataSource_Slo';
+import { DataSourceWebsite } from './DataSource_Website';
+import { InstanaOptions } from '../types/instana_options';
+import { InstanaQuery } from '../types/instana_query';
+import MetricCategories from '../lists/metric_categories';
+import TimeFilter from '../types/time_filter';
+import _ from 'lodash';
+import { aggregateTarget } from '../util/aggregation_util';
+import { emptyResultData } from '../util/target_util';
+import getVersion from '../util/instana_version';
 import { isInvalidQueryInterval } from '../util/queryInterval_check';
-import { readItemMetrics } from '../util/analyze_util';
 import migrate from '../migration';
+import { readItemMetrics } from '../util/analyze_util';
 
 export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   options: InstanaOptions;
   dataSourceInfrastructure: DataSourceInfrastructure;
   dataSourceWebsite: DataSourceWebsite;
+  dataSourceMobileapp: DataSourceMobileApp;
   dataSourceApplication: DataSourceApplication;
   dataSourceService: DataSourceService;
   dataSourceEndpoint: DataSourceEndpoint;
@@ -66,6 +70,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     this.dataSourceSlo = new DataSourceSlo(instanceSettings.jsonData);
     this.dataSourceInfrastructure = new DataSourceInfrastructure(instanceSettings.jsonData);
     this.dataSourceWebsite = new DataSourceWebsite(instanceSettings.jsonData);
+    this.dataSourceMobileapp = new DataSourceMobileApp(instanceSettings.jsonData);
     this.dataSourceApplication = new DataSourceApplication(instanceSettings.jsonData);
     this.dataSourceService = new DataSourceService(instanceSettings.jsonData);
     this.dataSourceEndpoint = new DataSourceEndpoint(instanceSettings.jsonData);
@@ -125,6 +130,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
           });
         } else if (category === ANALYZE_WEBSITE_METRICS) {
           return this.dataSourceWebsite.runQuery(target, targetTimeFilter).then((data: any) => {
+            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+          });
+        } else if (category === ANALYZE_MOBILE_APP_METRICS) {
+          return this.dataSourceMobileapp.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
         } else if (category === ANALYZE_APPLICATION_METRICS) {
@@ -323,6 +332,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
   fetchWebsites(): Promise<SelectableValue[]> {
     return this.dataSourceWebsite.getWebsites(this.getTimeFilter());
+  }
+
+  fetchMobileapp(): Promise<SelectableValue[]> {
+    return this.dataSourceMobileapp.getMobileapp(this.getTimeFilter());
   }
 
   getDefaultTimeInterval(query: InstanaQuery) {

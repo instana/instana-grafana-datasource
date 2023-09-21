@@ -183,6 +183,20 @@ If your selection matches, the returned dataset will include metrics providing g
 
 A default label '_$label ($website) $metric_' will be shown.
 
+### Analyze mobile app
+To choose EUM mobile app metrics you need to select "Analyze mobile app" from the category dropdown. This will populate the other dropdown lists.
+
+The "Mobile-app" dropdown will contain a list of all mobile apps sorted by their session starts.
+
+Most metrics will have more than one aggregation type (SUM, MEAN, ...) and you can choose which one to use.
+
+It's also possible to add additional filters via "add Filter". Multiple filters are concatenated using "AND".
+
+If your selection matches, the returned dataset will include metrics providing graphs like the example below.
+
+![mobile plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/Analyze_Mobile_App_SessionStart_metrics.gif)
+![mobile plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/Analyze_Mobile_App_HttpRequest_Metrics.gif)
+
 #### Change legend format
 
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:

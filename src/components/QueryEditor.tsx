@@ -2,6 +2,7 @@ import '../instana-grafana.css';
 
 import {
   ANALYZE_APPLICATION_METRICS,
+  ANALYZE_MOBILE_APP_METRICS,
   ANALYZE_WEBSITE_METRICS,
   APPLICATION_SERVICE_ENDPOINT_METRICS,
   BUILT_IN_METRICS,
@@ -26,6 +27,7 @@ import { InstanaOptions } from '../types/instana_options';
 import { InstanaQuery } from '../types/instana_query';
 import Metric from './Metric/Metric';
 import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
+import { MobileAppMetrics } from './Analyze/MobileAppMetrics';
 import { SloInformation } from './SLOInformation/SloInformation';
 import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import _ from 'lodash';
@@ -433,6 +435,19 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
         {query.metricCategory.key === ANALYZE_WEBSITE_METRICS && (
           <WebsiteMetrics
+            query={query}
+            onRunQuery={this.props.onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
+            groups={this.state.groups}
+            updateGroups={this.updateGroups}
+            filterMetricsOnType={this.filterMetricsOnType}
+            datasource={this.props.datasource}
+          />
+        )}
+
+        {query.metricCategory.key === ANALYZE_MOBILE_APP_METRICS && (
+          <MobileAppMetrics
             query={query}
             onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}

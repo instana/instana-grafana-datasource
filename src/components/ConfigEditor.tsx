@@ -1,12 +1,13 @@
+import './plugin.css';
+
+import { Checkbox, Field, Icon, Input, Legend, Tooltip } from '@grafana/ui';
+import { DataSourcePluginOptionsEditorProps, DataSourceSettings, SelectableValue } from '@grafana/data';
 import React, { ChangeEvent, PureComponent } from 'react';
 
-import { DataSourcePluginOptionsEditorProps, DataSourceSettings, SelectableValue } from '@grafana/data';
-import { Legend, Field, Input, Checkbox, Icon, Tooltip } from '@grafana/ui';
 import { InstanaOptions } from '../types/instana_options';
+import _ from 'lodash';
 import getVersion from '../util/instana_version';
 import proxyCheck from '../util/proxy_check';
-import _ from 'lodash';
-import './plugin.css';
 
 interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {}
 
@@ -204,6 +205,15 @@ export class ConfigEditor extends PureComponent<Props, State> {
             value={jsonData.queryinterval_limit_website_metrics}
             placeholder={'optional: interval limit in hours'}
             onChange={(event) => this.onInstanaOptionsChange(event, 'queryinterval_limit_website_metrics')}
+          />
+        </Field>
+
+        <Field className={'width-30'} horizontal label="Analyze mobile app">
+          <Input
+            width={30}
+            value={jsonData.queryinterval_limit_mobileapp_metrics}
+            placeholder={'optional: interval limit in hours'}
+            onChange={(event) => this.onInstanaOptionsChange(event, 'queryinterval_limit_mobileapp_metrics')}
           />
         </Field>
       </div>

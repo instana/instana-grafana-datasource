@@ -1,5 +1,7 @@
-import { buildInstanaOptions, buildTimeFilter } from '../util/test_util';
 import * as RequestHandler from '../util/request_handler';
+
+import { buildInstanaOptions, buildTimeFilter } from '../util/test_util';
+
 import { DataSourceWebsite } from './DataSource_Website';
 import TimeFilter from '../types/time_filter';
 import _ from 'lodash';

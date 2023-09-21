@@ -1,0 +1,93 @@
+{
+  "predicates": [{
+    "equals": {
+      "method": "POST",
+      "path": "/api/mobile-app-monitoring/analyze/beacon-groups"
+    }
+  },{
+    "contains": { "body": "pageLoads" }
+  }],
+  "responses": [{
+    "is": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json;charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+      },
+      "body": "{\"items\": [{\"name\": \"www.instana.com\", \"earliestTimestamp\": 1545276735240,\"metrics\": {\"pageLoads.sum\": [[1545298333417,7594.0]]}},{\"name\": \"www.instana.io\",\"earliestTimestamp\": 1545277010834,\"metrics\": {\"pageLoads.sum\": [[1545298333417,59.0]]}}],\"canLoadMore\": false,\"totalHits\": 2,\"totalRepresentedItemCount\": 2}"
+    }
+  }]
+},
+{
+  "predicates": [{
+    "equals": {
+      "method": "POST",
+      "path": "/api/mobile-app-monitoring/analyze/beacon-groups"
+    }
+  },{
+    "contains": { "body": "beaconCount" }
+  }],
+  "responses": [{
+    "inject": "<%- stringify(filename, 'metrics_factory_4.ejs') %>"
+  }]
+},
+{
+  "predicates": [{
+    "equals": {
+      "method": "GET",
+      "path": "/api/mobile-app-monitoring/catalog/tags"
+    }
+  }],
+  "responses": [{
+    "is": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json;charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+      },
+      "body": "[{ \"name\": \"mobileBeacon.mobile-app.name\", \"type\": \"STRING\", \"category\": \"MOBILE_APP_MONITORING\" }, { \"name\": \"beacon.duration\", \"type\": \"NUMBER\", \"category\": \"MOBILE_APP_MONITORING\" }, { \"name\": \"beacon.page.name\", \"type\": \"STRING\", \"category\": \"MOBILE_APP_MONITORING\" }]"
+    }
+  }]
+},
+{
+  "predicates": [{
+    "equals": {
+      "method": "GET",
+      "path": "/api/mobile-app-monitoring/config"
+    }
+  }],
+  "responses": [{
+    "is": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json;charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+      },
+      "body": "[{ \"id\": \"someId\", \"name\": \"www.instana.com\" }]"
+    }
+  }]
+},
+{
+  "predicates": [{
+    "equals": {
+      "method": "GET",
+      "path": "/api/mobile-app-monitoring/catalog/metrics"
+    }
+  }],
+  "responses": [{
+    "is": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json;charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+      },
+      "body": "[{ \"metricId\": \"beaconCount\", \"label\": \"Beacon count\", \"formatter\": \"NUMBER\", \"description\": \"How many beacons matching a filter were recorded.\", \"aggregations\": [ \"SUM\" ], \"beaconTypes\":[\"pageLoad\",\"resourceLoad\"]  }, { \"metricId\": \"beaconDuration\", \"label\": \"Beacon duration\", \"formatter\": \"NUMBER\", \"description\": \"The recorded duration for a beacon.\", \"aggregations\": [ \"P99\", \"MEAN\", \"P25\", \"MIN\", \"MAX\", \"P90\", \"P50\", \"P95\", \"P98\", \"P75\" ], \"beaconTypes\":[\"pageLoad\",\"resourceLoad\"]  }, { \"metricId\": \"pageLoads\", \"label\": \"Page loads\", \"formatter\": \"NUMBER\", \"description\": \"How often a full page load occurred.\", \"aggregations\": [ \"SUM\" ], \"beaconTypes\":[\"pageLoad\"] }]"
+    }
+  }]
+},
+
+
