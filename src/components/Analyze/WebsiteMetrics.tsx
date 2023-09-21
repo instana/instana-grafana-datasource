@@ -1,13 +1,13 @@
+import { ALL_WEBSITES, ANALYZE_WEBSITE_METRICS } from '../../GlobalVariables';
 import React, { ChangeEvent } from 'react';
 
-import { ALL_WEBSITES, ANALYZE_WEBSITE_METRICS } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
-import { InstanaQuery } from '../../types/instana_query';
-import beacon_types from '../../lists/beacon_types';
 import FormSelect from '../FormField/FormSelect';
-import { SelectableValue } from '@grafana/data';
 import { Input } from '@grafana/ui';
+import { InstanaQuery } from '../../types/instana_query';
+import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
+import beacon_types from '../../lists/beacon_types_website';
 
 interface WebsiteMetricsState {
   websites: SelectableValue[];

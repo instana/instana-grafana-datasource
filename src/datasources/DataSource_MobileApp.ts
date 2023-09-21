@@ -108,7 +108,7 @@ export class DataSourceMobileApp {
             aggregations: entry.aggregations ? this.transformAggregations(entry.aggregations.sort()) : [],
             beaconTypes: entry.beaconTypes
               ? this.transformBeaconTypes(entry.beaconTypes)
-              : ['pageLoad', 'resourceLoad', 'httpRequest', 'error', 'custom', 'pageChange'],
+              : ['sessionStart', 'crash', 'httpRequest', 'custom', 'viewChange'],
           };
         })
     );
@@ -118,9 +118,21 @@ export class DataSourceMobileApp {
   }
 
   transformBeaconTypes(beaconTypes: string[]) {
-    if (beaconTypes.includes('pageChange')) {
-      let result = _.remove(beaconTypes, (type) => type !== 'pageChange');
-      result.push('page_change');
+    if (beaconTypes.includes('sessionStart')) {
+      let result = _.remove(beaconTypes, (type) => type !== 'sessionStart');
+      result.push('session_start');
+      return result;
+    }
+
+    if (beaconTypes.includes('httpRequest')) {
+      let result = _.remove(beaconTypes, (type) => type !== 'httpRequest');
+      result.push('http_request');
+      return result;
+    }
+
+    if (beaconTypes.includes('viewChange')) {
+      let result = _.remove(beaconTypes, (type) => type !== 'viewChange');
+      result.push('view_change');
       return result;
     }
 
@@ -140,7 +152,7 @@ export class DataSourceMobileApp {
     const windowSize = getWindowSize(timeFilter);
     const tagFilters = [
       {
-        name: 'beacon.mobileapp.name',
+        name: 'mobileBeacon.mobileApp.name',
         operator: 'EQUALS',
         value: target.entity.key,
       },

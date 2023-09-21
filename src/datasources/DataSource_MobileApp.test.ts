@@ -46,7 +46,7 @@ describe('Given a mobileapp datasource', () => {
             metricId: 'metricId',
             label: 'label',
             aggregations: ['MEAN', 'SUM'],
-            beaconTypes: ['pageLoad', 'resourceLoad', 'httpRequest', 'error', 'custom', 'pageChange'],
+            beaconTypes: ['sessionStart', 'crash', 'httpRequest', 'custom', 'viewChange'],
           },
           {
             metricId: 'singleId',

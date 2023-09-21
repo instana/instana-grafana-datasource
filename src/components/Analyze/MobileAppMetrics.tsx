@@ -7,7 +7,7 @@ import { Input } from '@grafana/ui';
 import { InstanaQuery } from '../../types/instana_query';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
-import beacon_types from '../../lists/beacon_types';
+import beacon_types from '../../lists/beacon_types_mobile_app';
 
 interface MobileAppMetricsState {
   mobileapps: SelectableValue[];
