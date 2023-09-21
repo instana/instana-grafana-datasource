@@ -199,4 +199,13 @@ This should render a chart with one dataset (`GET (AWS instances) latency.mean`)
 * Group by: `beacon.page.name`
 * Metric: `Beacon Count (beaconCount)`
 
+#### Analyze mobile app
+
+* Data source: `Instana-1`
+* Category: `Analyze mobile app`
+* mobile app: `robot-warehouse`
+* Type: `Session Starts`
+* Group by: `mobileBeacon.view.name`
+* Metric: `Beacon Count (beaconCount)`
+
 This should render a chart with one dataset (`home (www.instana.com) beaconCount.sum.300`).
