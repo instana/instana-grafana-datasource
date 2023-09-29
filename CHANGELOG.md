@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.8
+- add mobile app metrics data
+
 ## 3.3.7
 - fix application, service and endpoint selection in corresponding metrics category
 
