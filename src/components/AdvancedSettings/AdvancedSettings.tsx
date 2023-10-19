@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 
-import { BUILT_IN_METRICS, CUSTOM_METRICS, INFRASTRUCTURE_EXPLORE, SLO_INFORMATION } from '../../GlobalVariables';
+import { BUILT_IN_METRICS, CUSTOM_METRICS, INFRASTRUCTURE_ANALYZE, SLO_INFORMATION } from '../../GlobalVariables';
 import { FreeTextMetrics } from '../Infrastructure/Custom/FreeTextMetrics';
 import { InstanaQuery } from '../../types/instana_query';
 import { AggregateQuery } from './AggregateQuery';
@@ -171,7 +171,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
         </div>
 
         <div hidden={!query.showAdvancedSettings}>
-          <div className={'gf-form'} hidden={category === SLO_INFORMATION || category === INFRASTRUCTURE_EXPLORE}>
+          <div className={'gf-form'} hidden={category === SLO_INFORMATION || category === INFRASTRUCTURE_ANALYZE}>
             <FormInput
               queryKeyword
               inputWidth={0}
