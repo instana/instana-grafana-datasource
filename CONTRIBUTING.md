@@ -96,7 +96,7 @@ This procedure is used to test the Instana Grafana data source before the versio
     * for Grafana 5.3+ URL with proxy: `http://mountebank:8010`
     * for Grafana <5.3 URL with out proxy: `http://localhost:8010`
     * API Token: `valid-api-token`
-    * check `Enable Infrastructure Explore category`
+    * check `Enable Infrastructure Analyze category`
     * Name: `Instana-1`
 * Create a new dashboard with a graph panel
 
@@ -128,13 +128,13 @@ Values for each label in order:
 
 This should render a chart with one dataset (`host-3 (29042)`).
 
-#### Infrastructure Explore
+#### Infrastructure Analyze
 
 Values for each label in order:
-The category `Infrastructure explore (beta)` will only show up if you have checked `Enable Infrastructure Explore category` in the data source options.
+The category `Infrastructure Analyze (beta)` will only show up if you have checked `Enable Infrastructure Analyze category` in the data source options.
 
 * Data source: `Instana-1`
-* Category: `Infrastructure explore (beta)`
+* Category: `Infrastructure Analyze (beta)`
 * Filter: 
 ```
 {
