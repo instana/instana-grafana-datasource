@@ -20,7 +20,7 @@ For On-premise customers Instana Release 146 is required.
 
 ## Troubleshooting 
 
-When troubleshooting, please open a ticket at https://support.instana.com/hc/en-us/requests/new to get your issues/questions resolved the fastest way possible.
+When troubleshooting, please open a ticket at https://www.ibm.com/mysupport to get your issues/questions resolved the fastest way possible.
 
 Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).
 
