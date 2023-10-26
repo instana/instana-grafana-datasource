@@ -238,7 +238,6 @@ export class DataSourceInfrastructure {
         });
 
         return result;
-        
       }
     );
   }

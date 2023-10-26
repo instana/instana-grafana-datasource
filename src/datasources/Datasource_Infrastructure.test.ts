@@ -282,13 +282,13 @@ describe('Given an infrastructure datasource', () => {
     };
     beforeEach(() => {
       metricSpy.mockReset();
-        metricSpy = jest.spyOn(RequestHandler, 'postRequest');
-        metricSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
-          if (endpoint === '/api/infrastructure-monitoring/metrics') {
-            return Promise.resolve(data);
-          }
-          throw new Error('Unexpected call URL: ' + endpoint);
-        });
+      metricSpy = jest.spyOn(RequestHandler, 'postRequest');
+      metricSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
+        if (endpoint === '/api/infrastructure-monitoring/metrics') {
+          return Promise.resolve(data);
+        }
+        throw new Error('Unexpected call URL: ' + endpoint);
+      });
     });
     it('should call postRequest with the correct parameters', () => {
       RequestHandler.postRequest(
