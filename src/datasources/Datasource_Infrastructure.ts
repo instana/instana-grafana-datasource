@@ -88,6 +88,7 @@ export class DataSourceInfrastructure {
   }
 
   fetchMetricsForSnapshots(target: InstanaQuery, snapshots: any, timeFilter: TimeFilter, metric: any) {
+    let maxValues: any = [];
     let snapshotIds: string[] = [];
     _.map(snapshots, (snapshot) => snapshotIds.push(snapshot.snapshotId));
     // ...fetch the metric data for every snapshot in the results.
@@ -95,19 +96,27 @@ export class DataSourceInfrastructure {
       if (!response.data) {
         return response;
       }
+      let timeseries = this.readTimeSeries(response.data.items, target.aggregation, timeFilter);
       // as we map two times we need to flatten the result
-      return _.flatten(
+      let results = _.flatten(
         response.data.items.map((item: any, index: number) => {
           return _.map(item.metrics, (value, key) => {
-            return {
+            let result = {
               target: item.label,
               datapoints: _.map(value, (metric) => [metric[1], metric[0]]),
               refId: target.refId,
               key: target.stableHash,
             };
+            if (target.displayMaxMetricValue) {
+              const maxValue = this.getMaxMetricValue(target.metric, snapshots);
+              maxValues.push(this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
+              result.datapoints = this.convertRelativeToAbsolute(result.datapoints, maxValue);
+            }  
+            return result;
           });
         })
       );
+      return results
     });
   }
 
