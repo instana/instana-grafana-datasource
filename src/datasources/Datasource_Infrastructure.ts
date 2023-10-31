@@ -291,16 +291,18 @@ export class DataSourceInfrastructure {
     }
 
     const fetchSnapshotContextsUrl =
-      `/api/snapshots/context` +
-      `?q=${query}` +
+      `/api/infrastructure-monitoring/snapshots` +
+      `?plugin=${target.entityType.key}` +
+      '&size=100' +
+      `&q=${target.entityQuery}` +
       `&from=${timeFilter.from}` +
       `&to=${timeFilter.to}` +
-      (this.instanaOptions.showOffline ? `` : `&time=${timeFilter.to}&size=100`);
+      (this.instanaOptions.showOffline ? `` : `&time=${timeFilter.to}`);
 
     snapshots = getRequest(this.instanaOptions, fetchSnapshotContextsUrl)
       .then((contextsResponse: any) => {
         return Promise.all(
-          contextsResponse.data.map(({ snapshotId, host }: any) => {
+          contextsResponse.data.items.map(({ snapshotId, host }: any) => {
             let snapshotInfo = this.snapshotInfoCache.get(snapshotId);
             if (snapshotInfo) {
               return snapshotInfo;
