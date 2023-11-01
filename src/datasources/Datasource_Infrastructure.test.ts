@@ -155,7 +155,7 @@ describe('Given an infrastructure datasource', () => {
             Authorization: 'apiToken ' + options.apiToken,
           },
         })
-        .then((catalog: any) => {
+        .then((catalog: any) => {        
           mockCatalogResponseAndVerify(catalog, metricCategory);
           mockCatalogResponseAndVerify(catalog, metricCategory);
           expect(catalogSpy).toBeCalledTimes(1);
@@ -174,16 +174,18 @@ describe('Given an infrastructure datasource', () => {
     const snapshotB = { status: 200, data: { label: 'label for B' } };
     const contexts = {
       status: 200,
-      data: [
-        {
-          snapshotId: 'A',
-          host: 'Stans-Macbook-Pro',
-        },
-        {
-          snapshotId: 'B',
-          host: '',
-        },
-      ],
+      data:{
+        items: [
+          {
+            snapshotId: 'A',
+            host: 'Stans-Macbook-Pro',
+          },
+          {
+            snapshotId: 'B',
+            host: '',
+          },
+        ],
+      }
     };
 
     beforeEach(() => {
@@ -192,7 +194,7 @@ describe('Given an infrastructure datasource', () => {
       contextSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
         if (
           endpoint ===
-          '/api/snapshots/context?q=java%20AND%20entity.pluginId%3AsomeKey&from=' +
+          '/api/infrastructure-monitoring/snapshots?plugin='+target.entityType.key+'&size=100&q='+target.entityQuery+'&from=' +
             timeFilter.from +
             '&to=' +
             timeFilter.to
@@ -201,7 +203,7 @@ describe('Given an infrastructure datasource', () => {
         }
         if (
           endpoint ===
-          '/api/snapshots/context?q=daljeet%20AND%20entity.pluginId%3AsomeKey&from=' +
+          'api/infrastructure-monitoring/snapshots?plugin=netCoreRuntimePlatform&size=100&q=host&from=' +
             timeFilter.from +
             '&to=' +
             timeFilter.to
