@@ -233,8 +233,8 @@ export class Filters extends React.Component<Props, FilterState> {
               onChange={(e) => this.onTagFilterBooleanValueChange(e, index)}
               value={{ key: '' + query.filters[index].booleanValue, label: '' + query.filters[index].booleanValue }}
               options={[
-                { key: 'false', label: 'false' },
-                { key: 'true', label: 'true' },
+                { key: false, label: 'false' },
+                { key: true, label: 'true' },
               ]}
             />
           )}
