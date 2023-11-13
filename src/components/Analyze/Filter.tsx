@@ -1,6 +1,6 @@
 import React, { FormEvent } from 'react';
 
-import { ANALYZE_APPLICATION_METRICS, PLEASE_SPECIFY } from '../../GlobalVariables';
+import { ANALYZE_APPLICATION_METRICS,ANALYZE_MOBILE_APP_METRICS, PLEASE_SPECIFY } from '../../GlobalVariables';
 import { Button, InlineFormLabel, Input, Select } from '@grafana/ui';
 import call_to_entities from '../../lists/apply_call_to_entities';
 import { DataSource } from '../../datasources/DataSource';
@@ -183,7 +183,7 @@ export class Filters extends React.Component<Props, FilterState> {
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Filter by tag.'}>
             {index + 1}. filter
           </InlineFormLabel>
-          {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
+          {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && ANALYZE_MOBILE_APP_METRICS && (
             <Entity
               value={query.filters[index].entity}
               onChange={(callToEntity: string) => this.onCallToEntityChange(callToEntity, index)}
