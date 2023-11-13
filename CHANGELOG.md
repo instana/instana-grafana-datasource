@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.9
+- add filter feature for mobileapp analysis, and enabled beeInstana in infrastructure
+
 ## 3.3.8
 - add mobile app metrics data
 
