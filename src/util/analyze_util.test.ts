@@ -1,7 +1,8 @@
 import { createTagFilter, readItemMetrics } from './analyze_util';
+
 import { InstanaQuery } from '../types/instana_query';
-import { buildTestTarget } from './test_util';
 import TagFilter from '../types/tag_filter';
+import { buildTestTarget } from './test_util';
 
 describe('Given a TagFilter object', () => {
   describe('with no tag type', () => {
@@ -19,7 +20,7 @@ describe('Given a TagFilter object', () => {
       const expected = {
         name: 'test',
         operator: 'operator',
-        value: 'string',
+        value: false,
       };
 
       expect(createTagFilter(tagFilter)).toEqual(expected);
@@ -41,7 +42,7 @@ describe('Given a TagFilter object', () => {
       const expected = {
         name: 'some key',
         operator: 'operator',
-        value: '0',
+        value: false,
       };
 
       expect(createTagFilter(tagFilter)).toEqual(expected);
@@ -63,7 +64,7 @@ describe('Given a TagFilter object', () => {
       const expected = {
         name: 'tagKey',
         operator: 'operator',
-        value: 'true',
+        value: true,
       };
 
       expect(createTagFilter(tagFilter)).toEqual(expected);
