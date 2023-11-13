@@ -168,7 +168,7 @@ export class DataSourceApplication {
           value: target.entity.label!,
           entity: target.applicationCallToEntity ? target.applicationCallToEntity : 'DESTINATION',
         });
-        }
+      }
 
       _.forEach(target.filters, (filter) => {
         if (filter.isValid) {
@@ -202,10 +202,10 @@ export class DataSourceApplication {
       }
 
       let includeSynthetic = false;
-      target.filters.map(filter => {
-        if(filter.tag.key==='call.is_synthetic') {
-        includeSynthetic = filter.booleanValue;
-       }
+      target.filters.map((filter) => {
+        if (filter.tag.key === 'call.is_synthetic') {
+          includeSynthetic = filter.booleanValue;
+        }
       });
 
       const data: any = {
