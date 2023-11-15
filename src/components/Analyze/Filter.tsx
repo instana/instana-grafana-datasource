@@ -1,15 +1,15 @@
+import { ANALYZE_APPLICATION_METRICS, ANALYZE_MOBILE_APP_METRICS, PLEASE_SPECIFY } from '../../GlobalVariables';
+import { Button, InlineFormLabel, Input, Select } from '@grafana/ui';
 import React, { FormEvent } from 'react';
 
-import { ANALYZE_APPLICATION_METRICS, PLEASE_SPECIFY } from '../../GlobalVariables';
-import { Button, InlineFormLabel, Input, Select } from '@grafana/ui';
-import call_to_entities from '../../lists/apply_call_to_entities';
 import { DataSource } from '../../datasources/DataSource';
+import Entity from '../Entity/Entity';
 import { InstanaQuery } from '../../types/instana_query';
 import { SelectableValue } from '@grafana/data';
 import TagFilter from '../../types/tag_filter';
-import operators from '../../lists/operators';
-import Entity from '../Entity/Entity';
 import _ from 'lodash';
+import call_to_entities from '../../lists/apply_call_to_entities';
+import operators from '../../lists/operators';
 
 interface FilterState {}
 
@@ -183,7 +183,7 @@ export class Filters extends React.Component<Props, FilterState> {
           <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Filter by tag.'}>
             {index + 1}. filter
           </InlineFormLabel>
-          {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && (
+          {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && ANALYZE_MOBILE_APP_METRICS && (
             <Entity
               value={query.filters[index].entity}
               onChange={(callToEntity: string) => this.onCallToEntityChange(callToEntity, index)}
@@ -233,8 +233,8 @@ export class Filters extends React.Component<Props, FilterState> {
               onChange={(e) => this.onTagFilterBooleanValueChange(e, index)}
               value={{ key: '' + query.filters[index].booleanValue, label: '' + query.filters[index].booleanValue }}
               options={[
-                { key: 'false', label: 'false' },
-                { key: 'true', label: 'true' },
+                { key: false, label: 'false' },
+                { key: true, label: 'true' },
               ]}
             />
           )}

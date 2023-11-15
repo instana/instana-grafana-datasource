@@ -6,15 +6,15 @@ export function createTagFilter(filter: TagFilter) {
   let tagFilter = {
     name: filter.tag.key,
     operator: filter.operator.key,
-    value: filter.stringValue,
+    value: false,
   };
 
   if ('NUMBER' === filter.tag.type) {
     if (filter.numberValue !== null) {
-      tagFilter.value = filter.numberValue.toString();
+      tagFilter.value = filter.numberValue !== 0;
     }
   } else if ('BOOLEAN' === filter.tag.type) {
-    tagFilter.value = filter.booleanValue.toString();
+    tagFilter.value = filter.booleanValue;
   }
 
   return tagFilter;

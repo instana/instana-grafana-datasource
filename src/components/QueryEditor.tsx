@@ -501,7 +501,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         )}
 
         {(query.metricCategory.key === ANALYZE_APPLICATION_METRICS ||
-          query.metricCategory.key === ANALYZE_WEBSITE_METRICS) && (
+          query.metricCategory.key === ANALYZE_WEBSITE_METRICS ||
+          query.metricCategory.key === ANALYZE_MOBILE_APP_METRICS) && (
           <Filters
             query={query}
             onChange={this.props.onChange}
@@ -518,7 +519,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           loadEntityTypes={this.loadEntityTypes}
         />
 
-        <Badge text={'3.3.8'} color={'blue'} />
+        <Badge text={'3.3.9'} color={'blue'} />
       </div>
     );
   }
