@@ -36,17 +36,17 @@ export class DataSourceInfrastructure {
           this.instanaOptions.queryinterval_limit_infra +
           ' hours'
       );
-    }
-
+    }    
+    
     if (target.tagFilterExpression) {
       return this.fetchExploreEntities(target, timeFilter);
-    }
+    } 
 
     // do not try to retrieve data without selected metric
     if ((!target.metric || !target.metric.key) && !target.showAllMetrics && !target.freeTextMetrics) {
       return Promise.resolve(emptyResultData(target.refId));
-    }
-
+    } 
+    
     // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
     return this.fetchSnapshotsForTarget(target, timeFilter).then((snapshots) => {
       if (target.showAllMetrics) {
@@ -111,12 +111,12 @@ export class DataSourceInfrastructure {
               const maxValue = this.getMaxMetricValue(target.metric, snapshots);
               maxValues.push(this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
               result.datapoints = this.convertRelativeToAbsolute(result.datapoints, maxValue);
-            }  
+            }
             return result;
           });
         })
       );
-      return results
+      return results;
     });
   }
 
@@ -161,7 +161,7 @@ export class DataSourceInfrastructure {
     }
 
     entityTypes = getRequest(this.instanaOptions, '/api/infrastructure-monitoring/catalog/plugins').then(
-      (typesResponse: any) => {
+      (typesResponse: any) => {        
         const result = typesResponse.data.map((entry: any) => ({
           key: entry.plugin,
           label: entry.label,
@@ -200,11 +200,9 @@ export class DataSourceInfrastructure {
         operator: 'EQUALS',
         value: query.entityQuery.includes(':') ? query.entityQuery.split(':')[1] : query.entityQuery,
       },
-    };
-    return postRequest(this.instanaOptions, fetchSnapshotTypesUrl, data);
-  }
-
-  fetchAnalyzeEntities(target: InstanaQuery, timeFilter: TimeFilter) {}
+      };
+      return postRequest(this.instanaOptions, fetchSnapshotTypesUrl, data);
+    }   
 
   fetchExploreEntities(target: InstanaQuery, timeFilter: TimeFilter) {
     const data = JSON.parse(target.tagFilterExpression);
