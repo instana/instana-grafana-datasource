@@ -100,6 +100,7 @@ export class DataSourceApplication {
 
     return getRequest(this.instanaOptions, '/api/application-monitoring/applications?' + queryParameters).then(
       (response: any) => {
+        console.log(response, 'response');
         results.push(response.data);
         if (page * pageSize < response.data.totalHits) {
           page++;

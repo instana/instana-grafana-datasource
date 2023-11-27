@@ -155,7 +155,7 @@ describe('Given an infrastructure datasource', () => {
             Authorization: 'apiToken ' + options.apiToken,
           },
         })
-        .then((catalog: any) => {        
+        .then((catalog: any) => {
           mockCatalogResponseAndVerify(catalog, metricCategory);
           mockCatalogResponseAndVerify(catalog, metricCategory);
           expect(catalogSpy).toBeCalledTimes(1);
@@ -174,7 +174,7 @@ describe('Given an infrastructure datasource', () => {
     const snapshotB = { status: 200, data: { label: 'label for B' } };
     const contexts = {
       status: 200,
-      data:{
+      data: {
         items: [
           {
             snapshotId: 'A',
@@ -185,7 +185,7 @@ describe('Given an infrastructure datasource', () => {
             host: '',
           },
         ],
-      }
+      },
     };
 
     beforeEach(() => {
@@ -194,7 +194,11 @@ describe('Given an infrastructure datasource', () => {
       contextSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
         if (
           endpoint ===
-          '/api/infrastructure-monitoring/snapshots?plugin='+target.entityType.key+'&size=100&q='+target.entityQuery+'&from=' +
+          '/api/infrastructure-monitoring/snapshots?plugin=' +
+            target.entityType.key +
+            '&size=100&q=' +
+            target.entityQuery +
+            '&from=' +
             timeFilter.from +
             '&to=' +
             timeFilter.to

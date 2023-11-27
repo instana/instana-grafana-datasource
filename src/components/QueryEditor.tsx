@@ -152,10 +152,14 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
     if (query.entityQuery) {
       datasource.fetchTypesForTarget(query).then((response: any) => {
-        this.snapshots = response.data.plugins;
+        console.log("response2222",response)
+        this.snapshots = response.map((plugin:any)=> plugin.label);
+        console.log('this.snapshots',this.snapshots);
+        
         this.filterForEntityType(true, filterResult);
         onRunQuery();
       });
+      console.log(query, 'query');
     } else {
       this.setState({ queryTypes: [] });
     }
@@ -365,9 +369,10 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   render() {
     const { query, onCategoryChange } = this;
-    const categories = this.allowInfraExplore
-      ? metricCategories
-      : metricCategories.filter((category) => category.key !== INFRASTRUCTURE_ANALYZE);
+    const categories = metricCategories;
+    // const categories = this.allowInfraExplore
+    //   ? metricCategories
+    //   : metricCategories.filter((category) => category.key !== INFRASTRUCTURE_ANALYZE);
 
     return (
       <div className={'gf-form-group'}>
@@ -412,12 +417,12 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         {query.metricCategory.key === INFRASTRUCTURE_ANALYZE && (
           <Explore
             query={query}
-            queryTypes={this.state.queryTypes}
-            datasource={this.props.datasource}
             onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
-            updateQueryTypes={this.updateQueryTypes}
+            groups={this.state.groups}
+            updateGroups={this.updateGroups}
+            datasource={this.props.datasource}
           />
         )}
 
@@ -478,7 +483,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key !== SLO_INFORMATION && query.metricCategory.key !== INFRASTRUCTURE_ANALYZE && (
+        {query.metricCategory.key !== SLO_INFORMATION && (
           <Metric
             query={query}
             onChange={this.props.onChange}
@@ -502,7 +507,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
         {(query.metricCategory.key === ANALYZE_APPLICATION_METRICS ||
           query.metricCategory.key === ANALYZE_WEBSITE_METRICS ||
-          query.metricCategory.key === ANALYZE_MOBILE_APP_METRICS) && (
+          query.metricCategory.key === ANALYZE_MOBILE_APP_METRICS || 
+          query.metricCategory.key === INFRASTRUCTURE_ANALYZE ) && (
           <Filters
             query={query}
             onChange={this.props.onChange}
