@@ -318,10 +318,6 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     return this.dataSourceApplication.getApplicationTags(this.getTimeFilter());
   }
 
-  fetchAnalyzetages() {
-    return this.dataSourceInfrastructure.getAnalyzeTags(this.getTimeFilter());
-  }
-
   fetchServices(target: InstanaQuery) {
     return this.dataSourceService.getServicesOfApplication(target, this.getTimeFilter());
   }

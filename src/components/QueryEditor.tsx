@@ -127,7 +127,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.props.onChange(this.query);
   }
 
-  updateMetrics = (metrics: SelectableValue[]) => {
+  updateMetrics = (metrics: SelectableValue[]) => {   
     this.setState({
       availableMetrics: _.sortBy(metrics, 'key'),
       allMetrics: _.sortBy(metrics, 'key'),
@@ -152,14 +152,10 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
     if (query.entityQuery) {
       datasource.fetchTypesForTarget(query).then((response: any) => {
-        console.log("response2222",response)
-        this.snapshots = response.map((plugin:any)=> plugin.label);
-        console.log('this.snapshots',this.snapshots);
-        
+        this.snapshots = response.map((plugin: any) => plugin.label);
         this.filterForEntityType(true, filterResult);
         onRunQuery();
       });
-      console.log(query, 'query');
     } else {
       this.setState({ queryTypes: [] });
     }
@@ -370,9 +366,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   render() {
     const { query, onCategoryChange } = this;
     const categories = metricCategories;
-    // const categories = this.allowInfraExplore
-    //   ? metricCategories
-    //   : metricCategories.filter((category) => category.key !== INFRASTRUCTURE_ANALYZE);
 
     return (
       <div className={'gf-form-group'}>
@@ -507,8 +500,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
         {(query.metricCategory.key === ANALYZE_APPLICATION_METRICS ||
           query.metricCategory.key === ANALYZE_WEBSITE_METRICS ||
-          query.metricCategory.key === ANALYZE_MOBILE_APP_METRICS || 
-          query.metricCategory.key === INFRASTRUCTURE_ANALYZE ) && (
+          query.metricCategory.key === ANALYZE_MOBILE_APP_METRICS) && (
           <Filters
             query={query}
             onChange={this.props.onChange}

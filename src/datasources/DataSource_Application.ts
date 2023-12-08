@@ -100,7 +100,6 @@ export class DataSourceApplication {
 
     return getRequest(this.instanaOptions, '/api/application-monitoring/applications?' + queryParameters).then(
       (response: any) => {
-        console.log(response, 'response');
         results.push(response.data);
         if (page * pageSize < response.data.totalHits) {
           page++;
@@ -190,7 +189,6 @@ export class DataSourceApplication {
         aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
         granularity: target.timeInterval.key,
       };
-
       const group: any = {
         groupbyTag: target.group.key,
       };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BUILT_IN_METRICS, CUSTOM_METRICS, ANALYZE_APPLICATION_METRICS } from '../../GlobalVariables';
+import { BUILT_IN_METRICS, CUSTOM_METRICS, ANALYZE_APPLICATION_METRICS,INFRASTRUCTURE_ANALYZE } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import max_metrics from '../../lists/max_metrics';
@@ -125,7 +125,7 @@ export default class Metric extends React.Component<Props, MetricState> {
   }
 
   render() {
-    const { query, datasource } = this.props;
+    const { query, datasource } = this.props;   
 
     return (
       <div className={'gf-form'}>
@@ -185,17 +185,19 @@ export default class Metric extends React.Component<Props, MetricState> {
           />
         )}
 
-        <FormSelect
-          queryKeyword
-          disabled={datasource.availableTimeIntervals.length <= 1}
-          labelWidth={5}
-          inputWidth={12}
-          label={'Rollup'}
-          tooltip={'Select the rollup value.'}
-          value={query.timeInterval}
-          options={datasource.availableTimeIntervals}
-          onChange={this.onTimeIntervalChange}
-        />
+        {query.metricCategory.key !== INFRASTRUCTURE_ANALYZE &&(
+          <FormSelect
+            queryKeyword
+            disabled={datasource.availableTimeIntervals.length <= 1}
+            labelWidth={5}
+            inputWidth={12}
+            label={'Rollup'}
+            tooltip={'Select the rollup value.'}
+            value={query.timeInterval}
+            options={datasource.availableTimeIntervals}
+            onChange={this.onTimeIntervalChange}
+         />
+        )}
       </div>
     );
   }

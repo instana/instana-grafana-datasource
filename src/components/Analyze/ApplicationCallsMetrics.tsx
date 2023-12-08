@@ -45,9 +45,8 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
     const { query, datasource, onChange } = this.props;
     isUnmounting = false;
     datasource.fetchApplications().then((applications) => {
-      console.log(applications,"app");
       
-      if (!isUnmounting) {
+    if (!isUnmounting) {
         if (!_.find(applications, { key: null })) {
           applications.unshift({ key: null, label: ALL_APPLICATIONS });
         }
