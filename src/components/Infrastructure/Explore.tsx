@@ -8,6 +8,7 @@ import { PLEASE_SPECIFY } from '../../GlobalVariables';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
 import call_to_entities from '../../lists/apply_call_to_entities';
+
 interface AnalyzeState {
   entityTypes: SelectableValue[];
 }
@@ -62,7 +63,7 @@ export class Explore extends React.Component<Props, AnalyzeState> {
     query.entity = entityType;
     onChange(query);
     onRunQuery();
-    datasource.dataSourceInfrastructure.getAnalyzeMetricsCatalog(query).then((result: any) => {
+    datasource.fetchMetricsForEntityType(query).then((result: any) => {
       this.props.updateMetrics(result);
     });
   };

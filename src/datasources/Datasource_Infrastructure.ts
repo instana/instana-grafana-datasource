@@ -40,8 +40,8 @@ export class DataSourceInfrastructure {
         ' hours'
       );
     }
-    
-    if (target.tagFilterExpression || target.metricCategory.key === INFRASTRUCTURE_ANALYZE) {
+
+    if (target.tagFilterExpression || target.metricCategory.key === INFRASTRUCTURE_ANALYZE && (target.metric.key && target.group.key && target.entity.key)) {
       return this.fetchAnalyzeEntities(target, timeFilter);
     }
 
@@ -184,16 +184,6 @@ export class DataSourceInfrastructure {
     return entityTypes;
   }
 
-  getAnalyzeMetricsCatalog(target: InstanaQuery) {
-    let windowSize = 1000;
-    let timeFilter: TimeFilter = {
-      from: Date.now() - windowSize,
-      to: Date.now(),
-      windowSize: windowSize,
-    };
-    return this.fetchAvailableMetricsForEntityType(target, timeFilter);
-  }
-
   fetchTypesForTarget(query: InstanaQuery, timeFilter: TimeFilter): any {
     const windowSize = getWindowSize(timeFilter);
     query.timeInterval = getDefaultChartGranularity(windowSize);
@@ -234,7 +224,6 @@ export class DataSourceInfrastructure {
   }
 
   fetchAvailableMetricsForEntityType(target: InstanaQuery, timeFilter: TimeFilter) {
-    
     const windowSize = getWindowSize(timeFilter);
     target.timeInterval = getDefaultChartGranularity(windowSize);
     const data = {
@@ -281,16 +270,19 @@ export class DataSourceInfrastructure {
   }
 
   fetchAnalyzeEntities(target: InstanaQuery, timeFilter: TimeFilter) {
-
     const windowSize = getWindowSize(timeFilter);
+
     if (!target.timeInterval) {
       target.timeInterval = getDefaultChartGranularity(windowSize);
+    }
+    if(target.timeInterval.key < 60000){
+      target.timeInterval.key = 60000
     }
     const metric: any = {
       metric: target.metric.key,
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
-      granularity: target.timeInterval.key
-    };
+      granularity: (target.timeInterval.key)
+    }
     const payload = {
       tagFilterExpression: {
         elements: [],
@@ -310,9 +302,7 @@ export class DataSourceInfrastructure {
     };
 
     return postRequest(this.instanaOptions, '/api/infrastructure-monitoring/analyze/entity-groups', payload).then(
-      (res: any) => {
-        console.log(res,"res");
-        
+      (res: any) => {        
         let result: any = [];
 
         if (!res.data && res.errors.length >= 1) {
