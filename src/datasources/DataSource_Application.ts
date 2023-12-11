@@ -189,7 +189,7 @@ export class DataSourceApplication {
         aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
         granularity: target.timeInterval.key,
       };
-
+      
       const group: any = {
         groupbyTag: target.group.key,
       };

@@ -1,74 +1,125 @@
+import '../plugin.css';
+import { InlineFormLabel, Input, Select } from '@grafana/ui';
 import React, { ChangeEvent } from 'react';
-
-import FormTextArea from 'components/FormField/FormTextArea';
 import { DataSource } from '../../datasources/DataSource';
+import FormWrapper from '../FormField/FormWrapper';
 import { InstanaQuery } from '../../types/instana_query';
+import { PLEASE_SPECIFY } from '../../GlobalVariables';
 import { SelectableValue } from '@grafana/data';
 import _ from 'lodash';
-import '../plugin.css';
+import call_to_entities from '../../lists/apply_call_to_entities';
 
-interface State {
-  queryTypes: SelectableValue[];
+interface AnalyzeState {
+  entityTypes: SelectableValue[];
 }
-
 interface Props {
   query: InstanaQuery;
-  datasource: DataSource;
-  queryTypes: SelectableValue[];
+  groups: SelectableValue[];
+  updateGroups(groups: SelectableValue[]): void;
   onRunQuery(): void;
   onChange(value: InstanaQuery): void;
-  updateMetrics(metrics: SelectableValue[]): void;
-  updateQueryTypes(types: SelectableValue[]): void;
+  updateMetrics(metrics: any): void;
+  datasource: DataSource;
 }
-
-export class Explore extends React.Component<Props, State> {
+let isUnmounting = false;
+export class Explore extends React.Component<Props, AnalyzeState> {
   constructor(props: any) {
     super(props);
+    this.state = {
+      entityTypes: [],
+    };
   }
+  componentDidMount() {
+    const { query, datasource, onChange } = this.props;
+    isUnmounting = false;
+    datasource.getEntityTypes().then((entityTypes:SelectableValue[]) => {
 
-  onFilterChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
-    const { query, onChange } = this.props;
-    query.tagFilterExpression = eventItem.currentTarget.value;
+      if (!isUnmounting) {
+        if (!_.find(entityTypes, { key: null })) {
+          entityTypes.unshift({ key: null, label: PLEASE_SPECIFY });
+        }
+        this.setState({
+          entityTypes: entityTypes,
+        });
+        if (!query.entity || (!query.entity.key && !query.entity.label)) {
+          query.entity = entityTypes[0];
+        }
+        if (!query.callToEntity) {
+          query.callToEntity = call_to_entities[0];
+        }
+        if (!query.applicationCallToEntity) {
+          query.applicationCallToEntity = call_to_entities[0];
+        }
+        onChange(query);
+      }
+    });
+
+  }
+  componentWillUnmount() {
+    isUnmounting = true;
+  }
+  onEntityChange = (entityType: SelectableValue) => {
+    const { query, datasource,onChange, onRunQuery } = this.props;
+    query.entity = entityType;
     onChange(query);
-
+    onRunQuery();
+    datasource.fetchMetricsForEntityType(query).then((result: any) => {
+      this.props.updateMetrics(result);
+    });
+  };
+  onInfraCallToEntityChange = (applicationCallToEntity: string) => {
+    const { query, onChange, onRunQuery } = this.props;
+    query.applicationCallToEntity = applicationCallToEntity;
+    onChange(query);
+    onRunQuery();
+  };
+  debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
+  onCallToEntityChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
+    const { query, onChange } = this.props;
+    query.callToEntity = eventItem.currentTarget.value;
+    onChange(query);
+    // onRunQuery with 500ms delay after last debounce
+    this.debouncedRunQuery();
+  }
+  onGroupByTagSecondLevelKeyChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
+    const { query, onChange } = this.props;
+    query.group = { 
+      key: eventItem.currentTarget.value,
+      label: eventItem.currentTarget.value,
+      type: 'STRING',
+    }
+    query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
+    onChange(query);
     // onRunQuery with 500ms delay after last debounce
     this.debouncedRunQuery();
   };
-
-  isValidJson = (tagFilterExpression: string): boolean => {
-    if (tagFilterExpression) {
-      try {
-        JSON.parse(tagFilterExpression);
-        return true;
-      } catch (error) {
-        return false;
-      }
-    }
-
-    // no need to invalidate an empty input field
-    return true;
-  };
-
-  debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
-
   render() {
     const { query } = this.props;
-
     return (
-      <div>
-        <div className={'gf-form'}>
-          <FormTextArea
-            queryKeyword
-            inputWidth={0}
-            label={'Filter'}
-            tooltip={
-              'This is currently a beta feature and only available for selected customers. If you are interestedin this technology, please submit a request via our support system at https://support.instana.com/.'
-            }
-            value={query.tagFilterExpression}
-            invalid={!this.isValidJson(query.tagFilterExpression)}
-            onChange={this.onFilterChange}
+      <div className={'gf-form'}>
+        <FormWrapper stretch={true}>
+          <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your Entity Type.'}>
+            Entity types
+          </InlineFormLabel>
+          <Select
+            menuPlacement={'bottom'}
+            width={0}
+            isSearchable={true}
+            value={query.entity}
+            options={this.state.entityTypes}
+            onChange={this.onEntityChange}
           />
-        </div>
+        </FormWrapper>
+        <FormWrapper stretch={true}>
+          <InlineFormLabel className={'query-keyword'} width={7} tooltip={'Enter the Group by tag.'}>
+            Group by
+          </InlineFormLabel>
+          <Input
+            type={'text'}
+            value={query.groupbyTagSecondLevelKey}
+            onChange={this.onGroupByTagSecondLevelKeyChange}
+          />
+        </FormWrapper>
       </div>
     );
   }

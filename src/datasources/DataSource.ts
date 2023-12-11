@@ -337,6 +337,9 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   fetchMobileapp(): Promise<SelectableValue[]> {
     return this.dataSourceMobileapp.getMobileapp(this.getTimeFilter());
   }
+  fetchMetricsForEntityType(target:InstanaQuery): Promise<SelectableValue[]> {
+    return this.dataSourceInfrastructure.fetchAvailableMetricsForEntityType(target, this.timeFilter)
+  }
 
   getDefaultTimeInterval(query: InstanaQuery) {
     const category = query.metricCategory.key;
