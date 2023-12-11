@@ -2,6 +2,7 @@ import { buildInstanaOptions, buildTestTarget, buildTimeFilter } from '../util/t
 import { DataSourceInfrastructure } from './Datasource_Infrastructure';
 import { BUILT_IN_METRICS, CUSTOM_METRICS } from '../GlobalVariables';
 import * as RequestHandler from '../util/request_handler';
+import { atLeastGranularity, getWindowSize } from 'util/time_util';
 import { InstanaOptions } from '../types/instana_options';
 import { InstanaQuery } from '../types/instana_query';
 import { SelectableValue } from '@grafana/data';
@@ -206,12 +207,17 @@ describe('Given an infrastructure datasource', () => {
             timeFilter.to
         ) {
           return Promise.resolve(contexts);
-        } else if (endpoint === '/api/snapshots/A?from=' + timeFilter.from + '&to=' + timeFilter.to) {
+        } else if (
+          endpoint ===
+          '/api/infrastructure-monitoring/snapshots/A?from=' + timeFilter.from + '&to=' + timeFilter.to
+        ) {
           return Promise.resolve(snapshotA);
-        } else if (endpoint === '/api/snapshots/B?from=' + timeFilter.from + '&to=' + timeFilter.to) {
+        } else if (
+          endpoint ===
+          '/api/infrastructure-monitoring/snapshots/B?from=' + timeFilter.from + '&to=' + timeFilter.to
+        ) {
           return Promise.resolve(snapshotB);
         }
-
         throw new Error('Unexpected call URL: ' + endpoint);
       });
     });
@@ -249,6 +255,67 @@ describe('Given an infrastructure datasource', () => {
           response: { status: 200, data: { label: 'label for B' } },
         });
       });
+    });
+  });
+
+  describe('when fetching metrics for snapshots', () => {
+    let metricSpy: any = jest.spyOn(RequestHandler, 'postRequest');
+    const timeFilter: TimeFilter = buildTimeFilter();
+    const target: InstanaQuery = buildTestTarget();
+    const metricA = { status: 200, data: { label: 'label for A' } };
+    const metricB = { status: 200, data: { label: 'label for B' } };
+    const snapshotIds = ['snapshotId1', 'snapshotId2'];
+    const data = {
+      status: 200,
+      items: [
+        {
+          metrics: metricA,
+          plugin: 'zCics',
+          snapshotIds,
+        },
+        {
+          metrics: metricB,
+          plugin: 'zdb2',
+          snapshotIds,
+        },
+      ],
+    };
+    beforeEach(() => {
+      metricSpy.mockReset();
+      metricSpy = jest.spyOn(RequestHandler, 'postRequest');
+      metricSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
+        if (endpoint === '/api/infrastructure-monitoring/metrics') {
+          return Promise.resolve(data);
+        }
+        throw new Error('Unexpected call URL: ' + endpoint);
+      });
+    });
+    it('should call postRequest with the correct parameters', () => {
+      RequestHandler.postRequest(
+        dataSourceInfrastructure.instanaOptions,
+        '/api/infrastructure-monitoring/metrics',
+        () => {
+          expect(metricSpy).toHaveBeenCalledTimes(1);
+          const windowSize = getWindowSize(timeFilter);
+          const expecteddata = {
+            metrics: [metricA],
+            query: target.entityQuery,
+            plugin: target.entityType.key,
+            rollup: target.timeInterval.key,
+            snapshotIds,
+            timeFrame: {
+              to: timeFilter.to,
+              windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
+            },
+          };
+          dataSourceInfrastructure.fetchMetricsForSnapshot(target, snapshotIds, timeFilter, data);
+          expect(RequestHandler.postRequest).toHaveBeenCalledWith(
+            dataSourceInfrastructure.instanaOptions,
+            '/api/infrastructure-monitoring/metrics',
+            expecteddata
+          );
+        }
+      );
     });
   });
 

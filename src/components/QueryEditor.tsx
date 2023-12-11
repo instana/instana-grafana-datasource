@@ -7,7 +7,7 @@ import {
   APPLICATION_SERVICE_ENDPOINT_METRICS,
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
-  INFRASTRUCTURE_EXPLORE,
+  INFRASTRUCTURE_ANALYZE,
   SLO_INFORMATION,
 } from '../GlobalVariables';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
@@ -152,7 +152,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
     if (query.entityQuery) {
       datasource.fetchTypesForTarget(query).then((response: any) => {
-        this.snapshots = response.data;
+        this.snapshots = response.data.plugins;
         this.filterForEntityType(true, filterResult);
         onRunQuery();
       });
@@ -367,7 +367,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     const { query, onCategoryChange } = this;
     const categories = this.allowInfraExplore
       ? metricCategories
-      : metricCategories.filter((category) => category.key !== INFRASTRUCTURE_EXPLORE);
+      : metricCategories.filter((category) => category.key !== INFRASTRUCTURE_ANALYZE);
 
     return (
       <div className={'gf-form-group'}>
@@ -409,7 +409,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key === INFRASTRUCTURE_EXPLORE && (
+        {query.metricCategory.key === INFRASTRUCTURE_ANALYZE && (
           <Explore
             query={query}
             queryTypes={this.state.queryTypes}
@@ -478,7 +478,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key !== SLO_INFORMATION && query.metricCategory.key !== INFRASTRUCTURE_EXPLORE && (
+        {query.metricCategory.key !== SLO_INFORMATION && query.metricCategory.key !== INFRASTRUCTURE_ANALYZE && (
           <Metric
             query={query}
             onChange={this.props.onChange}

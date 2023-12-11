@@ -13,7 +13,7 @@ export const APPLICATION_SERVICE_ENDPOINT_METRICS = 4; // replaces previous ->
 // SERVICE_METRICS = '5';
 // ENDPOINT_METRICS = '6';
 export const SLO_INFORMATION = 7;
-export const INFRASTRUCTURE_EXPLORE = 8;
+export const INFRASTRUCTURE_ANALYZE = 8;
 export const ANALYZE_MOBILE_APP_METRICS = 9;
 
 /* DROPDOWN DEFAULTS */
