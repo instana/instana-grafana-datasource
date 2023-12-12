@@ -319,6 +319,80 @@ describe('Given an infrastructure datasource', () => {
     });
   });
 
+  describe('when fetching entities for infrastructure analyze', () => {
+    let metricSpy: any = jest.spyOn(RequestHandler, 'postRequest');
+    const timeFilter: TimeFilter = buildTimeFilter();
+    const target: InstanaQuery = buildTestTarget();
+    const response = {
+      status: 200,
+      data: {
+        items: [
+          {
+            tags: {},
+            count: 1,
+            metrics: {
+              "gc.Copy.inv.MAX.60000": [
+                [1701878640000, 7.0],
+                [1701878700000, 4.0],
+              ],
+            },
+          },
+          {
+            tags: {},
+            count: 1,
+            metrics: {},
+          },
+        ],
+      },
+    };
+
+    beforeEach(() => {
+      metricSpy.mockReset();
+      metricSpy = jest.spyOn(RequestHandler, 'postRequest');
+      metricSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
+        if (endpoint === '/api/infrastructure-monitoring/analyze/entity-groups') {
+          return Promise.resolve(response);
+        }
+        throw new Error('Unexpected call URL: ' + endpoint);
+      });
+    });
+
+    it('should call postRequest with the correct parameters', async () => {
+      expect(metricSpy).toHaveBeenCalledTimes(0);
+
+      const windowSize = getWindowSize(timeFilter);
+      const metric: any = {
+        metric: target.metric.key,
+        aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+        granularity: target.timeInterval.key,
+      };
+      const payload = {
+        tagFilterExpression: {
+          elements: [],
+          type: 'EXPRESSION',
+          logicalOperator: 'AND',
+        },
+        pagination: {
+          retrievalSize: 200,
+        },
+        groupBy: [target.groupbyTagSecondLevelKey],
+        type: target.entity.key,
+        metrics: [metric],
+        timeFrame: {
+          to: timeFilter.to,
+          windowSize: atLeastGranularity(windowSize, metric.granularity),
+        },
+      };
+
+      await dataSourceInfrastructure.fetchAnalyzeEntities(target, timeFilter);
+      expect(RequestHandler.postRequest).toHaveBeenCalledWith(
+        dataSourceInfrastructure.instanaOptions,
+        '/api/infrastructure-monitoring/analyze/entity-groups',
+        payload
+      );
+    });
+  });
+
   function resetDataSource() {
     dataSourceInfrastructure.snapshotCache = new Cache<Promise<SelectableValue[]>>();
     dataSourceInfrastructure.snapshotInfoCache = new Cache<Promise<SelectableValue[]>>();
