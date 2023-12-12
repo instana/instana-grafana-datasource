@@ -1,4 +1,4 @@
-import { CUSTOM_METRICS,INFRASTRUCTURE_ANALYZE,SEPARATOR } from '../GlobalVariables';
+import { CUSTOM_METRICS, INFRASTRUCTURE_ANALYZE, SEPARATOR } from '../GlobalVariables';
 import { atLeastGranularity, getTimeKey, getWindowSize, hoursToMs } from '../util/time_util';
 import { getRequest, postRequest } from '../util/request_handler';
 import Cache from '../cache';
@@ -42,7 +42,13 @@ export class DataSourceInfrastructure {
       );
     }
 
-    if (target.tagFilterExpression || target.metricCategory.key === INFRASTRUCTURE_ANALYZE && (target.metric.key && target.group.key && target.entity.key)) {
+    if (
+      target.tagFilterExpression ||
+      (target.metricCategory.key === INFRASTRUCTURE_ANALYZE &&
+        target.metric.key &&
+        target.group.key &&
+        target.entity.key)
+    ) {
       return this.fetchAnalyzeEntities(target, timeFilter);
     }
 
@@ -221,75 +227,76 @@ export class DataSourceInfrastructure {
       pagination: {
         retrievalSize: 200,
       },
-      tagFilterExpression:query.entityQuery ? {
-        type: 'TAG_FILTER',
-        entity: 'NOT_APPLICABLE',
-        name: 'dfq.type',
-        operator: 'EQUALS',
-        value: query.entityQuery?.includes(':') ? query.entityQuery?.split(':')[1] : query.entityQuery,
-      }
-      :{
+      tagFilterExpression: query.entityQuery
+        ? {
+            type: 'TAG_FILTER',
+            entity: 'NOT_APPLICABLE',
+            name: 'dfq.type',
+            operator: 'EQUALS',
+            value: query.entityQuery?.includes(':') ? query.entityQuery?.split(':')[1] : query.entityQuery,
+          }
+        : {
+            type: 'EXPRESSION',
+            logicalOperator: 'AND',
+            elements: [],
+          },
+    };
+    let typesforTarget = this.typeCache.get('entityTypes');
+    typesforTarget = postRequest(this.instanaOptions, fetchSnapshotTypesUrl, data).then((typesResponses: any) => {
+      const result = typesResponses.data.plugins.map((entry: any) => ({
+        key: entry,
+        label: entry,
+      }));
+
+      return _.sortBy(result, 'label');
+    });
+
+    return typesforTarget;
+  }
+
+  fetchAvailableMetricsForEntityType(target: InstanaQuery, timeFilter: TimeFilter) {
+    const windowSize = getWindowSize(timeFilter);
+    target.timeInterval = getDefaultChartGranularity(windowSize);
+    const data = {
+      tagFilterExpression: {
         type: 'EXPRESSION',
         logicalOperator: 'AND',
         elements: [],
-      },
-  };
-  let typesforTarget = this.typeCache.get('entityTypes');
-  typesforTarget = postRequest(this.instanaOptions, fetchSnapshotTypesUrl, data).then((typesResponses: any) => {
-
-    const result = typesResponses.data.plugins.map((entry: any) => ({
-      key: entry,
-      label: entry,
-    }));
-
-    return _.sortBy(result, 'label');
-  });
-
-  return typesforTarget;
-}
-
-fetchAvailableMetricsForEntityType(target: InstanaQuery, timeFilter: TimeFilter) {
-  const windowSize = getWindowSize(timeFilter);
-  target.timeInterval = getDefaultChartGranularity(windowSize);
-  const data = {
-    tagFilterExpression: {
-      type: "EXPRESSION",
-        logicalOperator: "AND",
-        elements: []
       },
       timeFrame: {
         to: timeFilter.to,
         windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
       },
-      query: "",
-      type: target.entity.key
+      query: '',
+      type: target.entity.key,
     };
-    let metricFortarget = postRequest(this.instanaOptions, '/api/infrastructure-monitoring/analyze/metrics', data).then((metricResponse: any) => {      
-      let result: any[] = []
-      metricResponse.data.metrics.map((metric: any) => (     
-        result.push({
-          key: metric.id,
-          label: metric.label,
-          description: metric.description,
-          aggregations: [
-            { key: 'MAX', label: 'MAX' },
-            { key: 'MEAN', label: 'MEAN' },
-            { key: 'MIN', label: 'MIN' },
-            { key: 'P25', label: 'P25' },
-            { key: 'P50', label: 'P50' },
-            { key: 'P75', label: 'P75' },
-            { key: 'P90', label: 'P90' },
-            { key: 'P95', label: 'P95' },
-            { key: 'P98', label: 'P98' },
-            { key: 'P99', label: 'P99' },
-          ]
-        })
-      ));      
+    let metricFortarget = postRequest(this.instanaOptions, '/api/infrastructure-monitoring/analyze/metrics', data).then(
+      (metricResponse: any) => {
+        let result: any[] = [];
+        metricResponse.data.metrics.map((metric: any) =>
+          result.push({
+            key: metric.id,
+            label: metric.label,
+            description: metric.description,
+            aggregations: [
+              { key: 'MAX', label: 'MAX' },
+              { key: 'MEAN', label: 'MEAN' },
+              { key: 'MIN', label: 'MIN' },
+              { key: 'P25', label: 'P25' },
+              { key: 'P50', label: 'P50' },
+              { key: 'P75', label: 'P75' },
+              { key: 'P90', label: 'P90' },
+              { key: 'P95', label: 'P95' },
+              { key: 'P98', label: 'P98' },
+              { key: 'P99', label: 'P99' },
+            ],
+          })
+        );
 
-      return _.sortBy(result, 'label');
-
-    })
-    return metricFortarget
+        return _.sortBy(result, 'label');
+      }
+    );
+    return metricFortarget;
   }
 
   fetchAnalyzeEntities(target: InstanaQuery, timeFilter: TimeFilter) {
@@ -297,19 +304,19 @@ fetchAvailableMetricsForEntityType(target: InstanaQuery, timeFilter: TimeFilter)
     if (!target.timeInterval) {
       target.timeInterval = getDefaultChartGranularity(windowSize);
     }
-    if(target.timeInterval.key < 60000){
-      target.timeInterval.key = 60000
+    if (target.timeInterval.key < 60000) {
+      target.timeInterval.key = 60000;
     }
     const metric: any = {
       metric: target.metric.key,
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
-      granularity: (target.timeInterval.key)
-    }
+      granularity: target.timeInterval.key,
+    };
     const payload = {
       tagFilterExpression: {
         elements: [],
-        type: "EXPRESSION",
-        logicalOperator: "AND",
+        type: 'EXPRESSION',
+        logicalOperator: 'AND',
       },
       pagination: {
         retrievalSize: 200,

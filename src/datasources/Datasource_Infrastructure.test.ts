@@ -331,7 +331,7 @@ describe('Given an infrastructure datasource', () => {
             tags: {},
             count: 1,
             metrics: {
-              "gc.Copy.inv.MAX.60000": [
+              'gc.Copy.inv.MAX.60000': [
                 [1701878640000, 7.0],
                 [1701878700000, 4.0],
               ],

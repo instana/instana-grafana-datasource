@@ -1,6 +1,11 @@
 import React from 'react';
 
-import { BUILT_IN_METRICS, CUSTOM_METRICS, ANALYZE_APPLICATION_METRICS, INFRASTRUCTURE_ANALYZE } from '../../GlobalVariables';
+import {
+  BUILT_IN_METRICS,
+  CUSTOM_METRICS,
+  ANALYZE_APPLICATION_METRICS,
+  INFRASTRUCTURE_ANALYZE,
+} from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import max_metrics from '../../lists/max_metrics';
@@ -185,7 +190,7 @@ export default class Metric extends React.Component<Props, MetricState> {
           />
         )}
 
-        {query.metricCategory.key !== INFRASTRUCTURE_ANALYZE &&(
+        {query.metricCategory.key !== INFRASTRUCTURE_ANALYZE && (
           <FormSelect
             queryKeyword
             disabled={datasource.availableTimeIntervals.length <= 1}
@@ -196,7 +201,7 @@ export default class Metric extends React.Component<Props, MetricState> {
             value={query.timeInterval}
             options={datasource.availableTimeIntervals}
             onChange={this.onTimeIntervalChange}
-         />
+          />
         )}
       </div>
     );

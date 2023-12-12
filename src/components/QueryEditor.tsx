@@ -151,8 +151,8 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     const { query, datasource, onRunQuery } = this.props;
 
     if (query.entityQuery) {
-      datasource.fetchTypesForTarget(query).then((response: any) => {       
-        this.snapshots = response.map((plugin: any) => plugin.label);        
+      datasource.fetchTypesForTarget(query).then((response: any) => {
+        this.snapshots = response.map((plugin: any) => plugin.label);
         this.filterForEntityType(true, filterResult);
         onRunQuery();
       });

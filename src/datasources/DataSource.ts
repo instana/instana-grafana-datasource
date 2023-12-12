@@ -338,8 +338,8 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     return this.dataSourceMobileapp.getMobileapp(this.getTimeFilter());
   }
 
-  fetchMetricsForEntityType(target:InstanaQuery): Promise<SelectableValue[]> {
-    return this.dataSourceInfrastructure.fetchAvailableMetricsForEntityType(target, this.timeFilter)
+  fetchMetricsForEntityType(target: InstanaQuery): Promise<SelectableValue[]> {
+    return this.dataSourceInfrastructure.fetchAvailableMetricsForEntityType(target, this.timeFilter);
   }
 
   getDefaultTimeInterval(query: InstanaQuery) {
