@@ -337,7 +337,7 @@ describe('Given an infrastructure datasource', () => {
             tags: {},
             count: 1,
             metrics: {
-              "gc.Copy.inv.MAX.60000": [
+              'gc.Copy.inv.MAX.60000': [
                 [1701878640000, 7.0],
                 [1701878700000, 4.0],
               ],
@@ -351,7 +351,7 @@ describe('Given an infrastructure datasource', () => {
         ],
       },
     };
-  
+
     beforeEach(() => {
       metricSpy.mockReset();
       metricSpy = jest.spyOn(RequestHandler, 'postRequest');
@@ -362,10 +362,10 @@ describe('Given an infrastructure datasource', () => {
         throw new Error('Unexpected call URL: ' + endpoint);
       });
     });
-  
+
     it('should call postRequest with the correct parameters', async () => {
       expect(metricSpy).toHaveBeenCalledTimes(0);
-  
+
       const windowSize = getWindowSize(timeFilter);
       const metric: any = {
         metric: target.metric.key,
@@ -389,7 +389,7 @@ describe('Given an infrastructure datasource', () => {
           windowSize: atLeastGranularity(windowSize, metric.granularity),
         },
       };
-  
+
       await dataSourceInfrastructure.fetchAnalyzeEntities(target, timeFilter);
       expect(RequestHandler.postRequest).toHaveBeenCalledWith(
         dataSourceInfrastructure.instanaOptions,

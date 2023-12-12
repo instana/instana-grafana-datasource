@@ -1438,16 +1438,16 @@ function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Filters", function() { return Filters; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lists/apply_call_to_entities */ "./lists/apply_call_to_entities.ts");
-/* harmony import */ var _lists_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../lists/operators */ "./lists/operators.ts");
-/* harmony import */ var _Entity_Entity__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Entity/Entity */ "./components/Entity/Entity.tsx");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "lodash");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Entity_Entity__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Entity/Entity */ "./components/Entity/Entity.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lists/apply_call_to_entities */ "./lists/apply_call_to_entities.ts");
+/* harmony import */ var _lists_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lists/operators */ "./lists/operators.ts");
 
 
 
@@ -1477,7 +1477,7 @@ function (_super) {
           onChange = _a.onChange;
       query.filters.push({
         tag: query.group,
-        entity: _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_4__["default"][0],
+        entity: _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_6__["default"][0],
         operator: _this.filterOperatorsOnType(query.group.type)[0],
         booleanValue: false,
         numberValue: 0,
@@ -1511,7 +1511,7 @@ function (_super) {
       _this.validateChangeAndRun(index);
     };
 
-    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_7___default.a.debounce(_this.props.onRunQuery, 500);
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.onRunQuery, 500);
 
     _this.onTagFilterStringValueChange = function (value, index) {
       var query = _this.props.query;
@@ -1531,7 +1531,7 @@ function (_super) {
   }
 
   Filters.prototype.filterOperatorsOnType = function (type) {
-    return lodash__WEBPACK_IMPORTED_MODULE_7___default.a.filter(_lists_operators__WEBPACK_IMPORTED_MODULE_5__["default"], function (o) {
+    return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.filter(_lists_operators__WEBPACK_IMPORTED_MODULE_7__["default"], function (o) {
       return o.type === type;
     });
   };
@@ -1541,7 +1541,7 @@ function (_super) {
     query.filters[index].tag = group;
     var ops = this.filterOperatorsOnType(group.type);
 
-    if (!lodash__WEBPACK_IMPORTED_MODULE_7___default.a.includes(ops, query.filters[index].operator)) {
+    if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.includes(ops, query.filters[index].operator)) {
       query.filters[index].operator = ops[0];
     }
 
@@ -1613,19 +1613,19 @@ function (_super) {
         query = _b.query,
         groups = _b.groups;
     var listFilter = (_a = query.filters) === null || _a === void 0 ? void 0 : _a.map(function (singleFilter, index) {
-      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
         key: 'filter_' + index,
         className: 'gf-form'
-      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["InlineFormLabel"], {
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
         className: 'query-keyword',
         width: 14,
         tooltip: 'Filter by tag.'
-      }, index + 1, ". filter"), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Entity_Entity__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      }, index + 1, ". filter"), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_APPLICATION_METRICS"] && _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_MOBILE_APP_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Entity_Entity__WEBPACK_IMPORTED_MODULE_4__["default"], {
         value: query.filters[index].entity,
         onChange: function onChange(callToEntity) {
           return _this.onCallToEntityChange(callToEntity, index);
         }
-      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Select"], {
+      }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
         menuPlacement: 'bottom',
         width: 30,
         isSearchable: true,
@@ -1634,7 +1634,7 @@ function (_super) {
         onChange: function onChange(group) {
           return _this.onGroupChange(group, index);
         }
-      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Select"], {
+      }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
         menuPlacement: 'bottom',
         width: 20,
         isSearchable: true,
@@ -1643,22 +1643,22 @@ function (_super) {
         onChange: function onChange(operator) {
           return _this.onOperatorChange(operator, index);
         }
-      }), _this.canShowStringInput(query.filters[index]) && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Input"], {
+      }), _this.canShowStringInput(query.filters[index]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
         width: 30,
         value: query.filters[index].stringValue,
-        placeholder: query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["PLEASE_SPECIFY"],
+        placeholder: query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"],
         onChange: function onChange(event) {
           return _this.onTagFilterStringValueChange(event, index);
         }
-      }), _this.canShowNumberInput(query.filters[index]) && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Input"], {
+      }), _this.canShowNumberInput(query.filters[index]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
         type: 'number',
         width: 30,
         value: query.filters[index].numberValue,
-        placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["PLEASE_SPECIFY"],
+        placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"],
         onChange: function onChange(event) {
           return _this.onTagFilterNumberValueChange(event, index);
         }
-      }), query.filters[index].tag.type === 'BOOLEAN' && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Select"], {
+      }), query.filters[index].tag.type === 'BOOLEAN' && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
         menuPlacement: 'bottom',
         width: 30,
         isSearchable: true,
@@ -1670,37 +1670,37 @@ function (_super) {
           label: '' + query.filters[index].booleanValue
         },
         options: [{
-          key: 'false',
+          key: false,
           label: 'false'
         }, {
-          key: 'true',
+          key: true,
           label: 'true'
         }]
-      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+      }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Button"], {
         variant: 'secondary',
         onClick: function onClick() {
           return _this.removeTagFilter(index);
         }
       }, "-"));
     });
-    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, listFilter, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", null, listFilter, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
       className: 'gf-form'
-    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["InlineFormLabel"], {
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
       width: 14,
       tooltip: 'Add an additional tag filter.'
-    }, "Add filter"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+    }, "Add filter"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Button"], {
       variant: 'secondary',
       onClick: this.addTagFilter
-    }, "+"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    }, "+"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
       hidden: !query.showWarningCantShowAllResults
-    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["InlineFormLabel"], {
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
       width: 12,
       tooltip: 'Add Filter to narrow down the data.'
     }, "\u26A0\uFE0F Can't show all results"))));
   };
 
   return Filters;
-}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
 
 
 
@@ -3179,71 +3179,6 @@ function (_super) {
 
 /***/ }),
 
-/***/ "./components/FormField/FormTextArea.tsx":
-/*!***********************************************!*\
-  !*** ./components/FormField/FormTextArea.tsx ***!
-  \***********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _FormWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FormWrapper */ "./components/FormField/FormWrapper.tsx");
-
-
-
-
-/**
- * Default input text area including label. Input text area is grafana/ui <TextArea />.
- */
-
-var FormTextArea =
-/** @class */
-function (_super) {
-  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(FormTextArea, _super);
-
-  function FormTextArea(props) {
-    return _super.call(this, props) || this;
-  }
-
-  FormTextArea.prototype.render = function () {
-    var _a = this.props,
-        label = _a.label,
-        tooltip = _a.tooltip,
-        queryKeyword = _a.queryKeyword,
-        disabled = _a.disabled,
-        _b = _a.labelWidth,
-        labelWidth = _b === void 0 ? 14 : _b,
-        _c = _a.inputWidth,
-        inputWidth = _c === void 0 ? 30 : _c,
-        remainingProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"])(_a, ["label", "tooltip", "queryKeyword", "disabled", "labelWidth", "inputWidth"]);
-
-    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      disabled: disabled,
-      stretch: !inputWidth
-    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
-      className: queryKeyword ? 'query-keyword' : '',
-      width: labelWidth,
-      tooltip: tooltip
-    }, label), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["TextArea"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({
-      rows: 4,
-      width: inputWidth,
-      disabled: disabled
-    }, remainingProps)));
-  };
-
-  return FormTextArea;
-}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
-
-/* harmony default export */ __webpack_exports__["default"] = (FormTextArea);
-
-/***/ }),
-
 /***/ "./components/FormField/FormWrapper.tsx":
 /*!**********************************************!*\
   !*** ./components/FormField/FormWrapper.tsx ***!
@@ -3505,18 +3440,26 @@ function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Explore", function() { return Explore; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var components_FormField_FormTextArea__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! components/FormField/FormTextArea */ "./components/FormField/FormTextArea.tsx");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "lodash");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _plugin_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../plugin.css */ "./components/plugin.css");
-/* harmony import */ var _plugin_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_plugin_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _plugin_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../plugin.css */ "./components/plugin.css");
+/* harmony import */ var _plugin_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_plugin_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../FormField/FormWrapper */ "./components/FormField/FormWrapper.tsx");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lists/apply_call_to_entities */ "./lists/apply_call_to_entities.ts");
 
 
 
 
 
+
+
+
+var isUnmounting = false;
 
 var Explore =
 /** @class */
@@ -3526,51 +3469,139 @@ function (_super) {
   function Explore(props) {
     var _this = _super.call(this, props) || this;
 
-    _this.onFilterChange = function (eventItem) {
+    _this.onEntityChange = function (entityType) {
+      var _a = _this.props,
+          query = _a.query,
+          datasource = _a.datasource,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.entity = entityType;
+      onChange(query);
+      onRunQuery();
+      datasource.fetchMetricsForEntityType(query).then(function (result) {
+        _this.props.updateMetrics(result);
+      });
+    };
+
+    _this.onInfraCallToEntityChange = function (applicationCallToEntity) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.applicationCallToEntity = applicationCallToEntity;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_6___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onCallToEntityChange = function (eventItem) {
       var _a = _this.props,
           query = _a.query,
           onChange = _a.onChange;
-      query.tagFilterExpression = eventItem.currentTarget.value;
+      query.callToEntity = eventItem.currentTarget.value;
       onChange(query); // onRunQuery with 500ms delay after last debounce
 
       _this.debouncedRunQuery();
     };
 
-    _this.isValidJson = function (tagFilterExpression) {
-      if (tagFilterExpression) {
-        try {
-          JSON.parse(tagFilterExpression);
-          return true;
-        } catch (error) {
-          return false;
-        }
-      } // no need to invalidate an empty input field
+    _this.onGroupByTagSecondLevelKeyChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.group = {
+        key: eventItem.currentTarget.value,
+        label: eventItem.currentTarget.value,
+        type: 'STRING'
+      };
+      query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
 
-
-      return true;
+      _this.debouncedRunQuery();
     };
 
-    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.debounce(_this.props.onRunQuery, 500);
+    _this.state = {
+      entityTypes: []
+    };
     return _this;
   }
 
+  Explore.prototype.componentDidMount = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        datasource = _a.datasource,
+        onChange = _a.onChange;
+    isUnmounting = false;
+    datasource.getEntityTypes().then(function (entityTypes) {
+      if (!isUnmounting) {
+        if (!lodash__WEBPACK_IMPORTED_MODULE_6___default.a.find(entityTypes, {
+          key: null
+        })) {
+          entityTypes.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_5__["PLEASE_SPECIFY"]
+          });
+        }
+
+        _this.setState({
+          entityTypes: entityTypes
+        });
+
+        if (!query.entity || !query.entity.key && !query.entity.label) {
+          query.entity = entityTypes[0];
+        }
+
+        if (!query.callToEntity) {
+          query.callToEntity = _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_7__["default"][0];
+        }
+
+        if (!query.applicationCallToEntity) {
+          query.applicationCallToEntity = _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_7__["default"][0];
+        }
+
+        onChange(query);
+      }
+    });
+  };
+
+  Explore.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
   Explore.prototype.render = function () {
     var query = this.props.query;
-    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
       className: 'gf-form'
-    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(components_FormField_FormTextArea__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      queryKeyword: true,
-      inputWidth: 0,
-      label: 'Filter',
-      tooltip: 'This is currently a beta feature and only available for selected customers. If you are interestedin this technology, please submit a request via our support system at https://support.instana.com/.',
-      value: query.tagFilterExpression,
-      invalid: !this.isValidJson(query.tagFilterExpression),
-      onChange: this.onFilterChange
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      stretch: true
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 14,
+      tooltip: 'Select your Entity Type.'
+    }, "Entity types"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      value: query.entity,
+      options: this.state.entityTypes,
+      onChange: this.onEntityChange
+    })), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      stretch: true
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 7,
+      tooltip: 'Enter the Group by tag.'
+    }, "Group by"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+      type: 'text',
+      value: query.groupbyTagSecondLevelKey,
+      onChange: this.onGroupByTagSecondLevelKeyChange
     })));
   };
 
   return Explore;
-}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
 
 
 
@@ -3969,7 +4000,7 @@ function (_super) {
       value: query.aggregation,
       options: query.metric.aggregations,
       onChange: this.onAggregationChange
-    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }), query.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
       queryKeyword: true,
       disabled: datasource.availableTimeIntervals.length <= 1,
       labelWidth: 5,
@@ -4278,7 +4309,9 @@ function (_super) {
 
     if (query.entityQuery) {
       datasource.fetchTypesForTarget(query).then(function (response) {
-        _this.snapshots = response.data.plugins;
+        _this.snapshots = response.map(function (plugin) {
+          return plugin.label;
+        });
 
         _this.filterForEntityType(true, filterResult);
 
@@ -4413,9 +4446,7 @@ function (_super) {
         query = _a.query,
         onCategoryChange = _a.onCategoryChange;
 
-    var categories = this.allowInfraExplore ? _lists_metric_categories__WEBPACK_IMPORTED_MODULE_19__["default"] : _lists_metric_categories__WEBPACK_IMPORTED_MODULE_19__["default"].filter(function (category) {
-      return category.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"];
-    });
+    var categories = _lists_metric_categories__WEBPACK_IMPORTED_MODULE_19__["default"];
     return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
       className: 'gf-form-group'
     }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
@@ -4448,12 +4479,12 @@ function (_super) {
       updateQueryTypes: this.updateQueryTypes
     }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Infrastructure_Explore__WEBPACK_IMPORTED_MODULE_9__["Explore"], {
       query: query,
-      queryTypes: this.state.queryTypes,
-      datasource: this.props.datasource,
       onRunQuery: this.props.onRunQuery,
       onChange: this.props.onChange,
       updateMetrics: this.updateMetrics,
-      updateQueryTypes: this.updateQueryTypes
+      groups: this.state.groups,
+      updateGroups: this.updateGroups,
+      datasource: this.props.datasource
     }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Analyze_ApplicationCallsMetrics__WEBPACK_IMPORTED_MODULE_6__["ApplicationCallsMetrics"], {
       query: query,
       onRunQuery: this.props.onRunQuery,
@@ -4491,7 +4522,7 @@ function (_super) {
       onRunQuery: this.props.onRunQuery,
       onChange: this.props.onChange,
       datasource: this.props.datasource
-    }), query.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"] && query.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Metric_Metric__WEBPACK_IMPORTED_MODULE_13__["default"], {
+    }), query.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Metric_Metric__WEBPACK_IMPORTED_MODULE_13__["default"], {
       query: query,
       onChange: this.props.onChange,
       onRunQuery: this.props.onRunQuery,
@@ -4505,7 +4536,7 @@ function (_super) {
       onFilterChange: this.onMetricsFilter,
       availableMetrics: this.state.availableMetrics,
       datasource: this.props.datasource
-    }), (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Analyze_Filter__WEBPACK_IMPORTED_MODULE_10__["Filters"], {
+    }), (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_MOBILE_APP_METRICS"]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Analyze_Filter__WEBPACK_IMPORTED_MODULE_10__["Filters"], {
       query: query,
       onChange: this.props.onChange,
       onRunQuery: this.props.onRunQuery,
@@ -4517,7 +4548,7 @@ function (_super) {
       onChange: this.props.onChange,
       loadEntityTypes: this.loadEntityTypes
     }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_8__["Badge"], {
-      text: '3.3.8',
+      text: '3.3.9',
       color: 'blue'
     }));
   };
@@ -5097,6 +5128,10 @@ function (_super) {
     return this.dataSourceMobileapp.getMobileapp(this.getTimeFilter());
   };
 
+  DataSource.prototype.fetchMetricsForEntityType = function (target) {
+    return this.dataSourceInfrastructure.fetchAvailableMetricsForEntityType(target, this.timeFilter);
+  };
+
   DataSource.prototype.getDefaultTimeInterval = function (query) {
     var category = query.metricCategory.key;
 
@@ -5417,6 +5452,12 @@ function () {
         group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
       }
 
+      var includeSynthetic = false;
+      target.filters.map(function (filter) {
+        if (filter.tag.key === 'call.is_synthetic') {
+          includeSynthetic = filter.booleanValue;
+        }
+      });
       var data = {
         group: group,
         timeFrame: {
@@ -5424,6 +5465,7 @@ function () {
           windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["atLeastGranularity"])(windowSize, metric.granularity)
         },
         metrics: [metric],
+        includeSynthetic: includeSynthetic,
         tagFilterExpression: {
           type: 'EXPRESSION',
           logicalOperator: 'AND',
@@ -6432,6 +6474,7 @@ function () {
     this.snapshotInfoCache = new _cache__WEBPACK_IMPORTED_MODULE_3__["default"]();
     this.catalogCache = new _cache__WEBPACK_IMPORTED_MODULE_3__["default"]();
     this.typeCache = new _cache__WEBPACK_IMPORTED_MODULE_3__["default"]();
+    this.miscCache = new _cache__WEBPACK_IMPORTED_MODULE_3__["default"]();
   }
 
   DataSourceInfrastructure.prototype.runQuery = function (target, timeFilter) {
@@ -6442,8 +6485,8 @@ function () {
       throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_infra + ' hours');
     }
 
-    if (target.tagFilterExpression) {
-      return this.fetchExploreEntities(target, timeFilter);
+    if (target.tagFilterExpression || target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_0__["INFRASTRUCTURE_ANALYZE"] && target.metric.key && target.group.key && target.entity.key) {
+      return this.fetchAnalyzeEntities(target, timeFilter);
     } // do not try to retrieve data without selected metric
 
 
@@ -6503,6 +6546,9 @@ function () {
   };
 
   DataSourceInfrastructure.prototype.fetchMetricsForSnapshots = function (target, snapshots, timeFilter, metric) {
+    var _this = this;
+
+    var maxValues = [];
     var snapshotIds = [];
 
     lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(snapshots, function (snapshot) {
@@ -6513,12 +6559,14 @@ function () {
     return this.fetchMetricsForSnapshot(target, snapshotIds.slice(0, 30), timeFilter, metric).then(function (response) {
       if (!response.data) {
         return response;
-      } // as we map two times we need to flatten the result
+      }
+
+      var timeseries = _this.readTimeSeries(response.data.items, target.aggregation, timeFilter); // as we map two times we need to flatten the result
 
 
-      return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.flatten(response.data.items.map(function (item, index) {
+      var results = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.flatten(response.data.items.map(function (item, index) {
         return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(item.metrics, function (value, key) {
-          return {
+          var result = {
             target: item.label,
             datapoints: lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(value, function (metric) {
               return [metric[1], metric[0]];
@@ -6526,8 +6574,19 @@ function () {
             refId: target.refId,
             key: target.stableHash
           };
+
+          if (target.displayMaxMetricValue) {
+            var maxValue = _this.getMaxMetricValue(target.metric, snapshots);
+
+            maxValues.push(_this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
+            result.datapoints = _this.convertRelativeToAbsolute(result.datapoints, maxValue);
+          }
+
+          return result;
         });
       }));
+
+      return results;
     });
   };
 
@@ -6594,6 +6653,8 @@ function () {
   };
 
   DataSourceInfrastructure.prototype.fetchTypesForTarget = function (query, timeFilter) {
+    var _a, _b;
+
     var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["getWindowSize"])(timeFilter);
     query.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_6__["getDefaultChartGranularity"])(windowSize);
     var fetchSnapshotTypesUrl = '/api/infrastructure-monitoring/analyze/entity-types'; // URL endpoint
@@ -6606,34 +6667,123 @@ function () {
       pagination: {
         retrievalSize: 200
       },
-      tagFilterExpression: {
+      tagFilterExpression: query.entityQuery ? {
         type: 'TAG_FILTER',
         entity: 'NOT_APPLICABLE',
         name: 'dfq.type',
         operator: 'EQUALS',
-        value: query.entityQuery.includes(':') ? query.entityQuery.split(':')[1] : query.entityQuery
+        value: ((_a = query.entityQuery) === null || _a === void 0 ? void 0 : _a.includes(':')) ? (_b = query.entityQuery) === null || _b === void 0 ? void 0 : _b.split(':')[1] : query.entityQuery
+      } : {
+        type: 'EXPRESSION',
+        logicalOperator: 'AND',
+        elements: []
       }
     };
-    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["postRequest"])(this.instanaOptions, fetchSnapshotTypesUrl, data);
+    var typesforTarget = this.typeCache.get('entityTypes');
+    typesforTarget = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["postRequest"])(this.instanaOptions, fetchSnapshotTypesUrl, data).then(function (typesResponses) {
+      var result = typesResponses.data.plugins.map(function (entry) {
+        return {
+          key: entry,
+          label: entry
+        };
+      });
+      return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.sortBy(result, 'label');
+    });
+    return typesforTarget;
   };
 
-  DataSourceInfrastructure.prototype.fetchAnalyzeEntities = function (target, timeFilter) {};
-
-  DataSourceInfrastructure.prototype.fetchExploreEntities = function (target, timeFilter) {
-    var data = JSON.parse(target.tagFilterExpression);
+  DataSourceInfrastructure.prototype.fetchAvailableMetricsForEntityType = function (target, timeFilter) {
     var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["getWindowSize"])(timeFilter);
     target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_6__["getDefaultChartGranularity"])(windowSize);
-    var payload = {
-      tagFilterExpression: data.tagFilterExpression,
-      pagination: {
-        retrievalSize: 200
+    var data = {
+      tagFilterExpression: {
+        type: 'EXPRESSION',
+        logicalOperator: 'AND',
+        elements: []
       },
-      groupBy: data.groupBy,
-      type: data.type,
-      metrics: data.metrics,
       timeFrame: {
         to: timeFilter.to,
         windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["atLeastGranularity"])(windowSize, target.timeInterval.key)
+      },
+      query: '',
+      type: target.entity.key
+    };
+    var metricFortarget = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["postRequest"])(this.instanaOptions, '/api/infrastructure-monitoring/analyze/metrics', data).then(function (metricResponse) {
+      var result = [];
+      metricResponse.data.metrics.map(function (metric) {
+        return result.push({
+          key: metric.id,
+          label: metric.label,
+          description: metric.description,
+          aggregations: [{
+            key: 'MAX',
+            label: 'MAX'
+          }, {
+            key: 'MEAN',
+            label: 'MEAN'
+          }, {
+            key: 'MIN',
+            label: 'MIN'
+          }, {
+            key: 'P25',
+            label: 'P25'
+          }, {
+            key: 'P50',
+            label: 'P50'
+          }, {
+            key: 'P75',
+            label: 'P75'
+          }, {
+            key: 'P90',
+            label: 'P90'
+          }, {
+            key: 'P95',
+            label: 'P95'
+          }, {
+            key: 'P98',
+            label: 'P98'
+          }, {
+            key: 'P99',
+            label: 'P99'
+          }]
+        });
+      });
+      return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.sortBy(result, 'label');
+    });
+    return metricFortarget;
+  };
+
+  DataSourceInfrastructure.prototype.fetchAnalyzeEntities = function (target, timeFilter) {
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["getWindowSize"])(timeFilter);
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_6__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    if (target.timeInterval.key < 60000) {
+      target.timeInterval.key = 60000;
+    }
+
+    var metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+      granularity: target.timeInterval.key
+    };
+    var payload = {
+      tagFilterExpression: {
+        elements: [],
+        type: 'EXPRESSION',
+        logicalOperator: 'AND'
+      },
+      pagination: {
+        retrievalSize: 200
+      },
+      groupBy: [target.groupbyTagSecondLevelKey],
+      type: target.entity.key,
+      metrics: [metric],
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["atLeastGranularity"])(windowSize, metric.granularity)
       }
     };
     return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["postRequest"])(this.instanaOptions, '/api/infrastructure-monitoring/analyze/entity-groups', payload).then(function (res) {
@@ -6646,7 +6796,7 @@ function () {
       res.data.items.forEach(function (entity) {
         for (var metric in entity.metrics) {
           result.push({
-            target: entity.tags[data.groupBy] + ' - ' + metric,
+            target: entity.tags[target.groupbyTagSecondLevelKey] + ' - ' + metric,
             datapoints: entity.metrics[metric] ? entity.metrics[metric].map(function (datapoint) {
               return [datapoint[1], datapoint[0]];
             }) : [],
@@ -6700,9 +6850,9 @@ function () {
       return snapshots;
     }
 
-    var fetchSnapshotContextsUrl = "/api/snapshots/context" + ("?q=" + query) + ("&from=" + timeFilter.from) + ("&to=" + timeFilter.to) + (this.instanaOptions.showOffline ? "" : "&time=" + timeFilter.to + "&size=100");
+    var fetchSnapshotContextsUrl = "/api/infrastructure-monitoring/snapshots" + ("?plugin=" + target.entityType.key) + '&size=100' + ("&q=" + target.entityQuery) + ("&from=" + timeFilter.from) + ("&to=" + timeFilter.to) + (this.instanaOptions.showOffline ? "" : "&time=" + timeFilter.to);
     snapshots = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["getRequest"])(this.instanaOptions, fetchSnapshotContextsUrl).then(function (contextsResponse) {
-      return Promise.all(contextsResponse.data.map(function (_a) {
+      return Promise.all(contextsResponse.data.items.map(function (_a) {
         var snapshotId = _a.snapshotId,
             host = _a.host;
 
@@ -7659,15 +7809,15 @@ function createTagFilter(filter) {
   var tagFilter = {
     name: filter.tag.key,
     operator: filter.operator.key,
-    value: filter.stringValue
+    value: false
   };
 
   if ('NUMBER' === filter.tag.type) {
     if (filter.numberValue !== null) {
-      tagFilter.value = filter.numberValue.toString();
+      tagFilter.value = filter.numberValue !== 0;
     }
   } else if ('BOOLEAN' === filter.tag.type) {
-    tagFilter.value = filter.booleanValue.toString();
+    tagFilter.value = filter.booleanValue;
   }
 
   return tagFilter;

@@ -32,8 +32,7 @@ export class Explore extends React.Component<Props, AnalyzeState> {
   componentDidMount() {
     const { query, datasource, onChange } = this.props;
     isUnmounting = false;
-    datasource.getEntityTypes().then((entityTypes:SelectableValue[]) => {
-
+    datasource.getEntityTypes().then((entityTypes: SelectableValue[]) => {
       if (!isUnmounting) {
         if (!_.find(entityTypes, { key: null })) {
           entityTypes.unshift({ key: null, label: PLEASE_SPECIFY });
@@ -53,13 +52,12 @@ export class Explore extends React.Component<Props, AnalyzeState> {
         onChange(query);
       }
     });
-
   }
   componentWillUnmount() {
     isUnmounting = true;
   }
   onEntityChange = (entityType: SelectableValue) => {
-    const { query, datasource,onChange, onRunQuery } = this.props;
+    const { query, datasource, onChange, onRunQuery } = this.props;
     query.entity = entityType;
     onChange(query);
     onRunQuery();
@@ -80,14 +78,14 @@ export class Explore extends React.Component<Props, AnalyzeState> {
     onChange(query);
     // onRunQuery with 500ms delay after last debounce
     this.debouncedRunQuery();
-  }
+  };
   onGroupByTagSecondLevelKeyChange = (eventItem: ChangeEvent<HTMLInputElement>) => {
     const { query, onChange } = this.props;
-    query.group = { 
+    query.group = {
       key: eventItem.currentTarget.value,
       label: eventItem.currentTarget.value,
       type: 'STRING',
-    }
+    };
     query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
     onChange(query);
     // onRunQuery with 500ms delay after last debounce

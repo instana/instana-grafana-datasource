@@ -127,7 +127,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.props.onChange(this.query);
   }
 
-  updateMetrics = (metrics: SelectableValue[]) => {   
+  updateMetrics = (metrics: SelectableValue[]) => {
     this.setState({
       availableMetrics: _.sortBy(metrics, 'key'),
       allMetrics: _.sortBy(metrics, 'key'),
