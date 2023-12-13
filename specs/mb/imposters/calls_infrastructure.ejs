@@ -1,13 +1,15 @@
 {
   "predicates": [{
     "equals": {
-      "method": "GET",
-      "path": "/api/snapshots/types",
+      "method": "POST",
+      "path": "/api/infrastructure-monitoring/analyze/entity-types",
       "query": {
-        "q": "filler"
+        "q": "jvm"
       }
     }
-  }],
+  }{
+    "contains": { "body": "tagFilterExpression" }
+  }]],
   "responses": [{
     "is": {
       "statusCode": 200,
@@ -16,17 +18,19 @@
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
       },
-      "body": "[\"host\", \"awsEc\", \"hadoopYARN\", \"process\", \"dropwizardApplicationContainer\"]"
+      "body": "{ "plugins": ["jvmRuntimePlatform", "dropwizardApplicationContainer","elasticsearchNode","hazelcastNode", "springbootApplicationContainer", "tomcatApplicationContainer" ]}"
     }
   }]
 },
 {
   "predicates": [{
     "equals": {
-      "method": "GET",
-      "path": "/api/snapshots/types"
+      "method": "POST",
+      "path": "/api/infrastructure-monitoring/analyze/entity-types"
     }
-  }],
+  }{
+    "contains": { "body": "tagFilterExpression" }
+  }]],
   "responses": [{
     "is": {
       "statusCode": 200,
@@ -125,7 +129,7 @@
   "predicates": [{
     "equals": {
       "method": "GET",
-      "path": "/api/snapshots",
+      "path": "/api/infrastructure-monitoring/snapshots",
       "query": {
         "q": "filler AND entity.pluginId:process"
       }
@@ -147,7 +151,7 @@
   "predicates": [{
     "equals": {
       "method": "GET",
-      "path": "/api/snapshots",
+      "path": "/api/infrastructure-monitoring/snapshots",
       "query": {
         "q": "filler AND entity.pluginId:dropwizardApplicationContainer"
       }
@@ -169,7 +173,7 @@
   "predicates": [{
     "equals": {
       "method": "GET",
-      "path": "/api/snapshots/context",
+      "path": "/api/infrastructure-monitoring/snapshots?plugin=*&size=<value>&query=<query>",
       "query": {
         "q": "filler AND entity.pluginId:process"
       }
@@ -183,7 +187,7 @@
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
       },
-      "body": "[{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx0\",\"host\":\"host-1\"},{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx1\",\"host\":\"host-2\"}]"
+      "body": "{items:[{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx0\",\"plugin\":\"plugin-1\,\"from\":\1698788697000\,\"to\": \null\,\"tags\": [],\"label\":\"label-1\",\"host\":\"host-1\"},{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx1\",\"plugin\":\plugin-2\,\"from\":\1698788698000\,\"to\": \null\,\"tags\": [],\"label\":\"label-2\",\"host\":\"host-2\"}]}"
     }
   }]
 },
@@ -191,7 +195,7 @@
   "predicates": [{
     "equals": {
       "method": "GET",
-      "path": "/api/snapshots/context",
+      "path": "/api/infrastructure-monitoring/snapshots?plugin=*&size=<value>&query=<query>",
       "query": {
         "q": "filler AND entity.pluginId:dropwizardApplicationContainer"
       }
@@ -205,7 +209,7 @@
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
       },
-      "body": "[{\"snapshotId\":\"0DtgUvTuwiV_OGCK0_GGuC3fBaw\",\"host\":\"host-3\"}]"
+      "body": "{items:[{\"snapshotId\":\"0DtgUvTuwiV_OGCK0_GGuC3fBaw\",\"plugin\":\plugin-3\,\"from\":\1698829676000\,\"to\": \null\,\"tags\": [],\"label\":\"label-1\",\"host\":\"host-3\"}]}"
     }
   }]
 },
@@ -213,7 +217,7 @@
   "predicates": [{
     "equals": {
       "method": "GET",
-      "path": "/api/snapshots/kBfqGyrfEXvUcwix_fL97vYegx0"
+      "path": "/api/infrastructure-monitoring/snapshots/kBfqGyrfEXvUcwix_fL97vYegx0"
     }
   }],
   "responses": [{
@@ -232,7 +236,7 @@
   "predicates": [{
     "equals": {
       "method": "GET",
-      "path": "/api/snapshots/kBfqGyrfEXvUcwix_fL97vYegx1"
+      "path": "/api/infrastructure-monitoring/snapshots/kBfqGyrfEXvUcwix_fL97vYegx1"
     }
   }],
   "responses": [{
@@ -251,7 +255,7 @@
   "predicates": [{
     "equals": {
       "method": "GET",
-      "path": "/api/snapshots/0DtgUvTuwiV_OGCK0_GGuC3fBaw"
+      "path": "/api/infrastructure-monitoring/snapshots/0DtgUvTuwiV_OGCK0_GGuC3fBaw"
     }
   }],
   "responses": [{
@@ -269,8 +273,8 @@
 {
   "predicates": [{
     "equals": {
-      "method": "GET",
-      "path": "/api/metrics",
+      "method": "POST",
+      "path": "/api/infrastructure-monitoring/metrics",
       "query": {
         "metric": "mem.virtual",
         "snapshotId": "kBfqGyrfEXvUcwix_fL97vYegx0"
@@ -284,8 +288,8 @@
 {
   "predicates": [{
     "equals": {
-      "method": "GET",
-      "path": "/api/metrics",
+      "method": "POST",
+      "path": "/api/infrastructure-monitoring/metrics",
       "query": {
         "metric": "mem.virtual",
         "snapshotId": "kBfqGyrfEXvUcwix_fL97vYegx1"
@@ -299,8 +303,8 @@
 {
   "predicates": [{
     "equals": {
-      "method": "GET",
-      "path": "/api/metrics",
+      "method": "POST",
+      "path": "/api/infrastructure-monitoring/metrics",
       "query": {
         "metric": "KPI.errors",
         "snapshotId": "0DtgUvTuwiV_OGCK0_GGuC3fBaw"
@@ -315,7 +319,7 @@
   "predicates": [{
     "equals": {
       "method": "POST",
-      "path": "/api/infrastructure-monitoring/explore/groups"
+      "path": "/api/infrastructure-monitoring/analyze/entity-groups"
     }
   },{
     "contains": { "body": "tagFilterExpression" }

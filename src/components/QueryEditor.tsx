@@ -7,7 +7,7 @@ import {
   APPLICATION_SERVICE_ENDPOINT_METRICS,
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
-  INFRASTRUCTURE_EXPLORE,
+  INFRASTRUCTURE_ANALYZE,
   SLO_INFORMATION,
 } from '../GlobalVariables';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
@@ -152,7 +152,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
     if (query.entityQuery) {
       datasource.fetchTypesForTarget(query).then((response: any) => {
-        this.snapshots = response.data;
+        this.snapshots = response.map((plugin: any) => plugin.label);
         this.filterForEntityType(true, filterResult);
         onRunQuery();
       });
@@ -365,9 +365,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   render() {
     const { query, onCategoryChange } = this;
-    const categories = this.allowInfraExplore
-      ? metricCategories
-      : metricCategories.filter((category) => category.key !== INFRASTRUCTURE_EXPLORE);
+    const categories = metricCategories;
 
     return (
       <div className={'gf-form-group'}>
@@ -409,15 +407,15 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key === INFRASTRUCTURE_EXPLORE && (
+        {query.metricCategory.key === INFRASTRUCTURE_ANALYZE && (
           <Explore
             query={query}
-            queryTypes={this.state.queryTypes}
-            datasource={this.props.datasource}
             onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
-            updateQueryTypes={this.updateQueryTypes}
+            groups={this.state.groups}
+            updateGroups={this.updateGroups}
+            datasource={this.props.datasource}
           />
         )}
 
@@ -478,7 +476,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key !== SLO_INFORMATION && query.metricCategory.key !== INFRASTRUCTURE_EXPLORE && (
+        {query.metricCategory.key !== SLO_INFORMATION && (
           <Metric
             query={query}
             onChange={this.props.onChange}

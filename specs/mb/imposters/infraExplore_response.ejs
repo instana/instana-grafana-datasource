@@ -21,48 +21,40 @@ function (request, state, logger) {
     },
     body: JSON.stringify(
       {
-        "data": {
-          "items": [
-            {
-              "tags": {
-                "kubernetes.namespace.name": "You"
-              },
-              "count": 2,
-              "metrics": {
-                "cpu.total_usage.P99": datapoints1
-              }
+        "items": [
+          {
+            "tags": {
+              "kubernetes.namespace.name": "You"
             },
-            {
-              "tags": {
-                "kubernetes.namespace.name": "are"
-              },
-              "count": 1,
-              "metrics": {
-                "cpu.total_usage.P99": datapoints2
-              }
-            },
-            {
-              "tags": {
-                "kubernetes.namespace.name": "awesome"
-              },
-              "count": 6,
-              "metrics": {
-                "cpu.total_usage.P99": datapoints3
-              }
+            "count": 2,
+            "metrics": {
+              "cpu.total_usage.P99": datapoints1
             }
-          ],
-          "canLoadMore": false,
-          "totalHits": 6,
-          "totalRepresentedItemCount": 61,
-          "next": null
-        },
+          },
+          {
+            "tags": {
+              "kubernetes.namespace.name": "are"
+            },
+            "count": 1,
+            "metrics": {
+              "cpu.total_usage.P99": datapoints2
+            }
+          },
+          {
+            "tags": {
+              "kubernetes.namespace.name": "awesome"
+            },
+            "count": 6,
+            "metrics": {
+              "cpu.total_usage.P99": datapoints3
+            }
+          }
+        ],
+        "canLoadMore": false,
+        "totalHits": 6,
+        "totalRepresentedItemCount": 61,
+        "next": null
         "adjustedWindowSize": null,
-        "errors": [],
-        "progress": {
-          "percentage": null,
-          "loading": false,
-          "note": null
-        }
       }
     )
   };

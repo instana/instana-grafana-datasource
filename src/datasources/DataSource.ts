@@ -5,7 +5,7 @@ import {
   APPLICATION_SERVICE_ENDPOINT_METRICS,
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
-  INFRASTRUCTURE_EXPLORE,
+  INFRASTRUCTURE_ANALYZE,
   SLO_INFORMATION,
 } from '../GlobalVariables';
 import {
@@ -120,7 +120,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
           return this.dataSourceSlo.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (category === INFRASTRUCTURE_EXPLORE) {
+        } else if (category === INFRASTRUCTURE_ANALYZE) {
           return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTarget(target, data);
           });
@@ -216,7 +216,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
   supportsDeltaRequests(target: InstanaQuery): boolean {
     if (target.metricCategory) {
-      if (target.metricCategory.key === SLO_INFORMATION || target.metricCategory.key === INFRASTRUCTURE_EXPLORE) {
+      if (target.metricCategory.key === SLO_INFORMATION || target.metricCategory.key === INFRASTRUCTURE_ANALYZE) {
         return false;
       }
     }
@@ -337,10 +337,13 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   fetchMobileapp(): Promise<SelectableValue[]> {
     return this.dataSourceMobileapp.getMobileapp(this.getTimeFilter());
   }
+  fetchMetricsForEntityType(target: InstanaQuery): Promise<SelectableValue[]> {
+    return this.dataSourceInfrastructure.fetchAvailableMetricsForEntityType(target, this.timeFilter);
+  }
 
   getDefaultTimeInterval(query: InstanaQuery) {
     const category = query.metricCategory.key;
-    if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_EXPLORE) {
+    if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_ANALYZE) {
       return getDefaultMetricRollupDuration(this.getTimeFilter());
     } else {
       return getDefaultChartGranularity(this.getTimeFilter().windowSize);
@@ -386,7 +389,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
   setPossibleTimeIntervals(target: InstanaQuery) {
     const category = target.metricCategory.key;
-    if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_EXPLORE) {
+    if (category === BUILT_IN_METRICS || category === CUSTOM_METRICS || category === INFRASTRUCTURE_ANALYZE) {
       this.availableTimeIntervals = this.availableRollups;
     } else {
       this.availableTimeIntervals = this.availableGranularities;
