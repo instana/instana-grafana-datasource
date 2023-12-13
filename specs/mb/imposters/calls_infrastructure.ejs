@@ -7,9 +7,9 @@
         "q": "jvm"
       }
     }
-  }{
+  }, {
     "contains": { "body": "tagFilterExpression" }
-  }]],
+  }],
   "responses": [{
     "is": {
       "statusCode": 200,
@@ -18,7 +18,7 @@
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
       },
-      "body": "{ "plugins": ["jvmRuntimePlatform", "dropwizardApplicationContainer","elasticsearchNode","hazelcastNode", "springbootApplicationContainer", "tomcatApplicationContainer" ]}"
+      "body": "{ \"plugins\": [\"jvmRuntimePlatform\", \"dropwizardApplicationContainer\",\"elasticsearchNode\",\"hazelcastNode\", \"springbootApplicationContainer\", \"tomcatApplicationContainer\" ]}"
     }
   }]
 },
@@ -28,9 +28,9 @@
       "method": "POST",
       "path": "/api/infrastructure-monitoring/analyze/entity-types"
     }
-  }{
+  }, {
     "contains": { "body": "tagFilterExpression" }
-  }]],
+  }],
   "responses": [{
     "is": {
       "statusCode": 200,
@@ -187,7 +187,7 @@
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
       },
-      "body": "{items:[{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx0\",\"plugin\":\"plugin-1\,\"from\":\1698788697000\,\"to\": \null\,\"tags\": [],\"label\":\"label-1\",\"host\":\"host-1\"},{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx1\",\"plugin\":\plugin-2\,\"from\":\1698788698000\,\"to\": \null\,\"tags\": [],\"label\":\"label-2\",\"host\":\"host-2\"}]}"
+      "body": "{ \"items\": [{\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx0\",\"plugin\":\"plugin-1\",\"from\":\"1698788697000\",\"to\": \"null\",\"tags\": [],\"label\":\"label-1\",\"host\":\"host-1\"}, {\"snapshotId\":\"kBfqGyrfEXvUcwix_fL97vYegx1\",\"plugin\":\"plugin-2\",\"from\":\"1698788698000\",\"to\": \"null\",\"tags\": [],\"label\":\"label-2\",\"host\":\"host-2\"}] }"
     }
   }]
 },
@@ -209,7 +209,7 @@
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
       },
-      "body": "{items:[{\"snapshotId\":\"0DtgUvTuwiV_OGCK0_GGuC3fBaw\",\"plugin\":\plugin-3\,\"from\":\1698829676000\,\"to\": \null\,\"tags\": [],\"label\":\"label-1\",\"host\":\"host-3\"}]}"
+      "body": "{ \"items\": [{\"snapshotId\":\"0DtgUvTuwiV_OGCK0_GGuC3fBaw\",\"plugin\":\"plugin-3\",\"from\":\"1698829676000\",\"to\": \"null\",\"tags\": [],\"label\":\"label-1\",\"host\":\"host-3\"}]}"
     }
   }]
 },
