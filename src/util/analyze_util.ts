@@ -2,16 +2,22 @@ import TagFilter from '../types/tag_filter';
 import _ from 'lodash';
 import { InstanaQuery } from '../types/instana_query';
 
+interface CustomTagFilter {
+  name: string;
+  operator: string;
+  value: string | boolean | number;
+}
+
 export function createTagFilter(filter: TagFilter) {
-  let tagFilter = {
+  let tagFilter: CustomTagFilter = {
     name: filter.tag.key,
     operator: filter.operator.key,
-    value: false,
+    value: filter.stringValue,
   };
 
   if ('NUMBER' === filter.tag.type) {
     if (filter.numberValue !== null) {
-      tagFilter.value = filter.numberValue !== 0;
+      tagFilter.value = filter.numberValue;
     }
   } else if ('BOOLEAN' === filter.tag.type) {
     tagFilter.value = filter.booleanValue;
