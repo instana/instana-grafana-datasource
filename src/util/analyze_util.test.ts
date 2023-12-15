@@ -20,7 +20,7 @@ describe('Given a TagFilter object', () => {
       const expected = {
         name: 'test',
         operator: 'operator',
-        value: false,
+        value: 'string',
       };
 
       expect(createTagFilter(tagFilter)).toEqual(expected);
@@ -28,7 +28,7 @@ describe('Given a TagFilter object', () => {
   });
 
   describe('with NUMBER tag type', () => {
-    it('should return a TagFilter object with the provided numberValue as the string value', () => {
+    it('should return a TagFilter object with the provided numberValue', () => {
       let tagFilter: TagFilter = {
         tag: { key: 'some key', type: 'NUMBER' },
         operator: { key: 'operator' },
@@ -42,7 +42,7 @@ describe('Given a TagFilter object', () => {
       const expected = {
         name: 'some key',
         operator: 'operator',
-        value: false,
+        value: 0,
       };
 
       expect(createTagFilter(tagFilter)).toEqual(expected);
@@ -50,7 +50,7 @@ describe('Given a TagFilter object', () => {
   });
 
   describe('with BOOLEAN tag type', () => {
-    it('should return a TagFilter object with the provided booleanValue as the string value', () => {
+    it('should return a TagFilter object with the provided booleanValue', () => {
       let tagFilter: TagFilter = {
         tag: { key: 'tagKey', type: 'BOOLEAN' },
         operator: { key: 'operator' },
