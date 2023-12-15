@@ -15,6 +15,7 @@ export const APPLICATION_SERVICE_ENDPOINT_METRICS = 4; // replaces previous ->
 export const SLO_INFORMATION = 7;
 export const INFRASTRUCTURE_EXPLORE = 8;
 export const ANALYZE_MOBILE_APP_METRICS = 9;
+export const SLO2_INFORMATION = 20;
 
 /* DROPDOWN DEFAULTS */
 export const ALL_APPLICATIONS = '-- No Application Filter --';

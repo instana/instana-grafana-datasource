@@ -6,6 +6,7 @@ import {
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   INFRASTRUCTURE_EXPLORE,
+  SLO2_INFORMATION,
   SLO_INFORMATION,
 } from '../GlobalVariables';
 import {
@@ -32,6 +33,7 @@ import { DataSourceInfrastructure } from './Datasource_Infrastructure';
 import { DataSourceMobileApp } from './DataSource_MobileApp';
 import { DataSourceService } from './DataSource_Service';
 import { DataSourceSlo } from './DataSource_Slo';
+import { DataSourceSlo2 } from './DataSource_Slo2';
 import { DataSourceWebsite } from './DataSource_Website';
 import { InstanaOptions } from '../types/instana_options';
 import { InstanaQuery } from '../types/instana_query';
@@ -54,6 +56,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   dataSourceService: DataSourceService;
   dataSourceEndpoint: DataSourceEndpoint;
   dataSourceSlo: DataSourceSlo;
+  dataSourceSlo2: DataSourceSlo2;
   timeFilter!: TimeFilter;
   availableGranularities: SelectableValue[];
   availableRollups: SelectableValue[];
@@ -68,6 +71,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     this.availableRollups = [];
     this.availableTimeIntervals = [];
     this.dataSourceSlo = new DataSourceSlo(instanceSettings.jsonData);
+    this.dataSourceSlo2 = new DataSourceSlo2(instanceSettings.jsonData);
     this.dataSourceInfrastructure = new DataSourceInfrastructure(instanceSettings.jsonData);
     this.dataSourceWebsite = new DataSourceWebsite(instanceSettings.jsonData);
     this.dataSourceMobileapp = new DataSourceMobileApp(instanceSettings.jsonData);
@@ -118,6 +122,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
         if (category === SLO_INFORMATION) {
           return this.dataSourceSlo.runQuery(target, targetTimeFilter).then((data: any) => {
+            return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+          });
+        } else if (category === SLO2_INFORMATION) {
+          return this.dataSourceSlo2.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
         } else if (category === INFRASTRUCTURE_EXPLORE) {
@@ -306,6 +314,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     return this.dataSourceSlo.getConfiguredSLIs();
   }
 
+  getSlo2Reports(): Promise<SelectableValue[]> {
+    return this.dataSourceSlo2.getSLOConfigurations();
+  }
+
   getEntityTypes(): Promise<SelectableValue[]> {
     return this.dataSourceInfrastructure.getEntityTypes();
   }
@@ -408,6 +420,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   testDatasource(): Promise<any> {
+    console.log(this.options);
     return getRequest(this.options, '/api/infrastructure-monitoring/monitoring-state').then(
       () => {
         return {

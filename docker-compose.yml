@@ -3,7 +3,7 @@ services:
   grafana:
     image: grafana/grafana
     ports:
-      - 3000:3000
+      - 5000:3000
     volumes:
       - ./dist:/var/lib/grafana/plugins/instana
       - ./provisioning/datasources:/etc/grafana/provisioning/datasources
@@ -12,6 +12,8 @@ services:
       INSTANA_UI_BACKEND_URL: ${INSTANA_UI_BACKEND_URL}
       INSTANA_API_TOKEN: ${INSTANA_API_TOKEN}
       GF_LOG_LEVEL: debug
+    extra_hosts:
+      local-instana.pink.instana.rocks: 172.30.123.104
   mountebank:
     build: specs/mb
     image: ui-backend-mockserver

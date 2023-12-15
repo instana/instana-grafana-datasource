@@ -1,6 +1,7 @@
 import { DataQuery, SelectableValue } from '@grafana/data';
-import TimeFilter from './time_filter';
+
 import TagFilter from './tag_filter';
+import TimeFilter from './time_filter';
 
 export interface InstanaQuery extends DataQuery {
   metricCategory: SelectableValue;
@@ -12,6 +13,7 @@ export interface InstanaQuery extends DataQuery {
   sloValue: string;
   filters: TagFilter[];
   sloSpecific: SelectableValue;
+  slo2Specific: SelectableValue;
   metric: SelectableValue;
   entity: SelectableValue;
   service: SelectableValue;

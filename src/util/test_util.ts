@@ -1,5 +1,5 @@
-import { InstanaQuery } from '../types/instana_query';
 import { InstanaOptions } from '../types/instana_options';
+import { InstanaQuery } from '../types/instana_query';
 import TimeFilter from '../types/time_filter';
 
 /*
@@ -68,6 +68,7 @@ export function buildTestTarget(): InstanaQuery {
     showWarningCantShowAllResults: false,
     sloReport: {},
     sloSpecific: {},
+    slo2Specific: {},
     sloValue: '',
     stableHash: '',
     timeFilter: { from: 0, to: 0, windowSize: 0 },

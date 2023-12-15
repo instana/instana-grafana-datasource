@@ -8,6 +8,7 @@ import {
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   INFRASTRUCTURE_EXPLORE,
+  SLO2_INFORMATION,
   SLO_INFORMATION,
 } from '../GlobalVariables';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
@@ -28,6 +29,7 @@ import { InstanaQuery } from '../types/instana_query';
 import Metric from './Metric/Metric';
 import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
 import { MobileAppMetrics } from './Analyze/MobileAppMetrics';
+import { Slo2Information } from './SLOInformation/Slo2Information';
 import { SloInformation } from './SLOInformation/SloInformation';
 import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import _ from 'lodash';
@@ -149,7 +151,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   loadEntityTypes(filterResult = true) {
     const { query, datasource, onRunQuery } = this.props;
-
     if (query.entityQuery) {
       datasource.fetchTypesForTarget(query).then((response: any) => {
         this.snapshots = response.data;
@@ -335,6 +336,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.resetServices();
     this.resetEndpoints();
     this.resetSLO();
+    this.resetSLO2();
   }
 
   resetMetricSelection() {
@@ -358,6 +360,12 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   resetSLO() {
+    const { query } = this.props;
+    query.sloValue = '';
+    query.sloReport = {};
+  }
+
+  resetSLO2() {
     const { query } = this.props;
     query.sloValue = '';
     query.sloReport = {};
@@ -478,7 +486,16 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key !== SLO_INFORMATION && query.metricCategory.key !== INFRASTRUCTURE_EXPLORE && (
+        {query.metricCategory.key === SLO2_INFORMATION && (
+          <Slo2Information
+            query={query}
+            onRunQuery={this.props.onRunQuery}
+            onChange={this.props.onChange}
+            datasource={this.props.datasource}
+          />
+        )}
+
+        {query.metricCategory.key !== SLO2_INFORMATION && query.metricCategory.key !== SLO_INFORMATION && query.metricCategory.key !== INFRASTRUCTURE_EXPLORE && (
           <Metric
             query={query}
             onChange={this.props.onChange}
