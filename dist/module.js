@@ -2756,14 +2756,14 @@ function (_super) {
       onChange: function onChange(event) {
         return _this.onSwitchChange(event, 'useProxy');
       },
-      description: 'Use Grafana server as proxy. Needs Grafana 5.3+ and Instana datasource 2.0.0+'
+      description: 'Use Grafana server as proxy. Needs Grafana 10.0.0+ and Instana datasource 3.3.0+'
     }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
       label: 'Enable offline snapshots',
       value: jsonData.showOffline,
       onChange: function onChange(event) {
         return _this.onSwitchChange(event, 'showOffline');
       },
-      description: 'Enables querying offline snapshots. Needs Instana release 156+ and Instana datasource 2.3.0+'
+      description: 'Enables querying offline snapshots. Needs Instana release 260+ and Instana datasource 3.3.0+'
     }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
       label: 'Enable Infrastructure Analyze category',
       value: jsonData.allowInfraExplore,
