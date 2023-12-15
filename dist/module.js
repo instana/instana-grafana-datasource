@@ -4548,7 +4548,7 @@ function (_super) {
       onChange: this.props.onChange,
       loadEntityTypes: this.loadEntityTypes
     }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_8__["Badge"], {
-      text: '3.3.9',
+      text: '3.4.0',
       color: 'blue'
     }));
   };
@@ -7809,12 +7809,12 @@ function createTagFilter(filter) {
   var tagFilter = {
     name: filter.tag.key,
     operator: filter.operator.key,
-    value: false
+    value: filter.stringValue
   };
 
   if ('NUMBER' === filter.tag.type) {
     if (filter.numberValue !== null) {
-      tagFilter.value = filter.numberValue !== 0;
+      tagFilter.value = filter.numberValue;
     }
   } else if ('BOOLEAN' === filter.tag.type) {
     tagFilter.value = filter.booleanValue;
