@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.4.0 - 2023-12-15
+- Chore: Replaced deprecated instana REST API calls in Analyze Infrastructure with new ones.
+- Fix: Fixed filter bug introduced in Analyze Application/Website.
+- Fix: Updated instana version and suggested grafana version.
+
 ## 3.3.9 - 2023-11-17
 - Chore: Added filter query for Analyze Mobileapp in grafana UI.
 - Chore: Enabled `includeSynthetic` parameter query in Analyze Infrastructure.
