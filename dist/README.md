@@ -6,9 +6,9 @@ This is a Grafana datasource for showing metrics from Instana AI-Powered APM for
 
 ## Requirements
 
-Attention: Grafana 7.0.0+ is required.
+Attention: Grafana 10.0.0+ is suggested.
 
-For On-premise customers Instana Release 146 is required.
+For On-premise customers Instana Release 260+ is required.
 
 ## Features
 
@@ -30,7 +30,7 @@ This datasource uses the Instana REST API to query the metric values. First of a
 
 To use the Grafana server as a proxy for querying Instana REST API please check `Use proxy`.
 
-To enable metrics for offline snapshots please check `Enable offline snapshots`. For On-premise customers Instana Release 156 is required.
+To enable metrics for offline snapshots please check `Enable offline snapshots`. For On-premise customers Instana Release 260 is required.
 
 The configuration allows the setting of a limit for the different categories that this plugin offers. Numeric values can be entered in order to make sure that queries do not exceed a certain amount of window size that they query. This can be useful when experiencing Grafana performance issues. 
 

@@ -143,14 +143,14 @@ export class ConfigEditor extends PureComponent<Props, State> {
           label={'Use Proxy'}
           value={jsonData.useProxy}
           onChange={(event) => this.onSwitchChange(event, 'useProxy')}
-          description={'Use Grafana server as proxy. Needs Grafana 5.3+ and Instana datasource 2.0.0+'}
+          description={'Use Grafana server as proxy. Needs Grafana 10.0.0+ and Instana datasource 3.3.0+'}
         />
 
         <Checkbox
           label={'Enable offline snapshots'}
           value={jsonData.showOffline}
           onChange={(event) => this.onSwitchChange(event, 'showOffline')}
-          description={'Enables querying offline snapshots. Needs Instana release 156+ and Instana datasource 2.3.0+'}
+          description={'Enables querying offline snapshots. Needs Instana release 260+ and Instana datasource 3.3.0+'}
         />
 
         <Checkbox
