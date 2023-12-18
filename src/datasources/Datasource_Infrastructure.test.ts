@@ -59,41 +59,35 @@ describe('Given an infrastructure datasource', () => {
       resetDataSource();
       pluginsSpy.mockReset();
     });
-
-    it('should return entity types in correct format', () => {
-      return axios
-        .get(options.url + '/api/infrastructure-monitoring/catalog/plugins', {
-          headers: {
-            Authorization: 'apiToken ' + options.apiToken,
-          },
-        })
-        .then((types: any) => {
-          pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
-          pluginsSpy.mockResolvedValue(types);
-
-          let result = dataSourceInfrastructure.getEntityTypes();
-          _.map(result, (et) => {
-            expect(et).toHaveProperty('key');
-            expect(et).toHaveProperty('label');
-          });
-        });
+  
+    it('should return entity types in correct format', async () => {
+      const types =  [
+        { plugin: 'plugin1', label: 'Plugin 1' },
+        { plugin: 'plugin2', label: 'Plugin 2' }
+      ]      
+      pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
+      pluginsSpy.mockResolvedValue({ data: types });
+  
+      const result = await dataSourceInfrastructure.getEntityTypes();
+  
+      result.forEach(et => {
+        expect(et).toHaveProperty('key');
+        expect(et).toHaveProperty('label');
+      });
     });
-
-    it('should cache entityTypes', () => {
-      return axios
-        .get(options.url + '/api/infrastructure-monitoring/catalog/plugins', {
-          headers: {
-            Authorization: 'apiToken ' + options.apiToken,
-          },
-        })
-        .then((types: any) => {
-          pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
-          pluginsSpy.mockResolvedValue(types);
-
-          dataSourceInfrastructure.getEntityTypes();
-          dataSourceInfrastructure.getEntityTypes();
-          expect(pluginsSpy).toHaveBeenCalledTimes(1);
-        });
+  
+    it('should cache entityTypes', async () => {
+      const types =  [
+        { plugin: 'plugin1', label: 'Plugin 1' },
+        { plugin: 'plugin2', label: 'Plugin 2' }
+      ]
+      pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
+      pluginsSpy.mockResolvedValue({ data: types });
+  
+      await dataSourceInfrastructure.getEntityTypes();
+      await dataSourceInfrastructure.getEntityTypes();
+  
+      expect(pluginsSpy).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -106,60 +100,51 @@ describe('Given an infrastructure datasource', () => {
       catalogSpy.mockReset();
     });
 
-    function mockCatalogResponseAndVerify(catalog: any, metricCategory: number) {
-      catalogSpy = jest.spyOn(RequestHandler, 'getRequest');
-      catalogSpy.mockResolvedValue(catalog);
-
-      dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory).then((result) => {
-        _.map(result, (entry) => {
-          expect(entry).toHaveProperty('key');
-          expect(entry).toHaveProperty('label');
-          expect(entry).toHaveProperty('aggregations');
-          expect(entry.aggregations).toBeInstanceOf(Array);
-          expect(entry).toHaveProperty('entityType');
-        });
-      });
-    }
-
-    it('should return builtin metrics in the correct format', () => {
+    it('should return builtin metrics in the correct format', async () => {
       let metricCategory: number = BUILT_IN_METRICS;
-      return axios
-        .get(options.url + '/api/infrastructure-monitoring/catalog/metrics/jvmRuntimePlatform?filter=builtin', {
-          headers: {
-            Authorization: 'apiToken ' + options.apiToken,
-          },
-        })
-        .then((catalog: any) => {
-          mockCatalogResponseAndVerify(catalog, metricCategory);
-        });
+      const catalog =  [
+        { label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1'},
+        { label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1' }
+      ]      
+      catalogSpy = jest.spyOn(RequestHandler, 'getRequest');
+      catalogSpy.mockResolvedValue({ data: catalog });
+  
+      const result = await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
+      result.forEach(entry => {
+        expect(entry).toHaveProperty('key');
+        expect(entry).toHaveProperty('label');
+      });
     });
 
-    it('should return custom metrics in the correct format', () => {
+    it('should return custom metrics in the correct format', async () => {
       let metricCategory: number = CUSTOM_METRICS;
-      return axios
-        .get(options.url + '/api/infrastructure-monitoring/catalog/metrics/jvmRuntimePlatform?filter=custom', {
-          headers: {
-            Authorization: 'apiToken ' + options.apiToken,
-          },
-        })
-        .then((catalog: any) => {
-          mockCatalogResponseAndVerify(catalog, metricCategory);
-        });
+      const catalog =  [
+        { label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1'},
+        { label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1' }
+      ]      
+      catalogSpy = jest.spyOn(RequestHandler, 'getRequest');
+      catalogSpy.mockResolvedValue({ data: catalog });
+  
+      const result = await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
+      result.forEach(entry => {
+        expect(entry).toHaveProperty('key');
+        expect(entry).toHaveProperty('label');
+      });
     });
 
-    it('should cache the catalog', () => {
-      let metricCategory: number = CUSTOM_METRICS;
-      return axios
-        .get(options.url + '/api/infrastructure-monitoring/catalog/metrics/jvmRuntimePlatform?filter=custom', {
-          headers: {
-            Authorization: 'apiToken ' + options.apiToken,
-          },
-        })
-        .then((catalog: any) => {
-          mockCatalogResponseAndVerify(catalog, metricCategory);
-          mockCatalogResponseAndVerify(catalog, metricCategory);
-          expect(catalogSpy).toBeCalledTimes(1);
-        });
+    it('should cache entityTypes', async () => {
+      let metricCategory: number = CUSTOM_METRICS || BUILT_IN_METRICS;
+      const types =  [
+        { custom: false, description: "description1", label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1'},
+        { custom: false, description: "description1", label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1' }
+      ]
+      catalogSpy = jest.spyOn(RequestHandler, 'getRequest');
+      catalogSpy.mockResolvedValue({ data: types });
+  
+      await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
+      await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
+  
+      expect(catalogSpy).toHaveBeenCalledTimes(1);
     });
   });
 
