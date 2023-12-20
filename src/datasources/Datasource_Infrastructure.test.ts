@@ -59,34 +59,34 @@ describe('Given an infrastructure datasource', () => {
       resetDataSource();
       pluginsSpy.mockReset();
     });
-  
+
     it('should return entity types in correct format', async () => {
-      const types =  [
+      const types = [
         { plugin: 'plugin1', label: 'Plugin 1' },
-        { plugin: 'plugin2', label: 'Plugin 2' }
-      ]      
+        { plugin: 'plugin2', label: 'Plugin 2' },
+      ];
       pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
       pluginsSpy.mockResolvedValue({ data: types });
-  
+
       const result = await dataSourceInfrastructure.getEntityTypes();
-  
-      result.forEach(et => {
+
+      result.forEach((et) => {
         expect(et).toHaveProperty('key');
         expect(et).toHaveProperty('label');
       });
     });
-  
+
     it('should cache entityTypes', async () => {
-      const types =  [
+      const types = [
         { plugin: 'plugin1', label: 'Plugin 1' },
-        { plugin: 'plugin2', label: 'Plugin 2' }
-      ]
+        { plugin: 'plugin2', label: 'Plugin 2' },
+      ];
       pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
       pluginsSpy.mockResolvedValue({ data: types });
-  
+
       await dataSourceInfrastructure.getEntityTypes();
       await dataSourceInfrastructure.getEntityTypes();
-  
+
       expect(pluginsSpy).toHaveBeenCalledTimes(1);
     });
   });
@@ -102,15 +102,15 @@ describe('Given an infrastructure datasource', () => {
 
     it('should return builtin metrics in the correct format', async () => {
       let metricCategory: number = BUILT_IN_METRICS;
-      const catalog =  [
-        { label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1'},
-        { label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1' }
-      ]      
+      const catalog = [
+        { label: 'Plugin 1', metricId: 'metricId1', pluginId: 'pluginId1' },
+        { label: 'Plugin 2', metricId: 'metricId2', pluginId: 'pluginId2' },
+      ];
       catalogSpy = jest.spyOn(RequestHandler, 'getRequest');
       catalogSpy.mockResolvedValue({ data: catalog });
-  
+
       const result = await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
-      result.forEach(entry => {
+      result.forEach((entry) => {
         expect(entry).toHaveProperty('key');
         expect(entry).toHaveProperty('label');
       });
@@ -118,15 +118,15 @@ describe('Given an infrastructure datasource', () => {
 
     it('should return custom metrics in the correct format', async () => {
       let metricCategory: number = CUSTOM_METRICS;
-      const catalog =  [
-        { label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1'},
-        { label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1' }
-      ]      
+      const catalog = [
+        { label: 'Plugin 1', metricId: 'metricId1', pluginId: 'pluginId1' },
+        { label: 'Plugin 2', metricId: 'metricId2', pluginId: 'pluginId2' },
+      ];
       catalogSpy = jest.spyOn(RequestHandler, 'getRequest');
       catalogSpy.mockResolvedValue({ data: catalog });
-  
+
       const result = await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
-      result.forEach(entry => {
+      result.forEach((entry) => {
         expect(entry).toHaveProperty('key');
         expect(entry).toHaveProperty('label');
       });
@@ -134,16 +134,16 @@ describe('Given an infrastructure datasource', () => {
 
     it('should cache entityTypes', async () => {
       let metricCategory: number = CUSTOM_METRICS || BUILT_IN_METRICS;
-      const types =  [
-        { custom: false, description: "description1", label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1'},
-        { custom: false, description: "description1", label: 'Plugin 1',metricId: 'metricId1',pluginId:'pluginId1' }
-      ]
+      const types = [
+        { label: 'Plugin 1', metricId: 'metricId1', pluginId: 'pluginId1' },
+        { label: 'Plugin 2', metricId: 'metricId2', pluginId: 'pluginId2' },
+      ];
       catalogSpy = jest.spyOn(RequestHandler, 'getRequest');
       catalogSpy.mockResolvedValue({ data: types });
-  
+
       await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
       await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
-  
+
       expect(catalogSpy).toHaveBeenCalledTimes(1);
     });
   });
