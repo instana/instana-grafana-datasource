@@ -352,6 +352,7 @@ describe('Given an infrastructure datasource', () => {
       expect(metricSpy).toHaveBeenCalledTimes(0);
 
       const windowSize = getWindowSize(timeFilter);
+      let tagFilters: any[] = [];
       const metric: any = {
         metric: target.metric.key,
         aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
@@ -359,12 +360,12 @@ describe('Given an infrastructure datasource', () => {
       };
       const payload = {
         tagFilterExpression: {
-          elements: [],
+          elements: tagFilters,
           type: 'EXPRESSION',
           logicalOperator: 'AND',
         },
         pagination: {
-          retrievalSize: 200,
+          retrievalSize: 20,
         },
         groupBy: [target.groupbyTagSecondLevelKey],
         type: target.entity.key,

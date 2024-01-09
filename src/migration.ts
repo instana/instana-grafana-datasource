@@ -1,6 +1,7 @@
 // can be removed once mixpanel shows no old plugins around
 import _ from 'lodash';
 import metric_categories from './lists/metric_categories';
+import { INFRASTRUCTURE_ANALYZE } from 'GlobalVariables';
 
 export default function (target: any) {
   // 1.3.1 towards 2.0.0
@@ -71,7 +72,13 @@ export default function (target: any) {
   if (target.customFilters && target.customFilters.length > 0 && target.customFilters[0].value) {
     target.customFilters = _.map(target.customFilters, (cf) => cf.value);
   }
-  if (target.filters && target.filters.length > 0 && !target.filters[0].tag.key && !target.filters[0].tag.label) {
+  if (
+    target.metricCategory.key !== INFRASTRUCTURE_ANALYZE &&
+    target.filters &&
+    target.filters.length > 0 &&
+    !target.filters[0].tag.key &&
+    !target.filters[0].tag.label
+  ) {
     _.forEach(target.filters, (filter) => {
       filter.tag.label = filter.tag.key;
     });

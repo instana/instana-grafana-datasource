@@ -131,10 +131,10 @@ This should render a chart with one dataset (`host-3 (29042)`).
 #### Infrastructure Analyze
 
 Values for each label in order:
-The category `Infrastructure Analyze (beta)` will only show up if you have checked `Enable Infrastructure Analyze category` in the data source options.
+The category `Infrastructure Analyze` will only show up if you have checked `Enable Infrastructure Analyze category` in the data source options.
 
 * Data source: `Instana-1`
-* Category: `Infrastructure Analyze (beta)`
+* Category: `Infrastructure Analyze`
 * Filter: 
 ```
 {
