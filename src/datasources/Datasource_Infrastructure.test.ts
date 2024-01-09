@@ -365,7 +365,7 @@ describe('Given an infrastructure datasource', () => {
           logicalOperator: 'AND',
         },
         pagination: {
-          retrievalSize: 20,
+          retrievalSize: 200,
         },
         groupBy: [target.groupbyTagSecondLevelKey],
         type: target.entity.key,
