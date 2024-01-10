@@ -276,6 +276,7 @@ export class DataSourceInfrastructure {
 
   fetchAnalyzeEntities(target: InstanaQuery, timeFilter: TimeFilter) {
     const windowSize = getWindowSize(timeFilter);
+    let tagFilters: any[] = [];
 
     if (!target.timeInterval) {
       target.timeInterval = getDefaultChartGranularity(windowSize);
@@ -283,6 +284,9 @@ export class DataSourceInfrastructure {
     if (target.timeInterval.key < 60000) {
       target.timeInterval.key = 60000;
     }
+    _.forEach(target.filters, (filter) => {
+      tagFilters.push(filter);
+    });
     const metric: any = {
       metric: target.metric.key,
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
@@ -290,7 +294,7 @@ export class DataSourceInfrastructure {
     };
     const payload = {
       tagFilterExpression: {
-        elements: [],
+        elements: tagFilters,
         type: 'EXPRESSION',
         logicalOperator: 'AND',
       },

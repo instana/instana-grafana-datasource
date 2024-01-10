@@ -1448,6 +1448,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lists/apply_call_to_entities */ "./lists/apply_call_to_entities.ts");
 /* harmony import */ var _lists_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lists/operators */ "./lists/operators.ts");
+/* harmony import */ var components_FormField_FormTextArea__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! components/FormField/FormTextArea */ "./components/FormField/FormTextArea.tsx");
+
 
 
 
@@ -1527,6 +1529,31 @@ function (_super) {
       _this.validateChangeAndRun(index, true);
     };
 
+    _this.onFilterChange = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      var filterValue = event.currentTarget.value;
+
+      _this.setState({
+        textareaValue: event.currentTarget.value
+      });
+
+      if (filterValue.trim() !== '') {
+        query.filters = JSON.parse(filterValue);
+      } else {
+        query.filters = [];
+      }
+
+      onChange(query);
+      _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.onRunQuery, 500);
+      onRunQuery();
+    };
+
+    _this.state = {
+      textareaValue: ''
+    };
     return _this;
   }
 
@@ -1612,91 +1639,108 @@ function (_super) {
     var _b = this.props,
         query = _b.query,
         groups = _b.groups;
-    var listFilter = (_a = query.filters) === null || _a === void 0 ? void 0 : _a.map(function (singleFilter, index) {
+
+    if (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"]) {
       return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
-        key: 'filter_' + index,
+        className: 'gf-form'
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(components_FormField_FormTextArea__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        queryKeyword: true,
+        inputWidth: 0,
+        label: 'Tag Filter',
+        tooltip: 'Enter the tagFilterExpression here ',
+        placeholder: "[{Enter the filter JSON here}]",
+        value: this.state.textareaValue,
+        onChange: function onChange(event) {
+          return _this.onFilterChange(event);
+        }
+      }));
+    } else {
+      var listFilter = (_a = query.filters) === null || _a === void 0 ? void 0 : _a.map(function (singleFilter, index) {
+        return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+          key: 'filter_' + index,
+          className: 'gf-form'
+        }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+          className: 'query-keyword',
+          width: 14,
+          tooltip: 'Filter by tag.'
+        }, index + 1, ". filter"), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_APPLICATION_METRICS"] && _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_MOBILE_APP_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Entity_Entity__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          value: query.filters[index].entity,
+          onChange: function onChange(callToEntity) {
+            return _this.onCallToEntityChange(callToEntity, index);
+          }
+        }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+          menuPlacement: 'bottom',
+          width: 30,
+          isSearchable: true,
+          value: query.filters[index].tag,
+          options: groups,
+          onChange: function onChange(group) {
+            return _this.onGroupChange(group, index);
+          }
+        }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+          menuPlacement: 'bottom',
+          width: 20,
+          isSearchable: true,
+          value: query.filters[index].operator,
+          options: _this.filterOperatorsOnType(query.filters[index].tag.type),
+          onChange: function onChange(operator) {
+            return _this.onOperatorChange(operator, index);
+          }
+        }), _this.canShowStringInput(query.filters[index]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+          width: 30,
+          value: query.filters[index].stringValue,
+          placeholder: query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"],
+          onChange: function onChange(event) {
+            return _this.onTagFilterStringValueChange(event, index);
+          }
+        }), _this.canShowNumberInput(query.filters[index]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+          type: 'number',
+          width: 30,
+          value: query.filters[index].numberValue,
+          placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"],
+          onChange: function onChange(event) {
+            return _this.onTagFilterNumberValueChange(event, index);
+          }
+        }), query.filters[index].tag.type === 'BOOLEAN' && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+          menuPlacement: 'bottom',
+          width: 30,
+          isSearchable: true,
+          onChange: function onChange(e) {
+            return _this.onTagFilterBooleanValueChange(e, index);
+          },
+          value: {
+            key: '' + query.filters[index].booleanValue,
+            label: '' + query.filters[index].booleanValue
+          },
+          options: [{
+            key: false,
+            label: 'false'
+          }, {
+            key: true,
+            label: 'true'
+          }]
+        }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+          variant: 'secondary',
+          onClick: function onClick() {
+            return _this.removeTagFilter(index);
+          }
+        }, "-"));
+      });
+      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", null, listFilter, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
         className: 'gf-form'
       }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
-        className: 'query-keyword',
         width: 14,
-        tooltip: 'Filter by tag.'
-      }, index + 1, ". filter"), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_APPLICATION_METRICS"] && _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_MOBILE_APP_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Entity_Entity__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        value: query.filters[index].entity,
-        onChange: function onChange(callToEntity) {
-          return _this.onCallToEntityChange(callToEntity, index);
-        }
-      }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
-        menuPlacement: 'bottom',
-        width: 30,
-        isSearchable: true,
-        value: query.filters[index].tag,
-        options: groups,
-        onChange: function onChange(group) {
-          return _this.onGroupChange(group, index);
-        }
-      }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
-        menuPlacement: 'bottom',
-        width: 20,
-        isSearchable: true,
-        value: query.filters[index].operator,
-        options: _this.filterOperatorsOnType(query.filters[index].tag.type),
-        onChange: function onChange(operator) {
-          return _this.onOperatorChange(operator, index);
-        }
-      }), _this.canShowStringInput(query.filters[index]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-        width: 30,
-        value: query.filters[index].stringValue,
-        placeholder: query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"],
-        onChange: function onChange(event) {
-          return _this.onTagFilterStringValueChange(event, index);
-        }
-      }), _this.canShowNumberInput(query.filters[index]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-        type: 'number',
-        width: 30,
-        value: query.filters[index].numberValue,
-        placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"],
-        onChange: function onChange(event) {
-          return _this.onTagFilterNumberValueChange(event, index);
-        }
-      }), query.filters[index].tag.type === 'BOOLEAN' && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
-        menuPlacement: 'bottom',
-        width: 30,
-        isSearchable: true,
-        onChange: function onChange(e) {
-          return _this.onTagFilterBooleanValueChange(e, index);
-        },
-        value: {
-          key: '' + query.filters[index].booleanValue,
-          label: '' + query.filters[index].booleanValue
-        },
-        options: [{
-          key: false,
-          label: 'false'
-        }, {
-          key: true,
-          label: 'true'
-        }]
-      }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+        tooltip: 'Add an additional tag filter.'
+      }, "Add filter"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Button"], {
         variant: 'secondary',
-        onClick: function onClick() {
-          return _this.removeTagFilter(index);
-        }
-      }, "-"));
-    });
-    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", null, listFilter, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
-      className: 'gf-form'
-    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
-      width: 14,
-      tooltip: 'Add an additional tag filter.'
-    }, "Add filter"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-      variant: 'secondary',
-      onClick: this.addTagFilter
-    }, "+"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
-      hidden: !query.showWarningCantShowAllResults
-    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
-      width: 12,
-      tooltip: 'Add Filter to narrow down the data.'
-    }, "\u26A0\uFE0F Can't show all results"))));
+        onClick: this.addTagFilter
+      }, "+"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+        hidden: !query.showWarningCantShowAllResults
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+        width: 12,
+        tooltip: 'Add Filter to narrow down the data.'
+      }, "\u26A0\uFE0F Can't show all results"))));
+    }
   };
 
   return Filters;
@@ -3179,6 +3223,71 @@ function (_super) {
 
 /***/ }),
 
+/***/ "./components/FormField/FormTextArea.tsx":
+/*!***********************************************!*\
+  !*** ./components/FormField/FormTextArea.tsx ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _FormWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FormWrapper */ "./components/FormField/FormWrapper.tsx");
+
+
+
+
+/**
+ * Default input text area including label. Input text area is grafana/ui <TextArea />.
+ */
+
+var FormTextArea =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(FormTextArea, _super);
+
+  function FormTextArea(props) {
+    return _super.call(this, props) || this;
+  }
+
+  FormTextArea.prototype.render = function () {
+    var _a = this.props,
+        label = _a.label,
+        tooltip = _a.tooltip,
+        queryKeyword = _a.queryKeyword,
+        disabled = _a.disabled,
+        _b = _a.labelWidth,
+        labelWidth = _b === void 0 ? 14 : _b,
+        _c = _a.inputWidth,
+        inputWidth = _c === void 0 ? 30 : _c,
+        remainingProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"])(_a, ["label", "tooltip", "queryKeyword", "disabled", "labelWidth", "inputWidth"]);
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      disabled: disabled,
+      stretch: !inputWidth
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: queryKeyword ? 'query-keyword' : '',
+      width: labelWidth,
+      tooltip: tooltip
+    }, label), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["TextArea"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({
+      rows: 4,
+      width: inputWidth,
+      disabled: disabled
+    }, remainingProps)));
+  };
+
+  return FormTextArea;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (FormTextArea);
+
+/***/ }),
+
 /***/ "./components/FormField/FormWrapper.tsx":
 /*!**********************************************!*\
   !*** ./components/FormField/FormWrapper.tsx ***!
@@ -4536,7 +4645,7 @@ function (_super) {
       onFilterChange: this.onMetricsFilter,
       availableMetrics: this.state.availableMetrics,
       datasource: this.props.datasource
-    }), (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_MOBILE_APP_METRICS"]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Analyze_Filter__WEBPACK_IMPORTED_MODULE_10__["Filters"], {
+    }), (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_MOBILE_APP_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Analyze_Filter__WEBPACK_IMPORTED_MODULE_10__["Filters"], {
       query: query,
       onChange: this.props.onChange,
       onRunQuery: this.props.onRunQuery,
@@ -6755,6 +6864,7 @@ function () {
 
   DataSourceInfrastructure.prototype.fetchAnalyzeEntities = function (target, timeFilter) {
     var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["getWindowSize"])(timeFilter);
+    var tagFilters = [];
 
     if (!target.timeInterval) {
       target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_6__["getDefaultChartGranularity"])(windowSize);
@@ -6764,6 +6874,10 @@ function () {
       target.timeInterval.key = 60000;
     }
 
+    lodash__WEBPACK_IMPORTED_MODULE_4___default.a.forEach(target.filters, function (filter) {
+      tagFilters.push(filter);
+    });
+
     var metric = {
       metric: target.metric.key,
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
@@ -6771,7 +6885,7 @@ function () {
     };
     var payload = {
       tagFilterExpression: {
-        elements: [],
+        elements: tagFilters,
         type: 'EXPRESSION',
         logicalOperator: 'AND'
       },
@@ -7286,7 +7400,7 @@ __webpack_require__.r(__webpack_exports__);
   label: 'Infrastructure custom metrics',
   key: 1
 }, {
-  label: 'Infrastructure Analyze (beta)',
+  label: 'Infrastructure Analyze',
   key: 8
 }, {
   // replaces Application metrics(4) & Service metrics(5) & Endpoint metrics(6)
@@ -7533,7 +7647,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _lists_metric_categories__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lists/metric_categories */ "./lists/metric_categories.ts");
+/* harmony import */ var GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! GlobalVariables */ "./GlobalVariables.ts");
 // can be removed once mixpanel shows no old plugins around
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = (function (target) {
@@ -7623,7 +7739,7 @@ __webpack_require__.r(__webpack_exports__);
     });
   }
 
-  if (target.filters && target.filters.length > 0 && !target.filters[0].tag.key && !target.filters[0].tag.label) {
+  if (target.metricCategory.key !== GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"] && target.filters && target.filters.length > 0 && !target.filters[0].tag.key && !target.filters[0].tag.label) {
     lodash__WEBPACK_IMPORTED_MODULE_0___default.a.forEach(target.filters, function (filter) {
       filter.tag.label = filter.tag.key;
     });

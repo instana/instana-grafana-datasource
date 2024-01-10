@@ -11,7 +11,7 @@ export default [
     key: 1,
   },
   {
-    label: 'Infrastructure Analyze (beta)',
+    label: 'Infrastructure Analyze',
     key: 8,
   },
   {

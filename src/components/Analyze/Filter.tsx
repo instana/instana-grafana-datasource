@@ -1,4 +1,9 @@
-import { ANALYZE_APPLICATION_METRICS, ANALYZE_MOBILE_APP_METRICS, PLEASE_SPECIFY } from '../../GlobalVariables';
+import {
+  ANALYZE_APPLICATION_METRICS,
+  ANALYZE_MOBILE_APP_METRICS,
+  INFRASTRUCTURE_ANALYZE,
+  PLEASE_SPECIFY,
+} from '../../GlobalVariables';
 import { Button, InlineFormLabel, Input, Select } from '@grafana/ui';
 import React, { FormEvent } from 'react';
 
@@ -10,8 +15,11 @@ import TagFilter from '../../types/tag_filter';
 import _ from 'lodash';
 import call_to_entities from '../../lists/apply_call_to_entities';
 import operators from '../../lists/operators';
+import FormTextArea from 'components/FormField/FormTextArea';
 
-interface FilterState {}
+interface FilterState {
+  textareaValue: string;
+}
 
 interface Props {
   query: InstanaQuery;
@@ -32,6 +40,9 @@ export class Filters extends React.Component<Props, FilterState> {
 
   constructor(props: any) {
     super(props);
+    this.state = {
+      textareaValue: '',
+    };
   }
 
   addTagFilter = () => {
@@ -122,6 +133,22 @@ export class Filters extends React.Component<Props, FilterState> {
     this.validateChangeAndRun(index);
   }
 
+  onFilterChange = (event: FormEvent<HTMLInputElement>) => {
+    const { query, onChange, onRunQuery } = this.props;
+    const filterValue = event.currentTarget.value;
+    this.setState({
+      textareaValue: event.currentTarget.value,
+    });
+    if (filterValue.trim() !== '') {
+      query.filters = JSON.parse(filterValue);
+    } else {
+      query.filters = [];
+    }
+    onChange(query);
+    this.debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
+    onRunQuery();
+  };
+
   validateChangeAndRun(index: number, runDebounced = false) {
     const { query, onChange, onRunQuery } = this.props;
     if (query.filters[index].tag) {
@@ -176,94 +203,109 @@ export class Filters extends React.Component<Props, FilterState> {
 
   render() {
     const { query, groups } = this.props;
-
-    let listFilter = query.filters?.map((singleFilter, index) => {
+    if (query.metricCategory.key === INFRASTRUCTURE_ANALYZE) {
       return (
-        <div key={'filter_' + index} className={'gf-form'}>
-          <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Filter by tag.'}>
-            {index + 1}. filter
-          </InlineFormLabel>
-          {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && ANALYZE_MOBILE_APP_METRICS && (
-            <Entity
-              value={query.filters[index].entity}
-              onChange={(callToEntity: string) => this.onCallToEntityChange(callToEntity, index)}
-            />
-          )}
-          <Select
-            menuPlacement={'bottom'}
-            width={30}
-            isSearchable={true}
-            value={query.filters[index].tag}
-            options={groups}
-            onChange={(group) => this.onGroupChange(group, index)}
+        <div className={'gf-form'}>
+          <FormTextArea
+            queryKeyword
+            inputWidth={0}
+            label={'Tag Filter'}
+            tooltip={'Enter the tagFilterExpression here '}
+            placeholder="[{Enter the filter JSON here}]"
+            value={this.state.textareaValue}
+            onChange={(event) => this.onFilterChange(event)}
           />
-          <Select
-            menuPlacement={'bottom'}
-            width={20}
-            isSearchable={true}
-            value={query.filters[index].operator}
-            options={this.filterOperatorsOnType(query.filters[index].tag.type)}
-            onChange={(operator) => this.onOperatorChange(operator, index)}
-          />
-
-          {this.canShowStringInput(query.filters[index]) && (
-            <Input
-              width={30}
-              value={query.filters[index].stringValue}
-              placeholder={query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : PLEASE_SPECIFY}
-              onChange={(event) => this.onTagFilterStringValueChange(event, index)}
-            />
-          )}
-
-          {this.canShowNumberInput(query.filters[index]) && (
-            <Input
-              type={'number'}
-              width={30}
-              value={query.filters[index].numberValue}
-              placeholder={PLEASE_SPECIFY}
-              onChange={(event) => this.onTagFilterNumberValueChange(event, index)}
-            />
-          )}
-
-          {query.filters[index].tag.type === 'BOOLEAN' && (
+        </div>
+      );
+    } else {
+      let listFilter = query.filters?.map((singleFilter, index) => {
+        return (
+          <div key={'filter_' + index} className={'gf-form'}>
+            <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Filter by tag.'}>
+              {index + 1}. filter
+            </InlineFormLabel>
+            {query.metricCategory.key === ANALYZE_APPLICATION_METRICS && ANALYZE_MOBILE_APP_METRICS && (
+              <Entity
+                value={query.filters[index].entity}
+                onChange={(callToEntity: string) => this.onCallToEntityChange(callToEntity, index)}
+              />
+            )}
             <Select
               menuPlacement={'bottom'}
               width={30}
               isSearchable={true}
-              onChange={(e) => this.onTagFilterBooleanValueChange(e, index)}
-              value={{ key: '' + query.filters[index].booleanValue, label: '' + query.filters[index].booleanValue }}
-              options={[
-                { key: false, label: 'false' },
-                { key: true, label: 'true' },
-              ]}
+              value={query.filters[index].tag}
+              options={groups}
+              onChange={(group) => this.onGroupChange(group, index)}
             />
-          )}
+            <Select
+              menuPlacement={'bottom'}
+              width={20}
+              isSearchable={true}
+              value={query.filters[index].operator}
+              options={this.filterOperatorsOnType(query.filters[index].tag.type)}
+              onChange={(operator) => this.onOperatorChange(operator, index)}
+            />
 
-          <Button variant={'secondary'} onClick={() => this.removeTagFilter(index)}>
-            -
-          </Button>
-        </div>
-      );
-    });
+            {this.canShowStringInput(query.filters[index]) && (
+              <Input
+                width={30}
+                value={query.filters[index].stringValue}
+                placeholder={query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : PLEASE_SPECIFY}
+                onChange={(event) => this.onTagFilterStringValueChange(event, index)}
+              />
+            )}
 
-    return (
-      <div>
-        {listFilter}
+            {this.canShowNumberInput(query.filters[index]) && (
+              <Input
+                type={'number'}
+                width={30}
+                value={query.filters[index].numberValue}
+                placeholder={PLEASE_SPECIFY}
+                onChange={(event) => this.onTagFilterNumberValueChange(event, index)}
+              />
+            )}
 
-        <div className={'gf-form'}>
-          <InlineFormLabel width={14} tooltip={'Add an additional tag filter.'}>
-            Add filter
-          </InlineFormLabel>
-          <Button variant={'secondary'} onClick={this.addTagFilter}>
-            +
-          </Button>
-          <div hidden={!query.showWarningCantShowAllResults}>
-            <InlineFormLabel width={12} tooltip={'Add Filter to narrow down the data.'}>
-              ⚠️ Can&apos;t show all results
+            {query.filters[index].tag.type === 'BOOLEAN' && (
+              <Select
+                menuPlacement={'bottom'}
+                width={30}
+                isSearchable={true}
+                onChange={(e) => this.onTagFilterBooleanValueChange(e, index)}
+                value={{ key: '' + query.filters[index].booleanValue, label: '' + query.filters[index].booleanValue }}
+                options={[
+                  { key: false, label: 'false' },
+                  { key: true, label: 'true' },
+                ]}
+              />
+            )}
+
+            <Button variant={'secondary'} onClick={() => this.removeTagFilter(index)}>
+              -
+            </Button>
+          </div>
+        );
+      });
+
+      return (
+        <div>
+          {listFilter}
+
+          <div className={'gf-form'}>
+            <InlineFormLabel width={14} tooltip={'Add an additional tag filter.'}>
+              Add filter
             </InlineFormLabel>
+            <Button variant={'secondary'} onClick={this.addTagFilter}>
+              +
+            </Button>
+            <div hidden={!query.showWarningCantShowAllResults}>
+              <InlineFormLabel width={12} tooltip={'Add Filter to narrow down the data.'}>
+                ⚠️ Can&apos;t show all results
+              </InlineFormLabel>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
