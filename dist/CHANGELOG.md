@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.4.0 - 2023-12-15
+## 3.4.0 - 2023-01-10
 - Chore: Replaced deprecated instana REST API calls in Analyze Infrastructure with new ones.
 - Fix: Fixed filter bug introduced in Analyze Application/Website.
 - Fix: Updated instana version and suggested grafana version.
