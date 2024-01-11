@@ -209,7 +209,7 @@ export class Filters extends React.Component<Props, FilterState> {
           <FormTextArea
             queryKeyword
             inputWidth={0}
-            label={'Tag Filter'}
+            label={'TagFilterExpression'}
             tooltip={'Enter the tagFilterExpression here '}
             placeholder="[{Enter the filter JSON here}]"
             value={this.state.textareaValue}
