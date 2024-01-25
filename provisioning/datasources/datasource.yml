@@ -21,6 +21,8 @@ datasources:
       useProxy: false
       showOffline: true
       allowInfraExplore: true
+    secureJsonData:
+      apiToken: ${INSTANA_API_TOKEN}
     # <bool> allow users to edit datasources from the UI.
     version: 1
     editable: true

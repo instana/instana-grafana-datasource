@@ -26,6 +26,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
     const { options } = this.props;
     const { jsonData } = options;
+    options.secureJsonData = {
+      apiToken: options.jsonData.apiToken || '',
+    };
 
     if (jsonData.useProxy === undefined) {
       jsonData.useProxy = proxyCheck();
@@ -34,12 +37,21 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
   onInstanaOptionsChange = (eventItem: ChangeEvent<HTMLInputElement> | SelectableValue, key: keyof InstanaOptions) => {
     const { options, onOptionsChange } = this.props;
-    const jsonData = {
+    let jsonData = {
       ...options.jsonData,
       [key]: eventItem.currentTarget.value,
     };
 
-    onOptionsChange({ ...options, jsonData });
+    let secureJsonData;
+    if (key === 'apiToken') {
+      secureJsonData = {
+        apiToken: eventItem.currentTarget.value,
+      };
+    } else {
+      secureJsonData = options.secureJsonData;
+    }
+
+    onOptionsChange({ ...options, jsonData, secureJsonData });
 
     if ('url' === key || 'apiToken' === key) {
       this.debouncedDetectFeatures(options);
@@ -88,7 +100,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
   render() {
     const { options } = this.props;
-    const { jsonData } = options;
+
+    options.secureJsonData = { apiToken: options.jsonData.apiToken };
+    const { jsonData, secureJsonData }: any = options;
 
     return (
       <div className="settings">
@@ -119,7 +133,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           <Input
             type="password"
             width={30}
-            value={jsonData.apiToken}
+            value={secureJsonData.apiToken}
             suffix={
               <Tooltip
                 content={
