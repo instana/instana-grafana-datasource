@@ -128,23 +128,24 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   updateMetrics = (metrics: SelectableValue[]) => {
-    this.setState({
-      availableMetrics: _.sortBy(metrics, 'key'),
-      allMetrics: _.sortBy(metrics, 'key'),
-    });
-
-    if ((this.query.metric && this.query.metric.key) || this.query.showAllMetrics) {
-      const metric = _.find(metrics, (m) => m.key === this.query.metric.key);
-      metric ? (this.query.metric = metric) : (this.query.metric = { key: null });
-    }
-
-    if (this.query.metricCategory.key === CUSTOM_METRICS) {
-      this.onMetricsFilter(this.query.customFilters); // this contains setMetricPlaceholder
-    } else if (!this.query.metric || !this.query.metric.key) {
-      this.setMetricPlaceholder(metrics.length);
-    }
-
-    this.changeAndRun();
+    this.setState(
+      {
+        availableMetrics: _.sortBy(metrics, 'key'),
+        allMetrics: _.sortBy(metrics, 'key'),
+      },
+      () => {
+        if ((this.query.metric && this.query.metric.key) || this.query.showAllMetrics) {
+          const metric = _.find(metrics, (m) => m.key === this.query.metric.key);
+          metric ? (this.query.metric = metric) : (this.query.metric = { key: null });
+        }
+        if (this.query.metricCategory.key === CUSTOM_METRICS) {
+          this.onMetricsFilter(this.query.customFilters); // this contains setMetricPlaceholder
+        } else if (!this.query.metric || !this.query.metric.key) {
+          this.setMetricPlaceholder(metrics.length);
+        }
+        this.changeAndRun();
+      }
+    );
   };
 
   loadEntityTypes(filterResult = true) {
