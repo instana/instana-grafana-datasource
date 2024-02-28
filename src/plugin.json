@@ -50,7 +50,7 @@
       "headers": [
         {
           "name": "Authorization",
-          "content": "apiToken {{.secureJsonData.apiToken}}"
+          "content": "apiToken {{.SecureJsonData.apiToken}}"
         }
       ]
     }
