@@ -4,12 +4,12 @@ import { Checkbox, Field, Icon, Input, Legend, Tooltip } from '@grafana/ui';
 import { DataSourcePluginOptionsEditorProps, DataSourceSettings, SelectableValue } from '@grafana/data';
 import React, { ChangeEvent, PureComponent } from 'react';
 
-import { InstanaOptions } from '../types/instana_options';
+import { InstanaOptions, SecureJsonData } from '../types/instana_options';
 import _ from 'lodash';
 import getVersion from '../util/instana_version';
 import proxyCheck from '../util/proxy_check';
 
-interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions> {}
+interface Props extends DataSourcePluginOptionsEditorProps<InstanaOptions, SecureJsonData> {}
 
 interface State {
   canQueryOfflineSnapshots: boolean;
@@ -24,15 +24,15 @@ export class ConfigEditor extends PureComponent<Props, State> {
     // check possibility every time
     this.detectFeatures();
 
-    const { options } = this.props;
+    const { options, onOptionsChange } = this.props;
     const { jsonData } = options;
-    options.secureJsonData = {
-      apiToken: options.jsonData.apiToken || '',
-    };
 
     if (jsonData.useProxy === undefined) {
       jsonData.useProxy = proxyCheck();
     }
+    jsonData.useProxy = true;
+
+    onOptionsChange({ ...options, jsonData });
   }
 
   onInstanaOptionsChange = (eventItem: ChangeEvent<HTMLInputElement> | SelectableValue, key: keyof InstanaOptions) => {
@@ -47,8 +47,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
       secureJsonData = {
         apiToken: eventItem.currentTarget.value,
       };
-    } else {
-      secureJsonData = options.secureJsonData;
+      delete jsonData.apiToken;
+      options.secureJsonData = secureJsonData;
     }
 
     onOptionsChange({ ...options, jsonData, secureJsonData });
@@ -100,9 +100,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
   render() {
     const { options } = this.props;
-
-    options.secureJsonData = { apiToken: options.jsonData.apiToken };
-    const { jsonData, secureJsonData }: any = options;
+    const { jsonData, secureJsonData } = options;
 
     return (
       <div className="settings">
@@ -133,7 +131,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           <Input
             type="password"
             width={30}
-            value={secureJsonData.apiToken}
+            value={secureJsonData?.apiToken}
             suffix={
               <Tooltip
                 content={
@@ -155,9 +153,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <Checkbox
           label={'Use Proxy'}
-          value={jsonData.useProxy}
-          onChange={(event) => this.onSwitchChange(event, 'useProxy')}
-          description={'Use Grafana server as proxy. Needs Grafana 10.0.0+ and Instana datasource 3.3.0+'}
+          value={true}
+          disabled={true}
+          description={'The only way to use the API token for authentication in Grafana is through Use-Proxy. Needs Grafana 10.0.0+ and Instana datasource 4.0.0+'}
         />
 
         <Checkbox

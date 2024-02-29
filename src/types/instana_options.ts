@@ -3,9 +3,8 @@ import { DataSourceJsonData } from '@grafana/data';
 /**
  * These are options configured for each DataSource instance
  */
-export interface InstanaOptions extends DataSourceJsonData {
+export interface InstanaOptions extends DataSourceJsonData, SecureJsonData {
   url: string;
-  apiToken: string;
   useProxy: boolean;
   showOffline: boolean;
   allowInfraExplore: boolean;
@@ -14,4 +13,7 @@ export interface InstanaOptions extends DataSourceJsonData {
   queryinterval_limit_app_calls?: number;
   queryinterval_limit_website_metrics?: number;
   queryinterval_limit_mobileapp_metrics?: number;
+}
+export interface SecureJsonData {
+  apiToken: string | undefined;
 }

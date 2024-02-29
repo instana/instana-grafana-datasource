@@ -2682,8 +2682,8 @@ function (_super) {
         secureJsonData = {
           apiToken: eventItem.currentTarget.value
         };
-      } else {
-        secureJsonData = options.secureJsonData;
+        delete jsonData.apiToken;
+        options.secureJsonData = secureJsonData;
       }
 
       onOptionsChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options), {
@@ -2754,16 +2754,19 @@ function (_super) {
 
     _this.detectFeatures();
 
-    var options = _this.props.options;
+    var _a = _this.props,
+        options = _a.options,
+        onOptionsChange = _a.onOptionsChange;
     var jsonData = options.jsonData;
-    options.secureJsonData = {
-      apiToken: options.jsonData.apiToken || ''
-    };
 
     if (jsonData.useProxy === undefined) {
       jsonData.useProxy = Object(_util_proxy_check__WEBPACK_IMPORTED_MODULE_6__["default"])();
     }
 
+    jsonData.useProxy = true;
+    onOptionsChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options), {
+      jsonData: jsonData
+    }));
     return _this;
   }
 
@@ -2771,9 +2774,6 @@ function (_super) {
     var _this = this;
 
     var options = this.props.options;
-    options.secureJsonData = {
-      apiToken: options.jsonData.apiToken
-    };
     var jsonData = options.jsonData,
         secureJsonData = options.secureJsonData;
     return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
@@ -2800,7 +2800,7 @@ function (_super) {
     }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
       type: "password",
       width: 30,
-      value: secureJsonData.apiToken,
+      value: secureJsonData === null || secureJsonData === void 0 ? void 0 : secureJsonData.apiToken,
       suffix: react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Tooltip"], {
         content: react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("p", null, "You can create API tokens following the instructions at\xA0", react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("a", {
           href: "https://www.ibm.com/docs/en/obi/current?topic=apis-web-rest-api#unit-specific-api-tokens"
@@ -2814,11 +2814,9 @@ function (_super) {
       }
     })), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
       label: 'Use Proxy',
-      value: jsonData.useProxy,
-      onChange: function onChange(event) {
-        return _this.onSwitchChange(event, 'useProxy');
-      },
-      description: 'Use Grafana server as proxy. Needs Grafana 10.0.0+ and Instana datasource 3.3.0+'
+      value: true,
+      disabled: true,
+      description: 'The only way to use the API token for authentication in Grafana is through Use-Proxy. Needs Grafana 10.0.0+ and Instana datasource 4.0.0+'
     }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
       label: 'Enable offline snapshots',
       value: jsonData.showOffline,
