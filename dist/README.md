@@ -29,24 +29,25 @@ For On-premise customers Instana Release 260+ is required.
 - **Configuration Page Update:**
   - To prevent data source breakage, existing users must reauthenticate by entering the URL and API Token on the configuration page.
 
-### Migration Instructions
+- **Migration Instructions:**
 
-1. **Reauthentication Steps:**
-   - Visit the configuration page and re-enter the URL and API Token for each datasource.
+   1. **Reauthentication Steps:**
+      - Visit the configuration page and re-enter the URL and API Token for each datasource.
    
-2. **Proxy Authentication:**
-   - Authentication now only takes place over the data source proxy method. Use-proxy via authentication is the only option in our datasource plugin.
+   2. **Proxy Authentication:**
+      - Authentication now only takes place over the data source proxy method. Use-proxy via authentication is the only option in our datasource plugin.
 
-3. **Grafana Version Requirement:**
-   - This version (4.0.0) is now the base version of instana-grafana-datasource, and Grafana 10.0.0 or higher is required.
+   3. **Grafana Version Requirement:**
+      - This version (4.0.0) is now the base version of instana-grafana-datasource, and Grafana 10.0.0 or higher is required.
 
-4. **API Key Authentication Method:**
-   - Introducing API key authentication method as part of the migration. This is in line with Grafana's authentication best practices.
+   4. **API Token Reset:**
+      - Once credentials are saved, the API Token is stored on the server. Users have the option to reset the API Token using the provided reset key Button.
 
-### Additional Notes
 
-- Ensure all existing datasources are reauthenticated to prevent disruptions.
-- Refer to the updated documentation for any additional information or troubleshooting steps related to authentication changes.
+- **Additional Notes**
+
+   - Ensure all existing datasources are reauthenticated to prevent disruptions.
+   - Refer to the updated documentation for any additional information or troubleshooting steps related to authentication changes.
 
 We appreciate your understanding and cooperation during this transition. If you encounter any issues or have questions, please reach out to our support team.
 
@@ -69,7 +70,7 @@ To enable metrics for offline snapshots please check `Enable offline snapshots`.
 
 The configuration allows the setting of a limit for the different categories that this plugin offers. Numeric values can be entered in order to make sure that queries do not exceed a certain amount of window size that they query. This can be useful when experiencing Grafana performance issues. 
 
-![datasource configuration](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/configuration.png)
+![datasource configuration](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v4.0.0/configuration.png)
 
 ## Usage
 

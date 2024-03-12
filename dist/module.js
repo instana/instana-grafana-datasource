@@ -2665,6 +2665,8 @@ function (_super) {
   Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(ConfigEditor, _super);
 
   function ConfigEditor(props) {
+    var _a;
+
     var _this = _super.call(this, props) || this;
 
     _this.onInstanaOptionsChange = function (eventItem, key) {
@@ -2683,7 +2685,15 @@ function (_super) {
           apiToken: eventItem.currentTarget.value
         };
         delete jsonData.apiToken;
-        options.secureJsonData = secureJsonData;
+        options.secureJsonData = secureJsonData; // Update state for API key configuration
+
+        var isApiKeyConfigured = !!eventItem.currentTarget.value;
+        var apiKeyValue = isApiKeyConfigured ? '********' : '';
+
+        _this.setState({
+          isApiKeyConfigured: isApiKeyConfigured,
+          apiKeyValue: apiKeyValue
+        });
       }
 
       onOptionsChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options), {
@@ -2694,6 +2704,24 @@ function (_super) {
       if ('url' === key || 'apiToken' === key) {
         _this.debouncedDetectFeatures(options);
       }
+    };
+
+    _this.onResetAPIKey = function () {
+      var _a = _this.props,
+          options = _a.options,
+          onOptionsChange = _a.onOptionsChange;
+      onOptionsChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options), {
+        secureJsonFields: Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options.secureJsonFields), {
+          apiToken: false
+        }),
+        secureJsonData: Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options.secureJsonData), {
+          apiToken: ''
+        })
+      })); // Removed unused variable
+
+      _this.setState({
+        apiKeyValue: ''
+      });
     };
 
     _this.onSwitchChange = function (eventItem, key) {
@@ -2749,21 +2777,32 @@ function (_super) {
 
     _this.state = {
       canQueryOfflineSnapshots: false,
-      canUseProxy: false
+      canUseProxy: false,
+      isApiKeyConfigured: false,
+      apiKeyValue: ''
     }; // check possibility every time
 
     _this.detectFeatures();
 
-    var _a = _this.props,
-        options = _a.options,
-        onOptionsChange = _a.onOptionsChange;
+    var _b = _this.props,
+        options = _b.options,
+        onOptionsChange = _b.onOptionsChange;
     var jsonData = options.jsonData;
 
     if (jsonData.useProxy === undefined) {
       jsonData.useProxy = Object(_util_proxy_check__WEBPACK_IMPORTED_MODULE_6__["default"])();
     }
 
-    jsonData.useProxy = true;
+    jsonData.useProxy = true; // Check if API key is already configured
+
+    var isApiKeyConfigured = !!((_a = options.secureJsonData) === null || _a === void 0 ? void 0 : _a.apiToken);
+    var apiKeyValue = isApiKeyConfigured ? '********' : '';
+
+    _this.setState({
+      isApiKeyConfigured: isApiKeyConfigured,
+      apiKeyValue: apiKeyValue
+    });
+
     onOptionsChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options), {
       jsonData: jsonData
     }));
@@ -2774,8 +2813,8 @@ function (_super) {
     var _this = this;
 
     var options = this.props.options;
-    var jsonData = options.jsonData,
-        secureJsonData = options.secureJsonData;
+    var jsonData = options.jsonData;
+    var apiKeyValue = this.state.apiKeyValue;
     return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
       className: "settings"
     }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Legend"], null, "Instana configuration"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Field"], {
@@ -2792,15 +2831,22 @@ function (_super) {
         return _this.onInstanaOptionsChange(event, 'url');
       }
     })), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Field"], {
-      className: 'width-30',
+      style: {
+        width: '637px'
+      },
       horizontal: true,
       required: true,
       label: "API Token",
       description: "The API token to access the data."
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+      style: {
+        display: 'flex'
+      }
     }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
       type: "password",
       width: 30,
-      value: secureJsonData === null || secureJsonData === void 0 ? void 0 : secureJsonData.apiToken,
+      value: apiKeyValue,
+      placeholder: "Enter API Key",
       suffix: react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Tooltip"], {
         content: react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("p", null, "You can create API tokens following the instructions at\xA0", react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("a", {
           href: "https://www.ibm.com/docs/en/obi/current?topic=apis-web-rest-api#unit-specific-api-tokens"
@@ -2812,7 +2858,13 @@ function (_super) {
       onChange: function onChange(event) {
         return _this.onInstanaOptionsChange(event, 'apiToken');
       }
-    })), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+      style: {
+        marginLeft: '15px'
+      }
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+      onClick: this.onResetAPIKey
+    }, "Reset API Token")))), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
       label: 'Use Proxy',
       value: true,
       disabled: true,
@@ -8253,12 +8305,6 @@ var postRequest = function postRequest(options, endpoint, data, swallowError, ma
 };
 
 function doRequest(options, request, swallowError, maxRetries) {
-  if (!options.useProxy) {
-    request['headers'] = {
-      Authorization: 'apiToken ' + options.apiToken
-    };
-  }
-
   return Object(_grafana_runtime__WEBPACK_IMPORTED_MODULE_0__["getBackendSrv"])().datasourceRequest(request)["catch"](function (error) {
     var _a, _b;
 
