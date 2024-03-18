@@ -35,11 +35,6 @@ function doRequest(
   swallowError: boolean,
   maxRetries: number
 ): any {
-  if (!options.useProxy) {
-    request['headers'] = {
-      Authorization: 'apiToken ' + options.apiToken,
-    };
-  }
   return getBackendSrv()
     .datasourceRequest(request)
     .catch((error) => {
