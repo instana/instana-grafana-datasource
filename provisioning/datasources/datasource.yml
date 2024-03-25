@@ -17,7 +17,6 @@ datasources:
     url: ${INSTANA_UI_BACKEND_URL}
     jsonData:
       url: ${INSTANA_UI_BACKEND_URL}
-      apiToken: ${INSTANA_API_TOKEN}
       useProxy: true
       showOffline: true
       allowInfraExplore: true

@@ -366,7 +366,9 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
   render() {
     const { query, onCategoryChange } = this;
-    const categories = metricCategories;
+    const categories = this.allowInfraExplore
+      ? metricCategories
+      : metricCategories.filter((category) => category.key !== INFRASTRUCTURE_ANALYZE);
 
     return (
       <div className={'gf-form-group'}>
