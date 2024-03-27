@@ -2754,11 +2754,9 @@ function (_super) {
 
 
     _this.detectFeatures = function (settings) {
-      if (!settings) {
-        settings = _this.props.options;
-      }
+      var jsonData = settings ? settings.jsonData : _this.props.options.jsonData;
 
-      if (!settings.id) {
+      if (!jsonData || !jsonData.url) {
         return;
       }
 
@@ -2766,7 +2764,7 @@ function (_super) {
         canUseProxy: Object(_util_proxy_check__WEBPACK_IMPORTED_MODULE_6__["default"])()
       });
 
-      Object(_util_instana_version__WEBPACK_IMPORTED_MODULE_5__["default"])(settings.jsonData).then(function (version) {
+      Object(_util_instana_version__WEBPACK_IMPORTED_MODULE_5__["default"])(jsonData).then(function (version) {
         version ? _this.setState({
           canQueryOfflineSnapshots: version >= 156
         }) : _this.setState({
@@ -2882,7 +2880,7 @@ function (_super) {
       onChange: function onChange(event) {
         return _this.onSwitchChange(event, 'allowInfraExplore');
       },
-      description: 'Beta feature. Adds a new category that allows usage of Infrastructure Analyze functionality. Needs Instana release ' + '195+ and an explicit feature flag. If you are interested in this technology, please submit a request via ' + 'our support system at https://support.instana.com/.'
+      description: 'Adds a new category that allows usage of Infrastructure Analyze functionality. Needs Instana release ' + '195+ and an explicit feature flag. If you are interested in this technology, please submit a request via ' + 'our support system at https://support.instana.com/.'
     }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("b", null, "Maximum query intervals in hours"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("p", {
       className: 'width-30'
     }, "This settings are optional values to control the load of data queries, by defining the maximum allowed query intervals against the Instana API."), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Field"], {

@@ -89,19 +89,21 @@ export class ConfigEditor extends PureComponent<Props, State> {
    * Checks whether the provided tenant-unit is able to provide certain features such as querying offline snapshots.
    */
   detectFeatures = (settings?: DataSourceSettings<InstanaOptions, {}>) => {
-    if (!settings) {
-      settings = this.props.options;
-    }
-    if (!settings.id) {
+    let jsonData = settings ? settings.jsonData : this.props.options.jsonData;
+
+    if (!jsonData || !jsonData.url) {
       return;
     }
+
     this.setState({ canUseProxy: proxyCheck() });
-    getVersion(settings.jsonData).then((version: any) => {
+
+    getVersion(jsonData).then((version: any) => {
       version
         ? this.setState({ canQueryOfflineSnapshots: version >= 156 })
         : this.setState({ canQueryOfflineSnapshots: false });
     });
   };
+
   render() {
     const { options } = this.props;
     const { jsonData } = options;
@@ -179,7 +181,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           value={jsonData.allowInfraExplore}
           onChange={(event) => this.onSwitchChange(event, 'allowInfraExplore')}
           description={
-            'Beta feature. Adds a new category that allows usage of Infrastructure Analyze functionality. Needs Instana release ' +
+            'Adds a new category that allows usage of Infrastructure Analyze functionality. Needs Instana release ' +
             '195+ and an explicit feature flag. If you are interested in this technology, please submit a request via ' +
             'our support system at https://support.instana.com/.'
           }
