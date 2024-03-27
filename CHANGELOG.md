@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.0 - 2024-03-19
+## 4.0.0 - 2024-03-27
 - Breaking Changes: Secure information, including API keys, is now stored in `secureJsonData` instead of `jsonData`. This change requires users to reauthenticate datasources by entering the URL and API Token on the configuration page.
 - Chore: Replaced deprecated instana REST API calls in Analyze Infrastructure with new ones.
 - Fix: Fixed filter bug introduced in Analyze Application/Website.
