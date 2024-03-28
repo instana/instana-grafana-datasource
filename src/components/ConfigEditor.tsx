@@ -46,7 +46,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
       options.secureJsonData = secureJsonData;
       // Update state for API key configuration
       const isApiKeyConfigured = !!eventItem.currentTarget.value;
-      const apiKeyValue = isApiKeyConfigured ? '********' : '';
+      const apiKeyValue = isApiKeyConfigured ? eventItem.currentTarget.value : '';
       this.setState({ isApiKeyConfigured, apiKeyValue });
     }
     onOptionsChange({ ...options, jsonData, secureJsonData });
@@ -138,7 +138,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
               type="password"
               width={30}
               value={apiKeyValue}
-              placeholder="Enter API Key"
+              placeholder={options.secureJsonFields?.apiToken ? 'Configured' : 'Enter API Key'}
+              readOnly={options.secureJsonFields?.apiToken}
               suffix={
                 <Tooltip
                   content={
