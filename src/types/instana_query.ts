@@ -12,6 +12,7 @@ export interface InstanaQuery extends DataQuery {
   sloValue: string;
   filters: TagFilter[];
   sloSpecific: SelectableValue;
+  slo2Specific: SelectableValue;
   metric: SelectableValue;
   entity: SelectableValue;
   service: SelectableValue;
