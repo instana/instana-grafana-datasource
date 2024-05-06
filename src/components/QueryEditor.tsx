@@ -153,7 +153,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
     if (query.entityQuery) {
       datasource.fetchTypesForTarget(query).then((response: any) => {
-        this.snapshots = response.map((plugin: any) => plugin.label);
+        this.snapshots = response.data;
         this.filterForEntityType(true, filterResult);
         onRunQuery();
       });
