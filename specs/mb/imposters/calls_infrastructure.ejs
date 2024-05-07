@@ -1,14 +1,31 @@
 {
   "predicates": [{
     "equals": {
-      "method": "POST",
-      "path": "/api/infrastructure-monitoring/analyze/entity-types",
+      "method": "GET",
+      "path": "/api/snapshots/types",
       "query": {
-        "q": "jvm"
+        "q": "filler"
       }
     }
-  }, {
-    "contains": { "body": "tagFilterExpression" }
+  }],
+  "responses": [{
+    "is": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json;charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
+      },
+      "body": "[\"host\", \"awsEc\", \"hadoopYARN\", \"process\", \"dropwizardApplicationContainer\"]"
+    }
+  }]
+},
+{
+  "predicates": [{
+    "equals": {
+      "method": "GET",
+      "path": "/api/snapshots/types"
+    }
   }],
   "responses": [{
     "is": {
@@ -19,27 +36,6 @@
         "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
       },
       "body": "{ \"plugins\": [\"jvmRuntimePlatform\", \"dropwizardApplicationContainer\",\"elasticsearchNode\",\"hazelcastNode\", \"springbootApplicationContainer\", \"tomcatApplicationContainer\" ]}"
-    }
-  }]
-},
-{
-  "predicates": [{
-    "equals": {
-      "method": "POST",
-      "path": "/api/infrastructure-monitoring/analyze/entity-types"
-    }
-  }, {
-    "contains": { "body": "tagFilterExpression" }
-  }],
-  "responses": [{
-    "is": {
-      "statusCode": 200,
-      "headers": {
-        "Content-Type": "application/json;charset=utf-8",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE"
-      },
-      "body": "[]"
     }
   }]
 },

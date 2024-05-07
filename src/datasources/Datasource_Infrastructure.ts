@@ -190,42 +190,13 @@ export class DataSourceInfrastructure {
   }
 
   fetchTypesForTarget(query: InstanaQuery, timeFilter: TimeFilter): any {
-    const windowSize = getWindowSize(timeFilter);
-    query.timeInterval = getDefaultChartGranularity(windowSize);
-    const fetchSnapshotTypesUrl = '/api/infrastructure-monitoring/analyze/entity-types'; // URL endpoint
-    const data = {
-      timeFrame: {
-        to: timeFilter.to,
-        windowSize: atLeastGranularity(windowSize, query.timeInterval.key),
-      },
-      pagination: {
-        retrievalSize: 200,
-      },
-      tagFilterExpression: query.entityQuery
-        ? {
-            type: 'TAG_FILTER',
-            entity: 'NOT_APPLICABLE',
-            name: 'dfq.type',
-            operator: 'EQUALS',
-            value: query.entityQuery?.includes(':') ? query.entityQuery?.split(':')[1] : query.entityQuery,
-          }
-        : {
-            type: 'EXPRESSION',
-            logicalOperator: 'AND',
-            elements: [],
-          },
-    };
-    let typesforTarget = this.typeCache.get('entityTypes');
-    typesforTarget = postRequest(this.instanaOptions, fetchSnapshotTypesUrl, data).then((typesResponses: any) => {
-      const result = typesResponses.data.plugins.map((entry: any) => ({
-        key: entry,
-        label: entry,
-      }));
-
-      return _.sortBy(result, 'label');
-    });
-
-    return typesforTarget;
+    const fetchSnapshotTypesUrl =
+      `/api/snapshots/types` +
+      `?q=${encodeURIComponent(query.entityQuery)}` +
+      `&from=${timeFilter.from}` +
+      `&to=${timeFilter.to}` +
+      (this.instanaOptions.showOffline ? `` : `&time=${timeFilter.to}`);
+    return getRequest(this.instanaOptions, fetchSnapshotTypesUrl);
   }
 
   fetchAvailableMetricsForEntityType(target: InstanaQuery, timeFilter: TimeFilter) {
