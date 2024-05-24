@@ -39,56 +39,60 @@ export class DataSourceSlo2 {
 
   runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
     //avoid involid calls
-    /*
-    if (
-      !target ||
-      !target.sloReport ||
-      !target.sloReport.key ||
-      !target.sloSpecific ||
-      !target.sloSpecific.key ||
-      !target.sloValue
-    ) {
+
+    if (!target || !target.slo2Report || !target.slo2Report.key || !target.slo2Specific || !target.slo2Specific.key) {
       return Promise.resolve(emptyResultData(target.refId));
     }
-   */
     let endpoint =
       '/api/slo/report/' +
-      target.sloReport.key +
+      target.slo2Report.key +
       '?from=' +
       Math.floor(timeFilter.from / 6000) * 6000 +
       '&to=' +
       Math.floor(timeFilter.to / 6000) * 6000;
-    console.info('run here: ' + endpoint);
 
     return getRequest(this.instanaOptions, endpoint).then((response: any) => {
       return this.extractSpecificValueFromSLI(target, response.data, timeFilter);
     });
   }
 
-  extractSpecificValueFromSLI(target: InstanaQuery, sliResult: any, timeFilter: TimeFilter) {
-    //console.info("query: "+timeFilter.from+"-"+timeFilter.to);
-    // console.debug(sliResult.sli);
-
-    if (target.sloSpecific.key === 'Status') {
+  extractSpecificValueFromSLI(target: InstanaQuery, sloResult: any, timeFilter: TimeFilter) {
+    if (target.slo2Specific.key === 'Status') {
       return [
-        buildTimeSeries(target.sloSpecific.label!, target.refId, this.buildResultArray(sliResult.sli, timeFilter.to)),
+        buildTimeSeries(target.slo2Specific.label!, target.refId, this.buildResultArray(sloResult.sli, timeFilter.to)),
       ];
-    } else if (target.sloSpecific.key === 'Remaining Error Budget') {
+    } else if (target.slo2Specific.key === 'Total Error Budget') {
       return [
         buildTimeSeries(
-          target.sloSpecific.label!,
+          target.slo2Specific.label!,
           target.refId,
-          this.buildResultArray(sliResult.errorBudgetRemaining, timeFilter.to)
+          this.buildResultArray(sloResult.totalErrorBudget, timeFilter.to)
         ),
       ];
-    } else if (target.sloSpecific.key === 'Timeseries') {
-      return this.buildViolationDistributionTimeSeries(target, sliResult.violationDistribution, timeFilter);
-    } else if (target.sloSpecific.key === 'ErrorChart') {
-      return this.buildChart('Error budget spent', target, sliResult.errorChart, timeFilter);
-    } else if (target.sloSpecific.key === 'ErrorAccumulationChart') {
-      return this.buildChart('Error Accumulation', target, sliResult.errorAccumulationChart, timeFilter);
-    } else if (target.sloSpecific.key === 'ErrorBudgetRemainChart') {
-      return this.buildChart('Error budget remain', target, sliResult.errorBudgetRemainChart, timeFilter);
+    } else if (target.slo2Specific.key === 'Remaining Error Budget') {
+      return [
+        buildTimeSeries(
+          target.slo2Specific.label!,
+          target.refId,
+          this.buildResultArray(sloResult.errorBudgetRemaining, timeFilter.to)
+        ),
+      ];
+    } else if (target.slo2Specific.key === 'Spended Error Budget') {
+      return [
+        buildTimeSeries(
+          target.slo2Specific.label!,
+          target.refId,
+          this.buildResultArray(sloResult.errorBudgetSpent, timeFilter.to)
+        ),
+      ];
+    } else if (target.slo2Specific.key === 'Timeseries') {
+      return this.buildViolationDistributionTimeSeries(target, sloResult.violationDistribution, timeFilter);
+    } else if (target.slo2Specific.key === 'Error Chart') {
+      return this.buildChart('Error budget spent', target, sloResult.errorChart, timeFilter);
+    } else if (target.slo2Specific.key === 'Error Accumulation Chart') {
+      return this.buildChart('Error Accumulation', target, sloResult.errorAccumulationChart, timeFilter);
+    } else if (target.slo2Specific.key === 'Error Budget Remain Chart') {
+      return this.buildChart('Error Budget Remain Chart', target, sloResult.errorBudgetRemainChart, timeFilter);
     }
 
     return [emptyResultData(target.refId)];
@@ -104,7 +108,6 @@ export class DataSourceSlo2 {
     const greys: any[] = [];
 
     let granularity = getWindowSize(timeFilter) / Object.keys(series).length;
-    console.info('granularity: ' + granularity);
     let startTS = Math.floor(timeFilter.from / granularity) * granularity;
     _.forEach(series, (value: number, index: number) => {
       if (value === 1) {
@@ -128,7 +131,6 @@ export class DataSourceSlo2 {
     const greens: any[] = [];
 
     let granularity = getWindowSize(timeFilter) / Object.keys(series).length;
-    console.info('granularity: ' + granularity);
     let startTS = Math.floor(timeFilter.from / granularity) * granularity;
     _.forEach(series, (value: number, index: number) => {
       greens.push([value, startTS + index * granularity]);

@@ -4,23 +4,31 @@ export default [
     label: 'Status',
   },
   {
+    key: 'Total Error Budget',
+    label: 'Total Error Budget',
+  },
+  {
     key: 'Remaining Error Budget',
     label: 'Remaining Error Budget',
+  },
+  {
+    key: 'Spended Error Budget',
+    label: 'Spended Error Budget',
   },
   {
     key: 'Timeseries',
     label: 'Violation Distribution',
   },
   {
-    key: 'ErrorChart',
+    key: 'Error Chart',
     label: 'Error Chart',
   },
   {
-    key: 'ErrorAccumulationChart',
+    key: 'Error Accumulation Chart',
     label: 'Error Accumulation Chart',
   },
   {
-    key: 'ErrorBudgetRemainChart',
+    key: 'Error Budget Remain Chart',
     label: 'Error Budget remain Chart',
   },
 ];

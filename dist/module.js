@@ -4775,13 +4775,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
 
- // import FormInput from '../FormField/FormInput';
 
 
 
 
 
-var MAX_VAL = 0.9999;
 var isUnmounting = false;
 
 var Slo2Information =
@@ -4798,30 +4796,20 @@ function (_super) {
       var _a = _this.props,
           query = _a.query,
           onRunQuery = _a.onRunQuery;
-      query.sloReport = slo;
+      query.slo2Report = slo;
       onRunQuery();
     };
 
-    _this.onSloValueChange = function (sloValue) {
-      var query = _this.props.query;
-      query.sloValue = sloValue.currentTarget.value;
-
-      if (_this.isValid(query.sloValue)) {
-        // onRunQuery with 500ms delay after last debounce
-        _this.debouncedRunQuery();
-      }
-    };
-
-    _this.onSloSpecificChange = function (sloSpecific) {
+    _this.onSloSpecificChange = function (slo2Specific) {
       var _a = _this.props,
           query = _a.query,
           onRunQuery = _a.onRunQuery;
-      query.sloSpecific = sloSpecific;
+      query.slo2Specific = slo2Specific;
       onRunQuery();
     };
 
     _this.state = {
-      sloReports: [],
+      slo2Reports: [],
       isValidSlo: true
     };
     return _this;
@@ -4830,19 +4818,10 @@ function (_super) {
   Slo2Information.prototype.componentDidMount = function () {
     isUnmounting = false;
     this.loadSloReports();
-    this.isValid(this.props.query.sloValue);
   };
 
   Slo2Information.prototype.componentWillUnmount = function () {
     isUnmounting = true;
-  };
-
-  Slo2Information.prototype.isValid = function (val) {
-    var valid = !val || +val >= 0 && +val <= MAX_VAL;
-    this.setState({
-      isValidSlo: valid
-    });
-    return valid;
   };
 
   Slo2Information.prototype.shouldComponentUpdate = function (nextProps, nextState, nextContext) {
@@ -4852,16 +4831,11 @@ function (_super) {
   Slo2Information.prototype.loadSloReports = function () {
     var _this = this;
 
-    var query = this.props.query;
-    this.props.datasource.getSlo2Reports().then(function (sloReports) {
+    this.props.datasource.getSlo2Reports().then(function (slo2Reports) {
       if (!isUnmounting) {
         _this.setState({
-          sloReports: sloReports
+          slo2Reports: slo2Reports
         });
-
-        if (!query.sloReport && sloReports.length >= 1) {
-          query.sloReport = sloReports[0];
-        }
       }
     });
   };
@@ -4874,18 +4848,18 @@ function (_super) {
       queryKeyword: true,
       inputWidth: 0,
       label: 'SLO Configuration name',
-      tooltip: 'SLI configuration used to compute error budget and SLI values.',
-      noOptionsMessage: 'No configured SLI found',
-      value: query.sloReport,
-      options: this.state.sloReports,
+      tooltip: 'SLI configuration used to compute SLI Report.',
+      noOptionsMessage: 'No configured SLO found',
+      value: query.slo2Report,
+      options: this.state.slo2Reports,
       onChange: this.onSlo2Change
     }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_2__["default"], {
       queryKeyword: true,
       labelWidth: 7,
       inputWidth: 0,
       label: 'Value type',
-      tooltip: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Select your specific SLO information:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Status' requires Gauge visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Remaining Error Budget' requires Singlestat visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Violation' drequires Bars draw mode on Graph visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Error Chart' drequires Bars draw mode on Graph visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Error Accumulation Chart' drequires Bars draw mode on Graph visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Error Budget Chart' drequires Bars draw mode on Graph visualization"))),
-      value: query.sloSpecific,
+      tooltip: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Select your specific SLO information:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Status' requires Gauge visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Total Error Budget' requires Singlestat visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Remaining Error Budget' requires Singlestat visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Spended Error Budget' requires Singlestat visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Violation' drequires Bars draw mode on Graph visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Error Chart' drequires Bars draw mode on Graph visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Error Accumulation Chart' drequires Bars draw mode on Graph visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Error Budget Chart' drequires Bars draw mode on Graph visualization"))),
+      value: query.slo2Specific,
       options: _lists_slo2_specifics__WEBPACK_IMPORTED_MODULE_4__["default"],
       onChange: this.onSloSpecificChange
     }));
@@ -4940,8 +4914,10 @@ function (_super) {
     _this.onSloChange = function (slo) {
       var _a = _this.props,
           query = _a.query,
-          onRunQuery = _a.onRunQuery;
+          onRunQuery = _a.onRunQuery,
+          onChange = _a.onChange;
       query.sloReport = slo;
+      onChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query));
       onRunQuery();
     };
 
@@ -4958,8 +4934,10 @@ function (_super) {
     _this.onSloSpecificChange = function (sloSpecific) {
       var _a = _this.props,
           query = _a.query,
-          onRunQuery = _a.onRunQuery;
+          onRunQuery = _a.onRunQuery,
+          onChange = _a.onChange;
       query.sloSpecific = sloSpecific;
+      onChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query));
       onRunQuery();
     };
 
@@ -5037,7 +5015,7 @@ function (_super) {
       labelWidth: 7,
       inputWidth: 0,
       label: 'Value type',
-      tooltip: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Select your specific SLO information:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'SLI' requires Gauge visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Remaining Error Budget' requires Singlestat visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Timeseries' drequires Bars draw mode on Graph visualization"))),
+      tooltip: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Select your specific SLO information:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'SLI' requires Gauge visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Remaining Error Budget' requires Singlestat visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Timeseries' requires Bars draw mode on Graph visualization"))),
       value: query.sloSpecific,
       options: _lists_slo_specifics__WEBPACK_IMPORTED_MODULE_3__["default"],
       onChange: this.onSloSpecificChange
@@ -6547,6 +6525,11 @@ function () {
   };
 
   DataSourceSlo.prototype.buildViolationDistributionTimeSeries = function (target, series, timeFilter) {
+    if (!series) {
+      // Handle the case where series is undefined or null
+      return [];
+    }
+
     var greens = [];
     var reds = [];
     var greys = [];
@@ -6626,44 +6609,36 @@ function () {
   };
 
   DataSourceSlo2.prototype.runQuery = function (target, timeFilter) {
-    var _this = this; //avoid involid calls
+    //avoid involid calls
+    var _this = this;
 
-    /*
-    if (
-      !target ||
-      !target.sloReport ||
-      !target.sloReport.key ||
-      !target.sloSpecific ||
-      !target.sloSpecific.key ||
-      !target.sloValue
-    ) {
-      return Promise.resolve(emptyResultData(target.refId));
+    if (!target || !target.slo2Report || !target.slo2Report.key || !target.slo2Specific || !target.slo2Specific.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["emptyResultData"])(target.refId));
     }
-    */
 
-
-    var endpoint = '/api/slo/report/' + target.sloReport.key + '?from=' + Math.floor(timeFilter.from / 6000) * 6000 + '&to=' + Math.floor(timeFilter.to / 6000) * 6000;
-    console.info('run here: ' + endpoint);
+    var endpoint = '/api/slo/report/' + target.slo2Report.key + '?from=' + Math.floor(timeFilter.from / 6000) * 6000 + '&to=' + Math.floor(timeFilter.to / 6000) * 6000;
     return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, endpoint).then(function (response) {
       return _this.extractSpecificValueFromSLI(target, response.data, timeFilter);
     });
   };
 
-  DataSourceSlo2.prototype.extractSpecificValueFromSLI = function (target, sliResult, timeFilter) {
-    //console.info("query: "+timeFilter.from+"-"+timeFilter.to);
-    // console.debug(sliResult.sli);
-    if (target.sloSpecific.key === 'Status') {
-      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.sloSpecific.label, target.refId, this.buildResultArray(sliResult.sli, timeFilter.to))];
-    } else if (target.sloSpecific.key === 'Remaining Error Budget') {
-      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.sloSpecific.label, target.refId, this.buildResultArray(sliResult.errorBudgetRemaining, timeFilter.to))];
-    } else if (target.sloSpecific.key === 'Timeseries') {
-      return this.buildViolationDistributionTimeSeries(target, sliResult.violationDistribution, timeFilter);
-    } else if (target.sloSpecific.key === 'ErrorChart') {
-      return this.buildChart('Error budget spent', target, sliResult.errorChart, timeFilter);
-    } else if (target.sloSpecific.key === 'ErrorAccumulationChart') {
-      return this.buildChart('Error Accumulation', target, sliResult.errorAccumulationChart, timeFilter);
-    } else if (target.sloSpecific.key === 'ErrorBudgetRemainChart') {
-      return this.buildChart('Error budget remain', target, sliResult.errorBudgetRemainChart, timeFilter);
+  DataSourceSlo2.prototype.extractSpecificValueFromSLI = function (target, sloResult, timeFilter) {
+    if (target.slo2Specific.key === 'Status') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.slo2Specific.label, target.refId, this.buildResultArray(sloResult.sli, timeFilter.to))];
+    } else if (target.slo2Specific.key === 'Total Error Budget') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.slo2Specific.label, target.refId, this.buildResultArray(sloResult.totalErrorBudget, timeFilter.to))];
+    } else if (target.slo2Specific.key === 'Remaining Error Budget') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.slo2Specific.label, target.refId, this.buildResultArray(sloResult.errorBudgetRemaining, timeFilter.to))];
+    } else if (target.slo2Specific.key === 'Spended Error Budget') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.slo2Specific.label, target.refId, this.buildResultArray(sloResult.errorBudgetSpent, timeFilter.to))];
+    } else if (target.slo2Specific.key === 'Timeseries') {
+      return this.buildViolationDistributionTimeSeries(target, sloResult.violationDistribution, timeFilter);
+    } else if (target.slo2Specific.key === 'Error Chart') {
+      return this.buildChart('Error budget spent', target, sloResult.errorChart, timeFilter);
+    } else if (target.slo2Specific.key === 'Error Accumulation Chart') {
+      return this.buildChart('Error Accumulation', target, sloResult.errorAccumulationChart, timeFilter);
+    } else if (target.slo2Specific.key === 'Error Budget Remain Chart') {
+      return this.buildChart('Error Budget Remain Chart', target, sloResult.errorBudgetRemainChart, timeFilter);
     }
 
     return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["emptyResultData"])(target.refId)];
@@ -6678,7 +6653,6 @@ function () {
     var reds = [];
     var greys = [];
     var granularity = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_4__["getWindowSize"])(timeFilter) / Object.keys(series).length;
-    console.info('granularity: ' + granularity);
     var startTS = Math.floor(timeFilter.from / granularity) * granularity;
 
     lodash__WEBPACK_IMPORTED_MODULE_2___default.a.forEach(series, function (value, index) {
@@ -6701,7 +6675,6 @@ function () {
   DataSourceSlo2.prototype.buildChart = function (name, target, series, timeFilter) {
     var greens = [];
     var granularity = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_4__["getWindowSize"])(timeFilter) / Object.keys(series).length;
-    console.info('granularity: ' + granularity);
     var startTS = Math.floor(timeFilter.from / granularity) * granularity;
 
     lodash__WEBPACK_IMPORTED_MODULE_2___default.a.forEach(series, function (value, index) {
@@ -8013,19 +7986,25 @@ __webpack_require__.r(__webpack_exports__);
   key: 'Status',
   label: 'Status'
 }, {
+  key: 'Total Error Budget',
+  label: 'Total Error Budget'
+}, {
   key: 'Remaining Error Budget',
   label: 'Remaining Error Budget'
+}, {
+  key: 'Spended Error Budget',
+  label: 'Spended Error Budget'
 }, {
   key: 'Timeseries',
   label: 'Violation Distribution'
 }, {
-  key: 'ErrorChart',
+  key: 'Error Chart',
   label: 'Error Chart'
 }, {
-  key: 'ErrorAccumulationChart',
+  key: 'Error Accumulation Chart',
   label: 'Error Accumulation Chart'
 }, {
-  key: 'ErrorBudgetRemainChart',
+  key: 'Error Budget Remain Chart',
   label: 'Error Budget remain Chart'
 }]);
 

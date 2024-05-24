@@ -88,6 +88,10 @@ export class DataSourceSlo {
   }
 
   buildViolationDistributionTimeSeries(target: InstanaQuery, series: any, timeFilter: TimeFilter): TimeSeries[] {
+    if (!series) {
+      // Handle the case where series is undefined or null
+      return [];
+    }
     const greens: any[] = [];
     const reds: any[] = [];
     const greys: any[] = [];

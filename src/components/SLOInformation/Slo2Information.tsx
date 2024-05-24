@@ -1,7 +1,6 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 
 import { DataSource } from '../../datasources/DataSource';
-// import FormInput from '../FormField/FormInput';
 import FormSelect from '../FormField/FormSelect';
 import { InstanaQuery } from '../../types/instana_query';
 import { SLO2_INFORMATION } from '../../GlobalVariables';
@@ -9,10 +8,8 @@ import { SelectableValue } from '@grafana/data';
 import Slo2Specifics from '../../lists/slo2_specifics';
 import _ from 'lodash';
 
-const MAX_VAL = 0.9999;
-
 interface Slo2InformationState {
-  sloReports: SelectableValue[];
+  slo2Reports: SelectableValue[];
   isValidSlo: boolean;
 }
 
@@ -32,7 +29,7 @@ export class Slo2Information extends React.Component<Props, Slo2InformationState
   constructor(props: any) {
     super(props);
     this.state = {
-      sloReports: [],
+      slo2Reports: [],
       isValidSlo: true,
     };
   }
@@ -40,7 +37,6 @@ export class Slo2Information extends React.Component<Props, Slo2InformationState
   componentDidMount() {
     isUnmounting = false;
     this.loadSloReports();
-    this.isValid(this.props.query.sloValue);
   }
 
   componentWillUnmount() {
@@ -51,33 +47,15 @@ export class Slo2Information extends React.Component<Props, Slo2InformationState
 
   onSlo2Change = (slo: SelectableValue) => {
     const { query, onRunQuery } = this.props;
-    query.sloReport = slo;
+    query.slo2Report = slo;
     onRunQuery();
   };
 
-  onSloValueChange = (sloValue: ChangeEvent<HTMLInputElement>) => {
-    const { query } = this.props;
-    query.sloValue = sloValue.currentTarget.value;
-
-    if (this.isValid(query.sloValue)) {
-      // onRunQuery with 500ms delay after last debounce
-      this.debouncedRunQuery();
-    }
-  };
-
-  onSloSpecificChange = (sloSpecific: SelectableValue) => {
+  onSloSpecificChange = (slo2Specific: SelectableValue) => {
     const { query, onRunQuery } = this.props;
-    query.sloSpecific = sloSpecific;
+    query.slo2Specific = slo2Specific;
     onRunQuery();
   };
-
-  isValid(val: string): boolean {
-    const valid = !val || (+val >= 0 && +val <= MAX_VAL);
-    this.setState({
-      isValidSlo: valid,
-    });
-    return valid;
-  }
 
   shouldComponentUpdate(
     nextProps: Readonly<Props>,
@@ -88,14 +66,9 @@ export class Slo2Information extends React.Component<Props, Slo2InformationState
   }
 
   loadSloReports() {
-    const { query } = this.props;
-    this.props.datasource.getSlo2Reports().then((sloReports) => {
+    this.props.datasource.getSlo2Reports().then((slo2Reports) => {
       if (!isUnmounting) {
-        this.setState({ sloReports: sloReports });
-
-        if (!query.sloReport && sloReports.length >= 1) {
-          query.sloReport = sloReports[0];
-        }
+        this.setState({ slo2Reports: slo2Reports });
       }
     });
   }
@@ -109,10 +82,10 @@ export class Slo2Information extends React.Component<Props, Slo2InformationState
           queryKeyword
           inputWidth={0}
           label={'SLO Configuration name'}
-          tooltip={'SLI configuration used to compute error budget and SLI values.'}
-          noOptionsMessage={'No configured SLI found'}
-          value={query.sloReport}
-          options={this.state.sloReports}
+          tooltip={'SLI configuration used to compute SLI Report.'}
+          noOptionsMessage={'No configured SLO found'}
+          value={query.slo2Report}
+          options={this.state.slo2Reports}
           onChange={this.onSlo2Change}
         />
 
@@ -126,7 +99,9 @@ export class Slo2Information extends React.Component<Props, Slo2InformationState
               Select your specific SLO information:
               <ul>
                 <li>&apos;Status&apos; requires Gauge visualization</li>
+                <li>&apos;Total Error Budget&apos; requires Singlestat visualization</li>
                 <li>&apos;Remaining Error Budget&apos; requires Singlestat visualization</li>
+                <li>&apos;Spended Error Budget&apos; requires Singlestat visualization</li>
                 <li>&apos;Violation&apos; drequires Bars draw mode on Graph visualization</li>
                 <li>&apos;Error Chart&apos; drequires Bars draw mode on Graph visualization</li>
                 <li>&apos;Error Accumulation Chart&apos; drequires Bars draw mode on Graph visualization</li>
@@ -134,7 +109,7 @@ export class Slo2Information extends React.Component<Props, Slo2InformationState
               </ul>
             </div>
           }
-          value={query.sloSpecific}
+          value={query.slo2Specific}
           options={Slo2Specifics}
           onChange={this.onSloSpecificChange}
         />

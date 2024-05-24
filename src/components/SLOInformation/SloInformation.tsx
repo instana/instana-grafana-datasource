@@ -50,8 +50,9 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
   debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
   onSloChange = (slo: SelectableValue) => {
-    const { query, onRunQuery } = this.props;
+    const { query, onRunQuery, onChange } = this.props;
     query.sloReport = slo;
+    onChange({ ...query });
     onRunQuery();
   };
 
@@ -66,8 +67,9 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
   };
 
   onSloSpecificChange = (sloSpecific: SelectableValue) => {
-    const { query, onRunQuery } = this.props;
+    const { query, onRunQuery, onChange } = this.props;
     query.sloSpecific = sloSpecific;
+    onChange({ ...query });
     onRunQuery();
   };
 
@@ -139,7 +141,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
               <ul>
                 <li>&apos;SLI&apos; requires Gauge visualization</li>
                 <li>&apos;Remaining Error Budget&apos; requires Singlestat visualization</li>
-                <li>&apos;Timeseries&apos; drequires Bars draw mode on Graph visualization</li>
+                <li>&apos;Timeseries&apos; requires Bars draw mode on Graph visualization</li>
               </ul>
             </div>
           }
