@@ -1,6 +1,9 @@
 # Changelog
 
-## 4.1.0 - 2024-05-07
+## 4.0.2 - 2024-05-29
+- Fix: Fixed a DFQ bug introduced in the Infrastructure Metrics category.
+
+## 4.0.1 - 2024-05-07
 - Fix: Fixed a bug in the Infrastructure snapshot API that was causing issues with listing Entity types for Self-hosted installation.
 
 ## 4.0.0 - 2024-03-28

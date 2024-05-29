@@ -515,7 +515,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           loadEntityTypes={this.loadEntityTypes}
         />
 
-        <Badge text={'4.0.1'} color={'blue'} />
+        <Badge text={'4.0.2'} color={'blue'} />
       </div>
     );
   }
