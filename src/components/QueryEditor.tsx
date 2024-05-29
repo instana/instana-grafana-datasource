@@ -194,7 +194,13 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   findMatchingEntityTypes = (entityType: SelectableValue) => {
     const { query } = this.props;
     // workaround as long the api does not support returning plugins with custom metrics only
-    if (query.metricCategory.key === BUILT_IN_METRICS || query.metricCategory.key === CUSTOM_METRICS) {
+    if (
+      query.metricCategory.key === BUILT_IN_METRICS ||
+      entityType.key === 'statsd' ||
+      entityType.key === 'prometheus' ||
+      entityType.key === 'jvmRuntimePlatform' ||
+      entityType.key === 'dropwizardApplicationContainer'
+    ) {
       return this.snapshots.find((type: any) => type === entityType.key) && entityType.label != null;
     }
 
