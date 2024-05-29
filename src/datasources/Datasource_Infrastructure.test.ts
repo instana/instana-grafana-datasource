@@ -181,7 +181,7 @@ describe('Given an infrastructure datasource', () => {
           endpoint ===
           '/api/infrastructure-monitoring/snapshots?plugin=' +
             target.entityType.key +
-            '&size=100&q=' +
+            '&size=100&query=' +
             target.entityQuery +
             '&from=' +
             timeFilter.from +
@@ -192,7 +192,7 @@ describe('Given an infrastructure datasource', () => {
         }
         if (
           endpoint ===
-          'api/infrastructure-monitoring/snapshots?plugin=netCoreRuntimePlatform&size=100&q=host&from=' +
+          'api/infrastructure-monitoring/snapshots?plugin=netCoreRuntimePlatform&size=100&query=host&from=' +
             timeFilter.from +
             '&to=' +
             timeFilter.to

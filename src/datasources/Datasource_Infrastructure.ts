@@ -350,7 +350,7 @@ export class DataSourceInfrastructure {
       `/api/infrastructure-monitoring/snapshots` +
       `?plugin=${target.entityType.key}` +
       '&size=100' +
-      `&q=${target.entityQuery}` +
+      `&query=${target.entityQuery}` +
       `&from=${timeFilter.from}` +
       `&to=${timeFilter.to}` +
       (this.instanaOptions.showOffline ? `` : `&time=${timeFilter.to}`);
