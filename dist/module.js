@@ -4491,9 +4491,7 @@ function (_super) {
 
     if (query.entityQuery) {
       datasource.fetchTypesForTarget(query).then(function (response) {
-        _this.snapshots = response.map(function (plugin) {
-          return plugin.label;
-        });
+        _this.snapshots = response.data;
 
         _this.filterForEntityType(true, filterResult);
 
@@ -4744,7 +4742,7 @@ function (_super) {
       onChange: this.props.onChange,
       loadEntityTypes: this.loadEntityTypes
     }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_8__["Badge"], {
-      text: '4.0.0',
+      text: '4.0.1',
       color: 'blue'
     }));
   };
@@ -7119,43 +7117,8 @@ function () {
   };
 
   DataSourceInfrastructure.prototype.fetchTypesForTarget = function (query, timeFilter) {
-    var _a, _b;
-
-    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["getWindowSize"])(timeFilter);
-    query.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_6__["getDefaultChartGranularity"])(windowSize);
-    var fetchSnapshotTypesUrl = '/api/infrastructure-monitoring/analyze/entity-types'; // URL endpoint
-
-    var data = {
-      timeFrame: {
-        to: timeFilter.to,
-        windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["atLeastGranularity"])(windowSize, query.timeInterval.key)
-      },
-      pagination: {
-        retrievalSize: 200
-      },
-      tagFilterExpression: query.entityQuery ? {
-        type: 'TAG_FILTER',
-        entity: 'NOT_APPLICABLE',
-        name: 'dfq.type',
-        operator: 'EQUALS',
-        value: ((_a = query.entityQuery) === null || _a === void 0 ? void 0 : _a.includes(':')) ? (_b = query.entityQuery) === null || _b === void 0 ? void 0 : _b.split(':')[1] : query.entityQuery
-      } : {
-        type: 'EXPRESSION',
-        logicalOperator: 'AND',
-        elements: []
-      }
-    };
-    var typesforTarget = this.typeCache.get('entityTypes');
-    typesforTarget = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["postRequest"])(this.instanaOptions, fetchSnapshotTypesUrl, data).then(function (typesResponses) {
-      var result = typesResponses.data.plugins.map(function (entry) {
-        return {
-          key: entry,
-          label: entry
-        };
-      });
-      return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.sortBy(result, 'label');
-    });
-    return typesforTarget;
+    var fetchSnapshotTypesUrl = "/api/snapshots/types" + ("?q=" + encodeURIComponent(query.entityQuery)) + ("&from=" + timeFilter.from) + ("&to=" + timeFilter.to) + (this.instanaOptions.showOffline ? "" : "&time=" + timeFilter.to);
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["getRequest"])(this.instanaOptions, fetchSnapshotTypesUrl);
   };
 
   DataSourceInfrastructure.prototype.fetchAvailableMetricsForEntityType = function (target, timeFilter) {

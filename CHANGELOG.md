@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.1.0 - 2024-05-07
+- Fix: Fixed a bug in the Infrastructure snapshot API that was causing issues with listing Entity types for Self-hosted installation.
+
 ## 4.0.0 - 2024-03-28
 - Breaking Changes: Secure information, including API keys, is now stored in `secureJsonData` instead of `jsonData`. This change requires users to reauthenticate datasources by entering the URL and API Token on the configuration page.
 - Chore: Replaced deprecated instana REST API calls in Analyze Infrastructure with new ones.
