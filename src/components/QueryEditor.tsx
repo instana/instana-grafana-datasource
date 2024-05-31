@@ -9,6 +9,7 @@ import {
   CUSTOM_METRICS,
   INFRASTRUCTURE_ANALYZE,
   SLO_INFORMATION,
+  SLO2_INFORMATION,
 } from '../GlobalVariables';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import React, { PureComponent } from 'react';
@@ -29,6 +30,7 @@ import Metric from './Metric/Metric';
 import { MetricFilter } from './Infrastructure/Custom/MetricFilter';
 import { MobileAppMetrics } from './Analyze/MobileAppMetrics';
 import { SloInformation } from './SLOInformation/SloInformation';
+import { Slo2Information } from './SLOInformation/Slo2Information';
 import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import _ from 'lodash';
 import metricCategories from '../lists/metric_categories';
@@ -330,6 +332,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
     this.resetServices();
     this.resetEndpoints();
     this.resetSLO();
+    this.resetSLO2();
   }
 
   resetMetricSelection() {
@@ -353,6 +356,12 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
   }
 
   resetSLO() {
+    const { query } = this.props;
+    query.sloValue = '';
+    query.sloReport = {};
+  }
+
+  resetSLO2() {
     const { query } = this.props;
     query.sloValue = '';
     query.sloReport = {};
@@ -473,7 +482,16 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key !== SLO_INFORMATION && (
+        {query.metricCategory.key === SLO2_INFORMATION && (
+          <Slo2Information
+            query={query}
+            onRunQuery={this.props.onRunQuery}
+            onChange={this.props.onChange}
+            datasource={this.props.datasource}
+          />
+        )}
+
+        {query.metricCategory.key !== SLO_INFORMATION && query.metricCategory.key !== SLO2_INFORMATION && (
           <Metric
             query={query}
             onChange={this.props.onChange}

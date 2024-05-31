@@ -35,4 +35,8 @@ export default [
     label: 'SLO information',
     key: 7,
   },
+  {
+    label: 'Service Levels Objective reborn information',
+    key: 10,
+  },
 ];
