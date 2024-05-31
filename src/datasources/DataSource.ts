@@ -224,7 +224,11 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
   supportsDeltaRequests(target: InstanaQuery): boolean {
     if (target.metricCategory) {
-      if (target.metricCategory.key === SLO_INFORMATION || target.metricCategory.key === INFRASTRUCTURE_ANALYZE) {
+      if (
+        target.metricCategory.key === SLO_INFORMATION ||
+        target.metricCategory.key === SLO2_INFORMATION ||
+        target.metricCategory.key === INFRASTRUCTURE_ANALYZE
+      ) {
         return false;
       }
     }

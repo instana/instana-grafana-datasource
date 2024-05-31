@@ -4801,8 +4801,10 @@ function (_super) {
     _this.onSloSpecificChange = function (slo2Specific) {
       var _a = _this.props,
           query = _a.query,
-          onRunQuery = _a.onRunQuery;
+          onRunQuery = _a.onRunQuery,
+          onChange = _a.onChange;
       query.slo2Specific = slo2Specific;
+      onChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query));
       onRunQuery();
     };
 
@@ -5317,7 +5319,7 @@ function (_super) {
     var _this = this;
 
     if (target.metricCategory) {
-      if (target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["SLO_INFORMATION"] || target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"]) {
+      if (target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["SLO_INFORMATION"] || target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["SLO2_INFORMATION"] || target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"]) {
         return false;
       }
     }

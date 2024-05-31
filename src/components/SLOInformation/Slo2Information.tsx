@@ -52,8 +52,9 @@ export class Slo2Information extends React.Component<Props, Slo2InformationState
   };
 
   onSloSpecificChange = (slo2Specific: SelectableValue) => {
-    const { query, onRunQuery } = this.props;
+    const { query, onRunQuery, onChange } = this.props;
     query.slo2Specific = slo2Specific;
+    onChange({ ...query });
     onRunQuery();
   };
 
