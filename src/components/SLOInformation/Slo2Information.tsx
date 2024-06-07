@@ -100,6 +100,7 @@ export class Slo2Information extends React.Component<Props, Slo2InformationState
               Select your specific SLO information:
               <ul>
                 <li>&apos;Status&apos; requires Gauge visualization</li>
+                <li>&apos;Service Level Target&apos; requires Gauge visualization</li>
                 <li>&apos;Total Error Budget&apos; requires Singlestat visualization</li>
                 <li>&apos;Remaining Error Budget&apos; requires Singlestat visualization</li>
                 <li>&apos;Spended Error Budget&apos; requires Singlestat visualization</li>

@@ -4,6 +4,10 @@ export default [
     label: 'Status',
   },
   {
+    key: 'Service Level Target',
+    label: 'Service Level Target',
+  },
+  {
     key: 'Total Error Budget',
     label: 'Total Error Budget',
   },

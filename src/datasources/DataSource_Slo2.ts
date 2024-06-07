@@ -38,11 +38,11 @@ export class DataSourceSlo2 {
   }
 
   runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
-    //avoid involid calls
-
+    // avoid invalid calls
     if (!target || !target.slo2Report || !target.slo2Report.key || !target.slo2Specific || !target.slo2Specific.key) {
       return Promise.resolve(emptyResultData(target.refId));
     }
+
     let endpoint =
       '/api/slo/report/' +
       target.slo2Report.key +
@@ -59,7 +59,19 @@ export class DataSourceSlo2 {
   extractSpecificValueFromSLI(target: InstanaQuery, sloResult: any, timeFilter: TimeFilter) {
     if (target.slo2Specific.key === 'Status') {
       return [
-        buildTimeSeries(target.slo2Specific.label!, target.refId, this.buildResultArray(sloResult.sli, timeFilter.to)),
+        buildTimeSeries(
+          target.slo2Specific.label!,
+          target.refId,
+          this.buildResultArray(sloResult.sli, timeFilter.to, true)
+        ),
+      ];
+    } else if (target.slo2Specific.key === 'Service Level Target') {
+      return [
+        buildTimeSeries(
+          target.slo2Specific.label!,
+          target.refId,
+          this.buildResultArray(sloResult.slo, timeFilter.to, true)
+        ),
       ];
     } else if (target.slo2Specific.key === 'Total Error Budget') {
       return [
@@ -98,7 +110,10 @@ export class DataSourceSlo2 {
     return [emptyResultData(target.refId)];
   }
 
-  buildResultArray(result: number, timestamp: number): TimeSeriesPoints {
+  buildResultArray(result: number, timestamp: number, asPercentage: boolean = false): TimeSeriesPoints {
+    if (asPercentage) {
+      result = parseFloat((result * 100).toFixed(4));
+    }
     return [[result, timestamp]];
   }
 
