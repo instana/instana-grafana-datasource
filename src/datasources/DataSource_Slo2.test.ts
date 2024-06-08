@@ -192,7 +192,7 @@ describe('Given an slo datasource', () => {
         expect(results.length).toBe(1);
         expect(results[0].target).toBe('Status');
         expect(results[0].datapoints.length).toBe(1);
-        expect(results[0].datapoints[0][0]).toBe(1.0);
+        expect(results[0].datapoints[0][0]).toBe(100);
       });
     });
     it('should return only five value for remaining error budget chart', () => {

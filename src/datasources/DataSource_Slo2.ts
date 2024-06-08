@@ -110,7 +110,7 @@ export class DataSourceSlo2 {
     return [emptyResultData(target.refId)];
   }
 
-  buildResultArray(result: number, timestamp: number, asPercentage: boolean = false): TimeSeriesPoints {
+  buildResultArray(result: number, timestamp: number, asPercentage = false): TimeSeriesPoints {
     if (asPercentage) {
       result = parseFloat((result * 100).toFixed(4));
     }
