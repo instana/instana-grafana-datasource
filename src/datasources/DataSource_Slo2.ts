@@ -59,19 +59,11 @@ export class DataSourceSlo2 {
   extractSpecificValueFromSLI(target: InstanaQuery, sloResult: any, timeFilter: TimeFilter) {
     if (target.slo2Specific.key === 'Status') {
       return [
-        buildTimeSeries(
-          target.slo2Specific.label!,
-          target.refId,
-          this.buildResultArray(sloResult.sli, timeFilter.to, true)
-        ),
+        buildTimeSeries(target.slo2Specific.label!, target.refId, this.buildResultArray(sloResult.sli, timeFilter.to)),
       ];
     } else if (target.slo2Specific.key === 'Service Level Target') {
       return [
-        buildTimeSeries(
-          target.slo2Specific.label!,
-          target.refId,
-          this.buildResultArray(sloResult.slo, timeFilter.to, true)
-        ),
+        buildTimeSeries(target.slo2Specific.label!, target.refId, this.buildResultArray(sloResult.slo, timeFilter.to)),
       ];
     } else if (target.slo2Specific.key === 'Total Error Budget') {
       return [
@@ -110,10 +102,7 @@ export class DataSourceSlo2 {
     return [emptyResultData(target.refId)];
   }
 
-  buildResultArray(result: number, timestamp: number, asPercentage = false): TimeSeriesPoints {
-    if (asPercentage) {
-      result = parseFloat((result * 100).toFixed(4));
-    }
+  buildResultArray(result: number, timestamp: number): TimeSeriesPoints {
     return [[result, timestamp]];
   }
 
