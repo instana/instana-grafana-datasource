@@ -32,11 +32,11 @@ export default [
     key: 9,
   },
   {
-    label: 'SLO information',
-    key: 7,
+    label: 'Service Level Objectives (Beta)',
+    key: 10,
   },
   {
-    label: 'Service Levels Objective reborn information',
-    key: 10,
+    label: 'Service Level Objectives Widgets',
+    key: 7,
   },
 ];
