@@ -269,9 +269,9 @@ If no custom format is provided the default label '_$label ($website) $metric_' 
 
 ### SLO Information
 
-Instana brings two Service levels information into Grafana. 
+Instana brings two collections Service levels information into Grafana. 
 
-- [Service levels objectives (beta)](https://www.ibm.com/docs/en/instana-observability/current?topic=instana-service-level-objectives-slo), by the predefined SLO target from configurations, supports:
+- [Service levels objectives (beta)](https://www.ibm.com/docs/en/instana-observability/current?topic=instana-service-level-objectives-slo), by the predefined SLO target from configurations, including:
   - Service level status (single number)
   - Predefined service level target (single number)
   - Total error budget (single number)
@@ -282,21 +282,21 @@ Instana brings two Service levels information into Grafana.
   - Error budget remain chart (timeseries)
   - Voilation chart (timeseries)
   
-- [Service level objectives widgets](https://www.ibm.com/docs/en/SSE1JP5_current/src/pages/service_level_objectives/slo_widgets.html), by the given SLO target from parameters, supports:
+- [Service level objectives widgets](https://www.ibm.com/docs/en/SSE1JP5_current/src/pages/service_level_objectives/slo_widgets.html), by the given SLO target from parameters, including:
   - SLI (single number)
   - Remain error budget (single number)
   - Timeseries (voilation in timeseries)
 
-Both of them can be selected from the metric category drop down list. Accordingly, SLO/SLI configuration and value types can be selected for display. 
+Both of them can be selected from the metric category drop-down list. Accordingly, SLO/SLI configuration and value types can be selected for display. 
 
-Difference between them is that SLO target is not set for the SLI configuration from `Service level objectives widgets`. If `Service level objectives widgets` is chosen, SLO(target) is required as a parameter. On the other side, SLO target has already predefined by the SLO configuration from `Service levels objectives (beta)`, there is no additional step to set the SLO target for calculation. Also, `Service levels objectives (beta)` provides more metrics and charts than the other. 
+Difference between them is that SLO target is not defined for the SLI configuration from `Service level objectives widgets`. If `Service level objectives widgets` is chosen, SLO(target) is required as a parameter. On the other side, SLO target has already predefined by the SLO configuration from `Service levels objectives (beta)`, no additional step is required to define the SLO target for calculation. Also, `Service levels objectives (beta)` provides more metrics and charts than `Service level objectives widgets`. 
 
-The image below shows how such a dashboard could look like when choose metrics from `Service levels objectives (beta)` category
+The image below shows how a dashboard looks like with metrics from `Service levels objectives (beta)` category
 
 
 ![slo2_dashboard](screenshots/slo2_dashboard.png)
 
-The image below shows how such a dashboard could look like when choose metrics from `Service level objectives widgets` category
+The image below shows a dashboard looks like when choosing metrics from `Service level objectives widgets` category
 
 ![slo_dashboard](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/slo_dashboard.png)
 
