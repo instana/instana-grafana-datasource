@@ -271,7 +271,7 @@ If no custom format is provided the default label '_$label ($website) $metric_' 
 
 Instana brings two collections Service levels information into Grafana. 
 
-- [Service levels objectives (beta)](https://www.ibm.com/docs/en/instana-observability/current?topic=instana-service-level-objectives-slo), by the predefined SLO target from configurations, including:
+- [Service levels objectives (beta)](https://www.ibm.com/docs/en/instana-observability/current?topic=slo-service-level-objectives-beta), by the predefined SLO target from configurations, including:
   - Service level status (single number)
   - Predefined service level target (single number)
   - Total error budget (single number)
