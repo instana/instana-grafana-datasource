@@ -139,7 +139,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
               <ul>
                 <li>&apos;SLI&apos; requires Gauge visualization</li>
                 <li>&apos;Remaining Error Budget&apos; requires Singlestat visualization</li>
-                <li>&apos;Timeseries&apos; drequires Bars draw mode on Graph visualization</li>
+                <li>&apos;Timeseries&apos; requires Bars draw mode on Graph visualization</li>
               </ul>
             </div>
           }

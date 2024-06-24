@@ -69,6 +69,8 @@ export function buildTestTarget(): InstanaQuery {
     sloReport: {},
     sloSpecific: {},
     sloValue: '',
+    slo2Report: {},
+    slo2Specific: {},
     stableHash: '',
     timeFilter: { from: 0, to: 0, windowSize: 0 },
     timeInterval: {},
