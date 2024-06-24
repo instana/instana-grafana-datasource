@@ -269,20 +269,37 @@ If no custom format is provided the default label '_$label ($website) $metric_' 
 
 ### SLO Information
 
-Display specific SLO/SLI information in Grafana based on Instana. This category can be enabled by going into the Instana Grafana plugin's settings and enable the `Enable SLO Dashboards` toggle. Then, the category will be visible next to the others.
+Instana brings two collections Service levels information into Grafana. 
 
-For SLI:
-Use the Gauge visualization to display the SLI. Move to the Threshold settings and switch the colors (red to green, green to red). Type in your SLO in order to properly show the SLO threshold. Further, choose "percent" as your unit (Field settings).
+- [Service levels objectives (beta)](https://www.ibm.com/docs/en/instana-observability/current?topic=instana-service-level-objectives-slo), by the predefined SLO target from configurations, including:
+  - Service level status (single number)
+  - Predefined service level target (single number)
+  - Total error budget (single number)
+  - Remain error budget (single number)
+  - Spent error budget (single number)
+  - Error chart/Error budget consumption (timeseries)
+  - Error budget accumulation chart (timeseries)
+  - Error budget remain chart (timeseries)
+  - Voilation chart (timeseries)
+  
+- [Service level objectives widgets](https://www.ibm.com/docs/en/SSE1JP5_current/src/pages/service_level_objectives/slo_widgets.html), by the given SLO target from parameters, including:
+  - SLI (single number)
+  - Remain error budget (single number)
+  - Timeseries (voilation in timeseries)
 
-For Remaining Error Budget:
-Use the Singlestat visualization. Move to Coloring settings, toggle the Background toggle and use `0,0` as your Thresholds. Also, invert the colors below. This will turn the background of the panel green as long as the number of remaining minutes is positive.
+Both of them can be selected from the metric category drop-down list. Accordingly, SLO/SLI configuration and value types can be selected for display. 
 
-For Timeseries:
-Select graph visualization, choose bars instead of lines as your draw mode and add a Y-Max value of `1` for the left y axis.
+Difference between them is that SLO target is not defined for the SLI configuration from `Service level objectives widgets`. If `Service level objectives widgets` is chosen, SLO(target) is required as a parameter. On the other side, SLO target has already predefined by the SLO configuration from `Service levels objectives (beta)`, no additional step is required to define the SLO target for calculation. Also, `Service levels objectives (beta)` provides more metrics and charts than `Service level objectives widgets`. 
 
-The image below shows how such a dashboard could look like.
+The image below shows how a dashboard looks like with metrics from `Service levels objectives (beta)` category
+
+
+![slo2_dashboard](screenshots/slo2_dashboard.png)
+
+The image below shows a dashboard looks like when choosing metrics from `Service level objectives widgets` category
 
 ![slo_dashboard](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/slo_dashboard.png)
+
 
 ### Singlestat visualization
 
