@@ -354,6 +354,8 @@ describe('Given a delta', () => {
           sloReport: {},
           sloSpecific: {},
           sloValue: '',
+          slo2Report: {},
+          slo2Specific: {},
           timeInterval: {},
           timeShift: '',
           showAllMetrics: false,
