@@ -338,6 +338,8 @@ export class DataSourceInfrastructure {
   }
 
   fetchSnapshotsForTarget(target: InstanaQuery, timeFilter: TimeFilter) {
+    const windowSize = getWindowSize(timeFilter);
+    target.timeInterval = getDefaultChartGranularity(windowSize);
     const query = this.buildQuery(target);
     const key = this.buildSnapshotCacheKey(query, timeFilter);
 
@@ -351,9 +353,10 @@ export class DataSourceInfrastructure {
       `?plugin=${target.entityType.key}` +
       '&size=100' +
       `&query=${target.entityQuery}` +
-      `&from=${timeFilter.from}` +
+      `&windowSize=${atLeastGranularity(windowSize,target.timeInterval.key)}` +
       `&to=${timeFilter.to}` +
-      (this.instanaOptions.showOffline ? `` : `&time=${timeFilter.to}`);
+      `&offline=${this.instanaOptions.showOffline}`;
+      // (this.instanaOptions.showOffline ? `` : `&time=${timeFilter.to}`);
 
     snapshots = getRequest(this.instanaOptions, fetchSnapshotContextsUrl)
       .then((contextsResponse: any) => {
@@ -366,9 +369,8 @@ export class DataSourceInfrastructure {
 
             const fetchSnapshotUrl =
               `/api/infrastructure-monitoring/snapshots/${snapshotId}` +
-              (this.instanaOptions.showOffline
-                ? `?from=${timeFilter.from}&to=${timeFilter.to}`
-                : `?time=${timeFilter.to}`); // @see SnapshotApiResource#getSnapshot
+               `?to=${timeFilter.to}&windowSize=${atLeastGranularity(windowSize,target.timeInterval.key)}`
+                // : `?time=${timeFilter.to}`); // @see SnapshotApiResource#getSnapshot
 
             snapshotInfo = getRequest(this.instanaOptions, fetchSnapshotUrl, true).then((snapshotResponse: any) => {
               // check for undefined because the fetchSnapshotContexts is buggy
@@ -447,7 +449,7 @@ export class DataSourceInfrastructure {
         windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
       },
     };
-    return postRequest(this.instanaOptions, '/api/infrastructure-monitoring/metrics', data);
+    return postRequest(this.instanaOptions, '/api/infrastructure-monitoring/metrics'+`?offline=${this.instanaOptions.showOffline}`, data);
   }
 
   getHostSuffix(host: string): string {
