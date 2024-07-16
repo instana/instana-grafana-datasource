@@ -4,8 +4,12 @@ import { InstanaOptions } from '../types/instana_options';
 import { DataSourceInstanceSettings } from '@grafana/data';
 import _ from 'lodash';
 
+interface ExtendedBackendSrvRequest extends BackendSrvRequest {
+  skipTLSVerify?: boolean;
+}
+
 export const getRequest = (options: InstanaOptions, endpoint: string, swallowError = false, maxRetries = 1) => {
-  const request = {
+  const request: ExtendedBackendSrvRequest = {
     method: 'GET',
     url: options.url + endpoint,
   };
@@ -20,7 +24,7 @@ export const postRequest = (
   swallowError = false,
   maxRetries = 0
 ) => {
-  const request = {
+  const request: ExtendedBackendSrvRequest = {
     method: 'POST',
     url: options.url + endpoint,
     data: data,
@@ -31,10 +35,15 @@ export const postRequest = (
 
 function doRequest(
   options: InstanaOptions,
-  request: BackendSrvRequest,
+  request: ExtendedBackendSrvRequest,
   swallowError: boolean,
   maxRetries: number
 ): any {
+  // Add skipTLSVerify option if enabled
+  if (options.skipTLSVerify) {
+    request.skipTLSVerify = true;
+  }
+
   return getBackendSrv()
     .datasourceRequest(request)
     .catch((error) => {
@@ -52,7 +61,6 @@ function doRequest(
           });
         }
         throw new Error('API limit is reached.');
-        return;
       }
 
       if (swallowError && (error.status >= 400 || error.status < 500)) {

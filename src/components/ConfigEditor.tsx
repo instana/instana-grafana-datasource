@@ -172,6 +172,12 @@ export class ConfigEditor extends PureComponent<Props, State> {
           }
         />
         <Checkbox
+          label={'Skip TLS Verify'}
+          value={jsonData.skipTLSVerify}
+          onChange={(event) => this.onSwitchChange(event, 'skipTLSVerify')}
+          description={'Disables TLS/SSL verification for the Instana API requests.'}
+        />
+        <Checkbox
           label={'Enable offline snapshots'}
           value={jsonData.showOffline}
           onChange={(event) => this.onSwitchChange(event, 'showOffline')}
