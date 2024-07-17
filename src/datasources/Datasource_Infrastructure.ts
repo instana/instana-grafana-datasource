@@ -353,10 +353,9 @@ export class DataSourceInfrastructure {
       `?plugin=${target.entityType.key}` +
       '&size=100' +
       `&query=${target.entityQuery}` +
-      `&windowSize=${atLeastGranularity(windowSize,target.timeInterval.key)}` +
+      `&windowSize=${atLeastGranularity(windowSize, target.timeInterval.key)}` +
       `&to=${timeFilter.to}` +
       `&offline=${this.instanaOptions.showOffline}`;
-      // (this.instanaOptions.showOffline ? `` : `&time=${timeFilter.to}`);
 
     snapshots = getRequest(this.instanaOptions, fetchSnapshotContextsUrl)
       .then((contextsResponse: any) => {
@@ -369,8 +368,7 @@ export class DataSourceInfrastructure {
 
             const fetchSnapshotUrl =
               `/api/infrastructure-monitoring/snapshots/${snapshotId}` +
-               `?to=${timeFilter.to}&windowSize=${atLeastGranularity(windowSize,target.timeInterval.key)}`
-                // : `?time=${timeFilter.to}`); // @see SnapshotApiResource#getSnapshot
+              `?to=${timeFilter.to}&windowSize=${atLeastGranularity(windowSize, target.timeInterval.key)}`; // @see SnapshotApiResource#getSnapshot
 
             snapshotInfo = getRequest(this.instanaOptions, fetchSnapshotUrl, true).then((snapshotResponse: any) => {
               // check for undefined because the fetchSnapshotContexts is buggy
@@ -449,7 +447,12 @@ export class DataSourceInfrastructure {
         windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
       },
     };
-    return postRequest(this.instanaOptions, '/api/infrastructure-monitoring/metrics'+`?offline=${this.instanaOptions.showOffline}`, data);
+
+    return postRequest(
+      this.instanaOptions,
+      '/api/infrastructure-monitoring/metrics' + `?offline=${this.instanaOptions.showOffline}`,
+      data
+    );
   }
 
   getHostSuffix(host: string): string {

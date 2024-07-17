@@ -7286,8 +7286,7 @@ function () {
       return snapshots;
     }
 
-    var fetchSnapshotContextsUrl = "/api/infrastructure-monitoring/snapshots" + ("?plugin=" + target.entityType.key) + '&size=100' + ("&query=" + target.entityQuery) + ("&windowSize=" + Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["atLeastGranularity"])(windowSize, target.timeInterval.key)) + ("&to=" + timeFilter.to) + ("&offline=" + this.instanaOptions.showOffline); // (this.instanaOptions.showOffline ? `` : `&time=${timeFilter.to}`);
-
+    var fetchSnapshotContextsUrl = "/api/infrastructure-monitoring/snapshots" + ("?plugin=" + target.entityType.key) + '&size=100' + ("&query=" + target.entityQuery) + ("&windowSize=" + Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["atLeastGranularity"])(windowSize, target.timeInterval.key)) + ("&to=" + timeFilter.to) + ("&offline=" + this.instanaOptions.showOffline);
     snapshots = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["getRequest"])(this.instanaOptions, fetchSnapshotContextsUrl).then(function (contextsResponse) {
       return Promise.all(contextsResponse.data.items.map(function (_a) {
         var snapshotId = _a.snapshotId,
@@ -7299,7 +7298,7 @@ function () {
           return snapshotInfo;
         }
 
-        var fetchSnapshotUrl = "/api/infrastructure-monitoring/snapshots/" + snapshotId + ("?to=" + timeFilter.to + "&windowSize=" + Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["atLeastGranularity"])(windowSize, target.timeInterval.key)); // : `?time=${timeFilter.to}`); // @see SnapshotApiResource#getSnapshot
+        var fetchSnapshotUrl = "/api/infrastructure-monitoring/snapshots/" + snapshotId + ("?to=" + timeFilter.to + "&windowSize=" + Object(_util_time_util__WEBPACK_IMPORTED_MODULE_1__["atLeastGranularity"])(windowSize, target.timeInterval.key)); // @see SnapshotApiResource#getSnapshot
 
         snapshotInfo = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["getRequest"])(_this.instanaOptions, fetchSnapshotUrl, true).then(function (snapshotResponse) {
           // check for undefined because the fetchSnapshotContexts is buggy

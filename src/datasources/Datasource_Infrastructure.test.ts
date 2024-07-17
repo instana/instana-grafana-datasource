@@ -152,6 +152,7 @@ describe('Given an infrastructure datasource', () => {
     let contextSpy: any = jest.spyOn(RequestHandler, 'getRequest');
     const timeFilter: TimeFilter = buildTimeFilter();
     const target: InstanaQuery = buildTestTarget();
+    const windowSize = getWindowSize(timeFilter);
     target.entityType = { key: 'someKey' };
     target.entityQuery = 'java';
 
@@ -183,29 +184,37 @@ describe('Given an infrastructure datasource', () => {
             target.entityType.key +
             '&size=100&query=' +
             target.entityQuery +
-            '&from=' +
-            timeFilter.from +
+            '&windowSize=' +
+            atLeastGranularity(windowSize, target.timeInterval.key) +
             '&to=' +
-            timeFilter.to
+            timeFilter.to +
+            '&offline=' +
+            instanaOptions.showOffline
         ) {
           return Promise.resolve(contexts);
         }
         if (
           endpoint ===
-          'api/infrastructure-monitoring/snapshots?plugin=netCoreRuntimePlatform&size=100&query=host&from=' +
-            timeFilter.from +
-            '&to=' +
-            timeFilter.to
+          'api/infrastructure-monitoring/snapshots?plugin=netCoreRuntimePlatform&size=100&query=host&to=' +
+            timeFilter.to +
+            '&windowSize=' +
+            atLeastGranularity(windowSize, target.timeInterval.key)
         ) {
           return Promise.resolve(contexts);
         } else if (
           endpoint ===
-          '/api/infrastructure-monitoring/snapshots/A?from=' + timeFilter.from + '&to=' + timeFilter.to
+          '/api/infrastructure-monitoring/snapshots/A?to=' +
+            timeFilter.to +
+            '&windowSize=' +
+            atLeastGranularity(windowSize, target.timeInterval.key)
         ) {
           return Promise.resolve(snapshotA);
         } else if (
           endpoint ===
-          '/api/infrastructure-monitoring/snapshots/B?from=' + timeFilter.from + '&to=' + timeFilter.to
+          '/api/infrastructure-monitoring/snapshots/B?to=' +
+            timeFilter.to +
+            '&windowSize=' +
+            atLeastGranularity(windowSize, target.timeInterval.key)
         ) {
           return Promise.resolve(snapshotB);
         }
@@ -275,7 +284,10 @@ describe('Given an infrastructure datasource', () => {
       metricSpy.mockReset();
       metricSpy = jest.spyOn(RequestHandler, 'postRequest');
       metricSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
-        if (endpoint === '/api/infrastructure-monitoring/metrics') {
+        if (
+          endpoint ===
+          '/api/infrastructure-monitoring/metrics?offline=' + dataSourceInfrastructure.instanaOptions.showOffline
+        ) {
           return Promise.resolve(data);
         }
         throw new Error('Unexpected call URL: ' + endpoint);
@@ -284,7 +296,7 @@ describe('Given an infrastructure datasource', () => {
     it('should call postRequest with the correct parameters', () => {
       RequestHandler.postRequest(
         dataSourceInfrastructure.instanaOptions,
-        '/api/infrastructure-monitoring/metrics',
+        '/api/infrastructure-monitoring/metrics?offline=' + dataSourceInfrastructure.instanaOptions.showOffline,
         () => {
           expect(metricSpy).toHaveBeenCalledTimes(1);
           const windowSize = getWindowSize(timeFilter);
@@ -302,7 +314,7 @@ describe('Given an infrastructure datasource', () => {
           dataSourceInfrastructure.fetchMetricsForSnapshot(target, snapshotIds, timeFilter, data);
           expect(RequestHandler.postRequest).toHaveBeenCalledWith(
             dataSourceInfrastructure.instanaOptions,
-            '/api/infrastructure-monitoring/metrics',
+            '/api/infrastructure-monitoring/metrics?offline=' + dataSourceInfrastructure.instanaOptions.showOffline,
             expecteddata
           );
         }
