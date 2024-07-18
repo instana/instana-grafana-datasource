@@ -18,6 +18,7 @@ datasources:
     jsonData:
       url: ${INSTANA_UI_BACKEND_URL}
       useProxy: true
+      tlsSkipVerify: true
       showOffline: true
       allowInfraExplore: true
     secureJsonData:

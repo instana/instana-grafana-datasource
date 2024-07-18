@@ -6,7 +6,7 @@ import { DataSourceJsonData } from '@grafana/data';
 export interface InstanaOptions extends DataSourceJsonData, SecureJsonData {
   url: string;
   useProxy: boolean;
-  skipTLSVerify: boolean;
+  tlsSkipVerify: boolean;
   showOffline: boolean;
   allowInfraExplore: boolean;
   queryinterval_limit_infra?: number;

@@ -13,6 +13,7 @@ interface State {
   isApiKeyConfigured: boolean;
   apiKeyValue: string;
 }
+
 export class ConfigEditor extends PureComponent<Props, State> {
   constructor(props: Readonly<Props>) {
     super(props);
@@ -173,8 +174,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
         />
         <Checkbox
           label={'Skip TLS Verify'}
-          value={jsonData.skipTLSVerify}
-          onChange={(event) => this.onSwitchChange(event, 'skipTLSVerify')}
+          value={jsonData.tlsSkipVerify}
+          onChange={(event) => this.onSwitchChange(event, 'tlsSkipVerify')}
           description={'Disables TLS/SSL verification for the Instana API requests.'}
         />
         <Checkbox

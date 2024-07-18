@@ -427,6 +427,8 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   }
 
   testDatasource(): Promise<any> {
+    console.log(this.options, 'ooooppp');
+
     return getRequest(this.options, '/api/infrastructure-monitoring/monitoring-state').then(
       () => {
         return {

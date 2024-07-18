@@ -6,6 +6,9 @@
   "annotations": false,
   "alerting": false,
   "logs": false,
+  "jsonData": {
+    "tlsSkipVerify": true
+  },
   "info": {
     "description": "Grafana datasource plugin for Instana: Automatic Infrastructure and Application Monitoring",
     "author": {

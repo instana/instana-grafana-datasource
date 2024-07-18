@@ -3,7 +3,7 @@ services:
   grafana:
     image: grafana/grafana
     ports:
-      - 3000:3000
+      - 8585:3000
     volumes:
       - ./dist:/var/lib/grafana/plugins/instana
       - ./provisioning/datasources:/etc/grafana/provisioning/datasources

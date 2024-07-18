@@ -2874,9 +2874,9 @@ function (_super) {
       description: 'The only way to use the API token for authentication in Grafana is through Use-Proxy. Needs Grafana 10.0.0+ and Instana datasource 4.0.0+'
     }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
       label: 'Skip TLS Verify',
-      value: jsonData.skipTLSVerify,
+      value: jsonData.tlsSkipVerify,
       onChange: function onChange(event) {
-        return _this.onSwitchChange(event, 'skipTLSVerify');
+        return _this.onSwitchChange(event, 'tlsSkipVerify');
       },
       description: 'Disables TLS/SSL verification for the Instana API requests.'
     }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
@@ -5536,6 +5536,7 @@ function (_super) {
   };
 
   DataSource.prototype.testDatasource = function () {
+    console.log(this.options, 'ooooppp');
     return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_5__["getRequest"])(this.options, '/api/infrastructure-monitoring/monitoring-state').then(function () {
       return {
         status: 'success',
@@ -8587,6 +8588,7 @@ var getRequest = function getRequest(options, endpoint, swallowError, maxRetries
     method: 'GET',
     url: options.url + endpoint
   };
+  console.log(doRequest, "options");
   return doRequest(options, request, swallowError, maxRetries);
 };
 var postRequest = function postRequest(options, endpoint, data, swallowError, maxRetries) {
@@ -8608,8 +8610,8 @@ var postRequest = function postRequest(options, endpoint, data, swallowError, ma
 
 function doRequest(options, request, swallowError, maxRetries) {
   // Add skipTLSVerify option if enabled
-  if (options.skipTLSVerify) {
-    request.skipTLSVerify = true;
+  if (options.tlsSkipVerify) {
+    request.tlsSkipVerify = true;
   }
 
   return Object(_grafana_runtime__WEBPACK_IMPORTED_MODULE_0__["getBackendSrv"])().datasourceRequest(request)["catch"](function (error) {

@@ -5,7 +5,7 @@ import { DataSourceInstanceSettings } from '@grafana/data';
 import _ from 'lodash';
 
 interface ExtendedBackendSrvRequest extends BackendSrvRequest {
-  skipTLSVerify?: boolean;
+  tlsSkipVerify?: boolean;
 }
 
 export const getRequest = (options: InstanaOptions, endpoint: string, swallowError = false, maxRetries = 1) => {
@@ -13,6 +13,7 @@ export const getRequest = (options: InstanaOptions, endpoint: string, swallowErr
     method: 'GET',
     url: options.url + endpoint,
   };
+console.log(doRequest,"options");
 
   return doRequest(options, request, swallowError, maxRetries);
 };
@@ -40,8 +41,8 @@ function doRequest(
   maxRetries: number
 ): any {
   // Add skipTLSVerify option if enabled
-  if (options.skipTLSVerify) {
-    request.skipTLSVerify = true;
+  if (options.tlsSkipVerify) {
+    request.tlsSkipVerify = true;
   }
 
   return getBackendSrv()

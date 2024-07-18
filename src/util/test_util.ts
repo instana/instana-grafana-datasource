@@ -92,7 +92,7 @@ export function buildInstanaOptions(): InstanaOptions {
     url: process.env.INSTANA_BACKEND_URL || 'http://mountebank:8010',
     apiToken: process.env.INSTANA_API_TOKEN || 'valid-api-token',
     useProxy: true,
-    skipTLSVerify: true,
+    tlsSkipVerify: true,
     showOffline: true,
     allowInfraExplore: true,
   };
