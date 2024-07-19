@@ -294,7 +294,7 @@ Difference between them is that SLO target is not defined for the SLI configurat
 The image below shows how a dashboard looks like with metrics from `Service levels objectives (beta)` category
 
 
-![slo2_dashboard](screenshots/slo2_dashboard.png)
+![slo2_dashboard](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/slo2_dashboard.png)
 
 The image below shows a dashboard looks like when choosing metrics from `Service level objectives widgets` category
 
