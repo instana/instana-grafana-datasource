@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.1.0 - 2024-07-19
+- New Feature: Added a new metric category for Service Level Objectives (beta) with the new SLO API.
+- Enhancements: Renamed the existing SLO information metric category to Service Level Objectives Widgets, which supports the old SLO APIs.
+- Fix: Fixed a bug to enable offline snapshots in the Infrastructure Metrics category.
+
 ## 4.0.2 - 2024-05-29
 - Fix: Fixed a DFQ bug introduced in the Infrastructure Metrics category.
 
