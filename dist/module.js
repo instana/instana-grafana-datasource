@@ -7013,44 +7013,46 @@ function () {
     var _this = this;
 
     var maxValues = [];
-    var snapshotIds = [];
+    var snapshotPromises = snapshots.map(function (snapshot, index) {
+      var snapshotId = snapshot.snapshotId;
+      var snapshotResponse = snapshot.response;
+      var host = snapshot.host; // Call fetchMetricsForSnapshot for each snapshot
 
-    lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(snapshots, function (snapshot) {
-      return snapshotIds.push(snapshot.snapshotId);
-    }); // ...fetch the metric data for every snapshot in the results.
+      return _this.fetchMetricsForSnapshot(target, [snapshotId], timeFilter, metric).then(function (response) {
+        if (!response.data) {
+          return [];
+        }
 
+        var timeseries = _this.readTimeSeries(response.data.items, target.aggregation, timeFilter);
 
-    return this.fetchMetricsForSnapshot(target, snapshotIds.slice(0, 30), timeFilter, metric).then(function (response) {
-      if (!response.data) {
-        return response;
-      }
+        return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.flatten(response.data.items.map(function (item) {
+          return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(item.metrics, function (value, key) {
+            var label = _this.buildLabel(snapshotResponse, host, target, index, metric);
 
-      var timeseries = _this.readTimeSeries(response.data.items, target.aggregation, timeFilter); // as we map two times we need to flatten the result
+            var result = {
+              target: label,
+              datapoints: lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(value, function (metric) {
+                return [metric[1], metric[0]];
+              }),
+              refId: target.refId,
+              key: target.stableHash
+            };
 
+            if (target.displayMaxMetricValue) {
+              var maxValue = _this.getMaxMetricValue(target.metric, snapshots);
 
-      var results = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.flatten(response.data.items.map(function (item, index) {
-        return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(item.metrics, function (value, key) {
-          var result = {
-            target: item.label,
-            datapoints: lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(value, function (metric) {
-              return [metric[1], metric[0]];
-            }),
-            refId: target.refId,
-            key: target.stableHash
-          };
+              maxValues.push(_this.buildMaxMetricTarget(target, timeseries, maxValue, label));
+              result.datapoints = _this.convertRelativeToAbsolute(result.datapoints, maxValue);
+            }
 
-          if (target.displayMaxMetricValue) {
-            var maxValue = _this.getMaxMetricValue(target.metric, snapshots);
+            return result;
+          });
+        }));
+      });
+    }); // Wait for all promises to complete and flatten the results
 
-            maxValues.push(_this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
-            result.datapoints = _this.convertRelativeToAbsolute(result.datapoints, maxValue);
-          }
-
-          return result;
-        });
-      }));
-
-      return results;
+    return Promise.all(snapshotPromises).then(function (allResults) {
+      return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.flatten(allResults);
     });
   };
 
