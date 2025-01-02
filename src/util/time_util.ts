@@ -3,8 +3,8 @@ import TimeFilter from '../types/time_filter';
 import { SEPARATOR } from '../GlobalVariables';
 
 export function readTime(time: TimeRange): TimeFilter {
-  const from = Math.floor(new Date(time!.from.valueOf()).getTime() / 1000) * 1000;
-  const to = Math.floor(new Date(time!.to.valueOf()).getTime() / 1000) * 1000;
+  const from = new Date(time!.from.valueOf()).getTime();
+  const to = new Date(time!.to.valueOf()).getTime();
   return {
     from: from,
     to: to,
@@ -13,7 +13,7 @@ export function readTime(time: TimeRange): TimeFilter {
 }
 
 export function getWindowSize(timeFilter: TimeFilter): number {
-  return timeFilter.from ? timeFilter.to - timeFilter.from : timeFilter.windowSize;
+  return timeFilter.to - timeFilter.from;
 }
 
 export function getTimeKey(timeFilter: TimeFilter): string {
@@ -22,18 +22,18 @@ export function getTimeKey(timeFilter: TimeFilter): string {
 }
 
 function msToMin(time: number): number {
-  return Math.floor(time / 60000);
+  return time / 60000; // Avoid rounding to retain precision
 }
 
 export function hoursToMs(hours: any): number {
   if (hours > 0) {
-    return hours * 60 * 60 * 1000;
+    return hours * 60 * 60 * 1000; // Direct conversion without rounding
   }
   return 0;
 }
 
 export function atLeastGranularity(windowSize: number, granularity: number): number {
-  // api does not support a windowSize smaller than queried granularity in ms
+  // Ensure windowSize is not smaller than granularity
   const granularityInMs = granularity * 1000;
-  return Math.max(windowSize, granularityInMs);
+  return windowSize >= granularityInMs ? windowSize : granularityInMs;
 }
