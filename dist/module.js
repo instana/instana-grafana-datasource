@@ -7013,8 +7013,10 @@ function () {
     var _this = this;
 
     var maxValues = [];
-    var snapshotPromises = snapshots.map(function (snapshot) {
-      var snapshotId = snapshot.snapshotId; // Call fetchMetricsForSnapshot for each snapshot
+    var snapshotPromises = snapshots.map(function (snapshot, index) {
+      var snapshotId = snapshot.snapshotId;
+      var snapshotResponse = snapshot.response;
+      var host = snapshot.host; // Call fetchMetricsForSnapshot for each snapshot
 
       return _this.fetchMetricsForSnapshot(target, [snapshotId], timeFilter, metric).then(function (response) {
         if (!response.data) {
@@ -7025,8 +7027,10 @@ function () {
 
         return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.flatten(response.data.items.map(function (item) {
           return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(item.metrics, function (value, key) {
+            var label = _this.buildLabel(snapshotResponse, host, target, index, metric);
+
             var result = {
-              target: item.label,
+              target: label,
               datapoints: lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(value, function (metric) {
                 return [metric[1], metric[0]];
               }),
@@ -7037,7 +7041,7 @@ function () {
             if (target.displayMaxMetricValue) {
               var maxValue = _this.getMaxMetricValue(target.metric, snapshots);
 
-              maxValues.push(_this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
+              maxValues.push(_this.buildMaxMetricTarget(target, timeseries, maxValue, label));
               result.datapoints = _this.convertRelativeToAbsolute(result.datapoints, maxValue);
             }
 

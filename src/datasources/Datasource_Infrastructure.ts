@@ -97,28 +97,36 @@ export class DataSourceInfrastructure {
 
   fetchMetricsForSnapshots(target: InstanaQuery, snapshots: any, timeFilter: TimeFilter, metric: any) {
     let maxValues: any = [];
-    let snapshotPromises = snapshots.map((snapshot: { snapshotId: any; }) => {
+    let snapshotPromises = snapshots.map((snapshot: { snapshotId: any; response: any; host: any }, index: number) => {
       const snapshotId = snapshot.snapshotId;
+      const snapshotResponse = snapshot.response;
+      const host = snapshot.host;
+
       // Call fetchMetricsForSnapshot for each snapshot
       return this.fetchMetricsForSnapshot(target, [snapshotId], timeFilter, metric).then((response: any) => {
         if (!response.data) {
           return [];
         }
+
         let timeseries = this.readTimeSeries(response.data.items, target.aggregation, timeFilter);
         return _.flatten(
           response.data.items.map((item: any) => {
             return _.map(item.metrics, (value, key) => {
+              let label = this.buildLabel(snapshotResponse, host, target, index, metric);
+
               let result = {
-                target: item.label,
+                target: label,
                 datapoints: _.map(value, (metric) => [metric[1], metric[0]]),
                 refId: target.refId,
                 key: target.stableHash,
               };
+
               if (target.displayMaxMetricValue) {
                 const maxValue = this.getMaxMetricValue(target.metric, snapshots);
-                maxValues.push(this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
+                maxValues.push(this.buildMaxMetricTarget(target, timeseries, maxValue, label));
                 result.datapoints = this.convertRelativeToAbsolute(result.datapoints, maxValue);
               }
+
               return result;
             });
           })
