@@ -97,35 +97,37 @@ export class DataSourceInfrastructure {
 
   fetchMetricsForSnapshots(target: InstanaQuery, snapshots: any, timeFilter: TimeFilter, metric: any) {
     let maxValues: any = [];
-    let snapshotIds: string[] = [];
-    _.map(snapshots, (snapshot) => snapshotIds.push(snapshot.snapshotId));
-    // ...fetch the metric data for every snapshot in the results.
-    return this.fetchMetricsForSnapshot(target, snapshotIds.slice(0, 30), timeFilter, metric).then((response: any) => {
-      if (!response.data) {
-        return response;
-      }
-      let timeseries = this.readTimeSeries(response.data.items, target.aggregation, timeFilter);
-      // as we map two times we need to flatten the result
-      let results = _.flatten(
-        response.data.items.map((item: any, index: number) => {
-          return _.map(item.metrics, (value, key) => {
-            let result = {
-              target: item.label,
-              datapoints: _.map(value, (metric) => [metric[1], metric[0]]),
-              refId: target.refId,
-              key: target.stableHash,
-            };
-            if (target.displayMaxMetricValue) {
-              const maxValue = this.getMaxMetricValue(target.metric, snapshots);
-              maxValues.push(this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
-              result.datapoints = this.convertRelativeToAbsolute(result.datapoints, maxValue);
-            }
-            return result;
-          });
-        })
-      );
-      return results;
+    let snapshotPromises = snapshots.map((snapshot: { snapshotId: any; }) => {
+      const snapshotId = snapshot.snapshotId;
+      // Call fetchMetricsForSnapshot for each snapshot
+      return this.fetchMetricsForSnapshot(target, [snapshotId], timeFilter, metric).then((response: any) => {
+        if (!response.data) {
+          return [];
+        }
+        let timeseries = this.readTimeSeries(response.data.items, target.aggregation, timeFilter);
+        return _.flatten(
+          response.data.items.map((item: any) => {
+            return _.map(item.metrics, (value, key) => {
+              let result = {
+                target: item.label,
+                datapoints: _.map(value, (metric) => [metric[1], metric[0]]),
+                refId: target.refId,
+                key: target.stableHash,
+              };
+              if (target.displayMaxMetricValue) {
+                const maxValue = this.getMaxMetricValue(target.metric, snapshots);
+                maxValues.push(this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
+                result.datapoints = this.convertRelativeToAbsolute(result.datapoints, maxValue);
+              }
+              return result;
+            });
+          })
+        );
+      });
     });
+
+    // Wait for all promises to complete and flatten the results
+    return Promise.all(snapshotPromises).then((allResults) => _.flatten(allResults));
   }
 
   getMaxMetricValue(metric: any, snapshot: any): number {

@@ -7013,44 +7013,42 @@ function () {
     var _this = this;
 
     var maxValues = [];
-    var snapshotIds = [];
+    var snapshotPromises = snapshots.map(function (snapshot) {
+      var snapshotId = snapshot.snapshotId; // Call fetchMetricsForSnapshot for each snapshot
 
-    lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(snapshots, function (snapshot) {
-      return snapshotIds.push(snapshot.snapshotId);
-    }); // ...fetch the metric data for every snapshot in the results.
+      return _this.fetchMetricsForSnapshot(target, [snapshotId], timeFilter, metric).then(function (response) {
+        if (!response.data) {
+          return [];
+        }
 
+        var timeseries = _this.readTimeSeries(response.data.items, target.aggregation, timeFilter);
 
-    return this.fetchMetricsForSnapshot(target, snapshotIds.slice(0, 30), timeFilter, metric).then(function (response) {
-      if (!response.data) {
-        return response;
-      }
+        return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.flatten(response.data.items.map(function (item) {
+          return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(item.metrics, function (value, key) {
+            var result = {
+              target: item.label,
+              datapoints: lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(value, function (metric) {
+                return [metric[1], metric[0]];
+              }),
+              refId: target.refId,
+              key: target.stableHash
+            };
 
-      var timeseries = _this.readTimeSeries(response.data.items, target.aggregation, timeFilter); // as we map two times we need to flatten the result
+            if (target.displayMaxMetricValue) {
+              var maxValue = _this.getMaxMetricValue(target.metric, snapshots);
 
+              maxValues.push(_this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
+              result.datapoints = _this.convertRelativeToAbsolute(result.datapoints, maxValue);
+            }
 
-      var results = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.flatten(response.data.items.map(function (item, index) {
-        return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(item.metrics, function (value, key) {
-          var result = {
-            target: item.label,
-            datapoints: lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(value, function (metric) {
-              return [metric[1], metric[0]];
-            }),
-            refId: target.refId,
-            key: target.stableHash
-          };
+            return result;
+          });
+        }));
+      });
+    }); // Wait for all promises to complete and flatten the results
 
-          if (target.displayMaxMetricValue) {
-            var maxValue = _this.getMaxMetricValue(target.metric, snapshots);
-
-            maxValues.push(_this.buildMaxMetricTarget(target, timeseries, maxValue, result.target));
-            result.datapoints = _this.convertRelativeToAbsolute(result.datapoints, maxValue);
-          }
-
-          return result;
-        });
-      }));
-
-      return results;
+    return Promise.all(snapshotPromises).then(function (allResults) {
+      return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.flatten(allResults);
     });
   };
 
