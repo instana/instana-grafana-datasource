@@ -304,7 +304,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     let cachedResult = this.resultCache.get(target.stableHash);
     if (cachedResult && hasIntersection(timeFilter, cachedResult.timeFilter)) {
       let newFrom = getDeltaRequestTimestamp(cachedResult.results, cachedResult.timeFilter.from, target.timeInterval);
-      let newTo = Math.floor(timeFilter.to / 10000) * 10000;
+      let newTo = timeFilter.to;
       return {
         from: newFrom,
         to: newTo,
@@ -414,7 +414,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
 
   getTimeFilter(): TimeFilter {
     if (!this.timeFilter || !this.timeFilter.from) {
-      const now = Math.floor(Date.now() / 1000) * 1000;
+      const now = Date.now();
       const windowSize = 6 * 60 * 60 * 1000; // 6h
       this.timeFilter = {
         from: now - windowSize,
