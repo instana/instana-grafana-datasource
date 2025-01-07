@@ -4742,7 +4742,7 @@ function (_super) {
       onChange: this.props.onChange,
       loadEntityTypes: this.loadEntityTypes
     }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_8__["Badge"], {
-      text: '4.1.0',
+      text: '4.1.1',
       color: 'blue'
     }));
   };

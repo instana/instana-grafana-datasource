@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.1.1 - 2025-01-07
+- Fix: Ensured accurate time range handling, resolving alignment and data consistency issues.
+- Fix: Fixed the API limit issue for querying "Infrastructure Custom Metrics".
+- Fix: Fixed the bug in the legend format functionality.
+
 ## 4.1.0 - 2024-07-19
 - New Feature: Added a new metric category for Service Level Objectives (beta) with the new SLO API.
 - Enhancements: Renamed the existing SLO information metric category to Service Level Objectives Widgets, which supports the old SLO APIs.
