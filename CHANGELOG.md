@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.1.1 - 2025-01-08
+## 4.1.1 - 2025-01-10
 - Fix: Ensured accurate time range handling, resolving alignment and data consistency issues.
 - Fix: Fixed the API limit issue for querying "Infrastructure Custom Metrics".
 - Fix: Fixed the bug in the legend format functionality.
