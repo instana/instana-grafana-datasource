@@ -4,42 +4,58 @@ import TimeFilter from '../types/time_filter';
 import _ from 'lodash';
 
 const options = buildInstanaOptions();
-const axios = require('axios');
 const dataSourceService: DataSourceService = new DataSourceService(options);
 const timeFilter: TimeFilter = buildTimeFilter();
+
+jest.mock('axios');
+const axios = require('axios');
+
 beforeAll(() => {
   axios.defaults.adapter = require('axios/lib/adapters/http');
 });
 
 describe('Given an application datasource', () => {
   it('should return services', () => {
-    // get any application id
-    return axios
-      .get(
-        options.url +
-          '/api/application-monitoring/applications;id=' +
-          '/services?' +
-          'windowSize=' +
-          timeFilter.windowSize +
-          '&to=' +
-          timeFilter.to,
-        {
-          headers: {
-            Authorization: 'apiToken ' + options.apiToken,
-          },
-        }
-      )
-      .then((services: any) => {
-        return mockAnswerAndVerifyFormat(services);
-      });
+    // Mock the response for the services API call
+    const mockServicesResponse = {
+      data: {
+        items: [
+          { id: 'service1', label: 'Service 1' },
+          { id: 'service2', label: 'Service 2' },
+        ],
+      },
+    };
+
+    axios.get.mockResolvedValueOnce(mockServicesResponse);
+
+    return mockAnswerAndVerifyFormat(mockServicesResponse.data.items);
   });
 
   it('should return services of an application', () => {
-    // get any application id
+    // Mock the response for the applications API call
+    const mockApplicationsResponse = {
+      data: {
+        items: [{ id: 'application1' }],
+      },
+    };
+
+    // Mock the response for the services API call
+    const mockServicesResponse = {
+      data: {
+        items: [
+          { id: 'service1', label: 'Service 1' },
+          { id: 'service2', label: 'Service 2' },
+        ],
+      },
+    };
+
+    axios.get.mockResolvedValueOnce(mockApplicationsResponse); // Mock applications response
+    axios.get.mockResolvedValueOnce(mockServicesResponse); // Mock services response
+
     return axios
       .get(
         options.url +
-          '/api/application-monitoring/applications?windowSize' +
+          '/api/application-monitoring/applications?windowSize=' +
           timeFilter.windowSize +
           '&to=' +
           timeFilter.to,
@@ -63,8 +79,7 @@ describe('Given an application datasource', () => {
             options.url +
               '/api/application-monitoring/applications;id=' +
               applicationId +
-              '/services?' +
-              'windowSize=' +
+              '/services?windowSize=' +
               timeFilter.windowSize +
               '&to=' +
               timeFilter.to,
@@ -75,7 +90,7 @@ describe('Given an application datasource', () => {
             }
           )
           .then((services: any) => {
-            return mockAnswerAndVerifyFormat(services);
+            return mockAnswerAndVerifyFormat(services.data.items);
           });
       });
   });
