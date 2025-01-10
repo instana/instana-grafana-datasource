@@ -7,7 +7,7 @@
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
-    "up": "docker-compose up --build",
+    "up": "docker compose up --build",
     "down": "docker-compose down --remove-orphans",
     "start": "yarn up -d; yarn watch",
     "format": "prettier src/**/*.ts --write"
