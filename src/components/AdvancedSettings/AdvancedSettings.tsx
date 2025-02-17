@@ -24,7 +24,7 @@ const legendFormatTooltips = [
     Default: $label (on host $host)
     <ul>
       <li>• $label - entity label</li>
-      <li>• $host - corresponding host</li>
+      <li>• $host - corresponding host MAC address</li>
       <li>• $pid - corresponding PID</li>
       <li>• $timeShift - corresponding timeShift</li>
       <li>• $metric - displayed metric</li>
@@ -38,7 +38,7 @@ const legendFormatTooltips = [
     Default: $label (on host $host)
     <ul>
       <li>• $label - entity label</li>
-      <li>• $host - corresponding host</li>
+      <li>• $host - corresponding host MAC address</li>
       <li>• $pid - corresponding PID</li>
       <li>• $timeShift - corresponding timeShift</li>
       <li>• $metric - displayed metric</li>
