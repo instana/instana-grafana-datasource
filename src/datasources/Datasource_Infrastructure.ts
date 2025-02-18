@@ -282,11 +282,12 @@ export class DataSourceInfrastructure {
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
       granularity: target.timeInterval.key,
     };
+    const operator = target.logicalOperator && target.logicalOperator.trim() !== '' ? target.logicalOperator : 'AND';
     const payload = {
       tagFilterExpression: {
         elements: tagFilters,
         type: 'EXPRESSION',
-        logicalOperator: 'AND',
+        logicalOperator: operator,
       },
       pagination: {
         retrievalSize: 200,
