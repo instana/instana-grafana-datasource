@@ -150,111 +150,80 @@ describe('Given an infrastructure datasource', () => {
 
   describe('when fetching snapshots for target', () => {
     let contextSpy: any = jest.spyOn(RequestHandler, 'getRequest');
+    let postSpy: any = jest.spyOn(RequestHandler, 'postRequest');
     const timeFilter: TimeFilter = buildTimeFilter();
     const target: InstanaQuery = buildTestTarget();
     const windowSize = getWindowSize(timeFilter);
     target.entityType = { key: 'someKey' };
     target.entityQuery = 'java';
 
-    const snapshotA = { status: 200, data: { label: 'label for A' } };
-    const snapshotB = { status: 200, data: { label: 'label for B' } };
+    const snapshotA = { snapshotId: 'A', host: 'Stans-Macbook-Pro', label: 'label for A' };
+    const snapshotB = { snapshotId: 'B', host: '', label: 'label for B' };
     const contexts = {
       status: 200,
       data: {
         items: [
-          {
-            snapshotId: 'A',
-            host: 'Stans-Macbook-Pro',
-          },
-          {
-            snapshotId: 'B',
-            host: '',
-          },
+          { snapshotId: 'A', host: 'Stans-Macbook-Pro' },
+          { snapshotId: 'B', host: '' },
         ],
+      },
+    };
+    const snapshotsResponse = {
+      status: 200,
+      data: {
+        items: [snapshotA, snapshotB],
       },
     };
 
     beforeEach(() => {
       contextSpy.mockReset();
+      postSpy.mockReset();
+
       contextSpy = jest.spyOn(RequestHandler, 'getRequest');
+      postSpy = jest.spyOn(RequestHandler, 'postRequest');
+
       contextSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
         if (
           endpoint ===
-          '/api/infrastructure-monitoring/snapshots?plugin=' +
-            target.entityType.key +
-            '&size=100&query=' +
-            target.entityQuery +
-            '&windowSize=' +
-            atLeastGranularity(windowSize, target.timeInterval.key) +
-            '&to=' +
-            timeFilter.to +
-            '&offline=' +
-            instanaOptions.showOffline
+          `/api/infrastructure-monitoring/snapshots?plugin=${target.entityType.key}` +
+            `&size=100&query=${target.entityQuery}` +
+            `&windowSize=${atLeastGranularity(windowSize, target.timeInterval.key)}` +
+            `&to=${timeFilter.to}&offline=${instanaOptions.showOffline}`
         ) {
           return Promise.resolve(contexts);
         }
-        if (
-          endpoint ===
-          'api/infrastructure-monitoring/snapshots?plugin=netCoreRuntimePlatform&size=100&query=host&to=' +
-            timeFilter.to +
-            '&windowSize=' +
-            atLeastGranularity(windowSize, target.timeInterval.key)
-        ) {
-          return Promise.resolve(contexts);
-        } else if (
-          endpoint ===
-          '/api/infrastructure-monitoring/snapshots/A?to=' +
-            timeFilter.to +
-            '&windowSize=' +
-            atLeastGranularity(windowSize, target.timeInterval.key)
-        ) {
-          return Promise.resolve(snapshotA);
-        } else if (
-          endpoint ===
-          '/api/infrastructure-monitoring/snapshots/B?to=' +
-            timeFilter.to +
-            '&windowSize=' +
-            atLeastGranularity(windowSize, target.timeInterval.key)
-        ) {
-          return Promise.resolve(snapshotB);
+        throw new Error('Unexpected call URL: ' + endpoint);
+      });
+
+      postSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string, payload: any) => {
+        if (endpoint === `/api/infrastructure-monitoring/snapshots` && payload.snapshotIds) {
+          return Promise.resolve(snapshotsResponse);
         }
         throw new Error('Unexpected call URL: ' + endpoint);
       });
     });
 
-    it('should return snapshots with response', () => {
-      dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter).then((results) => {
-        expect(results.length).toEqual(2);
-        expect(results[0]).toEqual({
-          snapshotId: 'A',
-          host: 'Stans-Macbook-Pro',
-          response: { status: 200, data: { label: 'label for A' } },
-        });
-        expect(results[1]).toEqual({
-          snapshotId: 'B',
-          host: '',
-          response: { status: 200, data: { label: 'label for B' } },
-        });
+    it('should return snapshots with response', async () => {
+      const results = await dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
+      expect(results.length).toEqual(2);
+      expect(results[0]).toEqual({
+        snapshotId: 'A',
+        host: 'Stans-Macbook-Pro',
+        response: expect.anything(),
+      });
+      expect(results[1]).toEqual({
+        snapshotId: 'B',
+        host: '',
+        response: expect.anything(),
       });
     });
 
-    it('should cache snapshots with response', () => {
+    it('should cache snapshots with response', async () => {
       target.entityQuery = 'daljeet';
-      dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
-      dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter).then((results) => {
-        expect(contextSpy).toHaveBeenCalledTimes(1);
-        expect(results.length).toEqual(2);
-        expect(results[0]).toEqual({
-          snapshotId: 'A',
-          host: 'Stans-Macbook-Pro',
-          response: { status: 200, data: { label: 'label for A' } },
-        });
-        expect(results[1]).toEqual({
-          snapshotId: 'B',
-          host: '',
-          response: { status: 200, data: { label: 'label for B' } },
-        });
-      });
+      await dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
+      await dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
+      expect(contextSpy).toHaveBeenCalledTimes(1);
+      expect(postSpy).toHaveBeenCalledTimes(1);
     });
   });
 

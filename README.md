@@ -125,7 +125,7 @@ If your selection matches, the returned dataset will include metrics providing g
 To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
 
 - $label - the entity label
-- $host - the corresponding host
+- $host - the corresponding host MAC address
 - $pid - the corresponding PID
 - $timeShift - corresponding timeShift
 - $metric - the displayed metric

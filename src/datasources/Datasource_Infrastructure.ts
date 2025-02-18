@@ -95,24 +95,33 @@ export class DataSourceInfrastructure {
     });
   }
 
-  fetchMetricsForSnapshots(target: InstanaQuery, snapshots: any, timeFilter: TimeFilter, metric: any) {
+  fetchMetricsForSnapshots(target: InstanaQuery, snapshots: any[], timeFilter: TimeFilter, metric: any) {
     let maxValues: any = [];
-    let snapshotPromises = snapshots.map((snapshot: { snapshotId: any; response: any; host: any }, index: number) => {
-      const snapshotId = snapshot.snapshotId;
-      const snapshotResponse = snapshot.response;
-      const host = snapshot.host;
-
-      // Call fetchMetricsForSnapshot for each snapshot
-      return this.fetchMetricsForSnapshot(target, [snapshotId], timeFilter, metric).then((response: any) => {
+    let batchSize = 30; // API limit
+    let snapshotBatches = _.chunk(snapshots, batchSize);
+    let batchPromises = snapshotBatches.map((batch, batchIndex) => {
+      return this.fetchMetricsForSnapshot(
+        target,
+        batch.map((s) => s.snapshotId),
+        timeFilter,
+        metric
+      ).then((response: any) => {
         if (!response.data) {
           return [];
         }
 
         let timeseries = this.readTimeSeries(response.data.items, target.aggregation, timeFilter);
         return _.flatten(
-          response.data.items.map((item: any) => {
+          response.data.items.map((item: any, index: number) => {
             return _.map(item.metrics, (value, key) => {
-              let label = this.buildLabel(snapshotResponse, host, target, index, metric);
+              let snapshot = batch[index];
+              let label = this.buildLabel(
+                snapshot.response,
+                snapshot.response.entityId.host,
+                target,
+                batchIndex * batchSize + index,
+                metric
+              );
 
               let result = {
                 target: label,
@@ -134,8 +143,8 @@ export class DataSourceInfrastructure {
       });
     });
 
-    // Wait for all promises to complete and flatten the results
-    return Promise.all(snapshotPromises).then((allResults) => _.flatten(allResults));
+    // Execute all batch requests and flatten results
+    return Promise.all(batchPromises).then((allResults) => _.flatten(allResults));
   }
 
   getMaxMetricValue(metric: any, snapshot: any): number {
@@ -347,7 +356,7 @@ export class DataSourceInfrastructure {
     return metrics;
   }
 
-  fetchSnapshotsForTarget(target: InstanaQuery, timeFilter: TimeFilter) {
+  async fetchSnapshotsForTarget(target: InstanaQuery, timeFilter: TimeFilter) {
     const windowSize = getWindowSize(timeFilter);
     target.timeInterval = getDefaultChartGranularity(windowSize);
     const query = this.buildQuery(target);
@@ -361,7 +370,7 @@ export class DataSourceInfrastructure {
     const fetchSnapshotContextsUrl =
       `/api/infrastructure-monitoring/snapshots` +
       `?plugin=${target.entityType.key}` +
-      '&size=100' +
+      `&size=100` +
       `&query=${target.entityQuery}` +
       `&windowSize=${atLeastGranularity(windowSize, target.timeInterval.key)}` +
       `&to=${timeFilter.to}` +
@@ -369,39 +378,28 @@ export class DataSourceInfrastructure {
 
     snapshots = getRequest(this.instanaOptions, fetchSnapshotContextsUrl)
       .then((contextsResponse: any) => {
-        return Promise.all(
-          contextsResponse.data.items.map(({ snapshotId, host }: any) => {
-            let snapshotInfo = this.snapshotInfoCache.get(snapshotId);
-            if (snapshotInfo) {
-              return snapshotInfo;
-            }
+        const snapshotIds = contextsResponse.data.items.map(({ snapshotId }: any) => snapshotId);
 
-            const fetchSnapshotUrl =
-              `/api/infrastructure-monitoring/snapshots/${snapshotId}` +
-              `?to=${timeFilter.to}&windowSize=${atLeastGranularity(windowSize, target.timeInterval.key)}`; // @see SnapshotApiResource#getSnapshot
+        if (snapshotIds.length === 0) {
+          return [];
+        }
 
-            snapshotInfo = getRequest(this.instanaOptions, fetchSnapshotUrl, true).then((snapshotResponse: any) => {
-              // check for undefined because the fetchSnapshotContexts is buggy
-              if (snapshotResponse !== undefined) {
-                return {
-                  snapshotId,
-                  host,
-                  response: this.reduceSnapshot(snapshotResponse),
-                };
-              }
+        const fetchSnapshotsUrl = `/api/infrastructure-monitoring/snapshots`;
+        const payload = {
+          snapshotIds,
+          to: timeFilter.to,
+          windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
+        };
 
-              return null;
-            });
-
-            this.snapshotInfoCache.put(snapshotId, snapshotInfo, this.timeToLiveSnapshotInfoCache);
-            return snapshotInfo;
-          })
-        );
+        return postRequest(this.instanaOptions, fetchSnapshotsUrl, payload).then((snapshotsResponse: any) => {
+          return snapshotsResponse.data.items.map((snapshot: any) => ({
+            snapshotId: snapshot.snapshotId,
+            host: snapshot.host,
+            response: this.reduceSnapshot(snapshot),
+          }));
+        });
       })
-      .then((response: any) => {
-        // undefined items need to be removed, because the fetchSnapshotContexts is buggy in the backend, maybe can be removed in the future
-        return _.compact(response);
-      });
+      .then((response: any) => _.compact(response)); // Remove undefined items
 
     this.snapshotCache.put(key, snapshots);
     return snapshots;
