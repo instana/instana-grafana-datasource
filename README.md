@@ -114,6 +114,7 @@ You should provide the appropriate group-by tag in the "Group by" text box. You 
 Most metrics will have more than one aggregation type (SUM, MEAN,etc...) from which appropriate one can be chosen.
 
 We currently fully support filtering in Infrastructure Analyze. To use this feature, you must fill the "TagFilterExpression" text box with a tagFilterExpression which contains an array of desired filter objects.
+By default, the logical operator is set to "AND". If multiple filters need to be applied in the Tag Filter Expression text box, users must select the desired logical operator from the Logical Operator dropdown to customize the filtering behavior.
 You can easily get the tagFilterExpression from the JSON tree under API query session of the Instana Infrastructure Analytics dashboard.
 If your selection matches, the returned dataset will include metrics providing graphs like the example below.
 

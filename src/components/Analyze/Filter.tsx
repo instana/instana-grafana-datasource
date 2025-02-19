@@ -226,6 +226,7 @@ export class Filters extends React.Component<Props, FilterState> {
             queryKeyword
             labelWidth={14}
             inputWidth={10}
+            placeholder="AND"
             label={'Logical Operator'}
             tooltip={'Select a Logical Operator.'}
             value={query.logicalOperator}
@@ -239,8 +240,8 @@ export class Filters extends React.Component<Props, FilterState> {
             queryKeyword
             inputWidth={0}
             label={'TagFilterExpression'}
-            tooltip={'Enter the tagFilterExpression here '}
-            placeholder="[{Enter the filter JSON here}]"
+            tooltip={'Enter the TagFilterExpressionElement here '}
+            placeholder="[{Array of objects (TagFilterExpressionElement)}]"
             value={this.state.textareaValue}
             onChange={(event) => this.onFilterChange(event)}
           />

@@ -1668,6 +1668,7 @@ function (_super) {
         queryKeyword: true,
         labelWidth: 14,
         inputWidth: 10,
+        placeholder: "AND",
         label: 'Logical Operator',
         tooltip: 'Select a Logical Operator.',
         value: query.logicalOperator,
@@ -1683,8 +1684,8 @@ function (_super) {
         queryKeyword: true,
         inputWidth: 0,
         label: 'TagFilterExpression',
-        tooltip: 'Enter the tagFilterExpression here ',
-        placeholder: "[{Enter the filter JSON here}]",
+        tooltip: 'Enter the TagFilterExpressionElement here ',
+        placeholder: "[{Array of objects (TagFilterExpressionElement)}]",
         value: this.state.textareaValue,
         onChange: function onChange(event) {
           return _this.onFilterChange(event);
