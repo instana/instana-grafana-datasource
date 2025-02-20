@@ -115,11 +115,31 @@ Most metrics will have more than one aggregation type (SUM, MEAN,etc...) from wh
 
 We currently fully support filtering in Infrastructure Analyze. To use this feature, you must fill the "TagFilterExpression" text box with a tagFilterExpression which contains an array of desired filter objects.
 By default, the logical operator is set to "AND". If multiple filters need to be applied in the Tag Filter Expression text box, users must select the desired logical operator from the Logical Operator dropdown to customize the filtering behavior.
-You can easily get the tagFilterExpression from the JSON tree under API query session of the Instana Infrastructure Analytics dashboard.
+You can easily get the tagFilterExpression elements from the JSON tree under API query session of the Instana Infrastructure Analytics dashboard.
+### Syntax:  
+```json
+[
+  {
+    "type": "TAG_FILTER",
+    "name": "<tag_name>",
+    "operator": "<operator>",
+    "entity": "NOT_APPLICABLE",
+    "value": "<tag_value>",
+    "tagDefinition": {
+      "name": "<tag_name>",
+      "type": "STRING",
+      "path": [
+        { "label": "<Category>" },
+        { "label": "<Subcategory>" }
+      ],
+      "availability": []
+    }
+  }
+]
+```
 If your selection matches, the returned dataset will include metrics providing graphs like the example below.
 
-![infra analyze plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.4.0/infrastructure_analyze_metrics1.gif)
-![infra analyze plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.4.0/infrastructure_analyze_metrics2.gif)
+![infra analyze plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.4.0/nfrastructure_analyze_metrics.gif)
 
 #### Change legend format
 
