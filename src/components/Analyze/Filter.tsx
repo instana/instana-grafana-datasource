@@ -16,9 +16,11 @@ import _ from 'lodash';
 import call_to_entities from '../../lists/apply_call_to_entities';
 import operators from '../../lists/operators';
 import FormTextArea from 'components/FormField/FormTextArea';
+import FormSelect from 'components/FormField/FormSelect';
 
 interface FilterState {
   textareaValue: string;
+  selectareaValue: string;
 }
 
 interface Props {
@@ -42,6 +44,7 @@ export class Filters extends React.Component<Props, FilterState> {
     super(props);
     this.state = {
       textareaValue: '',
+      selectareaValue: 'AND',
     };
   }
 
@@ -149,6 +152,19 @@ export class Filters extends React.Component<Props, FilterState> {
     onRunQuery();
   };
 
+  onLogicalOperatorChange = (selectedOption: SelectableValue) => {
+    const { query, onChange, onRunQuery } = this.props;
+
+    this.setState({
+      selectareaValue: selectedOption.value,
+    });
+    query.logicalOperator = selectedOption.value || 'AND';
+
+    onChange(query);
+    this.debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
+    onRunQuery();
+  };
+
   validateChangeAndRun(index: number, runDebounced = false) {
     const { query, onChange, onRunQuery } = this.props;
     if (query.filters[index].tag) {
@@ -206,12 +222,26 @@ export class Filters extends React.Component<Props, FilterState> {
     if (query.metricCategory.key === INFRASTRUCTURE_ANALYZE) {
       return (
         <div className={'gf-form'}>
+          <FormSelect
+            queryKeyword
+            labelWidth={14}
+            inputWidth={10}
+            placeholder="AND"
+            label={'Logical Operator'}
+            tooltip={'Select a Logical Operator.'}
+            value={query.logicalOperator}
+            options={[
+              { label: 'AND', value: 'AND' },
+              { label: 'OR', value: 'OR' },
+            ]}
+            onChange={this.onLogicalOperatorChange}
+          />
           <FormTextArea
             queryKeyword
             inputWidth={0}
             label={'TagFilterExpression'}
-            tooltip={'Enter the tagFilterExpression here '}
-            placeholder="[{Enter the filter JSON here}]"
+            tooltip={'Enter the TagFilterExpressionElement here '}
+            placeholder="[{Array of objects (TagFilterExpressionElement)}]"
             value={this.state.textareaValue}
             onChange={(event) => this.onFilterChange(event)}
           />

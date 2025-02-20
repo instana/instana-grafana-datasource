@@ -1451,6 +1451,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lists/apply_call_to_entities */ "./lists/apply_call_to_entities.ts");
 /* harmony import */ var _lists_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lists/operators */ "./lists/operators.ts");
 /* harmony import */ var components_FormField_FormTextArea__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! components/FormField/FormTextArea */ "./components/FormField/FormTextArea.tsx");
+/* harmony import */ var components_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! components/FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+
 
 
 
@@ -1553,8 +1555,25 @@ function (_super) {
       onRunQuery();
     };
 
+    _this.onLogicalOperatorChange = function (selectedOption) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+
+      _this.setState({
+        selectareaValue: selectedOption.value
+      });
+
+      query.logicalOperator = selectedOption.value || 'AND';
+      onChange(query);
+      _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.onRunQuery, 500);
+      onRunQuery();
+    };
+
     _this.state = {
-      textareaValue: ''
+      textareaValue: '',
+      selectareaValue: 'AND'
     };
     return _this;
   }
@@ -1645,12 +1664,28 @@ function (_super) {
     if (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"]) {
       return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
         className: 'gf-form'
-      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(components_FormField_FormTextArea__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(components_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        queryKeyword: true,
+        labelWidth: 14,
+        inputWidth: 10,
+        placeholder: "AND",
+        label: 'Logical Operator',
+        tooltip: 'Select a Logical Operator.',
+        value: query.logicalOperator,
+        options: [{
+          label: 'AND',
+          value: 'AND'
+        }, {
+          label: 'OR',
+          value: 'OR'
+        }],
+        onChange: this.onLogicalOperatorChange
+      }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(components_FormField_FormTextArea__WEBPACK_IMPORTED_MODULE_8__["default"], {
         queryKeyword: true,
         inputWidth: 0,
         label: 'TagFilterExpression',
-        tooltip: 'Enter the tagFilterExpression here ',
-        placeholder: "[{Enter the filter JSON here}]",
+        tooltip: 'Enter the TagFilterExpressionElement here ',
+        placeholder: "[{Array of objects (TagFilterExpressionElement)}]",
         value: this.state.textareaValue,
         onChange: function onChange(event) {
           return _this.onFilterChange(event);
@@ -7211,11 +7246,12 @@ function () {
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
       granularity: target.timeInterval.key
     };
+    var operator = target.logicalOperator && target.logicalOperator.trim() !== '' ? target.logicalOperator : 'AND';
     var payload = {
       tagFilterExpression: {
         elements: tagFilters,
         type: 'EXPRESSION',
-        logicalOperator: 'AND'
+        logicalOperator: operator
       },
       pagination: {
         retrievalSize: 200
