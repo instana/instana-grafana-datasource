@@ -7192,7 +7192,6 @@ function () {
 
   DataSourceInfrastructure.prototype.fetchAnalyzeEntities = function (target, timeFilter) {
     var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
-    var tagFilters = [];
 
     if (!target.timeInterval) {
       target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_7__["getDefaultChartGranularity"])(windowSize);
@@ -7202,21 +7201,18 @@ function () {
       target.timeInterval.key = 60000;
     }
 
-    lodash__WEBPACK_IMPORTED_MODULE_5___default.a.forEach(target.filters, function (filter) {
-      tagFilters.push(filter);
-    });
-
     var metric = {
       metric: target.metric.key,
       aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
       granularity: target.timeInterval.key
     };
+    var tagFilterExpression = target.filters && target.filters.length != 0 ? target.filters : {
+      elements: [],
+      type: 'EXPRESSION',
+      logicalOperator: 'AND'
+    };
     var payload = {
-      tagFilterExpression: {
-        elements: tagFilters,
-        type: 'EXPRESSION',
-        logicalOperator: 'AND'
-      },
+      tagFilterExpression: tagFilterExpression,
       pagination: {
         retrievalSize: 200
       },

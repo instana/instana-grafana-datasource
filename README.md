@@ -115,6 +115,32 @@ Most metrics will have more than one aggregation type (SUM, MEAN,etc...) from wh
 
 We currently fully support filtering in Infrastructure Analyze. To use this feature, you must fill the "TagFilterExpression" text box with a tagFilterExpression which contains an array of desired filter objects.
 You can easily get the tagFilterExpression from the JSON tree under API query session of the Instana Infrastructure Analytics dashboard.
+
+#### Syntax:  
+```json
+{
+  "type": "EXPRESSION",
+  "logicalOperator": "AND",
+  "elements": [
+    {
+      "type": "TAG_FILTER",
+      "name": "<tag-name>",
+      "operator": "EQUALS",
+      "entity": "NOT_APPLICABLE",
+      "value": "<desired-value>",
+      "tagDefinition": {
+        "name": "<tag-name>",
+        "type": "STRING",
+        "path": [
+          { "label": "<Category>" },
+          { "label": "<Tag>" }
+        ],
+        "availability": []
+      }
+    }
+  ]
+}
+```
 If your selection matches, the returned dataset will include metrics providing graphs like the example below.
 
 ![infra analyze plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.4.0/infrastructure_analyze_metrics1.gif)
