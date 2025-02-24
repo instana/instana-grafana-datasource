@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.2 - 2025-02-24
+- Enhancements: Enabled multi-filtering in the Infrastructure Analyze metric category.
+- Fix: Fixed a bug in the legend label format functionality.
+
 ## 4.1.1 - 2025-01-10
 - Fix: Ensured accurate time range handling, resolving alignment and data consistency issues.
 - Fix: Fixed the API limit issue for querying "Infrastructure Custom Metrics".
