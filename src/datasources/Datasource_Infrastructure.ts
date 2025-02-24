@@ -280,7 +280,7 @@ export class DataSourceInfrastructure {
     };
 
     const tagFilterExpression =
-      target.filters && target.filters.length != 0
+      target.filters && target.filters.length !== 0
         ? target.filters
         : {
             elements: [],
