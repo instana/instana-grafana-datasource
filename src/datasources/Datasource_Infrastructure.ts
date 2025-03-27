@@ -115,6 +115,8 @@ export class DataSourceInfrastructure {
           response.data.items.map((item: any, index: number) => {
             return _.map(item.metrics, (value, key) => {
               let snapshot = batch[index];
+              snapshot.response.pid = snapshot.pid;
+
               let label = this.buildLabel(
                 snapshot.response,
                 snapshot.response.entityId.host,
@@ -396,6 +398,7 @@ export class DataSourceInfrastructure {
           return snapshotsResponse.data.items.map((snapshot: any) => ({
             snapshotId: snapshot.snapshotId,
             host: snapshot.host,
+            pid: _.get(snapshot, ['data', 'pid'], ''),
             response: this.reduceSnapshot(snapshot),
           }));
         });
@@ -478,8 +481,8 @@ export class DataSourceInfrastructure {
       label = _.replace(label, '$plugin', snapshotResponse.plugin); // not documented
       label = _.replace(label, '$snapshot', snapshotResponse.snapshotId); // not documented
       label = _.replace(label, '$host', host ? host : 'unknown');
-      label = _.replace(label, '$pid', _.get(snapshotResponse, ['data', 'pid'], ''));
-      label = _.replace(label, '$type', _.get(snapshotResponse, ['data', 'type'], ''));
+      label = _.replace(label, '$pid', snapshotResponse.pid);
+      label = _.replace(label, '$type', target.entityType.label ?? '');
       label = _.replace(label, '$name', _.get(snapshotResponse, ['data', 'name'], ''));
       label = _.replace(label, '$service', _.get(snapshotResponse, ['data', 'service_name'], ''));
       if (target.freeTextMetrics) {
