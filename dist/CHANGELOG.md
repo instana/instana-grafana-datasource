@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.1.3 - 2025-03-28
+- Fix: Fixed an issue with the legend variables in Infrastructure Metric Categories.
+
 ## 4.1.2 - 2025-02-24
 - Enhancements: Enabled multi-filtering in the Infrastructure Analyze metric category.
 - Fix: Fixed a bug in the legend label format functionality.
