@@ -29,7 +29,6 @@ const legendFormatTooltips = [
       <li>• $timeShift - corresponding timeShift</li>
       <li>• $metric - displayed metric</li>
       <li>• $type - entity type</li>
-      <li>• $service - service label</li>
       <li>• $name - label alternative</li>
       <li>• $index - index in the list</li>
     </ul>
@@ -43,7 +42,6 @@ const legendFormatTooltips = [
       <li>• $timeShift - corresponding timeShift</li>
       <li>• $metric - displayed metric</li>
       <li>• $type - entity type</li>
-      <li>• $service - service label</li>
       <li>• $name - label alternative</li>
       <li>• $index - index in the list</li>
     </ul>
