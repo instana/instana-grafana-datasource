@@ -209,11 +209,15 @@ describe('Given an infrastructure datasource', () => {
       expect(results[0]).toEqual({
         snapshotId: 'A',
         host: 'Stans-Macbook-Pro',
+        name: '',
+        pid: '',
         response: expect.anything(),
       });
       expect(results[1]).toEqual({
         snapshotId: 'B',
         host: '',
+        name: '',
+        pid: '',
         response: expect.anything(),
       });
     });

@@ -7033,6 +7033,7 @@ function () {
           return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.map(item.metrics, function (value, key) {
             var snapshot = batch[index];
             snapshot.response.pid = snapshot.pid;
+            snapshot.response.name = snapshot.name;
 
             var label = _this.buildLabel(snapshot.response, snapshot.response.entityId.host, target, batchIndex * batchSize + index, metric);
 
@@ -7320,6 +7321,7 @@ function () {
                 snapshotId: snapshot.snapshotId,
                 host: snapshot.host,
                 pid: lodash__WEBPACK_IMPORTED_MODULE_5___default.a.get(snapshot, ['data', 'pid'], ''),
+                name: lodash__WEBPACK_IMPORTED_MODULE_5___default.a.get(snapshot, ['data', 'name'], ''),
                 response: _this.reduceSnapshot(snapshot)
               };
             });
@@ -7411,7 +7413,7 @@ function () {
       label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$host', host ? host : 'unknown');
       label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$pid', snapshotResponse.pid);
       label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$type', (_a = target.entityType.label) !== null && _a !== void 0 ? _a : '');
-      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$name', lodash__WEBPACK_IMPORTED_MODULE_5___default.a.get(snapshotResponse, ['data', 'name'], ''));
+      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$name', snapshotResponse.name);
       label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$service', lodash__WEBPACK_IMPORTED_MODULE_5___default.a.get(snapshotResponse, ['data', 'service_name'], ''));
 
       if (target.freeTextMetrics) {

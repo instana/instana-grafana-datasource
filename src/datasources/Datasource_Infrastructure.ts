@@ -116,6 +116,7 @@ export class DataSourceInfrastructure {
             return _.map(item.metrics, (value, key) => {
               let snapshot = batch[index];
               snapshot.response.pid = snapshot.pid;
+              snapshot.response.name = snapshot.name;
 
               let label = this.buildLabel(
                 snapshot.response,
@@ -399,6 +400,7 @@ export class DataSourceInfrastructure {
             snapshotId: snapshot.snapshotId,
             host: snapshot.host,
             pid: _.get(snapshot, ['data', 'pid'], ''),
+            name: _.get(snapshot, ['data', 'name'], ''),
             response: this.reduceSnapshot(snapshot),
           }));
         });
@@ -483,7 +485,7 @@ export class DataSourceInfrastructure {
       label = _.replace(label, '$host', host ? host : 'unknown');
       label = _.replace(label, '$pid', snapshotResponse.pid);
       label = _.replace(label, '$type', target.entityType.label ?? '');
-      label = _.replace(label, '$name', _.get(snapshotResponse, ['data', 'name'], ''));
+      label = _.replace(label, '$name', snapshotResponse.name);
       label = _.replace(label, '$service', _.get(snapshotResponse, ['data', 'service_name'], ''));
       if (target.freeTextMetrics) {
         label = _.replace(label, '$metric', metric.key);
