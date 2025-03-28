@@ -100,6 +100,19 @@ If your Dynamic Focus query matches, the returned dataset will include metrics p
 
 ![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/custom-metrics.gif)
 
+#### Change legend format
+
+To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
+
+- $label - the entity label
+- $host - the corresponding host MAC address
+- $pid - the corresponding PID
+- $timeShift - corresponding timeShift
+- $metric - the displayed metric
+- $type - the entity type
+- $name - a label alternative
+- $index - index in the list
+
 ### Infrastructure Analyze
 
 For self-hosted installations, BeeInstana is required for this endpoint group. See this [documentation for enabling BeeInstana](https://www.ibm.com/docs/en/instana-observability/current?topic=openshift-enabling-optional-features#beeinstana-metrics-pipeline).
@@ -145,20 +158,6 @@ If your selection matches, the returned dataset will include metrics providing g
 
 ![infra analyze plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.4.0/infrastructure_analyze_metrics1.gif)
 ![infra analyze plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.4.0/infrastructure_analyze_metrics2.gif)
-
-#### Change legend format
-
-To adjust the legend display you can provide an own "Legend format". Supported values for replacement are:
-
-- $label - the entity label
-- $host - the corresponding host MAC address
-- $pid - the corresponding PID
-- $timeShift - corresponding timeShift
-- $metric - the displayed metric
-- $type - the entity type
-- $service - the service label (for endpoints only)
-- $name - a label alternative
-- $index - index in the list
 
 ### Application metrics
 
