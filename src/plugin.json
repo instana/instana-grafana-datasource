@@ -39,8 +39,8 @@
       {"name": "query", "path": "img/query.png"},
       {"name": "slo", "path": "img/slo.png"}
     ],
-    "version": "4.1.3",
-    "updated": "2025-03-28"
+    "version": "4.1.4",
+    "updated": "2025-05-06"
   },
   "routes": [
     {

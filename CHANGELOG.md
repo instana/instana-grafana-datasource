@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.4 - 2025-05-06
+- Fix: Fixed an issue with metric count display in Infrastructure metric categories.
+- Fix: Fixed offline snapshot issue in infrastructure metrics categories.
+
 ## 4.1.3 - 2025-03-28
 - Fix: Fixed an issue with the legend variables in Infrastructure Metric Categories.
 
