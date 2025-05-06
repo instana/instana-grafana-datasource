@@ -392,8 +392,10 @@ export class DataSourceInfrastructure {
         const fetchSnapshotsUrl = `/api/infrastructure-monitoring/snapshots`;
         const payload = {
           snapshotIds,
-          to: timeFilter.to,
-          windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
+          timeFrame: {
+            to: timeFilter.to,
+            windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
+          },
         };
 
         return postRequest(this.instanaOptions, fetchSnapshotsUrl, payload).then((snapshotsResponse: any) => {
