@@ -342,6 +342,7 @@ describe('Given an infrastructure datasource', () => {
         metric: target.metric.key,
         aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
         granularity: target.timeInterval.key,
+        crossSeriesAggregation: 'DISTINCT_COUNT',
       };
       const payload = {
         tagFilterExpression: {
