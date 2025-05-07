@@ -1,6 +1,7 @@
 # Changelog
 
-## 4.1.4 - 2025-05-06
+## 4.1.4 - 2025-05-07
+- Security: Enabled content_security_policy in Grafana configuration to mitigate vulnerability issues and enhance protection against XSS attacks, following the recommended security hardening practices from Grafana documentation.
 - Fix: Fixed an issue with metric count display in Infrastructure metric categories.
 - Fix: Fixed offline snapshot issue in infrastructure metrics categories.
 
