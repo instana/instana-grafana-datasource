@@ -1,4 +1,4 @@
-FROM cpoepke/mountebank-basis:latest
+FROM bbyars/mountebank:latest
 
 ADD imposters /mb/
 
