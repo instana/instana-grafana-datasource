@@ -5,6 +5,7 @@ import {
   CUSTOM_METRICS,
   ANALYZE_APPLICATION_METRICS,
   INFRASTRUCTURE_ANALYZE,
+  SYNTHETIC_MONITORING,
 } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
@@ -131,20 +132,24 @@ export default class Metric extends React.Component<Props, MetricState> {
 
   render() {
     const { query, datasource } = this.props;
+    const shouldHideMetricField =
+      query.metricCategory.key === SYNTHETIC_MONITORING && query.testType?.value === 'results';
 
     return (
       <div className={'gf-form'}>
-        <FormSelect
-          queryKeyword
-          disabled={query.useFreeTextMetrics}
-          inputWidth={0}
-          label={'Metric'}
-          tooltip={'Select the metric you wish to plot.'}
-          value={query.metric}
-          noOptionsMessage={'No metrics found'}
-          options={this.props.availableMetrics}
-          onChange={this.onMetricChange}
-        />
+        {!shouldHideMetricField && (
+          <FormSelect
+            queryKeyword
+            disabled={query.useFreeTextMetrics}
+            inputWidth={0}
+            label={'Metric'}
+            tooltip={'Select the metric you wish to plot.'}
+            value={query.metric}
+            noOptionsMessage={'No metrics found'}
+            options={this.props.availableMetrics}
+            onChange={this.onMetricChange}
+          />
+        )}
 
         {query.metricCategory.key === BUILT_IN_METRICS && (
           <FormSwitch

@@ -3,6 +3,7 @@ import TimeFilter from './time_filter';
 import TagFilter from './tag_filter';
 
 export interface InstanaQuery extends DataQuery {
+  testType: SelectableValue<any>;
   metricCategory: SelectableValue;
   timeShift: string;
   aggregateGraphs: boolean;

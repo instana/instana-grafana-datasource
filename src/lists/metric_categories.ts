@@ -39,4 +39,8 @@ export default [
     label: 'Service Level Objectives Widgets',
     key: 7,
   },
+  {
+    label: 'Synthetic monitoring',
+    key: 11,
+  },
 ];
