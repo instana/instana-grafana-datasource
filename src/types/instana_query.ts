@@ -43,4 +43,6 @@ export interface InstanaQuery extends DataQuery {
   applicationBoundaryScope: string;
   showAdvancedSettings: boolean;
   tagFilterExpression: string;
+  applicationId: string;
+  testId: string;
 }

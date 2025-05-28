@@ -5,7 +5,6 @@ import {
   CUSTOM_METRICS,
   ANALYZE_APPLICATION_METRICS,
   INFRASTRUCTURE_ANALYZE,
-  SYNTHETIC_MONITORING,
 } from '../../GlobalVariables';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
@@ -132,12 +131,10 @@ export default class Metric extends React.Component<Props, MetricState> {
 
   render() {
     const { query, datasource } = this.props;
-    const shouldHideMetricField =
-      query.metricCategory.key === SYNTHETIC_MONITORING && query.testType?.value === 'results';
 
     return (
       <div className={'gf-form'}>
-        {!shouldHideMetricField && (
+        {
           <FormSelect
             queryKeyword
             disabled={query.useFreeTextMetrics}
@@ -149,7 +146,7 @@ export default class Metric extends React.Component<Props, MetricState> {
             options={this.props.availableMetrics}
             onChange={this.onMetricChange}
           />
-        )}
+        }
 
         {query.metricCategory.key === BUILT_IN_METRICS && (
           <FormSwitch

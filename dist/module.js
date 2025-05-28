@@ -4141,15 +4141,12 @@ function (_super) {
   };
 
   Metric.prototype.render = function () {
-    var _a;
-
-    var _b = this.props,
-        query = _b.query,
-        datasource = _b.datasource;
-    var shouldHideMetricField = query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SYNTHETIC_MONITORING"] && ((_a = query.testType) === null || _a === void 0 ? void 0 : _a.value) === 'results';
+    var _a = this.props,
+        query = _a.query,
+        datasource = _a.datasource;
     return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       className: 'gf-form'
-    }, !shouldHideMetricField && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
       queryKeyword: true,
       disabled: query.useFreeTextMetrics,
       inputWidth: 0,
@@ -5080,7 +5077,7 @@ function (_super) {
 
     _this.fetchSyntheticTests = function () {
       return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this, void 0, void 0, function () {
-        var _a, datasource, query, onChange, tests, testOptions, error_1;
+        var _a, datasource, query, onChange, tests, testOptions, selectedEntity, error_1;
 
         var _this = this;
 
@@ -5103,21 +5100,45 @@ function (_super) {
               if (!isUnmounting) {
                 testOptions = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spreadArray"])([{
                   label: 'Please specify',
-                  value: ''
+                  value: '',
+                  test: null
                 }], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(tests.map(function (test) {
                   return {
                     label: test.key,
-                    value: test.label
+                    value: test.label,
+                    test: test
                   };
                 })), false);
+                selectedEntity = testOptions.find(function (option) {
+                  var _a;
+
+                  return option.value === ((_a = query.entity) === null || _a === void 0 ? void 0 : _a.value);
+                }); // If not found, select first test (if available), else the default empty
+
+                if (!selectedEntity) {
+                  if (tests.length > 0) {
+                    selectedEntity = testOptions[1]; // first actual test, after 'Please specify'
+
+                    query.applicationId = tests[0].applicationId;
+                    query.testId = tests[0].testId;
+                  } else {
+                    selectedEntity = testOptions[0]; // 'Please specify'
+                  }
+                } else if (selectedEntity.test) {
+                  // Sync applicationId and testId to the query for selected test
+                  query.applicationId = selectedEntity.test.applicationId;
+                  query.testId = selectedEntity.test.testId;
+                }
+
                 this.setState({
                   tests: testOptions
-                });
+                }); // Update query.entity to selectedEntity and notify parent if changed
 
-                if (!query.entity || !query.entity.value) {
-                  query.entity = testOptions[0];
+                if (query.entity !== selectedEntity) {
+                  query.entity = selectedEntity;
                   onChange(query);
-                }
+                } // Set default testType if not set
+
 
                 if (!query.testType || !query.testType.value) {
                   query.testType = testTypeOptions[0];
@@ -5156,6 +5177,12 @@ function (_super) {
           onChange = _a.onChange,
           onRunQuery = _a.onRunQuery;
       query.entity = test;
+
+      if (test.test) {
+        query.testId = test.test.testId;
+        query.applicationId = test.test.applicationId;
+      }
+
       onChange(query);
       onRunQuery();
     };
@@ -6916,11 +6943,13 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceSyntheticMonitoring", function() { return DataSourceSyntheticMonitoring; });
-/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
-/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../cache */ "./cache.ts");
-/* harmony import */ var util_time_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! util/time_util */ "./util/time_util.ts");
-/* harmony import */ var util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var util_time_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! util/time_util */ "./util/time_util.ts");
 /* harmony import */ var util_target_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! util/target_util */ "./util/target_util.ts");
+/* harmony import */ var util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+
 
 
 
@@ -6932,99 +6961,167 @@ var DataSourceSyntheticMonitoring =
 function () {
   function DataSourceSyntheticMonitoring(options) {
     this.instanaOptions = options;
-    this.SyntheticMonitoringCache = new _cache__WEBPACK_IMPORTED_MODULE_1__["default"]();
-    this.miscCache = new _cache__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    this.SyntheticMonitoringCache = new _cache__WEBPACK_IMPORTED_MODULE_2__["default"]();
+    this.miscCache = new _cache__WEBPACK_IMPORTED_MODULE_2__["default"]();
   }
 
   DataSourceSyntheticMonitoring.prototype.runQuery = function (target, timeFilter) {
-    var _a, _b;
+    var _a, _b, _c, _d;
 
-    if (!((_a = target === null || target === void 0 ? void 0 : target.metric) === null || _a === void 0 ? void 0 : _a.key)) {
-      console.warn('Missing required target fields:', target);
+    if (!((_a = target === null || target === void 0 ? void 0 : target.metric) === null || _a === void 0 ? void 0 : _a.key) && ((_b = target.testType) === null || _b === void 0 ? void 0 : _b.value) === 'metric') {
+      console.warn('Missing required metric field for test type = metric:', target);
       return Promise.resolve(Object(util_target_util__WEBPACK_IMPORTED_MODULE_4__["emptyResultData"])(target.refId));
     }
 
-    if (((_b = target.testType) === null || _b === void 0 ? void 0 : _b.value) !== 'metric') {
-      console.warn('Skipping fetch: testtype is not metric', target.testType);
+    if (!((_c = target === null || target === void 0 ? void 0 : target.entity) === null || _c === void 0 ? void 0 : _c.value)) {
+      console.warn('Missing test selection (entity)', target);
       return Promise.resolve(Object(util_target_util__WEBPACK_IMPORTED_MODULE_4__["emptyResultData"])(target.refId));
     }
 
-    return this.fetchMetricsForSyntheticMonitoring(target, timeFilter).then(function (response) {
+    if (((_d = target.testType) === null || _d === void 0 ? void 0 : _d.value) === 'metric') {
+      return this.fetchMetricsForSyntheticMonitoring(target, timeFilter).then(function (response) {
+        var _a;
+
+        var result = [];
+
+        if (!((_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.testResult)) {
+          console.warn('Invalid or empty results data:', response);
+          return Object(util_target_util__WEBPACK_IMPORTED_MODULE_4__["emptyResultData"])(target.refId);
+        }
+
+        response.data.testResult.forEach(function (item) {
+          var _a, _b, _c;
+
+          var testName = (_a = item.testName) !== null && _a !== void 0 ? _a : 'UnknownTest';
+          var location = (_c = (_b = item.locationId) === null || _b === void 0 ? void 0 : _b[0]) !== null && _c !== void 0 ? _c : 'UnknownLocation';
+
+          if (Array.isArray(item.metrics)) {
+            item.metrics.forEach(function (metricObj) {
+              var metricName = Object.keys(metricObj)[0];
+              var metricValue = metricObj[metricName];
+              var datapoints = [[metricValue, Date.now()]];
+              result.push({
+                target: testName + " (" + location + ") - " + metricName,
+                datapoints: datapoints,
+                refId: target.refId,
+                key: target.stableHash
+              });
+            });
+          }
+        });
+        return result;
+      });
+    }
+
+    return this.fetchResultsForSyntheticMonitoring(target, timeFilter).then(function (response) {
       var _a;
 
-      var result = [];
-
-      if (!((_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.metricsResult) || !Array.isArray(response.data.metricsResult)) {
-        console.warn('Invalid or empty metricsResult:', response);
+      if (!((_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.items) || !Array.isArray(response.data.items)) {
+        console.warn('Invalid or empty results data:', response);
         return Object(util_target_util__WEBPACK_IMPORTED_MODULE_4__["emptyResultData"])(target.refId);
       }
 
-      response.data.metricsResult.forEach(function (entry, index) {
-        var _a, _b;
+      var aggregatedMetrics = {};
+      var testName = 'UnknownTest';
+      var locationLabel = 'UnknownLocation';
+      response.data.items.forEach(function (item) {
+        var _a, _b, _c, _d, _e;
 
-        var test = (_a = entry.tests) === null || _a === void 0 ? void 0 : _a[0];
-        var metricEntry = (_b = entry.metrics) === null || _b === void 0 ? void 0 : _b[0];
+        var props = (_a = item.testResultCommonProperties) !== null && _a !== void 0 ? _a : {};
+        testName = (_b = props.testName) !== null && _b !== void 0 ? _b : testName;
+        locationLabel = (_d = (_c = props.locationDisplayLabel) !== null && _c !== void 0 ? _c : props.locationId) !== null && _d !== void 0 ? _d : locationLabel;
+        var metrics = (_e = item.metrics) !== null && _e !== void 0 ? _e : {};
+        Object.entries(metrics).forEach(function (_a) {
+          var _b;
 
-        if (test && metricEntry) {
-          var metricKey = Object.keys(metricEntry)[0];
-          var metricValue = metricEntry[metricKey];
-          var label = target.entity.value + '-' + target.metric.key;
-          result.push({
-            target: label,
-            datapoints: [[metricValue, timeFilter.to]],
-            refId: target.refId,
-            key: target.stableHash
-          });
-        }
+          var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(_a, 2),
+              metricName = _c[0],
+              dataPoints = _c[1];
+
+          var points = Array.isArray(dataPoints) ? dataPoints.filter(function (entry) {
+            return Array.isArray(entry) && entry.length === 2 && typeof entry[0] === 'number' && typeof entry[1] === 'number';
+          }) : [];
+
+          if (!aggregatedMetrics[metricName]) {
+            aggregatedMetrics[metricName] = [];
+          }
+
+          (_b = aggregatedMetrics[metricName]).push.apply(_b, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spreadArray"])([], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(points), false));
+        });
+      });
+      var result = Object.entries(aggregatedMetrics).map(function (_a) {
+        var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(_a, 2),
+            metricName = _b[0],
+            datapoints = _b[1];
+
+        return {
+          target: testName + " (" + locationLabel + ") - " + metricName,
+          datapoints: datapoints.map(function (_a) {
+            var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(_a, 2),
+                ts = _b[0],
+                val = _b[1];
+
+            return [val, ts];
+          }),
+          refId: target.refId,
+          key: target.stableHash
+        };
       });
       return result;
     });
   };
 
   DataSourceSyntheticMonitoring.prototype.getSyntheticMonitoringtests = function () {
-    var SyntheticMonitoringtests = this.miscCache.get('SyntheticMonitoringtests');
+    var tests = this.miscCache.get('SyntheticMonitoringtests');
 
-    if (SyntheticMonitoringtests) {
-      return SyntheticMonitoringtests;
+    if (tests) {
+      return tests;
     }
 
-    SyntheticMonitoringtests = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_0__["getRequest"])(this.instanaOptions, '/api/synthetics/settings/tests').then(function (tagsResponse) {
-      return tagsResponse.data.map(function (entry) {
+    tests = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(this.instanaOptions, '/api/synthetics/settings/tests').then(function (response) {
+      return response.data.map(function (entry) {
         return {
           key: entry.label,
-          label: entry.label
+          label: entry.label,
+          applicationId: entry.applicationId,
+          testId: entry.id
         };
       });
     });
-    this.miscCache.put('mobileappTags', SyntheticMonitoringtests);
-    return SyntheticMonitoringtests;
+    this.miscCache.put('SyntheticMonitoringtests', tests);
+    return tests;
   };
 
   DataSourceSyntheticMonitoring.prototype.getSyntheticMonitoringTags = function () {
-    var SyntheticMonitoringTags = this.miscCache.get('SyntheticMonitoringTags');
+    var tags = this.miscCache.get('SyntheticMonitoringTags');
 
-    if (SyntheticMonitoringTags) {
-      return SyntheticMonitoringTags;
+    if (tags) {
+      return tags;
     }
 
-    SyntheticMonitoringTags = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_0__["getRequest"])(this.instanaOptions, '/api/synthetics/catalog?useCase=GROUPING').then(function (tagsResponse) {
-      return tagsResponse.data.map(function (entry) {
-        return {};
+    tags = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(this.instanaOptions, '/api/synthetics/catalog?useCase=GROUPING').then(function (response) {
+      return response.data.map(function (entry) {
+        var _a;
+
+        return {
+          key: entry.name,
+          label: (_a = entry.label) !== null && _a !== void 0 ? _a : entry.name
+        };
       });
     });
-    this.miscCache.put('mobileappTags', SyntheticMonitoringTags);
-    return SyntheticMonitoringTags;
+    this.miscCache.put('SyntheticMonitoringTags', tags);
+    return tags;
   };
 
   DataSourceSyntheticMonitoring.prototype.getSyntheticMonitoringMetricsCatalog = function () {
-    var SyntheticMonitoringMetricsCatalog = this.miscCache.get('SyntheticMonitoringMetricsCatalog');
+    var catalog = this.miscCache.get('SyntheticMonitoringMetricsCatalog');
 
-    if (SyntheticMonitoringMetricsCatalog) {
-      return SyntheticMonitoringMetricsCatalog;
+    if (catalog) {
+      return catalog;
     }
 
-    SyntheticMonitoringMetricsCatalog = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_0__["getRequest"])(this.instanaOptions, '/api/synthetics/catalog/metrics').then(function (catalogResponse) {
-      return catalogResponse.data.map(function (entry) {
+    catalog = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(this.instanaOptions, '/api/synthetics/catalog/metrics').then(function (response) {
+      return response.data.map(function (entry) {
         return {
           key: entry.metricId,
           label: entry.label,
@@ -7038,34 +7135,74 @@ function () {
         };
       });
     });
-    this.miscCache.put('SyntheticMonitoringMetricsCatalog', SyntheticMonitoringMetricsCatalog);
-    return SyntheticMonitoringMetricsCatalog;
+    this.miscCache.put('SyntheticMonitoringMetricsCatalog', catalog);
+    return catalog;
   };
 
   DataSourceSyntheticMonitoring.prototype.fetchMetricsForSyntheticMonitoring = function (target, timeFilter) {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c;
 
-    var windowSize = Object(util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var testId = target.testId;
+    var windowSize = Object(util_time_util__WEBPACK_IMPORTED_MODULE_3__["getWindowSize"])(timeFilter);
 
     if (!target.timeInterval) {
-      target.timeInterval = Object(util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_3__["getDefaultChartGranularity"])(windowSize);
+      target.timeInterval = Object(util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__["getDefaultChartGranularity"])(windowSize);
     }
 
-    target.metric.aggregation;
     var metric = {
-      metric: (_b = (_a = target === null || target === void 0 ? void 0 : target.metric) === null || _a === void 0 ? void 0 : _a.key) !== null && _b !== void 0 ? _b : '',
-      aggregation: target.aggregation.key,
-      granularity: (_d = (_c = target === null || target === void 0 ? void 0 : target.timeInterval) === null || _c === void 0 ? void 0 : _c.key) !== null && _d !== void 0 ? _d : '300'
+      metric: (_a = target === null || target === void 0 ? void 0 : target.metric) === null || _a === void 0 ? void 0 : _a.key,
+      aggregation: ((_b = target === null || target === void 0 ? void 0 : target.aggregation) === null || _b === void 0 ? void 0 : _b.key) || 'SUM',
+      granularity: (_c = target === null || target === void 0 ? void 0 : target.timeInterval) === null || _c === void 0 ? void 0 : _c.key
+    };
+    var tagFilterExpression = {
+      type: 'EXPRESSION',
+      elements: [{
+        name: 'synthetic.testId',
+        operator: 'EQUALS',
+        value: testId
+      }],
+      logicalOperator: 'AND'
     };
     var data = {
+      metrics: [metric],
+      tagFilterExpression: tagFilterExpression,
       timeFrame: {
         to: timeFilter.to,
-        windowSize: Object(util_time_util__WEBPACK_IMPORTED_MODULE_2__["atLeastGranularity"])(windowSize, metric.granularity)
-      },
-      type: (_f = (_e = target === null || target === void 0 ? void 0 : target.entityType) === null || _e === void 0 ? void 0 : _e.key) !== null && _f !== void 0 ? _f : '',
-      metrics: [metric]
+        windowSize: Object(util_time_util__WEBPACK_IMPORTED_MODULE_3__["atLeastGranularity"])(windowSize, metric.granularity)
+      }
     };
-    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_0__["postRequest"])(this.instanaOptions, '/api/synthetics/metrics', data);
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["postRequest"])(this.instanaOptions, '/api/synthetics/results', data);
+  };
+
+  DataSourceSyntheticMonitoring.prototype.fetchResultsForSyntheticMonitoring = function (target, timeFilter) {
+    var _a, _b;
+
+    var testId = target.testId;
+    var windowSize = Object(util_time_util__WEBPACK_IMPORTED_MODULE_3__["getWindowSize"])(timeFilter);
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    var tagFilterExpression = {
+      type: 'EXPRESSION',
+      elements: [{
+        name: 'synthetic.testId',
+        operator: 'EQUALS',
+        value: testId
+      }],
+      logicalOperator: 'AND'
+    };
+    var granularity = (_a = target === null || target === void 0 ? void 0 : target.timeInterval) === null || _a === void 0 ? void 0 : _a.key;
+    var data = {
+      syntheticMetrics: [(_b = target === null || target === void 0 ? void 0 : target.metric) === null || _b === void 0 ? void 0 : _b.key],
+      tagFilterExpression: tagFilterExpression,
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(util_time_util__WEBPACK_IMPORTED_MODULE_3__["atLeastGranularity"])(windowSize, granularity)
+      }
+    };
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["postRequest"])(this.instanaOptions, '/api/synthetics/results/list', data);
   };
 
   return DataSourceSyntheticMonitoring;
