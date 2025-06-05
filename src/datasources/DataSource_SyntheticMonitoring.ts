@@ -125,22 +125,6 @@ export class DataSourceSyntheticMonitoring {
     return tests;
   }
 
-  getSyntheticMonitoringTags() {
-    let tags = this.miscCache.get('SyntheticMonitoringTags');
-    if (tags) {
-      return tags;
-    }
-
-    tags = getRequest(this.instanaOptions, '/api/synthetics/catalog?useCase=GROUPING').then((response: any) =>
-      response.data.map((entry: any) => ({
-        key: entry.name,
-        label: entry.label ?? entry.name,
-      }))
-    );
-    this.miscCache.put('SyntheticMonitoringTags', tags);
-    return tags;
-  }
-
   getSyntheticMonitoringMetricsCatalog() {
     let catalog = this.miscCache.get('SyntheticMonitoringMetricsCatalog');
     if (catalog) {

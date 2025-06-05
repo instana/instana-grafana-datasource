@@ -7092,27 +7092,6 @@ function () {
     return tests;
   };
 
-  DataSourceSyntheticMonitoring.prototype.getSyntheticMonitoringTags = function () {
-    var tags = this.miscCache.get('SyntheticMonitoringTags');
-
-    if (tags) {
-      return tags;
-    }
-
-    tags = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(this.instanaOptions, '/api/synthetics/catalog?useCase=GROUPING').then(function (response) {
-      return response.data.map(function (entry) {
-        var _a;
-
-        return {
-          key: entry.name,
-          label: (_a = entry.label) !== null && _a !== void 0 ? _a : entry.name
-        };
-      });
-    });
-    this.miscCache.put('SyntheticMonitoringTags', tags);
-    return tags;
-  };
-
   DataSourceSyntheticMonitoring.prototype.getSyntheticMonitoringMetricsCatalog = function () {
     var catalog = this.miscCache.get('SyntheticMonitoringMetricsCatalog');
 
