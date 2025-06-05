@@ -5052,11 +5052,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var GlobalVariables__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! GlobalVariables */ "./GlobalVariables.ts");
+
 
 
 
 var testTypeOptions = [{
-  label: 'Select your test type',
+  label: GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"],
   value: ''
 }, {
   label: 'Metric',
@@ -5077,7 +5079,7 @@ function (_super) {
 
     _this.fetchSyntheticTests = function () {
       return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this, void 0, void 0, function () {
-        var _a, datasource, query, onChange, tests, testOptions, selectedEntity, error_1;
+        var _a, datasource, query, onChange, tests, placeholderOption, testOptions, error_1;
 
         var _this = this;
 
@@ -5098,50 +5100,34 @@ function (_super) {
               tests = _b.sent();
 
               if (!isUnmounting) {
-                testOptions = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spreadArray"])([{
-                  label: 'Please specify',
-                  value: '',
-                  test: null
-                }], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(tests.map(function (test) {
+                placeholderOption = {
+                  label: GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"],
+                  value: ''
+                };
+                testOptions = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spreadArray"])([placeholderOption], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(tests.map(function (test) {
                   return {
                     label: test.key,
                     value: test.label,
                     test: test
                   };
                 })), false);
-                selectedEntity = testOptions.find(function (option) {
-                  var _a;
-
-                  return option.value === ((_a = query.entity) === null || _a === void 0 ? void 0 : _a.value);
-                }); // If not found, select first test (if available), else the default empty
-
-                if (!selectedEntity) {
-                  if (tests.length > 0) {
-                    selectedEntity = testOptions[1]; // first actual test, after 'Please specify'
-
-                    query.applicationId = tests[0].applicationId;
-                    query.testId = tests[0].testId;
-                  } else {
-                    selectedEntity = testOptions[0]; // 'Please specify'
-                  }
-                } else if (selectedEntity.test) {
-                  // Sync applicationId and testId to the query for selected test
-                  query.applicationId = selectedEntity.test.applicationId;
-                  query.testId = selectedEntity.test.testId;
-                }
-
                 this.setState({
                   tests: testOptions
-                }); // Update query.entity to selectedEntity and notify parent if changed
+                }); // Set to placeholder if entity is not already set
 
-                if (query.entity !== selectedEntity) {
-                  query.entity = selectedEntity;
+                if (!query.entity || !query.entity.value) {
+                  query.entity = placeholderOption;
+                  query.applicationId = '';
+                  query.testId = '';
                   onChange(query);
-                } // Set default testType if not set
+                } // Set to placeholder if testType is not already set
 
 
                 if (!query.testType || !query.testType.value) {
-                  query.testType = testTypeOptions[0];
+                  query.testType = {
+                    label: GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"],
+                    value: ''
+                  };
                   onChange(query);
                 }
               }
@@ -5158,6 +5144,7 @@ function (_super) {
               , 4];
 
             case 4:
+              // Fetch metrics catalog
               datasource.dataSourceSyntheticMonitoring.getSyntheticMonitoringMetricsCatalog().then(function (SyntheticMonitoringMetrics) {
                 if (!isUnmounting) {
                   _this.props.updateMetrics(SyntheticMonitoringMetrics);
@@ -5181,6 +5168,9 @@ function (_super) {
       if (test.test) {
         query.testId = test.test.testId;
         query.applicationId = test.test.applicationId;
+      } else {
+        query.testId = '';
+        query.applicationId = '';
       }
 
       onChange(query);
@@ -5189,11 +5179,26 @@ function (_super) {
 
     _this.onTestTypeChange = function (testType) {
       return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this, void 0, void 0, function () {
-        var _a, query, onChange, onRunQuery;
+        var _a, query, onChange, onRunQuery, prevTestTypeValue, isSwitchingTypes;
 
-        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
+        var _b;
+
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_c) {
           _a = this.props, query = _a.query, onChange = _a.onChange, onRunQuery = _a.onRunQuery;
+          prevTestTypeValue = (_b = query.testType) === null || _b === void 0 ? void 0 : _b.value; // Update test type
+
           query.testType = testType;
+          isSwitchingTypes = prevTestTypeValue === 'metric' && testType.value === 'results' || prevTestTypeValue === 'results' && testType.value === 'metric';
+
+          if (isSwitchingTypes) {
+            query.entity = {
+              label: GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"],
+              value: ''
+            };
+            query.testId = '';
+            query.applicationId = '';
+          }
+
           onChange(query);
           onRunQuery();
           return [2

@@ -3,6 +3,7 @@ import { DataSource } from '../../datasources/DataSource';
 import { SelectableValue } from '@grafana/data';
 import { InstanaQuery } from '../../types/instana_query';
 import FormSelect from '../FormField/FormSelect';
+import { PLEASE_SPECIFY } from 'GlobalVariables';
 
 interface Props {
   query: InstanaQuery;
@@ -15,8 +16,9 @@ interface Props {
 interface State {
   tests: SelectableValue[];
 }
+
 const testTypeOptions: SelectableValue[] = [
-  { label: 'Select your test type', value: '' },
+  { label: PLEASE_SPECIFY, value: '' },
   { label: 'Metric', value: 'metric' },
   { label: 'Results', value: 'results' },
 ];
@@ -47,8 +49,10 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
       const tests = await datasource.dataSourceSyntheticMonitoring.getSyntheticMonitoringtests();
 
       if (!isUnmounting) {
+        const placeholderOption: SelectableValue = { label: PLEASE_SPECIFY, value: '' };
+
         const testOptions: SelectableValue[] = [
-          { label: 'Please specify', value: '', test: null },
+          placeholderOption,
           ...tests.map((test: any) => ({
             label: test.key,
             value: test.label,
@@ -56,35 +60,19 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
           })),
         ];
 
-        // Try to find the previously selected entity in the new options
-        let selectedEntity = testOptions.find((option) => option.value === query.entity?.value);
-
-        // If not found, select first test (if available), else the default empty
-        if (!selectedEntity) {
-          if (tests.length > 0) {
-            selectedEntity = testOptions[1]; // first actual test, after 'Please specify'
-            query.applicationId = tests[0].applicationId;
-            query.testId = tests[0].testId;
-          } else {
-            selectedEntity = testOptions[0]; // 'Please specify'
-          }
-        } else if (selectedEntity.test) {
-          // Sync applicationId and testId to the query for selected test
-          query.applicationId = selectedEntity.test.applicationId;
-          query.testId = selectedEntity.test.testId;
-        }
-
         this.setState({ tests: testOptions });
 
-        // Update query.entity to selectedEntity and notify parent if changed
-        if (query.entity !== selectedEntity) {
-          query.entity = selectedEntity;
+        // Set to placeholder if entity is not already set
+        if (!query.entity || !query.entity.value) {
+          query.entity = placeholderOption;
+          query.applicationId = '';
+          query.testId = '';
           onChange(query);
         }
 
-        // Set default testType if not set
+        // Set to placeholder if testType is not already set
         if (!query.testType || !query.testType.value) {
-          query.testType = testTypeOptions[0];
+          query.testType = { label: PLEASE_SPECIFY, value: '' };
           onChange(query);
         }
       }
@@ -92,6 +80,7 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
       console.error('Error fetching synthetic tests', error);
     }
 
+    // Fetch metrics catalog
     datasource.dataSourceSyntheticMonitoring
       .getSyntheticMonitoringMetricsCatalog()
       .then((SyntheticMonitoringMetrics: any) => {
@@ -109,6 +98,9 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
     if (test.test) {
       query.testId = test.test.testId;
       query.applicationId = test.test.applicationId;
+    } else {
+      query.testId = '';
+      query.applicationId = '';
     }
 
     onChange(query);
@@ -117,7 +109,23 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
 
   onTestTypeChange = async (testType: SelectableValue) => {
     const { query, onChange, onRunQuery } = this.props;
+
+    const prevTestTypeValue = query.testType?.value;
+
+    // Update test type
     query.testType = testType;
+
+    // If switching between 'metric' <-> 'results', then reset the test
+    const isSwitchingTypes =
+      (prevTestTypeValue === 'metric' && testType.value === 'results') ||
+      (prevTestTypeValue === 'results' && testType.value === 'metric');
+
+    if (isSwitchingTypes) {
+      query.entity = { label: PLEASE_SPECIFY, value: '' };
+      query.testId = '';
+      query.applicationId = '';
+    }
+
     onChange(query);
     onRunQuery();
   };
