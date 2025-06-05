@@ -125,25 +125,25 @@ export class DataSourceSyntheticMonitoring {
     return tests;
   }
 
-  getSyntheticMonitoringMetricsCatalog() {
-    let catalog = this.miscCache.get('SyntheticMonitoringMetricsCatalog');
-    if (catalog) {
-      return catalog;
-    }
-
-    catalog = getRequest(this.instanaOptions, '/api/synthetics/catalog/metrics').then((response: any) =>
-      response.data.map((entry: any) => ({
-        key: entry.metricId,
-        label: entry.label,
-        aggregations: entry.aggregations.map((agg: string) => ({ key: agg, label: agg })),
-        formatter: entry.formatter,
-      }))
-    );
-    this.miscCache.put('SyntheticMonitoringMetricsCatalog', catalog);
+ getSyntheticMonitoringMetricsCatalog() {
+  let catalog = this.miscCache.get('SyntheticMonitoringMetricsCatalog');
+  if (catalog) {
     return catalog;
   }
 
-  private fetchMetricsForSyntheticMonitoring(target: InstanaQuery, timeFilter: TimeFilter) {
+    catalog = getRequest(this.instanaOptions, '/api/synthetics/catalog/metrics').then((response: any) =>
+      response.data.map((entry: any) => ({
+      key: entry.metricId,
+        label: entry.label,
+        aggregations: entry.aggregations.map((agg: string) => ({ key: agg, label: agg })),
+      formatter: entry.formatter,
+      }))
+    );
+  this.miscCache.put('SyntheticMonitoringMetricsCatalog', catalog);
+  return catalog;
+}
+
+  public fetchMetricsForSyntheticMonitoring(target: InstanaQuery, timeFilter: TimeFilter) {
     const testId = target.testId;
     const windowSize = getWindowSize(timeFilter);
 
@@ -181,7 +181,7 @@ export class DataSourceSyntheticMonitoring {
     return postRequest(this.instanaOptions, '/api/synthetics/results', data);
   }
 
-  private fetchResultsForSyntheticMonitoring(target: InstanaQuery, timeFilter: TimeFilter) {
+  public fetchResultsForSyntheticMonitoring(target: InstanaQuery, timeFilter: TimeFilter) {
     const testId = target.testId;
     const windowSize = getWindowSize(timeFilter);
 
