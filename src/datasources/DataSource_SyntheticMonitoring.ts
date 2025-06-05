@@ -118,7 +118,6 @@ export class DataSourceSyntheticMonitoring {
       response.data.map((entry: any) => ({
         key: entry.label,
         label: entry.label,
-        applicationId: entry.applicationId,
         testId: entry.id,
       }))
     );

@@ -85,7 +85,6 @@ export function buildTestTarget(): InstanaQuery {
     applicationBoundaryScope: '',
     showAdvancedSettings: false,
     tagFilterExpression: '',
-    applicationId: '',
     testId: '',
   };
 }

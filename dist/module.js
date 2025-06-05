@@ -5117,7 +5117,6 @@ function (_super) {
 
                 if (!query.entity || !query.entity.value) {
                   query.entity = placeholderOption;
-                  query.applicationId = '';
                   query.testId = '';
                   onChange(query);
                 } // Set to placeholder if testType is not already set
@@ -5167,10 +5166,8 @@ function (_super) {
 
       if (test.test) {
         query.testId = test.test.testId;
-        query.applicationId = test.test.applicationId;
       } else {
         query.testId = '';
-        query.applicationId = '';
       }
 
       onChange(query);
@@ -5196,7 +5193,6 @@ function (_super) {
               value: ''
             };
             query.testId = '';
-            query.applicationId = '';
           }
 
           onChange(query);
@@ -7088,7 +7084,6 @@ function () {
         return {
           key: entry.label,
           label: entry.label,
-          applicationId: entry.applicationId,
           testId: entry.id
         };
       });

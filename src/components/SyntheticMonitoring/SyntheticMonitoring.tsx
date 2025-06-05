@@ -65,7 +65,6 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
         // Set to placeholder if entity is not already set
         if (!query.entity || !query.entity.value) {
           query.entity = placeholderOption;
-          query.applicationId = '';
           query.testId = '';
           onChange(query);
         }
@@ -97,10 +96,8 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
 
     if (test.test) {
       query.testId = test.test.testId;
-      query.applicationId = test.test.applicationId;
     } else {
       query.testId = '';
-      query.applicationId = '';
     }
 
     onChange(query);
@@ -123,7 +120,6 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
     if (isSwitchingTypes) {
       query.entity = { label: PLEASE_SPECIFY, value: '' };
       query.testId = '';
-      query.applicationId = '';
     }
 
     onChange(query);
