@@ -336,6 +336,7 @@ To view Synthetic Monitoring data, start by selecting "Synthetic Monitoring" fro
 Once a metric is selected, the Aggregation dropdown will be populated with available options (e.g., SUM, MEAN), allowing you to choose how the data should be summarized.
 If your selection matches, the returned dataset will include metrics or result details that can be visualized in the dashboard like the example below.
 
+![synthetic plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/synthetic_monitoring.gif)
 ### Singlestat visualization
 
 While using the "Singlestat" visualization an additional metric aggregation is selectable.
