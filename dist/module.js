@@ -1053,7 +1053,7 @@ function (_super) {
       hidden: !query.showAdvancedSettings
     }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       className: 'gf-form',
-      hidden: category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"] || category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"]
+      hidden: category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"] || category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"] || category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SYNTHETIC_MONITORING"]
     }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormInput__WEBPACK_IMPORTED_MODULE_6__["default"], {
       queryKeyword: true,
       inputWidth: 0,

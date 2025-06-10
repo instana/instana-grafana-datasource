@@ -325,6 +325,16 @@ The image below shows a dashboard looks like when choosing metrics from `Service
 
 ![slo_dashboard](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/slo_dashboard.png)
 
+### Synthetic Monitoring
+
+To view Synthetic Monitoring data, start by selecting "Synthetic Monitoring" from the category dropdown. This will populate the Test dropdown with a list of available synthetic tests. After selecting a test, choose the data type—either Metric or Result.
+
+  - Metric: To get aggregated test result metric data, such as average response time, select the Metric option. The metrics are fetched from the synthetic catalog and reflect summary information across test runs. These metrics cannot be plotted on time series charts. They are best visualized using Stat, Bar, or Table panels in Grafana.
+
+  - Result: To view detailed execution-level data for each test run, select the Result option. Metrics in this case are derived directly from the result responses.
+
+Once a metric is selected, the Aggregation dropdown will be populated with available options (e.g., SUM, MEAN), allowing you to choose how the data should be summarized.
+If your selection matches, the returned dataset will include metrics or result details that can be visualized in the dashboard like the example below.
 
 ### Singlestat visualization
 
