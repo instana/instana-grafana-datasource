@@ -8,6 +8,7 @@ import {
   INFRASTRUCTURE_ANALYZE,
   SLO_INFORMATION,
   SLO2_INFORMATION,
+  SYNTHETIC_MONITORING,
 } from '../GlobalVariables';
 import {
   DataQueryRequest,
@@ -35,6 +36,7 @@ import { DataSourceService } from './DataSource_Service';
 import { DataSourceSlo } from './DataSource_Slo';
 import { DataSourceSlo2 } from './DataSource_Slo2';
 import { DataSourceWebsite } from './DataSource_Website';
+import { DataSourceSyntheticMonitoring } from './DataSource_SyntheticMonitoring';
 import { InstanaOptions } from '../types/instana_options';
 import { InstanaQuery } from '../types/instana_query';
 import MetricCategories from '../lists/metric_categories';
@@ -57,6 +59,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   dataSourceEndpoint: DataSourceEndpoint;
   dataSourceSlo: DataSourceSlo;
   dataSourceSlo2: DataSourceSlo2;
+  dataSourceSyntheticMonitoring: DataSourceSyntheticMonitoring;
   timeFilter!: TimeFilter;
   availableGranularities: SelectableValue[];
   availableRollups: SelectableValue[];
@@ -78,6 +81,8 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     this.dataSourceApplication = new DataSourceApplication(instanceSettings.jsonData);
     this.dataSourceService = new DataSourceService(instanceSettings.jsonData);
     this.dataSourceEndpoint = new DataSourceEndpoint(instanceSettings.jsonData);
+    this.dataSourceSyntheticMonitoring = new DataSourceSyntheticMonitoring(instanceSettings.jsonData);
+
     this.resultCache = new Cache<any>();
   }
 
@@ -128,7 +133,11 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
           return this.dataSourceSlo2.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
-        } else if (category === INFRASTRUCTURE_ANALYZE) {
+        } else if (category === SYNTHETIC_MONITORING) {
+          return this.dataSourceSyntheticMonitoring.runQuery(target, targetTimeFilter).then((data: any) => {
+            return this.buildTarget(target, data);
+          });
+        }else if (category === INFRASTRUCTURE_ANALYZE) {
           return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTarget(target, data);
           });

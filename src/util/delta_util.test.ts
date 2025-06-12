@@ -332,6 +332,7 @@ describe('Given a delta', () => {
       let result = generateStableHash(target);
       expect(result).toEqual(
         JSON.stringify({
+          testType: {},
           callToEntity: '',
           aggregateGraphs: false,
           aggregation: {},
@@ -364,6 +365,7 @@ describe('Given a delta', () => {
           applicationBoundaryScope: '',
           showAdvancedSettings: false,
           tagFilterExpression: '',
+          testId: '',
         })
       );
     });

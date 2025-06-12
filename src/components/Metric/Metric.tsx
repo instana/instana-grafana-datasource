@@ -134,17 +134,19 @@ export default class Metric extends React.Component<Props, MetricState> {
 
     return (
       <div className={'gf-form'}>
-        <FormSelect
-          queryKeyword
-          disabled={query.useFreeTextMetrics}
-          inputWidth={0}
-          label={'Metric'}
-          tooltip={'Select the metric you wish to plot.'}
-          value={query.metric}
-          noOptionsMessage={'No metrics found'}
-          options={this.props.availableMetrics}
-          onChange={this.onMetricChange}
-        />
+        {
+          <FormSelect
+            queryKeyword
+            disabled={query.useFreeTextMetrics}
+            inputWidth={0}
+            label={'Metric'}
+            tooltip={'Select the metric you wish to plot.'}
+            value={query.metric}
+            noOptionsMessage={'No metrics found'}
+            options={this.props.availableMetrics}
+            onChange={this.onMetricChange}
+          />
+        }
 
         {query.metricCategory.key === BUILT_IN_METRICS && (
           <FormSwitch

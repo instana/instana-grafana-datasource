@@ -10,6 +10,7 @@ import {
   INFRASTRUCTURE_ANALYZE,
   SLO_INFORMATION,
   SLO2_INFORMATION,
+  SYNTHETIC_MONITORING,
 } from '../GlobalVariables';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import React, { PureComponent } from 'react';
@@ -32,6 +33,7 @@ import { MobileAppMetrics } from './Analyze/MobileAppMetrics';
 import { SloInformation } from './SLOInformation/SloInformation';
 import { Slo2Information } from './SLOInformation/Slo2Information';
 import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
+import { SyntheticMonitoring } from './SyntheticMonitoring/SyntheticMonitoring';
 import _ from 'lodash';
 import metricCategories from '../lists/metric_categories';
 import migrate from '../migration';
@@ -487,6 +489,19 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
             query={query}
             onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
+            datasource={this.props.datasource}
+          />
+        )}
+
+        {query.metricCategory.key === SYNTHETIC_MONITORING && (
+          <SyntheticMonitoring
+            query={query}
+            onRunQuery={this.props.onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
+            // groups={this.state.groups}
+            // updateGroups={this.updateGroups}
+            // filterMetricsOnType={this.filterMetricsOnType}
             datasource={this.props.datasource}
           />
         )}
