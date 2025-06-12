@@ -33,6 +33,7 @@ export class DataSourceSyntheticMonitoring {
     if (target.testType?.value === 'metric') {
       return this.fetchMetricsForSyntheticMonitoring(target, timeFilter).then((response: any) => {
         const result: any[] = [];
+
         if (!response?.data?.testResult) {
           console.warn('Invalid or empty results data:', response);
           return emptyResultData(target.refId);
@@ -57,6 +58,7 @@ export class DataSourceSyntheticMonitoring {
             });
           }
         });
+
         return result;
       });
     }
@@ -67,7 +69,7 @@ export class DataSourceSyntheticMonitoring {
         return emptyResultData(target.refId);
       }
 
-      const aggregatedMetrics: Record<string, [number, number][]> = {};
+      const aggregatedMetrics: Record<string, Array<[number, number]>> = {};
       let testName = 'UnknownTest';
       let locationLabel = 'UnknownLocation';
 
@@ -79,7 +81,7 @@ export class DataSourceSyntheticMonitoring {
         const metrics = item.metrics ?? {};
 
         Object.entries(metrics).forEach(([metricName, dataPoints]: [string, any]) => {
-          const points: [number, number][] = Array.isArray(dataPoints)
+          const points: Array<[number, number]> = Array.isArray(dataPoints)
             ? dataPoints.filter(
                 (entry): entry is [number, number] =>
                   Array.isArray(entry) &&
@@ -125,25 +127,26 @@ export class DataSourceSyntheticMonitoring {
     return tests;
   }
 
- getSyntheticMonitoringMetricsCatalog() {
-  let catalog = this.miscCache.get('SyntheticMonitoringMetricsCatalog');
-  if (catalog) {
-    return catalog;
-  }
+  getSyntheticMonitoringMetricsCatalog() {
+    let catalog = this.miscCache.get('SyntheticMonitoringMetricsCatalog');
+    if (catalog) {
+      return catalog;
+    }
 
     catalog = getRequest(this.instanaOptions, '/api/synthetics/catalog/metrics').then((response: any) =>
       response.data.map((entry: any) => ({
-      key: entry.metricId,
+        key: entry.metricId,
         label: entry.label,
         aggregations: entry.aggregations.map((agg: string) => ({ key: agg, label: agg })),
-      formatter: entry.formatter,
+        formatter: entry.formatter,
       }))
     );
-  this.miscCache.put('SyntheticMonitoringMetricsCatalog', catalog);
-  return catalog;
-}
 
-  public fetchMetricsForSyntheticMonitoring(target: InstanaQuery, timeFilter: TimeFilter) {
+    this.miscCache.put('SyntheticMonitoringMetricsCatalog', catalog);
+    return catalog;
+  }
+
+  fetchMetricsForSyntheticMonitoring(target: InstanaQuery, timeFilter: TimeFilter) {
     const testId = target.testId;
     const windowSize = getWindowSize(timeFilter);
 
@@ -181,7 +184,7 @@ export class DataSourceSyntheticMonitoring {
     return postRequest(this.instanaOptions, '/api/synthetics/results', data);
   }
 
-  public fetchResultsForSyntheticMonitoring(target: InstanaQuery, timeFilter: TimeFilter) {
+  fetchResultsForSyntheticMonitoring(target: InstanaQuery, timeFilter: TimeFilter) {
     const testId = target.testId;
     const windowSize = getWindowSize(timeFilter);
 
@@ -200,6 +203,7 @@ export class DataSourceSyntheticMonitoring {
       ],
       logicalOperator: 'AND',
     };
+
     const granularity = target?.timeInterval?.key;
 
     const data = {

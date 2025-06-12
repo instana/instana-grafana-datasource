@@ -44,7 +44,7 @@ export function generateTestData(amountOfTimeseries: number, numberOfEntries: nu
  */
 export function buildTestTarget(): InstanaQuery {
   return {
-    testType:{},
+    testType: {},
     callToEntity: '',
     aggregateGraphs: false,
     aggregation: {},

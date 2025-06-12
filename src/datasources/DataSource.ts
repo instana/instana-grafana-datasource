@@ -137,7 +137,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
           return this.dataSourceSyntheticMonitoring.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTarget(target, data);
           });
-        }else if (category === INFRASTRUCTURE_ANALYZE) {
+        } else if (category === INFRASTRUCTURE_ANALYZE) {
           return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTarget(target, data);
           });
