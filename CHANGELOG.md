@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.0.0 - 2025-06-12
+- New Feature: Added Synthetic Monitoring integration to display synthetic test metrics in Grafana UI.
+
 ## 4.1.4 - 2025-05-08
 - Security: Enabled content_security_policy in Grafana configuration to mitigate vulnerability CVE-2025-4123 and enhance protection against XSS attacks, following the recommended security hardening practices from Grafana documentation.
 - Fix: Fixed an issue with metric count display in Infrastructure metric categories.
