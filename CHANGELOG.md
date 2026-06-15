@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.1.0 - TBD
+- New Feature: Added Grafana Template Variables support
+  - Comprehensive documentation in VARIABLES.md
+
 ## 5.0.0 - 2025-06-12
 - New Feature: Added Synthetic Monitoring integration to display synthetic test metrics in Grafana UI.
 

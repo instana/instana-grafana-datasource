@@ -12,7 +12,6 @@ interface Props {
   datasource: DataSource;
   queryTypes: SelectableValue[];
   onRunQuery(): void;
-  loadEntityTypes(filterResult?: boolean): void;
   onChange(value: InstanaQuery): void;
   updateMetrics(metrics: SelectableValue[]): void;
   updateQueryTypes(types: SelectableValue[]): void;
@@ -29,19 +28,38 @@ export class Infrastructure extends React.Component<Props, InfrastructureBuiltIn
     const { query, onChange, datasource } = this.props;
     isUnmounting = false;
 
-    if (query.entityQuery && query.entityType && query.entityType.key) {
-      datasource.dataSourceInfrastructure
-        .getMetricsCatalog(query.entityType, query.metricCategory.key)
-        .then((results) => {
-          if (!isUnmounting) {
-            this.props.updateMetrics(results);
-          }
-        });
+    const savedEntityType = query.entityType?.key ? query.entityType : query.entity?.key ? query.entity : undefined;
+
+    if (savedEntityType && savedEntityType.key) {
+      if (!query.entityType || !query.entityType.key) {
+        query.entityType = savedEntityType;
+      }
+
+      if (!query.entity || !query.entity.key) {
+        query.entity = savedEntityType;
+      }
+
+      // Only fetch metrics if entity type is not a variable
+      const isVariable = typeof savedEntityType.key === 'string' && savedEntityType.key.startsWith('$');
+
+      if (!isVariable) {
+        datasource.dataSourceInfrastructure
+          .getMetricsCatalog(savedEntityType, query.metricCategory.key)
+          .then((results) => {
+            if (!isUnmounting) {
+              this.props.updateMetrics(results);
+            }
+          });
+      }
     } else {
-      query.metric = {
-        key: null,
-        label: '-',
-      };
+      // Only reset metric if it's not already set (e.g., from saved dashboard with variable)
+      const hasMetricValue = query.metric && query.metric.key;
+      if (!hasMetricValue) {
+        query.metric = {
+          key: null,
+          label: '-',
+        };
+      }
     }
 
     onChange(query);
@@ -52,16 +70,7 @@ export class Infrastructure extends React.Component<Props, InfrastructureBuiltIn
   }
 
   render() {
-    const {
-      query,
-      onRunQuery,
-      onChange,
-      updateMetrics,
-      loadEntityTypes,
-      datasource,
-      queryTypes,
-      updateQueryTypes,
-    } = this.props;
+    const { query, onRunQuery, onChange, updateMetrics, datasource, queryTypes, updateQueryTypes } = this.props;
 
     return (
       <QueryType
@@ -71,7 +80,6 @@ export class Infrastructure extends React.Component<Props, InfrastructureBuiltIn
         onRunQuery={onRunQuery}
         datasource={datasource}
         updateMetrics={updateMetrics}
-        loadEntityTypes={loadEntityTypes}
         updateQueryTypes={updateQueryTypes}
       />
     );

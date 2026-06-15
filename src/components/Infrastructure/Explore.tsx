@@ -32,6 +32,9 @@ export class Explore extends React.Component<Props, AnalyzeState> {
   componentDidMount() {
     const { query, datasource, onChange } = this.props;
     isUnmounting = false;
+
+    const entityValue = query.entity?.key || query.entity?.label;
+    const isEntityVariable = entityValue && typeof entityValue === 'string' && entityValue.includes('$');
     datasource.getEntityTypes().then((entityTypes: SelectableValue[]) => {
       if (!isUnmounting) {
         if (!_.find(entityTypes, { key: null })) {
@@ -50,20 +53,33 @@ export class Explore extends React.Component<Props, AnalyzeState> {
           query.applicationCallToEntity = call_to_entities[0];
         }
         onChange(query);
+
+        if (isEntityVariable && query.entity) {
+          this.props.onRunQuery();
+        }
       }
     });
   }
   componentWillUnmount() {
     isUnmounting = true;
   }
-  onEntityChange = (entityType: SelectableValue) => {
+  onEntityChange = (entityType: SelectableValue | string) => {
     const { query, datasource, onChange, onRunQuery } = this.props;
-    query.entity = entityType;
+
+    if (typeof entityType === 'string') {
+      query.entity = { key: entityType, label: entityType };
+    } else {
+      query.entity = entityType;
+    }
+
     onChange(query);
     onRunQuery();
-    datasource.fetchMetricsForEntityType(query).then((result: any) => {
-      this.props.updateMetrics(result);
-    });
+
+    if (query.entity.key && !query.entity.key.includes('$')) {
+      datasource.fetchMetricsForEntityType(query).then((result: any) => {
+        this.props.updateMetrics(result);
+      });
+    }
   };
   onInfraCallToEntityChange = (applicationCallToEntity: string) => {
     const { query, onChange, onRunQuery } = this.props;
@@ -93,19 +109,34 @@ export class Explore extends React.Component<Props, AnalyzeState> {
   };
   render() {
     const { query } = this.props;
+
+    let entityValue = query.entity;
+    if (query.entity && query.entity.key) {
+      entityValue = {
+        ...query.entity,
+        value: query.entity.key,
+        label: query.entity.label || query.entity.key,
+      };
+    }
     return (
       <div className={'gf-form'}>
         <FormWrapper stretch={true}>
-          <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your Entity Type.'}>
+          <InlineFormLabel
+            className={'query-keyword'}
+            width={14}
+            tooltip={'Select your Entity Type or type variable like $entity_type'}
+          >
             Entity types
           </InlineFormLabel>
           <Select
             menuPlacement={'bottom'}
             width={0}
             isSearchable={true}
-            value={query.entity}
+            value={entityValue}
             options={this.state.entityTypes}
             onChange={this.onEntityChange}
+            allowCustomValue={true}
+            placeholder={PLEASE_SPECIFY}
           />
         </FormWrapper>
         <FormWrapper stretch={true}>

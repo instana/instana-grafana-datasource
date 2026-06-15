@@ -54,16 +54,39 @@ export default class Metric extends React.Component<Props, MetricState> {
     onChange(query);
   }
 
-  onMetricChange = (metric: SelectableValue) => {
+  onMetricChange = (metric: SelectableValue | string) => {
     const { query, onRunQuery, onChange } = this.props;
-    query.metric = metric;
 
-    if (query.metric && query.metric.key && !_.includes(query.metric.aggregations, query.aggregation)) {
-      query.aggregation = query.metric.aggregations[0];
-    }
+    if (typeof metric === 'string') {
+      query.metric = { key: metric, label: metric, aggregations: [] };
+    } else {
+      if (metric.value && !metric.key) {
+        query.metric = {
+          key: metric.value,
+          label: metric.label || metric.value,
+          aggregations: metric.aggregations || [],
+        };
+      } else {
+        query.metric = metric;
+      }
 
-    if (query.displayMaxMetricValue && !this.canShowMaxMetricValue()) {
-      query.displayMaxMetricValue = false;
+      const metricKey = query.metric?.key || query.metric?.value;
+      const isVariable = metricKey && typeof metricKey === 'string' && metricKey.includes('$');
+
+      if (
+        !isVariable &&
+        query.metric &&
+        query.metric.key &&
+        query.metric.aggregations &&
+        query.metric.aggregations.length > 0 &&
+        !_.includes(query.metric.aggregations, query.aggregation)
+      ) {
+        query.aggregation = query.metric.aggregations[0];
+      }
+
+      if (query.displayMaxMetricValue && !this.canShowMaxMetricValue()) {
+        query.displayMaxMetricValue = false;
+      }
     }
 
     query.allMetrics = [];
@@ -83,16 +106,28 @@ export default class Metric extends React.Component<Props, MetricState> {
     );
   }
 
-  onTimeIntervalChange = (timeInterval: SelectableValue) => {
+  onTimeIntervalChange = (timeInterval: SelectableValue | string) => {
     const { query, onRunQuery, onChange } = this.props;
-    query.timeInterval = timeInterval;
+
+    if (typeof timeInterval === 'string') {
+      query.timeInterval = { key: timeInterval, label: timeInterval };
+    } else {
+      query.timeInterval = timeInterval;
+    }
+
     onChange(query);
     onRunQuery();
   };
 
-  onAggregationChange = (aggregation: SelectableValue) => {
+  onAggregationChange = (aggregation: SelectableValue | string) => {
     const { query, onRunQuery, onChange } = this.props;
-    query.aggregation = aggregation;
+
+    if (typeof aggregation === 'string') {
+      query.aggregation = { key: aggregation, label: aggregation } as any;
+    } else {
+      query.aggregation = aggregation;
+    }
+
     onChange(query);
     onRunQuery();
   };
@@ -132,6 +167,19 @@ export default class Metric extends React.Component<Props, MetricState> {
   render() {
     const { query, datasource } = this.props;
 
+    let metricValue = query.metric;
+    if (query.metric) {
+      const metricKey = query.metric.key || query.metric.value;
+      if (metricKey && typeof metricKey === 'string' && metricKey.includes('$')) {
+        metricValue = {
+          label: query.metric.label || metricKey,
+          value: metricKey,
+          key: metricKey,
+          aggregations: query.metric.aggregations || [],
+        };
+      }
+    }
+
     return (
       <div className={'gf-form'}>
         {
@@ -140,11 +188,13 @@ export default class Metric extends React.Component<Props, MetricState> {
             disabled={query.useFreeTextMetrics}
             inputWidth={0}
             label={'Metric'}
-            tooltip={'Select the metric you wish to plot.'}
-            value={query.metric}
+            tooltip={'Select the metric you wish to plot or type variable like $metric'}
+            value={metricValue}
             noOptionsMessage={'No metrics found'}
             options={this.props.availableMetrics}
             onChange={this.onMetricChange}
+            allowCustomValue={true}
+            placeholder={'Please specify'}
           />
         }
 
@@ -185,10 +235,12 @@ export default class Metric extends React.Component<Props, MetricState> {
             labelWidth={7}
             inputWidth={12}
             label={'Aggregation'}
-            tooltip={'Select a metric aggregation.'}
+            tooltip={'Select a metric aggregation or type variable like $aggregation'}
             value={query.aggregation}
-            options={query.metric.aggregations}
+            options={query.metric?.aggregations || []}
             onChange={this.onAggregationChange}
+            allowCustomValue={true}
+            placeholder={'Please specify'}
           />
         )}
 
@@ -199,10 +251,12 @@ export default class Metric extends React.Component<Props, MetricState> {
             labelWidth={5}
             inputWidth={12}
             label={'Rollup'}
-            tooltip={'Select the rollup value.'}
+            tooltip={'Select the rollup value or type variable like $timeInterval'}
             value={query.timeInterval}
             options={datasource.availableTimeIntervals}
             onChange={this.onTimeIntervalChange}
+            allowCustomValue={true}
+            placeholder={'Please specify'}
           />
         )}
       </div>

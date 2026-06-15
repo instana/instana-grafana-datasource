@@ -69,13 +69,25 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         });
 
         // replace removed application and preselect entity
-        if (query.entity && query.entity.key && !_.find(applications, (app) => app.key === query.entity.key)) {
+        // Don't replace if it's a variable
+        const entityKey = query.entity?.key || query.entity?.value;
+        if (entityKey) {
+          // Check if it's a variable - if so, preserve it
+          if (this.isVariable(entityKey)) {
+            // It's a variable - preserve it and trigger query
+            this.props.onRunQuery();
+            return;
+          }
+          // Not a variable - check if it exists in the list
+          if (!_.find(applications, (app) => app.key === entityKey)) {
+            query.entity = applications[0];
+            onChange(query);
+          }
+        } else if (applications) {
+          // No entity selected - set to default
           query.entity = applications[0];
-        } else if ((!query.entity || !query.entity.key) && applications) {
-          query.entity = applications[0];
+          onChange(query);
         }
-
-        onChange(query);
       }
     });
   }
@@ -92,15 +104,25 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         });
 
         // replace removed service and preselect service
-        if (query.service && query.service.key) {
-          if (!_.find(services, (app) => app.key === query.service.key)) {
+        // Don't replace if it's a variable
+        const serviceKey = query.service?.key || query.service?.value;
+        if (serviceKey) {
+          // Check if it's a variable - if so, preserve it
+          if (this.isVariable(serviceKey)) {
+            // It's a variable - preserve it and trigger query
+            this.props.onRunQuery();
+            return;
+          }
+          // Not a variable - check if it exists in the list
+          if (!_.find(services, (svc) => svc.key === serviceKey)) {
             query.service = services[0];
+            onChange(query);
           }
         } else {
+          // No service selected - set to default
           query.service = services[0];
+          onChange(query);
         }
-
-        onChange(query);
       }
     });
   }
@@ -117,52 +139,99 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
         });
 
         // replace removed endpoint and preselect endpoint
-        if (query.endpoint && query.endpoint.key) {
-          if (!_.find(endpoints, (app) => app.key === query.endpoint.key)) {
+        // Don't replace if it's a variable
+        const endpointKey = query.endpoint?.key || query.endpoint?.value;
+        if (endpointKey) {
+          // Check if it's a variable - if so, preserve it
+          if (this.isVariable(endpointKey)) {
+            // It's a variable - preserve it and trigger query
+            this.props.onRunQuery();
+            return;
+          }
+          // Not a variable - check if it exists in the list
+          if (!_.find(endpoints, (ep) => ep.key === endpointKey)) {
             query.endpoint = { key: null, label: ALL_ENDPOINTS };
+            onChange(query);
           }
         } else {
+          // No endpoint selected - set to default
           query.endpoint = { key: null, label: ALL_ENDPOINTS };
+          onChange(query);
         }
-
-        onChange(query);
       }
     });
   }
 
-  onApplicationChange = (application: SelectableValue) => {
+  onApplicationChange = (application: SelectableValue | string) => {
     const { query, onChange, onRunQuery } = this.props;
-    query.entity = application;
-    if (application.boundaryScope !== '') {
-      //set the default boundary scope that is configured for this application
-      query.applicationBoundaryScope = application.boundaryScope;
+
+    // Handle both string (variable) and SelectableValue (dropdown selection)
+    if (typeof application === 'string') {
+      query.entity = { key: application, label: application };
     } else {
-      if (query.applicationBoundaryScope !== 'ALL' && query.applicationBoundaryScope !== 'INBOUND') {
-        //if no default is set, set it to INBOUND
-        query.applicationBoundaryScope = 'INBOUND';
+      query.entity = application;
+      if (application.boundaryScope !== '') {
+        //set the default boundary scope that is configured for this application
+        query.applicationBoundaryScope = application.boundaryScope;
+      } else {
+        if (query.applicationBoundaryScope !== 'ALL' && query.applicationBoundaryScope !== 'INBOUND') {
+          //if no default is set, set it to INBOUND
+          query.applicationBoundaryScope = 'INBOUND';
+        }
       }
     }
 
     onChange(query);
-    this.loadServices();
-    this.loadEndpoints();
+
+    // Only load dependent data if not a variable
+    if (!this.isVariable(query.entity?.key)) {
+      this.loadServices();
+      this.loadEndpoints();
+    }
+
     onRunQuery();
   };
 
-  onServiceChange = (service: SelectableValue) => {
+  onServiceChange = (service: SelectableValue | string) => {
     const { query, onChange, onRunQuery } = this.props;
-    query.service = service;
+
+    // Handle both string (variable) and SelectableValue (dropdown selection)
+    if (typeof service === 'string') {
+      query.service = { key: service, label: service };
+    } else {
+      query.service = service;
+    }
+
     onChange(query);
-    this.loadEndpoints();
+
+    // Only load endpoints if not a variable
+    if (!this.isVariable(query.service?.key)) {
+      this.loadEndpoints();
+    }
+
     onRunQuery();
   };
 
-  onEndpointChange = (endpoint: SelectableValue) => {
+  onEndpointChange = (endpoint: SelectableValue | string) => {
     const { query, onChange, onRunQuery } = this.props;
-    query.endpoint = endpoint;
+
+    // Handle both string (variable) and SelectableValue (dropdown selection)
+    if (typeof endpoint === 'string') {
+      query.endpoint = { key: endpoint, label: endpoint };
+    } else {
+      query.endpoint = endpoint;
+    }
+
     onChange(query);
     onRunQuery();
   };
+
+  private isVariable(value: string | undefined | null): boolean {
+    if (!value || typeof value !== 'string') {
+      return false;
+    }
+    return value.includes('$');
+  }
 
   debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
@@ -187,6 +256,36 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
   render() {
     const { query } = this.props;
 
+    // Format entity value for Select component with allowCustomValue
+    let entityValue = query.entity;
+    if (query.entity && query.entity.key) {
+      entityValue = {
+        ...query.entity,
+        value: query.entity.key,
+        label: query.entity.label || query.entity.key,
+      };
+    }
+
+    // Format service value for Select component with allowCustomValue
+    let serviceValue = query.service;
+    if (query.service && query.service.key) {
+      serviceValue = {
+        ...query.service,
+        value: query.service.key,
+        label: query.service.label || query.service.key,
+      };
+    }
+
+    // Format endpoint value for Select component with allowCustomValue
+    let endpointValue = query.endpoint;
+    if (query.endpoint && query.endpoint.key) {
+      endpointValue = {
+        ...query.endpoint,
+        value: query.endpoint.key,
+        label: query.endpoint.label || query.endpoint.key,
+      };
+    }
+
     return (
       <div className={'gf-form'}>
         <InlineFormLabel className={'query-keyword'} width={14} tooltip={'Select your application.'}>
@@ -201,33 +300,47 @@ export class ApplicationServiceEndpointMetrics extends React.Component<Props, Ap
           menuPlacement={'bottom'}
           width={0}
           isSearchable={true}
-          value={query.entity}
+          value={entityValue}
           options={this.state.applications}
           onChange={this.onApplicationChange}
+          allowCustomValue={true}
+          placeholder={'Please specify'}
         />
 
-        <InlineFormLabel className={'query-keyword'} width={6} tooltip={'Select your service.'}>
+        <InlineFormLabel
+          className={'query-keyword'}
+          width={6}
+          tooltip={'Select your service or type variable like $service'}
+        >
           Service
         </InlineFormLabel>
         <Select
           menuPlacement={'bottom'}
           width={0}
           isSearchable={true}
-          value={query.service}
+          value={serviceValue}
           options={this.state.services}
           onChange={this.onServiceChange}
+          allowCustomValue={true}
+          placeholder={'Please specify'}
         />
 
-        <InlineFormLabel className={'query-keyword'} width={6} tooltip={'Select your endpoint.'}>
+        <InlineFormLabel
+          className={'query-keyword'}
+          width={6}
+          tooltip={'Select your endpoint or type variable like $endpoint'}
+        >
           Endpoint
         </InlineFormLabel>
         <Select
           menuPlacement={'bottom'}
           width={0}
           isSearchable={true}
-          value={query.endpoint}
+          value={endpointValue}
           options={this.state.endpoints}
           onChange={this.onEndpointChange}
+          allowCustomValue={true}
+          placeholder={'Please specify'}
         />
 
         <div style={!query.showGroupBySecondLevel ? { display: 'none' } : {}}>

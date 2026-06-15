@@ -46,7 +46,9 @@ export class DataSourceMobileApp {
       !target.group ||
       !target.group.key ||
       !target.entity ||
-      !target.entity.key
+      !target.entity.key ||
+      !target.entityType ||
+      !target.entityType.key
     ) {
       return Promise.resolve(emptyResultData(target.refId));
     }

@@ -89,33 +89,53 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
       });
   };
 
-  onTestChange = (test: SelectableValue) => {
+  onTestChange = (test: SelectableValue | string) => {
     const { query, onChange, onRunQuery } = this.props;
 
-    query.entity = test;
+    // Handle both string (variable) and SelectableValue (dropdown selection)
+    if (typeof test === 'string') {
+      // When a variable is used, try to find the matching test from available tests
+      const matchingTest = this.state.tests.find((t: any) => t.value === test || t.label === test);
 
-    if (test.test) {
-      query.testId = test.test.testId;
+      if (matchingTest && matchingTest.test) {
+        // Found matching test, use its testId
+        query.entity = { value: test, label: test };
+        query.testId = matchingTest.test.testId;
+      } else {
+        // Variable value doesn't match any test, store as-is (will be interpolated later)
+        query.entity = { value: test, label: test };
+        query.testId = test; // Use the variable value as testId
+      }
     } else {
-      query.testId = '';
+      query.entity = test;
+      if (test.test) {
+        query.testId = test.test.testId;
+      } else {
+        query.testId = '';
+      }
     }
 
     onChange(query);
     onRunQuery();
   };
 
-  onTestTypeChange = async (testType: SelectableValue) => {
+  onTestTypeChange = async (testType: SelectableValue | string) => {
     const { query, onChange, onRunQuery } = this.props;
 
     const prevTestTypeValue = query.testType?.value;
 
-    // Update test type
-    query.testType = testType;
+    // Handle both string (variable) and SelectableValue (dropdown selection)
+    if (typeof testType === 'string') {
+      query.testType = { value: testType, label: testType };
+    } else {
+      query.testType = testType;
+    }
 
     // If switching between 'metric' <-> 'results', then reset the test
+    const newTestTypeValue = typeof testType === 'string' ? testType : testType.value;
     const isSwitchingTypes =
-      (prevTestTypeValue === 'metric' && testType.value === 'results') ||
-      (prevTestTypeValue === 'results' && testType.value === 'metric');
+      (prevTestTypeValue === 'metric' && newTestTypeValue === 'results') ||
+      (prevTestTypeValue === 'results' && newTestTypeValue === 'metric');
 
     if (isSwitchingTypes) {
       query.entity = { label: PLEASE_SPECIFY, value: '' };
@@ -126,9 +146,16 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
     onRunQuery();
   };
 
-  onMetricChange = (metric: SelectableValue) => {
+  onMetricChange = (metric: SelectableValue | string) => {
     const { query, onChange, onRunQuery } = this.props;
-    query.metric = metric;
+
+    // Handle both string (variable) and SelectableValue (dropdown selection)
+    if (typeof metric === 'string') {
+      query.metric = { key: metric, value: metric, label: metric };
+    } else {
+      query.metric = metric;
+    }
+
     onChange(query);
     onRunQuery();
   };
@@ -148,6 +175,7 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
             value={query.entity}
             options={this.state.tests}
             onChange={this.onTestChange}
+            allowCustomValue={true}
           />
           <FormSelect
             queryKeyword
@@ -158,6 +186,7 @@ export class SyntheticMonitoring extends React.Component<Props, State> {
             value={query.testType}
             options={testTypeOptions}
             onChange={this.onTestTypeChange}
+            allowCustomValue={true}
           />
         </div>
       </div>

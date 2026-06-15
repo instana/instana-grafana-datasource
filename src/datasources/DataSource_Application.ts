@@ -40,6 +40,11 @@ export class DataSourceApplication {
       return Promise.resolve(emptyResultData(target.refId));
     }
 
+    // prevent query when no application is selected (key is null for "Select application" option)
+    if (!target.entity || target.entity.key === null) {
+      return Promise.resolve(emptyResultData(target.refId));
+    }
+
     return this.fetchAnalyzeMetricsForApplication(target, timeFilter).then((response) => {
       target.showWarningCantShowAllResults = response.data.canLoadMore;
       return readItemMetrics(target, response, this.buildAnalyzeApplicationLabel);
@@ -160,77 +165,90 @@ export class DataSourceApplication {
     const windowSize = getWindowSize(timeFilter);
     let tagFilters: any[] = [];
 
-    return Promise.resolve(this.getApplicationTags(timeFilter)).then((applicationTags) => {
-      if (target.entity.key) {
-        tagFilters.push({
-          name: 'application.name',
-          operator: 'EQUALS',
-          value: target.entity.label!,
-          entity: target.applicationCallToEntity ? target.applicationCallToEntity : 'DESTINATION',
-        });
-      }
+    return Promise.all([this.getApplicationTags(timeFilter), this.getApplications(timeFilter)]).then(
+      ([applicationTags, applications]) => {
+        if (target.entity.key) {
+          let applicationName = target.entity.label!;
 
-      _.forEach(target.filters, (filter) => {
-        if (filter.isValid) {
-          let tagFilter: any = createTagFilter(filter);
-          const tag = _.find(applicationTags, ['key', filter.tag.key]);
-          if (tag.canApplyToDestination || tag.canApplyToSource) {
-            tagFilter['entity'] = this.getTagEntity(filter.entity, tag);
+          // Try to find the application by ID to get its name
+          const foundApp = _.find(applications, ['key', target.entity.key]);
+          if (foundApp && foundApp.label) {
+            applicationName = foundApp.label;
           }
-          tagFilters.push(tagFilter);
+
+          tagFilters.push({
+            name: 'application.name',
+            operator: 'EQUALS',
+            value: applicationName,
+            entity: target.applicationCallToEntity ? target.applicationCallToEntity : 'DESTINATION',
+          });
         }
-      });
 
-      if (!target.timeInterval) {
-        target.timeInterval = getDefaultChartGranularity(windowSize);
-      }
-      const metric: any = {
-        metric: target.metric.key,
-        aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
-        granularity: target.timeInterval.key,
-      };
+        _.forEach(target.filters, (filter) => {
+          if (filter.isValid) {
+            let tagFilter: any = createTagFilter(filter);
+            const tag = _.find(applicationTags, ['key', filter.tag.key]);
+            if (tag.canApplyToDestination || tag.canApplyToSource) {
+              tagFilter['entity'] = this.getTagEntity(filter.entity, tag);
+            }
+            tagFilters.push(tagFilter);
+          }
+        });
 
-      const group: any = {
-        groupbyTag: target.group.key,
-      };
-      const tag: any = _.find(applicationTags, ['key', target.group.key]);
-      if (tag.canApplyToDestination || tag.canApplyToSource) {
-        group['groupbyTagEntity'] = target.callToEntity;
-      }
-      if (target.group.type === 'KEY_VALUE_PAIR' && target.groupbyTagSecondLevelKey) {
-        group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
-      }
-
-      let includeSynthetic = false;
-      target.filters.map((filter) => {
-        if (filter.tag.key === 'call.is_synthetic') {
-          includeSynthetic = filter.booleanValue;
+        if (!target.timeInterval) {
+          target.timeInterval = getDefaultChartGranularity(windowSize);
         }
-      });
+        const metric: any = {
+          metric: target.metric.key,
+          aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+          granularity: target.timeInterval.key,
+        };
 
-      const data: any = {
-        group: group,
-        timeFrame: {
-          to: timeFilter.to,
-          windowSize: atLeastGranularity(windowSize, metric.granularity),
-        },
-        metrics: [metric],
-        includeSynthetic,
-        tagFilterExpression: {
-          type: 'EXPRESSION',
-          logicalOperator: 'AND',
-          elements: tagFilters,
-        },
-      };
+        const group: any = {
+          groupbyTag: target.group.key,
+        };
+        const tag: any = _.find(applicationTags, ['key', target.group.key]);
+        // Only add groupbyTagEntity if the tag supports it
+        if (tag && (tag.canApplyToDestination || tag.canApplyToSource)) {
+          group['groupbyTagEntity'] = target.callToEntity;
+        }
+        // Check for KEY_VALUE_PAIR type - use target.group.type if available, otherwise check tag
+        const tagType = target.group.type || (tag && tag.type);
+        if (tagType === 'KEY_VALUE_PAIR' && target.groupbyTagSecondLevelKey) {
+          group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
+        }
 
-      return postRequest(
-        this.instanaOptions,
-        '/api/application-monitoring/analyze/call-groups?fillTimeSeries=true',
-        data,
-        false,
-        5
-      );
-    });
+        let includeSynthetic = false;
+        target.filters.map((filter) => {
+          if (filter.tag.key === 'call.is_synthetic') {
+            includeSynthetic = filter.booleanValue;
+          }
+        });
+
+        const data: any = {
+          group: group,
+          timeFrame: {
+            to: timeFilter.to,
+            windowSize: atLeastGranularity(windowSize, metric.granularity),
+          },
+          metrics: [metric],
+          includeSynthetic,
+          tagFilterExpression: {
+            type: 'EXPRESSION',
+            logicalOperator: 'AND',
+            elements: tagFilters,
+          },
+        };
+
+        return postRequest(
+          this.instanaOptions,
+          '/api/application-monitoring/analyze/call-groups?fillTimeSeries=true',
+          data,
+          false,
+          5
+        );
+      }
+    );
   }
 
   getTagEntity(selectedEntity: string, tag: any): string {

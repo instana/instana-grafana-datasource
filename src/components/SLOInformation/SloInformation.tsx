@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
-import { SLO_INFORMATION } from '../../GlobalVariables';
+import { PLEASE_SPECIFY, SLO_INFORMATION } from '../../GlobalVariables';
 import SloSpecifics from '../../lists/slo_specifics';
 import FormSelect from '../FormField/FormSelect';
 import { SelectableValue } from '@grafana/data';
@@ -12,7 +12,7 @@ import _ from 'lodash';
 const MAX_VAL = 0.9999;
 
 interface SloInformationState {
-  sloReports: SelectableValue[];
+  sliReports: SelectableValue[];
   isValidSlo: boolean;
 }
 
@@ -32,7 +32,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
   constructor(props: any) {
     super(props);
     this.state = {
-      sloReports: [],
+      sliReports: [],
       isValidSlo: true,
     };
   }
@@ -49,9 +49,17 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
 
   debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
-  onSloChange = (slo: SelectableValue) => {
-    const { query, onRunQuery } = this.props;
-    query.sloReport = slo;
+  onSloChange = (slo: SelectableValue | string) => {
+    const { query, onChange, onRunQuery } = this.props;
+
+    // Handle both string (variable) and SelectableValue (dropdown selection)
+    if (typeof slo === 'string') {
+      query.sloReport = { key: slo, label: slo };
+    } else {
+      query.sloReport = slo;
+    }
+
+    onChange(query);
     onRunQuery();
   };
 
@@ -66,8 +74,9 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
   };
 
   onSloSpecificChange = (sloSpecific: SelectableValue) => {
-    const { query, onRunQuery } = this.props;
+    const { query, onChange, onRunQuery } = this.props;
     query.sloSpecific = sloSpecific;
+    onChange(query);
     onRunQuery();
   };
 
@@ -89,12 +98,12 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
 
   loadSloReports() {
     const { query } = this.props;
-    this.props.datasource.getSloReports().then((sloReports) => {
+    this.props.datasource.getSliReports().then((sliReports) => {
       if (!isUnmounting) {
-        this.setState({ sloReports: sloReports });
+        this.setState({ sliReports: sliReports });
 
-        if (!query.sloReport && sloReports.length >= 1) {
-          query.sloReport = sloReports[0];
+        if (!query.sloReport && sliReports.length >= 1) {
+          query.sloReport = sliReports[0];
         }
       }
     });
@@ -109,11 +118,13 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
           queryKeyword
           inputWidth={0}
           label={'Configured SLI'}
-          tooltip={'SLI configuration used to compute error budget and SLI values.'}
+          tooltip={'SLI configuration used to compute error budget and SLI values or type variable like $sloReport'}
           noOptionsMessage={'No configured SLI found'}
           value={query.sloReport}
-          options={this.state.sloReports}
+          options={this.state.sliReports}
           onChange={this.onSloChange}
+          allowCustomValue={true}
+          placeholder={PLEASE_SPECIFY}
         />
 
         <FormInput
@@ -146,6 +157,7 @@ export class SloInformation extends React.Component<Props, SloInformationState> 
           value={query.sloSpecific}
           options={SloSpecifics}
           onChange={this.onSloSpecificChange}
+          placeholder={PLEASE_SPECIFY}
         />
       </div>
     );

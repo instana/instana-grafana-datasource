@@ -41,8 +41,22 @@ export class Filters extends React.Component<Props, FilterState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      textareaValue: '',
+      textareaValue: props.query.tagFilterExpression || '',
     };
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const { query } = this.props;
+
+    if (
+      query.metricCategory.key === INFRASTRUCTURE_ANALYZE &&
+      query.tagFilterExpression !== prevProps.query.tagFilterExpression &&
+      query.tagFilterExpression !== this.state.textareaValue
+    ) {
+      this.setState({
+        textareaValue: query.tagFilterExpression || '',
+      });
+    }
   }
 
   addTagFilter = () => {
@@ -137,10 +151,18 @@ export class Filters extends React.Component<Props, FilterState> {
     const { query, onChange, onRunQuery } = this.props;
     const filterValue = event.currentTarget.value;
     this.setState({
-      textareaValue: event.currentTarget.value,
+      textareaValue: filterValue,
     });
+
+    query.tagFilterExpression = filterValue;
+
     if (filterValue.trim() !== '') {
-      query.filters = JSON.parse(filterValue);
+      try {
+        query.filters = JSON.parse(filterValue);
+      } catch (e) {
+        console.warn('Invalid JSON in TagFilterExpression:', e);
+        query.filters = [];
+      }
     } else {
       query.filters = [];
     }
