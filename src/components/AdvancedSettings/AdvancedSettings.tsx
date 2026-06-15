@@ -101,7 +101,6 @@ interface Props {
   query: InstanaQuery;
   onRunQuery(): void;
   onChange(value: InstanaQuery): void;
-  loadEntityTypes(filterResult?: boolean): void;
 }
 
 export default class AdvancedSettings extends React.Component<Props, AdvancedSettingsState> {
@@ -160,7 +159,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
   };
 
   render() {
-    const { query, onRunQuery, onChange, loadEntityTypes } = this.props;
+    const { query, onRunQuery, onChange } = this.props;
     const category = query.metricCategory.key;
 
     return (
@@ -209,12 +208,7 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
           </div>
 
           <div hidden={category !== CUSTOM_METRICS}>
-            <FreeTextMetrics
-              query={query}
-              onRunQuery={onRunQuery}
-              onChange={onChange}
-              loadEntityTypes={loadEntityTypes}
-            />
+            <FreeTextMetrics query={query} onRunQuery={onRunQuery} onChange={onChange} />
           </div>
 
           <div hidden={category !== BUILT_IN_METRICS && category !== CUSTOM_METRICS}>

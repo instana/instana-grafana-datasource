@@ -11,9 +11,11 @@ import { emptyResultData } from '../util/target_util';
 import { getDefaultChartGranularity, getDefaultMetricRollupDuration } from '../util/rollup_granularity_util';
 import { isInvalidQueryInterval } from '../util/queryInterval_check';
 import max_metrics from '../lists/max_metrics';
+import { TemplateSrv } from '@grafana/runtime';
 
 export class DataSourceInfrastructure {
   instanaOptions: InstanaOptions;
+  templateSrv?: TemplateSrv;
   snapshotCache: Cache<Promise<SelectableValue[]>>;
   snapshotInfoCache: Cache<Promise<SelectableValue[]>>;
   catalogCache: Cache<Promise<SelectableValue[]>>;
@@ -21,8 +23,9 @@ export class DataSourceInfrastructure {
   timeToLiveSnapshotInfoCache = 4000000; // set to 1,11 hour
   miscCache: Cache<any>;
 
-  constructor(options: InstanaOptions) {
+  constructor(options: InstanaOptions, templateSrv?: TemplateSrv) {
     this.instanaOptions = options;
+    this.templateSrv = templateSrv;
     this.snapshotCache = new Cache<Promise<SelectableValue[]>>();
     this.snapshotInfoCache = new Cache<Promise<SelectableValue[]>>();
     this.catalogCache = new Cache<Promise<SelectableValue[]>>();
@@ -45,7 +48,7 @@ export class DataSourceInfrastructure {
       (target.metricCategory.key === INFRASTRUCTURE_ANALYZE &&
         target.metric.key &&
         target.group.key &&
-        target.entity.key)
+        target.entity?.key)
     ) {
       return this.fetchAnalyzeEntities(target, timeFilter);
     }
@@ -211,6 +214,43 @@ export class DataSourceInfrastructure {
     return entityTypes;
   }
 
+  getInfrastructureEntities(plugin?: string): Promise<SelectableValue[]> {
+    const cacheKey = `infrastructureEntities_${plugin || 'all'}`;
+    let entities = this.miscCache.get(cacheKey);
+    if (entities) {
+      return entities;
+    }
+
+    const params = new URLSearchParams();
+    if (plugin) {
+      params.append('plugin', plugin);
+    }
+    params.append('size', '100');
+    params.append('windowSize', '300000');
+    params.append('to', Date.now().toString());
+    params.append('offline', this.instanaOptions.showOffline ? 'true' : 'false');
+
+    const url = `/api/infrastructure-monitoring/snapshots?${params.toString()}`;
+
+    entities = getRequest(this.instanaOptions, url).then((snapshotsResponse: any) => {
+      if (!snapshotsResponse.data || !snapshotsResponse.data.items) {
+        return [];
+      }
+
+      const result = snapshotsResponse.data.items.map((snapshot: any) => ({
+        key: snapshot.snapshotId,
+        label: snapshot.label,
+        value: snapshot.snapshotId,
+      }));
+
+      return _.sortBy(result, 'label');
+    });
+
+    this.miscCache.put(cacheKey, entities, 300000);
+
+    return entities;
+  }
+
   fetchTypesForTarget(query: InstanaQuery, timeFilter: TimeFilter): any {
     const fetchSnapshotTypesUrl =
       `/api/snapshots/types` +
@@ -237,7 +277,6 @@ export class DataSourceInfrastructure {
       query: '',
       type: target.entity.key,
     };
-
     let metricFortarget = postRequest(this.instanaOptions, '/api/infrastructure-monitoring/analyze/metrics', data).then(
       (metricResponse: any) => {
         let result: any[] = [];
@@ -267,6 +306,32 @@ export class DataSourceInfrastructure {
     return metricFortarget;
   }
 
+  private resolveVariablesInObject(obj: any): any {
+    if (!obj || !this.templateSrv) {
+      return obj;
+    }
+
+    if (Array.isArray(obj)) {
+      return obj.map((item) => this.resolveVariablesInObject(item));
+    }
+
+    if (typeof obj === 'object') {
+      const resolved: any = {};
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          resolved[key] = this.resolveVariablesInObject(obj[key]);
+        }
+      }
+      return resolved;
+    }
+
+    if (typeof obj === 'string' && obj.includes('$')) {
+      return this.templateSrv.replace(obj);
+    }
+
+    return obj;
+  }
+
   fetchAnalyzeEntities(target: InstanaQuery, timeFilter: TimeFilter) {
     const windowSize = getWindowSize(timeFilter);
 
@@ -282,15 +347,42 @@ export class DataSourceInfrastructure {
       granularity: target.timeInterval.key,
       crossSeriesAggregation: 'DISTINCT_COUNT',
     };
+    let tagFilterExpression: any;
 
-    const tagFilterExpression =
-      target.filters && target.filters.length !== 0
-        ? target.filters
-        : {
+    if (target.tagFilterExpression) {
+      if (typeof target.tagFilterExpression === 'object') {
+        tagFilterExpression = target.tagFilterExpression;
+      } else if (typeof target.tagFilterExpression === 'string') {
+        try {
+          let resolvedString = this.templateSrv
+            ? this.templateSrv.replace(target.tagFilterExpression)
+            : target.tagFilterExpression;
+          resolvedString = resolvedString.replace(/\u00A0/g, ' ');
+
+          resolvedString = resolvedString.trim();
+          tagFilterExpression = JSON.parse(resolvedString);
+        } catch (e) {
+          console.error('Failed to parse tagFilterExpression:', e);
+          console.error('Problematic string was:', target.tagFilterExpression);
+          tagFilterExpression = {
             elements: [],
             type: 'EXPRESSION',
             logicalOperator: 'AND',
           };
+        }
+      }
+    } else if (target.filters && target.filters.length !== 0) {
+      tagFilterExpression = target.filters;
+    } else {
+      tagFilterExpression = {
+        elements: [],
+        type: 'EXPRESSION',
+        logicalOperator: 'AND',
+      };
+    }
+
+    tagFilterExpression = this.resolveVariablesInObject(tagFilterExpression);
+
     const payload = {
       tagFilterExpression: tagFilterExpression,
       pagination: {
@@ -332,7 +424,12 @@ export class DataSourceInfrastructure {
   }
 
   getMetricsCatalog(plugin: SelectableValue, metricCategory: number): Promise<SelectableValue[]> {
-    const key = plugin.key + '|' + metricCategory;
+    let resolvedPluginKey = plugin.key;
+    if (this.templateSrv && typeof resolvedPluginKey === 'string' && resolvedPluginKey.includes('$')) {
+      resolvedPluginKey = this.templateSrv.replace(resolvedPluginKey);
+    }
+
+    const key = resolvedPluginKey + '|' + metricCategory;
 
     let metrics = this.catalogCache.get(key);
     if (metrics) {
@@ -342,7 +439,7 @@ export class DataSourceInfrastructure {
     const filter = metricCategory === CUSTOM_METRICS ? 'custom' : 'builtin';
     metrics = getRequest(
       this.instanaOptions,
-      `/api/infrastructure-monitoring/catalog/metrics/${plugin.key}?filter=${filter}`
+      `/api/infrastructure-monitoring/catalog/metrics/${resolvedPluginKey}?filter=${filter}`
     ).then((catalogResponse: any) =>
       catalogResponse.data.map((entry: any) => ({
         key: entry.metricId,
@@ -364,6 +461,33 @@ export class DataSourceInfrastructure {
   async fetchSnapshotsForTarget(target: InstanaQuery, timeFilter: TimeFilter) {
     const windowSize = getWindowSize(timeFilter);
     target.timeInterval = getDefaultChartGranularity(windowSize);
+
+    const selectedSnapshotId = target.selectedEntity?.key;
+    if (selectedSnapshotId && target.metricCategory.key !== INFRASTRUCTURE_ANALYZE) {
+      const fetchSnapshotsUrl = `/api/infrastructure-monitoring/snapshots`;
+      const payload = {
+        snapshotIds: [selectedSnapshotId],
+        timeFrame: {
+          to: timeFilter.to,
+          windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
+        },
+      };
+
+      return postRequest(this.instanaOptions, fetchSnapshotsUrl, payload).then((snapshotsResponse: any) => {
+        if (!snapshotsResponse.data || !snapshotsResponse.data.items) {
+          return [];
+        }
+
+        return snapshotsResponse.data.items.map((snapshot: any) => ({
+          snapshotId: snapshot.snapshotId,
+          host: snapshot.host,
+          pid: _.get(snapshot, ['data', 'pid'], ''),
+          name: _.get(snapshot, ['data', 'name'], ''),
+          response: this.reduceSnapshot(snapshot),
+        }));
+      });
+    }
+
     const query = this.buildQuery(target);
     const key = this.buildSnapshotCacheKey(query, timeFilter);
 
@@ -376,7 +500,6 @@ export class DataSourceInfrastructure {
       `/api/infrastructure-monitoring/snapshots` +
       `?plugin=${target.entityType.key}` +
       `&size=100` +
-      `&query=${target.entityQuery}` +
       `&windowSize=${atLeastGranularity(windowSize, target.timeInterval.key)}` +
       `&to=${timeFilter.to}` +
       `&offline=${this.instanaOptions.showOffline}`;
@@ -408,14 +531,13 @@ export class DataSourceInfrastructure {
           }));
         });
       })
-      .then((response: any) => _.compact(response)); // Remove undefined items
+      .then((response: any) => _.compact(response));
 
     this.snapshotCache.put(key, snapshots);
     return snapshots;
   }
 
   buildQuery(target: InstanaQuery): string {
-    // check for entity.pluginId or entity.selfType, because otherwise the backend has a problem with `AND entity.pluginId`
     if (`${target.entityQuery}`.includes('entity.pluginId:') || `${target.entityQuery}`.includes('entity.selfType:')) {
       return encodeURIComponent(`${target.entityQuery}`);
     } else {
@@ -428,7 +550,6 @@ export class DataSourceInfrastructure {
   }
 
   reduceSnapshot(snapshotResponse: any) {
-    // reduce data to used label formatting values
     snapshotResponse.data = _.pick(snapshotResponse.data, ['id', 'label', 'plugin', 'data']);
     return snapshotResponse;
   }
@@ -453,8 +574,11 @@ export class DataSourceInfrastructure {
   fetchMetricsForSnapshot(target: InstanaQuery, snapshotIds: string[], timeFilter: TimeFilter, metric: any) {
     const windowSize = getWindowSize(timeFilter);
     target.timeInterval = getDefaultChartGranularity(windowSize);
+
+    const metricKey = metric.key || metric.value;
+
     const data = {
-      metrics: [metric.key],
+      metrics: [metricKey],
       query: target.entityQuery,
       plugin: target.entityType.key,
       rollup: target.timeInterval.key,

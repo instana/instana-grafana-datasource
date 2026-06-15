@@ -8,7 +8,7 @@ interface State {}
 
 interface Props {
   label: string;
-  value: SelectableValue;
+  value: SelectableValue | string;
   options: any;
   queryKeyword?: boolean;
   disabled?: boolean;
@@ -19,6 +19,8 @@ interface Props {
   inputWidth?: number | 30;
   placeholder?: string | '-';
   tooltip?: PopoverContent;
+  allowCustomValue?: boolean;
+  isClearable?: boolean;
 
   onChange(event?: any): any;
 }
@@ -41,6 +43,7 @@ export default class FormSelect extends React.Component<Props, State> {
       placeholder = '-',
       labelWidth = 14,
       inputWidth = 30,
+      isClearable = false,
       ...remainingProps
     } = this.props;
 
@@ -54,6 +57,7 @@ export default class FormSelect extends React.Component<Props, State> {
           disabled={disabled}
           width={inputWidth}
           isSearchable={searchable}
+          isClearable={isClearable}
           placeholder={placeholder}
           {...remainingProps}
         />

@@ -150,9 +150,19 @@ export class DataSourceWebsite {
     if (!target.timeInterval) {
       target.timeInterval = getDefaultChartGranularity(windowSize);
     }
+
+    // Determine the aggregation to use
+    let aggregation = 'SUM';
+    if (target.aggregation && target.aggregation.key) {
+      aggregation = target.aggregation.key;
+    } else if (target.metric && target.metric.aggregations && target.metric.aggregations.length > 0) {
+      // Use the first supported aggregation from the metric's catalog
+      aggregation = target.metric.aggregations[0].key || target.metric.aggregations[0];
+    }
+
     const metric: any = {
       metric: target.metric.key,
-      aggregation: target.aggregation.key ? target.aggregation.key : 'SUM',
+      aggregation: aggregation,
       granularity: target.timeInterval.key,
     };
 

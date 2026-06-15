@@ -23,6 +23,7 @@ export interface InstanaQuery extends DataQuery {
   callToEntity: string;
   entityQuery: string;
   entityType: SelectableValue;
+  selectedEntity: SelectableValue;
   showAllMetrics: boolean;
   canShowAllMetrics: boolean;
   groupbyTagSecondLevelKey: string;

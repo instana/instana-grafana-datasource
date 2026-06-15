@@ -47,6 +47,13 @@ interface QueryState {
   allMetrics: SelectableValue[];
   availableMetrics: SelectableValue[];
   selectedWindowSize: number;
+  lastInterpolatedQuery: string;
+  lastInterpolatedEntityType: string;
+  lastInterpolatedEntity: string;
+  lastInterpolatedMetric: string;
+  lastInterpolatedGroup: string;
+  lastInterpolatedMobileAppType: string;
+  lastInterpolatedWebsiteType: string;
 }
 
 export class QueryEditor extends PureComponent<Props, QueryState> {
@@ -66,23 +73,54 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
 
     migrate(this.query);
 
+    const metricKey = this.query.metric?.key || this.query.metric?.value;
+    const initialMetric = metricKey && metricKey.includes('$') ? props.datasource.templateSrv.replace(metricKey) : '';
+
+    const groupKey = this.query.group?.key || this.query.group?.value;
+    const initialGroup = groupKey && groupKey.includes('$') ? props.datasource.templateSrv.replace(groupKey) : '';
+
     this.state = {
       groups: [],
       allMetrics: [],
       queryTypes: [],
       availableMetrics: [],
       selectedWindowSize: props.range ? readTime(props.range).windowSize : 21600000,
+      lastInterpolatedQuery: '',
+      lastInterpolatedEntityType: '',
+      lastInterpolatedEntity: '',
+      lastInterpolatedMetric: initialMetric,
+      lastInterpolatedGroup: initialGroup,
+      lastInterpolatedMobileAppType: '',
+      lastInterpolatedWebsiteType: '',
     };
 
     this.filterMetricsOnType = this.filterMetricsOnType.bind(this);
-    this.loadEntityTypes = this.loadEntityTypes.bind(this);
     this.allowInfraExplore = props.datasource.options.allowInfraExplore;
 
     props.onChange(this.query);
   }
 
+  componentDidMount() {
+    const { datasource } = this.props;
+
+    if (this.query.metricCategory.key === INFRASTRUCTURE_ANALYZE) {
+      const entityKey = this.query.entity?.key || this.query.entity?.value;
+      if (entityKey) {
+        datasource
+          .fetchMetricsForEntityType(this.query)
+          .then((results: any) => {
+            this.updateMetrics(results);
+          })
+          .catch((error: any) => {
+            console.error('[QueryEditor] Failed to hydrate Infra Analyze metrics on mount', error);
+          });
+      }
+    }
+  }
+
   componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<QueryState>, snapshot?: any) {
-    const { onChange, range, datasource } = this.props;
+    const { onChange, range, datasource, onRunQuery } = this.props;
+
     if (range && this.state.selectedWindowSize !== readTime(range).windowSize) {
       this.setState({
         ...this.state,
@@ -94,6 +132,176 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         onChange(this.query);
         // no need to execute onRunQuery() here because the change of time frame triggers
         // datasource.query() anyways and datasource will take care of correcting the timeInterval
+      }
+    }
+
+    // Handle dashboard variable changes for entityType in Built-in/Custom metrics
+    if (
+      this.query.entityType?.label &&
+      this.query.entityType.label.includes('$') &&
+      (this.query.metricCategory.key === 0 || this.query.metricCategory.key === 1)
+    ) {
+      const currentInterpolatedType = datasource.templateSrv.replace(this.query.entityType.label);
+
+      if (currentInterpolatedType !== this.state.lastInterpolatedEntityType && currentInterpolatedType) {
+        this.setState({
+          ...this.state,
+          lastInterpolatedEntityType: currentInterpolatedType,
+        });
+
+        const interpolatedQuery = datasource.interpolateVariables(this.query);
+
+        datasource.dataSourceInfrastructure
+          .getMetricsCatalog(interpolatedQuery.entityType, this.query.metricCategory.key)
+          .then((results) => {
+            this.updateMetrics(results);
+          });
+      }
+    }
+    // Handle dashboard variable changes for entity in Infrastructure Analyze
+    const entityKey = this.query.entity?.key || this.query.entity?.value;
+    if (entityKey && entityKey.includes('$') && this.query.metricCategory.key === INFRASTRUCTURE_ANALYZE) {
+      const currentInterpolatedEntity = datasource.templateSrv.replace(entityKey);
+
+      if (currentInterpolatedEntity !== this.state.lastInterpolatedEntity && currentInterpolatedEntity) {
+        this.setState({
+          ...this.state,
+          lastInterpolatedEntity: currentInterpolatedEntity,
+        });
+
+        if (this.query.entity?.value && !this.query.entity?.key) {
+          this.query.entity.key = this.query.entity.value;
+        }
+
+        const interpolatedQuery = datasource.interpolateVariables(this.query);
+
+        datasource.fetchMetricsForEntityType(interpolatedQuery).then((results) => {
+          this.updateMetrics(results);
+        });
+      }
+    }
+
+    // Handle dashboard variable changes for entity in Website Analyze
+    const websiteEntityKey = this.query.entity?.key || this.query.entity?.value;
+    if (
+      websiteEntityKey &&
+      websiteEntityKey.includes('$') &&
+      this.query.metricCategory.key === ANALYZE_WEBSITE_METRICS
+    ) {
+      const currentInterpolatedEntity = datasource.templateSrv.replace(websiteEntityKey);
+
+      if (currentInterpolatedEntity !== this.state.lastInterpolatedEntity && currentInterpolatedEntity) {
+        this.setState({
+          ...this.state,
+          lastInterpolatedEntity: currentInterpolatedEntity,
+        });
+
+        onRunQuery();
+      }
+    }
+
+    // Handle dashboard variable changes for entity in Mobile App Analyze
+    const mobileAppEntityKey = this.query.entity?.key || this.query.entity?.value;
+    if (
+      mobileAppEntityKey &&
+      mobileAppEntityKey.includes('$') &&
+      this.query.metricCategory.key === ANALYZE_MOBILE_APP_METRICS
+    ) {
+      const currentInterpolatedEntity = datasource.templateSrv.replace(mobileAppEntityKey);
+
+      if (currentInterpolatedEntity !== this.state.lastInterpolatedEntity && currentInterpolatedEntity) {
+        this.setState({
+          ...this.state,
+          lastInterpolatedEntity: currentInterpolatedEntity,
+        });
+
+        onRunQuery();
+      }
+    }
+    // Handle dashboard variable changes for entityType (Type field) in Mobile App Analyze
+    const mobileAppEntityTypeKey = this.query.entityType?.key || this.query.entityType?.value;
+    if (
+      mobileAppEntityTypeKey &&
+      mobileAppEntityTypeKey.includes('$') &&
+      this.query.metricCategory.key === ANALYZE_MOBILE_APP_METRICS
+    ) {
+      const currentInterpolatedType = datasource.templateSrv.replace(mobileAppEntityTypeKey);
+
+      if (currentInterpolatedType !== this.state.lastInterpolatedMobileAppType && currentInterpolatedType) {
+        this.setState({
+          ...this.state,
+          lastInterpolatedMobileAppType: currentInterpolatedType,
+        });
+
+        const interpolatedQuery = datasource.interpolateVariables(this.query);
+
+        datasource.dataSourceMobileapp.getMobileappMetricsCatalog().then((allMetrics: any) => {
+          const filteredMetrics = allMetrics.filter(
+            (metric: any) => metric.beaconTypes && metric.beaconTypes.includes(interpolatedQuery.entityType.key)
+          );
+          this.updateMetrics(filteredMetrics.length > 0 ? filteredMetrics : allMetrics);
+          onRunQuery();
+        });
+      }
+    }
+
+    // Handle dashboard variable changes for entityType (Type field) in Website Analyze
+    const websiteEntityTypeKey = this.query.entityType?.key || this.query.entityType?.value;
+    if (
+      websiteEntityTypeKey &&
+      websiteEntityTypeKey.includes('$') &&
+      this.query.metricCategory.key === ANALYZE_WEBSITE_METRICS
+    ) {
+      const currentInterpolatedType = datasource.templateSrv.replace(websiteEntityTypeKey);
+
+      if (currentInterpolatedType !== this.state.lastInterpolatedWebsiteType && currentInterpolatedType) {
+        this.setState({
+          ...this.state,
+          lastInterpolatedWebsiteType: currentInterpolatedType,
+        });
+
+        const interpolatedQuery = datasource.interpolateVariables(this.query);
+
+        datasource.dataSourceWebsite.getWebsiteMetricsCatalog().then((allMetrics: any) => {
+          const filteredMetrics = allMetrics.filter(
+            (metric: any) => metric.beaconTypes && metric.beaconTypes.includes(interpolatedQuery.entityType.key)
+          );
+          this.updateMetrics(filteredMetrics.length > 0 ? filteredMetrics : allMetrics);
+          onRunQuery();
+        });
+      }
+    }
+    // Handle dashboard variable changes for metric variable
+    const metricKey = this.query.metric?.key || this.query.metric?.value;
+    if (metricKey && metricKey.includes('$')) {
+      const currentInterpolatedMetric = datasource.templateSrv.replace(metricKey);
+
+      if (currentInterpolatedMetric !== this.state.lastInterpolatedMetric && currentInterpolatedMetric) {
+        this.setState({
+          ...this.state,
+          lastInterpolatedMetric: currentInterpolatedMetric,
+        });
+        onRunQuery();
+      }
+    }
+
+    // Handle dashboard variable changes for group (Group by) in Analyze categories
+    const groupKey = this.query.group?.key || this.query.group?.value;
+    if (
+      groupKey &&
+      groupKey.includes('$') &&
+      (this.query.metricCategory.key === ANALYZE_APPLICATION_METRICS ||
+        this.query.metricCategory.key === ANALYZE_WEBSITE_METRICS ||
+        this.query.metricCategory.key === ANALYZE_MOBILE_APP_METRICS)
+    ) {
+      const currentInterpolatedGroup = datasource.templateSrv.replace(groupKey);
+
+      if (currentInterpolatedGroup !== this.state.lastInterpolatedGroup && currentInterpolatedGroup) {
+        this.setState({
+          ...this.state,
+          lastInterpolatedGroup: currentInterpolatedGroup,
+        });
+        onRunQuery();
       }
     }
   }
@@ -140,7 +348,12 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       () => {
         if ((this.query.metric && this.query.metric.key) || this.query.showAllMetrics) {
           const metric = _.find(metrics, (m) => m.key === this.query.metric.key);
-          metric ? (this.query.metric = metric) : (this.query.metric = { key: null });
+
+          if (metric) {
+            this.query.metric = metric;
+          } else if (this.query.metric.key && !this.query.metric.key.toString().startsWith('$')) {
+            this.query.metric = { key: null };
+          }
         }
         if (this.query.metricCategory.key === CUSTOM_METRICS) {
           this.onMetricsFilter(this.query.customFilters); // this contains setMetricPlaceholder
@@ -150,59 +363,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         this.changeAndRun();
       }
     );
-  };
-
-  loadEntityTypes(filterResult = true) {
-    const { query, datasource, onRunQuery } = this.props;
-
-    if (query.entityQuery) {
-      datasource.fetchTypesForTarget(query).then((response: any) => {
-        this.snapshots = response.data;
-        this.filterForEntityType(true, filterResult);
-        onRunQuery();
-      });
-    } else {
-      this.setState({ queryTypes: [] });
-    }
-  }
-
-  filterForEntityType = (findMatchingEntityTypes = true, filterResults = true) => {
-    const { query, datasource, onChange } = this.props;
-    datasource.getEntityTypes().then((entityTypes: any) => {
-      let queryTypes = entityTypes;
-      if (filterResults && !query.useFreeTextMetrics) {
-        queryTypes = this.filterEntityTypes(entityTypes, findMatchingEntityTypes);
-      }
-
-      this.setState({ queryTypes: queryTypes });
-
-      if (!query.entityType || !query.entityType.key || !_.find(queryTypes, (m) => m.key === query.entityType.key)) {
-        query.entityType = { key: null, label: 'Please select (' + queryTypes.length + ')' };
-      }
-
-      onChange(query);
-    });
-  };
-
-  filterEntityTypes = (entityTypes: SelectableValue[], findMatchingEntityTypes: boolean) => {
-    if (findMatchingEntityTypes) {
-      return _.sortBy(
-        _.filter(entityTypes, (entityType) => this.findMatchingEntityTypes(entityType)),
-        'label'
-      );
-    }
-
-    return _.sortBy(entityTypes, 'label');
-  };
-
-  findMatchingEntityTypes = (entityType: SelectableValue) => {
-    const { query } = this.props;
-
-    if (query.metricCategory.key === BUILT_IN_METRICS || query.metricCategory.key === CUSTOM_METRICS) {
-      return this.snapshots.find((type: any) => type === entityType.key) && entityType.label != null;
-    }
-
-    return false;
   };
 
   updateQueryTypes = (types: SelectableValue[]) => {
@@ -229,7 +389,9 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
       this.query.showAllMetrics = false;
     }
     this.query.customFilters = customFilters;
-    if (!this.query.metric || !this.query.metric.key) {
+
+    const isVariable = this.query.metric?.key && this.query.metric.key.toString().startsWith('$');
+    if ((!this.query.metric || !this.query.metric.key) && !isVariable) {
       this.setMetricPlaceholder(newAvailableMetrics.length);
     }
 
@@ -282,7 +444,10 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
         this.query.metric.key
       )
     ) {
-      this.resetMetricSelection();
+      const isVariable = this.query.metric.key.toString().startsWith('$');
+      if (!isVariable) {
+        this.resetMetricSelection();
+      }
     }
 
     this.changeAndRun();
@@ -397,7 +562,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
             onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
-            loadEntityTypes={this.loadEntityTypes}
             updateQueryTypes={this.updateQueryTypes}
           />
         )}
@@ -410,7 +574,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
             onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
-            loadEntityTypes={this.loadEntityTypes}
             updateQueryTypes={this.updateQueryTypes}
           />
         )}
@@ -499,9 +662,6 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
             onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             updateMetrics={this.updateMetrics}
-            // groups={this.state.groups}
-            // updateGroups={this.updateGroups}
-            // filterMetricsOnType={this.filterMetricsOnType}
             datasource={this.props.datasource}
           />
         )}
@@ -541,12 +701,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        <AdvancedSettings
-          query={query}
-          onRunQuery={this.props.onRunQuery}
-          onChange={this.props.onChange}
-          loadEntityTypes={this.loadEntityTypes}
-        />
+        <AdvancedSettings query={query} onRunQuery={this.props.onRunQuery} onChange={this.props.onChange} />
 
         <Badge text={'5.0.0'} color={'blue'} />
       </div>

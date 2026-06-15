@@ -11,7 +11,6 @@ interface Props {
   query: InstanaQuery;
   onRunQuery(): void;
   onChange(value: InstanaQuery): void;
-  loadEntityTypes(filterResult?: boolean): void;
 }
 
 export class FreeTextMetrics extends React.Component<Props, FreeTextMetricsState> {
@@ -22,14 +21,11 @@ export class FreeTextMetrics extends React.Component<Props, FreeTextMetricsState
   debouncedRunQuery = _.debounce(this.props.onRunQuery, 500);
 
   onUseFreeTextMetricsChange = (event: React.SyntheticEvent<HTMLInputElement> | undefined) => {
-    const { query, onChange, loadEntityTypes } = this.props;
+    const { query, onChange } = this.props;
     if (event && event.currentTarget) {
       query.useFreeTextMetrics = event.currentTarget.checked;
       if (query.useFreeTextMetrics) {
-        loadEntityTypes(false);
         query.metric = {};
-      } else {
-        loadEntityTypes(true);
       }
       onChange(query);
     }

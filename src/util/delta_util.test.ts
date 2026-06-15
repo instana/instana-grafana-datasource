@@ -343,6 +343,7 @@ describe('Given a delta', () => {
           entity: 'key', //no more label
           entityQuery: 'query',
           entityType: {},
+          selectedEntity: {},
           filters: [],
           freeTextMetrics: '',
           group: {},

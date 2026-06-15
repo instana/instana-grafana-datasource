@@ -17,6 +17,8 @@ For On-premise customers Instana Release 260+ is required.
 - Automatic completion for available types and metrics
 - Utilizes Instana REST API
 - Security via access token
+- Grafana Template Variables Support
+- Datasource Variables Support
 
 ### Breaking Changes
 
@@ -53,8 +55,105 @@ We appreciate your understanding and cooperation during this transition. If you 
 
 Thank you for using instana-grafana-datasource!
 
+## Template Variables Support
 
-## Troubleshooting 
+Instead of hard-coding details such as applications, services, entity types, and metric names in your queries, you can use variables. Grafana lists these variables in dropdown select boxes at the top of the dashboard to help you change the data displayed in your dashboard. Grafana refers to such variables as template variables.
+
+For an introduction to templates and variables, see the following Grafana documentation topics:
+- [Variables](https://grafana.com/docs/grafana/latest/variables/)
+- [Add and manage variables](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/)
+- [Variable syntax](https://grafana.com/docs/grafana/latest/dashboards/variables/variable-syntax/)
+
+### Supported Variable Types
+
+The Instana datasource currently supports the following variable types:
+
+* **Query Variable** - Populate variable values from Instana data using query functions
+* **Custom Variable** - Define static values manually
+* **Datasource Variable** - Switch between multiple Instana datasource instances
+
+### Configuring a Variable
+
+1. Navigate to **Dashboard Settings → Variables**.
+2. Click **Add Variable**.
+3. Select the **Variable Type**:
+   * **Query** - For dynamic values from Instana
+   * **Custom** - For static predefined values
+   * **Datasource** - For datasource selection
+4. Choose your **Instana Datasource** (for Query variables).
+5. Enter a value in the **Query** field:
+   * For **Query Variables**, use one of the supported query functions (see table below).
+   * For **Custom Variables**, enter the required custom values.
+6. Configure any additional variable options as needed.
+7. Click **Run Query** to validate the variable (for Query variables).
+8. Save the dashboard.
+
+> **Note:** Multi-value selection is currently not supported due to API limitations.
+
+### Available Query Functions
+
+The following query functions are available for populating template variables:
+
+| Query | Description |
+|-------|-------------|
+| `applications()` | Returns all monitored applications |
+| `applicationTags()` | Returns available application tags for grouping |
+| `applicationMetrics()` | Returns all application metrics |
+| `services()` | Returns all monitored services |
+| `services($application)` | Returns services for a specific application |
+| `endpoints()` | Returns all monitored endpoints |
+| `endpoints($application)` | Returns endpoints for a specific application |
+| `endpoints($application, $service)` | Returns endpoints for a specific application and service |
+| `entityTypes()` | Returns all infrastructure entity types |
+| `entities($entityType)` | Returns all infrastructure entities of a specific type |
+| `metrics($entityType)` | Returns metrics for a specific infrastructure entity type |
+| `websites()` | Returns all monitored websites |
+| `websiteBeaconTypes()` | Returns website beacon types (pageLoad, resourceLoad, etc.) |
+| `websiteTags()` | Returns available website tags for grouping |
+| `websiteMetrics()` | Returns all website metrics |
+| `websiteMetrics($beaconType)` | Returns website metrics for a specific beacon type |
+| `mobileApps()` | Returns all monitored mobile applications |
+| `mobileAppBeaconTypes()` | Returns mobile app beacon types (session_start, http_request, etc.) |
+| `mobileAppTags()` | Returns available mobile app tags for grouping |
+| `mobileAppMetrics()` | Returns all mobile app metrics |
+| `mobileAppMetrics($beaconType)` | Returns mobile app metrics for a specific beacon type |
+| `sliReports()` | Returns all SLI configurations name (Service Level Objectives Widgets) |
+| `sloReports()` | Returns all SLO Configuration names (Service Level Objectives Beta) |
+| `syntheticTests()` | Returns all synthetic monitoring tests |
+| `syntheticMetrics()` | Returns synthetic monitoring metrics |
+
+### Using Variables in Queries
+
+After you create a variable, you can use it in your Instana queries using the `$variableName` or `${variableName}` syntax:
+
+**Examples:**
+- Entity Type field: `$entityType`
+- Application field: `$application`
+- Service field: `$service`
+- Metric field: `$metric`
+- Group by field: `$groupByTag`
+- Tag Filter Expression (Infrastructure Analyze): Can include variables in JSON
+
+### Chained Variables Example
+
+Create hierarchical variable dependencies where one variable's options depend on another:
+
+```
+Variable 1 - Application:
+  Query: applications()
+
+Variable 2 - Service:
+  Query: services($application)
+
+Variable 3 - Endpoint:
+  Query: endpoints($application, $service)
+```
+
+When a user selects an application, the service dropdown updates automatically. When a service is selected, the endpoint dropdown updates accordingly.
+
+For complete documentation, detailed examples, and advanced usage patterns, see **[VARIABLES.md](VARIABLES.md)**.
+
+## Troubleshooting
 
 When troubleshooting, please open a ticket at https://www.ibm.com/mysupport to get your issues/questions resolved the fastest way possible.
 

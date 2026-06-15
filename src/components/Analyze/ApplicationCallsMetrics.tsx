@@ -44,6 +44,10 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
   componentDidMount() {
     const { query, datasource, onChange } = this.props;
     isUnmounting = false;
+
+    const entityValue = query.entity?.key || query.entity?.label;
+    const isEntityVariable = entityValue && typeof entityValue === 'string' && entityValue.includes('$');
+
     datasource.fetchApplications().then((applications) => {
       if (!isUnmounting) {
         if (!_.find(applications, { key: null })) {
@@ -66,6 +70,10 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
         }
 
         onChange(query);
+
+        if (isEntityVariable && query.entity) {
+          this.props.onRunQuery();
+        }
       }
     });
 
@@ -73,8 +81,10 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
       if (!isUnmounting) {
         this.props.updateGroups(_.sortBy(applicationTags, 'key'));
 
-        // select a meaningful default group
-        if (!query.group || !query.group.key) {
+        const groupKey = query.group?.key || query.group?.value || query.group?.label;
+        const isGroupVariable = groupKey && typeof groupKey === 'string' && groupKey.includes('$');
+
+        if (!query.group || (!query.group.key && !isGroupVariable)) {
           query.group = _.find(applicationTags, ['key', 'endpoint.name']);
           onChange(query);
         }
@@ -88,16 +98,39 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
     isUnmounting = true;
   }
 
-  onApplicationChange = (application: SelectableValue) => {
+  onApplicationChange = (application: SelectableValue | string) => {
     const { query, onChange, onRunQuery } = this.props;
-    query.entity = application;
+
+    if (typeof application === 'string') {
+      query.entity = { key: application, label: application };
+    } else {
+      query.entity = application;
+    }
+
     onChange(query);
     onRunQuery();
   };
 
-  onGroupChange = (group: SelectableValue) => {
-    const { query, onChange, onRunQuery } = this.props;
-    query.group = group;
+  onGroupChange = (group: SelectableValue | string) => {
+    const { query, onChange, onRunQuery, groups } = this.props;
+
+    const currentGroupKey = query.group?.key || query.group?.value || query.group?.label;
+    const isCurrentVariable = currentGroupKey && typeof currentGroupKey === 'string' && currentGroupKey.includes('$');
+
+    if (isCurrentVariable && typeof group === 'object' && group.key && !group.key.includes('$')) {
+      return;
+    }
+
+    if (typeof group === 'string') {
+      const foundTag = _.find(groups, ['key', group]);
+      if (foundTag) {
+        query.group = foundTag;
+      } else {
+        query.group = { key: group, label: group };
+      }
+    } else {
+      query.group = group;
+    }
 
     if (query.group && query.metricCategory.key === ANALYZE_APPLICATION_METRICS) {
       query.showGroupBySecondLevel = query.group.type === 'KEY_VALUE_PAIR';
@@ -139,6 +172,24 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
   render() {
     const { query, groups } = this.props;
 
+    let entityValue = query.entity;
+    if (query.entity && query.entity.key) {
+      entityValue = {
+        ...query.entity,
+        value: query.entity.key,
+        label: query.entity.label || query.entity.key,
+      };
+    }
+
+    let groupValue = query.group;
+    if (query.group && query.group.key) {
+      groupValue = {
+        ...query.group,
+        value: query.group.key,
+        label: query.group.label || query.group.key,
+      };
+    }
+
     return (
       <div className={'gf-form'}>
         <FormWrapper stretch={true}>
@@ -150,14 +201,20 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
             menuPlacement={'bottom'}
             width={0}
             isSearchable={true}
-            value={query.entity}
+            value={entityValue}
             options={this.state.applications}
             onChange={this.onApplicationChange}
+            allowCustomValue={true}
+            placeholder={'Select or type $application'}
           />
         </FormWrapper>
 
         <FormWrapper stretch={true}>
-          <InlineFormLabel className={'query-keyword'} width={7} tooltip={'Group by tag.'}>
+          <InlineFormLabel
+            className={'query-keyword'}
+            width={7}
+            tooltip={'Group by tag or type variable like $groupBy'}
+          >
             Group by
           </InlineFormLabel>
           <Entity value={query.callToEntity} onChange={this.onCallToEntityChange} />
@@ -166,8 +223,10 @@ export class ApplicationCallsMetrics extends React.Component<Props, ApplicationC
             width={0}
             isSearchable={true}
             options={groups}
-            value={query.group}
+            value={groupValue}
             onChange={this.onGroupChange}
+            allowCustomValue={true}
+            placeholder={'Select or type $groupBy'}
           />
         </FormWrapper>
 
