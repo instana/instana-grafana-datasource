@@ -180,23 +180,27 @@ Select the appropriate category and then choose the relevant metric options from
 
 ### Infrastructure built-in metrics
 
-Once you filled in the query the available types dropdown will be automatically populated, select the type you want.
+Once you select the **Infrastructure Built-in Metrics** category from the dropdown, the available **Entity Types** will be populated automatically. Select the entity type you want to query.
 
-As you select the type, the available metrics dropdown will be automatically populated, select the metric you want.
+After selecting an entity type, the **Metrics** dropdown will be populated with all available metrics for that entity. Choose the metric you want to visualize.
 
-If your Dynamic Focus query matches multiple instances then, the returned dataset will include metrics from all those matching instances, providing graphs with multiple plots like the example below.
+If the selected entity type contains multiple matching instances, the returned dataset will include metrics from all matching entities, resulting in multiple plots on the graph, as shown in the example below.
 
-![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/built-in-metrics.gif)
+An optional **Entity Name** field is available for entity-specific filtering. If you want to retrieve metrics for a particular entity instance, select the desired entity name from the dropdown.
+
+![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v5.1.0/builtin_metrics.gif)
 
 ### Infrastructure custom metrics
 
-To choose custom metrics matching your query you need to select "Infrastructure custom metrics" from the category dropdown, which will automatically populate the available types dropdown.
+To query custom metrics, select **Infrastructure Custom Metrics** from the **Category** dropdown. Once the category is selected, the available **Entity Types** will be populated automatically.
 
-As you select the type, the available metrics dropdown will be automatically populated, select the metric you want. As there might be a huge amount of custom metrics, you can specify an optional filter to reduce to a corresponding subset.
+After selecting an entity type, the **Metrics** dropdown will be populated with the available custom metrics for that entity. Since there may be a large number of custom metrics, you can optionally specify a **Metric Filter** to narrow down the list and quickly find the desired metric.
 
-If your Dynamic Focus query matches, the returned dataset will include metrics providing graphs like the example below.
+Once a metric is selected, the query will return data for all matching entities, and the resulting graph will display the corresponding metric series.
 
-![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/custom-metrics.gif)
+An optional **Entity Name** field is available for entity-specific filtering. If you want to retrieve metrics for a particular entity instance, select the entity name from the dropdown.
+
+![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v5.1.0/custom_metrics.gif)
 
 #### Change legend format
 
