@@ -19,7 +19,7 @@ export class DataSourceSyntheticMonitoring {
     this.miscCache = new Cache<any>();
   }
 
-  runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
+  async runQuery(target: InstanaQuery, timeFilter: TimeFilter) {
     if (!target?.metric?.key && target.testType?.value === 'metric') {
       console.warn('Missing required metric field for test type = metric:', target);
       return Promise.resolve(emptyResultData(target.refId));
@@ -28,6 +28,17 @@ export class DataSourceSyntheticMonitoring {
     if (!target?.entity?.value) {
       console.warn('Missing test selection (entity)', target);
       return Promise.resolve(emptyResultData(target.refId));
+    }
+
+    // If testId is not set or equals the test name (variable case), resolve it
+    if (!target.testId || target.testId === target.entity.value) {
+      const resolvedTestId = await this.getTestIdByName(target.entity.value);
+      if (resolvedTestId) {
+        target.testId = resolvedTestId;
+      } else {
+        console.warn('Could not resolve test ID for test name:', target.entity.value);
+        // If we can't resolve, try using the value as-is (might be a direct test ID)
+      }
     }
 
     if (target.testType?.value === 'metric') {
@@ -125,6 +136,17 @@ export class DataSourceSyntheticMonitoring {
     );
     this.miscCache.put('SyntheticMonitoringtests', tests);
     return tests;
+  }
+
+  async getTestIdByName(testName: string): Promise<string | null> {
+    try {
+      const tests = await this.getSyntheticMonitoringtests();
+      const matchingTest = tests.find((test: any) => test.label === testName || test.key === testName);
+      return matchingTest ? matchingTest.testId : null;
+    } catch (error) {
+      console.error('Error finding test ID for test name:', testName, error);
+      return null;
+    }
   }
 
   getSyntheticMonitoringMetricsCatalog() {

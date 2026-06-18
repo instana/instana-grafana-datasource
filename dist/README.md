@@ -17,6 +17,8 @@ For On-premise customers Instana Release 260+ is required.
 - Automatic completion for available types and metrics
 - Utilizes Instana REST API
 - Security via access token
+- Grafana Template Variables Support
+- Datasource Variables Support
 
 ### Breaking Changes
 
@@ -53,8 +55,105 @@ We appreciate your understanding and cooperation during this transition. If you 
 
 Thank you for using instana-grafana-datasource!
 
+## Template Variables Support
 
-## Troubleshooting 
+Instead of hard-coding details such as applications, services, entity types, and metric names in your queries, you can use variables. Grafana lists these variables in dropdown select boxes at the top of the dashboard to help you change the data displayed in your dashboard. Grafana refers to such variables as template variables.
+
+For an introduction to templates and variables, see the following Grafana documentation topics:
+- [Variables](https://grafana.com/docs/grafana/latest/variables/)
+- [Add and manage variables](https://grafana.com/docs/grafana/latest/dashboards/variables/add-template-variables/)
+- [Variable syntax](https://grafana.com/docs/grafana/latest/dashboards/variables/variable-syntax/)
+
+### Supported Variable Types
+
+The Instana datasource currently supports the following variable types:
+
+* **Query Variable** - Populate variable values from Instana data using query functions
+* **Custom Variable** - Define static values manually
+* **Datasource Variable** - Switch between multiple Instana datasource instances
+
+### Configuring a Variable
+
+1. Navigate to **Dashboard Settings → Variables**.
+2. Click **Add Variable**.
+3. Select the **Variable Type**:
+   * **Query** - For dynamic values from Instana
+   * **Custom** - For static predefined values
+   * **Datasource** - For datasource selection
+4. Choose your **Instana Datasource** (for Query variables).
+5. Enter a value in the **Query** field:
+   * For **Query Variables**, use one of the supported query functions (see table below).
+   * For **Custom Variables**, enter the required custom values.
+6. Configure any additional variable options as needed.
+7. Click **Run Query** to validate the variable (for Query variables).
+8. Save the dashboard.
+
+> **Note:** Multi-value selection is currently not supported due to API limitations.
+
+### Available Query Functions
+
+The following query functions are available for populating template variables:
+
+| Query | Description |
+|-------|-------------|
+| `applications()` | Returns all monitored applications |
+| `applicationTags()` | Returns available application tags for grouping |
+| `applicationMetrics()` | Returns all application metrics |
+| `services()` | Returns all monitored services |
+| `services($application)` | Returns services for a specific application |
+| `endpoints()` | Returns all monitored endpoints |
+| `endpoints($application)` | Returns endpoints for a specific application |
+| `endpoints($application, $service)` | Returns endpoints for a specific application and service |
+| `entityTypes()` | Returns all infrastructure entity types |
+| `entities($entityType)` | Returns all infrastructure entities of a specific type |
+| `metrics($entityType)` | Returns metrics for a specific infrastructure entity type |
+| `websites()` | Returns all monitored websites |
+| `websiteBeaconTypes()` | Returns website beacon types (pageLoad, resourceLoad, etc.) |
+| `websiteTags()` | Returns available website tags for grouping |
+| `websiteMetrics()` | Returns all website metrics |
+| `websiteMetrics($beaconType)` | Returns website metrics for a specific beacon type |
+| `mobileApps()` | Returns all monitored mobile applications |
+| `mobileAppBeaconTypes()` | Returns mobile app beacon types (session_start, http_request, etc.) |
+| `mobileAppTags()` | Returns available mobile app tags for grouping |
+| `mobileAppMetrics()` | Returns all mobile app metrics |
+| `mobileAppMetrics($beaconType)` | Returns mobile app metrics for a specific beacon type |
+| `sliReports()` | Returns all SLI configurations name (Service Level Objectives Widgets) |
+| `sloReports()` | Returns all SLO Configuration names (Service Level Objectives Beta) |
+| `syntheticTests()` | Returns all synthetic monitoring tests |
+| `syntheticMetrics()` | Returns synthetic monitoring metrics |
+
+### Using Variables in Queries
+
+After you create a variable, you can use it in your Instana queries using the `$variableName` or `${variableName}` syntax:
+
+**Examples:**
+- Entity Type field: `$entityType`
+- Application field: `$application`
+- Service field: `$service`
+- Metric field: `$metric`
+- Group by field: `$groupByTag`
+- Tag Filter Expression (Infrastructure Analyze): Can include variables in JSON
+
+### Chained Variables Example
+
+Create hierarchical variable dependencies where one variable's options depend on another:
+
+```
+Variable 1 - Application:
+  Query: applications()
+
+Variable 2 - Service:
+  Query: services($application)
+
+Variable 3 - Endpoint:
+  Query: endpoints($application, $service)
+```
+
+When a user selects an application, the service dropdown updates automatically. When a service is selected, the endpoint dropdown updates accordingly.
+
+For complete documentation, detailed examples, and advanced usage patterns, see **[VARIABLES.md](VARIABLES.md)**.
+
+## Troubleshooting
 
 When troubleshooting, please open a ticket at https://www.ibm.com/mysupport to get your issues/questions resolved the fastest way possible.
 
@@ -76,29 +175,32 @@ The configuration allows the setting of a limit for the different categories tha
 
 ### Query Editor
 
-![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/empty-query.png)
-
-To start, enter the [Dynamic Focus](https://www.ibm.com/docs/en/obi/current?topic=instana-filtering-dynamic-focus) query. This is exactly the same as used in the Instana dashboard; you can test your queries in Instana and then copy and paste them into Grafana. *NOTE* Saved filters are not currently supported by the Grafana datasource plugin.
+![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v5.1.0/query_editor.png)
+Select the appropriate category and then choose the relevant metric options from the fields provided. The query editor automatically updates the available selections based on your choices, making it easier to build queries directly in Grafana. *NOTE* Saved filters are not currently supported by the Grafana datasource plugin.
 
 ### Infrastructure built-in metrics
 
-Once you filled in the query the available types dropdown will be automatically populated, select the type you want.
+Once you select the **Infrastructure Built-in Metrics** category from the dropdown, the available **Entity Types** will be populated automatically. Select the entity type you want to query.
 
-As you select the type, the available metrics dropdown will be automatically populated, select the metric you want.
+After selecting an entity type, the **Metrics** dropdown will be populated with all available metrics for that entity. Choose the metric you want to visualize.
 
-If your Dynamic Focus query matches multiple instances then, the returned dataset will include metrics from all those matching instances, providing graphs with multiple plots like the example below.
+If the selected entity type contains multiple matching instances, the returned dataset will include metrics from all matching entities, resulting in multiple plots on the graph, as shown in the example below.
 
-![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/built-in-metrics.gif)
+An optional **Entity Name** field is available for entity-specific filtering. If you want to retrieve metrics for a particular entity instance, select the desired entity name from the dropdown.
+
+![multiple plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v5.1.0/builtin_metrics.gif)
 
 ### Infrastructure custom metrics
 
-To choose custom metrics matching your query you need to select "Infrastructure custom metrics" from the category dropdown, which will automatically populate the available types dropdown.
+To query custom metrics, select **Infrastructure Custom Metrics** from the **Category** dropdown. Once the category is selected, the available **Entity Types** will be populated automatically.
 
-As you select the type, the available metrics dropdown will be automatically populated, select the metric you want. As there might be a huge amount of custom metrics, you can specify an optional filter to reduce to a corresponding subset.
+After selecting an entity type, the **Metrics** dropdown will be populated with the available custom metrics for that entity. Since there may be a large number of custom metrics, you can optionally specify a **Metric Filter** to narrow down the list and quickly find the desired metric.
 
-If your Dynamic Focus query matches, the returned dataset will include metrics providing graphs like the example below.
+Once a metric is selected, the query will return data for all matching entities, and the resulting graph will display the corresponding metric series.
 
-![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/custom-metrics.gif)
+An optional **Entity Name** field is available for entity-specific filtering. If you want to retrieve metrics for a particular entity instance, select the entity name from the dropdown.
+
+![custom plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v5.1.0/custom_metrics.gif)
 
 #### Change legend format
 

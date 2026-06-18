@@ -56,6 +56,7 @@ export function buildTestTarget(): InstanaQuery {
     entity: {},
     entityQuery: '',
     entityType: {},
+    selectedEntity: {},
     filters: [],
     freeTextMetrics: '',
     group: {},

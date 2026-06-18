@@ -17,7 +17,7 @@ beforeAll(() => {
 });
 
 describe('Given an infrastructure datasource', () => {
-  const dataSourceInfrastructure: DataSourceInfrastructure = new DataSourceInfrastructure(options);
+  const dataSourceInfrastructure: DataSourceInfrastructure = new DataSourceInfrastructure(options, undefined);
 
   describe('with free text metrics', () => {
     let freeText = '';
@@ -186,7 +186,7 @@ describe('Given an infrastructure datasource', () => {
         if (
           endpoint ===
           `/api/infrastructure-monitoring/snapshots?plugin=${target.entityType.key}` +
-            `&size=100&query=${target.entityQuery}` +
+            `&size=100` +
             `&windowSize=${atLeastGranularity(windowSize, target.timeInterval.key)}` +
             `&to=${timeFilter.to}&offline=${instanaOptions.showOffline}`
         ) {
@@ -228,6 +228,49 @@ describe('Given an infrastructure datasource', () => {
       await dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
       expect(contextSpy).toHaveBeenCalledTimes(1);
       expect(postSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should use selectedEntity snapshot id for builtin/custom metrics', async () => {
+      target.metricCategory = { key: BUILT_IN_METRICS, label: 'Built-in metrics' } as any;
+      target.selectedEntity = { key: 'snapshot-123', label: 'Entity Name' } as any;
+      target.entity = { key: 'crIRuntimePlatform', label: '.NET App' } as any;
+
+      const results = await dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
+
+      expect(contextSpy).not.toHaveBeenCalled();
+      expect(postSpy).toHaveBeenCalledWith(
+        dataSourceInfrastructure.instanaOptions,
+        '/api/infrastructure-monitoring/snapshots',
+        {
+          snapshotIds: ['snapshot-123'],
+          timeFrame: {
+            to: timeFilter.to,
+            windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
+          },
+        }
+      );
+      expect(results.length).toEqual(2);
+    });
+
+    it('should not use entity type as snapshot id when selectedEntity is missing', async () => {
+      target.metricCategory = { key: CUSTOM_METRICS, label: 'Custom metrics' } as any;
+      target.selectedEntity = { key: null, label: 'Please specify' } as any;
+      target.entity = { key: 'crIRuntimePlatform', label: '.NET App' } as any;
+      target.entityQuery = 'missing-selected-entity';
+
+      dataSourceInfrastructure.snapshotCache = new Cache<Promise<SelectableValue[]>>();
+
+      await dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
+
+      expect(contextSpy).toHaveBeenCalledTimes(1);
+      expect(postSpy).toHaveBeenCalledTimes(1);
+      expect(postSpy).not.toHaveBeenCalledWith(
+        dataSourceInfrastructure.instanaOptions,
+        '/api/infrastructure-monitoring/snapshots',
+        expect.objectContaining({
+          snapshotIds: ['crIRuntimePlatform'],
+        })
+      );
     });
   });
 
