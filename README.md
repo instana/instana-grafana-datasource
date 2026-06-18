@@ -175,9 +175,8 @@ The configuration allows the setting of a limit for the different categories tha
 
 ### Query Editor
 
-![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v3.1.0/empty-query.png)
-
-To start, enter the [Dynamic Focus](https://www.ibm.com/docs/en/obi/current?topic=instana-filtering-dynamic-focus) query. This is exactly the same as used in the Instana dashboard; you can test your queries in Instana and then copy and paste them into Grafana. *NOTE* Saved filters are not currently supported by the Grafana datasource plugin.
+![empty query editor](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v5.1.0/query_editor.png)
+Select the appropriate category and then choose the relevant metric options from the fields provided. The query editor automatically updates the available selections based on your choices, making it easier to build queries directly in Grafana. *NOTE* Saved filters are not currently supported by the Grafana datasource plugin.
 
 ### Infrastructure built-in metrics
 
