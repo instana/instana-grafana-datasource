@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.1.0 - 2026-06-16
+## 5.1.0 - 2026-06-19
 - New Feature: Added Grafana Template Variables support
   - Comprehensive documentation in VARIABLES.md
 
