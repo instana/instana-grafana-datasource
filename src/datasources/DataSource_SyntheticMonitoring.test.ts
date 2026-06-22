@@ -27,6 +27,15 @@ describe('DataSourceSyntheticMonitoring', () => {
     jest.clearAllMocks();
 
     jest.spyOn(console, 'warn').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    // Mock getRequest for getSyntheticMonitoringtests
+    (RequestHandler.getRequest as jest.Mock).mockResolvedValue({
+      data: [
+        { id: 'test-id-1', label: 'someEntity' },
+        { id: 'test-id-2', label: 'anotherEntity' },
+      ],
+    });
   });
 
   it('should return metric-based results from synthetic monitoring', async () => {
