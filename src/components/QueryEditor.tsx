@@ -1,4 +1,4 @@
-import '../instana-grafana.css';
+import { injectGlobal } from '@emotion/css';
 
 import {
   ANALYZE_APPLICATION_METRICS,
@@ -55,6 +55,14 @@ interface QueryState {
   lastInterpolatedMobileAppType: string;
   lastInterpolatedWebsiteType: string;
 }
+
+// Inject global CSS to hide specific SVG path (from instana-grafana.css)
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+injectGlobal`
+  path[d="M18.71,7.21a1,1,0,0,0-1.42,0L9.84,14.67,6.71,11.53A1,1,0,1,0,5.29,13l3.84,3.84a1,1,0,0,0,1.42,0l8.16-8.16A1,1,0,0,0,18.71,7.21Z"] {
+    display: none;
+  }
+`;
 
 export class QueryEditor extends PureComponent<Props, QueryState> {
   query: InstanaQuery;
