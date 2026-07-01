@@ -151,7 +151,7 @@ Variable 3 - Endpoint:
 
 When a user selects an application, the service dropdown updates automatically. When a service is selected, the endpoint dropdown updates accordingly.
 
-For complete documentation, detailed examples, and advanced usage patterns, see **[VARIABLES.md](VARIABLES.md)**.
+For complete documentation, detailed examples, and advanced usage patterns, see **[VARIABLES.md](https://github.com/instana/instana-grafana-datasource/blob/master/VARIABLES.md)**.
 
 ## Troubleshooting
 

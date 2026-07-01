@@ -1,5 +1,5 @@
-import './plugin.css';
 import { Button, Checkbox, Field, Icon, Input, Legend, Tooltip } from '@grafana/ui';
+import { css } from '@emotion/css';
 import { DataSourcePluginOptionsEditorProps, DataSourceSettings, SelectableValue } from '@grafana/data';
 import React, { ChangeEvent, PureComponent } from 'react';
 import { InstanaOptions, SecureJsonData } from '../types/instana_options';
@@ -13,6 +13,11 @@ interface State {
   isApiKeyConfigured: boolean;
   apiKeyValue: string;
 }
+
+const settingsStyle = css`
+  max-width: 600px;
+`;
+
 export class ConfigEditor extends PureComponent<Props, State> {
   constructor(props: Readonly<Props>) {
     super(props);
@@ -109,7 +114,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
     const { jsonData } = options;
     const { apiKeyValue } = this.state;
     return (
-      <div className="settings">
+      <div className={settingsStyle}>
         <Legend>Instana configuration</Legend>
         <Field
           className={'width-30'}

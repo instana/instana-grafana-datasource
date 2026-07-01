@@ -1,4 +1,3 @@
-import '../plugin.css';
 import { InlineFormLabel, Input, Select } from '@grafana/ui';
 import React, { ChangeEvent } from 'react';
 import { DataSource } from '../../datasources/DataSource';

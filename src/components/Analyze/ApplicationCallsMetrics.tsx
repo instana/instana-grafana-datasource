@@ -9,7 +9,6 @@ import FormWrapper from '../FormField/FormWrapper';
 import { SelectableValue } from '@grafana/data';
 import Entity from '../Entity/Entity';
 import _ from 'lodash';
-import '../plugin.css';
 
 interface ApplicationCallsMetricsState {
   applications: SelectableValue[];

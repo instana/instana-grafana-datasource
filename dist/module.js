@@ -1,3 +1,11164 @@
-/*! For license information please see module.js.LICENSE.txt */
-define(["react","lodash","@grafana/ui","@grafana/data","@grafana/runtime"],(function(e,t,n,a,i){return function(e){var t={};function n(a){if(t[a])return t[a].exports;var i=t[a]={i:a,l:!1,exports:{}};return e[a].call(i.exports,i,i.exports,n),i.l=!0,i.exports}return n.m=e,n.c=t,n.d=function(e,t,a){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:a})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var a=Object.create(null);if(n.r(a),Object.defineProperty(a,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var i in e)n.d(a,i,function(t){return e[t]}.bind(null,i));return a},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="/",n(n.s=13)}([function(t,n){t.exports=e},function(e,n){e.exports=t},function(e,t){e.exports=n},function(e,t){e.exports=a},function(e,t){e.exports=i},function(e,t,n){var a=n(6),i=n(8);"string"==typeof(i=i.__esModule?i.default:i)&&(i=[[e.i,i,""]]);var r={insert:"head",singleton:!1},o=(a(i,r),i.locals?i.locals:{});e.exports=o},function(e,t,n){"use strict";var a,i=function(){return void 0===a&&(a=Boolean(window&&document&&document.all&&!window.atob)),a},r=function(){var e={};return function(t){if(void 0===e[t]){var n=document.querySelector(t);if(window.HTMLIFrameElement&&n instanceof window.HTMLIFrameElement)try{n=n.contentDocument.head}catch(e){n=null}e[t]=n}return e[t]}}(),o=[];function l(e){for(var t=-1,n=0;n<o.length;n++)if(o[n].identifier===e){t=n;break}return t}function s(e,t){for(var n={},a=[],i=0;i<e.length;i++){var r=e[i],s=t.base?r[0]+t.base:r[0],u=n[s]||0,c="".concat(s," ").concat(u);n[s]=u+1;var p=l(c),y={css:r[1],media:r[2],sourceMap:r[3]};-1!==p?(o[p].references++,o[p].updater(y)):o.push({identifier:c,updater:f(y,t),references:1}),a.push(c)}return a}function u(e){var t=document.createElement("style"),a=e.attributes||{};if(void 0===a.nonce){var i=n.nc;i&&(a.nonce=i)}if(Object.keys(a).forEach((function(e){t.setAttribute(e,a[e])})),"function"==typeof e.insert)e.insert(t);else{var o=r(e.insert||"head");if(!o)throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");o.appendChild(t)}return t}var c,p=(c=[],function(e,t){return c[e]=t,c.filter(Boolean).join("\n")});function y(e,t,n,a){var i=n?"":a.media?"@media ".concat(a.media," {").concat(a.css,"}"):a.css;if(e.styleSheet)e.styleSheet.cssText=p(t,i);else{var r=document.createTextNode(i),o=e.childNodes;o[t]&&e.removeChild(o[t]),o.length?e.insertBefore(r,o[t]):e.appendChild(r)}}function h(e,t,n){var a=n.css,i=n.media,r=n.sourceMap;if(i?e.setAttribute("media",i):e.removeAttribute("media"),r&&btoa&&(a+="\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(r))))," */")),e.styleSheet)e.styleSheet.cssText=a;else{for(;e.firstChild;)e.removeChild(e.firstChild);e.appendChild(document.createTextNode(a))}}var d=null,g=0;function f(e,t){var n,a,i;if(t.singleton){var r=g++;n=d||(d=u(t)),a=y.bind(null,n,r,!1),i=y.bind(null,n,r,!0)}else n=u(t),a=h.bind(null,n,t),i=function(){!function(e){if(null===e.parentNode)return!1;e.parentNode.removeChild(e)}(n)};return a(e),function(t){if(t){if(t.css===e.css&&t.media===e.media&&t.sourceMap===e.sourceMap)return;a(e=t)}else i()}}e.exports=function(e,t){(t=t||{}).singleton||"boolean"==typeof t.singleton||(t.singleton=i());var n=s(e=e||[],t);return function(e){if(e=e||[],"[object Array]"===Object.prototype.toString.call(e)){for(var a=0;a<n.length;a++){var i=l(n[a]);o[i].references--}for(var r=s(e,t),u=0;u<n.length;u++){var c=l(n[u]);0===o[c].references&&(o[c].updater(),o.splice(c,1))}n=r}}}},function(e,t,n){"use strict";e.exports=function(e){var t=[];return t.toString=function(){return this.map((function(t){var n=function(e,t){var n=e[1]||"",a=e[3];if(!a)return n;if(t&&"function"==typeof btoa){var i=(o=a,l=btoa(unescape(encodeURIComponent(JSON.stringify(o)))),s="sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(l),"/*# ".concat(s," */")),r=a.sources.map((function(e){return"/*# sourceURL=".concat(a.sourceRoot||"").concat(e," */")}));return[n].concat(r).concat([i]).join("\n")}var o,l,s;return[n].join("\n")}(t,e);return t[2]?"@media ".concat(t[2]," {").concat(n,"}"):n})).join("")},t.i=function(e,n,a){"string"==typeof e&&(e=[[null,e,""]]);var i={};if(a)for(var r=0;r<this.length;r++){var o=this[r][0];null!=o&&(i[o]=!0)}for(var l=0;l<e.length;l++){var s=[].concat(e[l]);a&&i[s[0]]||(n&&(s[2]?s[2]="".concat(n," and ").concat(s[2]):s[2]=n),t.push(s))}},t}},function(e,t,n){(t=n(7)(!0)).push([e.i,".entityDropdown{min-width:80px}.settings{max-width:600px}","",{version:3,sources:["plugin.css"],names:[],mappings:"AAAA,gBAAgB,cAAc,CAAC,UAAU,eAAe",file:"plugin.css",sourcesContent:[".entityDropdown{min-width:80px}.settings{max-width:600px}"]}]),e.exports=t},function(e,t,n){var a=n(6),i=n(10);"string"==typeof(i=i.__esModule?i.default:i)&&(i=[[e.i,i,""]]);var r={insert:"head",singleton:!1},o=(a(i,r),i.locals?i.locals:{});e.exports=o},function(e,t,n){(t=n(7)(!0)).push([e.i,'path[d="M18.71,7.21a1,1,0,0,0-1.42,0L9.84,14.67,6.71,11.53A1,1,0,1,0,5.29,13l3.84,3.84a1,1,0,0,0,1.42,0l8.16-8.16A1,1,0,0,0,18.71,7.21Z"]{display:none}',"",{version:3,sources:["instana-grafana.css"],names:[],mappings:"AAAA,0IAA0I,YAAY",file:"instana-grafana.css",sourcesContent:['path[d="M18.71,7.21a1,1,0,0,0-1.42,0L9.84,14.67,6.71,11.53A1,1,0,1,0,5.29,13l3.84,3.84a1,1,0,0,0,1.42,0l8.16-8.16A1,1,0,0,0,18.71,7.21Z"]{display:none}']}]),e.exports=t},function(e,t,n){var a=n(6),i=n(12);"string"==typeof(i=i.__esModule?i.default:i)&&(i=[[e.i,i,""]]);var r={insert:"head",singleton:!1},o=(a(i,r),i.locals?i.locals:{});e.exports=o},function(e,t,n){(t=n(7)(!0)).push([e.i,'.dropdown{position:relative;background:transparent;width:"32px";height:"32px";margin-right:"4px"}.dropdown-list{transition:max-height .2s ease-out;max-height:0;overflow:hidden;z-index:2;position:absolute}.dropdown-list-active{overflow:hidden;z-index:2;max-height:1000px;opacity:1;position:absolute}.iconTextContainer{display:inline-flex}.iconStyle{display:flex;align-items:center;justify-content:center}.iconTextStyle{padding:7px}',"",{version:3,sources:["ApplicationBoundaryScope.css"],names:[],mappings:"AAAA,UAAU,iBAAiB,CAAC,sBAAsB,CAAC,YAAY,CAAC,aAAa,CAAC,kBAAkB,CAAC,eAAe,kCAAkC,CAAC,YAAY,CAAC,eAAe,CAAC,SAAS,CAAC,iBAAiB,CAAC,sBAAsB,eAAe,CAAC,SAAS,CAAC,iBAAiB,CAAC,SAAS,CAAC,iBAAiB,CAAC,mBAAmB,mBAAmB,CAAC,WAAW,YAAY,CAAC,kBAAkB,CAAC,sBAAsB,CAAC,eAAe,WAAW",file:"ApplicationBoundaryScope.css",sourcesContent:['.dropdown{position:relative;background:transparent;width:"32px";height:"32px";margin-right:"4px"}.dropdown-list{transition:max-height .2s ease-out;max-height:0;overflow:hidden;z-index:2;position:absolute}.dropdown-list-active{overflow:hidden;z-index:2;max-height:1000px;opacity:1;position:absolute}.iconTextContainer{display:inline-flex}.iconStyle{display:flex;align-items:center;justify-content:center}.iconTextStyle{padding:7px}']}]),e.exports=t},function(e,t,n){"use strict";n.r(t);var a=n(3),i=function(e,t){return(i=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var n in t)Object.prototype.hasOwnProperty.call(t,n)&&(e[n]=t[n])})(e,t)};function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Class extends value "+String(t)+" is not a constructor or null");function n(){this.constructor=e}i(e,t),e.prototype=null===t?Object.create(t):(n.prototype=t.prototype,new n)}var o=function(){return(o=Object.assign||function(e){for(var t,n=1,a=arguments.length;n<a;n++)for(var i in t=arguments[n])Object.prototype.hasOwnProperty.call(t,i)&&(e[i]=t[i]);return e}).apply(this,arguments)};function l(e,t){var n={};for(var a in e)Object.prototype.hasOwnProperty.call(e,a)&&t.indexOf(a)<0&&(n[a]=e[a]);if(null!=e&&"function"==typeof Object.getOwnPropertySymbols){var i=0;for(a=Object.getOwnPropertySymbols(e);i<a.length;i++)t.indexOf(a[i])<0&&Object.prototype.propertyIsEnumerable.call(e,a[i])&&(n[a[i]]=e[a[i]])}return n}function s(e,t,n,a){return new(n||(n=Promise))((function(i,r){function o(e){try{s(a.next(e))}catch(e){r(e)}}function l(e){try{s(a.throw(e))}catch(e){r(e)}}function s(e){var t;e.done?i(e.value):(t=e.value,t instanceof n?t:new n((function(e){e(t)}))).then(o,l)}s((a=a.apply(e,t||[])).next())}))}function u(e,t){var n,a,i,r,o={label:0,sent:function(){if(1&i[0])throw i[1];return i[1]},trys:[],ops:[]};return r={next:l(0),throw:l(1),return:l(2)},"function"==typeof Symbol&&(r[Symbol.iterator]=function(){return this}),r;function l(r){return function(l){return function(r){if(n)throw new TypeError("Generator is already executing.");for(;o;)try{if(n=1,a&&(i=2&r[0]?a.return:r[0]?a.throw||((i=a.return)&&i.call(a),0):a.next)&&!(i=i.call(a,r[1])).done)return i;switch(a=0,i&&(r=[2&r[0],i.value]),r[0]){case 0:case 1:i=r;break;case 4:return o.label++,{value:r[1],done:!1};case 5:o.label++,a=r[1],r=[0];continue;case 7:r=o.ops.pop(),o.trys.pop();continue;default:if(!(i=o.trys,(i=i.length>0&&i[i.length-1])||6!==r[0]&&2!==r[0])){o=0;continue}if(3===r[0]&&(!i||r[1]>i[0]&&r[1]<i[3])){o.label=r[1];break}if(6===r[0]&&o.label<i[1]){o.label=i[1],i=r;break}if(i&&o.label<i[2]){o.label=i[2],o.ops.push(r);break}i[2]&&o.ops.pop(),o.trys.pop();continue}r=t.call(e,o)}catch(e){r=[6,e],a=0}finally{n=i=0}if(5&r[0])throw r[1];return{value:r[0]?r[1]:void 0,done:!0}}([r,l])}}}Object.create;function c(e,t){var n="function"==typeof Symbol&&e[Symbol.iterator];if(!n)return e;var a,i,r=n.call(e),o=[];try{for(;(void 0===t||t-- >0)&&!(a=r.next()).done;)o.push(a.value)}catch(e){i={error:e}}finally{try{a&&!a.done&&(n=r.return)&&n.call(r)}finally{if(i)throw i.error}}return o}function p(e,t,n){if(n||2===arguments.length)for(var a,i=0,r=t.length;i<r;i++)!a&&i in t||(a||(a=Array.prototype.slice.call(t,0,i)),a[i]=t[i]);return e.concat(a||Array.prototype.slice.call(t))}Object.create;var y="-- No Application Filter --",h="-- No Endpoint Filter --",d="Please specify",g=n(4),f=n(1),m=n.n(f);function v(e){return(v="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}var b=["refId","pluginId","showWarningCantShowAllResults","timeShiftIsValid","useFreeTextMetrics","showGroupBySecondLevel","canShowAllMetrics","timeFilter","stableHash"];var S=[{value:1,label:"1s"},{value:5,label:"5s"},{value:10,label:"10s"},{value:60,label:"1min"},{value:300,label:"5min"},{value:600,label:"10min"},{value:1800,label:"30min"},{value:3600,label:"1h"},{value:14400,label:"4h"},{value:21600,label:"6h"},{value:28800,label:"8h"},{value:43200,label:"12h"},{value:86400,label:"1d"},{value:432e3,label:"5d"},{value:864e3,label:"10d"}];function k(e){var t=new Date(e.from.valueOf()).getTime(),n=new Date(e.to.valueOf()).getTime();return{from:t,to:n,windowSize:n-t}}function T(e){return e.to-e.from}function C(e){return E(e.from)+"|"+E(e.to)}function E(e){return e/6e4}function A(e){return e>0?60*e*60*1e3:0}function w(e,t){var n=1e3*t;return e>=n?e:n}var I=[{availableFor:864e5,rollup:1e3,label:"1s"},{availableFor:864e5,rollup:5e3,label:"5s"},{availableFor:26784e5,rollup:6e4,label:"1min"},{availableFor:80352e5,rollup:3e5,label:"5min"},{availableFor:321408e5,rollup:36e5,label:"1h"}];function M(e){return R(e,80)[0]}function R(e,t){void 0===t&&(t=600);var n=S.filter((function(n){return e/1e3/n.value<=t&&1e3*n.value<=e}));return e>48000001&&(n=n.filter((function(e){return e.value>=3600}))),e>=18e5&&(n=n.filter((function(e){return e.value>=60}))),n.length>0?n.map((function(e){return{key:e.value.toString(),label:e.label}})):[{key:S[S.length-1].value.toString(),label:S[S.length-1].label}]}function q(e){return O(e)[0]}function O(e){var t=Date.now(),n=T(e),a=I.filter((function(n){return e.from>=t-n.availableFor})).filter((function(e){return n>=e.rollup&&n/e.rollup<=800}));return a.length>0?a.map((function(e){return{key:e.rollup.toString(),label:e.label}})):[{key:I[I.length-1].rollup.toString(),label:I[I.length-1].label}]}var x=function(e,t,n,a){return void 0===n&&(n=!1),void 0===a&&(a=1),F(e,{method:"GET",url:e.url+t},n,a)},L=function(e,t,n,a,i){return void 0===a&&(a=!1),void 0===i&&(i=0),F(e,{method:"POST",url:e.url+t,data:n},a,i)};function F(e,t,n,a){return Object(g.getBackendSrv)().datasourceRequest(t).catch((function(i){var r,o;if(429===i.status){if(a>0&&(null===(r=i.data)||void 0===r?void 0:r.errors)&&i.data.errors[0]&&i.data.errors[0].includes("concurrent")){var l=a>=4?1e4:2e4*(4-a);return new Promise((function(e){return setTimeout(e,l)})).then((function(){return F(e,t,n,a-1)}))}throw new Error("API limit is reached.")}if(!n||!(i.status>=400||i.status<500)){if(a>0&&i.status>=500)return F(e,t,n,a-1);if(!i.statusText&&(null===(o=i.data)||void 0===o?void 0:o.errors)&&i.data.errors[0])throw new Error(i.data.errors[0]);throw i}}))}var N=function(){function e(){this.store={}}return e.prototype.put=function(e,t,n){var a=this;void 0===n&&(n=7e4),void 0!==e&&void 0!==t&&(this.del(e),this.store[e]={value:t,expiry:Date.now()+n,timeout:setTimeout((function(){a.del(e)}),n)})},e.prototype.get=function(e){var t=this.store[e];return!t||t.expiry&&t.expiry>Date.now()||(this.del(e),t=void 0),t&&t.value},e.prototype.del=function(e){this.store.hasOwnProperty(e)&&(clearTimeout(this.store[e].timeout),delete this.store[e])},e}();function V(e){var t={name:e.tag.key,operator:e.operator.key,value:e.stringValue};return"NUMBER"===e.tag.type?null!==e.numberValue&&(t.value=e.numberValue):"BOOLEAN"===e.tag.type&&(t.value=e.booleanValue),t}function _(e,t,n){return t.data?m.a.flatten(t.data.items.map((function(t,a){return m.a.map(t.metrics,(function(i,r){return{target:n(e,t,r,a),datapoints:m.a.map(i,(function(e){return[e[1],e[0]]})),refId:e.refId,key:e.stableHash}}))}))):t}function P(e){return{target:e,datapoints:[]}}function B(e,t,n){return{target:e,refId:t,datapoints:n}}var $=[{key:"calls",label:"Call count",description:"calls",aggregations:[{key:"SUM",label:"SUM"}]},{key:"latency",label:"Call latency",description:"latency",aggregations:[{key:"MAX",label:"MAX"},{key:"MEAN",label:"MEAN"},{key:"MIN",label:"MIN"},{key:"P25",label:"P25"},{key:"P50",label:"P50"},{key:"P75",label:"P75"},{key:"P90",label:"P90"},{key:"P95",label:"P95"},{key:"P98",label:"P98"},{key:"P99",label:"P99"}]},{key:"errors",label:"Error rate",description:"errors",aggregations:[{key:"MEAN",label:"MEAN"}]},{key:"services",label:"Service Count",description:"services",aggregations:[{key:"DISTINCT_COUNT",label:"DISTINCT_COUNT"}]}];function Q(e,t){return!!t&&(t>0&&e>t)}var W=new N;function D(e){var t=W.get("version");return t?Promise.resolve(t):x(e,"/api/instana/version").then((function(t){if(t.data&&t.data.imageTag){var n=parseInt(t.data.imageTag.split(".",2)[1],10)||null;return n&&W.put(e.url,n,6e5),n}return null}),(function(e){return null}))}var U=function(){function e(e){this.instanaOptions=e,this.applicationsCache=new N,this.miscCache=new N}return e.prototype.runQuery=function(e,t){var n=this;if(Q(t.windowSize,A(this.instanaOptions.queryinterval_limit_app_calls)))throw new Error("Limit for maximum selectable windowsize exceeded, max is: "+this.instanaOptions.queryinterval_limit_app_calls+" hours");return e&&e.metric&&e.metric.key&&e.group&&e.group.key&&e.entity&&null!==e.entity.key?this.fetchAnalyzeMetricsForApplication(e,t).then((function(t){return e.showWarningCantShowAllResults=t.data.canLoadMore,_(e,t,n.buildAnalyzeApplicationLabel)})):Promise.resolve(P(e.refId))},e.prototype.getApplications=function(e){var t=C(e),n=this.applicationsCache.get(t);if(n)return n;var a=T(e);return n=this.paginateApplications([],a,e.to,1,200,15).then((function(e){var t=m.a.flattenDeep(m.a.map(e,(function(e){return e.items})));return m.a.orderBy(m.a.compact(t).map((function(e){return{key:e.id,label:e.label,boundaryScope:e.boundaryScope}})),[function(e){return e.label.toLowerCase()}],["asc"])})),this.applicationsCache.put(t,n,6e5),n},e.prototype.paginateApplications=function(e,t,n,a,i,r){var o=this;if(a>r)return e;var l="windowSize="+t+"&to="+n+"&page="+a+"&pageSize="+i;return x(this.instanaOptions,"/api/application-monitoring/applications?"+l).then((function(l){return e.push(l.data),a*i<l.data.totalHits?(a++,o.paginateApplications(e,t,n,a,i,r)):e}))},e.prototype.getApplicationTags=function(e){var t=this,n=this.miscCache.get("applicationTags");return n||D(this.instanaOptions).then((function(a){return n=a>=191?t.getCatalog(e).then((function(e){return t.mapCatalogResponse(e.data.tags)})):t.getCatalogFromDeprecatedEndpoint().then((function(e){return t.mapCatalogResponse(e.data)})),t.miscCache.put("applicationTags",n),n}))},e.prototype.getCatalog=function(e){var t="/api/application-monitoring/catalog?dataSource=CALLS&useCase=FILTERING&from="+e.from;return x(this.instanaOptions,t)},e.prototype.getCatalogFromDeprecatedEndpoint=function(){return x(this.instanaOptions,"/api/application-monitoring/catalog/tags")},e.prototype.mapCatalogResponse=function(e){return e.map((function(e){return{key:e.name,label:e.name,type:e.type,canApplyToSource:e.canApplyToSource,canApplyToDestination:e.canApplyToDestination}}))},e.prototype.getApplicationMetricsCatalog=function(){return $},e.prototype.fetchAnalyzeMetricsForApplication=function(e,t){var n=this,a=T(t),i=[];return Promise.all([this.getApplicationTags(t),this.getApplications(t)]).then((function(r){var o=c(r,2),l=o[0],s=o[1];if(e.entity.key){var u=e.entity.label,p=m.a.find(s,["key",e.entity.key]);p&&p.label&&(u=p.label),i.push({name:"application.name",operator:"EQUALS",value:u,entity:e.applicationCallToEntity?e.applicationCallToEntity:"DESTINATION"})}m.a.forEach(e.filters,(function(e){if(e.isValid){var t=V(e),a=m.a.find(l,["key",e.tag.key]);(a.canApplyToDestination||a.canApplyToSource)&&(t.entity=n.getTagEntity(e.entity,a)),i.push(t)}})),e.timeInterval||(e.timeInterval=M(a));var y={metric:e.metric.key,aggregation:e.aggregation&&e.aggregation.key?e.aggregation.key:"SUM",granularity:e.timeInterval.key},h={groupbyTag:e.group.key},d=m.a.find(l,["key",e.group.key]);d&&(d.canApplyToDestination||d.canApplyToSource)&&(h.groupbyTagEntity=e.callToEntity),"KEY_VALUE_PAIR"===(e.group.type||d&&d.type)&&e.groupbyTagSecondLevelKey&&(h.groupbyTagSecondLevelKey=e.groupbyTagSecondLevelKey);var g=!1;e.filters.map((function(e){"call.is_synthetic"===e.tag.key&&(g=e.booleanValue)}));var f={group:h,timeFrame:{to:t.to,windowSize:w(a,y.granularity)},metrics:[y],includeSynthetic:g,tagFilterExpression:{type:"EXPRESSION",logicalOperator:"AND",elements:i}};return L(n.instanaOptions,"/api/application-monitoring/analyze/call-groups?fillTimeSeries=true",f,!1,5)}))},e.prototype.getTagEntity=function(e,t){return"DESTINATION"===e&&t.canApplyToDestination?"DESTINATION":"SOURCE"===e&&t.canApplyToSource?"SOURCE":t.canApplyToDestination?"DESTINATION":"SOURCE"},e.prototype.fetchApplicationMetrics=function(e,t){if(!e||!e.metric||!e.metric.key)return Promise.resolve(P(e.refId));var n=T(t);e.timeInterval||(e.timeInterval=M(n));var a={metric:e.metric.key,aggregation:e.aggregation&&e.aggregation.key?e.aggregation.key:"SUM",granularity:e.timeInterval.key},i={timeFrame:{to:t.to,windowSize:w(n,a.granularity)},metrics:[a]};return null!==e.entity.key&&(i.applicationId=e.entity.key,i.applicationBoundaryScope=e.applicationBoundaryScope),L(this.instanaOptions,"/api/application-monitoring/metrics/applications?fillTimeSeries=true",i)},e.prototype.buildAnalyzeApplicationLabel=function(e,t,n,a){if(e.labelFormat){var i=e.labelFormat;return i=m.a.replace(i,"$label",t.name),i=m.a.replace(i,"$application",e.entity.label),i=m.a.replace(i,"$metric",e.metric.label),i=m.a.replace(i,"$key",n),i=m.a.replace(i,"$index",""+a+1),i=m.a.replace(i,"$timeShift",e.timeShift)}return e.entity.label===y?e.timeShift?t.name+" - "+n+" - "+e.timeShift:t.name+" - "+n:e.timeShift&&e.timeShiftIsValid?t.name+" ("+e.entity.label+") - "+n+" - "+e.timeShift:t.name+" ("+e.entity.label+") - "+n},e.prototype.buildApplicationMetricLabel=function(e,t,n,a){if(e.labelFormat){var i=e.labelFormat;return i=m.a.replace(i,"$label",t.application.label),i=m.a.replace(i,"$application",e.entity.label),i=m.a.replace(i,"$metric",e.metric.label),i=m.a.replace(i,"$key",n),i=m.a.replace(i,"$index",""+a+1),i=m.a.replace(i,"$timeShift",e.timeShift)}return e.entity.label===y?e.timeShift?t.application.label+" - "+n+" - "+e.timeShift:t.application.label+" - "+n:e.timeShift&&e.timeShiftIsValid?t.application.label+" ("+e.entity.label+") - "+n+" - "+e.timeShift:t.application.label+" ("+e.entity.label+") - "+n},e}(),G=function(){function e(e){this.instanaOptions=e,this.endpointsCache=new N}return e.prototype.getEndpointsOfService=function(e,t){var n="";e.entity&&e.entity.key&&(n=e.entity.key);var a="";e.service&&(a=e.service.key);var i=C(t)+n+a+e.applicationBoundaryScope,r=this.endpointsCache.get(i);if(r)return r;var o=T(t);return r=this.paginateEndpoints([],n,a,o,e.applicationBoundaryScope,t.to,1,200,15).then((function(e){var t=m.a.flattenDeep(m.a.map(e,(function(e){return e.items})));return m.a.orderBy(m.a.compact(t).map((function(e){return{key:e.id,label:e.label}})),[function(e){return e.label.toLowerCase()}],["asc"])})),this.endpointsCache.put(i,r,6e5),r},e.prototype.paginateEndpoints=function(e,t,n,a,i,r,o,l,s){var u=this;if(o>s)return e;var c="windowSize="+a+"&to="+r+"&page="+o+"&pageSize="+l;"ALL"!==i&&"INBOUND"!==i||(c+="&applicationBoundaryScope="+i);var p="/api/application-monitoring/applications;id="+(t||"")+"/services;id="+(n||"")+"/endpoints?"+c;return x(this.instanaOptions,p).then((function(c){return e.push(c.data),o*l<c.data.totalHits?(o++,u.paginateEndpoints(e,t,n,a,i,r,o,l,s)):e}))},e.prototype.fetchEndpointMetrics=function(e,t){if(!e||!e.metric||!e.metric.key)return Promise.resolve(P(e.refId));var n=T(t);e.timeInterval||(e.timeInterval=M(n));var a={metric:e.metric.key,aggregation:e.aggregation&&e.aggregation.key?e.aggregation.key:"SUM",granularity:e.timeInterval.key},i={endpointId:e.endpoint.key,timeFrame:{to:t.to,windowSize:w(n,a.granularity)},metrics:[a]};return e.entity&&e.entity.key&&(i.applicationId=e.entity.key,i.applicationBoundaryScope=e.applicationBoundaryScope),e.service&&e.service.key&&(i.serviceId=e.service.key),L(this.instanaOptions,"/api/application-monitoring/metrics/endpoints?fillTimeSeries=true",i)},e.prototype.buildEndpointMetricLabel=function(e,t,n,a){if(e.labelFormat){var i=e.labelFormat;return i=m.a.replace(i,"$label",t.endpoint.label),i=m.a.replace(i,"$endpoint",e.endpoint.label),i=m.a.replace(i,"$service",e.service.label),i=m.a.replace(i,"$application",e.entity.label),i=m.a.replace(i,"$metric",e.metric.label),i=m.a.replace(i,"$key",n),i=m.a.replace(i,"$index",""+a+1),i=m.a.replace(i,"$timeShift",e.timeShift)}return e.endpoint.label===h?e.timeShift?t.endpoint.label+" - "+n+" - "+e.timeShift:t.endpoint.label+" - "+n:e.timeShift&&e.timeShiftIsValid?t.endpoint.label+" ("+e.endpoint.label+") - "+n+" - "+e.timeShift:t.endpoint.label+" ("+e.endpoint.label+") - "+n},e}(),K=[{key:"cpu.used",value:"cpu.count",label:"cpu.max"},{key:"memory.used",value:"memory.total",label:"memory.max"},{key:"openFiles.used",value:"openFiles.max",label:"openFiles.max"}];function z(e){return(z="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}var j=function(){function e(e,t){this.timeToLiveSnapshotInfoCache=4e6,this.instanaOptions=e,this.templateSrv=t,this.snapshotCache=new N,this.snapshotInfoCache=new N,this.catalogCache=new N,this.typeCache=new N,this.miscCache=new N}return e.prototype.runQuery=function(e,t){var n,a=this;if(Q(t.windowSize,A(this.instanaOptions.queryinterval_limit_infra)))throw new Error("Limit for maximum selectable windowsize exceeded, max is: "+this.instanaOptions.queryinterval_limit_infra+" hours");return e.tagFilterExpression||8===e.metricCategory.key&&e.metric.key&&e.group.key&&(null===(n=e.entity)||void 0===n?void 0:n.key)?this.fetchAnalyzeEntities(e,t):e.metric&&e.metric.key||e.showAllMetrics||e.freeTextMetrics?this.fetchSnapshotsForTarget(e,t).then((function(n){if(e.showAllMetrics)return a.fetchMultipleMetricsForSnapshots(e,n,t,e.allMetrics);if(e.freeTextMetrics){var i=a.extractMetricsFromText(e.freeTextMetrics);return a.fetchMultipleMetricsForSnapshots(e,n,t,i)}return a.fetchMetricsForSnapshots(e,n,t,e.metric)})):Promise.resolve(P(e.refId))},e.prototype.extractMetricsFromText=function(e){var t=e.replace(/\s/g,"").split(","),n=[];return m.a.each(t,(function(e){return n.push(JSON.parse('{ "key": "'+e+'"}'))})),n.length>4&&(n=n.slice(0,4)),n},e.prototype.fetchMultipleMetricsForSnapshots=function(e,t,n,a){var i=this,r=[];return m.a.forEach(a,(function(a){r.push(i.fetchMetricsForSnapshots(e,t,n,a))})),Promise.all(r).then((function(e){var t=[];return e.forEach((function(e){return e.forEach((function(e){return t.push(e)}))})),t}))},e.prototype.fetchMetricsForSnapshots=function(e,t,n,a){var i=this,r=[],o=m.a.chunk(t,30).map((function(o,l){return i.fetchMetricsForSnapshot(e,o.map((function(e){return e.snapshotId})),n,a).then((function(s){if(!s.data)return[];var u=i.readTimeSeries(s.data.items,e.aggregation,n);return m.a.flatten(s.data.items.map((function(n,s){return m.a.map(n.metrics,(function(n,c){var p=o[s];p.response.pid=p.pid,p.response.name=p.name;var y=i.buildLabel(p.response,p.response.entityId.host,e,30*l+s,a),h={target:y,datapoints:m.a.map(n,(function(e){return[e[1],e[0]]})),refId:e.refId,key:e.stableHash};if(e.displayMaxMetricValue){var d=i.getMaxMetricValue(e.metric,t);r.push(i.buildMaxMetricTarget(e,u,d,y)),h.datapoints=i.convertRelativeToAbsolute(h.datapoints,d)}return h}))})))}))}));return Promise.all(o).then((function(e){return m.a.flatten(e)}))},e.prototype.getMaxMetricValue=function(e,t){var n=K;return t.response.data.data[m.a.find(n,(function(t){return t.key===e.key})).value]},e.prototype.buildMaxMetricTarget=function(e,t,n,a){var i=m.a.map(t,(function(e){return[n,e.timestamp]})),r=this.convertMetricNameToMaxLabel(e.metric);return{target:a+" "+r,datapoints:i,refId:e.refId,key:e.stableHash+r}},e.prototype.convertMetricNameToMaxLabel=function(e){var t=K;return m.a.find(t,(function(t){return t.key===e.key})).label},e.prototype.convertRelativeToAbsolute=function(e,t){return m.a.map(e,(function(e){return e[0]?[e[0]*t,e[1]]:[null,e[1]]}))},e.prototype.getEntityTypes=function(){var e=this.typeCache.get("entityTypes");return e||(e=x(this.instanaOptions,"/api/infrastructure-monitoring/catalog/plugins").then((function(e){var t=e.data.map((function(e){return{key:e.plugin,label:e.label}}));return t.push({key:"regionEntity",label:"Region"}),m.a.sortBy(t,"label")})),this.typeCache.put("entityTypes",e),e)},e.prototype.getInfrastructureEntities=function(e){var t="infrastructureEntities_"+(e||"all"),n=this.miscCache.get(t);if(n)return n;var a=new URLSearchParams;e&&a.append("plugin",e),a.append("size","100"),a.append("windowSize","300000"),a.append("to",Date.now().toString()),a.append("offline",this.instanaOptions.showOffline?"true":"false");var i="/api/infrastructure-monitoring/snapshots?"+a.toString();return n=x(this.instanaOptions,i).then((function(e){if(!e.data||!e.data.items)return[];var t=e.data.items.map((function(e){return{key:e.snapshotId,label:e.label,value:e.snapshotId}}));return m.a.sortBy(t,"label")})),this.miscCache.put(t,n,3e5),n},e.prototype.fetchTypesForTarget=function(e,t){var n="/api/snapshots/types?q="+encodeURIComponent(e.entityQuery)+"&from="+t.from+"&to="+t.to+(this.instanaOptions.showOffline?"":"&time="+t.to);return x(this.instanaOptions,n)},e.prototype.fetchAvailableMetricsForEntityType=function(e,t){var n=T(t);e.timeInterval=M(n);var a={tagFilterExpression:{type:"EXPRESSION",logicalOperator:"AND",elements:[]},timeFrame:{to:t.to,windowSize:w(n,e.timeInterval.key)},query:"",type:e.entity.key};return L(this.instanaOptions,"/api/infrastructure-monitoring/analyze/metrics",a).then((function(e){var t=[];return e.data.metrics.map((function(e){return t.push({key:e.id,label:e.label,description:e.description,aggregations:[{key:"MAX",label:"MAX"},{key:"MEAN",label:"MEAN"},{key:"MIN",label:"MIN"},{key:"P25",label:"P25"},{key:"P50",label:"P50"},{key:"P75",label:"P75"},{key:"P90",label:"P90"},{key:"P95",label:"P95"},{key:"P98",label:"P98"},{key:"P99",label:"P99"}]})})),m.a.sortBy(t,"label")}))},e.prototype.resolveVariablesInObject=function(e){var t=this;if(!e||!this.templateSrv)return e;if(Array.isArray(e))return e.map((function(e){return t.resolveVariablesInObject(e)}));if("object"===z(e)){var n={};for(var a in e)e.hasOwnProperty(a)&&(n[a]=this.resolveVariablesInObject(e[a]));return n}return"string"==typeof e&&e.includes("$")?this.templateSrv.replace(e):e},e.prototype.fetchAnalyzeEntities=function(e,t){var n=T(t);e.timeInterval||(e.timeInterval=M(n)),e.timeInterval.key<6e4&&(e.timeInterval.key=6e4);var a,i={metric:e.metric.key,aggregation:e.aggregation&&e.aggregation.key?e.aggregation.key:"SUM",granularity:e.timeInterval.key,crossSeriesAggregation:"DISTINCT_COUNT"};if(e.tagFilterExpression){if("object"===z(e.tagFilterExpression))a=e.tagFilterExpression;else if("string"==typeof e.tagFilterExpression)try{var r=this.templateSrv?this.templateSrv.replace(e.tagFilterExpression):e.tagFilterExpression;r=(r=r.replace(/\u00A0/g," ")).trim(),a=JSON.parse(r)}catch(e){a={elements:[],type:"EXPRESSION",logicalOperator:"AND"}}}else a=e.filters&&0!==e.filters.length?e.filters:{elements:[],type:"EXPRESSION",logicalOperator:"AND"};var o={tagFilterExpression:a=this.resolveVariablesInObject(a),pagination:{retrievalSize:200},groupBy:[e.groupbyTagSecondLevelKey],type:e.entity.key,metrics:[i],timeFrame:{to:t.to,windowSize:w(n,i.granularity)}};return L(this.instanaOptions,"/api/infrastructure-monitoring/analyze/entity-groups",o).then((function(t){var n=[];if(!t.data&&t.errors.length>=1)throw new Error(t.errors[0].message||t.errors[0]);return t.data.items.forEach((function(t){for(var a in t.metrics)n.push({target:t.tags[e.groupbyTagSecondLevelKey]+" - "+a,datapoints:t.metrics[a]?t.metrics[a].map((function(e){return[e[1],e[0]]})):[],refId:e.refId,key:e.stableHash})})),n}))},e.prototype.getMetricsCatalog=function(e,t){var n=e.key;this.templateSrv&&"string"==typeof n&&n.includes("$")&&(n=this.templateSrv.replace(n));var a=n+"|"+t,i=this.catalogCache.get(a);if(i)return i;var r=1===t?"custom":"builtin";return i=x(this.instanaOptions,"/api/infrastructure-monitoring/catalog/metrics/"+n+"?filter="+r).then((function(e){return e.data.map((function(e){return{key:e.metricId,label:e.label,description:e.metricId,aggregations:[{key:"MEAN",label:"MEAN"},{key:"SUM",label:"SUM"}],entityType:e.pluginId}}))})),this.catalogCache.put(a,i),i},e.prototype.fetchSnapshotsForTarget=function(e,t){var n;return s(this,void 0,void 0,(function(){var a,i,r,o,l,s,c,p=this;return u(this,(function(u){return a=T(t),e.timeInterval=M(a),(i=null===(n=e.selectedEntity)||void 0===n?void 0:n.key)&&8!==e.metricCategory.key?("/api/infrastructure-monitoring/snapshots",r={snapshotIds:[i],timeFrame:{to:t.to,windowSize:w(a,e.timeInterval.key)}},[2,L(this.instanaOptions,"/api/infrastructure-monitoring/snapshots",r).then((function(e){return e.data&&e.data.items?e.data.items.map((function(e){return{snapshotId:e.snapshotId,host:e.host,pid:m.a.get(e,["data","pid"],""),name:m.a.get(e,["data","name"],""),response:p.reduceSnapshot(e)}})):[]}))]):(o=this.buildQuery(e),l=this.buildSnapshotCacheKey(o,t),(s=this.snapshotCache.get(l))||(c="/api/infrastructure-monitoring/snapshots?plugin="+e.entityType.key+"&size=100&windowSize="+w(a,e.timeInterval.key)+"&to="+t.to+"&offline="+this.instanaOptions.showOffline,s=x(this.instanaOptions,c).then((function(n){var i=n.data.items.map((function(e){return e.snapshotId}));if(0===i.length)return[];var r={snapshotIds:i,timeFrame:{to:t.to,windowSize:w(a,e.timeInterval.key)}};return L(p.instanaOptions,"/api/infrastructure-monitoring/snapshots",r).then((function(e){return e.data.items.map((function(e){return{snapshotId:e.snapshotId,host:e.host,pid:m.a.get(e,["data","pid"],""),name:m.a.get(e,["data","name"],""),response:p.reduceSnapshot(e)}}))}))})).then((function(e){return m.a.compact(e)})),this.snapshotCache.put(l,s)),[2,s])}))}))},e.prototype.buildQuery=function(e){return(""+e.entityQuery).includes("entity.pluginId:")||(""+e.entityQuery).includes("entity.selfType:")?encodeURIComponent(""+e.entityQuery):encodeURIComponent(e.entityQuery+" AND entity.pluginId:"+e.entityType.key)},e.prototype.buildSnapshotCacheKey=function(e,t){return e+"|"+C(t)},e.prototype.reduceSnapshot=function(e){return e.data=m.a.pick(e.data,["id","label","plugin","data"]),e},e.prototype.readTimeSeries=function(e,t,n){return t&&"SUM"===t.key?this.correctMeanToSum(e,n):e},e.prototype.correctMeanToSum=function(e,t){var n=parseInt(q(t).key,10)/1e3;return m.a.map(e,(function(e){return{value:e.value?e.value*n:null,timestamp:e.timestamp}}))},e.prototype.fetchMetricsForSnapshot=function(e,t,n,a){var i=T(n);e.timeInterval=M(i);var r={metrics:[a.key||a.value],query:e.entityQuery,plugin:e.entityType.key,rollup:e.timeInterval.key,snapshotIds:t,timeFrame:{to:n.to,windowSize:w(i,e.timeInterval.key)}};return L(this.instanaOptions,"/api/infrastructure-monitoring/metrics?offline="+this.instanaOptions.showOffline,r)},e.prototype.getHostSuffix=function(e){return e?' (on host "'+e+'")':""},e.prototype.buildLabel=function(e,t,n,a,i){var r;if(n.labelFormat){var o=n.labelFormat;return o=m.a.replace(o,"$label",e.label),o=m.a.replace(o,"$plugin",e.plugin),o=m.a.replace(o,"$snapshot",e.snapshotId),o=m.a.replace(o,"$host",t||"unknown"),o=m.a.replace(o,"$pid",e.pid),o=m.a.replace(o,"$type",null!==(r=n.entityType.label)&&void 0!==r?r:""),o=m.a.replace(o,"$name",e.name),o=m.a.replace(o,"$service",m.a.get(e,["data","service_name"],"")),o=n.freeTextMetrics?m.a.replace(o,"$metric",i.key):m.a.replace(o,"$metric",m.a.get(n,["metric","key"],"n/a")),o=m.a.replace(o,"$index",a+1),o=m.a.replace(o,"$timeShift",n.timeShift)}return n.timeShift&&n.timeShiftIsValid?e.label+this.getHostSuffix(t)+" - "+n.timeShift:e.label+this.getHostSuffix(t)},e}(),Y=function(){function e(e){this.instanaOptions=e,this.MobileAppCache=new N,this.miscCache=new N}return e.prototype.runQuery=function(e,t){var n=this;if(Q(t.windowSize,A(this.instanaOptions.queryinterval_limit_mobileapp_metrics)))throw new Error("Limit for maximum selectable windowsize exceeded, max is: "+this.instanaOptions.queryinterval_limit_mobileapp_metrics+" hours");return e&&e.metric&&e.metric.key&&e.group&&e.group.key&&e.entity&&e.entity.key&&e.entityType&&e.entityType.key?this.fetchAnalyzeMetricsForMobileapp(e,t).then((function(t){return _(e,t,n.buildAnalyzeMobileAppLabel)})):Promise.resolve(P(e.refId))},e.prototype.getMobileapp=function(e){var t=C(e),n=this.MobileAppCache.get(t);return n||(n=x(this.instanaOptions,"/api/mobile-app-monitoring/config").then((function(e){return e.data.map((function(e){return{key:e.name,label:e.name}}))})),this.MobileAppCache.put(t,n,6e5),n)},e.prototype.getMobileappTags=function(){var e=this.miscCache.get("mobileappTags");return e||(e=x(this.instanaOptions,"/api/mobile-app-monitoring/catalog/tags").then((function(e){return e.data.map((function(e){return{key:e.name,label:e.name,type:e.type}}))})),this.miscCache.put("mobileappTags",e),e)},e.prototype.getMobileappMetricsCatalog=function(){var e=this,t=this.miscCache.get("mobileappCatalog");return t||(t=x(this.instanaOptions,"/api/mobile-app-monitoring/catalog/metrics").then((function(t){return t.data.map((function(t){return{key:t.metricId,label:t.label,aggregations:t.aggregations?e.transformAggregations(t.aggregations.sort()):[],beaconTypes:t.beaconTypes?e.transformBeaconTypes(t.beaconTypes):["sessionStart","crash","httpRequest","custom","viewChange"]}}))})),this.miscCache.put("mobileappCatalog",t),t)},e.prototype.transformBeaconTypes=function(e){var t;return e.includes("sessionStart")?((t=m.a.remove(e,(function(e){return"sessionStart"!==e}))).push("session_start"),t):e.includes("httpRequest")?((t=m.a.remove(e,(function(e){return"httpRequest"!==e}))).push("http_request"),t):e.includes("viewChange")?((t=m.a.remove(e,(function(e){return"viewChange"!==e}))).push("view_change"),t):e},e.prototype.transformAggregations=function(e){return m.a.map(e,(function(e){return{key:e,label:e}}))},e.prototype.fetchAnalyzeMetricsForMobileapp=function(e,t){var n=T(t),a=[{name:"mobileBeacon.mobileApp.name",operator:"EQUALS",value:e.entity.key}];m.a.forEach(e.filters,(function(e){e.isValid&&a.push(V(e))})),e.timeInterval||(e.timeInterval=M(n));var i={metric:e.metric.key,aggregation:e.aggregation.key?e.aggregation.key:"SUM",granularity:e.timeInterval.key},r={groupbyTag:e.group.key};"KEY_VALUE_PAIR"===e.group.type&&e.groupbyTagSecondLevelKey&&(r.groupbyTagSecondLevelKey=e.groupbyTagSecondLevelKey);var o={group:r,timeFrame:{to:t.to,windowSize:w(n,i.granularity)},tagFilters:a,type:e.entityType.key,metrics:[i]};return L(this.instanaOptions,"/api/mobile-app-monitoring/analyze/beacon-groups?fillTimeSeries=true",o,!1,5)},e.prototype.buildAnalyzeMobileAppLabel=function(e,t,n,a){if(e.labelFormat){var i=e.labelFormat;return i=m.a.replace(i,"$label",t.name),i=m.a.replace(i,"$mobileapp",e.entity.label),i=m.a.replace(i,"$type",e.entityType.label),i=m.a.replace(i,"$metric",e.metric.label),i=m.a.replace(i,"$key",n),i=m.a.replace(i,"$index",""+a+1),i=m.a.replace(i,"$timeShift",e.timeShift)}return e.timeShift&&e.timeShiftIsValid?t.name+" ("+e.entity.label+") - "+n+" - "+e.timeShift:t.name+" ("+e.entity.label+") - "+n},e}(),H=function(){function e(e){this.instanaOptions=e,this.servicesCache=new N}return e.prototype.getServicesOfApplication=function(e,t){var n="";e.entity&&e.entity.key&&(n=e.entity.key);var a=C(t)+n+e.applicationBoundaryScope,i=this.servicesCache.get(a);if(i)return i;var r=T(t);return i=this.paginateServices([],n,r,t.to,e.applicationBoundaryScope,1,200,15).then((function(e){var t=m.a.flattenDeep(m.a.map(e,(function(e){return e.items})));return m.a.orderBy(m.a.compact(t).map((function(e){return{key:e.id,label:e.label}})),[function(e){return e.label.toLowerCase()}],["asc"])})),this.servicesCache.put(a,i,6e5),i},e.prototype.paginateServices=function(e,t,n,a,i,r,o,l){var s=this;if(r>l)return e;var u="windowSize="+n+"&to="+a+"&page="+r+"&pageSize="+o;"ALL"!==i&&"INBOUND"!==i||(u+="&applicationBoundaryScope="+i);var c="/api/application-monitoring/applications;id="+(t||"")+"/services?"+u;return x(this.instanaOptions,c).then((function(u){return e.push(u.data),r*o<u.data.totalHits?(r++,s.paginateServices(e,t,n,a,i,r,o,l)):e}))},e.prototype.fetchServiceMetrics=function(e,t){if(!e||!e.metric||!e.metric.key)return Promise.resolve(P(e.refId));var n=T(t);e.timeInterval||(e.timeInterval=M(n));var a={metric:e.metric.key,aggregation:e.aggregation&&e.aggregation.key?e.aggregation.key:"SUM",granularity:e.timeInterval.key},i={timeFrame:{to:t.to,windowSize:w(n,a.granularity)},metrics:[a]};return e.entity&&e.entity.key&&(i.applicationId=e.entity.key,i.applicationBoundaryScope=e.applicationBoundaryScope),e.service&&e.service.key&&(i.serviceId=e.service.key),L(this.instanaOptions,"/api/application-monitoring/metrics/services?fillTimeSeries=true",i)},e.prototype.buildServiceMetricLabel=function(e,t,n,a){if(e.labelFormat){var i=e.labelFormat;return i=m.a.replace(i,"$label",t.service.label),i=m.a.replace(i,"$service",e.service.label),i=m.a.replace(i,"$application",e.entity.label),i=m.a.replace(i,"$metric",e.metric.label),i=m.a.replace(i,"$key",n),i=m.a.replace(i,"$index",a+1+""),i=m.a.replace(i,"$timeShift",e.timeShift)}return null===e.service.key?e.timeShift?t.service.label+" - "+n+" - "+e.timeShift:t.service.label+" - "+n:e.timeShift&&e.timeShiftIsValid?t.service.label+" ("+e.service.label+") - "+n+" - "+e.timeShift:t.service.label+" ("+e.service.label+") - "+n},e}(),J=function(){function e(e){this.instanaOptions=e,this.sliReportsCache=new N}return e.prototype.getConfiguredSLIs=function(){var e=this.sliReportsCache.get("sliReports");return e||(e=x(this.instanaOptions,"/api/settings/sli").then((function(e){return m.a.map(e.data,(function(e){return{key:e.id,label:e.sliName}}))})),this.sliReportsCache.put("sliReports",e),e)},e.prototype.runQuery=function(e,t){var n=this;if(!(e&&e.sloReport&&e.sloReport.key&&e.sloSpecific&&e.sloSpecific.key&&e.sloValue))return Promise.resolve(P(e.refId));var a="/api/sli/report/"+e.sloReport.key+"?from="+t.from+"&to="+t.to+"&slo="+e.sloValue;return x(this.instanaOptions,a).then((function(a){return n.extractSpecificValueFromSLI(e,a.data,t)}))},e.prototype.extractSpecificValueFromSLI=function(e,t,n){return"SLI"===e.sloSpecific.key?[B(e.sloSpecific.label,e.refId,this.buildResultArray(t.sli,n.to))]:"Remaining Error Budget"===e.sloSpecific.key?[B(e.sloSpecific.label,e.refId,this.buildResultArray(t.errorBudgetRemaining,n.to))]:"Timeseries"===e.sloSpecific.key?this.buildViolationDistributionTimeSeries(e,t.violationDistribution,n):[P(e.refId)]},e.prototype.buildResultArray=function(e,t){return[[e,t]]},e.prototype.buildViolationDistributionTimeSeries=function(e,t,n){if(!t)return[];var a=[],i=[],r=[],o=T(n)/Object.keys(t).length;m.a.forEach(t,(function(e,t){1===e?a.push([1,n.from+t*o]):0===e?r.push([1,n.from+t*o]):-1===e&&i.push([1,n.from+t*o])}));var l=[];return l.push(B("No violation",e.refId,a)),l.push(B("Violation",e.refId,i)),l.push(B("No data",e.refId,r)),l},e}(),X=function(){function e(e){this.instanaOptions=e,this.sloReportsCache=new N}return e.prototype.getSLOConfigurations=function(){var e=this.sloReportsCache.get("sloReports");return e||(e=x(this.instanaOptions,"/api/settings/slo").then((function(e){return m.a.map(e.data.items,(function(e){return{key:e.id,label:e.name}}))})),this.sloReportsCache.put("sloReports",e),e)},e.prototype.runQuery=function(e,t){var n=this;if(!(e&&e.slo2Report&&e.slo2Report.key&&e.slo2Specific&&e.slo2Specific.key))return Promise.resolve(P(e.refId));var a="/api/slo/report/"+e.slo2Report.key+"?from="+6e3*Math.floor(t.from/6e3)+"&to="+6e3*Math.floor(t.to/6e3);return x(this.instanaOptions,a).then((function(a){return n.extractSpecificValueFromSLI(e,a.data,t)}))},e.prototype.extractSpecificValueFromSLI=function(e,t,n){return"Status"===e.slo2Specific.key?[B(e.slo2Specific.label,e.refId,this.buildResultArray(t.sli,n.to))]:"Service Level Target"===e.slo2Specific.key?[B(e.slo2Specific.label,e.refId,this.buildResultArray(t.slo,n.to))]:"Total Error Budget"===e.slo2Specific.key?[B(e.slo2Specific.label,e.refId,this.buildResultArray(t.totalErrorBudget,n.to))]:"Remaining Error Budget"===e.slo2Specific.key?[B(e.slo2Specific.label,e.refId,this.buildResultArray(t.errorBudgetRemaining,n.to))]:"Spended Error Budget"===e.slo2Specific.key?[B(e.slo2Specific.label,e.refId,this.buildResultArray(t.errorBudgetSpent,n.to))]:"Timeseries"===e.slo2Specific.key?this.buildViolationDistributionTimeSeries(e,t.violationDistribution,n):"Error Chart"===e.slo2Specific.key?this.buildChart("Error budget spent",e,t.errorChart,n):"Error Accumulation Chart"===e.slo2Specific.key?this.buildChart("Error Accumulation",e,t.errorAccumulationChart,n):"Error Budget Remain Chart"===e.slo2Specific.key?this.buildChart("Error Budget Remain Chart",e,t.errorBudgetRemainChart,n):[P(e.refId)]},e.prototype.buildResultArray=function(e,t){return[[e,t]]},e.prototype.buildViolationDistributionTimeSeries=function(e,t,n){var a=[],i=[],r=[],o=T(n)/Object.keys(t).length,l=Math.floor(n.from/o)*o;m.a.forEach(t,(function(e,t){1===e?a.push([1,l+t*o]):0===e?r.push([1,l+t*o]):-1===e&&i.push([1,l+t*o])}));var s=[];return s.push(B("No violation",e.refId,a)),s.push(B("Violation",e.refId,i)),s.push(B("No data",e.refId,r)),s},e.prototype.buildChart=function(e,t,n,a){var i=[],r=T(a)/Object.keys(n).length,o=Math.floor(a.from/r)*r;m.a.forEach(n,(function(e,t){i.push([e,o+t*r])}));var l=[];return l.push(B(e,t.refId,i)),l},e}(),Z=function(){function e(e){this.instanaOptions=e,this.websitesCache=new N,this.miscCache=new N}return e.prototype.runQuery=function(e,t){var n=this;if(Q(t.windowSize,A(this.instanaOptions.queryinterval_limit_website_metrics)))throw new Error("Limit for maximum selectable windowsize exceeded, max is: "+this.instanaOptions.queryinterval_limit_website_metrics+" hours");return e&&e.metric&&e.metric.key&&e.group&&e.group.key&&e.entity&&e.entity.key?this.fetchAnalyzeMetricsForWebsite(e,t).then((function(t){return _(e,t,n.buildAnalyzeWebsiteLabel)})):Promise.resolve(P(e.refId))},e.prototype.getWebsites=function(e){var t=C(e),n=this.websitesCache.get(t);return n||(n=x(this.instanaOptions,"/api/website-monitoring/config").then((function(e){return e.data.map((function(e){return{key:e.name,label:e.name}}))})),this.websitesCache.put(t,n,6e5),n)},e.prototype.getWebsiteTags=function(){var e=this.miscCache.get("websiteTags");return e||(e=x(this.instanaOptions,"/api/website-monitoring/catalog/tags").then((function(e){return e.data.map((function(e){return{key:e.name,label:e.name,type:e.type}}))})),this.miscCache.put("websiteTags",e),e)},e.prototype.getWebsiteMetricsCatalog=function(){var e=this,t=this.miscCache.get("websiteCatalog");return t||(t=x(this.instanaOptions,"/api/website-monitoring/catalog/metrics").then((function(t){return t.data.map((function(t){return{key:t.metricId,label:t.label,aggregations:t.aggregations?e.transformAggregations(t.aggregations.sort()):[],beaconTypes:t.beaconTypes?e.transformBeaconTypes(t.beaconTypes):["pageLoad","resourceLoad","httpRequest","error","custom","pageChange"]}}))})),this.miscCache.put("websiteCatalog",t),t)},e.prototype.transformBeaconTypes=function(e){if(e.includes("pageChange")){var t=m.a.remove(e,(function(e){return"pageChange"!==e}));return t.push("page_change"),t}return e},e.prototype.transformAggregations=function(e){return m.a.map(e,(function(e){return{key:e,label:e}}))},e.prototype.fetchAnalyzeMetricsForWebsite=function(e,t){var n=T(t),a=[{name:"beacon.website.name",operator:"EQUALS",value:e.entity.key}];m.a.forEach(e.filters,(function(e){e.isValid&&a.push(V(e))})),e.timeInterval||(e.timeInterval=M(n));var i="SUM";e.aggregation&&e.aggregation.key?i=e.aggregation.key:e.metric&&e.metric.aggregations&&e.metric.aggregations.length>0&&(i=e.metric.aggregations[0].key||e.metric.aggregations[0]);var r={metric:e.metric.key,aggregation:i,granularity:e.timeInterval.key},o={groupbyTag:e.group.key};"KEY_VALUE_PAIR"===e.group.type&&e.groupbyTagSecondLevelKey&&(o.groupbyTagSecondLevelKey=e.groupbyTagSecondLevelKey);var l={group:o,timeFrame:{to:t.to,windowSize:w(n,r.granularity)},tagFilters:a,type:e.entityType.key,metrics:[r]};return L(this.instanaOptions,"/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true",l,!1,5)},e.prototype.buildAnalyzeWebsiteLabel=function(e,t,n,a){if(e.labelFormat){var i=e.labelFormat;return i=m.a.replace(i,"$label",t.name),i=m.a.replace(i,"$website",e.entity.label),i=m.a.replace(i,"$type",e.entityType.label),i=m.a.replace(i,"$metric",e.metric.label),i=m.a.replace(i,"$key",n),i=m.a.replace(i,"$index",""+a+1),i=m.a.replace(i,"$timeShift",e.timeShift)}return e.timeShift&&e.timeShiftIsValid?t.name+" ("+e.entity.label+") - "+n+" - "+e.timeShift:t.name+" ("+e.entity.label+") - "+n},e}(),ee=function(){function e(e){this.instanaOptions=e,this.SyntheticMonitoringCache=new N,this.miscCache=new N}return e.prototype.runQuery=function(e,t){var n,a,i,r;return s(this,void 0,void 0,(function(){var o;return u(this,(function(l){switch(l.label){case 0:return((null===(n=null==e?void 0:e.metric)||void 0===n?void 0:n.key)||"metric"!==(null===(a=e.testType)||void 0===a?void 0:a.value))&&(null===(i=null==e?void 0:e.entity)||void 0===i?void 0:i.value)?e.testId&&e.testId!==e.entity.value?[3,2]:[4,this.getTestIdByName(e.entity.value)]:[2,Promise.resolve(P(e.refId))];case 1:(o=l.sent())&&(e.testId=o),l.label=2;case 2:return"metric"===(null===(r=e.testType)||void 0===r?void 0:r.value)?[2,this.fetchMetricsForSyntheticMonitoring(e,t).then((function(t){var n,a=[];return(null===(n=null==t?void 0:t.data)||void 0===n?void 0:n.testResult)?(t.data.testResult.forEach((function(t){var n,i,r,o=null!==(n=t.testName)&&void 0!==n?n:"UnknownTest",l=null!==(r=null===(i=t.locationId)||void 0===i?void 0:i[0])&&void 0!==r?r:"UnknownLocation";Array.isArray(t.metrics)&&t.metrics.forEach((function(t){var n=Object.keys(t)[0],i=[[t[n],Date.now()]];a.push({target:o+" ("+l+") - "+n,datapoints:i,refId:e.refId,key:e.stableHash})}))})),a):P(e.refId)}))]:[2,this.fetchResultsForSyntheticMonitoring(e,t).then((function(t){var n;if(!(null===(n=null==t?void 0:t.data)||void 0===n?void 0:n.items)||!Array.isArray(t.data.items))return P(e.refId);var a={},i="UnknownTest",r="UnknownLocation";return t.data.items.forEach((function(e){var t,n,o,l,s,u=null!==(t=e.testResultCommonProperties)&&void 0!==t?t:{};i=null!==(n=u.testName)&&void 0!==n?n:i,r=null!==(l=null!==(o=u.locationDisplayLabel)&&void 0!==o?o:u.locationId)&&void 0!==l?l:r;var y=null!==(s=e.metrics)&&void 0!==s?s:{};Object.entries(y).forEach((function(e){var t,n=c(e,2),i=n[0],r=n[1],o=Array.isArray(r)?r.filter((function(e){return Array.isArray(e)&&2===e.length&&"number"==typeof e[0]&&"number"==typeof e[1]})):[];a[i]||(a[i]=[]),(t=a[i]).push.apply(t,p([],c(o),!1))}))})),Object.entries(a).map((function(t){var n=c(t,2),a=n[0],o=n[1];return{target:i+" ("+r+") - "+a,datapoints:o.map((function(e){var t=c(e,2),n=t[0];return[t[1],n]})),refId:e.refId,key:e.stableHash}}))}))]}}))}))},e.prototype.getSyntheticMonitoringtests=function(){var e=this.miscCache.get("SyntheticMonitoringtests");return e||(e=x(this.instanaOptions,"/api/synthetics/settings/tests").then((function(e){return e.data.map((function(e){return{key:e.label,label:e.label,testId:e.id}}))})),this.miscCache.put("SyntheticMonitoringtests",e),e)},e.prototype.getTestIdByName=function(e){return s(this,void 0,Promise,(function(){var t,n;return u(this,(function(a){switch(a.label){case 0:return a.trys.push([0,2,,3]),[4,this.getSyntheticMonitoringtests()];case 1:return t=a.sent(),[2,(n=t.find((function(t){return t.label===e||t.key===e})))?n.testId:null];case 2:return a.sent(),[2,null];case 3:return[2]}}))}))},e.prototype.getSyntheticMonitoringMetricsCatalog=function(){var e=this.miscCache.get("SyntheticMonitoringMetricsCatalog");return e||(e=x(this.instanaOptions,"/api/synthetics/catalog/metrics").then((function(e){return e.data.map((function(e){return{key:e.metricId,label:e.label,aggregations:e.aggregations.map((function(e){return{key:e,label:e}})),formatter:e.formatter}}))})),this.miscCache.put("SyntheticMonitoringMetricsCatalog",e),e)},e.prototype.fetchMetricsForSyntheticMonitoring=function(e,t){var n,a,i,r=e.testId,o=T(t);e.timeInterval||(e.timeInterval=M(o));var l={metric:null===(n=null==e?void 0:e.metric)||void 0===n?void 0:n.key,aggregation:(null===(a=null==e?void 0:e.aggregation)||void 0===a?void 0:a.key)||"SUM",granularity:null===(i=null==e?void 0:e.timeInterval)||void 0===i?void 0:i.key},s={metrics:[l],tagFilterExpression:{type:"EXPRESSION",elements:[{name:"synthetic.testId",operator:"EQUALS",value:r}],logicalOperator:"AND"},timeFrame:{to:t.to,windowSize:w(o,l.granularity)}};return L(this.instanaOptions,"/api/synthetics/results",s)},e.prototype.fetchResultsForSyntheticMonitoring=function(e,t){var n,a,i=e.testId,r=T(t);e.timeInterval||(e.timeInterval=M(r));var o={type:"EXPRESSION",elements:[{name:"synthetic.testId",operator:"EQUALS",value:i}],logicalOperator:"AND"},l=null===(n=null==e?void 0:e.timeInterval)||void 0===n?void 0:n.key,s={syntheticMetrics:[null===(a=null==e?void 0:e.metric)||void 0===a?void 0:a.key],tagFilterExpression:o,timeFrame:{to:t.to,windowSize:w(r,l)}};return L(this.instanaOptions,"/api/synthetics/results/list",s)},e}(),te=[{label:"Infrastructure built-in metrics",key:0},{label:"Infrastructure custom metrics",key:1},{label:"Infrastructure Analyze",key:8},{label:"Application/service/endpoint metrics",key:4},{label:"Analyze application calls",key:2},{label:"Analyze website",key:3},{label:"Analyze mobile app",key:9},{label:"Service Level Objectives (Beta)",key:10},{label:"Service Level Objectives Widgets",key:7},{label:"Synthetic monitoring",key:11}];function ne(e,t){var n=function(e){if(e.showAllMetrics){if(e.allMetrics.length>1){if(e.customFilters&&e.customFilters.length>0){var t="";return m.a.each(e.customFilters,(function(n,a){t+=n,a!==e.customFilters.length-1&&(t+=".")})),t=t+" ("+e.aggregationFunction.label+")"}return e.aggregationFunction.label}return e.allMetrics[0].key+" ("+e.aggregationFunction.label+")"}return e.metric.key+" ("+e.aggregationFunction.label+")"}(t),a=function(e){var t=[];return m.a.each(e,(function(e){t=m.a.concat(t,e.datapoints)})),t}(e=m.a.filter(e,(function(e){return e.target!==n}))),i=function(e,t){var n=[];return m.a.each(e,(function(e,a){var i,r,o=m.a.map(e,(function(e){return e[0]})),l=(r=o,"sum"===(i=t).toLowerCase()?m.a.sum(r):"mean"===i.toLowerCase()?m.a.mean(r):"min"===i.toLowerCase()?m.a.min(r):"max"===i.toLowerCase()?m.a.max(r):r);n.push([l,parseInt(a,10)])})),n}(m.a.groupBy(a,(function(e){return e[1]})),t.aggregationFunction.label);return function(e,t,n){return{datapoints:e,refId:t,target:n}}(i=m.a.sortBy(i,[function(e){return e[1]}]),t.refId,n)}var ae=function(e){e.entityType&&"string"==typeof e.entityType&&(e.entityType={key:e.entityType,label:e.entityType}),e.filter&&""!==e.filter&&(e.customFilters||(e.customFilters=[],e.customFilters.push({value:e.filter}))),e.timeInterval&&(e.timeInterval.value?e.timeInterval={key:e.timeInterval.value,label:e.timeInterval.label}:e.timeInterval.rollup&&(e.timeInterval={key:e.timeInterval.rollup,label:e.timeInterval.label})),"5"===e.metricCategory&&(e.metricCategory="4",e.service={},e.service.key=e.entity.key,e.service.label=e.entity.label,e.selectedApplication&&e.selectedApplication.key?(e.entity.key=e.selectedApplication.key,e.entity.label=e.selectedApplication.label):(e.entity.key=null,e.entity.label="Test")),"6"===e.metricCategory&&(e.metricCategory="4",e.endpoint={},e.endpoint.key=e.entity.key,e.selectedApplication&&e.selectedApplication.key?(e.entity.key=e.selectedApplication.key,e.entity.label=e.selectedApplication.label):(e.entity.key=null,e.entity.label="Test")),e.aggregation&&"string"==typeof e.aggregation&&(e.aggregation?e.aggregation={key:e.aggregation,label:e.aggregation}:e.aggregation={},e.aggregationFunction?e.aggregationFunction={key:e.aggregationFunction.label,label:e.aggregationFunction.label}:e.aggregationFunction={}),e.customFilters&&e.customFilters.length>0&&e.customFilters[0].value&&(e.customFilters=m.a.map(e.customFilters,(function(e){return e.value}))),8!==e.metricCategory.key&&e.filters&&e.filters.length>0&&!e.filters[0].tag.key&&!e.filters[0].tag.label&&m.a.forEach(e.filters,(function(e){e.tag.label=e.tag.key})),e.group&&e.group.key&&!e.group.label&&(e.group.label=e.group.key),e.metricCategory&&"string"==typeof e.metricCategory&&(e.metricCategory=m.a.find(te,(function(t){return t.key===parseInt(e.metricCategory,10)}))),e.callToEntity&&e.callToEntity.key&&(e.callToEntity=e.callToEntity.key),e.applicationCallToEntity&&e.applicationCallToEntity.key&&(e.applicationCallToEntity=e.applicationCallToEntity.key),e.filters&&e.filters.length>0&&e.filters.forEach((function(e){e.entity&&e.entity.key&&(e.entity=e.entity.key)}))},ie=function(e){function t(t){var n=e.call(this,t)||this;return n.options=t.jsonData,n.options.url=function(e){return e.jsonData.useProxy?m.a.trimEnd(e.url,"/ ")+"/instana":m.a.trimEnd(e.jsonData.url,"/ ")}(t),n.templateSrv=Object(g.getTemplateSrv)(),n.availableGranularities=[],n.availableRollups=[],n.availableTimeIntervals=[],n.dataSourceSlo=new J(t.jsonData),n.dataSourceSlo2=new X(t.jsonData),n.dataSourceInfrastructure=new j(t.jsonData,n.templateSrv),n.dataSourceWebsite=new Z(t.jsonData),n.dataSourceMobileapp=new Y(t.jsonData),n.dataSourceApplication=new U(t.jsonData),n.dataSourceService=new H(t.jsonData),n.dataSourceEndpoint=new G(t.jsonData),n.dataSourceSyntheticMonitoring=new ee(t.jsonData),n.resultCache=new N,n}return r(t,e),t.prototype.isVariable=function(e){return!(!e||"string"!=typeof e)&&e.includes("$")},t.prototype.replaceVariables=function(e,t){return e?this.templateSrv.replace(e,t):""},t.prototype.interpolateVariables=function(e,t){var n,a,i,r,l,s,u,c,p,y,h,d,g,f,m,v,b,S,k,T,C,E,A,w,I,M=this,R=o({},e);if(R.entityQuery&&(R.entityQuery=this.replaceVariables(R.entityQuery,t)),(null===(n=R.entityType)||void 0===n?void 0:n.key)&&this.isVariable(R.entityType.key)){var q=this.replaceVariables(R.entityType.key,t);R.entityType={key:q,label:q}}var O=(null===(a=R.metric)||void 0===a?void 0:a.key)||(null===(i=R.metric)||void 0===i?void 0:i.value);if(O&&this.isVariable(O)){q=this.replaceVariables(O,t);R.metric={key:q,value:q,label:q,aggregations:R.metric.aggregations||[]}}var x=(null===(r=R.entityType)||void 0===r?void 0:r.key)||(null===(l=R.entityType)||void 0===l?void 0:l.value);if(x&&this.isVariable(x)){q=this.replaceVariables(x,t);R.entityType={key:q,label:q}}var L=(null===(s=R.entity)||void 0===s?void 0:s.key)||(null===(u=R.entity)||void 0===u?void 0:u.value);if(L&&this.isVariable(L)){q=this.replaceVariables(L,t);R.entity={key:q,value:q,label:q},11===(null===(c=R.metricCategory)||void 0===c?void 0:c.key)&&(R.testId=q)}var F=(null===(p=R.selectedEntity)||void 0===p?void 0:p.key)||(null===(y=R.selectedEntity)||void 0===y?void 0:y.value);if(F&&this.isVariable(F)){q=this.replaceVariables(F,t);R.selectedEntity={key:q,value:q,label:q}}var N=(null===(h=R.service)||void 0===h?void 0:h.key)||(null===(d=R.service)||void 0===d?void 0:d.value);if(N&&this.isVariable(N)){q=this.replaceVariables(N,t);R.service={key:q,value:q,label:q}}var V=(null===(g=R.endpoint)||void 0===g?void 0:g.key)||(null===(f=R.endpoint)||void 0===f?void 0:f.value);if(V&&this.isVariable(V)){q=this.replaceVariables(V,t);R.endpoint={key:q,value:q,label:q}}var _=(null===(m=R.group)||void 0===m?void 0:m.key)||(null===(v=R.group)||void 0===v?void 0:v.value);if(_&&this.isVariable(_)){q=this.replaceVariables(_,t);R.group=o(o({},R.group),{key:q,label:q,value:q})}else R.group&&(R.group=o({},R.group));R.filters&&R.filters.length>0&&(R.filters=R.filters.map((function(e){return o(o({},e),{stringValue:M.replaceVariables(e.stringValue,t)})}))),R.tagFilterExpression&&(R.tagFilterExpression=this.replaceVariables(R.tagFilterExpression,t)),R.freeTextMetrics&&(R.freeTextMetrics=this.replaceVariables(R.freeTextMetrics,t)),R.customFilters&&R.customFilters.length>0&&(R.customFilters=R.customFilters.map((function(e){return M.replaceVariables(e,t)}))),R.groupbyTagSecondLevelKey&&(R.groupbyTagSecondLevelKey=this.replaceVariables(R.groupbyTagSecondLevelKey,t));var P=(null===(b=R.aggregation)||void 0===b?void 0:b.key)||(null===(S=R.aggregation)||void 0===S?void 0:S.value);if(P&&this.isVariable(P)){q=this.replaceVariables(P,t);R.aggregation={key:q,label:q}}var B=(null===(k=R.timeInterval)||void 0===k?void 0:k.key)||(null===(T=R.timeInterval)||void 0===T?void 0:T.value);if(B&&this.isVariable(B)){q=this.replaceVariables(B,t);R.timeInterval={key:q,label:q}}R.timeShift&&(R.timeShift=this.replaceVariables(R.timeShift,t)),R.labelFormat&&(R.labelFormat=this.replaceVariables(R.labelFormat,t)),R.applicationCallToEntity&&(R.applicationCallToEntity=this.replaceVariables(R.applicationCallToEntity,t)),R.callToEntity&&(R.callToEntity=this.replaceVariables(R.callToEntity,t));var $=(null===(C=R.sloReport)||void 0===C?void 0:C.key)||(null===(E=R.sloReport)||void 0===E?void 0:E.value);if($&&this.isVariable($)){q=this.replaceVariables($,t);R.sloReport={key:q,value:q,label:q}}var Q=(null===(A=R.slo2Report)||void 0===A?void 0:A.key)||(null===(w=R.slo2Report)||void 0===w?void 0:w.value);if(Q&&this.isVariable(Q)){q=this.replaceVariables(Q,t);R.slo2Report={key:q,value:q,label:q}}R.sloValue&&(R.sloValue=this.replaceVariables(R.sloValue,t));var W=null===(I=R.testType)||void 0===I?void 0:I.value;if(W&&this.isVariable(W)){q=this.replaceVariables(W,t);R.testType={value:q,label:q}}return R},t.prototype.query=function(e){return s(this,void 0,Promise,(function(){var t,n,a=this;return u(this,(function(i){return t=e.range,n=e.scopedVars,this.timeFilter=k(t),this.availableRollups=O(this.timeFilter),this.availableGranularities=R(this.timeFilter.windowSize),[2,Promise.all(e.targets.map((function(e){var i,r,o=k(t);if(e.hide)return{data:[],target:e};if(e=a.interpolateVariables(e,n),ae(e),e.metricCategory||(e.metricCategory=te[0]),a.setPossibleTimeIntervals(e),a.availableTimeIntervals.find((function(t){return t.key===e.timeInterval.key}))||(e.timeInterval=a.getDefaultTimeInterval(e)),e.timeShift){var l=a.convertTimeShiftToMillis(e.timeShift);l>0&&(o=a.applyTimeShiftOnTimeFilter(o,l))}e.timeFilter=o,e.stableHash=(i=e,r=m.a.omit(i,b),r=m.a.mapValues(r,(function(e){return null!=e&&"object"===v(e)&&"key"in e&&(e=e.key),e})),JSON.stringify(r)),o=a.adjustTimeFilterIfCached(o,e);var s=e.metricCategory.key;return 7===s?a.dataSourceSlo.runQuery(e,o).then((function(t){return a.buildTargetWithAppendedDataResult(e,o,t)})):10===s?a.dataSourceSlo2.runQuery(e,o).then((function(t){return a.buildTargetWithAppendedDataResult(e,o,t)})):11===s?a.dataSourceSyntheticMonitoring.runQuery(e,o).then((function(t){return a.buildTarget(e,t)})):8===s?a.dataSourceInfrastructure.runQuery(e,o).then((function(t){return a.buildTarget(e,t)})):0===s||1===s?a.dataSourceInfrastructure.runQuery(e,o).then((function(t){return a.buildTargetWithAppendedDataResult(e,o,t)})):3===s?a.dataSourceWebsite.runQuery(e,o).then((function(t){return a.buildTargetWithAppendedDataResult(e,o,t)})):9===s?a.dataSourceMobileapp.runQuery(e,o).then((function(t){return a.buildTargetWithAppendedDataResult(e,o,t)})):2===s?a.dataSourceApplication.runQuery(e,o).then((function(t){return a.buildTargetWithAppendedDataResult(e,o,t)})):4===s?a.getApplicationServiceEndpointMetrics(e,o).then((function(t){return a.buildTargetWithAppendedDataResult(e,o,t)})):Promise.resolve(P(e.refId))}))).then((function(e){var t=[];return m.a.each(e,(function(e){var n=m.a.compact(m.a.flatten(e.data));a.cacheResultIfNecessary(m.a.cloneDeep(n),e.target),a.applyTimeShiftIfNecessary(n,e.target),n=a.aggregateDataIfNecessary(n,e.target),t.push(n)})),{data:m.a.flatten(t)}}))]}))}))},t.prototype.getApplicationServiceEndpointMetrics=function(e,t){var n=this;if(Q(t.windowSize,A(this.options.queryinterval_limit_app_metrics)))throw new Error("Limit for maximum selectable windowsize exceeded, max is: "+this.options.queryinterval_limit_app_metrics+" hours");return e.endpoint&&e.endpoint.key?this.dataSourceEndpoint.fetchEndpointMetrics(e,t).then((function(t){return _(e,t,n.dataSourceEndpoint.buildEndpointMetricLabel)})):e.service&&null!==e.service.key&&void 0!==e.service.key?this.dataSourceService.fetchServiceMetrics(e,t).then((function(t){return _(e,t,n.dataSourceService.buildServiceMetricLabel)})):e.entity&&e.entity.key?this.dataSourceApplication.fetchApplicationMetrics(e,t).then((function(t){return t.data&&(e.showWarningCantShowAllResults=t.data.canLoadMore),_(e,t,n.dataSourceApplication.buildApplicationMetricLabel)})):Promise.resolve({data:{items:[]}})},t.prototype.applyTimeShiftIfNecessary=function(e,t){var n=this;if(t.timeShift){var a=this.convertTimeShiftToMillis(t.timeShift);a>0&&e.forEach((function(e){n.applyTimeShiftOnData(e,a)}))}},t.prototype.cacheResultIfNecessary=function(e,t){if(this.supportsDeltaRequests(t)&&this.hasResult(e)){var n={timeFilter:t.timeFilter,results:e};this.resultCache.put(t.stableHash,n,4e6)}},t.prototype.supportsDeltaRequests=function(e){var t=this;if(e.metricCategory&&(7===e.metricCategory.key||10===e.metricCategory.key||8===e.metricCategory.key))return!1;var n=this.resultCache.get("version");return n?n>=171:D(this.options).then((function(e){return t.resultCache.put("version",e,4e6),e>=171}))},t.prototype.hasResult=function(e){return e&&e.length>0},t.prototype.applyTimeShiftOnData=function(e,t){e.datapoints.forEach((function(e){e[1]=e[1]+t}))},t.prototype.aggregateDataIfNecessary=function(e,t){var n=[];if(t.aggregateGraphs){var a=ne(e,t);return n.push(a),t.hideOriginalGraphs||m.a.each(e,(function(e){e.target!==a.target&&n.push(e)})),n}return e},t.prototype.buildTarget=function(e,t){return{target:e,data:t}},t.prototype.buildTargetWithAppendedDataResult=function(e,t,n){return t.from!==e.timeFilter.from&&n&&(n=this.appendResult(n,e)).forEach((function(t){t.datapoints=t.datapoints.filter((function(t){return t[1]>=e.timeFilter.from}))})),this.buildTarget(e,n)},t.prototype.appendResult=function(e,t){var n,a,i=this.resultCache.get(t.stableHash);return i&&i.results&&(n=e,a=i.results,m.a.each(n,(function(e){var t=m.a.findIndex(a,(function(t){return t.key===e.key&&t.target===e.target}));if(a[t]&&e.datapoints){var n=e.datapoints.concat(a[t].datapoints);n=m.a.sortedUniqBy(n.sort((function(e,t){return e[1]-t[1]})),(function(e){return e[1]})),a[t].datapoints=m.a.takeRight(n,800),a[t].target=e.target}else a.push(e)})),e=a),e},t.prototype.adjustTimeFilterIfCached=function(e,t){var n,a,i=this.resultCache.get(t.stableHash);if(i&&(n=e,a=i.timeFilter,n.from<a.to&&n.from>=a.from&&n.to>=a.to)){var r=function(e,t,n){if("1"===n.key)return t;var a=e[0].datapoints.length;if(a<2)return t;var i=a-2;return e[0].datapoints[i][1]}(i.results,i.timeFilter.from,t.timeInterval),o=e.to;return{from:r,to:o,windowSize:o-r}}return e},t.prototype.getSliReports=function(){return this.dataSourceSlo.getConfiguredSLIs()},t.prototype.getSloReports=function(){return this.dataSourceSlo2.getSLOConfigurations()},t.prototype.getEntityTypes=function(){return this.dataSourceInfrastructure.getEntityTypes()},t.prototype.fetchApplications=function(){return this.dataSourceApplication.getApplications(this.getTimeFilter())},t.prototype.fetchApplicationTags=function(){return this.dataSourceApplication.getApplicationTags(this.getTimeFilter())},t.prototype.fetchServices=function(e){var t=this.interpolateVariables(e);return this.dataSourceService.getServicesOfApplication(t,this.getTimeFilter())},t.prototype.fetchEndpoints=function(e){var t=this.interpolateVariables(e);return this.dataSourceEndpoint.getEndpointsOfService(t,this.getTimeFilter())},t.prototype.fetchTypesForTarget=function(e){var t=this.interpolateVariables(e);return this.dataSourceInfrastructure.fetchTypesForTarget(t,this.getTimeFilter())},t.prototype.fetchWebsites=function(){return this.dataSourceWebsite.getWebsites(this.getTimeFilter())},t.prototype.fetchMobileapp=function(){return this.dataSourceMobileapp.getMobileapp(this.getTimeFilter())},t.prototype.fetchMetricsForEntityType=function(e){var t=this.interpolateVariables(e);return 0===t.metricCategory.key||1===t.metricCategory.key?this.dataSourceInfrastructure.getMetricsCatalog(t.entityType,t.metricCategory.key):this.dataSourceInfrastructure.fetchAvailableMetricsForEntityType(t,this.timeFilter)},t.prototype.getDefaultTimeInterval=function(e){var t=e.metricCategory.key;return 0===t||1===t||8===t?q(this.getTimeFilter()):M(this.getTimeFilter().windowSize)},t.prototype.convertTimeShiftToMillis=function(e){if(!e)return 0;try{return this.parseTimeShift(e)}catch(e){return 0}},t.prototype.parseTimeShift=function(e){return e.endsWith("s")?1e3*parseInt(e.split("s")[0],10):e.endsWith("m")?60*parseInt(e.split("m")[0],10)*1e3:e.endsWith("h")?60*parseInt(e.split("h")[0],10)*60*1e3:e.endsWith("d")?60*parseInt(e.split("d")[0],10)*60*24*1e3:e.endsWith("w")?60*parseInt(e.split("w")[0],10)*60*24*7*1e3:0},t.prototype.applyTimeShiftOnTimeFilter=function(e,t){return{from:e.from-t,to:e.to-t,windowSize:e.windowSize}},t.prototype.setPossibleTimeIntervals=function(e){var t=e.metricCategory.key;this.availableTimeIntervals=0===t||1===t||8===t?this.availableRollups:this.availableGranularities},t.prototype.getTimeFilter=function(){if(!this.timeFilter||!this.timeFilter.from){var e=Date.now();this.timeFilter={from:e-216e5,to:e,windowSize:216e5}}return this.timeFilter},t.prototype.metricFindQuery=function(e,t){return s(this,void 0,Promise,(function(){var n,a,i,r,o,l,s,c,p,y,h,d,g,f,m,v,b,S,k,T,C,E,A,w,I,M,R,q,O,x,L,F,N,V,_,P,B,$,Q;return u(this,(function(u){switch(u.label){case 0:n=e.trim().toLowerCase(),u.label=1;case 1:return u.trys.push([1,51,,52]),"applications()"!==n&&"applications"!==n?[3,3]:[4,this.fetchApplications()];case 2:return a=u.sent(),(Q=a.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select application...",value:""}),[2,Q];case 3:return n.startsWith("services")?(x=n.match(/services\(([^)]+)\)/))&&x[1]?(r=x[1].trim(),b={entity:{key:r},applicationBoundaryScope:"ALL"},[4,this.fetchServices(b)]):[3,5]:[3,7];case 4:return i=u.sent(),(Q=i.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select service...",value:""}),[2,Q];case 5:return b={entity:{},applicationBoundaryScope:"ALL"},[4,this.fetchServices(b)];case 6:return i=u.sent(),(Q=i.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select service...",value:""}),[2,Q];case 7:return n.startsWith("endpoints")?(x=n.match(/endpoints\(([^)]*)\)/),r="",o="",x&&x[1]&&(1===(g=x[1].split(",").map((function(e){return e.trim()}))).length?r=this.templateSrv.replace(g[0],null==t?void 0:t.scopedVars):g.length>=2&&(r=this.templateSrv.replace(g[0],null==t?void 0:t.scopedVars),o=this.templateSrv.replace(g[1],null==t?void 0:t.scopedVars))),b={entity:r?{key:r}:{},service:o?{key:o}:{},applicationBoundaryScope:"ALL"},[4,this.fetchEndpoints(b)]):[3,9];case 8:return l=u.sent(),(Q=l.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select endpoint...",value:""}),[2,Q];case 9:return n.startsWith("entitytypes")?(x=n.match(/entitytypes\(([^)]+)\)/))&&x[1]?(s=x[1].trim(),c=this.templateSrv.replace(s,null==t?void 0:t.scopedVars),b={entityQuery:c},[4,this.fetchTypesForTarget(b)]):[3,11]:[3,13];case 10:return p=u.sent(),y=p.data||[],(Q=y.map((function(e){return{text:e,value:e}}))).unshift({text:"Select entity type...",value:""}),[2,Q];case 11:return[4,this.getEntityTypes()];case 12:return h=u.sent(),(Q=h.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select entity type...",value:""}),[2,Q];case 13:return n.startsWith("entities")?(x=e.trim().match(/entities\(([^)]*)\)/i),d=void 0,x&&x[1]&&(g=x[1].split(",").map((function(e){return e.trim().replace(/['"]/g,"")}))).length>=1&&(d=this.templateSrv.replace(g[0],null==t?void 0:t.scopedVars)),[4,this.dataSourceInfrastructure.getInfrastructureEntities(d)]):[3,15];case 14:return f=u.sent(),(Q=f.map((function(e){return{text:e.label||e.key,value:e.key||e.value}}))).unshift({text:"Select entity...",value:""}),[2,Q];case 15:return n.startsWith("metrics")?(x=n.match(/metrics\(([^)]+)\)/))&&x[1]?(m=x[1].trim(),v=this.templateSrv.replace(m,null==t?void 0:t.scopedVars),b={entityType:{key:v,label:v},metricCategory:{key:0}},[4,this.fetchMetricsForEntityType(b)]):[3,17]:[3,18];case 16:return S=u.sent(),(Q=S.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select metric...",value:""}),[2,Q];case 17:return[2,[]];case 18:return"applicationtags()"!==n&&"applicationtags"!==n?[3,20]:[4,this.fetchApplicationTags()];case 19:return k=u.sent(),(Q=k.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select tag...",value:""}),[2,Q];case 20:return"applicationmetrics()"!==n&&"applicationmetrics"!==n?[3,22]:[4,this.dataSourceApplication.getApplicationMetricsCatalog()];case 21:return T=u.sent(),(Q=T.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select metric...",value:""}),[2,Q];case 22:return"websites()"!==n&&"websites"!==n?[3,24]:[4,this.fetchWebsites()];case 23:return C=u.sent(),(Q=C.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select website...",value:""}),[2,Q];case 24:return"mobileapps()"!==n&&"mobileapps"!==n?[3,26]:[4,this.fetchMobileapp()];case 25:return E=u.sent(),(Q=E.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select mobile app...",value:""}),[2,Q];case 26:return"slireports()"!==n&&"slireports"!==n?[3,28]:[4,this.getSliReports()];case 27:return A=u.sent(),(Q=A.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select SLI report...",value:""}),[2,Q];case 28:return"sloreports()"!==n&&"sloreports"!==n?[3,30]:[4,this.getSloReports()];case 29:return w=u.sent(),(Q=w.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select SLO report...",value:""}),[2,Q];case 30:return"synthetictests()"!==n&&"synthetictests"!==n?[3,32]:[4,this.dataSourceSyntheticMonitoring.getSyntheticMonitoringtests()];case 31:return I=u.sent(),(Q=I.map((function(e){return{text:e.label||e.key,value:e.label}}))).unshift({text:"Select synthetic test...",value:""}),[2,Q];case 32:return"syntheticmetrics()"!==n&&"syntheticmetrics"!==n?[3,34]:[4,this.dataSourceSyntheticMonitoring.getSyntheticMonitoringMetricsCatalog()];case 33:return M=u.sent(),(Q=M.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select metric...",value:""}),[2,Q];case 34:return n.startsWith("websitemetrics")?(x=n.match(/websitemetrics\(([^)]+)\)/))&&x[1]?(L=(L=x[1].trim()).replace(/['"]/g,""),!(R=this.templateSrv.replace(L,null==t?void 0:t.scopedVars))||R===L&&L.startsWith("$")?[4,this.dataSourceWebsite.getWebsiteMetricsCatalog()]:[3,36]):[3,38]:[3,40];case 35:return q=u.sent(),(O=q.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select metric...",value:""}),[2,O];case 36:return[4,this.dataSourceWebsite.getWebsiteMetricsCatalog()];case 37:return P=u.sent(),_=P.filter((function(e){return e.beaconTypes&&e.beaconTypes.includes(R)})),(Q=_.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select metric...",value:""}),[2,Q];case 38:return[4,this.dataSourceWebsite.getWebsiteMetricsCatalog()];case 39:return P=u.sent(),(Q=P.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select metric...",value:""}),[2,Q];case 40:return n.startsWith("mobileappmetrics")?(x=n.match(/mobileappmetrics\(([^)]+)\)/))&&x[1]?(L=(L=x[1].trim()).replace(/['"]/g,""),!(F=this.templateSrv.replace(L,null==t?void 0:t.scopedVars))||F===L&&L.startsWith("$")?[4,this.dataSourceMobileapp.getMobileappMetricsCatalog()]:[3,42]):[3,44]:[3,46];case 41:return N=u.sent(),(V=N.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select metric...",value:""}),[2,V];case 42:return[4,this.dataSourceMobileapp.getMobileappMetricsCatalog()];case 43:return P=u.sent(),_=P.filter((function(e){return e.beaconTypes&&e.beaconTypes.includes(F)})),(Q=_.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select metric...",value:""}),[2,Q];case 44:return[4,this.dataSourceMobileapp.getMobileappMetricsCatalog()];case 45:return P=u.sent(),(Q=P.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select metric...",value:""}),[2,Q];case 46:return"mobileappbeacontypes()"===n||"mobileappbeacontypes"===n?((Q=[{key:"session_start",label:"Session Starts"},{key:"view_change",label:"View Transitions"},{key:"crash",label:"Crashes"},{key:"http_request",label:"HTTP Requests"},{key:"custom",label:"Custom Events"}].map((function(e){return{text:e.label,value:e.key}}))).unshift({text:"Select beacon type...",value:""}),[2,Q]):"mobileapptags()"!==n&&"mobileapptags"!==n?[3,48]:[4,this.dataSourceMobileapp.getMobileappTags()];case 47:return B=u.sent(),(Q=B.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select tag...",value:""}),[2,Q];case 48:return"websitebeacontypes()"===n||"websitebeacontypes"===n?((Q=[{key:"pageLoad",label:"Page Loads"},{key:"resourceLoad",label:"Resources"},{key:"httpRequest",label:"HTTP Requests"},{key:"error",label:"Errors"},{key:"pageChange",label:"Page Transitions"}].map((function(e){return{text:e.label,value:e.key}}))).unshift({text:"Select beacon type...",value:""}),[2,Q]):"websitetags()"!==n&&"websitetags"!==n?[3,50]:[4,this.dataSourceWebsite.getWebsiteTags()];case 49:return $=u.sent(),(Q=$.map((function(e){return{text:e.label||e.key,value:e.key}}))).unshift({text:"Select tag...",value:""}),[2,Q];case 50:return[2,[]];case 51:return u.sent(),[2,[]];case 52:return[2]}}))}))},t.prototype.testDatasource=function(){return x(this.options,"/api/infrastructure-monitoring/monitoring-state").then((function(){return{status:"success",message:"Successfully connected to the Instana API.",title:"Success"}}),(function(e){return 401===e.status?{status:"error",message:"Unauthorized. Please verify the API Token.",title:"Error"}:{status:"error",message:"Error ("+e.status+") connecting to the Instana API: "+e.statusText,title:"Error"}}))},t}(a.DataSourceApi),re=(n(5),n(2)),oe=n(0),le=n.n(oe),se=function(){var e=m.a.get(window,["grafanaBootData","settings","buildInfo","version"],"3.0.0"),t=m.a.split(e,".",2).map((function(e){return parseInt(e,10)}));return e[0]>=6||t[0]>=5&&t[1]>=3},ue=function(e){function t(t){var n,a=e.call(this,t)||this;a.onInstanaOptionsChange=function(e,t){var n,i,r=a.props,l=r.options,s=r.onOptionsChange,u=o(o({},l.jsonData),((n={})[t]=e.currentTarget.value,n));if("apiToken"===t){i={apiToken:e.currentTarget.value},delete u.apiToken,l.secureJsonData=i;var c=!!e.currentTarget.value,p=c?e.currentTarget.value:"";a.setState({isApiKeyConfigured:c,apiKeyValue:p})}s(o(o({},l),{jsonData:u,secureJsonData:i})),"url"!==t&&"apiToken"!==t||a.debouncedDetectFeatures(l)},a.onResetAPIKey=function(){var e=a.props,t=e.options;(0,e.onOptionsChange)(o(o({},t),{secureJsonFields:o(o({},t.secureJsonFields),{apiToken:!1}),secureJsonData:o(o({},t.secureJsonData),{apiToken:""})})),a.setState({apiKeyValue:""})},a.onSwitchChange=function(e,t){var n,i=a.props,r=i.options,l=i.onOptionsChange,s=!1;e&&e.currentTarget&&(s=!r.jsonData[t]);var u=o(o({},r.jsonData),((n={})[t]=s,n));l(o(o({},r),{jsonData:u}))},a.debouncedDetectFeatures=function(e){m.a.debounce((function(){return a.detectFeatures(e)}),500)},a.detectFeatures=function(e){var t=e?e.jsonData:a.props.options.jsonData;t&&t.url&&(a.setState({canUseProxy:se()}),D(t).then((function(e){e?a.setState({canQueryOfflineSnapshots:e>=156}):a.setState({canQueryOfflineSnapshots:!1})})))},a.state={canQueryOfflineSnapshots:!1,canUseProxy:!1,isApiKeyConfigured:!1,apiKeyValue:""},a.detectFeatures();var i=a.props,r=i.options,l=i.onOptionsChange,s=r.jsonData;void 0===s.useProxy&&(s.useProxy=se()),s.useProxy=!0;var u=!!(null===(n=r.secureJsonData)||void 0===n?void 0:n.apiToken),c=u?"********":"";return a.setState({isApiKeyConfigured:u,apiKeyValue:c}),l(o(o({},r),{jsonData:s})),a}return r(t,e),t.prototype.render=function(){var e,t,n=this,a=this.props.options,i=a.jsonData,r=this.state.apiKeyValue;return le.a.createElement("div",{className:"settings"},le.a.createElement(re.Legend,null,"Instana configuration"),le.a.createElement(re.Field,{className:"width-30",horizontal:!0,required:!0,label:"URL",description:"The URL of your Instana installation."},le.a.createElement(re.Input,{width:30,value:i.url,placeholder:"https://tools-acme.instana.io",onChange:function(e){return n.onInstanaOptionsChange(e,"url")}})),le.a.createElement(re.Field,{style:{width:"637px"},horizontal:!0,required:!0,label:"API Token",description:"The API token to access the data."},le.a.createElement("div",{style:{display:"flex"}},le.a.createElement(re.Input,{type:"password",width:30,value:r,placeholder:(null===(e=a.secureJsonFields)||void 0===e?void 0:e.apiToken)?"Configured":"Enter API Key",readOnly:null===(t=a.secureJsonFields)||void 0===t?void 0:t.apiToken,suffix:le.a.createElement(re.Tooltip,{content:le.a.createElement("p",null,"You can create API tokens following the instructions at ",le.a.createElement("a",{href:"https://www.ibm.com/docs/en/obi/current?topic=apis-web-rest-api#unit-specific-api-tokens"},"https://www.ibm.com/docs/en/obi/current?topic=apis-web-rest-api")),theme:"info"},le.a.createElement(re.Icon,{name:"info-circle"})),onChange:function(e){return n.onInstanaOptionsChange(e,"apiToken")}}),le.a.createElement("div",{style:{marginLeft:"15px"}},le.a.createElement(re.Button,{onClick:this.onResetAPIKey},"Reset API Token")))),le.a.createElement(re.Checkbox,{label:"Use Proxy",value:!0,disabled:!0,description:"The only way to use the API token for authentication in Grafana is through Use-Proxy. Needs Grafana 10.0.0+ and Instana datasource 4.0.0+"}),le.a.createElement(re.Checkbox,{label:"Enable offline snapshots",value:i.showOffline,onChange:function(e){return n.onSwitchChange(e,"showOffline")},description:"Enables querying offline snapshots. Needs Instana release 260+ and Instana datasource 3.3.0+"}),le.a.createElement(re.Checkbox,{label:"Enable Infrastructure Analyze category",value:i.allowInfraExplore,onChange:function(e){return n.onSwitchChange(e,"allowInfraExplore")},description:"Adds a new category that allows usage of Infrastructure Analyze functionality. Needs Instana release 195+ and an explicit feature flag. If you are interested in this technology, please submit a request via our support system at https://support.instana.com/."}),le.a.createElement("br",null),le.a.createElement("br",null),le.a.createElement("b",null,"Maximum query intervals in hours"),le.a.createElement("p",{className:"width-30"},"This settings are optional values to control the load of data queries, by defining the maximum allowed query intervals against the Instana API."),le.a.createElement(re.Field,{className:"width-30",horizontal:!0,label:"Infrastructure metrics"},le.a.createElement(re.Input,{width:30,value:i.queryinterval_limit_infra,placeholder:"optional: interval limit in hours",onChange:function(e){return n.onInstanaOptionsChange(e,"queryinterval_limit_infra")}})),le.a.createElement(re.Field,{className:"width-30",horizontal:!0,label:"Application metrics"},le.a.createElement(re.Input,{width:30,value:i.queryinterval_limit_app_metrics,placeholder:"optional: interval limit in hours",onChange:function(e){return n.onInstanaOptionsChange(e,"queryinterval_limit_app_metrics")}})),le.a.createElement(re.Field,{className:"width-30",horizontal:!0,label:"Analyze application calls"},le.a.createElement(re.Input,{width:30,value:i.queryinterval_limit_app_calls,placeholder:"optional: interval limit in hours",onChange:function(e){return n.onInstanaOptionsChange(e,"queryinterval_limit_app_calls")}})),le.a.createElement(re.Field,{className:"width-30",horizontal:!0,label:"Analyze website"},le.a.createElement(re.Input,{width:30,value:i.queryinterval_limit_website_metrics,placeholder:"optional: interval limit in hours",onChange:function(e){return n.onInstanaOptionsChange(e,"queryinterval_limit_website_metrics")}})),le.a.createElement(re.Field,{className:"width-30",horizontal:!0,label:"Analyze mobile app"},le.a.createElement(re.Input,{width:30,value:i.queryinterval_limit_mobileapp_metrics,placeholder:"optional: interval limit in hours",onChange:function(e){return n.onInstanaOptionsChange(e,"queryinterval_limit_mobileapp_metrics")}})))},t}(oe.PureComponent);n(9);function ce(e){var t={display:"flex"};return e.disabled&&(t.opacity="0.4",t.pointerEvents="none"),e.stretch&&(t.width="100%"),le.a.createElement("div",{style:t},e.children)}var pe=re.LegacyForms.Switch,ye=function(e){function t(t){return e.call(this,t)||this}return r(t,e),t.prototype.render=function(){var e=this.props,t=e.label,n=e.tooltip,a=e.queryKeyword,i=e.disabled,r=e.labelWidth,s=void 0===r?14:r,u=e.value,c=l(e,["label","tooltip","queryKeyword","disabled","labelWidth","value"]);return le.a.createElement(ce,{disabled:i,stretch:!1},le.a.createElement(re.InlineFormLabel,{className:a?"query-keyword":"",width:s,tooltip:n},t),le.a.createElement(pe,o({checked:u,label:""},c)))},t}(le.a.Component),he=function(e){function t(t){var n=e.call(this,t)||this;return n.debouncedRunQuery=m.a.debounce(n.props.onRunQuery,500),n.onUseFreeTextMetricsChange=function(e){var t=n.props,a=t.query,i=t.onChange;e&&e.currentTarget&&(a.useFreeTextMetrics=e.currentTarget.checked,a.useFreeTextMetrics&&(a.metric={}),i(a))},n.onFreeTextMetricsChange=function(e){var t=n.props,a=t.query,i=t.onChange;a.freeTextMetrics=e.currentTarget.value,i(a),n.debouncedRunQuery()},n}return r(t,e),t.prototype.render=function(){var e=this.props.query;return le.a.createElement("div",{className:"gf-form"},le.a.createElement(ye,{queryKeyword:!0,label:"Enable free text metrics",tooltip:"Specify comma separated metrics directly in this text field. Once this field has a value, selected metrics from above will be ignored. Enabled as soon as a query is entered. Max 4 metrics supported.",value:e.useFreeTextMetrics,onChange:this.onUseFreeTextMetricsChange,disabled:!1}),le.a.createElement(re.Input,{width:0,disabled:!e.useFreeTextMetrics,value:e.freeTextMetrics,placeholder:"metric.one,metric.two,metric.three",onChange:this.onFreeTextMetricsChange}))},t}(le.a.Component),de=[{label:"SUM"},{label:"MEAN"},{label:"MIN"},{label:"MAX"}],ge=function(e){function t(t){var n=e.call(this,t)||this;n.onAggregateGraphs=function(e){var t=n.props,a=t.query,i=t.onRunQuery;e&&e.currentTarget&&(a.aggregateGraphs=e.currentTarget.checked,i())},n.onHideOriginalGraph=function(e){var t=n.props,a=t.query,i=t.onRunQuery;e&&e.currentTarget&&(a.hideOriginalGraphs=e.currentTarget.checked,i())},n.onAggregationFunctionChange=function(e){var t=n.props,a=t.query,i=t.onRunQuery;a.aggregationFunction=e,i()},n.state={showAdditionalSettings:!1,legendFormat:""};var a=n.props.query;return a.aggregationFunction||(a.aggregationFunction=de[0]),n}return r(t,e),t.prototype.render=function(){var e=this.props.query;return le.a.createElement("div",{className:"gf-form"},le.a.createElement(ye,{queryKeyword:!0,label:"Aggregate query graphs",tooltip:"Aggregate all graphs of a query.",value:e.aggregateGraphs,onChange:this.onAggregateGraphs}),le.a.createElement(re.Select,{menuPlacement:"bottom",width:12,isSearchable:!0,options:de,value:e.aggregationFunction,disabled:!e.aggregateGraphs,onChange:this.onAggregationFunctionChange}),le.a.createElement(ye,{queryKeyword:!0,disabled:!e.aggregateGraphs,labelWidth:10,label:"Hide original graphs",tooltip:"Removes the original graphs resulted from the query and only shows the aggregated graph.",value:e.hideOriginalGraphs,onChange:this.onHideOriginalGraph}))},t}(le.a.Component),fe=function(e){function t(t){return e.call(this,t)||this}return r(t,e),t.prototype.render=function(){var e=this.props,t=e.label,n=e.tooltip,a=e.queryKeyword,i=e.disabled,r=e.labelWidth,s=void 0===r?14:r,u=e.inputWidth,c=void 0===u?30:u,p=l(e,["label","tooltip","queryKeyword","disabled","labelWidth","inputWidth"]);return le.a.createElement(ce,{disabled:i,stretch:!c},le.a.createElement(re.InlineFormLabel,{className:a?"query-keyword":"",width:s,tooltip:n},t),le.a.createElement(re.Input,o({width:c,disabled:i},p)))},t}(le.a.Component),me=["$label (on host $host)","$label (on host $host)","$label ($application) - $key","$label ($website) - $key","$label ($application) - $key","","",""],ve=[le.a.createElement("div",{key:"builtIn"},"Default: $label (on host $host)",le.a.createElement("ul",null,le.a.createElement("li",null,"• $label - entity label"),le.a.createElement("li",null,"• $host - corresponding host MAC address"),le.a.createElement("li",null,"• $pid - corresponding PID"),le.a.createElement("li",null,"• $timeShift - corresponding timeShift"),le.a.createElement("li",null,"• $metric - displayed metric"),le.a.createElement("li",null,"• $type - entity type"),le.a.createElement("li",null,"• $name - label alternative"),le.a.createElement("li",null,"• $index - index in the list"))),le.a.createElement("div",{key:"custom"},"Default: $label (on host $host)",le.a.createElement("ul",null,le.a.createElement("li",null,"• $label - entity label"),le.a.createElement("li",null,"• $host - corresponding host MAC address"),le.a.createElement("li",null,"• $pid - corresponding PID"),le.a.createElement("li",null,"• $timeShift - corresponding timeShift"),le.a.createElement("li",null,"• $metric - displayed metric"),le.a.createElement("li",null,"• $type - entity type"),le.a.createElement("li",null,"• $name - label alternative"),le.a.createElement("li",null,"• $index - index in the list"))),le.a.createElement("div",{key:"application"},"Default: $label ($application) - $key",le.a.createElement("ul",null,le.a.createElement("li",null,"• $label - entity label"),le.a.createElement("li",null,"• $application - application label"),le.a.createElement("li",null,"• $timeShift - corresponding timeShift"),le.a.createElement("li",null,"• $metric - displayed metric"),le.a.createElement("li",null,"• $key - metric key with aggregation and rollup"),le.a.createElement("li",null,"• $index - index in the list"))),le.a.createElement("div",{key:"website"},"Default: $label ($website) - $key",le.a.createElement("ul",null,le.a.createElement("li",null,"• $label - entity label"),le.a.createElement("li",null,"• $website - application label"),le.a.createElement("li",null,"• $type - entity type"),le.a.createElement("li",null,"• $timeShift - corresponding timeShift"),le.a.createElement("li",null,"• $metric - displayed metric"),le.a.createElement("li",null,"• $key - metric key with aggregation and rollup"),le.a.createElement("li",null,"• $index - index in the list"))),le.a.createElement("div",{key:"endpoint"},"Default: $label ($application) - $key",le.a.createElement("ul",null,le.a.createElement("li",null,"• $label - entity label"),le.a.createElement("li",null,"• $application - application label"),le.a.createElement("li",null,"• $service - service label"),le.a.createElement("li",null,"• $endpoint - endpoint label"),le.a.createElement("li",null,"• $timeShift - corresponding timeShift"),le.a.createElement("li",null,"• $metric - displayed metric"),le.a.createElement("li",null,"• $key - metric key with aggregation and rollup"),le.a.createElement("li",null,"• $index - index in the list"))),"","",""],be=function(e){function t(t){var n=e.call(this,t)||this;return n.debouncedRunQuery=m.a.debounce(n.props.onRunQuery,500),n.onLegendFormatChange=function(e){var t=n.props,a=t.query,i=t.onChange;a.labelFormat=e.currentTarget.value,i(a),n.debouncedRunQuery()},n.onTimeShiftChange=function(e){var t=n.props,a=t.query,i=t.onChange;a.timeShift=e.currentTarget.value,a.timeShift?a.timeShiftIsValid=!!a.timeShift.match(/\d+[m,s,h,d,w]{1}/):a.timeShiftIsValid=!0,i(a),a.timeShiftIsValid&&n.debouncedRunQuery()},n.onShowAdvancedSettingsChange=function(e){if(e&&e.currentTarget){var t=n.props,a=t.query,i=t.onChange;a.showAdvancedSettings=e.currentTarget.checked,i(a)}},n.state={legendFormatPlaceholder:n.setLegendFormatPlaceholder()},n}return r(t,e),t.prototype.setLegendFormatPlaceholder=function(){var e=this.props.query;return me[e.metricCategory.key]},t.prototype.setLegendFormatTooltip=function(){var e=this.props.query;return ve[e.metricCategory.key]},t.prototype.render=function(){var e=this,t=this.props,n=t.query,a=t.onRunQuery,i=t.onChange,r=n.metricCategory.key;return le.a.createElement("div",null,le.a.createElement("div",{className:"gf-form"},le.a.createElement(ye,{label:"Show advanced settings",tooltip:"Show all additional settings",value:n.showAdvancedSettings,onChange:function(t){return e.onShowAdvancedSettingsChange(t)}})),le.a.createElement("div",{hidden:!n.showAdvancedSettings},le.a.createElement("div",{className:"gf-form",hidden:7===r||8===r||11===r},le.a.createElement(fe,{queryKeyword:!0,inputWidth:0,label:"Legend format",tooltip:this.setLegendFormatTooltip(),value:n.labelFormat,placeholder:this.setLegendFormatPlaceholder(),onChange:function(t){return e.onLegendFormatChange(t)}})),le.a.createElement("div",{className:"gf-form"},le.a.createElement(fe,{queryKeyword:!0,inputWidth:0,label:"Time shift",tooltip:"Specify the amount of hours that shall be used. The time shift function always go back in time, not forward. Accepts values such as 1s, 1m, 1h, 1d, 1w.",value:n.timeShift,invalid:!n.timeShiftIsValid,placeholder:"1h",onChange:function(t){return e.onTimeShiftChange(t)}})),le.a.createElement("div",{hidden:1!==r},le.a.createElement(he,{query:n,onRunQuery:a,onChange:i})),le.a.createElement("div",{hidden:0!==r&&1!==r},le.a.createElement(ge,{query:n,onRunQuery:a,onChange:i}))))},t}(le.a.Component),Se=["DESTINATION","SOURCE"],ke={position:"relative",background:"transparent",width:"32px",height:"32px",marginRight:"4px"},Te={transition:"max-height .2s ease-out",maxHeight:0,overflow:"hidden",zIndex:1,position:"fixed"},Ce={overflow:"hidden",zIndex:2,position:"fixed",maxHeight:"1000px",opacity:1},Ee={display:"inline-flex"},Ae={display:"flex",alignItems:"center",justifyContent:"center"},we={padding:"7px"},Ie=le.a.createElement("svg",{style:Ae,height:30,width:30},le.a.createElement("path",{transform:"translate(3, 5)",fill:"#33a2e5",d:"M4 11.173h6.38L8.115 8.92 9.042 8l3.704 3.684-3.704 3.684-.926-.92 2.263-2.252H4zM16.43 14.316c-1.426 0-2.632-1.206-2.632-2.632 0-1.425 1.206-2.631 2.632-2.631 1.425 0 2.631 1.206 2.631 2.631 0 1.426-1.206 2.632-2.631 2.632z"})),Me=le.a.createElement("svg",{style:Ae,height:30,width:30},le.a.createElement("path",{transform:"translate(3, 5)",fill:"#33a2e5",d:"M9.939 11.173h6.379L14.054 8.92 14.98 8l3.704 3.684-3.704 3.684-.926-.92 2.264-2.252h-6.38c-.308 1.023-1.234 1.842-2.366 1.842C6.132 14.243 5 13.117 5 11.787c0-1.33 1.132-2.457 2.47-2.457 1.234 0 2.16.717 2.469 1.843z"}));function Re(e){var t={background:Object(re.useTheme)().colors.bg2,cursor:"pointer",listStyle:"none",borderRadius:"3px",height:"32px"},n=c(Object(oe.useState)(!1),2),a=n[0],i=n[1];function r(t){e.onChange(t),i(!1)}return le.a.createElement("div",{style:ke},le.a.createElement("div",{onClick:function(){i(!a)},onBlur:function(){return i(!1)},style:t,contentEditable:!0},le.a.createElement(re.Tooltip,{content:e.value,theme:"info",placement:"top"},"DESTINATION"===e.value?Ie:Me)),le.a.createElement("ul",{style:a?Ce:Te},le.a.createElement("li",{onClick:function(){return r("DESTINATION")},key:"DESTINATION",style:t},le.a.createElement("div",{style:Ee},Ie," ",le.a.createElement("span",{style:we},"DESTINATION"))),le.a.createElement("li",{onClick:function(){return r("SOURCE")},key:"SOURCE",style:t},le.a.createElement("div",{style:Ee},Me," ",le.a.createElement("span",{style:we},"SOURCE")))))}function qe(e){return(qe="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}var Oe=!1,xe=function(e){function t(t){var n=e.call(this,t)||this;return n.onApplicationChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.entity="string"==typeof e?{key:e,label:e}:e,i(a),r()},n.onGroupChange=function(e){var t,a,i,r=n.props,o=r.query,l=r.onChange,s=r.onRunQuery,u=r.groups,c=(null===(t=o.group)||void 0===t?void 0:t.key)||(null===(a=o.group)||void 0===a?void 0:a.value)||(null===(i=o.group)||void 0===i?void 0:i.label);if(!(c&&"string"==typeof c&&c.includes("$"))||"object"!==qe(e)||!e.key||e.key.includes("$")){if("string"==typeof e){var p=m.a.find(u,["key",e]);o.group=p||{key:e,label:e}}else o.group=e;o.group&&2===o.metricCategory.key&&(o.showGroupBySecondLevel="KEY_VALUE_PAIR"===o.group.type),o.showGroupBySecondLevel||(o.groupbyTagSecondLevelKey=""),l(o),s()}},n.onApplicationCallToEntityChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.applicationCallToEntity=e,i(a),r()},n.onCallToEntityChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.callToEntity=e,i(a),r()},n.debouncedRunQuery=m.a.debounce(n.props.onRunQuery,500),n.onGroupByTagSecondLevelKeyChange=function(e){var t=n.props,a=t.query,i=t.onChange;a.groupbyTagSecondLevelKey=e.currentTarget.value,i(a),n.debouncedRunQuery()},n.state={applications:[]},n}return r(t,e),t.prototype.componentDidMount=function(){var e,t,n=this,a=this.props,i=a.query,r=a.datasource,o=a.onChange;Oe=!1;var l=(null===(e=i.entity)||void 0===e?void 0:e.key)||(null===(t=i.entity)||void 0===t?void 0:t.label),s=l&&"string"==typeof l&&l.includes("$");r.fetchApplications().then((function(e){Oe||(m.a.find(e,{key:null})||e.unshift({key:null,label:y}),n.setState({applications:e}),i.entity&&(i.entity.key||i.entity.label)||(i.entity=e[0]),i.callToEntity||(i.callToEntity=Se[0]),i.applicationCallToEntity||(i.applicationCallToEntity=Se[0]),o(i),s&&i.entity&&n.props.onRunQuery())})),r.fetchApplicationTags().then((function(e){var t,a,r;if(!Oe){n.props.updateGroups(m.a.sortBy(e,"key"));var l=(null===(t=i.group)||void 0===t?void 0:t.key)||(null===(a=i.group)||void 0===a?void 0:a.value)||(null===(r=i.group)||void 0===r?void 0:r.label),s=l&&"string"==typeof l&&l.includes("$");i.group&&(i.group.key||s)||(i.group=m.a.find(e,["key","endpoint.name"]),o(i))}})),this.props.updateMetrics(r.dataSourceApplication.getApplicationMetricsCatalog())},t.prototype.componentWillUnmount=function(){Oe=!0},t.prototype.render=function(){var e=this.props,t=e.query,n=e.groups,a=t.entity;t.entity&&t.entity.key&&(a=o(o({},t.entity),{value:t.entity.key,label:t.entity.label||t.entity.key}));var i=t.group;return t.group&&t.group.key&&(i=o(o({},t.group),{value:t.group.key,label:t.group.label||t.group.key})),le.a.createElement("div",{className:"gf-form"},le.a.createElement(ce,{stretch:!0},le.a.createElement(re.InlineFormLabel,{className:"query-keyword",width:14,tooltip:"Select your application."},"Application"),le.a.createElement(Re,{value:t.applicationCallToEntity,onChange:this.onApplicationCallToEntityChange}),le.a.createElement(re.Select,{menuPlacement:"bottom",width:0,isSearchable:!0,value:a,options:this.state.applications,onChange:this.onApplicationChange,allowCustomValue:!0,placeholder:"Select or type $application"})),le.a.createElement(ce,{stretch:!0},le.a.createElement(re.InlineFormLabel,{className:"query-keyword",width:7,tooltip:"Group by tag or type variable like $groupBy"},"Group by"),le.a.createElement(Re,{value:t.callToEntity,onChange:this.onCallToEntityChange}),le.a.createElement(re.Select,{menuPlacement:"bottom",width:0,isSearchable:!0,options:n,value:i,onChange:this.onGroupChange,allowCustomValue:!0,placeholder:"Select or type $groupBy"})),le.a.createElement("div",{style:t.showGroupBySecondLevel?{}:{display:"none"}},le.a.createElement(re.Input,{type:"text",value:t.groupbyTagSecondLevelKey,onChange:this.onGroupByTagSecondLevelKeyChange})))},t}(le.a.Component),Le=(n(11),{position:"relative",background:"transparent",width:"32px",height:"32px",marginRight:"4px"}),Fe=le.a.createElement("svg",{className:"iconStyle",height:30,width:30},le.a.createElement("path",{transform:"translate(3, 5)",fill:"#33a2e5",d:"M12.7891666,14.6051302 L12.7751756,19.8293818 L11.4691127,19.8328795 L11.4776628,16.6402814 L6.96695389,21.1509902 L6.2433066,20.427343 L10.7540155,15.9166341 L7.56141732,15.9251842 L7.56491507,14.6191213 L12.7891666,14.6051302 Z M15.754133,9.38135895 C17.1795716,9.38135895 18.3857119,10.5874993 18.3857119,12.0129379 C18.3857119,13.4383765 17.1795716,14.6445168 15.754133,14.6445168 C14.3286944,14.6445168 13.122554,13.4383765 13.122554,12.0129379 C13.122554,10.5874993 14.3286944,9.38135895 15.754133,9.38135895 Z M6.96695389,3.2433066 L11.4776628,7.75401547 L11.4691127,4.56141732 L12.7751756,4.56491507 L12.7891666,9.7891666 L7.56491507,9.77517557 L7.56141732,8.46911269 L10.7540155,8.47766276 L6.2433066,3.96695389 L6.96695389,3.2433066 Z"})),Ne=le.a.createElement("svg",{className:"iconStyle",height:30,width:30},le.a.createElement("path",{transform:"translate(3, 5)",fill:"#33a2e5",d:"M7.54586,15 L7.53186897,20.2242515 L6.22580608,20.2277493 L6.23435616,17.0351511 L1.72364729,21.54586 L1,20.8222127 L5.51070887,16.3115038 L2.31811071,16.3200539 L2.32160847,15.013991 L7.54586,15 Z M14.1975552,7.94441147 L17.901552,11.628622 L14.1975552,15.3128325 L13.271556,14.3917799 L15.5351096,12.1403179 L12.4724561,12.1407167 C12.2827518,13.474447 11.1361413,14.5 9.75,14.5 C8.23121694,14.5 7,13.2687831 7,11.75 C7,10.2312169 8.23121694,9 9.75,9 C11.0508538,9 12.1407461,9.90323356 12.4267385,11.1167623 L15.5351096,11.1169261 L13.271556,8.8654641 L14.1975552,7.94441147 Z M20.75,9 C22.2687831,9 23.5,10.2312169 23.5,11.75 C23.5,13.2687831 22.2687831,14.5 20.75,14.5 C19.2312169,14.5 18,13.2687831 18,11.75 C18,10.2312169 19.2312169,9 20.75,9 Z M1.72364729,2 L6.23435616,6.51070887 L6.22580608,3.31811071 L7.53186897,3.32160847 L7.54586,8.54586 L2.32160847,8.53186897 L2.31811071,7.22580608 L5.51070887,7.23435616 L1,2.72364729 L1.72364729,2 Z"}));function Ve(e){var t=Object(re.useTheme)(),n=e.disabled?.5:1,a={background:t.colors.bg2,cursor:"pointer",listStyle:"none",borderRadius:"3px",height:"32px",opacity:n},i=c(Object(oe.useState)(!1),2),r=i[0],o=i[1];function l(t){e.onChange(t),o(!1)}return le.a.createElement("div",{style:Le},le.a.createElement("div",{onClick:function(){e.disabled||o(!r)},onBlur:function(){return o(!1)},style:a,contentEditable:!0},le.a.createElement(re.Tooltip,{content:e.value?e.value:"ALL",theme:"info",placement:"top"},"INBOUND"===e.value?Fe:Ne)),le.a.createElement("ul",{className:r?"dropdown-list-active":"dropdown-list"},le.a.createElement("li",{onClick:function(){return l("INBOUND")},key:"INBOUND",style:a},le.a.createElement("div",{className:"iconTextContainer"},Fe," ",le.a.createElement("span",{className:"iconTextStyle"},"INBOUND"))),le.a.createElement("li",{onClick:function(){return l("ALL")},key:"ALL",style:a},le.a.createElement("div",{className:"iconTextContainer"},Ne," ",le.a.createElement("span",{className:"iconTextStyle"},"ALL")))))}var _e=!1,Pe=function(e){function t(t){var n=e.call(this,t)||this;return n.onApplicationChange=function(e){var t,a=n.props,i=a.query,r=a.onChange,o=a.onRunQuery;"string"==typeof e?i.entity={key:e,label:e}:(i.entity=e,""!==e.boundaryScope?i.applicationBoundaryScope=e.boundaryScope:"ALL"!==i.applicationBoundaryScope&&"INBOUND"!==i.applicationBoundaryScope&&(i.applicationBoundaryScope="INBOUND")),r(i),n.isVariable(null===(t=i.entity)||void 0===t?void 0:t.key)||(n.loadServices(),n.loadEndpoints()),o()},n.onServiceChange=function(e){var t,a=n.props,i=a.query,r=a.onChange,o=a.onRunQuery;i.service="string"==typeof e?{key:e,label:e}:e,r(i),n.isVariable(null===(t=i.service)||void 0===t?void 0:t.key)||n.loadEndpoints(),o()},n.onEndpointChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.endpoint="string"==typeof e?{key:e,label:e}:e,i(a),r()},n.debouncedRunQuery=m.a.debounce(n.props.onRunQuery,500),n.onGroupByTagSecondLevelKeyChange=function(e){var t=n.props,a=t.query,i=t.onChange;a.groupbyTagSecondLevelKey=e.currentTarget.value,i(a),n.debouncedRunQuery()},n.onApplicationBoundaryScopeChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.applicationBoundaryScope=e,i(a),n.loadServices(),n.loadEndpoints(),r()},n.state={applications:[],services:[],endpoints:[],value:{value:2,imgUrl:"../../resources/dest.png"}},n}return r(t,e),t.prototype.componentDidMount=function(){_e=!1,this.loadApplications(),this.loadServices(),this.loadEndpoints();var e=this.props.datasource;this.props.updateMetrics(e.dataSourceApplication.getApplicationMetricsCatalog())},t.prototype.componentWillUnmount=function(){_e=!0},t.prototype.loadApplications=function(){var e=this,t=this.props,n=t.query,a=t.onChange;t.datasource.fetchApplications().then((function(t){var i,r;if(!_e){m.a.find(t,{key:null})||t.unshift({key:null,label:y}),e.setState({applications:t});var o=(null===(i=n.entity)||void 0===i?void 0:i.key)||(null===(r=n.entity)||void 0===r?void 0:r.value);if(o){if(e.isVariable(o))return void e.props.onRunQuery();m.a.find(t,(function(e){return e.key===o}))||(n.entity=t[0],a(n))}else t&&(n.entity=t[0],a(n))}}))},t.prototype.loadServices=function(){var e=this,t=this.props,n=t.query,a=t.onChange;t.datasource.fetchServices(n).then((function(t){var i,r;if(!_e){m.a.find(t,{key:null})||t.unshift({key:null,label:"-- No Service Filter --"}),e.setState({services:t});var o=(null===(i=n.service)||void 0===i?void 0:i.key)||(null===(r=n.service)||void 0===r?void 0:r.value);if(o){if(e.isVariable(o))return void e.props.onRunQuery();m.a.find(t,(function(e){return e.key===o}))||(n.service=t[0],a(n))}else n.service=t[0],a(n)}}))},t.prototype.loadEndpoints=function(){var e=this,t=this.props,n=t.query,a=t.onChange;t.datasource.fetchEndpoints(n).then((function(t){var i,r;if(!_e){m.a.find(t,{key:null})||t.unshift({key:null,label:h}),e.setState({endpoints:t});var o=(null===(i=n.endpoint)||void 0===i?void 0:i.key)||(null===(r=n.endpoint)||void 0===r?void 0:r.value);if(o){if(e.isVariable(o))return void e.props.onRunQuery();m.a.find(t,(function(e){return e.key===o}))||(n.endpoint={key:null,label:h},a(n))}else n.endpoint={key:null,label:h},a(n)}}))},t.prototype.isVariable=function(e){return!(!e||"string"!=typeof e)&&e.includes("$")},t.prototype.render=function(){var e,t=this.props.query,n=t.entity;t.entity&&t.entity.key&&(n=o(o({},t.entity),{value:t.entity.key,label:t.entity.label||t.entity.key}));var a=t.service;t.service&&t.service.key&&(a=o(o({},t.service),{value:t.service.key,label:t.service.label||t.service.key}));var i=t.endpoint;return t.endpoint&&t.endpoint.key&&(i=o(o({},t.endpoint),{value:t.endpoint.key,label:t.endpoint.label||t.endpoint.key})),le.a.createElement("div",{className:"gf-form"},le.a.createElement(re.InlineFormLabel,{className:"query-keyword",width:14,tooltip:"Select your application."},"Application"),le.a.createElement(Ve,{value:t.applicationBoundaryScope,disabled:!(null===(e=t.entity)||void 0===e?void 0:e.key),onChange:this.onApplicationBoundaryScopeChange}),le.a.createElement(re.Select,{menuPlacement:"bottom",width:0,isSearchable:!0,value:n,options:this.state.applications,onChange:this.onApplicationChange,allowCustomValue:!0,placeholder:"Please specify"}),le.a.createElement(re.InlineFormLabel,{className:"query-keyword",width:6,tooltip:"Select your service or type variable like $service"},"Service"),le.a.createElement(re.Select,{menuPlacement:"bottom",width:0,isSearchable:!0,value:a,options:this.state.services,onChange:this.onServiceChange,allowCustomValue:!0,placeholder:"Please specify"}),le.a.createElement(re.InlineFormLabel,{className:"query-keyword",width:6,tooltip:"Select your endpoint or type variable like $endpoint"},"Endpoint"),le.a.createElement(re.Select,{menuPlacement:"bottom",width:0,isSearchable:!0,value:i,options:this.state.endpoints,onChange:this.onEndpointChange,allowCustomValue:!0,placeholder:"Please specify"}),le.a.createElement("div",{style:t.showGroupBySecondLevel?{}:{display:"none"}},le.a.createElement(re.Input,{value:t.groupbyTagSecondLevelKey,onChange:this.onGroupByTagSecondLevelKeyChange})))},t}(le.a.Component),Be=!1,$e=function(e){function t(t){var n=e.call(this,t)||this;return n.onEntityChange=function(e){var t=n.props,a=t.query,i=t.datasource,r=t.onChange,o=t.onRunQuery;a.entity="string"==typeof e?{key:e,label:e}:e,r(a),o(),a.entity.key&&!a.entity.key.includes("$")&&i.fetchMetricsForEntityType(a).then((function(e){n.props.updateMetrics(e)}))},n.onInfraCallToEntityChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.applicationCallToEntity=e,i(a),r()},n.debouncedRunQuery=m.a.debounce(n.props.onRunQuery,500),n.onCallToEntityChange=function(e){var t=n.props,a=t.query,i=t.onChange;a.callToEntity=e.currentTarget.value,i(a),n.debouncedRunQuery()},n.onGroupByTagSecondLevelKeyChange=function(e){var t=n.props,a=t.query,i=t.onChange;a.group={key:e.currentTarget.value,label:e.currentTarget.value,type:"STRING"},a.groupbyTagSecondLevelKey=e.currentTarget.value,i(a),n.debouncedRunQuery()},n.state={entityTypes:[]},n}return r(t,e),t.prototype.componentDidMount=function(){var e,t,n=this,a=this.props,i=a.query,r=a.datasource,o=a.onChange;Be=!1;var l=(null===(e=i.entity)||void 0===e?void 0:e.key)||(null===(t=i.entity)||void 0===t?void 0:t.label),s=l&&"string"==typeof l&&l.includes("$");r.getEntityTypes().then((function(e){Be||(m.a.find(e,{key:null})||e.unshift({key:null,label:d}),n.setState({entityTypes:e}),i.entity&&(i.entity.key||i.entity.label)||(i.entity=e[0]),i.callToEntity||(i.callToEntity=Se[0]),i.applicationCallToEntity||(i.applicationCallToEntity=Se[0]),o(i),s&&i.entity&&n.props.onRunQuery())}))},t.prototype.componentWillUnmount=function(){Be=!0},t.prototype.render=function(){var e=this.props.query,t=e.entity;return e.entity&&e.entity.key&&(t=o(o({},e.entity),{value:e.entity.key,label:e.entity.label||e.entity.key})),le.a.createElement("div",{className:"gf-form"},le.a.createElement(ce,{stretch:!0},le.a.createElement(re.InlineFormLabel,{className:"query-keyword",width:14,tooltip:"Select your Entity Type or type variable like $entity_type"},"Entity types"),le.a.createElement(re.Select,{menuPlacement:"bottom",width:0,isSearchable:!0,value:t,options:this.state.entityTypes,onChange:this.onEntityChange,allowCustomValue:!0,placeholder:d})),le.a.createElement(ce,{stretch:!0},le.a.createElement(re.InlineFormLabel,{className:"query-keyword",width:7,tooltip:"Enter the Group by tag."},"Group by"),le.a.createElement(re.Input,{type:"text",value:e.groupbyTagSecondLevelKey,onChange:this.onGroupByTagSecondLevelKeyChange})))},t}(le.a.Component),Qe=[{key:"EQUALS",label:"equals",type:"STRING"},{key:"NOT_EQUAL",label:"does not equal",type:"STRING"},{key:"CONTAINS",label:"contains",type:"STRING"},{key:"NOT_CONTAIN",label:"does not contain",type:"STRING"},{key:"NOT_EMPTY",label:"is present",type:"STRING"},{key:"IS_EMPTY",label:"is not present",type:"STRING"},{key:"STARTS_WITH",label:"starts with",type:"STRING"},{key:"ENDS_WITH",label:"ends with",type:"STRING"},{key:"NOT_STARTS_WITH",label:"does not start with",type:"STRING"},{key:"NOT_ENDS_WITH",label:"does not end with",type:"STRING"},{key:"EQUALS",label:"=",type:"NUMBER"},{key:"NOT_EQUAL",label:"!=",type:"NUMBER"},{key:"LESS_THAN",label:"<",type:"NUMBER"},{key:"GREATER_THAN",label:">",type:"NUMBER"},{key:"IS_EMPTY",label:"is empty",type:"NUMBER"},{key:"NOT_EMPTY",label:"is not empty",type:"NUMBER"},{key:"LESS_OR_EQUAL_THAN",label:"less or equal than",type:"NUMBER"},{key:"GREATER_OR_EQUAL_THAN",label:"greater or equal than",type:"NUMBER"},{key:"EQUALS",label:"is",type:"BOOLEAN"},{key:"EQUALS",label:"equals",type:"KEY_VALUE_PAIR"},{key:"NOT_EQUAL",label:"does not equal",type:"KEY_VALUE_PAIR"},{key:"CONTAINS",label:"contains",type:"KEY_VALUE_PAIR"},{key:"NOT_CONTAIN",label:"does not contain",type:"KEY_VALUE_PAIR"},{key:"NOT_EMPTY",label:"is present",type:"KEY_VALUE_PAIR"},{key:"IS_EMPTY",label:"is not present",type:"KEY_VALUE_PAIR"},{key:"STARTS_WITH",label:"starts with",type:"KEY_VALUE_PAIR"},{key:"ENDS_WITH",label:"ends with",type:"KEY_VALUE_PAIR"},{key:"IS_BLANK",label:"is blank",type:"KEY_VALUE_PAIR"},{key:"NOT_BLANK",label:"is not blank",type:"KEY_VALUE_PAIR"},{key:"EQUALS",label:"equals",type:"STRING_SET"},{key:"NOT_EQUAL",label:"does not equal",type:"STRING_SET"},{key:"CONTAINS",label:"contains",type:"STRING_SET"},{key:"NOT_CONTAIN",label:"does not contain",type:"STRING_SET"},{key:"NOT_EMPTY",label:"is present",type:"STRING_SET"},{key:"IS_EMPTY",label:"is not present",type:"STRING_SET"}],We=function(e){function t(t){return e.call(this,t)||this}return r(t,e),t.prototype.render=function(){var e=this.props,t=e.label,n=e.tooltip,a=e.queryKeyword,i=e.disabled,r=e.labelWidth,s=void 0===r?14:r,u=e.inputWidth,c=void 0===u?30:u,p=l(e,["label","tooltip","queryKeyword","disabled","labelWidth","inputWidth"]);return le.a.createElement(ce,{disabled:i,stretch:!c},le.a.createElement(re.InlineFormLabel,{className:a?"query-keyword":"",width:s,tooltip:n},t),le.a.createElement(re.TextArea,o({rows:4,width:c,disabled:i},p)))},t}(le.a.Component),De=function(e){function t(t){var n=e.call(this,t)||this;return n.OPERATOR_STRING="STRING",n.OPERATOR_STRING_SET="STRING_SET",n.OPERATOR_NUMBER="NUMBER",n.OPERATOR_BOOLEAN="BOOLEAN",n.OPERATOR_KEY_VALUE="KEY_VALUE_PAIR",n.addTagFilter=function(){var e=n.props,t=e.query,a=e.onChange;t.filters.push({tag:t.group,entity:Se[0],operator:n.filterOperatorsOnType(t.group.type)[0],booleanValue:!1,numberValue:0,stringValue:"",isValid:!1}),a(t)},n.removeTagFilter=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.filters.splice(e,1),i(a),r()},n.onCallToEntityChange=function(e,t){n.props.query.filters[t].entity=e,n.validateChangeAndRun(t)},n.onOperatorChange=function(e,t){n.props.query.filters[t].operator=e,n.validateChangeAndRun(t)},n.debouncedRunQuery=m.a.debounce(n.props.onRunQuery,500),n.onTagFilterStringValueChange=function(e,t){n.props.query.filters[t].stringValue=e.currentTarget.value,n.validateChangeAndRun(t,!0)},n.onTagFilterNumberValueChange=function(e,t){n.props.query.filters[t].numberValue=e.currentTarget.valueAsNumber,n.validateChangeAndRun(t,!0)},n.onFilterChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery,o=e.currentTarget.value;if(n.setState({textareaValue:o}),a.tagFilterExpression=o,""!==o.trim())try{a.filters=JSON.parse(o)}catch(e){a.filters=[]}else a.filters=[];i(a),n.debouncedRunQuery=m.a.debounce(n.props.onRunQuery,500),r()},n.state={textareaValue:t.query.tagFilterExpression||""},n}return r(t,e),t.prototype.componentDidUpdate=function(e){var t=this.props.query;8===t.metricCategory.key&&t.tagFilterExpression!==e.query.tagFilterExpression&&t.tagFilterExpression!==this.state.textareaValue&&this.setState({textareaValue:t.tagFilterExpression||""})},t.prototype.filterOperatorsOnType=function(e){return m.a.filter(Qe,(function(t){return t.type===e}))},t.prototype.onGroupChange=function(e,t){var n=this.props.query;n.filters[t].tag=e;var a=this.filterOperatorsOnType(e.type);m.a.includes(a,n.filters[t].operator)||(n.filters[t].operator=a[0]),this.validateChangeAndRun(t)},t.prototype.canShowStringInput=function(e){return e.tag.type===this.OPERATOR_KEY_VALUE||!e.operator.key.includes("EMPTY")&&(e.tag.type===this.OPERATOR_STRING||e.tag.type===this.OPERATOR_STRING_SET)},t.prototype.canShowNumberInput=function(e){return e.tag.type===this.OPERATOR_NUMBER&&!e.operator.key.includes("EMPTY")},t.prototype.onTagFilterBooleanValueChange=function(e,t){this.props.query.filters[t].booleanValue=e.key,this.validateChangeAndRun(t)},t.prototype.validateChangeAndRun=function(e,t){void 0===t&&(t=!1);var n=this.props,a=n.query,i=n.onChange,r=n.onRunQuery;a.filters[e].tag?!a.filters[e].operator.key.includes("EMPTY")||this.OPERATOR_STRING!==a.filters[e].tag.type&&this.OPERATOR_STRING_SET!==a.filters[e].tag.type?this.OPERATOR_STRING!==a.filters[e].tag.type&&this.OPERATOR_STRING_SET!==a.filters[e].tag.type||!a.filters[e].stringValue?a.filters[e].operator.key.includes("EMPTY")&&this.OPERATOR_KEY_VALUE===a.filters[e].tag.type&&a.filters[e].stringValue||this.OPERATOR_KEY_VALUE===a.filters[e].tag.type&&a.filters[e].stringValue&&a.filters[e].stringValue.includes("=")?a.filters[e].isValid=!0:this.OPERATOR_NUMBER!==a.filters[e].tag.type||isNaN(a.filters[e].numberValue)?this.OPERATOR_BOOLEAN===a.filters[e].tag.type&&void 0!==a.filters[e].booleanValue&&(a.filters[e].isValid=!0):a.filters[e].isValid=!0:a.filters[e].isValid=!0:(a.filters[e].isValid=!0,a.filters[e].stringValue="",a.filters[e].numberValue=0,a.filters[e].booleanValue=!0):a.filters[e].isValid=!1,i(a),t?this.debouncedRunQuery():r()},t.prototype.render=function(){var e,t=this,n=this.props,a=n.query,i=n.groups;if(8===a.metricCategory.key)return le.a.createElement("div",{className:"gf-form"},le.a.createElement(We,{queryKeyword:!0,inputWidth:0,label:"TagFilterExpression",tooltip:"Enter the tagFilterExpression here ",placeholder:"[{Enter the filter JSON here}]",value:this.state.textareaValue,onChange:function(e){return t.onFilterChange(e)}}));var r=null===(e=a.filters)||void 0===e?void 0:e.map((function(e,n){return le.a.createElement("div",{key:"filter_"+n,className:"gf-form"},le.a.createElement(re.InlineFormLabel,{className:"query-keyword",width:14,tooltip:"Filter by tag."},n+1,". filter"),2===a.metricCategory.key&&le.a.createElement(Re,{value:a.filters[n].entity,onChange:function(e){return t.onCallToEntityChange(e,n)}}),le.a.createElement(re.Select,{menuPlacement:"bottom",width:30,isSearchable:!0,value:a.filters[n].tag,options:i,onChange:function(e){return t.onGroupChange(e,n)}}),le.a.createElement(re.Select,{menuPlacement:"bottom",width:20,isSearchable:!0,value:a.filters[n].operator,options:t.filterOperatorsOnType(a.filters[n].tag.type),onChange:function(e){return t.onOperatorChange(e,n)}}),t.canShowStringInput(a.filters[n])&&le.a.createElement(re.Input,{width:30,value:a.filters[n].stringValue,placeholder:"KEY_VALUE_PAIR"===a.filters[n].tag.type?"key=value":d,onChange:function(e){return t.onTagFilterStringValueChange(e,n)}}),t.canShowNumberInput(a.filters[n])&&le.a.createElement(re.Input,{type:"number",width:30,value:a.filters[n].numberValue,placeholder:d,onChange:function(e){return t.onTagFilterNumberValueChange(e,n)}}),"BOOLEAN"===a.filters[n].tag.type&&le.a.createElement(re.Select,{menuPlacement:"bottom",width:30,isSearchable:!0,onChange:function(e){return t.onTagFilterBooleanValueChange(e,n)},value:{key:""+a.filters[n].booleanValue,label:""+a.filters[n].booleanValue},options:[{key:!1,label:"false"},{key:!0,label:"true"}]}),le.a.createElement(re.Button,{variant:"secondary",onClick:function(){return t.removeTagFilter(n)}},"-"))}));return le.a.createElement("div",null,r,le.a.createElement("div",{className:"gf-form"},le.a.createElement(re.InlineFormLabel,{width:14,tooltip:"Add an additional tag filter."},"Add filter"),le.a.createElement(re.Button,{variant:"secondary",onClick:this.addTagFilter},"+"),le.a.createElement("div",{hidden:!a.showWarningCantShowAllResults},le.a.createElement(re.InlineFormLabel,{width:12,tooltip:"Add Filter to narrow down the data."},"⚠️ Can't show all results"))))},t}(le.a.Component),Ue=function(e){function t(t){return e.call(this,t)||this}return r(t,e),t.prototype.render=function(){var e=this.props,t=e.label,n=e.tooltip,a=e.searchable,i=void 0===a||a,r=e.disabled,s=e.queryKeyword,u=e.placeholder,c=void 0===u?"-":u,p=e.labelWidth,y=void 0===p?14:p,h=e.inputWidth,d=void 0===h?30:h,g=e.isClearable,f=void 0!==g&&g,m=l(e,["label","tooltip","searchable","disabled","queryKeyword","placeholder","labelWidth","inputWidth","isClearable"]);return le.a.createElement(ce,{disabled:r,stretch:!d},le.a.createElement(re.InlineFormLabel,{className:s?"query-keyword":"",width:y,tooltip:n},t),le.a.createElement(re.Select,o({menuPlacement:"bottom",disabled:r,width:d,isSearchable:i,isClearable:f,placeholder:c},m)))},t}(le.a.Component),Ge=function(e){function t(t){var n=e.call(this,t)||this;return n.onTypeChange=function(e){var t=n.props,a=t.query,i=t.datasource,r=t.onChange;"string"==typeof e?a.entityType={key:e,label:e}:e.value&&!e.key?a.entityType={key:e.value,label:e.label||e.value}:a.entityType=e,a.entity=a.entityType,a.selectedEntity={key:null,label:d},r(a),n.loadAvailableEntities(),a.entityType.key&&!a.entityType.key.includes("$")&&i.dataSourceInfrastructure.getMetricsCatalog(a.entityType,a.metricCategory.key).then((function(e){n.props.updateMetrics(e)}))},n.onEntityChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;if(!e||null===e)return a.selectedEntity={key:null,label:d},i(a),void r();"string"==typeof e?a.selectedEntity={key:e,label:e}:e&&e.value&&!e.key?a.selectedEntity={key:e.value,label:e.label||e.value}:a.selectedEntity=e,i(a),r()},n.loadAvailableEntities=function(){var e=n.props,t=e.query,a=e.datasource;if(t.entityType&&t.entityType.key){n.setState({loadingEntities:!0});var i=t.entityType.key;"string"!=typeof i||!i.startsWith("$")||(i=a.templateSrv.replace(i))!==t.entityType.key&&i?a.dataSourceInfrastructure.getInfrastructureEntities(i).then((function(e){n.setState({availableEntities:e,loadingEntities:!1})})).catch((function(e){n.setState({availableEntities:[],loadingEntities:!1})})):n.setState({availableEntities:[],loadingEntities:!1})}else n.setState({availableEntities:[],loadingEntities:!1})},n.state={availableEntities:[],loadingEntities:!1},n}return r(t,e),t.prototype.componentDidMount=function(){var e,t,n=this,a=this.props,i=a.query,r=a.datasource,o=(null===(e=i.entityType)||void 0===e?void 0:e.key)?i.entityType:(null===(t=i.entity)||void 0===t?void 0:t.key)?i.entity:void 0;!o||!o.key||i.entityType&&i.entityType.key||(i.entityType=o),!o||!o.key||i.entity&&i.entity.key||(i.entity=o),r.getEntityTypes().then((function(e){n.props.updateQueryTypes(e)})),i.entityType&&i.entityType.key&&this.loadAvailableEntities()},t.prototype.render=function(){var e=this.props,t=e.query,n=e.queryTypes,a=this.state,i=a.availableEntities,r=a.loadingEntities,l=t.entityType;t.entityType&&t.entityType.key&&(l=o(o({},t.entityType),{value:t.entityType.key,label:t.entityType.label||t.entityType.key}));var s=t.selectedEntity;return t.selectedEntity&&t.selectedEntity.key&&(s=o(o({},t.selectedEntity),{value:t.selectedEntity.key,label:t.selectedEntity.label||t.selectedEntity.key})),le.a.createElement("div",{className:"gf-form"},le.a.createElement(Ue,{queryKeyword:!0,inputWidth:0,label:"Type",tooltip:"Select an entity type or type variable like $entity_type",noOptionsMessage:"No types available",value:l,options:n,onChange:this.onTypeChange,allowCustomValue:!0,placeholder:d}),le.a.createElement(Ue,{queryKeyword:!0,labelWidth:12,label:"Entity Name",tooltip:"Optional: Select a specific entity to filter results or type variable like $entity. Leave empty to show all entities of the selected type.",noOptionsMessage:r?"Loading entities...":"No entities found",value:s,options:i,onChange:this.onEntityChange,allowCustomValue:!0,isClearable:!0,placeholder:d}))},t}(le.a.Component),Ke=!1,ze=function(e){function t(t){return e.call(this,t)||this}return r(t,e),t.prototype.componentDidMount=function(){var e,t,n=this,a=this.props,i=a.query,r=a.onChange,o=a.datasource;Ke=!1;var l=(null===(e=i.entityType)||void 0===e?void 0:e.key)?i.entityType:(null===(t=i.entity)||void 0===t?void 0:t.key)?i.entity:void 0;l&&l.key?(i.entityType&&i.entityType.key||(i.entityType=l),i.entity&&i.entity.key||(i.entity=l),"string"==typeof l.key&&l.key.startsWith("$")||o.dataSourceInfrastructure.getMetricsCatalog(l,i.metricCategory.key).then((function(e){Ke||n.props.updateMetrics(e)}))):i.metric&&i.metric.key||(i.metric={key:null,label:"-"});r(i)},t.prototype.componentWillUnmount=function(){Ke=!0},t.prototype.render=function(){var e=this.props,t=e.query,n=e.onRunQuery,a=e.onChange,i=e.updateMetrics,r=e.datasource,o=e.queryTypes,l=e.updateQueryTypes;return le.a.createElement(Ge,{query:t,onChange:a,queryTypes:o,onRunQuery:n,datasource:r,updateMetrics:i,updateQueryTypes:l})},t}(le.a.Component),je=function(e){function t(t){var n=e.call(this,t)||this;return n.onMetricChange=function(e){var t,a,i=n.props,r=i.query,o=i.onRunQuery,l=i.onChange;if("string"==typeof e)r.metric={key:e,label:e,aggregations:[]};else{e.value&&!e.key?r.metric={key:e.value,label:e.label||e.value,aggregations:e.aggregations||[]}:r.metric=e;var s=(null===(t=r.metric)||void 0===t?void 0:t.key)||(null===(a=r.metric)||void 0===a?void 0:a.value);!(s&&"string"==typeof s&&s.includes("$"))&&r.metric&&r.metric.key&&r.metric.aggregations&&r.metric.aggregations.length>0&&!m.a.includes(r.metric.aggregations,r.aggregation)&&(r.aggregation=r.metric.aggregations[0]),r.displayMaxMetricValue&&!n.canShowMaxMetricValue()&&(r.displayMaxMetricValue=!1)}r.allMetrics=[],r.showAllMetrics=!1,l(r),o()},n.onTimeIntervalChange=function(e){var t=n.props,a=t.query,i=t.onRunQuery,r=t.onChange;a.timeInterval="string"==typeof e?{key:e,label:e}:e,r(a),i()},n.onAggregationChange=function(e){var t=n.props,a=t.query,i=t.onRunQuery,r=t.onChange;a.aggregation="string"==typeof e?{key:e,label:e}:e,r(a),i()},n.onShowMaxValueChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;e&&e.currentTarget&&(a.displayMaxMetricValue=e.currentTarget.checked,i(a),r())},n.onShowAllMetricsChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;e&&e.currentTarget&&(a.showAllMetrics=e.currentTarget.checked,a.showAllMetrics&&(a.metric={key:null,label:"Displaying "+n.props.availableMetrics.length+" metrics"},a.allMetrics=n.props.availableMetrics),i(a),r())},n.state={possibleTimeIntervals:[],possibleAggregations:[]},n}return r(t,e),t.prototype.componentDidMount=function(){var e=this.props,t=e.query,n=e.datasource,a=e.onChange;t.timeInterval&&t.timeInterval.key&&n.availableTimeIntervals.find((function(e){return e.key===t.timeInterval.key}))||(t.timeInterval=n.getDefaultTimeInterval(t)),a(t)},t.prototype.canShowMaxMetricValue=function(){var e=this.props.query;return e.entityType&&"host"===e.entityType.key&&e.metric&&m.a.find(K,(function(t){return t.key===e.metric.key}))},t.prototype.canShowAggregation=function(){return this.props.query.metricCategory.key>=2},t.prototype.canSelectAggregation=function(){var e=this.props.query;return e.metric&&e.metric.aggregations&&e.metric.aggregations.length>1},t.prototype.render=function(){var e,t=this.props,n=t.query,a=t.datasource,i=n.metric;if(n.metric){var r=n.metric.key||n.metric.value;r&&"string"==typeof r&&r.includes("$")&&(i={label:n.metric.label||r,value:r,key:r,aggregations:n.metric.aggregations||[]})}return le.a.createElement("div",{className:"gf-form"},le.a.createElement(Ue,{queryKeyword:!0,disabled:n.useFreeTextMetrics,inputWidth:0,label:"Metric",tooltip:"Select the metric you wish to plot or type variable like $metric",value:i,noOptionsMessage:"No metrics found",options:this.props.availableMetrics,onChange:this.onMetricChange,allowCustomValue:!0,placeholder:"Please specify"}),0===n.metricCategory.key&&le.a.createElement(ye,{queryKeyword:!0,disabled:!this.canShowMaxMetricValue(),labelWidth:9,label:"Show max value",tooltip:"Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, memory.used and openFiles.used only.",value:n.displayMaxMetricValue,onChange:this.onShowMaxValueChange}),1===n.metricCategory.key&&le.a.createElement(ye,{queryKeyword:!0,disabled:!n.canShowAllMetrics,labelWidth:9,label:"Show all metrics",tooltip:"You have the option to show all metrics in the graph once the amount of possible, selectable metrics is between 1 and 5.",value:n.showAllMetrics,onChange:this.onShowAllMetricsChange}),this.canShowAggregation()&&le.a.createElement(Ue,{queryKeyword:!0,disabled:!this.canSelectAggregation(),labelWidth:7,inputWidth:12,label:"Aggregation",tooltip:"Select a metric aggregation or type variable like $aggregation",value:n.aggregation,options:(null===(e=n.metric)||void 0===e?void 0:e.aggregations)||[],onChange:this.onAggregationChange,allowCustomValue:!0,placeholder:"Please specify"}),8!==n.metricCategory.key&&le.a.createElement(Ue,{queryKeyword:!0,disabled:a.availableTimeIntervals.length<=1,labelWidth:5,inputWidth:12,label:"Rollup",tooltip:"Select the rollup value or type variable like $timeInterval",value:n.timeInterval,options:a.availableTimeIntervals,onChange:this.onTimeIntervalChange,allowCustomValue:!0,placeholder:"Please specify"}))},t}(le.a.Component),Ye=function(e){function t(t){var n=e.call(this,t)||this;return n.onFilterChange=function(e,t){var a=n.state.customFilters;a[t]=e.currentTarget.value,n.setState({customFilters:a}),n.props.onFilterChange(a)},n.addCustomFilter=function(){var e=n.state.customFilters;e.push(""),n.setState({customFilters:e});var t=n.props,a=t.query,i=t.onChange;a.customFilters=e,i(a)},n.removeCustomFilter=function(e){var t=n.state.customFilters;t.splice(e,1),n.setState({customFilters:t}),n.props.onFilterChange(t)},n.state={customFilters:[]},n}return r(t,e),t.prototype.componentDidMount=function(){var e=this.props.query;this.setState({customFilters:e.customFilters})},t.prototype.render=function(){var e=this,t=this.state.customFilters.map((function(t,n){return le.a.createElement("div",{className:"gf-form"},le.a.createElement(fe,{label:n+1+". filter metric select",value:e.state.customFilters[n],placeholder:d,onChange:function(t){return e.onFilterChange(t,n)},tooltip:"Type to suggest metrics."}),le.a.createElement(re.Button,{variant:"secondary",onClick:function(){return e.removeCustomFilter(n)}},"-"))}));return le.a.createElement("div",null,t,le.a.createElement("div",{className:"gf-form"},le.a.createElement(re.InlineFormLabel,{width:14,tooltip:"Add an additional metric select filter."},"Add filter metric select"),le.a.createElement(re.Button,{variant:"secondary",onClick:this.addCustomFilter},"+")))},t}(le.a.Component),He=[{key:"session_start",label:"Session Starts"},{key:"view_change",label:"View Transitions"},{key:"crash",label:"Crashes"},{key:"http_request",label:"HTTP Requests"},{key:"custom",label:"Custom Events"}],Je=!1,Xe=function(e){function t(t){var n=e.call(this,t)||this;return n.onMobileappChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.entity="string"==typeof e?{key:e,label:e}:e,i(a),r()},n.onBeaconTypeChange=function(e){var t,a=n.props,i=a.query,r=a.onChange,o=a.filterMetricsOnType;i.entityType="string"==typeof e?{key:e,label:e}:e,r(i),"string"==typeof e||(null===(t=i.entityType)||void 0===t?void 0:t.key)&&i.entityType.key.includes("$")||o(i.entityType.key)},n.onGroupChange=function(e){var t,a=n.props,i=a.query,r=a.onChange,o=a.onRunQuery;(i.group="string"==typeof e?{key:e,label:e}:e,i.group&&9===i.metricCategory.key)&&("string"==typeof e||(null===(t=i.group)||void 0===t?void 0:t.key)&&i.group.key.includes("$")||(i.showGroupBySecondLevel="KEY_VALUE_PAIR"===i.group.type));i.showGroupBySecondLevel||(i.groupbyTagSecondLevelKey=""),r(i),o()},n.debouncedRunQuery=m.a.debounce(n.props.onRunQuery,500),n.onGroupByTagSecondLevelKeyChange=function(e){var t=n.props,a=t.query,i=t.onChange;a.groupbyTagSecondLevelKey=e.currentTarget.value,i(a),n.debouncedRunQuery()},n.state={mobileapps:[]},n}return r(t,e),t.prototype.componentDidMount=function(){var e,t,n,a,i,r,o=this,l=this.props,s=l.query,u=l.datasource,c=l.onChange;Je=!1;var p=(null===(e=s.entity)||void 0===e?void 0:e.key)||(null===(t=s.entity)||void 0===t?void 0:t.label),y=p&&"string"==typeof p&&p.includes("$"),h=(null===(n=s.entityType)||void 0===n?void 0:n.key)||(null===(a=s.entityType)||void 0===a?void 0:a.label),d=h&&"string"==typeof h&&h.includes("$"),g=(null===(i=s.group)||void 0===i?void 0:i.key)||(null===(r=s.group)||void 0===r?void 0:r.label),f=g&&"string"==typeof g&&g.includes("$");u.fetchMobileapp().then((function(e){if(!Je){if(m.a.find(e,{key:null})||e.unshift({key:null,label:"-- No Mobile App Filter --"}),y&&s.entity){var t={key:p,label:p,value:p};m.a.find(e,["key",p])||e.splice(1,0,t)}o.setState({mobileapps:e});var n=!1;s.entity&&(s.entity.key||s.entity.label)&&(y||m.a.find(e,["key",p]))?y&&s.entity&&!s.entity.key&&s.entity.label&&(s.entity.key=s.entity.label,n=!0):(s.entity=e[0],n=!0),n&&c(s),y&&s.entity&&o.props.onRunQuery()}})),u.dataSourceMobileapp.getMobileappTags().then((function(e){if(!Je)if(o.props.updateGroups(m.a.sortBy(e,"key")),s.group&&(s.group.key||s.group.value||s.group.label))if(f){var t=s.group.key||s.group.value||s.group.label;s.group.key||(s.group.key=t),s.group.value||(s.group.value=t),s.group.label||(s.group.label=t),c(s)}else s.group&&!s.group.key&&(s.group.value||s.group.label)&&(s.group.key=s.group.value||s.group.label,c(s));else s.group=m.a.find(e,["key","beacon.page.name"]),c(s)})),s.entityType&&(s.entityType.key||s.entityType.label)?d&&s.entityType&&!s.entityType.key&&s.entityType.label&&(s.entityType.key=s.entityType.label,c(s)):(s.entityType=He[0],c(s)),u.dataSourceMobileapp.getMobileappMetricsCatalog().then((function(e){Je||(o.props.updateMetrics(e),d||o.props.filterMetricsOnType(s.entityType.key))}))},t.prototype.componentWillUnmount=function(){Je=!0},t.prototype.render=function(){var e=this.props,t=e.query,n=e.groups,a=t.entity;t.entity&&t.entity.key&&(a=o(o({},t.entity),{value:t.entity.key,label:t.entity.label||t.entity.key}));var i=t.entityType;t.entityType&&t.entityType.key&&(i=o(o({},t.entityType),{value:t.entityType.key,label:t.entityType.label||t.entityType.key}));var r=t.group;return t.group&&t.group.key&&(r=o(o({},t.group),{value:t.group.key,label:t.group.label||t.group.key})),le.a.createElement("div",{className:"gf-form"},le.a.createElement(Ue,{queryKeyword:!0,inputWidth:0,label:"Mobile-app",tooltip:"Select your mobile app or type variable like $mobileApp",noOptionsMessage:"No mobile apps found",value:a,options:this.state.mobileapps,onChange:this.onMobileappChange,allowCustomValue:!0,placeholder:d}),le.a.createElement(Ue,{queryKeyword:!0,labelWidth:6,label:"Type",tooltip:"Select a beacon type or type variable like $beaconType",value:i,options:He,onChange:this.onBeaconTypeChange,allowCustomValue:!0,placeholder:d}),le.a.createElement(Ue,{queryKeyword:!0,labelWidth:6,label:"Group by",tooltip:"Group by tag or type variable like $groupBy",value:r,options:n,onChange:this.onGroupChange,allowCustomValue:!0,placeholder:d}),le.a.createElement("div",{style:t.showGroupBySecondLevel?{}:{display:"none"}},le.a.createElement(re.Input,{value:t.groupbyTagSecondLevelKey,onChange:this.onGroupByTagSecondLevelKeyChange})))},t}(le.a.Component),Ze=[{key:"SLI",label:"SLI"},{key:"Remaining Error Budget",label:"Remaining Error Budget"},{key:"Timeseries",label:"Timeseries"}],et=!1,tt=function(e){function t(t){var n=e.call(this,t)||this;return n.debouncedRunQuery=m.a.debounce(n.props.onRunQuery,500),n.onSloChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.sloReport="string"==typeof e?{key:e,label:e}:e,i(a),r()},n.onSloValueChange=function(e){var t=n.props.query;t.sloValue=e.currentTarget.value,n.isValid(t.sloValue)&&n.debouncedRunQuery()},n.onSloSpecificChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.sloSpecific=e,i(a),r()},n.state={sliReports:[],isValidSlo:!0},n}return r(t,e),t.prototype.componentDidMount=function(){et=!1,this.loadSloReports(),this.isValid(this.props.query.sloValue)},t.prototype.componentWillUnmount=function(){et=!0},t.prototype.isValid=function(e){var t=!e||+e>=0&&+e<=.9999;return this.setState({isValidSlo:t}),t},t.prototype.shouldComponentUpdate=function(e,t,n){return 7===e.query.metricCategory.key},t.prototype.loadSloReports=function(){var e=this,t=this.props.query;this.props.datasource.getSliReports().then((function(n){et||(e.setState({sliReports:n}),!t.sloReport&&n.length>=1&&(t.sloReport=n[0]))}))},t.prototype.render=function(){var e=this.props.query;return le.a.createElement("div",{className:"gf-form"},le.a.createElement(Ue,{queryKeyword:!0,inputWidth:0,label:"Configured SLI",tooltip:"SLI configuration used to compute error budget and SLI values or type variable like $sloReport",noOptionsMessage:"No configured SLI found",value:e.sloReport,options:this.state.sliReports,onChange:this.onSloChange,allowCustomValue:!0,placeholder:d}),le.a.createElement(fe,{queryKeyword:!0,labelWidth:7,inputWidth:0,label:"SLO",tooltip:"Type in your desired SLO threshold from 0 to 0.9999",value:e.sloValue,invalid:!this.state.isValidSlo,placeholder:"0.99",onChange:this.onSloValueChange}),le.a.createElement(Ue,{queryKeyword:!0,labelWidth:7,inputWidth:0,label:"Value type",tooltip:le.a.createElement("div",null,"Select your specific SLO information:",le.a.createElement("ul",null,le.a.createElement("li",null,"'SLI' requires Gauge visualization"),le.a.createElement("li",null,"'Remaining Error Budget' requires Singlestat visualization"),le.a.createElement("li",null,"'Timeseries' requires Bars draw mode on Graph visualization"))),value:e.sloSpecific,options:Ze,onChange:this.onSloSpecificChange,placeholder:d}))},t}(le.a.Component),nt=[{key:"Status",label:"Status"},{key:"Service Level Target",label:"Service Level Target"},{key:"Total Error Budget",label:"Total Error Budget"},{key:"Remaining Error Budget",label:"Remaining Error Budget"},{key:"Spended Error Budget",label:"Spended Error Budget"},{key:"Timeseries",label:"Violation Distribution"},{key:"Error Chart",label:"Error Chart"},{key:"Error Accumulation Chart",label:"Error Accumulation Chart"},{key:"Error Budget Remain Chart",label:"Error Budget remain Chart"}],at=!1,it=function(e){function t(t){var n=e.call(this,t)||this;return n.debouncedRunQuery=m.a.debounce(n.props.onRunQuery,500),n.onSlo2Change=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.slo2Report="string"==typeof e?{key:e,label:e}:e,i(a),r()},n.onSloSpecificChange=function(e){var t=n.props,a=t.query,i=t.onRunQuery,r=t.onChange;a.slo2Specific=e,r(o({},a)),i()},n.state={sloReports:[],isValidSlo:!0},n}return r(t,e),t.prototype.componentDidMount=function(){at=!1,this.loadSloReports()},t.prototype.componentWillUnmount=function(){at=!0},t.prototype.shouldComponentUpdate=function(e,t,n){return 10===e.query.metricCategory.key},t.prototype.loadSloReports=function(){var e,t,n=this,a=this.props.query,i=(null===(e=a.slo2Report)||void 0===e?void 0:e.key)||(null===(t=a.slo2Report)||void 0===t?void 0:t.label),r=i&&"string"==typeof i&&i.includes("$");this.props.datasource.getSloReports().then((function(e){at||(n.setState({sloReports:e}),r&&a.slo2Report&&n.props.onRunQuery())}))},t.prototype.render=function(){var e=this.props.query,t=e.slo2Report;return e.slo2Report&&e.slo2Report.key&&(t=o(o({},e.slo2Report),{value:e.slo2Report.key,label:e.slo2Report.label||e.slo2Report.key})),le.a.createElement("div",{className:"gf-form"},le.a.createElement(Ue,{queryKeyword:!0,inputWidth:0,label:"SLO Configuration name",tooltip:"SLI configuration used to compute SLI Report or type variable like $slo2Report",noOptionsMessage:"No configured SLO found",value:t,options:this.state.sloReports,onChange:this.onSlo2Change,allowCustomValue:!0,placeholder:d}),le.a.createElement(Ue,{queryKeyword:!0,labelWidth:7,inputWidth:0,label:"Value type",tooltip:le.a.createElement("div",null,"Select your specific SLO information:",le.a.createElement("ul",null,le.a.createElement("li",null,"'Status' requires Gauge visualization"),le.a.createElement("li",null,"'Service Level Target' requires Gauge visualization"),le.a.createElement("li",null,"'Total Error Budget' requires Singlestat visualization"),le.a.createElement("li",null,"'Remaining Error Budget' requires Singlestat visualization"),le.a.createElement("li",null,"'Spended Error Budget' requires Singlestat visualization"),le.a.createElement("li",null,"'Violation' requires Bars draw mode on Graph visualization"),le.a.createElement("li",null,"'Error Chart' requires Bars draw mode on Graph visualization"),le.a.createElement("li",null,"'Error Accumulation Chart' requires Bars draw mode on Graph visualization"),le.a.createElement("li",null,"'Error Budget Chart' requires Bars draw mode on Graph visualization"))),value:e.slo2Specific,options:nt,onChange:this.onSloSpecificChange,placeholder:d}))},t}(le.a.Component),rt=[{key:"pageLoad",label:"Page Loads"},{key:"page_change",label:"Page Transitions"},{key:"resourceLoad",label:"Resources"},{key:"httpRequest",label:"HTTP Requests"},{key:"error",label:"Errors"},{key:"custom",label:"Custom Events"}],ot=!1,lt=function(e){function t(t){var n=e.call(this,t)||this;return n.onWebsiteChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.entity="string"==typeof e?{key:e,label:e}:e,i(a),r()},n.onBeaconTypeChange=function(e){var t,a=n.props,i=a.query,r=a.onChange,o=a.filterMetricsOnType,l=a.datasource;i.entityType="string"==typeof e?{key:e,label:e}:e,r(i),"string"==typeof e||(null===(t=i.entityType)||void 0===t?void 0:t.key)&&i.entityType.key.includes("$")||(o(i.entityType.key),i.metric&&i.metric.key&&l.dataSourceWebsite.getWebsiteMetricsCatalog().then((function(e){var t,n=e.find((function(e){return e.key===i.metric.key}));if(n&&n.aggregations&&n.aggregations.length>0){var a=null===(t=i.aggregation)||void 0===t?void 0:t.key;n.aggregations.some((function(e){return(e.key||e)===a}))||(i.aggregation=n.aggregations[0],r(i))}})))},n.onGroupChange=function(e){var t,a=n.props,i=a.query,r=a.onChange,o=a.onRunQuery;(i.group="string"==typeof e?{key:e,label:e}:e,i.group&&3===i.metricCategory.key)&&("string"==typeof e||(null===(t=i.group)||void 0===t?void 0:t.key)&&i.group.key.includes("$")||(i.showGroupBySecondLevel="KEY_VALUE_PAIR"===i.group.type));i.showGroupBySecondLevel||(i.groupbyTagSecondLevelKey=""),r(i),o()},n.debouncedRunQuery=m.a.debounce(n.props.onRunQuery,500),n.onGroupByTagSecondLevelKeyChange=function(e){var t=n.props,a=t.query,i=t.onChange;a.groupbyTagSecondLevelKey=e.currentTarget.value,i(a),n.debouncedRunQuery()},n.state={websites:[]},n}return r(t,e),t.prototype.componentDidMount=function(){var e,t,n,a,i,r,o=this,l=this.props,s=l.query,u=l.datasource,c=l.onChange;ot=!1;var p=(null===(e=s.entity)||void 0===e?void 0:e.key)||(null===(t=s.entity)||void 0===t?void 0:t.label),y=p&&"string"==typeof p&&p.includes("$"),h=(null===(n=s.entityType)||void 0===n?void 0:n.key)||(null===(a=s.entityType)||void 0===a?void 0:a.label),d=h&&"string"==typeof h&&h.includes("$"),g=(null===(i=s.group)||void 0===i?void 0:i.key)||(null===(r=s.group)||void 0===r?void 0:r.label),f=g&&"string"==typeof g&&g.includes("$");u.fetchWebsites().then((function(e){if(!ot){if(m.a.find(e,{key:null})||e.unshift({key:null,label:"-- No Website Filter --"}),y&&s.entity){var t={key:p,label:p,value:p};m.a.find(e,["key",p])||e.splice(1,0,t)}o.setState({websites:e});var n=!1;s.entity&&(s.entity.key||s.entity.label)&&(y||m.a.find(e,["key",p]))?y&&s.entity&&!s.entity.key&&s.entity.label&&(s.entity.key=s.entity.label,n=!0):(s.entity=e[0],n=!0),n&&c(s),y&&s.entity&&o.props.onRunQuery()}})),u.dataSourceWebsite.getWebsiteTags().then((function(e){ot||(o.props.updateGroups(m.a.sortBy(e,"key")),s.group&&s.group.key?f&&s.group&&!s.group.key&&s.group.label&&(s.group.key=s.group.label,c(s)):(s.group=m.a.find(e,["key","beacon.page.name"]),c(s)))})),s.entityType&&(s.entityType.key||s.entityType.label)?d&&s.entityType&&!s.entityType.key&&s.entityType.label&&(s.entityType.key=s.entityType.label,c(s)):(s.entityType=rt[0],c(s)),u.dataSourceWebsite.getWebsiteMetricsCatalog().then((function(e){var t;if(!ot&&(o.props.updateMetrics(e),d||o.props.filterMetricsOnType(s.entityType.key),s.metric&&s.metric.key&&!y)){var n=e.find((function(e){return e.key===s.metric.key}));if(n&&n.aggregations&&n.aggregations.length>0){var a=null===(t=s.aggregation)||void 0===t?void 0:t.key;n.aggregations.some((function(e){return(e.key||e)===a}))||(s.aggregation=n.aggregations[0],c(s))}}}))},t.prototype.componentWillUnmount=function(){ot=!0},t.prototype.render=function(){var e=this.props,t=e.query,n=e.groups,a=t.entity;t.entity&&t.entity.key&&(a=o(o({},t.entity),{value:t.entity.key,label:t.entity.label||t.entity.key}));var i=t.entityType;t.entityType&&t.entityType.key&&(i=o(o({},t.entityType),{value:t.entityType.key,label:t.entityType.label||t.entityType.key}));var r=t.group;return t.group&&t.group.key&&(r=o(o({},t.group),{value:t.group.key,label:t.group.label||t.group.key})),le.a.createElement("div",{className:"gf-form"},le.a.createElement(Ue,{queryKeyword:!0,inputWidth:0,labelWidth:8,label:"Website",tooltip:"Select your website or type variable like $website",noOptionsMessage:"No websites found",value:a,options:this.state.websites,onChange:this.onWebsiteChange,allowCustomValue:!0,placeholder:d}),le.a.createElement(Ue,{queryKeyword:!0,inputWidth:0,labelWidth:8,label:"Type",tooltip:"Select a beacon type or type variable like $beaconType",value:i,options:rt,onChange:this.onBeaconTypeChange,allowCustomValue:!0,placeholder:d}),le.a.createElement(Ue,{queryKeyword:!0,inputWidth:0,labelWidth:8,label:"Group by",tooltip:"Group by tag or type variable like $groupBy",value:r,options:n,onChange:this.onGroupChange,allowCustomValue:!0,placeholder:d}),le.a.createElement("div",{className:"gf-form-inline",style:t.showGroupBySecondLevel?{}:{display:"none"}},le.a.createElement("div",{className:"gf-form"},le.a.createElement("label",{className:"gf-form-label width-8"},"Key"),le.a.createElement(re.Input,{className:"gf-form-input",value:t.groupbyTagSecondLevelKey,onChange:this.onGroupByTagSecondLevelKeyChange}))))},t}(le.a.Component),st=[{label:d,value:""},{label:"Metric",value:"metric"},{label:"Results",value:"results"}],ut=!1,ct=function(e){function t(t){var n=e.call(this,t)||this;return n.fetchSyntheticTests=function(){return s(n,void 0,void 0,(function(){var e,t,n,a,i,r,o,l=this;return u(this,(function(s){switch(s.label){case 0:e=this.props,t=e.datasource,n=e.query,a=e.onChange,s.label=1;case 1:return s.trys.push([1,3,,4]),[4,t.dataSourceSyntheticMonitoring.getSyntheticMonitoringtests()];case 2:return i=s.sent(),ut||(o=p([r={label:d,value:""}],c(i.map((function(e){return{label:e.key,value:e.label,test:e}}))),!1),this.setState({tests:o}),n.entity&&n.entity.value||(n.entity=r,n.testId="",a(n)),n.testType&&n.testType.value||(n.testType={label:d,value:""},a(n))),[3,4];case 3:return s.sent(),[3,4];case 4:return t.dataSourceSyntheticMonitoring.getSyntheticMonitoringMetricsCatalog().then((function(e){ut||l.props.updateMetrics(e)})),[2]}}))}))},n.onTestChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;if("string"==typeof e){var o=n.state.tests.find((function(t){return t.value===e||t.label===e}));o&&o.test?(a.entity={value:e,label:e},a.testId=o.test.testId):(a.entity={value:e,label:e},a.testId=e)}else a.entity=e,e.test?a.testId=e.test.testId:a.testId="";i(a),r()},n.onTestTypeChange=function(e){return s(n,void 0,void 0,(function(){var t,n,a,i,r,o,l;return u(this,(function(s){return t=this.props,n=t.query,a=t.onChange,i=t.onRunQuery,r=null===(l=n.testType)||void 0===l?void 0:l.value,n.testType="string"==typeof e?{value:e,label:e}:e,o="string"==typeof e?e:e.value,("metric"===r&&"results"===o||"results"===r&&"metric"===o)&&(n.entity={label:d,value:""},n.testId=""),a(n),i(),[2]}))}))},n.onMetricChange=function(e){var t=n.props,a=t.query,i=t.onChange,r=t.onRunQuery;a.metric="string"==typeof e?{key:e,value:e,label:e}:e,i(a),r()},n.state={tests:[]},n}return r(t,e),t.prototype.componentDidMount=function(){ut=!1,this.fetchSyntheticTests()},t.prototype.componentWillUnmount=function(){ut=!0},t.prototype.render=function(){var e=this.props.query;return le.a.createElement("div",null,le.a.createElement("div",{className:"gf-form"},le.a.createElement(Ue,{queryKeyword:!0,inputWidth:0,label:"Synthetic Test",tooltip:"Select your test",noOptionsMessage:"No synthetic tests found",value:e.entity,options:this.state.tests,onChange:this.onTestChange,allowCustomValue:!0}),le.a.createElement(Ue,{queryKeyword:!0,inputWidth:0,label:"Type",tooltip:"Select your test type",noOptionsMessage:"No synthetic test type found",value:e.testType,options:st,onChange:this.onTestTypeChange,allowCustomValue:!0})))},t}(le.a.Component),pt=function(e){function t(t){var n,a,i,r,l=e.call(this,t)||this;l.onCategoryChange=function(e){l.query.metricCategory===e||(l.selectionReset(),l.query.metricCategory=e,l.query.timeInterval=l.props.datasource.getDefaultTimeInterval(l.query),l.changeAndRun())},l.changeAndRun=function(){l.props.onChange(l.query),l.props.onRunQuery()},l.updateMetrics=function(e){l.setState({availableMetrics:m.a.sortBy(e,"key"),allMetrics:m.a.sortBy(e,"key")},(function(){if(l.query.metric&&l.query.metric.key||l.query.showAllMetrics){var t=m.a.find(e,(function(e){return e.key===l.query.metric.key}));t?l.query.metric=t:l.query.metric.key&&!l.query.metric.key.toString().startsWith("$")&&(l.query.metric={key:null})}1===l.query.metricCategory.key?l.onMetricsFilter(l.query.customFilters):l.query.metric&&l.query.metric.key||l.setMetricPlaceholder(e.length),l.changeAndRun()}))},l.updateQueryTypes=function(e){l.setState({queryTypes:e})},l.updateGroups=function(e){l.setState({groups:e})},l.onMetricsFilter=function(e){var t,n=[];n=e&&0!==e.length?l.applyFilterToMetricList(e):l.state.allMetrics,l.query.canShowAllMetrics=l.isAbleToShowAllMetrics(n),l.query.canShowAllMetrics||(l.query.showAllMetrics=!1),l.query.customFilters=e;var a=(null===(t=l.query.metric)||void 0===t?void 0:t.key)&&l.query.metric.key.toString().startsWith("$");l.query.metric&&l.query.metric.key||a||l.setMetricPlaceholder(n.length),l.setState((function(e){return o(o({},e),{availableMetrics:n})})),l.props.onChange(l.query),l.checkMetricAndRefresh()};var s={metricCategory:te[0],timeShiftIsValid:!0,customFilters:[]};l.query=Object.assign(s,t.query),ae(l.query);var u=(null===(n=l.query.metric)||void 0===n?void 0:n.key)||(null===(a=l.query.metric)||void 0===a?void 0:a.value),c=u&&u.includes("$")?t.datasource.templateSrv.replace(u):"",p=(null===(i=l.query.group)||void 0===i?void 0:i.key)||(null===(r=l.query.group)||void 0===r?void 0:r.value),y=p&&p.includes("$")?t.datasource.templateSrv.replace(p):"";return l.state={groups:[],allMetrics:[],queryTypes:[],availableMetrics:[],selectedWindowSize:t.range?k(t.range).windowSize:216e5,lastInterpolatedQuery:"",lastInterpolatedEntityType:"",lastInterpolatedEntity:"",lastInterpolatedMetric:c,lastInterpolatedGroup:y,lastInterpolatedMobileAppType:"",lastInterpolatedWebsiteType:""},l.filterMetricsOnType=l.filterMetricsOnType.bind(l),l.allowInfraExplore=t.datasource.options.allowInfraExplore,t.onChange(l.query),l}return r(t,e),t.prototype.componentDidMount=function(){var e,t,n=this,a=this.props.datasource;8===this.query.metricCategory.key&&(((null===(e=this.query.entity)||void 0===e?void 0:e.key)||(null===(t=this.query.entity)||void 0===t?void 0:t.value))&&a.fetchMetricsForEntityType(this.query).then((function(e){n.updateMetrics(e)})).catch((function(e){})))},t.prototype.componentDidUpdate=function(e,t,n){var a,i,r,l,s,u,c,p,y,h,d,g,f,m,v,b,S,T=this,C=this.props,E=C.onChange,A=C.range,w=C.datasource,I=C.onRunQuery;if((A&&this.state.selectedWindowSize!==k(A).windowSize&&(this.setState(o(o({},this.state),{selectedWindowSize:k(A).windowSize})),w.setPossibleTimeIntervals(this.query),w.availableTimeIntervals.find((function(e){return e.key===T.query.timeInterval.key}))||(this.query.timeInterval=w.getDefaultTimeInterval(this.query),E(this.query))),(null===(a=this.query.entityType)||void 0===a?void 0:a.label)&&this.query.entityType.label.includes("$")&&(0===this.query.metricCategory.key||1===this.query.metricCategory.key))&&((N=w.templateSrv.replace(this.query.entityType.label))!==this.state.lastInterpolatedEntityType&&N)){this.setState(o(o({},this.state),{lastInterpolatedEntityType:N}));var M=w.interpolateVariables(this.query);w.dataSourceInfrastructure.getMetricsCatalog(M.entityType,this.query.metricCategory.key).then((function(e){T.updateMetrics(e)}))}var R=(null===(i=this.query.entity)||void 0===i?void 0:i.key)||(null===(r=this.query.entity)||void 0===r?void 0:r.value);if(R&&R.includes("$")&&8===this.query.metricCategory.key&&((O=w.templateSrv.replace(R))!==this.state.lastInterpolatedEntity&&O)){this.setState(o(o({},this.state),{lastInterpolatedEntity:O})),(null===(l=this.query.entity)||void 0===l?void 0:l.value)&&!(null===(s=this.query.entity)||void 0===s?void 0:s.key)&&(this.query.entity.key=this.query.entity.value);M=w.interpolateVariables(this.query);w.fetchMetricsForEntityType(M).then((function(e){T.updateMetrics(e)}))}var q=(null===(u=this.query.entity)||void 0===u?void 0:u.key)||(null===(c=this.query.entity)||void 0===c?void 0:c.value);q&&q.includes("$")&&3===this.query.metricCategory.key&&((O=w.templateSrv.replace(q))!==this.state.lastInterpolatedEntity&&O&&(this.setState(o(o({},this.state),{lastInterpolatedEntity:O})),I()));var O,x=(null===(p=this.query.entity)||void 0===p?void 0:p.key)||(null===(y=this.query.entity)||void 0===y?void 0:y.value);x&&x.includes("$")&&9===this.query.metricCategory.key&&((O=w.templateSrv.replace(x))!==this.state.lastInterpolatedEntity&&O&&(this.setState(o(o({},this.state),{lastInterpolatedEntity:O})),I()));var L=(null===(h=this.query.entityType)||void 0===h?void 0:h.key)||(null===(d=this.query.entityType)||void 0===d?void 0:d.value);if(L&&L.includes("$")&&9===this.query.metricCategory.key&&((N=w.templateSrv.replace(L))!==this.state.lastInterpolatedMobileAppType&&N)){this.setState(o(o({},this.state),{lastInterpolatedMobileAppType:N}));var F=w.interpolateVariables(this.query);w.dataSourceMobileapp.getMobileappMetricsCatalog().then((function(e){var t=e.filter((function(e){return e.beaconTypes&&e.beaconTypes.includes(F.entityType.key)}));T.updateMetrics(t.length>0?t:e),I()}))}var N,V=(null===(g=this.query.entityType)||void 0===g?void 0:g.key)||(null===(f=this.query.entityType)||void 0===f?void 0:f.value);if(V&&V.includes("$")&&3===this.query.metricCategory.key&&((N=w.templateSrv.replace(V))!==this.state.lastInterpolatedWebsiteType&&N)){this.setState(o(o({},this.state),{lastInterpolatedWebsiteType:N}));var _=w.interpolateVariables(this.query);w.dataSourceWebsite.getWebsiteMetricsCatalog().then((function(e){var t=e.filter((function(e){return e.beaconTypes&&e.beaconTypes.includes(_.entityType.key)}));T.updateMetrics(t.length>0?t:e),I()}))}var P=(null===(m=this.query.metric)||void 0===m?void 0:m.key)||(null===(v=this.query.metric)||void 0===v?void 0:v.value);if(P&&P.includes("$")){var B=w.templateSrv.replace(P);B!==this.state.lastInterpolatedMetric&&B&&(this.setState(o(o({},this.state),{lastInterpolatedMetric:B})),I())}var $=(null===(b=this.query.group)||void 0===b?void 0:b.key)||(null===(S=this.query.group)||void 0===S?void 0:S.value);if($&&$.includes("$")&&(2===this.query.metricCategory.key||3===this.query.metricCategory.key||9===this.query.metricCategory.key)){var Q=w.templateSrv.replace($);Q!==this.state.lastInterpolatedGroup&&Q&&(this.setState(o(o({},this.state),{lastInterpolatedGroup:Q})),I())}},t.prototype.setMetricPlaceholder=function(e){1===this.query.metricCategory.key?this.query.metric={key:null,label:"Please select ("+e+"/"+this.state.allMetrics.length+")"}:this.query.metric={key:null,label:"Please select ("+e+")"},this.props.onChange(this.query)},t.prototype.applyFilterToMetricList=function(e){var t=this.state.allMetrics;return m.a.forEach(e,(function(e){""!==e&&(t=m.a.sortBy(m.a.filter(t,(function(t){return t.key.toLowerCase().includes(e.toLowerCase())})),"key"))})),t},t.prototype.filterMetricsOnType=function(e){var t=this.state.allMetrics.filter((function(t){return t.beaconTypes.includes(e)}));this.setState({availableMetrics:t}),this.query.metric&&this.query.metric.key&&this.query.metric.beaconTypes.includes(e)||this.setMetricPlaceholder(t.length),this.changeAndRun()},t.prototype.isAbleToShowAllMetrics=function(e){return 1===this.query.metricCategory.key&&e.length>0&&e.length<=5},t.prototype.checkMetricAndRefresh=function(){this.query.metric&&this.query.metric.key&&!m.a.includes(m.a.map(this.state.availableMetrics,(function(e){return e.key})),this.query.metric.key)&&(this.query.metric.key.toString().startsWith("$")||this.resetMetricSelection());this.changeAndRun()},t.prototype.selectionReset=function(){var e=this.props.query;e.metricCategory.key>1&&(e.entityQuery=""),this.setState({availableMetrics:[],allMetrics:[],groups:[]}),this.resetEntityTypeSelection(),this.resetEntitySelection(),this.resetMetricSelection()},t.prototype.resetEntityTypeSelection=function(){var e=this.props.query;e.entityType={key:null,label:"-"},e.customFilters=[]},t.prototype.resetEntitySelection=function(){var e=this.props.query;e.entity={},e.group={},e.showGroupBySecondLevel=!1,e.groupbyTagSecondLevelKey="",e.aggregateGraphs=!1,e.aggregationFunction=de[0],e.hideOriginalGraphs=!1,e.filters=[],e.showWarningCantShowAllResults=!1,e.showAllMetrics=!1,e.canShowAllMetrics=!1,e.displayMaxMetricValue=!1,e.applicationCallToEntity="",e.callToEntity="",e.tagFilterExpression="",this.resetServices(),this.resetEndpoints(),this.resetSLO(),this.resetSLO2()},t.prototype.resetMetricSelection=function(){var e=this.props.query;e.metric={},e.timeShift="",e.timeShiftIsValid=!0,e.showWarningCantShowAllResults=!1,e.showAllMetrics=!1,e.labelFormat="",e.freeTextMetrics="",e.useFreeTextMetrics=!1},t.prototype.resetServices=function(){this.props.query.service={}},t.prototype.resetEndpoints=function(){this.props.query.endpoint={}},t.prototype.resetSLO=function(){var e=this.props.query;e.sloValue="",e.sloReport={}},t.prototype.resetSLO2=function(){var e=this.props.query;e.sloValue="",e.sloReport={}},t.prototype.render=function(){var e=this.query,t=this.onCategoryChange,n=this.allowInfraExplore?te:te.filter((function(e){return 8!==e.key}));return le.a.createElement("div",{className:"gf-form-group"},le.a.createElement("div",{className:"gf-form"},le.a.createElement(Ue,{queryKeyword:!0,inputWidth:0,label:"Category",tooltip:"Select a metric category.",value:e.metricCategory,options:n,onChange:t})),0===e.metricCategory.key&&le.a.createElement(ze,{query:e,queryTypes:this.state.queryTypes,datasource:this.props.datasource,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,updateQueryTypes:this.updateQueryTypes}),1===e.metricCategory.key&&le.a.createElement(ze,{query:e,queryTypes:this.state.queryTypes,datasource:this.props.datasource,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,updateQueryTypes:this.updateQueryTypes}),8===e.metricCategory.key&&le.a.createElement($e,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,groups:this.state.groups,updateGroups:this.updateGroups,datasource:this.props.datasource}),2===e.metricCategory.key&&le.a.createElement(xe,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,groups:this.state.groups,updateGroups:this.updateGroups,datasource:this.props.datasource}),3===e.metricCategory.key&&le.a.createElement(lt,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,groups:this.state.groups,updateGroups:this.updateGroups,filterMetricsOnType:this.filterMetricsOnType,datasource:this.props.datasource}),9===e.metricCategory.key&&le.a.createElement(Xe,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,groups:this.state.groups,updateGroups:this.updateGroups,filterMetricsOnType:this.filterMetricsOnType,datasource:this.props.datasource}),4===e.metricCategory.key&&le.a.createElement(Pe,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,datasource:this.props.datasource}),7===e.metricCategory.key&&le.a.createElement(tt,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,datasource:this.props.datasource}),10===e.metricCategory.key&&le.a.createElement(it,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,datasource:this.props.datasource}),11===e.metricCategory.key&&le.a.createElement(ct,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange,updateMetrics:this.updateMetrics,datasource:this.props.datasource}),7!==e.metricCategory.key&&10!==e.metricCategory.key&&le.a.createElement(je,{query:e,onChange:this.props.onChange,onRunQuery:this.props.onRunQuery,updateMetrics:this.updateMetrics,availableMetrics:this.state.availableMetrics,datasource:this.props.datasource}),1===e.metricCategory.key&&le.a.createElement(Ye,{query:e,onChange:this.props.onChange,onRunQuery:this.props.onRunQuery,onFilterChange:this.onMetricsFilter,availableMetrics:this.state.availableMetrics,datasource:this.props.datasource}),(2===e.metricCategory.key||3===e.metricCategory.key||9===e.metricCategory.key||8===e.metricCategory.key)&&le.a.createElement(De,{query:e,onChange:this.props.onChange,onRunQuery:this.props.onRunQuery,datasource:this.props.datasource,groups:this.state.groups}),le.a.createElement(be,{query:e,onRunQuery:this.props.onRunQuery,onChange:this.props.onChange}),le.a.createElement(re.Badge,{text:"5.1.0",color:"blue"}))},t}(oe.PureComponent);n.d(t,"plugin",(function(){return yt}));var yt=new a.DataSourcePlugin(ie).setConfigEditor(ue).setQueryEditor(pt)}])}));
+define(["@emotion/css","@grafana/data","@grafana/runtime","@grafana/ui","lodash","react"], function(__WEBPACK_EXTERNAL_MODULE__emotion_css__, __WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_runtime__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_lodash__, __WEBPACK_EXTERNAL_MODULE_react__) { return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./module.ts");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "../node_modules/tslib/tslib.es6.js":
+/*!******************************************!*\
+  !*** ../node_modules/tslib/tslib.es6.js ***!
+  \******************************************/
+/*! exports provided: __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __createBinding, __exportStar, __values, __read, __spread, __spreadArrays, __spreadArray, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__extends", function() { return __extends; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__assign", function() { return __assign; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__rest", function() { return __rest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__decorate", function() { return __decorate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__param", function() { return __param; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__metadata", function() { return __metadata; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__awaiter", function() { return __awaiter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__generator", function() { return __generator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__createBinding", function() { return __createBinding; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__exportStar", function() { return __exportStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__values", function() { return __values; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__read", function() { return __read; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spread", function() { return __spread; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spreadArrays", function() { return __spreadArrays; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spreadArray", function() { return __spreadArray; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__await", function() { return __await; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncGenerator", function() { return __asyncGenerator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncDelegator", function() { return __asyncDelegator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncValues", function() { return __asyncValues; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__makeTemplateObject", function() { return __makeTemplateObject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importStar", function() { return __importStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importDefault", function() { return __importDefault; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldGet", function() { return __classPrivateFieldGet; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldSet", function() { return __classPrivateFieldSet; });
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    if (typeof b !== "function" && b !== null)
+        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    }
+    return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+var __createBinding = Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+});
+
+function __exportStar(m, o) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
+}
+
+function __values(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+/** @deprecated */
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+/** @deprecated */
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+}
+
+function __spreadArray(to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+}
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+var __setModuleDefault = Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+};
+
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+}
+
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+}
+
+
+/***/ }),
+
+/***/ "./GlobalVariables.ts":
+/*!****************************!*\
+  !*** ./GlobalVariables.ts ***!
+  \****************************/
+/*! exports provided: PAGINATION_LIMIT, CACHE_MAX_AGE, SEPARATOR, BUILT_IN_METRICS, CUSTOM_METRICS, ANALYZE_APPLICATION_METRICS, ANALYZE_WEBSITE_METRICS, APPLICATION_SERVICE_ENDPOINT_METRICS, SLO_INFORMATION, INFRASTRUCTURE_ANALYZE, ANALYZE_MOBILE_APP_METRICS, SLO2_INFORMATION, SYNTHETIC_MONITORING, ALL_APPLICATIONS, ALL_WEBSITES, ALL_MOBILE_APPS, ALL_SERVICES, ALL_ENDPOINTS, PLEASE_SPECIFY */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PAGINATION_LIMIT", function() { return PAGINATION_LIMIT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CACHE_MAX_AGE", function() { return CACHE_MAX_AGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEPARATOR", function() { return SEPARATOR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BUILT_IN_METRICS", function() { return BUILT_IN_METRICS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CUSTOM_METRICS", function() { return CUSTOM_METRICS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ANALYZE_APPLICATION_METRICS", function() { return ANALYZE_APPLICATION_METRICS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ANALYZE_WEBSITE_METRICS", function() { return ANALYZE_WEBSITE_METRICS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "APPLICATION_SERVICE_ENDPOINT_METRICS", function() { return APPLICATION_SERVICE_ENDPOINT_METRICS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SLO_INFORMATION", function() { return SLO_INFORMATION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "INFRASTRUCTURE_ANALYZE", function() { return INFRASTRUCTURE_ANALYZE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ANALYZE_MOBILE_APP_METRICS", function() { return ANALYZE_MOBILE_APP_METRICS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SLO2_INFORMATION", function() { return SLO2_INFORMATION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SYNTHETIC_MONITORING", function() { return SYNTHETIC_MONITORING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ALL_APPLICATIONS", function() { return ALL_APPLICATIONS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ALL_WEBSITES", function() { return ALL_WEBSITES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ALL_MOBILE_APPS", function() { return ALL_MOBILE_APPS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ALL_SERVICES", function() { return ALL_SERVICES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ALL_ENDPOINTS", function() { return ALL_ENDPOINTS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLEASE_SPECIFY", function() { return PLEASE_SPECIFY; });
+/* CONFIG */
+var PAGINATION_LIMIT = 15; // pagesize=200 => 3000 results in dropdown (~30sec.)
+
+var CACHE_MAX_AGE = 60000;
+var SEPARATOR = '|';
+/* CATEGORIES */
+
+var BUILT_IN_METRICS = 0;
+var CUSTOM_METRICS = 1;
+var ANALYZE_APPLICATION_METRICS = 2;
+var ANALYZE_WEBSITE_METRICS = 3;
+var APPLICATION_SERVICE_ENDPOINT_METRICS = 4; // replaces previous ->
+// APPLICATION_METRICS = '4';
+// SERVICE_METRICS = '5';
+// ENDPOINT_METRICS = '6';
+
+var SLO_INFORMATION = 7;
+var INFRASTRUCTURE_ANALYZE = 8;
+var ANALYZE_MOBILE_APP_METRICS = 9;
+var SLO2_INFORMATION = 10;
+var SYNTHETIC_MONITORING = 11;
+/* DROPDOWN DEFAULTS */
+
+var ALL_APPLICATIONS = '-- No Application Filter --';
+var ALL_WEBSITES = '-- No Website Filter --';
+var ALL_MOBILE_APPS = '-- No Mobile App Filter --';
+var ALL_SERVICES = '-- No Service Filter --';
+var ALL_ENDPOINTS = '-- No Endpoint Filter --';
+/* PLACEHOLDER */
+
+var PLEASE_SPECIFY = 'Please specify';
+
+/***/ }),
+
+/***/ "./cache.ts":
+/*!******************!*\
+  !*** ./cache.ts ***!
+  \******************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var Cache =
+/** @class */
+function () {
+  function Cache() {
+    this.store = {};
+  }
+
+  Cache.prototype.put = function (key, value, ttl) {
+    var _this = this;
+
+    if (ttl === void 0) {
+      ttl = 70000;
+    }
+
+    if (key === undefined || value === undefined) {
+      return;
+    }
+
+    this.del(key);
+    this.store[key] = {
+      value: value,
+      expiry: Date.now() + ttl,
+      timeout: setTimeout(function () {
+        _this.del(key);
+      }, ttl)
+    };
+  };
+
+  Cache.prototype.get = function (key) {
+    var item = this.store[key];
+
+    if (item && !(item.expiry && item.expiry > Date.now())) {
+      this.del(key);
+      item = undefined;
+    }
+
+    return item && item.value;
+  };
+
+  Cache.prototype.del = function (key) {
+    if (this.store.hasOwnProperty(key)) {
+      clearTimeout(this.store[key].timeout);
+      delete this.store[key];
+    }
+  };
+
+  return Cache;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (Cache);
+
+/***/ }),
+
+/***/ "./components/AdvancedSettings/AdvancedSettings.tsx":
+/*!**********************************************************!*\
+  !*** ./components/AdvancedSettings/AdvancedSettings.tsx ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _Infrastructure_Custom_FreeTextMetrics__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Infrastructure/Custom/FreeTextMetrics */ "./components/Infrastructure/Custom/FreeTextMetrics.tsx");
+/* harmony import */ var _AggregateQuery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./AggregateQuery */ "./components/AdvancedSettings/AggregateQuery.tsx");
+/* harmony import */ var _FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../FormField/FormSwitch */ "./components/FormField/FormSwitch.tsx");
+/* harmony import */ var _FormField_FormInput__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../FormField/FormInput */ "./components/FormField/FormInput.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+
+
+
+
+
+
+
+
+var legendFormatPlaceholders = ['$label (on host $host)', '$label (on host $host)', '$label ($application) - $key', '$label ($website) - $key', '$label ($application) - $key', '', '', ''];
+var legendFormatTooltips = [react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+  key: "builtIn"
+}, "Default: $label (on host $host)", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $label - entity label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $host - corresponding host MAC address"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $pid - corresponding PID"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $timeShift - corresponding timeShift"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $metric - displayed metric"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $type - entity type"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $name - label alternative"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $index - index in the list"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+  key: "custom"
+}, "Default: $label (on host $host)", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $label - entity label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $host - corresponding host MAC address"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $pid - corresponding PID"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $timeShift - corresponding timeShift"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $metric - displayed metric"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $type - entity type"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $name - label alternative"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $index - index in the list"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+  key: "application"
+}, "Default: $label ($application) - $key", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $label - entity label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $application - application label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $timeShift - corresponding timeShift"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $metric - displayed metric"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $key - metric key with aggregation and rollup"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $index - index in the list"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+  key: "website"
+}, "Default: $label ($website) - $key", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $label - entity label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $website - application label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $type - entity type"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $timeShift - corresponding timeShift"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $metric - displayed metric"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $key - metric key with aggregation and rollup"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $index - index in the list"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+  key: "endpoint"
+}, "Default: $label ($application) - $key", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $label - entity label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $application - application label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $service - service label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $endpoint - endpoint label"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $timeShift - corresponding timeShift"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $metric - displayed metric"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $key - metric key with aggregation and rollup"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "\u2022 $index - index in the list"))), '', '', ''];
+
+var AdvancedSettings =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(AdvancedSettings, _super);
+
+  function AdvancedSettings(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_7___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onLegendFormatChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.labelFormat = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    _this.onTimeShiftChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.timeShift = eventItem.currentTarget.value;
+
+      if (query.timeShift) {
+        query.timeShiftIsValid = query.timeShift.match(/\d+[m,s,h,d,w]{1}/) ? true : false;
+      } else {
+        query.timeShiftIsValid = true;
+      }
+
+      onChange(query);
+
+      if (query.timeShiftIsValid) {
+        // onRunQuery with 500ms delay after last debounce
+        _this.debouncedRunQuery();
+      }
+    };
+
+    _this.onShowAdvancedSettingsChange = function (event) {
+      if (event && event.currentTarget) {
+        var _a = _this.props,
+            query = _a.query,
+            onChange = _a.onChange;
+        query.showAdvancedSettings = event.currentTarget.checked;
+        onChange(query);
+      }
+    };
+
+    _this.state = {
+      legendFormatPlaceholder: _this.setLegendFormatPlaceholder()
+    };
+    return _this;
+  }
+
+  AdvancedSettings.prototype.setLegendFormatPlaceholder = function () {
+    var query = this.props.query;
+    return legendFormatPlaceholders[query.metricCategory.key];
+  };
+
+  AdvancedSettings.prototype.setLegendFormatTooltip = function () {
+    var query = this.props.query;
+    return legendFormatTooltips[query.metricCategory.key];
+  };
+
+  AdvancedSettings.prototype.render = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        onRunQuery = _a.onRunQuery,
+        onChange = _a.onChange;
+    var category = query.metricCategory.key;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      label: 'Show advanced settings',
+      tooltip: 'Show all additional settings',
+      value: query.showAdvancedSettings,
+      onChange: function onChange(e) {
+        return _this.onShowAdvancedSettingsChange(e);
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      hidden: !query.showAdvancedSettings
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form',
+      hidden: category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"] || category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"] || category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SYNTHETIC_MONITORING"]
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormInput__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Legend format',
+      tooltip: this.setLegendFormatTooltip(),
+      value: query.labelFormat,
+      placeholder: this.setLegendFormatPlaceholder(),
+      onChange: function onChange(event) {
+        return _this.onLegendFormatChange(event);
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormInput__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Time shift',
+      tooltip: 'Specify the amount of hours that shall be used. The time shift function always go back in time, ' + 'not forward. Accepts values such as 1s, 1m, 1h, 1d, 1w.',
+      value: query.timeShift,
+      invalid: !query.timeShiftIsValid,
+      placeholder: '1h',
+      onChange: function onChange(event) {
+        return _this.onTimeShiftChange(event);
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      hidden: category !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"]
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Infrastructure_Custom_FreeTextMetrics__WEBPACK_IMPORTED_MODULE_3__["FreeTextMetrics"], {
+      query: query,
+      onRunQuery: onRunQuery,
+      onChange: onChange
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      hidden: category !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["BUILT_IN_METRICS"] && category !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"]
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_AggregateQuery__WEBPACK_IMPORTED_MODULE_4__["AggregateQuery"], {
+      query: query,
+      onRunQuery: onRunQuery,
+      onChange: onChange
+    }))));
+  };
+
+  return AdvancedSettings;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (AdvancedSettings);
+
+/***/ }),
+
+/***/ "./components/AdvancedSettings/AggregateQuery.tsx":
+/*!********************************************************!*\
+  !*** ./components/AdvancedSettings/AggregateQuery.tsx ***!
+  \********************************************************/
+/*! exports provided: AggregateQuery */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AggregateQuery", function() { return AggregateQuery; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _lists_aggregation_function__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lists/aggregation_function */ "./lists/aggregation_function.ts");
+/* harmony import */ var _FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../FormField/FormSwitch */ "./components/FormField/FormSwitch.tsx");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+
+var AggregateQuery =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(AggregateQuery, _super);
+
+  function AggregateQuery(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onAggregateGraphs = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery;
+
+      if (event && event.currentTarget) {
+        query.aggregateGraphs = event.currentTarget.checked;
+        onRunQuery();
+      }
+    };
+
+    _this.onHideOriginalGraph = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery;
+
+      if (event && event.currentTarget) {
+        query.hideOriginalGraphs = event.currentTarget.checked;
+        onRunQuery();
+      }
+    };
+
+    _this.onAggregationFunctionChange = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery;
+      query.aggregationFunction = event;
+      onRunQuery();
+    };
+
+    _this.state = {
+      showAdditionalSettings: false,
+      legendFormat: ''
+    };
+    var query = _this.props.query;
+
+    if (!query.aggregationFunction) {
+      query.aggregationFunction = _lists_aggregation_function__WEBPACK_IMPORTED_MODULE_2__["default"][0];
+    }
+
+    return _this;
+  }
+
+  AggregateQuery.prototype.render = function () {
+    var query = this.props.query;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      queryKeyword: true,
+      label: 'Aggregate query graphs',
+      tooltip: 'Aggregate all graphs of a query.',
+      value: query.aggregateGraphs,
+      onChange: this.onAggregateGraphs
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Select"], {
+      menuPlacement: 'bottom',
+      width: 12,
+      isSearchable: true,
+      options: _lists_aggregation_function__WEBPACK_IMPORTED_MODULE_2__["default"],
+      value: query.aggregationFunction,
+      disabled: !query.aggregateGraphs,
+      onChange: this.onAggregationFunctionChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      queryKeyword: true,
+      disabled: !query.aggregateGraphs,
+      labelWidth: 10,
+      label: 'Hide original graphs',
+      tooltip: 'Removes the original graphs resulted from the query and only shows the aggregated graph.',
+      value: query.hideOriginalGraphs,
+      onChange: this.onHideOriginalGraph
+    }));
+  };
+
+  return AggregateQuery;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Analyze/ApplicationCallsMetrics.tsx":
+/*!********************************************************!*\
+  !*** ./components/Analyze/ApplicationCallsMetrics.tsx ***!
+  \********************************************************/
+/*! exports provided: ApplicationCallsMetrics */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ApplicationCallsMetrics", function() { return ApplicationCallsMetrics; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lists/apply_call_to_entities */ "./lists/apply_call_to_entities.ts");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../FormField/FormWrapper */ "./components/FormField/FormWrapper.tsx");
+/* harmony import */ var _Entity_Entity__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Entity/Entity */ "./components/Entity/Entity.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+
+
+
+
+
+
+
+
+var isUnmounting = false;
+
+var ApplicationCallsMetrics =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(ApplicationCallsMetrics, _super);
+
+  function ApplicationCallsMetrics(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onApplicationChange = function (application) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+
+      if (typeof application === 'string') {
+        query.entity = {
+          key: application,
+          label: application
+        };
+      } else {
+        query.entity = application;
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onGroupChange = function (group) {
+      var _a, _b, _c;
+
+      var _d = _this.props,
+          query = _d.query,
+          onChange = _d.onChange,
+          onRunQuery = _d.onRunQuery,
+          groups = _d.groups;
+      var currentGroupKey = ((_a = query.group) === null || _a === void 0 ? void 0 : _a.key) || ((_b = query.group) === null || _b === void 0 ? void 0 : _b.value) || ((_c = query.group) === null || _c === void 0 ? void 0 : _c.label);
+      var isCurrentVariable = currentGroupKey && typeof currentGroupKey === 'string' && currentGroupKey.includes('$');
+
+      if (isCurrentVariable && _typeof(group) === 'object' && group.key && !group.key.includes('$')) {
+        return;
+      }
+
+      if (typeof group === 'string') {
+        var foundTag = lodash__WEBPACK_IMPORTED_MODULE_7___default.a.find(groups, ['key', group]);
+
+        if (foundTag) {
+          query.group = foundTag;
+        } else {
+          query.group = {
+            key: group,
+            label: group
+          };
+        }
+      } else {
+        query.group = group;
+      }
+
+      if (query.group && query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"]) {
+        query.showGroupBySecondLevel = query.group.type === 'KEY_VALUE_PAIR';
+      }
+
+      if (!query.showGroupBySecondLevel) {
+        query.groupbyTagSecondLevelKey = '';
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onApplicationCallToEntityChange = function (applicationCallToEntity) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.applicationCallToEntity = applicationCallToEntity;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onCallToEntityChange = function (callToEntity) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.callToEntity = callToEntity;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_7___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onGroupByTagSecondLevelKeyChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    _this.state = {
+      applications: []
+    };
+    return _this;
+  }
+
+  ApplicationCallsMetrics.prototype.componentDidMount = function () {
+    var _this = this;
+
+    var _a, _b;
+
+    var _c = this.props,
+        query = _c.query,
+        datasource = _c.datasource,
+        onChange = _c.onChange;
+    isUnmounting = false;
+    var entityValue = ((_a = query.entity) === null || _a === void 0 ? void 0 : _a.key) || ((_b = query.entity) === null || _b === void 0 ? void 0 : _b.label);
+    var isEntityVariable = entityValue && typeof entityValue === 'string' && entityValue.includes('$');
+    datasource.fetchApplications().then(function (applications) {
+      if (!isUnmounting) {
+        if (!lodash__WEBPACK_IMPORTED_MODULE_7___default.a.find(applications, {
+          key: null
+        })) {
+          applications.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ALL_APPLICATIONS"]
+          });
+        }
+
+        _this.setState({
+          applications: applications
+        });
+
+        if (!query.entity || !query.entity.key && !query.entity.label) {
+          query.entity = applications[0];
+        }
+
+        if (!query.callToEntity) {
+          query.callToEntity = _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_3__["default"][0];
+        }
+
+        if (!query.applicationCallToEntity) {
+          query.applicationCallToEntity = _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_3__["default"][0];
+        }
+
+        onChange(query);
+
+        if (isEntityVariable && query.entity) {
+          _this.props.onRunQuery();
+        }
+      }
+    });
+    datasource.fetchApplicationTags().then(function (applicationTags) {
+      var _a, _b, _c;
+
+      if (!isUnmounting) {
+        _this.props.updateGroups(lodash__WEBPACK_IMPORTED_MODULE_7___default.a.sortBy(applicationTags, 'key'));
+
+        var groupKey = ((_a = query.group) === null || _a === void 0 ? void 0 : _a.key) || ((_b = query.group) === null || _b === void 0 ? void 0 : _b.value) || ((_c = query.group) === null || _c === void 0 ? void 0 : _c.label);
+        var isGroupVariable = groupKey && typeof groupKey === 'string' && groupKey.includes('$');
+
+        if (!query.group || !query.group.key && !isGroupVariable) {
+          query.group = lodash__WEBPACK_IMPORTED_MODULE_7___default.a.find(applicationTags, ['key', 'endpoint.name']);
+          onChange(query);
+        }
+      }
+    });
+    this.props.updateMetrics(datasource.dataSourceApplication.getApplicationMetricsCatalog());
+  };
+
+  ApplicationCallsMetrics.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  ApplicationCallsMetrics.prototype.render = function () {
+    var _a = this.props,
+        query = _a.query,
+        groups = _a.groups;
+    var entityValue = query.entity;
+
+    if (query.entity && query.entity.key) {
+      entityValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.entity), {
+        value: query.entity.key,
+        label: query.entity.label || query.entity.key
+      });
+    }
+
+    var groupValue = query.group;
+
+    if (query.group && query.group.key) {
+      groupValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.group), {
+        value: query.group.key,
+        label: query.group.label || query.group.key
+      });
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      stretch: true
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 14,
+      tooltip: 'Select your application.'
+    }, "Application"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Entity_Entity__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      value: query.applicationCallToEntity,
+      onChange: this.onApplicationCallToEntityChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      value: entityValue,
+      options: this.state.applications,
+      onChange: this.onApplicationChange,
+      allowCustomValue: true,
+      placeholder: 'Select or type $application'
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      stretch: true
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 7,
+      tooltip: 'Group by tag or type variable like $groupBy'
+    }, "Group by"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Entity_Entity__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      value: query.callToEntity,
+      onChange: this.onCallToEntityChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      options: groups,
+      value: groupValue,
+      onChange: this.onGroupChange,
+      allowCustomValue: true,
+      placeholder: 'Select or type $groupBy'
+    })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      style: !query.showGroupBySecondLevel ? {
+        display: 'none'
+      } : {}
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Input"], {
+      type: 'text',
+      value: query.groupbyTagSecondLevelKey,
+      onChange: this.onGroupByTagSecondLevelKeyChange
+    })));
+  };
+
+  return ApplicationCallsMetrics;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Analyze/Filter.tsx":
+/*!***************************************!*\
+  !*** ./components/Analyze/Filter.tsx ***!
+  \***************************************/
+/*! exports provided: Filters */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Filters", function() { return Filters; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Entity_Entity__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Entity/Entity */ "./components/Entity/Entity.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lists/apply_call_to_entities */ "./lists/apply_call_to_entities.ts");
+/* harmony import */ var _lists_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lists/operators */ "./lists/operators.ts");
+/* harmony import */ var components_FormField_FormTextArea__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! components/FormField/FormTextArea */ "./components/FormField/FormTextArea.tsx");
+
+
+
+
+
+
+
+
+
+
+var Filters =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(Filters, _super);
+
+  function Filters(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.OPERATOR_STRING = 'STRING';
+    _this.OPERATOR_STRING_SET = 'STRING_SET';
+    _this.OPERATOR_NUMBER = 'NUMBER';
+    _this.OPERATOR_BOOLEAN = 'BOOLEAN';
+    _this.OPERATOR_KEY_VALUE = 'KEY_VALUE_PAIR';
+
+    _this.addTagFilter = function () {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.filters.push({
+        tag: query.group,
+        entity: _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_6__["default"][0],
+        operator: _this.filterOperatorsOnType(query.group.type)[0],
+        booleanValue: false,
+        numberValue: 0,
+        stringValue: '',
+        isValid: false
+      });
+      onChange(query);
+    };
+
+    _this.removeTagFilter = function (index) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.filters.splice(index, 1);
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onCallToEntityChange = function (callToEntity, index) {
+      var query = _this.props.query;
+      query.filters[index].entity = callToEntity;
+
+      _this.validateChangeAndRun(index);
+    };
+
+    _this.onOperatorChange = function (operator, index) {
+      var query = _this.props.query;
+      query.filters[index].operator = operator;
+
+      _this.validateChangeAndRun(index);
+    };
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onTagFilterStringValueChange = function (value, index) {
+      var query = _this.props.query;
+      query.filters[index].stringValue = value.currentTarget.value;
+
+      _this.validateChangeAndRun(index, true);
+    };
+
+    _this.onTagFilterNumberValueChange = function (value, index) {
+      var query = _this.props.query;
+      query.filters[index].numberValue = value.currentTarget.valueAsNumber;
+
+      _this.validateChangeAndRun(index, true);
+    };
+
+    _this.onFilterChange = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      var filterValue = event.currentTarget.value;
+
+      _this.setState({
+        textareaValue: filterValue
+      });
+
+      query.tagFilterExpression = filterValue;
+
+      if (filterValue.trim() !== '') {
+        try {
+          query.filters = JSON.parse(filterValue);
+        } catch (e) {
+          console.warn('Invalid JSON in TagFilterExpression:', e);
+          query.filters = [];
+        }
+      } else {
+        query.filters = [];
+      }
+
+      onChange(query);
+      _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.onRunQuery, 500);
+      onRunQuery();
+    };
+
+    _this.state = {
+      textareaValue: props.query.tagFilterExpression || ''
+    };
+    return _this;
+  }
+
+  Filters.prototype.componentDidUpdate = function (prevProps) {
+    var query = this.props.query;
+
+    if (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"] && query.tagFilterExpression !== prevProps.query.tagFilterExpression && query.tagFilterExpression !== this.state.textareaValue) {
+      this.setState({
+        textareaValue: query.tagFilterExpression || ''
+      });
+    }
+  };
+
+  Filters.prototype.filterOperatorsOnType = function (type) {
+    return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.filter(_lists_operators__WEBPACK_IMPORTED_MODULE_7__["default"], function (o) {
+      return o.type === type;
+    });
+  };
+
+  Filters.prototype.onGroupChange = function (group, index) {
+    var query = this.props.query;
+    query.filters[index].tag = group;
+    var ops = this.filterOperatorsOnType(group.type);
+
+    if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.includes(ops, query.filters[index].operator)) {
+      query.filters[index].operator = ops[0];
+    }
+
+    this.validateChangeAndRun(index);
+  };
+
+  Filters.prototype.canShowStringInput = function (filter) {
+    return filter.tag.type === this.OPERATOR_KEY_VALUE || !filter.operator.key.includes('EMPTY') && (filter.tag.type === this.OPERATOR_STRING || filter.tag.type === this.OPERATOR_STRING_SET);
+  };
+
+  Filters.prototype.canShowNumberInput = function (filter) {
+    return filter.tag.type === this.OPERATOR_NUMBER && !filter.operator.key.includes('EMPTY');
+  };
+
+  Filters.prototype.onTagFilterBooleanValueChange = function (value, index) {
+    var query = this.props.query;
+    query.filters[index].booleanValue = value.key;
+    this.validateChangeAndRun(index);
+  };
+
+  Filters.prototype.validateChangeAndRun = function (index, runDebounced) {
+    if (runDebounced === void 0) {
+      runDebounced = false;
+    }
+
+    var _a = this.props,
+        query = _a.query,
+        onChange = _a.onChange,
+        onRunQuery = _a.onRunQuery;
+
+    if (query.filters[index].tag) {
+      if (query.filters[index].operator.key.includes('EMPTY') && (this.OPERATOR_STRING === query.filters[index].tag.type || this.OPERATOR_STRING_SET === query.filters[index].tag.type)) {
+        query.filters[index].isValid = true; // to avoid sending value with query.filters[index] operators that do not require a value (such as is-present/is-not-present)
+
+        query.filters[index].stringValue = '';
+        query.filters[index].numberValue = 0;
+        query.filters[index].booleanValue = true;
+      } else if ((this.OPERATOR_STRING === query.filters[index].tag.type || this.OPERATOR_STRING_SET === query.filters[index].tag.type) && query.filters[index].stringValue) {
+        query.filters[index].isValid = true;
+      } else if (query.filters[index].operator.key.includes('EMPTY') && this.OPERATOR_KEY_VALUE === query.filters[index].tag.type && query.filters[index].stringValue) {
+        query.filters[index].isValid = true;
+      } else if (this.OPERATOR_KEY_VALUE === query.filters[index].tag.type && query.filters[index].stringValue && query.filters[index].stringValue.includes('=')) {
+        query.filters[index].isValid = true;
+      } else if (this.OPERATOR_NUMBER === query.filters[index].tag.type && !isNaN(query.filters[index].numberValue)) {
+        query.filters[index].isValid = true;
+      } else if (this.OPERATOR_BOOLEAN === query.filters[index].tag.type && query.filters[index].booleanValue !== undefined) {
+        query.filters[index].isValid = true;
+      }
+    } else {
+      query.filters[index].isValid = false;
+    }
+
+    onChange(query);
+
+    if (runDebounced) {
+      // onRunQuery with 500ms delay after last debounce
+      this.debouncedRunQuery();
+    } else {
+      onRunQuery();
+    }
+  };
+
+  Filters.prototype.render = function () {
+    var _this = this;
+
+    var _a;
+
+    var _b = this.props,
+        query = _b.query,
+        groups = _b.groups;
+
+    if (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"]) {
+      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+        className: 'gf-form'
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(components_FormField_FormTextArea__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        queryKeyword: true,
+        inputWidth: 0,
+        label: 'TagFilterExpression',
+        tooltip: 'Enter the tagFilterExpression here ',
+        placeholder: "[{Enter the filter JSON here}]",
+        value: this.state.textareaValue,
+        onChange: function onChange(event) {
+          return _this.onFilterChange(event);
+        }
+      }));
+    } else {
+      var listFilter = (_a = query.filters) === null || _a === void 0 ? void 0 : _a.map(function (singleFilter, index) {
+        return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+          key: 'filter_' + index,
+          className: 'gf-form'
+        }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+          className: 'query-keyword',
+          width: 14,
+          tooltip: 'Filter by tag.'
+        }, index + 1, ". filter"), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_APPLICATION_METRICS"] && _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_MOBILE_APP_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Entity_Entity__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          value: query.filters[index].entity,
+          onChange: function onChange(callToEntity) {
+            return _this.onCallToEntityChange(callToEntity, index);
+          }
+        }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+          menuPlacement: 'bottom',
+          width: 30,
+          isSearchable: true,
+          value: query.filters[index].tag,
+          options: groups,
+          onChange: function onChange(group) {
+            return _this.onGroupChange(group, index);
+          }
+        }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+          menuPlacement: 'bottom',
+          width: 20,
+          isSearchable: true,
+          value: query.filters[index].operator,
+          options: _this.filterOperatorsOnType(query.filters[index].tag.type),
+          onChange: function onChange(operator) {
+            return _this.onOperatorChange(operator, index);
+          }
+        }), _this.canShowStringInput(query.filters[index]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+          width: 30,
+          value: query.filters[index].stringValue,
+          placeholder: query.filters[index].tag.type === 'KEY_VALUE_PAIR' ? 'key=value' : _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"],
+          onChange: function onChange(event) {
+            return _this.onTagFilterStringValueChange(event, index);
+          }
+        }), _this.canShowNumberInput(query.filters[index]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+          type: 'number',
+          width: 30,
+          value: query.filters[index].numberValue,
+          placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"],
+          onChange: function onChange(event) {
+            return _this.onTagFilterNumberValueChange(event, index);
+          }
+        }), query.filters[index].tag.type === 'BOOLEAN' && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+          menuPlacement: 'bottom',
+          width: 30,
+          isSearchable: true,
+          onChange: function onChange(e) {
+            return _this.onTagFilterBooleanValueChange(e, index);
+          },
+          value: {
+            key: '' + query.filters[index].booleanValue,
+            label: '' + query.filters[index].booleanValue
+          },
+          options: [{
+            key: false,
+            label: 'false'
+          }, {
+            key: true,
+            label: 'true'
+          }]
+        }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+          variant: 'secondary',
+          onClick: function onClick() {
+            return _this.removeTagFilter(index);
+          }
+        }, "-"));
+      });
+      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", null, listFilter, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+        className: 'gf-form'
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+        width: 14,
+        tooltip: 'Add an additional tag filter.'
+      }, "Add filter"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+        variant: 'secondary',
+        onClick: this.addTagFilter
+      }, "+"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+        hidden: !query.showWarningCantShowAllResults
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+        width: 12,
+        tooltip: 'Add Filter to narrow down the data.'
+      }, "\u26A0\uFE0F Can't show all results"))));
+    }
+  };
+
+  return Filters;
+}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Analyze/MobileAppMetrics.tsx":
+/*!*************************************************!*\
+  !*** ./components/Analyze/MobileAppMetrics.tsx ***!
+  \*************************************************/
+/*! exports provided: MobileAppMetrics */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MobileAppMetrics", function() { return MobileAppMetrics; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _lists_beacon_types_mobile_app__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lists/beacon_types_mobile_app */ "./lists/beacon_types_mobile_app.ts");
+
+
+
+
+
+
+
+var isUnmounting = false;
+
+var MobileAppMetrics =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(MobileAppMetrics, _super);
+
+  function MobileAppMetrics(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onMobileappChange = function (mobileapp) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+
+      if (typeof mobileapp === 'string') {
+        query.entity = {
+          key: mobileapp,
+          label: mobileapp
+        };
+      } else {
+        query.entity = mobileapp;
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onBeaconTypeChange = function (type) {
+      var _a;
+
+      var _b = _this.props,
+          query = _b.query,
+          onChange = _b.onChange,
+          filterMetricsOnType = _b.filterMetricsOnType;
+
+      if (typeof type === 'string') {
+        query.entityType = {
+          key: type,
+          label: type
+        };
+      } else {
+        query.entityType = type;
+      }
+
+      onChange(query);
+      var isVariable = typeof type === 'string' || ((_a = query.entityType) === null || _a === void 0 ? void 0 : _a.key) && query.entityType.key.includes('$');
+
+      if (!isVariable) {
+        filterMetricsOnType(query.entityType.key);
+      }
+    };
+
+    _this.onGroupChange = function (group) {
+      var _a;
+
+      var _b = _this.props,
+          query = _b.query,
+          onChange = _b.onChange,
+          onRunQuery = _b.onRunQuery;
+
+      if (typeof group === 'string') {
+        query.group = {
+          key: group,
+          label: group
+        };
+      } else {
+        query.group = group;
+      }
+
+      if (query.group && query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_MOBILE_APP_METRICS"]) {
+        var isVariable = typeof group === 'string' || ((_a = query.group) === null || _a === void 0 ? void 0 : _a.key) && query.group.key.includes('$');
+
+        if (!isVariable) {
+          query.showGroupBySecondLevel = query.group.type === 'KEY_VALUE_PAIR';
+        }
+      }
+
+      if (!query.showGroupBySecondLevel) {
+        query.groupbyTagSecondLevelKey = '';
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onGroupByTagSecondLevelKeyChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    _this.state = {
+      mobileapps: []
+    };
+    return _this;
+  }
+
+  MobileAppMetrics.prototype.componentDidMount = function () {
+    var _this = this;
+
+    var _a, _b, _c, _d, _e, _f;
+
+    var _g = this.props,
+        query = _g.query,
+        datasource = _g.datasource,
+        onChange = _g.onChange;
+    isUnmounting = false;
+    var entityValue = ((_a = query.entity) === null || _a === void 0 ? void 0 : _a.key) || ((_b = query.entity) === null || _b === void 0 ? void 0 : _b.label);
+    var isVariable = entityValue && typeof entityValue === 'string' && entityValue.includes('$');
+    var entityTypeValue = ((_c = query.entityType) === null || _c === void 0 ? void 0 : _c.key) || ((_d = query.entityType) === null || _d === void 0 ? void 0 : _d.label);
+    var isEntityTypeVariable = entityTypeValue && typeof entityTypeValue === 'string' && entityTypeValue.includes('$');
+    var groupValue = ((_e = query.group) === null || _e === void 0 ? void 0 : _e.key) || ((_f = query.group) === null || _f === void 0 ? void 0 : _f.label);
+    var isGroupVariable = groupValue && typeof groupValue === 'string' && groupValue.includes('$');
+    datasource.fetchMobileapp().then(function (mobileapps) {
+      if (!isUnmounting) {
+        if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(mobileapps, {
+          key: null
+        })) {
+          mobileapps.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ALL_MOBILE_APPS"]
+          });
+        }
+
+        if (isVariable && query.entity) {
+          var variableOption = {
+            key: entityValue,
+            label: entityValue,
+            value: entityValue
+          };
+
+          if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(mobileapps, ['key', entityValue])) {
+            mobileapps.splice(1, 0, variableOption);
+          }
+        }
+
+        _this.setState({
+          mobileapps: mobileapps
+        });
+
+        var shouldUpdate = false;
+
+        if (!query.entity || !query.entity.key && !query.entity.label) {
+          query.entity = mobileapps[0];
+          shouldUpdate = true;
+        } else if (!isVariable && !lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(mobileapps, ['key', entityValue])) {
+          query.entity = mobileapps[0];
+          shouldUpdate = true;
+        } else {
+          if (isVariable && query.entity && !query.entity.key && query.entity.label) {
+            query.entity.key = query.entity.label;
+            shouldUpdate = true;
+          }
+        }
+
+        if (shouldUpdate) {
+          onChange(query);
+        }
+
+        if (isVariable && query.entity) {
+          _this.props.onRunQuery();
+        }
+      }
+    });
+    datasource.dataSourceMobileapp.getMobileappTags().then(function (mobileappTags) {
+      if (!isUnmounting) {
+        _this.props.updateGroups(lodash__WEBPACK_IMPORTED_MODULE_5___default.a.sortBy(mobileappTags, 'key'));
+
+        var hasGroupValue = query.group && (query.group.key || query.group.value || query.group.label);
+
+        if (!hasGroupValue) {
+          query.group = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(mobileappTags, ['key', 'beacon.page.name']);
+          onChange(query);
+        } else if (isGroupVariable) {
+          var groupValue_1 = query.group.key || query.group.value || query.group.label;
+
+          if (!query.group.key) {
+            query.group.key = groupValue_1;
+          }
+
+          if (!query.group.value) {
+            query.group.value = groupValue_1;
+          }
+
+          if (!query.group.label) {
+            query.group.label = groupValue_1;
+          }
+
+          onChange(query);
+        } else if (query.group && !query.group.key && (query.group.value || query.group.label)) {
+          query.group.key = query.group.value || query.group.label;
+          onChange(query);
+        }
+      }
+    });
+
+    if (!query.entityType || !query.entityType.key && !query.entityType.label) {
+      query.entityType = _lists_beacon_types_mobile_app__WEBPACK_IMPORTED_MODULE_6__["default"][0];
+      onChange(query);
+    } else if (isEntityTypeVariable) {
+      if (query.entityType && !query.entityType.key && query.entityType.label) {
+        query.entityType.key = query.entityType.label;
+        onChange(query);
+      }
+    }
+
+    datasource.dataSourceMobileapp.getMobileappMetricsCatalog().then(function (mobileappMetrics) {
+      if (!isUnmounting) {
+        // store all available metrics first and filter by type afterwards
+        _this.props.updateMetrics(mobileappMetrics);
+
+        if (!isEntityTypeVariable) {
+          _this.props.filterMetricsOnType(query.entityType.key);
+        }
+      }
+    });
+  };
+
+  MobileAppMetrics.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  MobileAppMetrics.prototype.render = function () {
+    var _a = this.props,
+        query = _a.query,
+        groups = _a.groups;
+    var mobileAppValue = query.entity;
+
+    if (query.entity && query.entity.key) {
+      mobileAppValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.entity), {
+        value: query.entity.key,
+        label: query.entity.label || query.entity.key
+      });
+    }
+
+    var entityTypeValue = query.entityType;
+
+    if (query.entityType && query.entityType.key) {
+      entityTypeValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.entityType), {
+        value: query.entityType.key,
+        label: query.entityType.label || query.entityType.key
+      });
+    }
+
+    var groupValue = query.group;
+
+    if (query.group && query.group.key) {
+      groupValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.group), {
+        value: query.group.key,
+        label: query.group.label || query.group.key
+      });
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Mobile-app',
+      tooltip: 'Select your mobile app or type variable like $mobileApp',
+      noOptionsMessage: 'No mobile apps found',
+      value: mobileAppValue,
+      options: this.state.mobileapps,
+      onChange: this.onMobileappChange,
+      allowCustomValue: true,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"]
+    }), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      queryKeyword: true,
+      labelWidth: 6,
+      label: 'Type',
+      tooltip: 'Select a beacon type or type variable like $beaconType',
+      value: entityTypeValue,
+      options: _lists_beacon_types_mobile_app__WEBPACK_IMPORTED_MODULE_6__["default"],
+      onChange: this.onBeaconTypeChange,
+      allowCustomValue: true,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"]
+    }), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      queryKeyword: true,
+      labelWidth: 6,
+      label: 'Group by',
+      tooltip: 'Group by tag or type variable like $groupBy',
+      value: groupValue,
+      options: groups,
+      onChange: this.onGroupChange,
+      allowCustomValue: true,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"]
+    }), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      style: !query.showGroupBySecondLevel ? {
+        display: 'none'
+      } : {}
+    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Input"], {
+      value: query.groupbyTagSecondLevelKey,
+      onChange: this.onGroupByTagSecondLevelKeyChange
+    })));
+  };
+
+  return MobileAppMetrics;
+}(react__WEBPACK_IMPORTED_MODULE_2___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Analyze/WebsiteMetrics.tsx":
+/*!***********************************************!*\
+  !*** ./components/Analyze/WebsiteMetrics.tsx ***!
+  \***********************************************/
+/*! exports provided: WebsiteMetrics */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WebsiteMetrics", function() { return WebsiteMetrics; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _lists_beacon_types_website__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lists/beacon_types_website */ "./lists/beacon_types_website.ts");
+
+
+
+
+
+
+
+var isUnmounting = false;
+
+var WebsiteMetrics =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(WebsiteMetrics, _super);
+
+  function WebsiteMetrics(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onWebsiteChange = function (website) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+      if (typeof website === 'string') {
+        query.entity = {
+          key: website,
+          label: website
+        };
+      } else {
+        query.entity = website;
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onBeaconTypeChange = function (type) {
+      var _a;
+
+      var _b = _this.props,
+          query = _b.query,
+          onChange = _b.onChange,
+          filterMetricsOnType = _b.filterMetricsOnType,
+          datasource = _b.datasource; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+      if (typeof type === 'string') {
+        query.entityType = {
+          key: type,
+          label: type
+        };
+      } else {
+        query.entityType = type;
+      }
+
+      onChange(query); // Only filter metrics if type is not a variable
+
+      var isVariable = typeof type === 'string' || ((_a = query.entityType) === null || _a === void 0 ? void 0 : _a.key) && query.entityType.key.includes('$');
+
+      if (!isVariable) {
+        filterMetricsOnType(query.entityType.key); // After filtering, validate that the current metric's aggregation is still valid
+
+        if (query.metric && query.metric.key) {
+          datasource.dataSourceWebsite.getWebsiteMetricsCatalog().then(function (websiteMetrics) {
+            var _a;
+
+            var selectedMetric = websiteMetrics.find(function (m) {
+              return m.key === query.metric.key;
+            });
+
+            if (selectedMetric && selectedMetric.aggregations && selectedMetric.aggregations.length > 0) {
+              // Check if current aggregation is supported
+              var currentAggKey_1 = (_a = query.aggregation) === null || _a === void 0 ? void 0 : _a.key;
+              var isAggSupported = selectedMetric.aggregations.some(function (agg) {
+                return (agg.key || agg) === currentAggKey_1;
+              }); // If current aggregation is not supported, use the first supported one
+
+              if (!isAggSupported) {
+                query.aggregation = selectedMetric.aggregations[0];
+                onChange(query);
+              }
+            }
+          });
+        }
+      }
+    };
+
+    _this.onGroupChange = function (group) {
+      var _a;
+
+      var _b = _this.props,
+          query = _b.query,
+          onChange = _b.onChange,
+          onRunQuery = _b.onRunQuery; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+      if (typeof group === 'string') {
+        query.group = {
+          key: group,
+          label: group
+        };
+      } else {
+        query.group = group;
+      }
+
+      if (query.group && query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_WEBSITE_METRICS"]) {
+        // Only check type if group is not a variable
+        var isVariable = typeof group === 'string' || ((_a = query.group) === null || _a === void 0 ? void 0 : _a.key) && query.group.key.includes('$');
+
+        if (!isVariable) {
+          query.showGroupBySecondLevel = query.group.type === 'KEY_VALUE_PAIR';
+        }
+      }
+
+      if (!query.showGroupBySecondLevel) {
+        query.groupbyTagSecondLevelKey = '';
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onGroupByTagSecondLevelKeyChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    _this.state = {
+      websites: []
+    };
+    return _this;
+  }
+
+  WebsiteMetrics.prototype.componentDidMount = function () {
+    var _this = this;
+
+    var _a, _b, _c, _d, _e, _f;
+
+    var _g = this.props,
+        query = _g.query,
+        datasource = _g.datasource,
+        onChange = _g.onChange;
+    isUnmounting = false; // Check if entity.key OR entity.label is a variable (contains $) before fetching
+
+    var entityValue = ((_a = query.entity) === null || _a === void 0 ? void 0 : _a.key) || ((_b = query.entity) === null || _b === void 0 ? void 0 : _b.label);
+    var isVariable = entityValue && typeof entityValue === 'string' && entityValue.includes('$'); // Check if entityType is a variable
+
+    var entityTypeValue = ((_c = query.entityType) === null || _c === void 0 ? void 0 : _c.key) || ((_d = query.entityType) === null || _d === void 0 ? void 0 : _d.label);
+    var isEntityTypeVariable = entityTypeValue && typeof entityTypeValue === 'string' && entityTypeValue.includes('$'); // Check if group is a variable
+
+    var groupValue = ((_e = query.group) === null || _e === void 0 ? void 0 : _e.key) || ((_f = query.group) === null || _f === void 0 ? void 0 : _f.label);
+    var isGroupVariable = groupValue && typeof groupValue === 'string' && groupValue.includes('$');
+    datasource.fetchWebsites().then(function (websites) {
+      if (!isUnmounting) {
+        if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(websites, {
+          key: null
+        })) {
+          websites.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ALL_WEBSITES"]
+          });
+        } // If current entity is a variable, add it to the options list so Select can display it
+
+
+        if (isVariable && query.entity) {
+          var variableOption = {
+            key: entityValue,
+            label: entityValue,
+            value: entityValue
+          }; // Add variable at the beginning (after ALL_WEBSITES if present)
+
+          if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(websites, ['key', entityValue])) {
+            websites.splice(1, 0, variableOption);
+          }
+        }
+
+        _this.setState({
+          websites: websites
+        }); // Only update entity if it's not already set or if it's not a variable
+
+
+        var shouldUpdate = false;
+
+        if (!query.entity || !query.entity.key && !query.entity.label) {
+          // No entity set, use first website
+          query.entity = websites[0];
+          shouldUpdate = true;
+        } else if (!isVariable && !lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(websites, ['key', entityValue])) {
+          // Entity is set but not a variable and not found in list, reset to first
+          query.entity = websites[0];
+          shouldUpdate = true;
+        } else {
+          // If entity is a variable but only has label, ensure it also has key
+          if (isVariable && query.entity && !query.entity.key && query.entity.label) {
+            query.entity.key = query.entity.label;
+            shouldUpdate = true;
+          }
+        }
+
+        if (shouldUpdate) {
+          onChange(query);
+        }
+
+        if (isVariable && query.entity) {
+          _this.props.onRunQuery();
+        }
+      }
+    });
+    datasource.dataSourceWebsite.getWebsiteTags().then(function (websiteTags) {
+      if (!isUnmounting) {
+        _this.props.updateGroups(lodash__WEBPACK_IMPORTED_MODULE_5___default.a.sortBy(websiteTags, 'key')); // select a meaningful default group - but don't overwrite if already set or if it's a variable
+
+
+        if (!query.group || !query.group.key) {
+          query.group = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(websiteTags, ['key', 'beacon.page.name']);
+          onChange(query);
+        } else if (isGroupVariable && query.group && !query.group.key && query.group.label) {
+          // If group is a variable but only has label, ensure it also has key
+          query.group.key = query.group.label;
+          onChange(query);
+        }
+      }
+    }); // Handle entityType initialization - preserve variables
+
+    if (!query.entityType || !query.entityType.key && !query.entityType.label) {
+      // No entityType set at all, use default
+      query.entityType = _lists_beacon_types_website__WEBPACK_IMPORTED_MODULE_6__["default"][0];
+      onChange(query);
+    } else if (isEntityTypeVariable) {
+      // If entityType is a variable but only has label, ensure it also has key
+      if (query.entityType && !query.entityType.key && query.entityType.label) {
+        query.entityType.key = query.entityType.label;
+        onChange(query);
+      }
+    }
+
+    datasource.dataSourceWebsite.getWebsiteMetricsCatalog().then(function (websiteMetrics) {
+      var _a;
+
+      if (!isUnmounting) {
+        // store all available metrics first and filter by type afterwards
+        _this.props.updateMetrics(websiteMetrics); // Only filter if entityType is not a variable
+
+
+        if (!isEntityTypeVariable) {
+          _this.props.filterMetricsOnType(query.entityType.key);
+        } // Ensure aggregation is set correctly for the current metric
+
+
+        if (query.metric && query.metric.key && !isVariable) {
+          var selectedMetric = websiteMetrics.find(function (m) {
+            return m.key === query.metric.key;
+          });
+
+          if (selectedMetric && selectedMetric.aggregations && selectedMetric.aggregations.length > 0) {
+            // Check if current aggregation is supported
+            var currentAggKey_2 = (_a = query.aggregation) === null || _a === void 0 ? void 0 : _a.key;
+            var isAggSupported = selectedMetric.aggregations.some(function (agg) {
+              return (agg.key || agg) === currentAggKey_2;
+            }); // If current aggregation is not supported, use the first supported one
+
+            if (!isAggSupported) {
+              query.aggregation = selectedMetric.aggregations[0];
+              onChange(query);
+            }
+          }
+        }
+      }
+    });
+  };
+
+  WebsiteMetrics.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  WebsiteMetrics.prototype.render = function () {
+    var _a = this.props,
+        query = _a.query,
+        groups = _a.groups; // Ensure value is properly formatted for Select component with allowCustomValue
+
+    var websiteValue = query.entity;
+
+    if (query.entity && query.entity.key) {
+      // For variables or custom values, ensure both 'value' and 'label' properties exist
+      websiteValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.entity), {
+        value: query.entity.key,
+        label: query.entity.label || query.entity.key
+      });
+    } // Format entityType value for Select component with allowCustomValue
+
+
+    var entityTypeValue = query.entityType;
+
+    if (query.entityType && query.entityType.key) {
+      entityTypeValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.entityType), {
+        value: query.entityType.key,
+        label: query.entityType.label || query.entityType.key
+      });
+    } // Format group value for Select component with allowCustomValue
+
+
+    var groupValue = query.group;
+
+    if (query.group && query.group.key) {
+      groupValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.group), {
+        value: query.group.key,
+        label: query.group.label || query.group.key
+      });
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      labelWidth: 8,
+      label: 'Website',
+      tooltip: 'Select your website or type variable like $website',
+      noOptionsMessage: 'No websites found',
+      value: websiteValue,
+      options: this.state.websites,
+      onChange: this.onWebsiteChange,
+      allowCustomValue: true,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"]
+    }), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      labelWidth: 8,
+      label: 'Type',
+      tooltip: 'Select a beacon type or type variable like $beaconType',
+      value: entityTypeValue,
+      options: _lists_beacon_types_website__WEBPACK_IMPORTED_MODULE_6__["default"],
+      onChange: this.onBeaconTypeChange,
+      allowCustomValue: true,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"]
+    }), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      labelWidth: 8,
+      label: 'Group by',
+      tooltip: 'Group by tag or type variable like $groupBy',
+      value: groupValue,
+      options: groups,
+      onChange: this.onGroupChange,
+      allowCustomValue: true,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["PLEASE_SPECIFY"]
+    }), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: 'gf-form-inline',
+      style: !query.showGroupBySecondLevel ? {
+        display: 'none'
+      } : {}
+    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
+      className: 'gf-form-label width-8'
+    }, "Key"), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_4__["Input"], {
+      className: 'gf-form-input',
+      value: query.groupbyTagSecondLevelKey,
+      onChange: this.onGroupByTagSecondLevelKeyChange
+    }))));
+  };
+
+  return WebsiteMetrics;
+}(react__WEBPACK_IMPORTED_MODULE_2___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/ApplicationServiceEndpointMetrics/ApplicationBoundaryScope.tsx":
+/*!***********************************************************************************!*\
+  !*** ./components/ApplicationServiceEndpointMetrics/ApplicationBoundaryScope.tsx ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ApplicationBoundaryScope; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _emotion_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @emotion/css */ "@emotion/css");
+/* harmony import */ var _emotion_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_emotion_css__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+var INBOUND = 'INBOUND';
+var ALL = 'ALL';
+var dropdown = {
+  position: 'relative',
+  background: 'transparent',
+  width: '32px',
+  height: '32px',
+  marginRight: '4px'
+};
+var iconSize = 30;
+var dropdownListStyle = Object(_emotion_css__WEBPACK_IMPORTED_MODULE_3__["css"])(templateObject_1 || (templateObject_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n  transition: max-height 0.2s ease-out;\n  max-height: 0;\n  overflow: hidden;\n  z-index: 2;\n  position: absolute;\n"], ["\n  transition: max-height 0.2s ease-out;\n  max-height: 0;\n  overflow: hidden;\n  z-index: 2;\n  position: absolute;\n"])));
+var dropdownListActiveStyle = Object(_emotion_css__WEBPACK_IMPORTED_MODULE_3__["css"])(templateObject_2 || (templateObject_2 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n  overflow: hidden;\n  z-index: 2;\n  max-height: 1000px;\n  opacity: 1;\n  position: absolute;\n"], ["\n  overflow: hidden;\n  z-index: 2;\n  max-height: 1000px;\n  opacity: 1;\n  position: absolute;\n"])));
+var iconTextContainerStyle = Object(_emotion_css__WEBPACK_IMPORTED_MODULE_3__["css"])(templateObject_3 || (templateObject_3 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n  display: inline-flex;\n"], ["\n  display: inline-flex;\n"])));
+var iconStyleClass = Object(_emotion_css__WEBPACK_IMPORTED_MODULE_3__["css"])(templateObject_4 || (templateObject_4 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n  display: flex;\n  align-items: center;\n  justify-content: center;\n"], ["\n  display: flex;\n  align-items: center;\n  justify-content: center;\n"])));
+var iconTextStyleClass = Object(_emotion_css__WEBPACK_IMPORTED_MODULE_3__["css"])(templateObject_5 || (templateObject_5 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n  padding: 7px;\n"], ["\n  padding: 7px;\n"])));
+var inboundIcon = react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("svg", {
+  className: iconStyleClass,
+  height: iconSize,
+  width: iconSize
+}, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("path", {
+  transform: "translate(3, 5)",
+  fill: "#33a2e5",
+  d: "M12.7891666,14.6051302 L12.7751756,19.8293818 L11.4691127,19.8328795 L11.4776628,16.6402814 L6.96695389,21.1509902 L6.2433066,20.427343 L10.7540155,15.9166341 L7.56141732,15.9251842 L7.56491507,14.6191213 L12.7891666,14.6051302 Z M15.754133,9.38135895 C17.1795716,9.38135895 18.3857119,10.5874993 18.3857119,12.0129379 C18.3857119,13.4383765 17.1795716,14.6445168 15.754133,14.6445168 C14.3286944,14.6445168 13.122554,13.4383765 13.122554,12.0129379 C13.122554,10.5874993 14.3286944,9.38135895 15.754133,9.38135895 Z M6.96695389,3.2433066 L11.4776628,7.75401547 L11.4691127,4.56141732 L12.7751756,4.56491507 L12.7891666,9.7891666 L7.56491507,9.77517557 L7.56141732,8.46911269 L10.7540155,8.47766276 L6.2433066,3.96695389 L6.96695389,3.2433066 Z"
+}));
+var allIcon = react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("svg", {
+  className: iconStyleClass,
+  height: iconSize,
+  width: iconSize
+}, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("path", {
+  transform: "translate(3, 5)",
+  fill: "#33a2e5",
+  d: "M7.54586,15 L7.53186897,20.2242515 L6.22580608,20.2277493 L6.23435616,17.0351511 L1.72364729,21.54586 L1,20.8222127 L5.51070887,16.3115038 L2.31811071,16.3200539 L2.32160847,15.013991 L7.54586,15 Z M14.1975552,7.94441147 L17.901552,11.628622 L14.1975552,15.3128325 L13.271556,14.3917799 L15.5351096,12.1403179 L12.4724561,12.1407167 C12.2827518,13.474447 11.1361413,14.5 9.75,14.5 C8.23121694,14.5 7,13.2687831 7,11.75 C7,10.2312169 8.23121694,9 9.75,9 C11.0508538,9 12.1407461,9.90323356 12.4267385,11.1167623 L15.5351096,11.1169261 L13.271556,8.8654641 L14.1975552,7.94441147 Z M20.75,9 C22.2687831,9 23.5,10.2312169 23.5,11.75 C23.5,13.2687831 22.2687831,14.5 20.75,14.5 C19.2312169,14.5 18,13.2687831 18,11.75 C18,10.2312169 19.2312169,9 20.75,9 Z M1.72364729,2 L6.23435616,6.51070887 L6.22580608,3.31811071 L7.53186897,3.32160847 L7.54586,8.54586 L2.32160847,8.53186897 L2.31811071,7.22580608 L5.51070887,7.23435616 L1,2.72364729 L1.72364729,2 Z"
+}));
+/**
+ * Props have to be:
+ *   value: string
+ *   onChange: function that accepts a string as a parameter and returns void
+ *   disabled: boolean
+ */
+
+function ApplicationBoundaryScope(props) {
+  var theme = Object(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["useTheme"])();
+  var opacity = props.disabled ? 0.5 : 1;
+  var dropdown__list__item = {
+    background: theme.colors.bg2,
+    cursor: 'pointer',
+    listStyle: 'none',
+    borderRadius: '3px',
+    height: '32px',
+    opacity: opacity
+  };
+
+  var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(false), 2),
+      active = _a[0],
+      setActive = _a[1];
+
+  function toggleDropdown() {
+    if (!props.disabled) {
+      setActive(!active);
+    }
+  }
+
+  function handleClick(entity) {
+    props.onChange(entity);
+    setActive(false);
+  }
+
+  return react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+    style: dropdown
+  }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+    onClick: function onClick() {
+      return toggleDropdown();
+    },
+    onBlur: function onBlur() {
+      return setActive(false);
+    },
+    style: dropdown__list__item,
+    contentEditable: true
+  }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Tooltip"], {
+    content: props.value ? props.value : ALL,
+    theme: 'info',
+    placement: 'top'
+  }, props.value === INBOUND ? inboundIcon : allIcon)), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("ul", {
+    className: active ? dropdownListActiveStyle : dropdownListStyle
+  }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("li", {
+    onClick: function onClick() {
+      return handleClick(INBOUND);
+    },
+    key: INBOUND,
+    style: dropdown__list__item
+  }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+    className: iconTextContainerStyle
+  }, inboundIcon, " ", react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
+    className: iconTextStyleClass
+  }, INBOUND))), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("li", {
+    onClick: function onClick() {
+      return handleClick(ALL);
+    },
+    key: ALL,
+    style: dropdown__list__item
+  }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+    className: iconTextContainerStyle
+  }, allIcon, " ", react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
+    className: iconTextStyleClass
+  }, ALL)))));
+}
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5;
+
+/***/ }),
+
+/***/ "./components/ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics.tsx":
+/*!********************************************************************************************!*\
+  !*** ./components/ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics.tsx ***!
+  \********************************************************************************************/
+/*! exports provided: ApplicationServiceEndpointMetrics */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ApplicationServiceEndpointMetrics", function() { return ApplicationServiceEndpointMetrics; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _ApplicationBoundaryScope__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ApplicationBoundaryScope */ "./components/ApplicationServiceEndpointMetrics/ApplicationBoundaryScope.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+var isUnmounting = false;
+
+var ApplicationServiceEndpointMetrics =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(ApplicationServiceEndpointMetrics, _super);
+
+  function ApplicationServiceEndpointMetrics(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onApplicationChange = function (application) {
+      var _a;
+
+      var _b = _this.props,
+          query = _b.query,
+          onChange = _b.onChange,
+          onRunQuery = _b.onRunQuery; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+      if (typeof application === 'string') {
+        query.entity = {
+          key: application,
+          label: application
+        };
+      } else {
+        query.entity = application;
+
+        if (application.boundaryScope !== '') {
+          //set the default boundary scope that is configured for this application
+          query.applicationBoundaryScope = application.boundaryScope;
+        } else {
+          if (query.applicationBoundaryScope !== 'ALL' && query.applicationBoundaryScope !== 'INBOUND') {
+            //if no default is set, set it to INBOUND
+            query.applicationBoundaryScope = 'INBOUND';
+          }
+        }
+      }
+
+      onChange(query); // Only load dependent data if not a variable
+
+      if (!_this.isVariable((_a = query.entity) === null || _a === void 0 ? void 0 : _a.key)) {
+        _this.loadServices();
+
+        _this.loadEndpoints();
+      }
+
+      onRunQuery();
+    };
+
+    _this.onServiceChange = function (service) {
+      var _a;
+
+      var _b = _this.props,
+          query = _b.query,
+          onChange = _b.onChange,
+          onRunQuery = _b.onRunQuery; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+      if (typeof service === 'string') {
+        query.service = {
+          key: service,
+          label: service
+        };
+      } else {
+        query.service = service;
+      }
+
+      onChange(query); // Only load endpoints if not a variable
+
+      if (!_this.isVariable((_a = query.service) === null || _a === void 0 ? void 0 : _a.key)) {
+        _this.loadEndpoints();
+      }
+
+      onRunQuery();
+    };
+
+    _this.onEndpointChange = function (endpoint) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+      if (typeof endpoint === 'string') {
+        query.endpoint = {
+          key: endpoint,
+          label: endpoint
+        };
+      } else {
+        query.endpoint = endpoint;
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onGroupByTagSecondLevelKeyChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    _this.onApplicationBoundaryScopeChange = function (scope) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.applicationBoundaryScope = scope;
+      onChange(query);
+
+      _this.loadServices();
+
+      _this.loadEndpoints();
+
+      onRunQuery();
+    };
+
+    _this.state = {
+      applications: [],
+      services: [],
+      endpoints: [],
+      value: {
+        value: 2,
+        imgUrl: '../../resources/dest.png'
+      }
+    };
+    return _this;
+  }
+
+  ApplicationServiceEndpointMetrics.prototype.componentDidMount = function () {
+    isUnmounting = false;
+    this.loadApplications();
+    this.loadServices();
+    this.loadEndpoints();
+    var datasource = this.props.datasource;
+    this.props.updateMetrics(datasource.dataSourceApplication.getApplicationMetricsCatalog());
+  };
+
+  ApplicationServiceEndpointMetrics.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  ApplicationServiceEndpointMetrics.prototype.loadApplications = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        onChange = _a.onChange,
+        datasource = _a.datasource;
+    datasource.fetchApplications().then(function (applications) {
+      var _a, _b;
+
+      if (!isUnmounting) {
+        if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(applications, {
+          key: null
+        })) {
+          applications.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ALL_APPLICATIONS"]
+          });
+        }
+
+        _this.setState({
+          applications: applications
+        }); // replace removed application and preselect entity
+        // Don't replace if it's a variable
+
+
+        var entityKey_1 = ((_a = query.entity) === null || _a === void 0 ? void 0 : _a.key) || ((_b = query.entity) === null || _b === void 0 ? void 0 : _b.value);
+
+        if (entityKey_1) {
+          // Check if it's a variable - if so, preserve it
+          if (_this.isVariable(entityKey_1)) {
+            // It's a variable - preserve it and trigger query
+            _this.props.onRunQuery();
+
+            return;
+          } // Not a variable - check if it exists in the list
+
+
+          if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(applications, function (app) {
+            return app.key === entityKey_1;
+          })) {
+            query.entity = applications[0];
+            onChange(query);
+          }
+        } else if (applications) {
+          // No entity selected - set to default
+          query.entity = applications[0];
+          onChange(query);
+        }
+      }
+    });
+  };
+
+  ApplicationServiceEndpointMetrics.prototype.loadServices = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        onChange = _a.onChange,
+        datasource = _a.datasource;
+    datasource.fetchServices(query).then(function (services) {
+      var _a, _b;
+
+      if (!isUnmounting) {
+        if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(services, {
+          key: null
+        })) {
+          services.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ALL_SERVICES"]
+          });
+        }
+
+        _this.setState({
+          services: services
+        }); // replace removed service and preselect service
+        // Don't replace if it's a variable
+
+
+        var serviceKey_1 = ((_a = query.service) === null || _a === void 0 ? void 0 : _a.key) || ((_b = query.service) === null || _b === void 0 ? void 0 : _b.value);
+
+        if (serviceKey_1) {
+          // Check if it's a variable - if so, preserve it
+          if (_this.isVariable(serviceKey_1)) {
+            // It's a variable - preserve it and trigger query
+            _this.props.onRunQuery();
+
+            return;
+          } // Not a variable - check if it exists in the list
+
+
+          if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(services, function (svc) {
+            return svc.key === serviceKey_1;
+          })) {
+            query.service = services[0];
+            onChange(query);
+          }
+        } else {
+          // No service selected - set to default
+          query.service = services[0];
+          onChange(query);
+        }
+      }
+    });
+  };
+
+  ApplicationServiceEndpointMetrics.prototype.loadEndpoints = function () {
+    var _this = this;
+
+    var _a = this.props,
+        query = _a.query,
+        onChange = _a.onChange,
+        datasource = _a.datasource;
+    datasource.fetchEndpoints(query).then(function (endpoints) {
+      var _a, _b;
+
+      if (!isUnmounting) {
+        if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(endpoints, {
+          key: null
+        })) {
+          endpoints.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ALL_ENDPOINTS"]
+          });
+        }
+
+        _this.setState({
+          endpoints: endpoints
+        }); // replace removed endpoint and preselect endpoint
+        // Don't replace if it's a variable
+
+
+        var endpointKey_1 = ((_a = query.endpoint) === null || _a === void 0 ? void 0 : _a.key) || ((_b = query.endpoint) === null || _b === void 0 ? void 0 : _b.value);
+
+        if (endpointKey_1) {
+          // Check if it's a variable - if so, preserve it
+          if (_this.isVariable(endpointKey_1)) {
+            // It's a variable - preserve it and trigger query
+            _this.props.onRunQuery();
+
+            return;
+          } // Not a variable - check if it exists in the list
+
+
+          if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(endpoints, function (ep) {
+            return ep.key === endpointKey_1;
+          })) {
+            query.endpoint = {
+              key: null,
+              label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ALL_ENDPOINTS"]
+            };
+            onChange(query);
+          }
+        } else {
+          // No endpoint selected - set to default
+          query.endpoint = {
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ALL_ENDPOINTS"]
+          };
+          onChange(query);
+        }
+      }
+    });
+  };
+
+  ApplicationServiceEndpointMetrics.prototype.isVariable = function (value) {
+    if (!value || typeof value !== 'string') {
+      return false;
+    }
+
+    return value.includes('$');
+  };
+
+  ApplicationServiceEndpointMetrics.prototype.render = function () {
+    var _a;
+
+    var query = this.props.query; // Format entity value for Select component with allowCustomValue
+
+    var entityValue = query.entity;
+
+    if (query.entity && query.entity.key) {
+      entityValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.entity), {
+        value: query.entity.key,
+        label: query.entity.label || query.entity.key
+      });
+    } // Format service value for Select component with allowCustomValue
+
+
+    var serviceValue = query.service;
+
+    if (query.service && query.service.key) {
+      serviceValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.service), {
+        value: query.service.key,
+        label: query.service.label || query.service.key
+      });
+    } // Format endpoint value for Select component with allowCustomValue
+
+
+    var endpointValue = query.endpoint;
+
+    if (query.endpoint && query.endpoint.key) {
+      endpointValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.endpoint), {
+        value: query.endpoint.key,
+        label: query.endpoint.label || query.endpoint.key
+      });
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 14,
+      tooltip: 'Select your application.'
+    }, "Application"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_ApplicationBoundaryScope__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      value: query.applicationBoundaryScope,
+      disabled: !((_a = query.entity) === null || _a === void 0 ? void 0 : _a.key),
+      onChange: this.onApplicationBoundaryScopeChange
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      value: entityValue,
+      options: this.state.applications,
+      onChange: this.onApplicationChange,
+      allowCustomValue: true,
+      placeholder: 'Please specify'
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 6,
+      tooltip: 'Select your service or type variable like $service'
+    }, "Service"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      value: serviceValue,
+      options: this.state.services,
+      onChange: this.onServiceChange,
+      allowCustomValue: true,
+      placeholder: 'Please specify'
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 6,
+      tooltip: 'Select your endpoint or type variable like $endpoint'
+    }, "Endpoint"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      value: endpointValue,
+      options: this.state.endpoints,
+      onChange: this.onEndpointChange,
+      allowCustomValue: true,
+      placeholder: 'Please specify'
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+      style: !query.showGroupBySecondLevel ? {
+        display: 'none'
+      } : {}
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
+      value: query.groupbyTagSecondLevelKey,
+      onChange: this.onGroupByTagSecondLevelKeyChange
+    })));
+  };
+
+  return ApplicationServiceEndpointMetrics;
+}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/ConfigEditor.tsx":
+/*!*************************************!*\
+  !*** ./components/ConfigEditor.tsx ***!
+  \*************************************/
+/*! exports provided: ConfigEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ConfigEditor", function() { return ConfigEditor; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _emotion_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @emotion/css */ "@emotion/css");
+/* harmony import */ var _emotion_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_emotion_css__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _util_instana_version__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/instana_version */ "./util/instana_version.ts");
+/* harmony import */ var _util_proxy_check__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/proxy_check */ "./util/proxy_check.ts");
+
+
+
+
+
+
+
+var settingsStyle = Object(_emotion_css__WEBPACK_IMPORTED_MODULE_2__["css"])(templateObject_1 || (templateObject_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n  max-width: 600px;\n"], ["\n  max-width: 600px;\n"])));
+
+var ConfigEditor =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(ConfigEditor, _super);
+
+  function ConfigEditor(props) {
+    var _a;
+
+    var _this = _super.call(this, props) || this;
+
+    _this.onInstanaOptionsChange = function (eventItem, key) {
+      var _a;
+
+      var _b = _this.props,
+          options = _b.options,
+          onOptionsChange = _b.onOptionsChange;
+
+      var jsonData = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options.jsonData), (_a = {}, _a[key] = eventItem.currentTarget.value, _a));
+
+      var secureJsonData;
+
+      if (key === 'apiToken') {
+        secureJsonData = {
+          apiToken: eventItem.currentTarget.value
+        };
+        delete jsonData.apiToken;
+        options.secureJsonData = secureJsonData; // Update state for API key configuration
+
+        var isApiKeyConfigured = !!eventItem.currentTarget.value;
+        var apiKeyValue = isApiKeyConfigured ? eventItem.currentTarget.value : '';
+
+        _this.setState({
+          isApiKeyConfigured: isApiKeyConfigured,
+          apiKeyValue: apiKeyValue
+        });
+      }
+
+      onOptionsChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options), {
+        jsonData: jsonData,
+        secureJsonData: secureJsonData
+      }));
+
+      if ('url' === key || 'apiToken' === key) {
+        _this.debouncedDetectFeatures(options);
+      }
+    };
+
+    _this.onResetAPIKey = function () {
+      var _a = _this.props,
+          options = _a.options,
+          onOptionsChange = _a.onOptionsChange;
+      onOptionsChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options), {
+        secureJsonFields: Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options.secureJsonFields), {
+          apiToken: false
+        }),
+        secureJsonData: Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options.secureJsonData), {
+          apiToken: ''
+        })
+      })); // Removed unused variable
+
+      _this.setState({
+        apiKeyValue: ''
+      });
+    };
+
+    _this.onSwitchChange = function (eventItem, key) {
+      var _a;
+
+      var _b = _this.props,
+          options = _b.options,
+          onOptionsChange = _b.onOptionsChange;
+      var value = false;
+
+      if (eventItem && eventItem.currentTarget) {
+        value = !options.jsonData[key];
+      }
+
+      var jsonData = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options.jsonData), (_a = {}, _a[key] = value, _a));
+
+      onOptionsChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options), {
+        jsonData: jsonData
+      }));
+    };
+
+    _this.debouncedDetectFeatures = function (settings) {
+      lodash__WEBPACK_IMPORTED_MODULE_4___default.a.debounce(function () {
+        return _this.detectFeatures(settings);
+      }, 500);
+    };
+    /**
+     * Checks whether the provided tenant-unit is able to provide certain features such as querying offline snapshots.
+     */
+
+
+    _this.detectFeatures = function (settings) {
+      var jsonData = settings ? settings.jsonData : _this.props.options.jsonData;
+
+      if (!jsonData || !jsonData.url) {
+        return;
+      }
+
+      _this.setState({
+        canUseProxy: Object(_util_proxy_check__WEBPACK_IMPORTED_MODULE_6__["default"])()
+      });
+
+      Object(_util_instana_version__WEBPACK_IMPORTED_MODULE_5__["default"])(jsonData).then(function (version) {
+        version ? _this.setState({
+          canQueryOfflineSnapshots: version >= 156
+        }) : _this.setState({
+          canQueryOfflineSnapshots: false
+        });
+      });
+    };
+
+    _this.state = {
+      canQueryOfflineSnapshots: false,
+      canUseProxy: false,
+      isApiKeyConfigured: false,
+      apiKeyValue: ''
+    }; // check possibility every time
+
+    _this.detectFeatures();
+
+    var _b = _this.props,
+        options = _b.options,
+        onOptionsChange = _b.onOptionsChange;
+    var jsonData = options.jsonData;
+
+    if (jsonData.useProxy === undefined) {
+      jsonData.useProxy = Object(_util_proxy_check__WEBPACK_IMPORTED_MODULE_6__["default"])();
+    }
+
+    jsonData.useProxy = true; // Check if API key is already configured
+
+    var isApiKeyConfigured = !!((_a = options.secureJsonData) === null || _a === void 0 ? void 0 : _a.apiToken);
+    var apiKeyValue = isApiKeyConfigured ? '********' : '';
+
+    _this.setState({
+      isApiKeyConfigured: isApiKeyConfigured,
+      apiKeyValue: apiKeyValue
+    });
+
+    onOptionsChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, options), {
+      jsonData: jsonData
+    }));
+    return _this;
+  }
+
+  ConfigEditor.prototype.render = function () {
+    var _this = this;
+
+    var _a, _b;
+
+    var options = this.props.options;
+    var jsonData = options.jsonData;
+    var apiKeyValue = this.state.apiKeyValue;
+    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+      className: settingsStyle
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Legend"], null, "Instana configuration"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      required: true,
+      label: "URL",
+      description: "The URL of your Instana installation."
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+      width: 30,
+      value: jsonData.url,
+      placeholder: 'https://tools-acme.instana.io',
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'url');
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      style: {
+        width: '637px'
+      },
+      horizontal: true,
+      required: true,
+      label: "API Token",
+      description: "The API token to access the data."
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+      style: {
+        display: 'flex'
+      }
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+      type: "password",
+      width: 30,
+      value: apiKeyValue,
+      placeholder: ((_a = options.secureJsonFields) === null || _a === void 0 ? void 0 : _a.apiToken) ? 'Configured' : 'Enter API Key',
+      readOnly: (_b = options.secureJsonFields) === null || _b === void 0 ? void 0 : _b.apiToken,
+      suffix: react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Tooltip"], {
+        content: react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("p", null, "You can create API tokens following the instructions at\xA0", react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("a", {
+          href: "https://www.ibm.com/docs/en/obi/current?topic=apis-web-rest-api#unit-specific-api-tokens"
+        }, "https://www.ibm.com/docs/en/obi/current?topic=apis-web-rest-api")),
+        theme: 'info'
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Icon"], {
+        name: "info-circle"
+      })),
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'apiToken');
+      }
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+      style: {
+        marginLeft: '15px'
+      }
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+      onClick: this.onResetAPIKey
+    }, "Reset API Token")))), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+      label: 'Use Proxy',
+      value: true,
+      disabled: true,
+      description: 'The only way to use the API token for authentication in Grafana is through Use-Proxy. Needs Grafana 10.0.0+ and Instana datasource 4.0.0+'
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+      label: 'Enable offline snapshots',
+      value: jsonData.showOffline,
+      onChange: function onChange(event) {
+        return _this.onSwitchChange(event, 'showOffline');
+      },
+      description: 'Enables querying offline snapshots. Needs Instana release 260+ and Instana datasource 3.3.0+'
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+      label: 'Enable Infrastructure Analyze category',
+      value: jsonData.allowInfraExplore,
+      onChange: function onChange(event) {
+        return _this.onSwitchChange(event, 'allowInfraExplore');
+      },
+      description: 'Adds a new category that allows usage of Infrastructure Analyze functionality. Needs Instana release ' + '195+ and an explicit feature flag. If you are interested in this technology, please submit a request via ' + 'our support system at https://support.instana.com/.'
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("b", null, "Maximum query intervals in hours"), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("p", {
+      className: 'width-30'
+    }, "This settings are optional values to control the load of data queries, by defining the maximum allowed query intervals against the Instana API."), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      label: "Infrastructure metrics"
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+      width: 30,
+      value: jsonData.queryinterval_limit_infra,
+      placeholder: 'optional: interval limit in hours',
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'queryinterval_limit_infra');
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      label: "Application metrics"
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+      width: 30,
+      value: jsonData.queryinterval_limit_app_metrics,
+      placeholder: 'optional: interval limit in hours',
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'queryinterval_limit_app_metrics');
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      label: "Analyze application calls"
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+      width: 30,
+      value: jsonData.queryinterval_limit_app_calls,
+      placeholder: 'optional: interval limit in hours',
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'queryinterval_limit_app_calls');
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      label: "Analyze website"
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+      width: 30,
+      value: jsonData.queryinterval_limit_website_metrics,
+      placeholder: 'optional: interval limit in hours',
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'queryinterval_limit_website_metrics');
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      className: 'width-30',
+      horizontal: true,
+      label: "Analyze mobile app"
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+      width: 30,
+      value: jsonData.queryinterval_limit_mobileapp_metrics,
+      placeholder: 'optional: interval limit in hours',
+      onChange: function onChange(event) {
+        return _this.onInstanaOptionsChange(event, 'queryinterval_limit_mobileapp_metrics');
+      }
+    })));
+  };
+
+  return ConfigEditor;
+}(react__WEBPACK_IMPORTED_MODULE_3__["PureComponent"]);
+
+
+var templateObject_1;
+
+/***/ }),
+
+/***/ "./components/Entity/Entity.tsx":
+/*!**************************************!*\
+  !*** ./components/Entity/Entity.tsx ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Entity; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+var DESTINATION = 'DESTINATION';
+var SOURCE = 'SOURCE';
+var dropdown = {
+  position: 'relative',
+  background: 'transparent',
+  width: '32px',
+  height: '32px',
+  marginRight: '4px'
+};
+var dropdown__list = {
+  transition: 'max-height .2s ease-out',
+  maxHeight: 0,
+  overflow: 'hidden',
+  zIndex: 1,
+  position: 'fixed'
+};
+var dropdown__list__active = {
+  overflow: 'hidden',
+  zIndex: 2,
+  position: 'fixed',
+  maxHeight: '1000px',
+  opacity: 1
+};
+var iconTextContainer = {
+  display: 'inline-flex'
+};
+var iconStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
+};
+var iconTextStyle = {
+  padding: '7px'
+};
+var iconSize = 30;
+var destinationIcon = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("svg", {
+  style: iconStyle,
+  height: iconSize,
+  width: iconSize
+}, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("path", {
+  transform: "translate(3, 5)",
+  fill: "#33a2e5",
+  d: "M4 11.173h6.38L8.115 8.92 9.042 8l3.704 3.684-3.704 3.684-.926-.92 2.263-2.252H4zM16.43 14.316c-1.426 0-2.632-1.206-2.632-2.632 0-1.425 1.206-2.631 2.632-2.631 1.425 0 2.631 1.206 2.631 2.631 0 1.426-1.206 2.632-2.631 2.632z"
+}));
+var sourceIcon = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("svg", {
+  style: iconStyle,
+  height: iconSize,
+  width: iconSize
+}, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("path", {
+  transform: "translate(3, 5)",
+  fill: "#33a2e5",
+  d: "M9.939 11.173h6.379L14.054 8.92 14.98 8l3.704 3.684-3.704 3.684-.926-.92 2.264-2.252h-6.38c-.308 1.023-1.234 1.842-2.366 1.842C6.132 14.243 5 13.117 5 11.787c0-1.33 1.132-2.457 2.47-2.457 1.234 0 2.16.717 2.469 1.843z"
+}));
+/**
+ * Props have to be:
+ *   value: string
+ *   onChange: function that accepts a string as a parameter and returns void
+ */
+
+function Entity(props) {
+  var theme = Object(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["useTheme"])();
+  var dropdown__list__item = {
+    background: theme.colors.bg2,
+    cursor: 'pointer',
+    listStyle: 'none',
+    borderRadius: '3px',
+    height: '32px'
+  };
+
+  var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false), 2),
+      active = _a[0],
+      setActive = _a[1];
+
+  function toggleDropdown() {
+    setActive(!active);
+  }
+
+  function handleClick(entity) {
+    props.onChange(entity);
+    setActive(false);
+  }
+
+  return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    style: dropdown
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    onClick: function onClick() {
+      return toggleDropdown();
+    },
+    onBlur: function onBlur() {
+      return setActive(false);
+    },
+    style: dropdown__list__item,
+    contentEditable: true
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Tooltip"], {
+    content: props.value,
+    theme: 'info',
+    placement: 'top'
+  }, props.value === DESTINATION ? destinationIcon : sourceIcon)), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", {
+    style: active ? dropdown__list__active : dropdown__list
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+    onClick: function onClick() {
+      return handleClick(DESTINATION);
+    },
+    key: DESTINATION,
+    style: dropdown__list__item
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    style: iconTextContainer
+  }, destinationIcon, " ", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+    style: iconTextStyle
+  }, DESTINATION))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+    onClick: function onClick() {
+      return handleClick('SOURCE');
+    },
+    key: SOURCE,
+    style: dropdown__list__item
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    style: iconTextContainer
+  }, sourceIcon, " ", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+    style: iconTextStyle
+  }, SOURCE)))));
+}
+
+/***/ }),
+
+/***/ "./components/FormField/FormInput.tsx":
+/*!********************************************!*\
+  !*** ./components/FormField/FormInput.tsx ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _FormWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FormWrapper */ "./components/FormField/FormWrapper.tsx");
+
+
+
+
+/**
+ * Default input field including label. Input element is grafana/ui <Input />.
+ */
+
+var FormInput =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(FormInput, _super);
+
+  function FormInput(props) {
+    return _super.call(this, props) || this;
+  }
+
+  FormInput.prototype.render = function () {
+    var _a = this.props,
+        label = _a.label,
+        tooltip = _a.tooltip,
+        queryKeyword = _a.queryKeyword,
+        disabled = _a.disabled,
+        _b = _a.labelWidth,
+        labelWidth = _b === void 0 ? 14 : _b,
+        _c = _a.inputWidth,
+        inputWidth = _c === void 0 ? 30 : _c,
+        remainingProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"])(_a, ["label", "tooltip", "queryKeyword", "disabled", "labelWidth", "inputWidth"]);
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      disabled: disabled,
+      stretch: !inputWidth
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: queryKeyword ? 'query-keyword' : '',
+      width: labelWidth,
+      tooltip: tooltip
+    }, label), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({
+      width: inputWidth,
+      disabled: disabled
+    }, remainingProps)));
+  };
+
+  return FormInput;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (FormInput);
+
+/***/ }),
+
+/***/ "./components/FormField/FormSelect.tsx":
+/*!*********************************************!*\
+  !*** ./components/FormField/FormSelect.tsx ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _FormWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FormWrapper */ "./components/FormField/FormWrapper.tsx");
+
+
+
+
+/**
+ * Default select field including label. Select element is grafana/ui <Select />.
+ */
+
+var FormSelect =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(FormSelect, _super);
+
+  function FormSelect(props) {
+    return _super.call(this, props) || this;
+  }
+
+  FormSelect.prototype.render = function () {
+    var _a = this.props,
+        label = _a.label,
+        tooltip = _a.tooltip,
+        _b = _a.searchable,
+        searchable = _b === void 0 ? true : _b,
+        disabled = _a.disabled,
+        queryKeyword = _a.queryKeyword,
+        _c = _a.placeholder,
+        placeholder = _c === void 0 ? '-' : _c,
+        _d = _a.labelWidth,
+        labelWidth = _d === void 0 ? 14 : _d,
+        _e = _a.inputWidth,
+        inputWidth = _e === void 0 ? 30 : _e,
+        _f = _a.isClearable,
+        isClearable = _f === void 0 ? false : _f,
+        remainingProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"])(_a, ["label", "tooltip", "searchable", "disabled", "queryKeyword", "placeholder", "labelWidth", "inputWidth", "isClearable"]);
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      disabled: disabled,
+      stretch: !inputWidth
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: queryKeyword ? 'query-keyword' : '',
+      width: labelWidth,
+      tooltip: tooltip
+    }, label), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Select"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({
+      menuPlacement: 'bottom',
+      disabled: disabled,
+      width: inputWidth,
+      isSearchable: searchable,
+      isClearable: isClearable,
+      placeholder: placeholder
+    }, remainingProps)));
+  };
+
+  return FormSelect;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (FormSelect);
+
+/***/ }),
+
+/***/ "./components/FormField/FormSwitch.tsx":
+/*!*********************************************!*\
+  !*** ./components/FormField/FormSwitch.tsx ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _FormWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FormWrapper */ "./components/FormField/FormWrapper.tsx");
+
+
+
+
+var Switch = _grafana_ui__WEBPACK_IMPORTED_MODULE_2__["LegacyForms"].Switch;
+/**
+ * Default switch field including label. Switch element is grafana/ui <Switch />.
+ */
+
+var FormSwitch =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(FormSwitch, _super);
+
+  function FormSwitch(props) {
+    return _super.call(this, props) || this;
+  }
+
+  FormSwitch.prototype.render = function () {
+    var _a = this.props,
+        label = _a.label,
+        tooltip = _a.tooltip,
+        queryKeyword = _a.queryKeyword,
+        disabled = _a.disabled,
+        _b = _a.labelWidth,
+        labelWidth = _b === void 0 ? 14 : _b,
+        value = _a.value,
+        remainingProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"])(_a, ["label", "tooltip", "queryKeyword", "disabled", "labelWidth", "value"]);
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      disabled: disabled,
+      stretch: false
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: queryKeyword ? 'query-keyword' : '',
+      width: labelWidth,
+      tooltip: tooltip
+    }, label), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Switch, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({
+      checked: value,
+      label: ''
+    }, remainingProps)));
+  };
+
+  return FormSwitch;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (FormSwitch);
+
+/***/ }),
+
+/***/ "./components/FormField/FormTextArea.tsx":
+/*!***********************************************!*\
+  !*** ./components/FormField/FormTextArea.tsx ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _FormWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FormWrapper */ "./components/FormField/FormWrapper.tsx");
+
+
+
+
+/**
+ * Default input text area including label. Input text area is grafana/ui <TextArea />.
+ */
+
+var FormTextArea =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(FormTextArea, _super);
+
+  function FormTextArea(props) {
+    return _super.call(this, props) || this;
+  }
+
+  FormTextArea.prototype.render = function () {
+    var _a = this.props,
+        label = _a.label,
+        tooltip = _a.tooltip,
+        queryKeyword = _a.queryKeyword,
+        disabled = _a.disabled,
+        _b = _a.labelWidth,
+        labelWidth = _b === void 0 ? 14 : _b,
+        _c = _a.inputWidth,
+        inputWidth = _c === void 0 ? 30 : _c,
+        remainingProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"])(_a, ["label", "tooltip", "queryKeyword", "disabled", "labelWidth", "inputWidth"]);
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      disabled: disabled,
+      stretch: !inputWidth
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["InlineFormLabel"], {
+      className: queryKeyword ? 'query-keyword' : '',
+      width: labelWidth,
+      tooltip: tooltip
+    }, label), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["TextArea"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({
+      rows: 4,
+      width: inputWidth,
+      disabled: disabled
+    }, remainingProps)));
+  };
+
+  return FormTextArea;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (FormTextArea);
+
+/***/ }),
+
+/***/ "./components/FormField/FormWrapper.tsx":
+/*!**********************************************!*\
+  !*** ./components/FormField/FormWrapper.tsx ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FormWrapper; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function FormWrapper(props) {
+  var style = {
+    display: 'flex'
+  };
+
+  if (props.disabled) {
+    style.opacity = '0.4';
+    style.pointerEvents = 'none';
+  }
+
+  if (props.stretch) {
+    style.width = '100%';
+  }
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    style: style
+  }, props.children);
+}
+
+/***/ }),
+
+/***/ "./components/Infrastructure/Custom/FreeTextMetrics.tsx":
+/*!**************************************************************!*\
+  !*** ./components/Infrastructure/Custom/FreeTextMetrics.tsx ***!
+  \**************************************************************/
+/*! exports provided: FreeTextMetrics */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FreeTextMetrics", function() { return FreeTextMetrics; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../FormField/FormSwitch */ "./components/FormField/FormSwitch.tsx");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+
+var FreeTextMetrics =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(FreeTextMetrics, _super);
+
+  function FreeTextMetrics(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onUseFreeTextMetricsChange = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+
+      if (event && event.currentTarget) {
+        query.useFreeTextMetrics = event.currentTarget.checked;
+
+        if (query.useFreeTextMetrics) {
+          query.metric = {};
+        }
+
+        onChange(query);
+      }
+    };
+
+    _this.onFreeTextMetricsChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.freeTextMetrics = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    return _this;
+  }
+
+  FreeTextMetrics.prototype.render = function () {
+    var query = this.props.query;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      queryKeyword: true,
+      label: 'Enable free text metrics',
+      tooltip: 'Specify comma separated metrics directly in this text field. Once this field has a value,' + ' selected metrics from above will be ignored. Enabled as soon as a query is entered.' + ' Max 4 metrics supported.',
+      value: query.useFreeTextMetrics,
+      onChange: this.onUseFreeTextMetricsChange,
+      disabled: false
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Input"], {
+      width: 0,
+      disabled: !query.useFreeTextMetrics,
+      value: query.freeTextMetrics,
+      placeholder: 'metric.one,metric.two,metric.three',
+      onChange: this.onFreeTextMetricsChange
+    }));
+  };
+
+  return FreeTextMetrics;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Infrastructure/Custom/MetricFilter.tsx":
+/*!***********************************************************!*\
+  !*** ./components/Infrastructure/Custom/MetricFilter.tsx ***!
+  \***********************************************************/
+/*! exports provided: MetricFilter */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MetricFilter", function() { return MetricFilter; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _FormField_FormInput__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../FormField/FormInput */ "./components/FormField/FormInput.tsx");
+
+
+
+
+
+
+var MetricFilter =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(MetricFilter, _super);
+
+  function MetricFilter(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onFilterChange = function (eventItem, index) {
+      var customFilters = _this.state.customFilters;
+      customFilters[index] = eventItem.currentTarget.value;
+
+      _this.setState({
+        customFilters: customFilters
+      });
+
+      _this.props.onFilterChange(customFilters);
+    };
+
+    _this.addCustomFilter = function () {
+      var customFilters = _this.state.customFilters;
+      customFilters.push('');
+
+      _this.setState({
+        customFilters: customFilters
+      });
+
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.customFilters = customFilters;
+      onChange(query);
+    };
+
+    _this.removeCustomFilter = function (index) {
+      var customFilters = _this.state.customFilters;
+      customFilters.splice(index, 1);
+
+      _this.setState({
+        customFilters: customFilters
+      });
+
+      _this.props.onFilterChange(customFilters);
+    };
+
+    _this.state = {
+      customFilters: []
+    };
+    return _this;
+  }
+
+  MetricFilter.prototype.componentDidMount = function () {
+    var query = this.props.query;
+    this.setState({
+      customFilters: query.customFilters
+    });
+  };
+
+  MetricFilter.prototype.render = function () {
+    var _this = this;
+
+    var filter = null;
+    var listFilter = this.state.customFilters.map(function (filters, index) {
+      filter = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: 'gf-form'
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormInput__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        label: index + 1 + '. filter metric select',
+        value: _this.state.customFilters[index],
+        placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["PLEASE_SPECIFY"],
+        onChange: function onChange(event) {
+          return _this.onFilterChange(event, index);
+        },
+        tooltip: 'Type to suggest metrics.'
+      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+        variant: 'secondary',
+        onClick: function onClick() {
+          return _this.removeCustomFilter(index);
+        }
+      }, "-"));
+      return filter;
+    });
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, listFilter, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["InlineFormLabel"], {
+      width: 14,
+      tooltip: 'Add an additional metric select filter.'
+    }, "Add filter metric select"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+      variant: 'secondary',
+      onClick: this.addCustomFilter
+    }, "+")));
+  };
+
+  return MetricFilter;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Infrastructure/Explore.tsx":
+/*!***********************************************!*\
+  !*** ./components/Infrastructure/Explore.tsx ***!
+  \***********************************************/
+/*! exports provided: Explore */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Explore", function() { return Explore; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../FormField/FormWrapper */ "./components/FormField/FormWrapper.tsx");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lists/apply_call_to_entities */ "./lists/apply_call_to_entities.ts");
+
+
+
+
+
+
+
+var isUnmounting = false;
+
+var Explore =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(Explore, _super);
+
+  function Explore(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onEntityChange = function (entityType) {
+      var _a = _this.props,
+          query = _a.query,
+          datasource = _a.datasource,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+
+      if (typeof entityType === 'string') {
+        query.entity = {
+          key: entityType,
+          label: entityType
+        };
+      } else {
+        query.entity = entityType;
+      }
+
+      onChange(query);
+      onRunQuery();
+
+      if (query.entity.key && !query.entity.key.includes('$')) {
+        datasource.fetchMetricsForEntityType(query).then(function (result) {
+          _this.props.updateMetrics(result);
+        });
+      }
+    };
+
+    _this.onInfraCallToEntityChange = function (applicationCallToEntity) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.applicationCallToEntity = applicationCallToEntity;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onCallToEntityChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.callToEntity = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    _this.onGroupByTagSecondLevelKeyChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange;
+      query.group = {
+        key: eventItem.currentTarget.value,
+        label: eventItem.currentTarget.value,
+        type: 'STRING'
+      };
+      query.groupbyTagSecondLevelKey = eventItem.currentTarget.value;
+      onChange(query); // onRunQuery with 500ms delay after last debounce
+
+      _this.debouncedRunQuery();
+    };
+
+    _this.state = {
+      entityTypes: []
+    };
+    return _this;
+  }
+
+  Explore.prototype.componentDidMount = function () {
+    var _this = this;
+
+    var _a, _b;
+
+    var _c = this.props,
+        query = _c.query,
+        datasource = _c.datasource,
+        onChange = _c.onChange;
+    isUnmounting = false;
+    var entityValue = ((_a = query.entity) === null || _a === void 0 ? void 0 : _a.key) || ((_b = query.entity) === null || _b === void 0 ? void 0 : _b.label);
+    var isEntityVariable = entityValue && typeof entityValue === 'string' && entityValue.includes('$');
+    datasource.getEntityTypes().then(function (entityTypes) {
+      if (!isUnmounting) {
+        if (!lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(entityTypes, {
+          key: null
+        })) {
+          entityTypes.unshift({
+            key: null,
+            label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_4__["PLEASE_SPECIFY"]
+          });
+        }
+
+        _this.setState({
+          entityTypes: entityTypes
+        });
+
+        if (!query.entity || !query.entity.key && !query.entity.label) {
+          query.entity = entityTypes[0];
+        }
+
+        if (!query.callToEntity) {
+          query.callToEntity = _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_6__["default"][0];
+        }
+
+        if (!query.applicationCallToEntity) {
+          query.applicationCallToEntity = _lists_apply_call_to_entities__WEBPACK_IMPORTED_MODULE_6__["default"][0];
+        }
+
+        onChange(query);
+
+        if (isEntityVariable && query.entity) {
+          _this.props.onRunQuery();
+        }
+      }
+    });
+  };
+
+  Explore.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  Explore.prototype.render = function () {
+    var query = this.props.query;
+    var entityValue = query.entity;
+
+    if (query.entity && query.entity.key) {
+      entityValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.entity), {
+        value: query.entity.key,
+        label: query.entity.label || query.entity.key
+      });
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      stretch: true
+    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 14,
+      tooltip: 'Select your Entity Type or type variable like $entity_type'
+    }, "Entity types"), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+      menuPlacement: 'bottom',
+      width: 0,
+      isSearchable: true,
+      value: entityValue,
+      options: this.state.entityTypes,
+      onChange: this.onEntityChange,
+      allowCustomValue: true,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_4__["PLEASE_SPECIFY"]
+    })), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_FormField_FormWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      stretch: true
+    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["InlineFormLabel"], {
+      className: 'query-keyword',
+      width: 7,
+      tooltip: 'Enter the Group by tag.'
+    }, "Group by"), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+      type: 'text',
+      value: query.groupbyTagSecondLevelKey,
+      onChange: this.onGroupByTagSecondLevelKeyChange
+    })));
+  };
+
+  return Explore;
+}(react__WEBPACK_IMPORTED_MODULE_2___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Infrastructure/Infrastructure.tsx":
+/*!******************************************************!*\
+  !*** ./components/Infrastructure/Infrastructure.tsx ***!
+  \******************************************************/
+/*! exports provided: Infrastructure */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Infrastructure", function() { return Infrastructure; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _QueryType__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./QueryType */ "./components/Infrastructure/QueryType.tsx");
+
+
+
+var isUnmounting = false;
+
+var Infrastructure =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(Infrastructure, _super);
+
+  function Infrastructure(props) {
+    return _super.call(this, props) || this;
+  }
+
+  Infrastructure.prototype.componentDidMount = function () {
+    var _this = this;
+
+    var _a, _b;
+
+    var _c = this.props,
+        query = _c.query,
+        onChange = _c.onChange,
+        datasource = _c.datasource;
+    isUnmounting = false;
+    var savedEntityType = ((_a = query.entityType) === null || _a === void 0 ? void 0 : _a.key) ? query.entityType : ((_b = query.entity) === null || _b === void 0 ? void 0 : _b.key) ? query.entity : undefined;
+
+    if (savedEntityType && savedEntityType.key) {
+      if (!query.entityType || !query.entityType.key) {
+        query.entityType = savedEntityType;
+      }
+
+      if (!query.entity || !query.entity.key) {
+        query.entity = savedEntityType;
+      } // Only fetch metrics if entity type is not a variable
+
+
+      var isVariable = typeof savedEntityType.key === 'string' && savedEntityType.key.startsWith('$');
+
+      if (!isVariable) {
+        datasource.dataSourceInfrastructure.getMetricsCatalog(savedEntityType, query.metricCategory.key).then(function (results) {
+          if (!isUnmounting) {
+            _this.props.updateMetrics(results);
+          }
+        });
+      }
+    } else {
+      // Only reset metric if it's not already set (e.g., from saved dashboard with variable)
+      var hasMetricValue = query.metric && query.metric.key;
+
+      if (!hasMetricValue) {
+        query.metric = {
+          key: null,
+          label: '-'
+        };
+      }
+    }
+
+    onChange(query);
+  };
+
+  Infrastructure.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  Infrastructure.prototype.render = function () {
+    var _a = this.props,
+        query = _a.query,
+        onRunQuery = _a.onRunQuery,
+        onChange = _a.onChange,
+        updateMetrics = _a.updateMetrics,
+        datasource = _a.datasource,
+        queryTypes = _a.queryTypes,
+        updateQueryTypes = _a.updateQueryTypes;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_QueryType__WEBPACK_IMPORTED_MODULE_2__["QueryType"], {
+      query: query,
+      onChange: onChange,
+      queryTypes: queryTypes,
+      onRunQuery: onRunQuery,
+      datasource: datasource,
+      updateMetrics: updateMetrics,
+      updateQueryTypes: updateQueryTypes
+    });
+  };
+
+  return Infrastructure;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Infrastructure/QueryType.tsx":
+/*!*************************************************!*\
+  !*** ./components/Infrastructure/QueryType.tsx ***!
+  \*************************************************/
+/*! exports provided: QueryType */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QueryType", function() { return QueryType; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+
+
+
+
+
+var QueryType =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(QueryType, _super);
+
+  function QueryType(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onTypeChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          datasource = _a.datasource,
+          onChange = _a.onChange; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+      if (typeof eventItem === 'string') {
+        query.entityType = {
+          key: eventItem,
+          label: eventItem
+        };
+      } else {
+        // When user types a custom value in Select, Grafana creates { value: "...", label: "..." }
+        // We need to normalize this to use 'key' property for consistency
+        if (eventItem.value && !eventItem.key) {
+          query.entityType = {
+            key: eventItem.value,
+            label: eventItem.label || eventItem.value
+          };
+        } else {
+          query.entityType = eventItem;
+        }
+      }
+
+      query.entity = query.entityType; // Reset selected entity when entity type changes
+
+      query.selectedEntity = {
+        key: null,
+        label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"]
+      };
+      onChange(query); // Load available entities for the new entity type
+
+      _this.loadAvailableEntities(); // Only fetch metrics if it's not a variable
+
+
+      if (query.entityType.key && !query.entityType.key.includes('$')) {
+        datasource.dataSourceInfrastructure.getMetricsCatalog(query.entityType, query.metricCategory.key).then(function (results) {
+          _this.props.updateMetrics(results);
+        });
+      }
+    };
+
+    _this.onEntityChange = function (eventItem) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery; // Handle null/undefined (clear selection)
+
+      if (!eventItem || eventItem === null) {
+        query.selectedEntity = {
+          key: null,
+          label: _GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"]
+        };
+        onChange(query);
+        onRunQuery();
+        return;
+      } // Handle both string (variable) and SelectableValue (dropdown selection)
+
+
+      if (typeof eventItem === 'string') {
+        query.selectedEntity = {
+          key: eventItem,
+          label: eventItem
+        };
+      } else {
+        // When user types a custom value in Select, Grafana creates { value: "...", label: "..." }
+        // We need to normalize this to use 'key' property for consistency
+        if (eventItem && eventItem.value && !eventItem.key) {
+          query.selectedEntity = {
+            key: eventItem.value,
+            label: eventItem.label || eventItem.value
+          };
+        } else {
+          query.selectedEntity = eventItem;
+        }
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.loadAvailableEntities = function () {
+      var _a = _this.props,
+          query = _a.query,
+          datasource = _a.datasource; // Only load entities if we have entityType
+
+      if (!query.entityType || !query.entityType.key) {
+        _this.setState({
+          availableEntities: [],
+          loadingEntities: false
+        });
+
+        return;
+      }
+
+      _this.setState({
+        loadingEntities: true
+      }); // Resolve variables in entityType if present
+
+
+      var resolvedEntityType = query.entityType.key;
+
+      if (typeof resolvedEntityType === 'string' && resolvedEntityType.startsWith('$')) {
+        // Use templateSrv to resolve the variable
+        resolvedEntityType = datasource.templateSrv.replace(resolvedEntityType); // If variable couldn't be resolved (returns the same value), don't fetch
+
+        if (resolvedEntityType === query.entityType.key || !resolvedEntityType) {
+          _this.setState({
+            availableEntities: [],
+            loadingEntities: false
+          });
+
+          return;
+        }
+      }
+
+      datasource.dataSourceInfrastructure.getInfrastructureEntities(resolvedEntityType).then(function (entities) {
+        _this.setState({
+          availableEntities: entities,
+          loadingEntities: false
+        });
+      })["catch"](function (error) {
+        console.error('Error loading entities:', error);
+
+        _this.setState({
+          availableEntities: [],
+          loadingEntities: false
+        });
+      });
+    };
+
+    _this.state = {
+      availableEntities: [],
+      loadingEntities: false
+    };
+    return _this;
+  }
+
+  QueryType.prototype.componentDidMount = function () {
+    var _this = this;
+
+    var _a, _b;
+
+    var _c = this.props,
+        query = _c.query,
+        datasource = _c.datasource;
+    var savedEntityType = ((_a = query.entityType) === null || _a === void 0 ? void 0 : _a.key) ? query.entityType : ((_b = query.entity) === null || _b === void 0 ? void 0 : _b.key) ? query.entity : undefined;
+
+    if (savedEntityType && savedEntityType.key && (!query.entityType || !query.entityType.key)) {
+      query.entityType = savedEntityType;
+    }
+
+    if (savedEntityType && savedEntityType.key && (!query.entity || !query.entity.key)) {
+      query.entity = savedEntityType;
+    } // Load all entity types on mount
+
+
+    datasource.getEntityTypes().then(function (entityTypes) {
+      _this.props.updateQueryTypes(entityTypes);
+    }); // Load available entities if entityType is already set (e.g., from saved panel)
+
+    if (query.entityType && query.entityType.key) {
+      this.loadAvailableEntities();
+    }
+  };
+
+  QueryType.prototype.render = function () {
+    var _a = this.props,
+        query = _a.query,
+        queryTypes = _a.queryTypes;
+    var _b = this.state,
+        availableEntities = _b.availableEntities,
+        loadingEntities = _b.loadingEntities;
+    var entityTypeValue = query.entityType;
+
+    if (query.entityType && query.entityType.key) {
+      entityTypeValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.entityType), {
+        value: query.entityType.key,
+        label: query.entityType.label || query.entityType.key
+      });
+    }
+
+    var selectedEntityValue = query.selectedEntity;
+
+    if (query.selectedEntity && query.selectedEntity.key) {
+      selectedEntityValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.selectedEntity), {
+        value: query.selectedEntity.key,
+        label: query.selectedEntity.label || query.selectedEntity.key
+      });
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Type',
+      tooltip: 'Select an entity type or type variable like $entity_type',
+      noOptionsMessage: 'No types available',
+      value: entityTypeValue,
+      options: queryTypes,
+      onChange: this.onTypeChange,
+      allowCustomValue: true,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"]
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      queryKeyword: true,
+      labelWidth: 12,
+      label: 'Entity Name',
+      tooltip: 'Optional: Select a specific entity to filter results or type variable like $entity. Leave empty to show all entities of the selected type.',
+      noOptionsMessage: loadingEntities ? 'Loading entities...' : 'No entities found',
+      value: selectedEntityValue,
+      options: availableEntities,
+      onChange: this.onEntityChange,
+      allowCustomValue: true,
+      isClearable: true,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"]
+    }));
+  };
+
+  return QueryType;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/Metric/Metric.tsx":
+/*!**************************************!*\
+  !*** ./components/Metric/Metric.tsx ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _lists_max_metrics__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lists/max_metrics */ "./lists/max_metrics.ts");
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../FormField/FormSwitch */ "./components/FormField/FormSwitch.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
+
+
+
+
+
+
+
+
+var Metric =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(Metric, _super);
+
+  function Metric(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.onMetricChange = function (metric) {
+      var _a, _b;
+
+      var _c = _this.props,
+          query = _c.query,
+          onRunQuery = _c.onRunQuery,
+          onChange = _c.onChange;
+
+      if (typeof metric === 'string') {
+        query.metric = {
+          key: metric,
+          label: metric,
+          aggregations: []
+        };
+      } else {
+        if (metric.value && !metric.key) {
+          query.metric = {
+            key: metric.value,
+            label: metric.label || metric.value,
+            aggregations: metric.aggregations || []
+          };
+        } else {
+          query.metric = metric;
+        }
+
+        var metricKey = ((_a = query.metric) === null || _a === void 0 ? void 0 : _a.key) || ((_b = query.metric) === null || _b === void 0 ? void 0 : _b.value);
+        var isVariable = metricKey && typeof metricKey === 'string' && metricKey.includes('$');
+
+        if (!isVariable && query.metric && query.metric.key && query.metric.aggregations && query.metric.aggregations.length > 0 && !lodash__WEBPACK_IMPORTED_MODULE_6___default.a.includes(query.metric.aggregations, query.aggregation)) {
+          query.aggregation = query.metric.aggregations[0];
+        }
+
+        if (query.displayMaxMetricValue && !_this.canShowMaxMetricValue()) {
+          query.displayMaxMetricValue = false;
+        }
+      }
+
+      query.allMetrics = [];
+      query.showAllMetrics = false;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onTimeIntervalChange = function (timeInterval) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery,
+          onChange = _a.onChange;
+
+      if (typeof timeInterval === 'string') {
+        query.timeInterval = {
+          key: timeInterval,
+          label: timeInterval
+        };
+      } else {
+        query.timeInterval = timeInterval;
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onAggregationChange = function (aggregation) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery,
+          onChange = _a.onChange;
+
+      if (typeof aggregation === 'string') {
+        query.aggregation = {
+          key: aggregation,
+          label: aggregation
+        };
+      } else {
+        query.aggregation = aggregation;
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onShowMaxValueChange = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+
+      if (event && event.currentTarget) {
+        query.displayMaxMetricValue = event.currentTarget.checked;
+        onChange(query);
+        onRunQuery();
+      }
+    };
+
+    _this.onShowAllMetricsChange = function (event) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+
+      if (event && event.currentTarget) {
+        query.showAllMetrics = event.currentTarget.checked;
+
+        if (query.showAllMetrics) {
+          query.metric = {
+            key: null,
+            label: "Displaying " + _this.props.availableMetrics.length + " metrics"
+          };
+          query.allMetrics = _this.props.availableMetrics;
+        }
+
+        onChange(query);
+        onRunQuery();
+      }
+    };
+
+    _this.state = {
+      possibleTimeIntervals: [],
+      possibleAggregations: []
+    };
+    return _this;
+  }
+
+  Metric.prototype.componentDidMount = function () {
+    var _a = this.props,
+        query = _a.query,
+        datasource = _a.datasource,
+        onChange = _a.onChange;
+
+    if (!query.timeInterval || !query.timeInterval.key || !datasource.availableTimeIntervals.find(function (i) {
+      return i.key === query.timeInterval.key;
+    })) {
+      query.timeInterval = datasource.getDefaultTimeInterval(query);
+    }
+
+    onChange(query);
+  };
+
+  Metric.prototype.canShowMaxMetricValue = function () {
+    var query = this.props.query;
+    return query.entityType && query.entityType.key === 'host' && query.metric && lodash__WEBPACK_IMPORTED_MODULE_6___default.a.find(_lists_max_metrics__WEBPACK_IMPORTED_MODULE_3__["default"], function (m) {
+      return m.key === query.metric.key;
+    });
+  };
+
+  Metric.prototype.canShowAggregation = function () {
+    var query = this.props.query;
+    return query.metricCategory.key >= _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"];
+  };
+
+  Metric.prototype.canSelectAggregation = function () {
+    var query = this.props.query;
+    return query.metric && query.metric.aggregations && query.metric.aggregations.length > 1;
+  };
+
+  Metric.prototype.render = function () {
+    var _a;
+
+    var _b = this.props,
+        query = _b.query,
+        datasource = _b.datasource;
+    var metricValue = query.metric;
+
+    if (query.metric) {
+      var metricKey = query.metric.key || query.metric.value;
+
+      if (metricKey && typeof metricKey === 'string' && metricKey.includes('$')) {
+        metricValue = {
+          label: query.metric.label || metricKey,
+          value: metricKey,
+          key: metricKey,
+          aggregations: query.metric.aggregations || []
+        };
+      }
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      disabled: query.useFreeTextMetrics,
+      inputWidth: 0,
+      label: 'Metric',
+      tooltip: 'Select the metric you wish to plot or type variable like $metric',
+      value: metricValue,
+      noOptionsMessage: 'No metrics found',
+      options: this.props.availableMetrics,
+      onChange: this.onMetricChange,
+      allowCustomValue: true,
+      placeholder: 'Please specify'
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["BUILT_IN_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      queryKeyword: true,
+      disabled: !this.canShowMaxMetricValue(),
+      labelWidth: 9,
+      label: 'Show max value',
+      tooltip: "Displays the maximal value of current metric. Supported for 'Type=Host' with cpu.used, " + 'memory.used and openFiles.used only.',
+      value: query.displayMaxMetricValue,
+      onChange: this.onShowMaxValueChange
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSwitch__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      queryKeyword: true,
+      disabled: !query.canShowAllMetrics,
+      labelWidth: 9,
+      label: 'Show all metrics',
+      tooltip: 'You have the option to show all metrics in the graph once the amount of possible, selectable ' + 'metrics is between 1 and 5.',
+      value: query.showAllMetrics,
+      onChange: this.onShowAllMetricsChange
+    }), this.canShowAggregation() && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      disabled: !this.canSelectAggregation(),
+      labelWidth: 7,
+      inputWidth: 12,
+      label: 'Aggregation',
+      tooltip: 'Select a metric aggregation or type variable like $aggregation',
+      value: query.aggregation,
+      options: ((_a = query.metric) === null || _a === void 0 ? void 0 : _a.aggregations) || [],
+      onChange: this.onAggregationChange,
+      allowCustomValue: true,
+      placeholder: 'Please specify'
+    }), query.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"] && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      disabled: datasource.availableTimeIntervals.length <= 1,
+      labelWidth: 5,
+      inputWidth: 12,
+      label: 'Rollup',
+      tooltip: 'Select the rollup value or type variable like $timeInterval',
+      value: query.timeInterval,
+      options: datasource.availableTimeIntervals,
+      onChange: this.onTimeIntervalChange,
+      allowCustomValue: true,
+      placeholder: 'Please specify'
+    }));
+  };
+
+  return Metric;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Metric);
+
+/***/ }),
+
+/***/ "./components/QueryEditor.tsx":
+/*!************************************!*\
+  !*** ./components/QueryEditor.tsx ***!
+  \************************************/
+/*! exports provided: QueryEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QueryEditor", function() { return QueryEditor; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _emotion_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @emotion/css */ "@emotion/css");
+/* harmony import */ var _emotion_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_emotion_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _AdvancedSettings_AdvancedSettings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./AdvancedSettings/AdvancedSettings */ "./components/AdvancedSettings/AdvancedSettings.tsx");
+/* harmony import */ var _lists_aggregation_function__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../lists/aggregation_function */ "./lists/aggregation_function.ts");
+/* harmony import */ var _Analyze_ApplicationCallsMetrics__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Analyze/ApplicationCallsMetrics */ "./components/Analyze/ApplicationCallsMetrics.tsx");
+/* harmony import */ var _ApplicationServiceEndpointMetrics_ApplicationServiceEndpointMetrics__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics */ "./components/ApplicationServiceEndpointMetrics/ApplicationServiceEndpointMetrics.tsx");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _Infrastructure_Explore__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Infrastructure/Explore */ "./components/Infrastructure/Explore.tsx");
+/* harmony import */ var _Analyze_Filter__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Analyze/Filter */ "./components/Analyze/Filter.tsx");
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _Infrastructure_Infrastructure__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Infrastructure/Infrastructure */ "./components/Infrastructure/Infrastructure.tsx");
+/* harmony import */ var _Metric_Metric__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Metric/Metric */ "./components/Metric/Metric.tsx");
+/* harmony import */ var _Infrastructure_Custom_MetricFilter__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Infrastructure/Custom/MetricFilter */ "./components/Infrastructure/Custom/MetricFilter.tsx");
+/* harmony import */ var _Analyze_MobileAppMetrics__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Analyze/MobileAppMetrics */ "./components/Analyze/MobileAppMetrics.tsx");
+/* harmony import */ var _SLOInformation_SloInformation__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./SLOInformation/SloInformation */ "./components/SLOInformation/SloInformation.tsx");
+/* harmony import */ var _SLOInformation_Slo2Information__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./SLOInformation/Slo2Information */ "./components/SLOInformation/Slo2Information.tsx");
+/* harmony import */ var _Analyze_WebsiteMetrics__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Analyze/WebsiteMetrics */ "./components/Analyze/WebsiteMetrics.tsx");
+/* harmony import */ var _SyntheticMonitoring_SyntheticMonitoring__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./SyntheticMonitoring/SyntheticMonitoring */ "./components/SyntheticMonitoring/SyntheticMonitoring.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_20__);
+/* harmony import */ var _lists_metric_categories__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../lists/metric_categories */ "./lists/metric_categories.ts");
+/* harmony import */ var _migration__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../migration */ "./migration.ts");
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // Inject global CSS to hide specific SVG path (from instana-grafana.css)
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
+Object(_emotion_css__WEBPACK_IMPORTED_MODULE_1__["injectGlobal"])(templateObject_1 || (templateObject_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n  path[d=\"M18.71,7.21a1,1,0,0,0-1.42,0L9.84,14.67,6.71,11.53A1,1,0,1,0,5.29,13l3.84,3.84a1,1,0,0,0,1.42,0l8.16-8.16A1,1,0,0,0,18.71,7.21Z\"] {\n    display: none;\n  }\n"], ["\n  path[d=\"M18.71,7.21a1,1,0,0,0-1.42,0L9.84,14.67,6.71,11.53A1,1,0,1,0,5.29,13l3.84,3.84a1,1,0,0,0,1.42,0l8.16-8.16A1,1,0,0,0,18.71,7.21Z\"] {\n    display: none;\n  }\n"])));
+
+var QueryEditor =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(QueryEditor, _super);
+
+  function QueryEditor(props) {
+    var _a, _b, _c, _d;
+
+    var _this = _super.call(this, props) || this;
+
+    _this.onCategoryChange = function (newCategory) {
+      if (_this.query.metricCategory === newCategory) {// nothing needs to be done
+      } else {
+        _this.selectionReset();
+
+        _this.query.metricCategory = newCategory;
+        _this.query.timeInterval = _this.props.datasource.getDefaultTimeInterval(_this.query);
+
+        _this.changeAndRun();
+      }
+    };
+
+    _this.changeAndRun = function () {
+      _this.props.onChange(_this.query);
+
+      _this.props.onRunQuery();
+    };
+
+    _this.updateMetrics = function (metrics) {
+      _this.setState({
+        availableMetrics: lodash__WEBPACK_IMPORTED_MODULE_20___default.a.sortBy(metrics, 'key'),
+        allMetrics: lodash__WEBPACK_IMPORTED_MODULE_20___default.a.sortBy(metrics, 'key')
+      }, function () {
+        if (_this.query.metric && _this.query.metric.key || _this.query.showAllMetrics) {
+          var metric = lodash__WEBPACK_IMPORTED_MODULE_20___default.a.find(metrics, function (m) {
+            return m.key === _this.query.metric.key;
+          });
+
+          if (metric) {
+            _this.query.metric = metric;
+          } else if (_this.query.metric.key && !_this.query.metric.key.toString().startsWith('$')) {
+            _this.query.metric = {
+              key: null
+            };
+          }
+        }
+
+        if (_this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"]) {
+          _this.onMetricsFilter(_this.query.customFilters); // this contains setMetricPlaceholder
+
+        } else if (!_this.query.metric || !_this.query.metric.key) {
+          _this.setMetricPlaceholder(metrics.length);
+        }
+
+        _this.changeAndRun();
+      });
+    };
+
+    _this.updateQueryTypes = function (types) {
+      _this.setState({
+        queryTypes: types
+      });
+    };
+
+    _this.updateGroups = function (groups) {
+      _this.setState({
+        groups: groups
+      });
+    };
+
+    _this.onMetricsFilter = function (customFilters) {
+      var _a;
+
+      var newAvailableMetrics = [];
+
+      if (!customFilters || customFilters.length === 0) {
+        newAvailableMetrics = _this.state.allMetrics;
+      } else {
+        newAvailableMetrics = _this.applyFilterToMetricList(customFilters);
+      }
+
+      _this.query.canShowAllMetrics = _this.isAbleToShowAllMetrics(newAvailableMetrics);
+
+      if (!_this.query.canShowAllMetrics) {
+        _this.query.showAllMetrics = false;
+      }
+
+      _this.query.customFilters = customFilters;
+
+      var isVariable = ((_a = _this.query.metric) === null || _a === void 0 ? void 0 : _a.key) && _this.query.metric.key.toString().startsWith('$');
+
+      if ((!_this.query.metric || !_this.query.metric.key) && !isVariable) {
+        _this.setMetricPlaceholder(newAvailableMetrics.length);
+      }
+
+      _this.setState(function (state) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, state), {
+          availableMetrics: newAvailableMetrics
+        });
+      });
+
+      _this.props.onChange(_this.query);
+
+      _this.checkMetricAndRefresh();
+    };
+
+    var defaultQuery = {
+      metricCategory: _lists_metric_categories__WEBPACK_IMPORTED_MODULE_21__["default"][0],
+      timeShiftIsValid: true,
+      customFilters: []
+    };
+    _this.query = Object.assign(defaultQuery, props.query);
+    Object(_migration__WEBPACK_IMPORTED_MODULE_22__["default"])(_this.query);
+    var metricKey = ((_a = _this.query.metric) === null || _a === void 0 ? void 0 : _a.key) || ((_b = _this.query.metric) === null || _b === void 0 ? void 0 : _b.value);
+    var initialMetric = metricKey && metricKey.includes('$') ? props.datasource.templateSrv.replace(metricKey) : '';
+    var groupKey = ((_c = _this.query.group) === null || _c === void 0 ? void 0 : _c.key) || ((_d = _this.query.group) === null || _d === void 0 ? void 0 : _d.value);
+    var initialGroup = groupKey && groupKey.includes('$') ? props.datasource.templateSrv.replace(groupKey) : '';
+    _this.state = {
+      groups: [],
+      allMetrics: [],
+      queryTypes: [],
+      availableMetrics: [],
+      selectedWindowSize: props.range ? Object(_util_time_util__WEBPACK_IMPORTED_MODULE_23__["readTime"])(props.range).windowSize : 21600000,
+      lastInterpolatedQuery: '',
+      lastInterpolatedEntityType: '',
+      lastInterpolatedEntity: '',
+      lastInterpolatedMetric: initialMetric,
+      lastInterpolatedGroup: initialGroup,
+      lastInterpolatedMobileAppType: '',
+      lastInterpolatedWebsiteType: ''
+    };
+    _this.filterMetricsOnType = _this.filterMetricsOnType.bind(_this);
+    _this.allowInfraExplore = props.datasource.options.allowInfraExplore;
+    props.onChange(_this.query);
+    return _this;
+  }
+
+  QueryEditor.prototype.componentDidMount = function () {
+    var _this = this;
+
+    var _a, _b;
+
+    var datasource = this.props.datasource;
+
+    if (this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"]) {
+      var entityKey = ((_a = this.query.entity) === null || _a === void 0 ? void 0 : _a.key) || ((_b = this.query.entity) === null || _b === void 0 ? void 0 : _b.value);
+
+      if (entityKey) {
+        datasource.fetchMetricsForEntityType(this.query).then(function (results) {
+          _this.updateMetrics(results);
+        })["catch"](function (error) {
+          console.error('[QueryEditor] Failed to hydrate Infra Analyze metrics on mount', error);
+        });
+      }
+    }
+  };
+
+  QueryEditor.prototype.componentDidUpdate = function (prevProps, prevState, snapshot) {
+    var _this = this;
+
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
+
+    var _t = this.props,
+        onChange = _t.onChange,
+        range = _t.range,
+        datasource = _t.datasource,
+        onRunQuery = _t.onRunQuery;
+
+    if (range && this.state.selectedWindowSize !== Object(_util_time_util__WEBPACK_IMPORTED_MODULE_23__["readTime"])(range).windowSize) {
+      this.setState(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, this.state), {
+        selectedWindowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_23__["readTime"])(range).windowSize
+      }));
+      datasource.setPossibleTimeIntervals(this.query);
+
+      if (!datasource.availableTimeIntervals.find(function (i) {
+        return i.key === _this.query.timeInterval.key;
+      })) {
+        this.query.timeInterval = datasource.getDefaultTimeInterval(this.query);
+        onChange(this.query); // no need to execute onRunQuery() here because the change of time frame triggers
+        // datasource.query() anyways and datasource will take care of correcting the timeInterval
+      }
+    } // Handle dashboard variable changes for entityType in Built-in/Custom metrics
+
+
+    if (((_a = this.query.entityType) === null || _a === void 0 ? void 0 : _a.label) && this.query.entityType.label.includes('$') && (this.query.metricCategory.key === 0 || this.query.metricCategory.key === 1)) {
+      var currentInterpolatedType = datasource.templateSrv.replace(this.query.entityType.label);
+
+      if (currentInterpolatedType !== this.state.lastInterpolatedEntityType && currentInterpolatedType) {
+        this.setState(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, this.state), {
+          lastInterpolatedEntityType: currentInterpolatedType
+        }));
+        var interpolatedQuery = datasource.interpolateVariables(this.query);
+        datasource.dataSourceInfrastructure.getMetricsCatalog(interpolatedQuery.entityType, this.query.metricCategory.key).then(function (results) {
+          _this.updateMetrics(results);
+        });
+      }
+    } // Handle dashboard variable changes for entity in Infrastructure Analyze
+
+
+    var entityKey = ((_b = this.query.entity) === null || _b === void 0 ? void 0 : _b.key) || ((_c = this.query.entity) === null || _c === void 0 ? void 0 : _c.value);
+
+    if (entityKey && entityKey.includes('$') && this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"]) {
+      var currentInterpolatedEntity = datasource.templateSrv.replace(entityKey);
+
+      if (currentInterpolatedEntity !== this.state.lastInterpolatedEntity && currentInterpolatedEntity) {
+        this.setState(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, this.state), {
+          lastInterpolatedEntity: currentInterpolatedEntity
+        }));
+
+        if (((_d = this.query.entity) === null || _d === void 0 ? void 0 : _d.value) && !((_e = this.query.entity) === null || _e === void 0 ? void 0 : _e.key)) {
+          this.query.entity.key = this.query.entity.value;
+        }
+
+        var interpolatedQuery = datasource.interpolateVariables(this.query);
+        datasource.fetchMetricsForEntityType(interpolatedQuery).then(function (results) {
+          _this.updateMetrics(results);
+        });
+      }
+    } // Handle dashboard variable changes for entity in Website Analyze
+
+
+    var websiteEntityKey = ((_f = this.query.entity) === null || _f === void 0 ? void 0 : _f.key) || ((_g = this.query.entity) === null || _g === void 0 ? void 0 : _g.value);
+
+    if (websiteEntityKey && websiteEntityKey.includes('$') && this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"]) {
+      var currentInterpolatedEntity = datasource.templateSrv.replace(websiteEntityKey);
+
+      if (currentInterpolatedEntity !== this.state.lastInterpolatedEntity && currentInterpolatedEntity) {
+        this.setState(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, this.state), {
+          lastInterpolatedEntity: currentInterpolatedEntity
+        }));
+        onRunQuery();
+      }
+    } // Handle dashboard variable changes for entity in Mobile App Analyze
+
+
+    var mobileAppEntityKey = ((_h = this.query.entity) === null || _h === void 0 ? void 0 : _h.key) || ((_j = this.query.entity) === null || _j === void 0 ? void 0 : _j.value);
+
+    if (mobileAppEntityKey && mobileAppEntityKey.includes('$') && this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_MOBILE_APP_METRICS"]) {
+      var currentInterpolatedEntity = datasource.templateSrv.replace(mobileAppEntityKey);
+
+      if (currentInterpolatedEntity !== this.state.lastInterpolatedEntity && currentInterpolatedEntity) {
+        this.setState(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, this.state), {
+          lastInterpolatedEntity: currentInterpolatedEntity
+        }));
+        onRunQuery();
+      }
+    } // Handle dashboard variable changes for entityType (Type field) in Mobile App Analyze
+
+
+    var mobileAppEntityTypeKey = ((_k = this.query.entityType) === null || _k === void 0 ? void 0 : _k.key) || ((_l = this.query.entityType) === null || _l === void 0 ? void 0 : _l.value);
+
+    if (mobileAppEntityTypeKey && mobileAppEntityTypeKey.includes('$') && this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_MOBILE_APP_METRICS"]) {
+      var currentInterpolatedType = datasource.templateSrv.replace(mobileAppEntityTypeKey);
+
+      if (currentInterpolatedType !== this.state.lastInterpolatedMobileAppType && currentInterpolatedType) {
+        this.setState(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, this.state), {
+          lastInterpolatedMobileAppType: currentInterpolatedType
+        }));
+        var interpolatedQuery_1 = datasource.interpolateVariables(this.query);
+        datasource.dataSourceMobileapp.getMobileappMetricsCatalog().then(function (allMetrics) {
+          var filteredMetrics = allMetrics.filter(function (metric) {
+            return metric.beaconTypes && metric.beaconTypes.includes(interpolatedQuery_1.entityType.key);
+          });
+
+          _this.updateMetrics(filteredMetrics.length > 0 ? filteredMetrics : allMetrics);
+
+          onRunQuery();
+        });
+      }
+    } // Handle dashboard variable changes for entityType (Type field) in Website Analyze
+
+
+    var websiteEntityTypeKey = ((_m = this.query.entityType) === null || _m === void 0 ? void 0 : _m.key) || ((_o = this.query.entityType) === null || _o === void 0 ? void 0 : _o.value);
+
+    if (websiteEntityTypeKey && websiteEntityTypeKey.includes('$') && this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"]) {
+      var currentInterpolatedType = datasource.templateSrv.replace(websiteEntityTypeKey);
+
+      if (currentInterpolatedType !== this.state.lastInterpolatedWebsiteType && currentInterpolatedType) {
+        this.setState(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, this.state), {
+          lastInterpolatedWebsiteType: currentInterpolatedType
+        }));
+        var interpolatedQuery_2 = datasource.interpolateVariables(this.query);
+        datasource.dataSourceWebsite.getWebsiteMetricsCatalog().then(function (allMetrics) {
+          var filteredMetrics = allMetrics.filter(function (metric) {
+            return metric.beaconTypes && metric.beaconTypes.includes(interpolatedQuery_2.entityType.key);
+          });
+
+          _this.updateMetrics(filteredMetrics.length > 0 ? filteredMetrics : allMetrics);
+
+          onRunQuery();
+        });
+      }
+    } // Handle dashboard variable changes for metric variable
+
+
+    var metricKey = ((_p = this.query.metric) === null || _p === void 0 ? void 0 : _p.key) || ((_q = this.query.metric) === null || _q === void 0 ? void 0 : _q.value);
+
+    if (metricKey && metricKey.includes('$')) {
+      var currentInterpolatedMetric = datasource.templateSrv.replace(metricKey);
+
+      if (currentInterpolatedMetric !== this.state.lastInterpolatedMetric && currentInterpolatedMetric) {
+        this.setState(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, this.state), {
+          lastInterpolatedMetric: currentInterpolatedMetric
+        }));
+        onRunQuery();
+      }
+    } // Handle dashboard variable changes for group (Group by) in Analyze categories
+
+
+    var groupKey = ((_r = this.query.group) === null || _r === void 0 ? void 0 : _r.key) || ((_s = this.query.group) === null || _s === void 0 ? void 0 : _s.value);
+
+    if (groupKey && groupKey.includes('$') && (this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] || this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"] || this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_MOBILE_APP_METRICS"])) {
+      var currentInterpolatedGroup = datasource.templateSrv.replace(groupKey);
+
+      if (currentInterpolatedGroup !== this.state.lastInterpolatedGroup && currentInterpolatedGroup) {
+        this.setState(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, this.state), {
+          lastInterpolatedGroup: currentInterpolatedGroup
+        }));
+        onRunQuery();
+      }
+    }
+  };
+
+  QueryEditor.prototype.setMetricPlaceholder = function (nrOfTotalResults) {
+    if (this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"]) {
+      this.query.metric = {
+        key: null,
+        label: 'Please select (' + nrOfTotalResults + '/' + this.state.allMetrics.length + ')'
+      };
+    } else {
+      this.query.metric = {
+        key: null,
+        label: 'Please select (' + nrOfTotalResults + ')'
+      };
+    }
+
+    this.props.onChange(this.query);
+  };
+
+  QueryEditor.prototype.applyFilterToMetricList = function (filters) {
+    var filteredMetrics = this.state.allMetrics;
+
+    lodash__WEBPACK_IMPORTED_MODULE_20___default.a.forEach(filters, function (filter) {
+      if (filter !== '') {
+        filteredMetrics = lodash__WEBPACK_IMPORTED_MODULE_20___default.a.sortBy(lodash__WEBPACK_IMPORTED_MODULE_20___default.a.filter(filteredMetrics, function (metric) {
+          return metric.key.toLowerCase().includes(filter.toLowerCase());
+        }), 'key');
+      }
+    });
+
+    return filteredMetrics;
+  };
+
+  QueryEditor.prototype.filterMetricsOnType = function (type) {
+    var filteredMetrics = this.state.allMetrics.filter(function (metric) {
+      return metric.beaconTypes.includes(type);
+    });
+    this.setState({
+      availableMetrics: filteredMetrics
+    });
+
+    if (!this.query.metric || !this.query.metric.key || !this.query.metric.beaconTypes.includes(type)) {
+      this.setMetricPlaceholder(filteredMetrics.length);
+    }
+
+    this.changeAndRun();
+  };
+
+  QueryEditor.prototype.isAbleToShowAllMetrics = function (metrics) {
+    return this.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"] && metrics.length > 0 && metrics.length <= 5;
+  };
+
+  QueryEditor.prototype.checkMetricAndRefresh = function () {
+    if (this.query.metric && this.query.metric.key && !lodash__WEBPACK_IMPORTED_MODULE_20___default.a.includes(lodash__WEBPACK_IMPORTED_MODULE_20___default.a.map(this.state.availableMetrics, function (m) {
+      return m.key;
+    }), this.query.metric.key)) {
+      var isVariable = this.query.metric.key.toString().startsWith('$');
+
+      if (!isVariable) {
+        this.resetMetricSelection();
+      }
+    }
+
+    this.changeAndRun();
+  };
+
+  QueryEditor.prototype.selectionReset = function () {
+    var query = this.props.query;
+
+    if (query.metricCategory.key > _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"]) {
+      query.entityQuery = '';
+    }
+
+    this.setState({
+      availableMetrics: [],
+      allMetrics: [],
+      groups: []
+    });
+    this.resetEntityTypeSelection();
+    this.resetEntitySelection();
+    this.resetMetricSelection();
+  };
+
+  QueryEditor.prototype.resetEntityTypeSelection = function () {
+    var query = this.props.query;
+    query.entityType = {
+      key: null,
+      label: '-'
+    };
+    query.customFilters = [];
+  };
+
+  QueryEditor.prototype.resetEntitySelection = function () {
+    var query = this.props.query;
+    query.entity = {};
+    query.group = {};
+    query.showGroupBySecondLevel = false;
+    query.groupbyTagSecondLevelKey = '';
+    query.aggregateGraphs = false;
+    query.aggregationFunction = _lists_aggregation_function__WEBPACK_IMPORTED_MODULE_5__["default"][0];
+    query.hideOriginalGraphs = false;
+    query.filters = [];
+    query.showWarningCantShowAllResults = false;
+    query.showAllMetrics = false;
+    query.canShowAllMetrics = false;
+    query.displayMaxMetricValue = false;
+    query.applicationCallToEntity = '';
+    query.callToEntity = '';
+    query.tagFilterExpression = '';
+    this.resetServices();
+    this.resetEndpoints();
+    this.resetSLO();
+    this.resetSLO2();
+  };
+
+  QueryEditor.prototype.resetMetricSelection = function () {
+    var query = this.props.query;
+    query.metric = {};
+    query.timeShift = '';
+    query.timeShiftIsValid = true;
+    query.showWarningCantShowAllResults = false;
+    query.showAllMetrics = false;
+    query.labelFormat = '';
+    query.freeTextMetrics = '';
+    query.useFreeTextMetrics = false;
+  };
+
+  QueryEditor.prototype.resetServices = function () {
+    this.props.query.service = {};
+  };
+
+  QueryEditor.prototype.resetEndpoints = function () {
+    this.props.query.endpoint = {};
+  };
+
+  QueryEditor.prototype.resetSLO = function () {
+    var query = this.props.query;
+    query.sloValue = '';
+    query.sloReport = {};
+  };
+
+  QueryEditor.prototype.resetSLO2 = function () {
+    var query = this.props.query;
+    query.sloValue = '';
+    query.sloReport = {};
+  };
+
+  QueryEditor.prototype.render = function () {
+    var _a = this,
+        query = _a.query,
+        onCategoryChange = _a.onCategoryChange;
+
+    var categories = this.allowInfraExplore ? _lists_metric_categories__WEBPACK_IMPORTED_MODULE_21__["default"] : _lists_metric_categories__WEBPACK_IMPORTED_MODULE_21__["default"].filter(function (category) {
+      return category.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"];
+    });
+    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+      className: 'gf-form-group'
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_11__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Category',
+      tooltip: 'Select a metric category.',
+      value: query.metricCategory,
+      options: categories,
+      onChange: onCategoryChange
+    })), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["BUILT_IN_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Infrastructure_Infrastructure__WEBPACK_IMPORTED_MODULE_12__["Infrastructure"], {
+      query: query,
+      queryTypes: this.state.queryTypes,
+      datasource: this.props.datasource,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      updateQueryTypes: this.updateQueryTypes
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Infrastructure_Infrastructure__WEBPACK_IMPORTED_MODULE_12__["Infrastructure"], {
+      query: query,
+      queryTypes: this.state.queryTypes,
+      datasource: this.props.datasource,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      updateQueryTypes: this.updateQueryTypes
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Infrastructure_Explore__WEBPACK_IMPORTED_MODULE_9__["Explore"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      groups: this.state.groups,
+      updateGroups: this.updateGroups,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Analyze_ApplicationCallsMetrics__WEBPACK_IMPORTED_MODULE_6__["ApplicationCallsMetrics"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      groups: this.state.groups,
+      updateGroups: this.updateGroups,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Analyze_WebsiteMetrics__WEBPACK_IMPORTED_MODULE_18__["WebsiteMetrics"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      groups: this.state.groups,
+      updateGroups: this.updateGroups,
+      filterMetricsOnType: this.filterMetricsOnType,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_MOBILE_APP_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Analyze_MobileAppMetrics__WEBPACK_IMPORTED_MODULE_15__["MobileAppMetrics"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      groups: this.state.groups,
+      updateGroups: this.updateGroups,
+      filterMetricsOnType: this.filterMetricsOnType,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["APPLICATION_SERVICE_ENDPOINT_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_ApplicationServiceEndpointMetrics_ApplicationServiceEndpointMetrics__WEBPACK_IMPORTED_MODULE_7__["ApplicationServiceEndpointMetrics"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_SLOInformation_SloInformation__WEBPACK_IMPORTED_MODULE_16__["SloInformation"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO2_INFORMATION"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_SLOInformation_Slo2Information__WEBPACK_IMPORTED_MODULE_17__["Slo2Information"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SYNTHETIC_MONITORING"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_SyntheticMonitoring_SyntheticMonitoring__WEBPACK_IMPORTED_MODULE_19__["SyntheticMonitoring"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange,
+      updateMetrics: this.updateMetrics,
+      datasource: this.props.datasource
+    }), query.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"] && query.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO2_INFORMATION"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Metric_Metric__WEBPACK_IMPORTED_MODULE_13__["default"], {
+      query: query,
+      onChange: this.props.onChange,
+      onRunQuery: this.props.onRunQuery,
+      updateMetrics: this.updateMetrics,
+      availableMetrics: this.state.availableMetrics,
+      datasource: this.props.datasource
+    }), query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_METRICS"] && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Infrastructure_Custom_MetricFilter__WEBPACK_IMPORTED_MODULE_14__["MetricFilter"], {
+      query: query,
+      onChange: this.props.onChange,
+      onRunQuery: this.props.onRunQuery,
+      onFilterChange: this.onMetricsFilter,
+      availableMetrics: this.state.availableMetrics,
+      datasource: this.props.datasource
+    }), (query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_APPLICATION_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_WEBSITE_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["ANALYZE_MOBILE_APP_METRICS"] || query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"]) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Analyze_Filter__WEBPACK_IMPORTED_MODULE_10__["Filters"], {
+      query: query,
+      onChange: this.props.onChange,
+      onRunQuery: this.props.onRunQuery,
+      datasource: this.props.datasource,
+      groups: this.state.groups
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_AdvancedSettings_AdvancedSettings__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      query: query,
+      onRunQuery: this.props.onRunQuery,
+      onChange: this.props.onChange
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_8__["Badge"], {
+      text: '5.1.0',
+      color: 'blue'
+    }));
+  };
+
+  return QueryEditor;
+}(react__WEBPACK_IMPORTED_MODULE_3__["PureComponent"]);
+
+
+var templateObject_1;
+
+/***/ }),
+
+/***/ "./components/SLOInformation/Slo2Information.tsx":
+/*!*******************************************************!*\
+  !*** ./components/SLOInformation/Slo2Information.tsx ***!
+  \*******************************************************/
+/*! exports provided: Slo2Information */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Slo2Information", function() { return Slo2Information; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _lists_slo2_specifics__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lists/slo2_specifics */ "./lists/slo2_specifics.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+var isUnmounting = false;
+
+var Slo2Information =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(Slo2Information, _super);
+
+  function Slo2Information(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onSlo2Change = function (slo) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+      if (typeof slo === 'string') {
+        query.slo2Report = {
+          key: slo,
+          label: slo
+        };
+      } else {
+        query.slo2Report = slo;
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onSloSpecificChange = function (slo2Specific) {
+      var _a = _this.props,
+          query = _a.query,
+          onRunQuery = _a.onRunQuery,
+          onChange = _a.onChange;
+      query.slo2Specific = slo2Specific;
+      onChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query));
+      onRunQuery();
+    };
+
+    _this.state = {
+      sloReports: [],
+      isValidSlo: true
+    };
+    return _this;
+  }
+
+  Slo2Information.prototype.componentDidMount = function () {
+    isUnmounting = false;
+    this.loadSloReports();
+  };
+
+  Slo2Information.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  Slo2Information.prototype.shouldComponentUpdate = function (nextProps, nextState, nextContext) {
+    return nextProps.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["SLO2_INFORMATION"];
+  };
+
+  Slo2Information.prototype.loadSloReports = function () {
+    var _this = this;
+
+    var _a, _b;
+
+    var query = this.props.query; // Check if slo2Report is a variable
+
+    var slo2ReportValue = ((_a = query.slo2Report) === null || _a === void 0 ? void 0 : _a.key) || ((_b = query.slo2Report) === null || _b === void 0 ? void 0 : _b.label);
+    var isSlo2ReportVariable = slo2ReportValue && typeof slo2ReportValue === 'string' && slo2ReportValue.includes('$');
+    this.props.datasource.getSloReports().then(function (sloReports) {
+      if (!isUnmounting) {
+        _this.setState({
+          sloReports: sloReports
+        }); // CRITICAL FIX: If slo2Report is a variable, trigger query execution
+
+
+        if (isSlo2ReportVariable && query.slo2Report) {
+          console.log('[Slo2Information] SLO2 Report is a variable, triggering query execution');
+
+          _this.props.onRunQuery();
+        }
+      }
+    });
+  };
+
+  Slo2Information.prototype.render = function () {
+    var query = this.props.query; // Format slo2Report value for Select component with allowCustomValue
+
+    var slo2ReportValue = query.slo2Report;
+
+    if (query.slo2Report && query.slo2Report.key) {
+      slo2ReportValue = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query.slo2Report), {
+        value: query.slo2Report.key,
+        label: query.slo2Report.label || query.slo2Report.key
+      });
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'SLO Configuration name',
+      tooltip: 'SLI configuration used to compute SLI Report or type variable like $slo2Report',
+      noOptionsMessage: 'No configured SLO found',
+      value: slo2ReportValue,
+      options: this.state.sloReports,
+      onChange: this.onSlo2Change,
+      allowCustomValue: true,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"]
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      queryKeyword: true,
+      labelWidth: 7,
+      inputWidth: 0,
+      label: 'Value type',
+      tooltip: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Select your specific SLO information:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Status' requires Gauge visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Service Level Target' requires Gauge visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Total Error Budget' requires Singlestat visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Remaining Error Budget' requires Singlestat visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Spended Error Budget' requires Singlestat visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Violation' requires Bars draw mode on Graph visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Error Chart' requires Bars draw mode on Graph visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Error Accumulation Chart' requires Bars draw mode on Graph visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Error Budget Chart' requires Bars draw mode on Graph visualization"))),
+      value: query.slo2Specific,
+      options: _lists_slo2_specifics__WEBPACK_IMPORTED_MODULE_4__["default"],
+      onChange: this.onSloSpecificChange,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"]
+    }));
+  };
+
+  return Slo2Information;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/SLOInformation/SloInformation.tsx":
+/*!******************************************************!*\
+  !*** ./components/SLOInformation/SloInformation.tsx ***!
+  \******************************************************/
+/*! exports provided: SloInformation */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SloInformation", function() { return SloInformation; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _lists_slo_specifics__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lists/slo_specifics */ "./lists/slo_specifics.ts");
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var _FormField_FormInput__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../FormField/FormInput */ "./components/FormField/FormInput.tsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
+
+
+
+
+
+
+
+var MAX_VAL = 0.9999;
+var isUnmounting = false;
+
+var SloInformation =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(SloInformation, _super);
+
+  function SloInformation(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.debouncedRunQuery = lodash__WEBPACK_IMPORTED_MODULE_6___default.a.debounce(_this.props.onRunQuery, 500);
+
+    _this.onSloChange = function (slo) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+      if (typeof slo === 'string') {
+        query.sloReport = {
+          key: slo,
+          label: slo
+        };
+      } else {
+        query.sloReport = slo;
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onSloValueChange = function (sloValue) {
+      var query = _this.props.query;
+      query.sloValue = sloValue.currentTarget.value;
+
+      if (_this.isValid(query.sloValue)) {
+        // onRunQuery with 500ms delay after last debounce
+        _this.debouncedRunQuery();
+      }
+    };
+
+    _this.onSloSpecificChange = function (sloSpecific) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery;
+      query.sloSpecific = sloSpecific;
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.state = {
+      sliReports: [],
+      isValidSlo: true
+    };
+    return _this;
+  }
+
+  SloInformation.prototype.componentDidMount = function () {
+    isUnmounting = false;
+    this.loadSloReports();
+    this.isValid(this.props.query.sloValue);
+  };
+
+  SloInformation.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  SloInformation.prototype.isValid = function (val) {
+    var valid = !val || +val >= 0 && +val <= MAX_VAL;
+    this.setState({
+      isValidSlo: valid
+    });
+    return valid;
+  };
+
+  SloInformation.prototype.shouldComponentUpdate = function (nextProps, nextState, nextContext) {
+    return nextProps.query.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["SLO_INFORMATION"];
+  };
+
+  SloInformation.prototype.loadSloReports = function () {
+    var _this = this;
+
+    var query = this.props.query;
+    this.props.datasource.getSliReports().then(function (sliReports) {
+      if (!isUnmounting) {
+        _this.setState({
+          sliReports: sliReports
+        });
+
+        if (!query.sloReport && sliReports.length >= 1) {
+          query.sloReport = sliReports[0];
+        }
+      }
+    });
+  };
+
+  SloInformation.prototype.render = function () {
+    var query = this.props.query;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Configured SLI',
+      tooltip: 'SLI configuration used to compute error budget and SLI values or type variable like $sloReport',
+      noOptionsMessage: 'No configured SLI found',
+      value: query.sloReport,
+      options: this.state.sliReports,
+      onChange: this.onSloChange,
+      allowCustomValue: true,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["PLEASE_SPECIFY"]
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormInput__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      queryKeyword: true,
+      labelWidth: 7,
+      inputWidth: 0,
+      label: 'SLO',
+      tooltip: 'Type in your desired SLO threshold from 0 to ' + MAX_VAL,
+      value: query.sloValue,
+      invalid: !this.state.isValidSlo,
+      placeholder: '0.99',
+      onChange: this.onSloValueChange
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      queryKeyword: true,
+      labelWidth: 7,
+      inputWidth: 0,
+      label: 'Value type',
+      tooltip: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "Select your specific SLO information:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'SLI' requires Gauge visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Remaining Error Budget' requires Singlestat visualization"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, "'Timeseries' requires Bars draw mode on Graph visualization"))),
+      value: query.sloSpecific,
+      options: _lists_slo_specifics__WEBPACK_IMPORTED_MODULE_3__["default"],
+      onChange: this.onSloSpecificChange,
+      placeholder: _GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["PLEASE_SPECIFY"]
+    }));
+  };
+
+  return SloInformation;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./components/SyntheticMonitoring/SyntheticMonitoring.tsx":
+/*!****************************************************************!*\
+  !*** ./components/SyntheticMonitoring/SyntheticMonitoring.tsx ***!
+  \****************************************************************/
+/*! exports provided: SyntheticMonitoring */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SyntheticMonitoring", function() { return SyntheticMonitoring; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _FormField_FormSelect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../FormField/FormSelect */ "./components/FormField/FormSelect.tsx");
+/* harmony import */ var GlobalVariables__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! GlobalVariables */ "./GlobalVariables.ts");
+
+
+
+
+var testTypeOptions = [{
+  label: GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"],
+  value: ''
+}, {
+  label: 'Metric',
+  value: 'metric'
+}, {
+  label: 'Results',
+  value: 'results'
+}];
+var isUnmounting = false;
+
+var SyntheticMonitoring =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(SyntheticMonitoring, _super);
+
+  function SyntheticMonitoring(props) {
+    var _this = _super.call(this, props) || this;
+
+    _this.fetchSyntheticTests = function () {
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this, void 0, void 0, function () {
+        var _a, datasource, query, onChange, tests, placeholderOption, testOptions, error_1;
+
+        var _this = this;
+
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
+          switch (_b.label) {
+            case 0:
+              _a = this.props, datasource = _a.datasource, query = _a.query, onChange = _a.onChange;
+              _b.label = 1;
+
+            case 1:
+              _b.trys.push([1, 3,, 4]);
+
+              return [4
+              /*yield*/
+              , datasource.dataSourceSyntheticMonitoring.getSyntheticMonitoringtests()];
+
+            case 2:
+              tests = _b.sent();
+
+              if (!isUnmounting) {
+                placeholderOption = {
+                  label: GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"],
+                  value: ''
+                };
+                testOptions = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spreadArray"])([placeholderOption], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(tests.map(function (test) {
+                  return {
+                    label: test.key,
+                    value: test.label,
+                    test: test
+                  };
+                })), false);
+                this.setState({
+                  tests: testOptions
+                }); // Set to placeholder if entity is not already set
+
+                if (!query.entity || !query.entity.value) {
+                  query.entity = placeholderOption;
+                  query.testId = '';
+                  onChange(query);
+                } // Set to placeholder if testType is not already set
+
+
+                if (!query.testType || !query.testType.value) {
+                  query.testType = {
+                    label: GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"],
+                    value: ''
+                  };
+                  onChange(query);
+                }
+              }
+
+              return [3
+              /*break*/
+              , 4];
+
+            case 3:
+              error_1 = _b.sent();
+              console.error('Error fetching synthetic tests', error_1);
+              return [3
+              /*break*/
+              , 4];
+
+            case 4:
+              // Fetch metrics catalog
+              datasource.dataSourceSyntheticMonitoring.getSyntheticMonitoringMetricsCatalog().then(function (SyntheticMonitoringMetrics) {
+                if (!isUnmounting) {
+                  _this.props.updateMetrics(SyntheticMonitoringMetrics);
+                }
+              });
+              return [2
+              /*return*/
+              ];
+          }
+        });
+      });
+    };
+
+    _this.onTestChange = function (test) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+      if (typeof test === 'string') {
+        // When a variable is used, try to find the matching test from available tests
+        var matchingTest = _this.state.tests.find(function (t) {
+          return t.value === test || t.label === test;
+        });
+
+        if (matchingTest && matchingTest.test) {
+          // Found matching test, use its testId
+          query.entity = {
+            value: test,
+            label: test
+          };
+          query.testId = matchingTest.test.testId;
+        } else {
+          // Variable value doesn't match any test, store as-is (will be interpolated later)
+          query.entity = {
+            value: test,
+            label: test
+          };
+          query.testId = test; // Use the variable value as testId
+        }
+      } else {
+        query.entity = test;
+
+        if (test.test) {
+          query.testId = test.test.testId;
+        } else {
+          query.testId = '';
+        }
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.onTestTypeChange = function (testType) {
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this, void 0, void 0, function () {
+        var _a, query, onChange, onRunQuery, prevTestTypeValue, newTestTypeValue, isSwitchingTypes;
+
+        var _b;
+
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_c) {
+          _a = this.props, query = _a.query, onChange = _a.onChange, onRunQuery = _a.onRunQuery;
+          prevTestTypeValue = (_b = query.testType) === null || _b === void 0 ? void 0 : _b.value; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+          if (typeof testType === 'string') {
+            query.testType = {
+              value: testType,
+              label: testType
+            };
+          } else {
+            query.testType = testType;
+          }
+
+          newTestTypeValue = typeof testType === 'string' ? testType : testType.value;
+          isSwitchingTypes = prevTestTypeValue === 'metric' && newTestTypeValue === 'results' || prevTestTypeValue === 'results' && newTestTypeValue === 'metric';
+
+          if (isSwitchingTypes) {
+            query.entity = {
+              label: GlobalVariables__WEBPACK_IMPORTED_MODULE_3__["PLEASE_SPECIFY"],
+              value: ''
+            };
+            query.testId = '';
+          }
+
+          onChange(query);
+          onRunQuery();
+          return [2
+          /*return*/
+          ];
+        });
+      });
+    };
+
+    _this.onMetricChange = function (metric) {
+      var _a = _this.props,
+          query = _a.query,
+          onChange = _a.onChange,
+          onRunQuery = _a.onRunQuery; // Handle both string (variable) and SelectableValue (dropdown selection)
+
+      if (typeof metric === 'string') {
+        query.metric = {
+          key: metric,
+          value: metric,
+          label: metric
+        };
+      } else {
+        query.metric = metric;
+      }
+
+      onChange(query);
+      onRunQuery();
+    };
+
+    _this.state = {
+      tests: []
+    };
+    return _this;
+  }
+
+  SyntheticMonitoring.prototype.componentDidMount = function () {
+    isUnmounting = false;
+    this.fetchSyntheticTests();
+  };
+
+  SyntheticMonitoring.prototype.componentWillUnmount = function () {
+    isUnmounting = true;
+  };
+
+  SyntheticMonitoring.prototype.render = function () {
+    var query = this.props.query;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "gf-form"
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Synthetic Test',
+      tooltip: 'Select your test',
+      noOptionsMessage: 'No synthetic tests found',
+      value: query.entity,
+      options: this.state.tests,
+      onChange: this.onTestChange,
+      allowCustomValue: true
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_FormField_FormSelect__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      queryKeyword: true,
+      inputWidth: 0,
+      label: 'Type',
+      tooltip: 'Select your test type',
+      noOptionsMessage: 'No synthetic test type found',
+      value: query.testType,
+      options: testTypeOptions,
+      onChange: this.onTestTypeChange,
+      allowCustomValue: true
+    })));
+  };
+
+  return SyntheticMonitoring;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource.ts":
+/*!***********************************!*\
+  !*** ./datasources/DataSource.ts ***!
+  \***********************************/
+/*! exports provided: DataSource */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSource", function() { return DataSource; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/data */ "@grafana/data");
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_data__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @grafana/runtime */ "@grafana/runtime");
+/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_grafana_runtime__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _util_delta_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/delta_util */ "./util/delta_util.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var _DataSource_Application__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./DataSource_Application */ "./datasources/DataSource_Application.ts");
+/* harmony import */ var _DataSource_Endpoint__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./DataSource_Endpoint */ "./datasources/DataSource_Endpoint.ts");
+/* harmony import */ var _Datasource_Infrastructure__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Datasource_Infrastructure */ "./datasources/Datasource_Infrastructure.ts");
+/* harmony import */ var _DataSource_MobileApp__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./DataSource_MobileApp */ "./datasources/DataSource_MobileApp.ts");
+/* harmony import */ var _DataSource_Service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./DataSource_Service */ "./datasources/DataSource_Service.ts");
+/* harmony import */ var _DataSource_Slo__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./DataSource_Slo */ "./datasources/DataSource_Slo.ts");
+/* harmony import */ var _DataSource_Slo2__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./DataSource_Slo2 */ "./datasources/DataSource_Slo2.ts");
+/* harmony import */ var _DataSource_Website__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./DataSource_Website */ "./datasources/DataSource_Website.ts");
+/* harmony import */ var _DataSource_SyntheticMonitoring__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./DataSource_SyntheticMonitoring */ "./datasources/DataSource_SyntheticMonitoring.ts");
+/* harmony import */ var _lists_metric_categories__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../lists/metric_categories */ "./lists/metric_categories.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var _util_aggregation_util__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../util/aggregation_util */ "./util/aggregation_util.ts");
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _util_instana_version__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../util/instana_version */ "./util/instana_version.ts");
+/* harmony import */ var _util_queryInterval_check__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../util/queryInterval_check */ "./util/queryInterval_check.ts");
+/* harmony import */ var _migration__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../migration */ "./migration.ts");
+/* harmony import */ var _util_analyze_util__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../util/analyze_util */ "./util/analyze_util.ts");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var DataSource =
+/** @class */
+function (_super) {
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(DataSource, _super);
+
+  function DataSource(instanceSettings) {
+    var _this = _super.call(this, instanceSettings) || this;
+
+    _this.options = instanceSettings.jsonData;
+    _this.options.url = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_6__["instanaUrl"])(instanceSettings);
+    _this.templateSrv = Object(_grafana_runtime__WEBPACK_IMPORTED_MODULE_3__["getTemplateSrv"])();
+    _this.availableGranularities = [];
+    _this.availableRollups = [];
+    _this.availableTimeIntervals = [];
+    _this.dataSourceSlo = new _DataSource_Slo__WEBPACK_IMPORTED_MODULE_14__["DataSourceSlo"](instanceSettings.jsonData);
+    _this.dataSourceSlo2 = new _DataSource_Slo2__WEBPACK_IMPORTED_MODULE_15__["DataSourceSlo2"](instanceSettings.jsonData);
+    _this.dataSourceInfrastructure = new _Datasource_Infrastructure__WEBPACK_IMPORTED_MODULE_11__["DataSourceInfrastructure"](instanceSettings.jsonData, _this.templateSrv);
+    _this.dataSourceWebsite = new _DataSource_Website__WEBPACK_IMPORTED_MODULE_16__["DataSourceWebsite"](instanceSettings.jsonData);
+    _this.dataSourceMobileapp = new _DataSource_MobileApp__WEBPACK_IMPORTED_MODULE_12__["DataSourceMobileApp"](instanceSettings.jsonData);
+    _this.dataSourceApplication = new _DataSource_Application__WEBPACK_IMPORTED_MODULE_9__["DataSourceApplication"](instanceSettings.jsonData);
+    _this.dataSourceService = new _DataSource_Service__WEBPACK_IMPORTED_MODULE_13__["DataSourceService"](instanceSettings.jsonData);
+    _this.dataSourceEndpoint = new _DataSource_Endpoint__WEBPACK_IMPORTED_MODULE_10__["DataSourceEndpoint"](instanceSettings.jsonData);
+    _this.dataSourceSyntheticMonitoring = new _DataSource_SyntheticMonitoring__WEBPACK_IMPORTED_MODULE_17__["DataSourceSyntheticMonitoring"](instanceSettings.jsonData);
+    _this.resultCache = new _cache__WEBPACK_IMPORTED_MODULE_8__["default"]();
+    return _this;
+  }
+  /**
+   * Checks if a value contains template variables
+   * @param value - The value to check
+   * @returns True if value contains variables ($var or ${var})
+   */
+
+
+  DataSource.prototype.isVariable = function (value) {
+    if (!value || typeof value !== 'string') {
+      return false;
+    }
+
+    return value.includes('$');
+  };
+  /**
+   * Replaces template variables in a string value
+   * @param value - The string containing variables to replace
+   * @param scopedVars - Scoped variables from the query context
+   * @returns The string with variables replaced
+   */
+
+
+  DataSource.prototype.replaceVariables = function (value, scopedVars) {
+    if (!value) {
+      return '';
+    }
+
+    return this.templateSrv.replace(value, scopedVars);
+  };
+  /**
+   * Interpolates variables in all relevant fields of the query target
+   * @param target - The query target to interpolate
+   * @param scopedVars - Scoped variables from the query context
+   * @returns A new target with variables interpolated
+   */
+
+
+  DataSource.prototype.interpolateVariables = function (target, scopedVars) {
+    var _this = this;
+
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
+
+    var interpolated = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, target); // Replace variables in entity query (Dynamic Focus query)
+
+
+    if (interpolated.entityQuery) {
+      interpolated.entityQuery = this.replaceVariables(interpolated.entityQuery, scopedVars);
+    }
+
+    if (((_a = interpolated.entityType) === null || _a === void 0 ? void 0 : _a.key) && this.isVariable(interpolated.entityType.key)) {
+      var interpolatedValue = this.replaceVariables(interpolated.entityType.key, scopedVars);
+      interpolated.entityType = {
+        key: interpolatedValue,
+        label: interpolatedValue
+      };
+    }
+
+    var metricKey = ((_b = interpolated.metric) === null || _b === void 0 ? void 0 : _b.key) || ((_c = interpolated.metric) === null || _c === void 0 ? void 0 : _c.value);
+
+    if (metricKey && this.isVariable(metricKey)) {
+      var interpolatedValue = this.replaceVariables(metricKey, scopedVars);
+      interpolated.metric = {
+        key: interpolatedValue,
+        value: interpolatedValue,
+        label: interpolatedValue,
+        aggregations: interpolated.metric.aggregations || []
+      };
+    }
+
+    var entityTypeKey = ((_d = interpolated.entityType) === null || _d === void 0 ? void 0 : _d.key) || ((_e = interpolated.entityType) === null || _e === void 0 ? void 0 : _e.value);
+
+    if (entityTypeKey && this.isVariable(entityTypeKey)) {
+      var interpolatedValue = this.replaceVariables(entityTypeKey, scopedVars);
+      interpolated.entityType = {
+        key: interpolatedValue,
+        label: interpolatedValue
+      };
+    }
+
+    var entityKey = ((_f = interpolated.entity) === null || _f === void 0 ? void 0 : _f.key) || ((_g = interpolated.entity) === null || _g === void 0 ? void 0 : _g.value);
+
+    if (entityKey && this.isVariable(entityKey)) {
+      var interpolatedValue = this.replaceVariables(entityKey, scopedVars);
+      interpolated.entity = {
+        key: interpolatedValue,
+        value: interpolatedValue,
+        label: interpolatedValue
+      };
+
+      if (((_h = interpolated.metricCategory) === null || _h === void 0 ? void 0 : _h.key) === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["SYNTHETIC_MONITORING"]) {
+        interpolated.testId = interpolatedValue;
+      }
+    }
+
+    var selectedEntityKey = ((_j = interpolated.selectedEntity) === null || _j === void 0 ? void 0 : _j.key) || ((_k = interpolated.selectedEntity) === null || _k === void 0 ? void 0 : _k.value);
+
+    if (selectedEntityKey && this.isVariable(selectedEntityKey)) {
+      var interpolatedValue = this.replaceVariables(selectedEntityKey, scopedVars);
+      interpolated.selectedEntity = {
+        key: interpolatedValue,
+        value: interpolatedValue,
+        label: interpolatedValue
+      };
+    }
+
+    var serviceKey = ((_l = interpolated.service) === null || _l === void 0 ? void 0 : _l.key) || ((_m = interpolated.service) === null || _m === void 0 ? void 0 : _m.value);
+
+    if (serviceKey && this.isVariable(serviceKey)) {
+      var interpolatedValue = this.replaceVariables(serviceKey, scopedVars);
+      interpolated.service = {
+        key: interpolatedValue,
+        value: interpolatedValue,
+        label: interpolatedValue
+      };
+    }
+
+    var endpointKey = ((_o = interpolated.endpoint) === null || _o === void 0 ? void 0 : _o.key) || ((_p = interpolated.endpoint) === null || _p === void 0 ? void 0 : _p.value);
+
+    if (endpointKey && this.isVariable(endpointKey)) {
+      var interpolatedValue = this.replaceVariables(endpointKey, scopedVars);
+      interpolated.endpoint = {
+        key: interpolatedValue,
+        value: interpolatedValue,
+        label: interpolatedValue
+      };
+    }
+
+    var groupKey = ((_q = interpolated.group) === null || _q === void 0 ? void 0 : _q.key) || ((_r = interpolated.group) === null || _r === void 0 ? void 0 : _r.value);
+
+    if (groupKey && this.isVariable(groupKey)) {
+      var interpolatedValue = this.replaceVariables(groupKey, scopedVars);
+      interpolated.group = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, interpolated.group), {
+        key: interpolatedValue,
+        label: interpolatedValue,
+        value: interpolatedValue
+      });
+    } else if (interpolated.group) {
+      interpolated.group = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, interpolated.group);
+    }
+
+    if (interpolated.filters && interpolated.filters.length > 0) {
+      interpolated.filters = interpolated.filters.map(function (filter) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, filter), {
+          stringValue: _this.replaceVariables(filter.stringValue, scopedVars)
+        });
+      });
+    }
+
+    if (interpolated.tagFilterExpression) {
+      interpolated.tagFilterExpression = this.replaceVariables(interpolated.tagFilterExpression, scopedVars);
+    }
+
+    if (interpolated.freeTextMetrics) {
+      interpolated.freeTextMetrics = this.replaceVariables(interpolated.freeTextMetrics, scopedVars);
+    }
+
+    if (interpolated.customFilters && interpolated.customFilters.length > 0) {
+      interpolated.customFilters = interpolated.customFilters.map(function (filter) {
+        return _this.replaceVariables(filter, scopedVars);
+      });
+    }
+
+    if (interpolated.groupbyTagSecondLevelKey) {
+      interpolated.groupbyTagSecondLevelKey = this.replaceVariables(interpolated.groupbyTagSecondLevelKey, scopedVars);
+    }
+
+    var aggregationKey = ((_s = interpolated.aggregation) === null || _s === void 0 ? void 0 : _s.key) || ((_t = interpolated.aggregation) === null || _t === void 0 ? void 0 : _t.value);
+
+    if (aggregationKey && this.isVariable(aggregationKey)) {
+      var interpolatedValue = this.replaceVariables(aggregationKey, scopedVars);
+      interpolated.aggregation = {
+        key: interpolatedValue,
+        label: interpolatedValue
+      };
+    }
+
+    var timeIntervalKey = ((_u = interpolated.timeInterval) === null || _u === void 0 ? void 0 : _u.key) || ((_v = interpolated.timeInterval) === null || _v === void 0 ? void 0 : _v.value);
+
+    if (timeIntervalKey && this.isVariable(timeIntervalKey)) {
+      var interpolatedValue = this.replaceVariables(timeIntervalKey, scopedVars);
+      interpolated.timeInterval = {
+        key: interpolatedValue,
+        label: interpolatedValue
+      };
+    }
+
+    if (interpolated.timeShift) {
+      interpolated.timeShift = this.replaceVariables(interpolated.timeShift, scopedVars);
+    }
+
+    if (interpolated.labelFormat) {
+      interpolated.labelFormat = this.replaceVariables(interpolated.labelFormat, scopedVars);
+    }
+
+    if (interpolated.applicationCallToEntity) {
+      interpolated.applicationCallToEntity = this.replaceVariables(interpolated.applicationCallToEntity, scopedVars);
+    }
+
+    if (interpolated.callToEntity) {
+      interpolated.callToEntity = this.replaceVariables(interpolated.callToEntity, scopedVars);
+    }
+
+    var sloReportKey = ((_w = interpolated.sloReport) === null || _w === void 0 ? void 0 : _w.key) || ((_x = interpolated.sloReport) === null || _x === void 0 ? void 0 : _x.value);
+
+    if (sloReportKey && this.isVariable(sloReportKey)) {
+      var interpolatedValue = this.replaceVariables(sloReportKey, scopedVars);
+      interpolated.sloReport = {
+        key: interpolatedValue,
+        value: interpolatedValue,
+        label: interpolatedValue
+      };
+    }
+
+    var slo2ReportKey = ((_y = interpolated.slo2Report) === null || _y === void 0 ? void 0 : _y.key) || ((_z = interpolated.slo2Report) === null || _z === void 0 ? void 0 : _z.value);
+
+    if (slo2ReportKey && this.isVariable(slo2ReportKey)) {
+      var interpolatedValue = this.replaceVariables(slo2ReportKey, scopedVars);
+      interpolated.slo2Report = {
+        key: interpolatedValue,
+        value: interpolatedValue,
+        label: interpolatedValue
+      };
+    }
+
+    if (interpolated.sloValue) {
+      interpolated.sloValue = this.replaceVariables(interpolated.sloValue, scopedVars);
+    }
+
+    var testTypeValue = (_0 = interpolated.testType) === null || _0 === void 0 ? void 0 : _0.value;
+
+    if (testTypeValue && this.isVariable(testTypeValue)) {
+      var interpolatedValue = this.replaceVariables(testTypeValue, scopedVars);
+      interpolated.testType = {
+        value: interpolatedValue,
+        label: interpolatedValue
+      };
+    }
+
+    return interpolated;
+  };
+
+  DataSource.prototype.query = function (options) {
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, Promise, function () {
+      var range, scopedVars;
+
+      var _this = this;
+
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+        range = options.range, scopedVars = options.scopedVars;
+        this.timeFilter = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_7__["readTime"])(range);
+        this.availableRollups = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__["getPossibleRollups"])(this.timeFilter);
+        this.availableGranularities = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__["getPossibleGranularities"])(this.timeFilter.windowSize);
+        return [2
+        /*return*/
+        , Promise.all(options.targets.map(function (target) {
+          var targetTimeFilter = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_7__["readTime"])(range); // grafana setting to disable query execution
+
+          if (target.hide) {
+            return {
+              data: [],
+              target: target
+            };
+          } // Interpolate variables in the target
+
+
+          target = _this.interpolateVariables(target, scopedVars); // target migration for downwards compatibility
+
+          Object(_migration__WEBPACK_IMPORTED_MODULE_24__["default"])(target);
+
+          if (!target.metricCategory) {
+            target.metricCategory = _lists_metric_categories__WEBPACK_IMPORTED_MODULE_18__["default"][0];
+          }
+
+          _this.setPossibleTimeIntervals(target);
+
+          if (!_this.availableTimeIntervals.find(function (i) {
+            return i.key === target.timeInterval.key;
+          })) {
+            target.timeInterval = _this.getDefaultTimeInterval(target);
+          }
+
+          if (target.timeShift) {
+            var millis = _this.convertTimeShiftToMillis(target.timeShift);
+
+            if (millis > 0) {
+              targetTimeFilter = _this.applyTimeShiftOnTimeFilter(targetTimeFilter, millis);
+            }
+          }
+
+          target.timeFilter = targetTimeFilter;
+          target.stableHash = Object(_util_delta_util__WEBPACK_IMPORTED_MODULE_4__["generateStableHash"])(target);
+          targetTimeFilter = _this.adjustTimeFilterIfCached(targetTimeFilter, target);
+          var category = target.metricCategory.key;
+
+          if (category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["SLO_INFORMATION"]) {
+            return _this.dataSourceSlo.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          } else if (category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["SLO2_INFORMATION"]) {
+            return _this.dataSourceSlo2.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          } else if (category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["SYNTHETIC_MONITORING"]) {
+            return _this.dataSourceSyntheticMonitoring.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTarget(target, data);
+            });
+          } else if (category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"]) {
+            return _this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTarget(target, data);
+            });
+          } else if (category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["BUILT_IN_METRICS"] || category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["CUSTOM_METRICS"]) {
+            return _this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          } else if (category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_WEBSITE_METRICS"]) {
+            return _this.dataSourceWebsite.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          } else if (category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_MOBILE_APP_METRICS"]) {
+            return _this.dataSourceMobileapp.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          } else if (category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["ANALYZE_APPLICATION_METRICS"]) {
+            return _this.dataSourceApplication.runQuery(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          } else if (category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["APPLICATION_SERVICE_ENDPOINT_METRICS"]) {
+            return _this.getApplicationServiceEndpointMetrics(target, targetTimeFilter).then(function (data) {
+              return _this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
+            });
+          }
+
+          return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_21__["emptyResultData"])(target.refId));
+        })).then(function (targetData) {
+          var result = [];
+
+          lodash__WEBPACK_IMPORTED_MODULE_19___default.a.each(targetData, function (targetAndData) {
+            // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
+            var resultData = lodash__WEBPACK_IMPORTED_MODULE_19___default.a.compact(lodash__WEBPACK_IMPORTED_MODULE_19___default.a.flatten(targetAndData.data)); // Also remove empty data items
+
+
+            _this.cacheResultIfNecessary(lodash__WEBPACK_IMPORTED_MODULE_19___default.a.cloneDeep(resultData), targetAndData.target); // clone to store results without timeshift re-calculation
+
+
+            _this.applyTimeShiftIfNecessary(resultData, targetAndData.target); // adjust resultdata after caching the result
+
+
+            resultData = _this.aggregateDataIfNecessary(resultData, targetAndData.target);
+            result.push(resultData);
+          });
+
+          return {
+            data: lodash__WEBPACK_IMPORTED_MODULE_19___default.a.flatten(result)
+          };
+        })];
+      });
+    });
+  };
+
+  DataSource.prototype.getApplicationServiceEndpointMetrics = function (target, timeFilter) {
+    var _this = this; // do not try to execute too big queries
+
+
+    if (Object(_util_queryInterval_check__WEBPACK_IMPORTED_MODULE_23__["isInvalidQueryInterval"])(timeFilter.windowSize, Object(_util_time_util__WEBPACK_IMPORTED_MODULE_7__["hoursToMs"])(this.options.queryinterval_limit_app_metrics))) {
+      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.options.queryinterval_limit_app_metrics + ' hours');
+    }
+
+    if (target.endpoint && target.endpoint.key) {
+      return this.dataSourceEndpoint.fetchEndpointMetrics(target, timeFilter).then(function (response) {
+        return Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_25__["readItemMetrics"])(target, response, _this.dataSourceEndpoint.buildEndpointMetricLabel);
+      });
+    } else if (target.service && target.service.key !== null && target.service.key !== undefined) {
+      return this.dataSourceService.fetchServiceMetrics(target, timeFilter).then(function (response) {
+        return Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_25__["readItemMetrics"])(target, response, _this.dataSourceService.buildServiceMetricLabel);
+      });
+    } else if (target.entity && target.entity.key) {
+      return this.dataSourceApplication.fetchApplicationMetrics(target, timeFilter).then(function (response) {
+        if (response.data) {
+          target.showWarningCantShowAllResults = response.data.canLoadMore;
+        }
+
+        return Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_25__["readItemMetrics"])(target, response, _this.dataSourceApplication.buildApplicationMetricLabel);
+      });
+    }
+
+    return Promise.resolve({
+      data: {
+        items: []
+      }
+    });
+  };
+
+  DataSource.prototype.applyTimeShiftIfNecessary = function (data, target) {
+    var _this = this;
+
+    if (target.timeShift) {
+      var millis_1 = this.convertTimeShiftToMillis(target.timeShift);
+
+      if (millis_1 > 0) {
+        data.forEach(function (data) {
+          _this.applyTimeShiftOnData(data, millis_1);
+        });
+      }
+    }
+  };
+
+  DataSource.prototype.cacheResultIfNecessary = function (result, target) {
+    if (this.supportsDeltaRequests(target) && this.hasResult(result)) {
+      var cachedObj = {
+        timeFilter: target.timeFilter,
+        results: result
+      };
+      this.resultCache.put(target.stableHash, cachedObj, 4000000); // set to 1,11 hour
+    }
+  };
+
+  DataSource.prototype.supportsDeltaRequests = function (target) {
+    var _this = this;
+
+    if (target.metricCategory) {
+      if (target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["SLO_INFORMATION"] || target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["SLO2_INFORMATION"] || target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"]) {
+        return false;
+      }
+    }
+
+    var version = this.resultCache.get('version');
+
+    if (!version) {
+      return Object(_util_instana_version__WEBPACK_IMPORTED_MODULE_22__["default"])(this.options).then(function (version) {
+        _this.resultCache.put('version', version, 4000000); // set to 1,11 hour
+
+
+        return version >= 171;
+      });
+    }
+
+    return version >= 171;
+  };
+
+  DataSource.prototype.hasResult = function (result) {
+    return result && result.length > 0;
+  };
+
+  DataSource.prototype.applyTimeShiftOnData = function (data, timeshift) {
+    data.datapoints.forEach(function (datapoint) {
+      datapoint[1] = datapoint[1] + timeshift;
+    });
+  };
+
+  DataSource.prototype.aggregateDataIfNecessary = function (data, target) {
+    var newData = [];
+
+    if (target.aggregateGraphs) {
+      var aggregatedData_1 = Object(_util_aggregation_util__WEBPACK_IMPORTED_MODULE_20__["aggregateTarget"])(data, target);
+      newData.push(aggregatedData_1);
+
+      if (!target.hideOriginalGraphs) {
+        lodash__WEBPACK_IMPORTED_MODULE_19___default.a.each(data, function (dt) {
+          if (dt.target !== aggregatedData_1.target) {
+            newData.push(dt);
+          }
+        });
+      }
+
+      return newData;
+    }
+
+    return data;
+  };
+
+  DataSource.prototype.buildTarget = function (target, data) {
+    return {
+      target: target,
+      data: data
+    };
+  };
+
+  DataSource.prototype.buildTargetWithAppendedDataResult = function (target, timeFilter, data) {
+    if (timeFilter.from !== target.timeFilter.from && data) {
+      data = this.appendResult(data, target);
+      data.forEach(function (t) {
+        t.datapoints = t.datapoints.filter(function (d) {
+          return d[1] >= target.timeFilter.from;
+        });
+      });
+    }
+
+    return this.buildTarget(target, data);
+  };
+
+  DataSource.prototype.appendResult = function (data, target) {
+    var cachedResult = this.resultCache.get(target.stableHash);
+
+    if (cachedResult && cachedResult.results) {
+      data = Object(_util_delta_util__WEBPACK_IMPORTED_MODULE_4__["appendData"])(data, cachedResult.results);
+    }
+
+    return data;
+  };
+
+  DataSource.prototype.adjustTimeFilterIfCached = function (timeFilter, target) {
+    var cachedResult = this.resultCache.get(target.stableHash);
+
+    if (cachedResult && Object(_util_delta_util__WEBPACK_IMPORTED_MODULE_4__["hasIntersection"])(timeFilter, cachedResult.timeFilter)) {
+      var newFrom = Object(_util_delta_util__WEBPACK_IMPORTED_MODULE_4__["getDeltaRequestTimestamp"])(cachedResult.results, cachedResult.timeFilter.from, target.timeInterval);
+      var newTo = timeFilter.to;
+      return {
+        from: newFrom,
+        to: newTo,
+        windowSize: newTo - newFrom
+      };
+    }
+
+    return timeFilter;
+  };
+
+  DataSource.prototype.getSliReports = function () {
+    return this.dataSourceSlo.getConfiguredSLIs();
+  };
+
+  DataSource.prototype.getSloReports = function () {
+    return this.dataSourceSlo2.getSLOConfigurations();
+  };
+
+  DataSource.prototype.getEntityTypes = function () {
+    return this.dataSourceInfrastructure.getEntityTypes();
+  };
+
+  DataSource.prototype.fetchApplications = function () {
+    return this.dataSourceApplication.getApplications(this.getTimeFilter());
+  };
+
+  DataSource.prototype.fetchApplicationTags = function () {
+    return this.dataSourceApplication.getApplicationTags(this.getTimeFilter());
+  };
+
+  DataSource.prototype.fetchServices = function (target) {
+    var interpolatedTarget = this.interpolateVariables(target);
+    return this.dataSourceService.getServicesOfApplication(interpolatedTarget, this.getTimeFilter());
+  };
+
+  DataSource.prototype.fetchEndpoints = function (target) {
+    var interpolatedTarget = this.interpolateVariables(target);
+    return this.dataSourceEndpoint.getEndpointsOfService(interpolatedTarget, this.getTimeFilter());
+  };
+
+  DataSource.prototype.fetchTypesForTarget = function (query) {
+    var interpolatedQuery = this.interpolateVariables(query);
+    return this.dataSourceInfrastructure.fetchTypesForTarget(interpolatedQuery, this.getTimeFilter());
+  };
+
+  DataSource.prototype.fetchWebsites = function () {
+    return this.dataSourceWebsite.getWebsites(this.getTimeFilter());
+  };
+
+  DataSource.prototype.fetchMobileapp = function () {
+    return this.dataSourceMobileapp.getMobileapp(this.getTimeFilter());
+  };
+
+  DataSource.prototype.fetchMetricsForEntityType = function (target) {
+    var interpolatedTarget = this.interpolateVariables(target);
+
+    if (interpolatedTarget.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["BUILT_IN_METRICS"] || interpolatedTarget.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["CUSTOM_METRICS"]) {
+      return this.dataSourceInfrastructure.getMetricsCatalog(interpolatedTarget.entityType, interpolatedTarget.metricCategory.key);
+    }
+
+    return this.dataSourceInfrastructure.fetchAvailableMetricsForEntityType(interpolatedTarget, this.timeFilter);
+  };
+
+  DataSource.prototype.getDefaultTimeInterval = function (query) {
+    var category = query.metricCategory.key;
+
+    if (category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["BUILT_IN_METRICS"] || category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["CUSTOM_METRICS"] || category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"]) {
+      return Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__["getDefaultMetricRollupDuration"])(this.getTimeFilter());
+    } else {
+      return Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__["getDefaultChartGranularity"])(this.getTimeFilter().windowSize);
+    }
+  };
+
+  DataSource.prototype.convertTimeShiftToMillis = function (timeShift) {
+    if (!timeShift) {
+      return 0;
+    }
+
+    try {
+      return this.parseTimeShift(timeShift);
+    } catch (e) {
+      return 0;
+    }
+  };
+
+  DataSource.prototype.parseTimeShift = function (timeShift) {
+    var milliSeconds = 1000;
+
+    if (timeShift.endsWith('s')) {
+      return parseInt(timeShift.split('s')[0], 10) * milliSeconds;
+    } else if (timeShift.endsWith('m')) {
+      return parseInt(timeShift.split('m')[0], 10) * 60 * milliSeconds;
+    } else if (timeShift.endsWith('h')) {
+      return parseInt(timeShift.split('h')[0], 10) * 60 * 60 * milliSeconds;
+    } else if (timeShift.endsWith('d')) {
+      return parseInt(timeShift.split('d')[0], 10) * 60 * 60 * 24 * milliSeconds;
+    } else if (timeShift.endsWith('w')) {
+      return parseInt(timeShift.split('w')[0], 10) * 60 * 60 * 24 * 7 * milliSeconds;
+    }
+
+    return 0;
+  };
+
+  DataSource.prototype.applyTimeShiftOnTimeFilter = function (timeFilter, timeShift) {
+    return {
+      from: timeFilter.from - timeShift,
+      to: timeFilter.to - timeShift,
+      windowSize: timeFilter.windowSize
+    };
+  };
+
+  DataSource.prototype.setPossibleTimeIntervals = function (target) {
+    var category = target.metricCategory.key;
+
+    if (category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["BUILT_IN_METRICS"] || category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["CUSTOM_METRICS"] || category === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"]) {
+      this.availableTimeIntervals = this.availableRollups;
+    } else {
+      this.availableTimeIntervals = this.availableGranularities;
+    }
+  };
+
+  DataSource.prototype.getTimeFilter = function () {
+    if (!this.timeFilter || !this.timeFilter.from) {
+      var now = Date.now();
+      var windowSize = 6 * 60 * 60 * 1000; // 6h
+
+      this.timeFilter = {
+        from: now - windowSize,
+        to: now,
+        windowSize: windowSize
+      };
+    }
+
+    return this.timeFilter;
+  };
+  /**
+   * Implements variable query support for Grafana template variables
+   * Allows users to create variables populated from Instana data
+   *
+   * Supported query formats:
+   * - applications() - Returns list of all applications
+   * - applicationTags() - Returns list of application tags (for Group by)
+   * - applicationMetrics() - Returns list of application metrics
+   * - services() - Returns list of all services
+   * - services(applicationId) - Returns services for a specific application
+   * - endpoints() - Returns list of all endpoints
+   * - endpoints(applicationId) - Returns endpoints for a specific application
+   * - endpoints(applicationId, serviceId) - Returns endpoints for a specific application and service
+   * - entityTypes() - Returns list of all entity types
+   * - entityTypes(query) - Returns entity types matching a query
+   * - metrics(entityType) - Returns metrics for a specific infrastructure entity type
+   * - websites() - Returns list of all websites
+   * - websiteBeaconTypes() - Returns list of website beacon types (for Type field)
+   * - websiteTags() - Returns list of website tags (for Group by)
+   * - websiteMetrics() - Returns list of all website metrics
+   * - websiteMetrics(beaconType) - Returns website metrics for a specific beacon type
+   * - mobileApps() - Returns list of all mobile apps
+   * - mobileAppBeaconTypes() - Returns list of mobile app beacon types (for Type field)
+   * - mobileAppTags() - Returns list of mobile app tags (for Group by)
+   * - mobileappMetrics() - Returns list of all mobile app metrics
+   * - mobileappMetrics(beaconType) - Returns mobile app metrics for a specific beacon type
+   * - sliReports() - Returns list of SLI reports
+   * - sloReports() - Returns list of SLO configurations
+   * - syntheticTests() - Returns list of all synthetic tests
+   * - syntheticMetrics() - Returns list of all synthetic monitoring metrics
+   *
+   * @param query - The query string defining what data to fetch
+   * @param options - Optional query options
+   * @returns Promise resolving to array of metric find values
+   */
+
+
+  DataSource.prototype.metricFindQuery = function (query, options) {
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, Promise, function () {
+      var normalizedQuery, applications, results, match, applicationId, target, services, results, target, services, results, match, applicationId, serviceId, params, target, endpoints, results, match, entityQuery, interpolatedQuery, target, response, types, results, entityTypes, results, match, plugin, params, entities, results, match, entityTypeKey, interpolatedEntityType, target, metrics, results, applicationTags, results, applicationMetrics, results, websites, results, mobileApps, results, sliReports, results, sloReports, results, syntheticTests, results, syntheticMetrics, results, match, beaconType, interpolatedBeaconType_1, allMetrics_1, results_1, allMetrics, filteredMetrics, results, allMetrics, results, match, beaconType, interpolatedBeaconType_2, allMetrics_2, results_2, allMetrics, filteredMetrics, results, allMetrics, results, beaconTypes, results, mobileAppTags, results, beaconTypes, results, websiteTags, results, error_1;
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            normalizedQuery = query.trim().toLowerCase();
+            _a.label = 1;
+
+          case 1:
+            _a.trys.push([1, 51,, 52]);
+
+            if (!(normalizedQuery === 'applications()' || normalizedQuery === 'applications')) return [3
+            /*break*/
+            , 3];
+            return [4
+            /*yield*/
+            , this.fetchApplications()];
+
+          case 2:
+            applications = _a.sent();
+            results = applications.map(function (app) {
+              return {
+                text: app.label || app.key,
+                value: app.key
+              };
+            });
+            results.unshift({
+              text: 'Select application...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 3:
+            if (!normalizedQuery.startsWith('services')) return [3
+            /*break*/
+            , 7];
+            match = normalizedQuery.match(/services\(([^)]+)\)/);
+            if (!(match && match[1])) return [3
+            /*break*/
+            , 5];
+            applicationId = match[1].trim();
+            target = {
+              entity: {
+                key: applicationId
+              },
+              applicationBoundaryScope: 'ALL'
+            };
+            return [4
+            /*yield*/
+            , this.fetchServices(target)];
+
+          case 4:
+            services = _a.sent();
+            results = services.map(function (svc) {
+              return {
+                text: svc.label || svc.key,
+                value: svc.key
+              };
+            });
+            results.unshift({
+              text: 'Select service...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 5:
+            target = {
+              entity: {},
+              applicationBoundaryScope: 'ALL'
+            };
+            return [4
+            /*yield*/
+            , this.fetchServices(target)];
+
+          case 6:
+            services = _a.sent();
+            results = services.map(function (svc) {
+              return {
+                text: svc.label || svc.key,
+                value: svc.key
+              };
+            });
+            results.unshift({
+              text: 'Select service...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 7:
+            if (!normalizedQuery.startsWith('endpoints')) return [3
+            /*break*/
+            , 9];
+            match = normalizedQuery.match(/endpoints\(([^)]*)\)/);
+            applicationId = '';
+            serviceId = '';
+
+            if (match && match[1]) {
+              params = match[1].split(',').map(function (p) {
+                return p.trim();
+              });
+
+              if (params.length === 1) {
+                applicationId = this.templateSrv.replace(params[0], options === null || options === void 0 ? void 0 : options.scopedVars);
+              } else if (params.length >= 2) {
+                applicationId = this.templateSrv.replace(params[0], options === null || options === void 0 ? void 0 : options.scopedVars);
+                serviceId = this.templateSrv.replace(params[1], options === null || options === void 0 ? void 0 : options.scopedVars);
+              }
+            }
+
+            target = {
+              entity: applicationId ? {
+                key: applicationId
+              } : {},
+              service: serviceId ? {
+                key: serviceId
+              } : {},
+              applicationBoundaryScope: 'ALL'
+            };
+            return [4
+            /*yield*/
+            , this.fetchEndpoints(target)];
+
+          case 8:
+            endpoints = _a.sent();
+            results = endpoints.map(function (ep) {
+              return {
+                text: ep.label || ep.key,
+                value: ep.key
+              };
+            });
+            results.unshift({
+              text: 'Select endpoint...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 9:
+            if (!normalizedQuery.startsWith('entitytypes')) return [3
+            /*break*/
+            , 13];
+            match = normalizedQuery.match(/entitytypes\(([^)]+)\)/);
+            if (!(match && match[1])) return [3
+            /*break*/
+            , 11];
+            entityQuery = match[1].trim();
+            interpolatedQuery = this.templateSrv.replace(entityQuery, options === null || options === void 0 ? void 0 : options.scopedVars);
+            target = {
+              entityQuery: interpolatedQuery
+            };
+            return [4
+            /*yield*/
+            , this.fetchTypesForTarget(target)];
+
+          case 10:
+            response = _a.sent();
+            types = response.data || [];
+            results = types.map(function (type) {
+              return {
+                text: type,
+                value: type
+              };
+            });
+            results.unshift({
+              text: 'Select entity type...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 11:
+            return [4
+            /*yield*/
+            , this.getEntityTypes()];
+
+          case 12:
+            entityTypes = _a.sent();
+            results = entityTypes.map(function (type) {
+              return {
+                text: type.label || type.key,
+                value: type.key
+              };
+            });
+            results.unshift({
+              text: 'Select entity type...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 13:
+            if (!normalizedQuery.startsWith('entities')) return [3
+            /*break*/
+            , 15];
+            match = query.trim().match(/entities\(([^)]*)\)/i);
+            plugin = void 0;
+
+            if (match && match[1]) {
+              params = match[1].split(',').map(function (p) {
+                return p.trim().replace(/['"]/g, '');
+              });
+
+              if (params.length >= 1) {
+                // Single parameter - treat as plugin (entity_type)
+                plugin = this.templateSrv.replace(params[0], options === null || options === void 0 ? void 0 : options.scopedVars);
+              }
+            }
+
+            return [4
+            /*yield*/
+            , this.dataSourceInfrastructure.getInfrastructureEntities(plugin)];
+
+          case 14:
+            entities = _a.sent();
+            results = entities.map(function (entity) {
+              return {
+                text: entity.label || entity.key,
+                value: entity.key || entity.value
+              };
+            });
+            results.unshift({
+              text: 'Select entity...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 15:
+            if (!normalizedQuery.startsWith('metrics')) return [3
+            /*break*/
+            , 18];
+            match = normalizedQuery.match(/metrics\(([^)]+)\)/);
+            if (!(match && match[1])) return [3
+            /*break*/
+            , 17];
+            entityTypeKey = match[1].trim();
+            interpolatedEntityType = this.templateSrv.replace(entityTypeKey, options === null || options === void 0 ? void 0 : options.scopedVars);
+            target = {
+              entityType: {
+                key: interpolatedEntityType,
+                label: interpolatedEntityType
+              },
+              metricCategory: {
+                key: _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["BUILT_IN_METRICS"]
+              }
+            };
+            return [4
+            /*yield*/
+            , this.fetchMetricsForEntityType(target)];
+
+          case 16:
+            metrics = _a.sent();
+            results = metrics.map(function (metric) {
+              return {
+                text: metric.label || metric.key,
+                value: metric.key
+              };
+            });
+            results.unshift({
+              text: 'Select metric...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 17:
+            console.warn('Instana datasource: metrics() requires an entity type parameter, e.g., metrics(host)');
+            return [2
+            /*return*/
+            , []];
+
+          case 18:
+            if (!(normalizedQuery === 'applicationtags()' || normalizedQuery === 'applicationtags')) return [3
+            /*break*/
+            , 20];
+            return [4
+            /*yield*/
+            , this.fetchApplicationTags()];
+
+          case 19:
+            applicationTags = _a.sent();
+            results = applicationTags.map(function (tag) {
+              return {
+                text: tag.label || tag.key,
+                value: tag.key
+              };
+            });
+            results.unshift({
+              text: 'Select tag...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 20:
+            if (!(normalizedQuery === 'applicationmetrics()' || normalizedQuery === 'applicationmetrics')) return [3
+            /*break*/
+            , 22];
+            return [4
+            /*yield*/
+            , this.dataSourceApplication.getApplicationMetricsCatalog()];
+
+          case 21:
+            applicationMetrics = _a.sent();
+            results = applicationMetrics.map(function (metric) {
+              return {
+                text: metric.label || metric.key,
+                value: metric.key
+              };
+            });
+            results.unshift({
+              text: 'Select metric...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 22:
+            if (!(normalizedQuery === 'websites()' || normalizedQuery === 'websites')) return [3
+            /*break*/
+            , 24];
+            return [4
+            /*yield*/
+            , this.fetchWebsites()];
+
+          case 23:
+            websites = _a.sent();
+            results = websites.map(function (website) {
+              return {
+                text: website.label || website.key,
+                value: website.key
+              };
+            });
+            results.unshift({
+              text: 'Select website...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 24:
+            if (!(normalizedQuery === 'mobileapps()' || normalizedQuery === 'mobileapps')) return [3
+            /*break*/
+            , 26];
+            return [4
+            /*yield*/
+            , this.fetchMobileapp()];
+
+          case 25:
+            mobileApps = _a.sent();
+            results = mobileApps.map(function (app) {
+              return {
+                text: app.label || app.key,
+                value: app.key
+              };
+            });
+            results.unshift({
+              text: 'Select mobile app...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 26:
+            if (!(normalizedQuery === 'slireports()' || normalizedQuery === 'slireports')) return [3
+            /*break*/
+            , 28];
+            return [4
+            /*yield*/
+            , this.getSliReports()];
+
+          case 27:
+            sliReports = _a.sent();
+            results = sliReports.map(function (report) {
+              return {
+                text: report.label || report.key,
+                value: report.key
+              };
+            });
+            results.unshift({
+              text: 'Select SLI report...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 28:
+            if (!(normalizedQuery === 'sloreports()' || normalizedQuery === 'sloreports')) return [3
+            /*break*/
+            , 30];
+            return [4
+            /*yield*/
+            , this.getSloReports()];
+
+          case 29:
+            sloReports = _a.sent();
+            results = sloReports.map(function (report) {
+              return {
+                text: report.label || report.key,
+                value: report.key
+              };
+            });
+            results.unshift({
+              text: 'Select SLO report...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 30:
+            if (!(normalizedQuery === 'synthetictests()' || normalizedQuery === 'synthetictests')) return [3
+            /*break*/
+            , 32];
+            return [4
+            /*yield*/
+            , this.dataSourceSyntheticMonitoring.getSyntheticMonitoringtests()];
+
+          case 31:
+            syntheticTests = _a.sent();
+            results = syntheticTests.map(function (test) {
+              return {
+                text: test.label || test.key,
+                value: test.label
+              };
+            });
+            results.unshift({
+              text: 'Select synthetic test...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 32:
+            if (!(normalizedQuery === 'syntheticmetrics()' || normalizedQuery === 'syntheticmetrics')) return [3
+            /*break*/
+            , 34];
+            return [4
+            /*yield*/
+            , this.dataSourceSyntheticMonitoring.getSyntheticMonitoringMetricsCatalog()];
+
+          case 33:
+            syntheticMetrics = _a.sent();
+            results = syntheticMetrics.map(function (metric) {
+              return {
+                text: metric.label || metric.key,
+                value: metric.key
+              };
+            });
+            results.unshift({
+              text: 'Select metric...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 34:
+            if (!normalizedQuery.startsWith('websitemetrics')) return [3
+            /*break*/
+            , 40];
+            match = normalizedQuery.match(/websitemetrics\(([^)]+)\)/);
+            if (!(match && match[1])) return [3
+            /*break*/
+            , 38];
+            beaconType = match[1].trim();
+            beaconType = beaconType.replace(/['"]/g, '');
+            interpolatedBeaconType_1 = this.templateSrv.replace(beaconType, options === null || options === void 0 ? void 0 : options.scopedVars);
+            if (!(!interpolatedBeaconType_1 || interpolatedBeaconType_1 === beaconType && beaconType.startsWith('$'))) return [3
+            /*break*/
+            , 36];
+            return [4
+            /*yield*/
+            , this.dataSourceWebsite.getWebsiteMetricsCatalog()];
+
+          case 35:
+            allMetrics_1 = _a.sent();
+            results_1 = allMetrics_1.map(function (metric) {
+              return {
+                text: metric.label || metric.key,
+                value: metric.key
+              };
+            });
+            results_1.unshift({
+              text: 'Select metric...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results_1];
+
+          case 36:
+            return [4
+            /*yield*/
+            , this.dataSourceWebsite.getWebsiteMetricsCatalog()];
+
+          case 37:
+            allMetrics = _a.sent();
+            filteredMetrics = allMetrics.filter(function (metric) {
+              return metric.beaconTypes && metric.beaconTypes.includes(interpolatedBeaconType_1);
+            });
+            results = filteredMetrics.map(function (metric) {
+              return {
+                text: metric.label || metric.key,
+                value: metric.key
+              };
+            });
+            results.unshift({
+              text: 'Select metric...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 38:
+            return [4
+            /*yield*/
+            , this.dataSourceWebsite.getWebsiteMetricsCatalog()];
+
+          case 39:
+            allMetrics = _a.sent();
+            results = allMetrics.map(function (metric) {
+              return {
+                text: metric.label || metric.key,
+                value: metric.key
+              };
+            });
+            results.unshift({
+              text: 'Select metric...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 40:
+            if (!normalizedQuery.startsWith('mobileappmetrics')) return [3
+            /*break*/
+            , 46];
+            match = normalizedQuery.match(/mobileappmetrics\(([^)]+)\)/);
+            if (!(match && match[1])) return [3
+            /*break*/
+            , 44];
+            beaconType = match[1].trim();
+            beaconType = beaconType.replace(/['"]/g, '');
+            interpolatedBeaconType_2 = this.templateSrv.replace(beaconType, options === null || options === void 0 ? void 0 : options.scopedVars);
+            if (!(!interpolatedBeaconType_2 || interpolatedBeaconType_2 === beaconType && beaconType.startsWith('$'))) return [3
+            /*break*/
+            , 42];
+            return [4
+            /*yield*/
+            , this.dataSourceMobileapp.getMobileappMetricsCatalog()];
+
+          case 41:
+            allMetrics_2 = _a.sent();
+            results_2 = allMetrics_2.map(function (metric) {
+              return {
+                text: metric.label || metric.key,
+                value: metric.key
+              };
+            });
+            results_2.unshift({
+              text: 'Select metric...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results_2];
+
+          case 42:
+            return [4
+            /*yield*/
+            , this.dataSourceMobileapp.getMobileappMetricsCatalog()];
+
+          case 43:
+            allMetrics = _a.sent();
+            filteredMetrics = allMetrics.filter(function (metric) {
+              return metric.beaconTypes && metric.beaconTypes.includes(interpolatedBeaconType_2);
+            });
+            results = filteredMetrics.map(function (metric) {
+              return {
+                text: metric.label || metric.key,
+                value: metric.key
+              };
+            });
+            results.unshift({
+              text: 'Select metric...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 44:
+            return [4
+            /*yield*/
+            , this.dataSourceMobileapp.getMobileappMetricsCatalog()];
+
+          case 45:
+            allMetrics = _a.sent();
+            results = allMetrics.map(function (metric) {
+              return {
+                text: metric.label || metric.key,
+                value: metric.key
+              };
+            });
+            results.unshift({
+              text: 'Select metric...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 46:
+            // Mobile app beacon types query
+            if (normalizedQuery === 'mobileappbeacontypes()' || normalizedQuery === 'mobileappbeacontypes') {
+              beaconTypes = [{
+                key: 'session_start',
+                label: 'Session Starts'
+              }, {
+                key: 'view_change',
+                label: 'View Transitions'
+              }, {
+                key: 'crash',
+                label: 'Crashes'
+              }, {
+                key: 'http_request',
+                label: 'HTTP Requests'
+              }, {
+                key: 'custom',
+                label: 'Custom Events'
+              }];
+              results = beaconTypes.map(function (type) {
+                return {
+                  text: type.label,
+                  value: type.key
+                };
+              });
+              results.unshift({
+                text: 'Select beacon type...',
+                value: ''
+              });
+              return [2
+              /*return*/
+              , results];
+            }
+
+            if (!(normalizedQuery === 'mobileapptags()' || normalizedQuery === 'mobileapptags')) return [3
+            /*break*/
+            , 48];
+            return [4
+            /*yield*/
+            , this.dataSourceMobileapp.getMobileappTags()];
+
+          case 47:
+            mobileAppTags = _a.sent();
+            results = mobileAppTags.map(function (tag) {
+              return {
+                text: tag.label || tag.key,
+                value: tag.key
+              };
+            });
+            results.unshift({
+              text: 'Select tag...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 48:
+            // Website beacon types query
+            if (normalizedQuery === 'websitebeacontypes()' || normalizedQuery === 'websitebeacontypes') {
+              beaconTypes = [{
+                key: 'pageLoad',
+                label: 'Page Loads'
+              }, {
+                key: 'resourceLoad',
+                label: 'Resources'
+              }, {
+                key: 'httpRequest',
+                label: 'HTTP Requests'
+              }, {
+                key: 'error',
+                label: 'Errors'
+              }, {
+                key: 'pageChange',
+                label: 'Page Transitions'
+              }];
+              results = beaconTypes.map(function (type) {
+                return {
+                  text: type.label,
+                  value: type.key
+                };
+              });
+              results.unshift({
+                text: 'Select beacon type...',
+                value: ''
+              });
+              return [2
+              /*return*/
+              , results];
+            }
+
+            if (!(normalizedQuery === 'websitetags()' || normalizedQuery === 'websitetags')) return [3
+            /*break*/
+            , 50];
+            return [4
+            /*yield*/
+            , this.dataSourceWebsite.getWebsiteTags()];
+
+          case 49:
+            websiteTags = _a.sent();
+            results = websiteTags.map(function (tag) {
+              return {
+                text: tag.label || tag.key,
+                value: tag.key
+              };
+            });
+            results.unshift({
+              text: 'Select tag...',
+              value: ''
+            });
+            return [2
+            /*return*/
+            , results];
+
+          case 50:
+            // If query doesn't match any pattern, return empty array
+            console.warn("Instana datasource: Unknown variable query format: " + query);
+            return [2
+            /*return*/
+            , []];
+
+          case 51:
+            error_1 = _a.sent();
+            console.error('Instana datasource: Error in metricFindQuery:', error_1);
+            return [2
+            /*return*/
+            , []];
+
+          case 52:
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
+
+  DataSource.prototype.testDatasource = function () {
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_6__["getRequest"])(this.options, '/api/infrastructure-monitoring/monitoring-state').then(function () {
+      return {
+        status: 'success',
+        message: 'Successfully connected to the Instana API.',
+        title: 'Success'
+      };
+    }, function (error) {
+      if (error.status === 401) {
+        return {
+          status: 'error',
+          message: 'Unauthorized. Please verify the API Token.',
+          title: 'Error'
+        };
+      } else {
+        console.log(error);
+        return {
+          status: 'error',
+          message: 'Error (' + error.status + ') connecting to the Instana API: ' + error.statusText,
+          title: 'Error'
+        };
+      }
+    });
+  };
+
+  return DataSource;
+}(_grafana_data__WEBPACK_IMPORTED_MODULE_2__["DataSourceApi"]);
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_Application.ts":
+/*!***********************************************!*\
+  !*** ./datasources/DataSource_Application.ts ***!
+  \***********************************************/
+/*! exports provided: DataSourceApplication */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceApplication", function() { return DataSourceApplication; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var _util_analyze_util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/analyze_util */ "./util/analyze_util.ts");
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _lists_default_metric_catalog__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../lists/default_metric_catalog */ "./lists/default_metric_catalog.ts");
+/* harmony import */ var _util_queryInterval_check__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../util/queryInterval_check */ "./util/queryInterval_check.ts");
+/* harmony import */ var _util_instana_version__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../util/instana_version */ "./util/instana_version.ts");
+
+
+
+
+
+
+
+
+
+
+
+
+
+var DataSourceApplication =
+/** @class */
+function () {
+  function DataSourceApplication(options) {
+    this.instanaOptions = options;
+    this.applicationsCache = new _cache__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    this.miscCache = new _cache__WEBPACK_IMPORTED_MODULE_1__["default"]();
+  }
+
+  DataSourceApplication.prototype.runQuery = function (target, timeFilter) {
+    var _this = this; // do not try to execute to big queries
+
+
+    if (Object(_util_queryInterval_check__WEBPACK_IMPORTED_MODULE_10__["isInvalidQueryInterval"])(timeFilter.windowSize, Object(_util_time_util__WEBPACK_IMPORTED_MODULE_3__["hoursToMs"])(this.instanaOptions.queryinterval_limit_app_calls))) {
+      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_app_calls + ' hours');
+    } // avoid invalid calls
+
+
+    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_7__["emptyResultData"])(target.refId));
+    } // prevent query when no application is selected (key is null for "Select application" option)
+
+
+    if (!target.entity || target.entity.key === null) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_7__["emptyResultData"])(target.refId));
+    }
+
+    return this.fetchAnalyzeMetricsForApplication(target, timeFilter).then(function (response) {
+      target.showWarningCantShowAllResults = response.data.canLoadMore;
+      return Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_6__["readItemMetrics"])(target, response, _this.buildAnalyzeApplicationLabel);
+    });
+  };
+
+  DataSourceApplication.prototype.getApplications = function (timeFilter) {
+    var key = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_3__["getTimeKey"])(timeFilter);
+    var applications = this.applicationsCache.get(key);
+
+    if (applications) {
+      return applications;
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_3__["getWindowSize"])(timeFilter);
+    var page = 1;
+    var pageSize = 200;
+    applications = this.paginateApplications([], windowSize, timeFilter.to, page, pageSize, _GlobalVariables__WEBPACK_IMPORTED_MODULE_8__["PAGINATION_LIMIT"]).then(function (response) {
+      var allResults = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.flattenDeep(lodash__WEBPACK_IMPORTED_MODULE_2___default.a.map(response, function (pageSet) {
+        return pageSet.items;
+      }));
+
+      return lodash__WEBPACK_IMPORTED_MODULE_2___default.a.orderBy(lodash__WEBPACK_IMPORTED_MODULE_2___default.a.compact(allResults).map(function (entry) {
+        return {
+          key: entry.id,
+          label: entry.label,
+          boundaryScope: entry.boundaryScope
+        };
+      }), [function (application) {
+        return application.label.toLowerCase();
+      }], ['asc']);
+    });
+    this.applicationsCache.put(key, applications, 600000);
+    return applications;
+  };
+
+  DataSourceApplication.prototype.paginateApplications = function (results, windowSize, to, page, pageSize, pageLimit) {
+    var _this = this;
+
+    if (page > pageLimit) {
+      return results;
+    }
+
+    var queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_4__["getRequest"])(this.instanaOptions, '/api/application-monitoring/applications?' + queryParameters).then(function (response) {
+      results.push(response.data);
+
+      if (page * pageSize < response.data.totalHits) {
+        page++;
+        return _this.paginateApplications(results, windowSize, to, page, pageSize, pageLimit);
+      } else {
+        return results;
+      }
+    });
+  };
+
+  DataSourceApplication.prototype.getApplicationTags = function (timeFilter) {
+    var _this = this;
+
+    var applicationTags = this.miscCache.get('applicationTags');
+
+    if (applicationTags) {
+      return applicationTags;
+    }
+
+    return Object(_util_instana_version__WEBPACK_IMPORTED_MODULE_11__["default"])(this.instanaOptions).then(function (version) {
+      if (version >= 191) {
+        applicationTags = _this.getCatalog(timeFilter).then(function (catalog) {
+          return _this.mapCatalogResponse(catalog.data.tags);
+        });
+      } else {
+        applicationTags = _this.getCatalogFromDeprecatedEndpoint().then(function (tagsResponse) {
+          return _this.mapCatalogResponse(tagsResponse.data);
+        });
+      }
+
+      _this.miscCache.put('applicationTags', applicationTags);
+
+      return applicationTags;
+    });
+  };
+
+  DataSourceApplication.prototype.getCatalog = function (timeFilter) {
+    var endpoint = '/api/application-monitoring/catalog?dataSource=CALLS&useCase=FILTERING&from=' + timeFilter.from;
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_4__["getRequest"])(this.instanaOptions, endpoint);
+  };
+
+  DataSourceApplication.prototype.getCatalogFromDeprecatedEndpoint = function () {
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_4__["getRequest"])(this.instanaOptions, '/api/application-monitoring/catalog/tags');
+  };
+
+  DataSourceApplication.prototype.mapCatalogResponse = function (catalog) {
+    return catalog.map(function (entry) {
+      return {
+        key: entry.name,
+        label: entry.name,
+        type: entry.type,
+        canApplyToSource: entry.canApplyToSource,
+        canApplyToDestination: entry.canApplyToDestination
+      };
+    });
+  };
+
+  DataSourceApplication.prototype.getApplicationMetricsCatalog = function () {
+    return _lists_default_metric_catalog__WEBPACK_IMPORTED_MODULE_9__["default"];
+  };
+
+  DataSourceApplication.prototype.fetchAnalyzeMetricsForApplication = function (target, timeFilter) {
+    var _this = this;
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_3__["getWindowSize"])(timeFilter);
+    var tagFilters = [];
+    return Promise.all([this.getApplicationTags(timeFilter), this.getApplications(timeFilter)]).then(function (_a) {
+      var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(_a, 2),
+          applicationTags = _b[0],
+          applications = _b[1];
+
+      if (target.entity.key) {
+        var applicationName = target.entity.label; // Try to find the application by ID to get its name
+
+        var foundApp = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.find(applications, ['key', target.entity.key]);
+
+        if (foundApp && foundApp.label) {
+          applicationName = foundApp.label;
+        }
+
+        tagFilters.push({
+          name: 'application.name',
+          operator: 'EQUALS',
+          value: applicationName,
+          entity: target.applicationCallToEntity ? target.applicationCallToEntity : 'DESTINATION'
+        });
+      }
+
+      lodash__WEBPACK_IMPORTED_MODULE_2___default.a.forEach(target.filters, function (filter) {
+        if (filter.isValid) {
+          var tagFilter = Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_6__["createTagFilter"])(filter);
+
+          var tag_1 = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.find(applicationTags, ['key', filter.tag.key]);
+
+          if (tag_1.canApplyToDestination || tag_1.canApplyToSource) {
+            tagFilter['entity'] = _this.getTagEntity(filter.entity, tag_1);
+          }
+
+          tagFilters.push(tagFilter);
+        }
+      });
+
+      if (!target.timeInterval) {
+        target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__["getDefaultChartGranularity"])(windowSize);
+      }
+
+      var metric = {
+        metric: target.metric.key,
+        aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+        granularity: target.timeInterval.key
+      };
+      var group = {
+        groupbyTag: target.group.key
+      };
+
+      var tag = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.find(applicationTags, ['key', target.group.key]); // Only add groupbyTagEntity if the tag supports it
+
+
+      if (tag && (tag.canApplyToDestination || tag.canApplyToSource)) {
+        group['groupbyTagEntity'] = target.callToEntity;
+      } // Check for KEY_VALUE_PAIR type - use target.group.type if available, otherwise check tag
+
+
+      var tagType = target.group.type || tag && tag.type;
+
+      if (tagType === 'KEY_VALUE_PAIR' && target.groupbyTagSecondLevelKey) {
+        group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
+      }
+
+      var includeSynthetic = false;
+      target.filters.map(function (filter) {
+        if (filter.tag.key === 'call.is_synthetic') {
+          includeSynthetic = filter.booleanValue;
+        }
+      });
+      var data = {
+        group: group,
+        timeFrame: {
+          to: timeFilter.to,
+          windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_3__["atLeastGranularity"])(windowSize, metric.granularity)
+        },
+        metrics: [metric],
+        includeSynthetic: includeSynthetic,
+        tagFilterExpression: {
+          type: 'EXPRESSION',
+          logicalOperator: 'AND',
+          elements: tagFilters
+        }
+      };
+      return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_4__["postRequest"])(_this.instanaOptions, '/api/application-monitoring/analyze/call-groups?fillTimeSeries=true', data, false, 5);
+    });
+  };
+
+  DataSourceApplication.prototype.getTagEntity = function (selectedEntity, tag) {
+    if (selectedEntity === 'DESTINATION' && tag.canApplyToDestination) {
+      return 'DESTINATION';
+    }
+
+    if (selectedEntity === 'SOURCE' && tag.canApplyToSource) {
+      return 'SOURCE';
+    }
+
+    return tag.canApplyToDestination ? 'DESTINATION' : 'SOURCE';
+  };
+
+  DataSourceApplication.prototype.fetchApplicationMetrics = function (target, timeFilter) {
+    // avoid invalid calls
+    if (!target || !target.metric || !target.metric.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_7__["emptyResultData"])(target.refId));
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_3__["getWindowSize"])(timeFilter);
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    var metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+      granularity: target.timeInterval.key
+    };
+    var data = {
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_3__["atLeastGranularity"])(windowSize, metric.granularity)
+      },
+      metrics: [metric]
+    };
+
+    if (target.entity.key !== null) {
+      data['applicationId'] = target.entity.key;
+      data['applicationBoundaryScope'] = target.applicationBoundaryScope;
+    }
+
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_4__["postRequest"])(this.instanaOptions, '/api/application-monitoring/metrics/applications?fillTimeSeries=true', data);
+  };
+
+  DataSourceApplication.prototype.buildAnalyzeApplicationLabel = function (target, item, key, index) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$label', item.name);
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$application', target.entity.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$metric', target.metric.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$key', key);
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$index', '' + index + 1);
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    if (target.entity.label === _GlobalVariables__WEBPACK_IMPORTED_MODULE_8__["ALL_APPLICATIONS"]) {
+      return target.timeShift ? item.name + ' - ' + key + ' - ' + target.timeShift : item.name + ' - ' + key;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? item.name + ' (' + target.entity.label + ')' + ' - ' + key + ' - ' + target.timeShift : item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+  };
+
+  DataSourceApplication.prototype.buildApplicationMetricLabel = function (target, item, key, index) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$label', item.application.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$application', target.entity.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$metric', target.metric.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$key', key);
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$index', '' + index + 1);
+      label = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    if (target.entity.label === _GlobalVariables__WEBPACK_IMPORTED_MODULE_8__["ALL_APPLICATIONS"]) {
+      return target.timeShift ? item.application.label + ' - ' + key + ' - ' + target.timeShift : item.application.label + ' - ' + key;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? item.application.label + ' (' + target.entity.label + ')' + ' - ' + key + ' - ' + target.timeShift : item.application.label + ' (' + target.entity.label + ')' + ' - ' + key;
+  };
+
+  return DataSourceApplication;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_Endpoint.ts":
+/*!********************************************!*\
+  !*** ./datasources/DataSource_Endpoint.ts ***!
+  \********************************************/
+/*! exports provided: DataSourceEndpoint */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceEndpoint", function() { return DataSourceEndpoint; });
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+
+
+
+
+
+
+
+
+var DataSourceEndpoint =
+/** @class */
+function () {
+  function DataSourceEndpoint(options) {
+    this.instanaOptions = options;
+    this.endpointsCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  }
+
+  DataSourceEndpoint.prototype.getEndpointsOfService = function (target, timeFilter) {
+    var applicationId = '';
+
+    if (target.entity && target.entity.key) {
+      applicationId = target.entity.key;
+    }
+
+    var serviceId = '';
+
+    if (target.service) {
+      serviceId = target.service.key;
+    }
+
+    var key = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getTimeKey"])(timeFilter) + applicationId + serviceId + target.applicationBoundaryScope;
+    var endpoints = this.endpointsCache.get(key);
+
+    if (endpoints) {
+      return endpoints;
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var page = 1;
+    var pageSize = 200;
+    endpoints = this.paginateEndpoints([], applicationId, serviceId, windowSize, target.applicationBoundaryScope, timeFilter.to, page, pageSize, _GlobalVariables__WEBPACK_IMPORTED_MODULE_4__["PAGINATION_LIMIT"]).then(function (response) {
+      var allResults = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.flattenDeep(lodash__WEBPACK_IMPORTED_MODULE_1___default.a.map(response, function (pageSet) {
+        return pageSet.items;
+      }));
+
+      return lodash__WEBPACK_IMPORTED_MODULE_1___default.a.orderBy(lodash__WEBPACK_IMPORTED_MODULE_1___default.a.compact(allResults).map(function (entry) {
+        return {
+          key: entry.id,
+          label: entry.label
+        };
+      }), [function (endpoint) {
+        return endpoint.label.toLowerCase();
+      }], ['asc']);
+    });
+    this.endpointsCache.put(key, endpoints, 600000);
+    return endpoints;
+  };
+
+  DataSourceEndpoint.prototype.paginateEndpoints = function (results, applicationId, serviceId, windowSize, applicationBoundaryScope, to, page, pageSize, pageLimit) {
+    var _this = this;
+
+    if (page > pageLimit) {
+      return results;
+    }
+
+    var queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
+
+    if (applicationBoundaryScope === 'ALL' || applicationBoundaryScope === 'INBOUND') {
+      queryParameters += '&applicationBoundaryScope=' + applicationBoundaryScope;
+    }
+
+    var url = '/api/application-monitoring/applications;id=' + (applicationId ? applicationId : '') + '/services;id=' + (serviceId ? serviceId : '') + '/endpoints?' + queryParameters;
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, url).then(function (response) {
+      results.push(response.data);
+
+      if (page * pageSize < response.data.totalHits) {
+        page++;
+        return _this.paginateEndpoints(results, applicationId, serviceId, windowSize, applicationBoundaryScope, to, page, pageSize, pageLimit);
+      } else {
+        return results;
+      }
+    });
+  };
+
+  DataSourceEndpoint.prototype.fetchEndpointMetrics = function (target, timeFilter) {
+    // avoid invalid calls
+    if (!target || !target.metric || !target.metric.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_5__["emptyResultData"])(target.refId));
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_6__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    var metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+      granularity: target.timeInterval.key
+    };
+    var data = {
+      endpointId: target.endpoint.key,
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["atLeastGranularity"])(windowSize, metric.granularity)
+      },
+      metrics: [metric]
+    };
+
+    if (target.entity && target.entity.key) {
+      data['applicationId'] = target.entity.key; // only set applicationBoundaryScope when an application is selected
+
+      data['applicationBoundaryScope'] = target.applicationBoundaryScope;
+    }
+
+    if (target.service && target.service.key) {
+      data['serviceId'] = target.service.key;
+    }
+
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, '/api/application-monitoring/metrics/endpoints?fillTimeSeries=true', data);
+  };
+
+  DataSourceEndpoint.prototype.buildEndpointMetricLabel = function (target, item, key, index) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$label', item.endpoint.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$endpoint', target.endpoint.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$service', target.service.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$application', target.entity.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$metric', target.metric.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$key', key);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$index', '' + index + 1);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    if (target.endpoint.label === _GlobalVariables__WEBPACK_IMPORTED_MODULE_4__["ALL_ENDPOINTS"]) {
+      return target.timeShift ? item.endpoint.label + ' - ' + key + ' - ' + target.timeShift : item.endpoint.label + ' - ' + key;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? item.endpoint.label + ' (' + target.endpoint.label + ')' + ' - ' + key + ' - ' + target.timeShift : item.endpoint.label + ' (' + target.endpoint.label + ')' + ' - ' + key;
+  };
+
+  return DataSourceEndpoint;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_MobileApp.ts":
+/*!*********************************************!*\
+  !*** ./datasources/DataSource_MobileApp.ts ***!
+  \*********************************************/
+/*! exports provided: DataSourceMobileApp */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceMobileApp", function() { return DataSourceMobileApp; });
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _util_analyze_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/analyze_util */ "./util/analyze_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var _util_queryInterval_check__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util/queryInterval_check */ "./util/queryInterval_check.ts");
+
+
+
+
+
+
+
+
+
+var DataSourceMobileApp =
+/** @class */
+function () {
+  function DataSourceMobileApp(options) {
+    this.instanaOptions = options;
+    this.MobileAppCache = new _cache__WEBPACK_IMPORTED_MODULE_3__["default"]();
+    this.miscCache = new _cache__WEBPACK_IMPORTED_MODULE_3__["default"]();
+  }
+
+  DataSourceMobileApp.prototype.runQuery = function (target, timeFilter) {
+    var _this = this;
+
+    if (Object(_util_queryInterval_check__WEBPACK_IMPORTED_MODULE_7__["isInvalidQueryInterval"])(timeFilter.windowSize, Object(_util_time_util__WEBPACK_IMPORTED_MODULE_0__["hoursToMs"])(this.instanaOptions.queryinterval_limit_mobileapp_metrics))) {
+      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_mobileapp_metrics + ' hours');
+    } // avoid invalid calls
+
+
+    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key || !target.entity || !target.entity.key || !target.entityType || !target.entityType.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_5__["emptyResultData"])(target.refId));
+    }
+
+    return this.fetchAnalyzeMetricsForMobileapp(target, timeFilter).then(function (response) {
+      return Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_1__["readItemMetrics"])(target, response, _this.buildAnalyzeMobileAppLabel);
+    });
+  };
+
+  DataSourceMobileApp.prototype.getMobileapp = function (timeFilter) {
+    var key = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_0__["getTimeKey"])(timeFilter);
+    var mobileapps = this.MobileAppCache.get(key);
+
+    if (mobileapps) {
+      return mobileapps;
+    }
+
+    mobileapps = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["getRequest"])(this.instanaOptions, '/api/mobile-app-monitoring/config').then(function (mobileappsResponse) {
+      return mobileappsResponse.data.map(function (mobile) {
+        return {
+          key: mobile.name,
+          label: mobile.name
+        };
+      });
+    });
+    this.MobileAppCache.put(key, mobileapps, 600000);
+    return mobileapps;
+  };
+
+  DataSourceMobileApp.prototype.getMobileappTags = function () {
+    var mobileappTags = this.miscCache.get('mobileappTags');
+
+    if (mobileappTags) {
+      return mobileappTags;
+    }
+
+    mobileappTags = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["getRequest"])(this.instanaOptions, '/api/mobile-app-monitoring/catalog/tags').then(function (tagsResponse) {
+      return tagsResponse.data.map(function (entry) {
+        return {
+          key: entry.name,
+          label: entry.name,
+          type: entry.type
+        };
+      });
+    });
+    this.miscCache.put('mobileappTags', mobileappTags);
+    return mobileappTags;
+  };
+
+  DataSourceMobileApp.prototype.getMobileappMetricsCatalog = function () {
+    var _this = this;
+
+    var mobileappCatalog = this.miscCache.get('mobileappCatalog');
+
+    if (mobileappCatalog) {
+      return mobileappCatalog;
+    }
+
+    mobileappCatalog = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["getRequest"])(this.instanaOptions, '/api/mobile-app-monitoring/catalog/metrics').then(function (catalogResponse) {
+      return catalogResponse.data.map(function (entry) {
+        return {
+          key: entry.metricId,
+          label: entry.label,
+          aggregations: entry.aggregations ? _this.transformAggregations(entry.aggregations.sort()) : [],
+          beaconTypes: entry.beaconTypes ? _this.transformBeaconTypes(entry.beaconTypes) : ['sessionStart', 'crash', 'httpRequest', 'custom', 'viewChange']
+        };
+      });
+    });
+    this.miscCache.put('mobileappCatalog', mobileappCatalog);
+    return mobileappCatalog;
+  };
+
+  DataSourceMobileApp.prototype.transformBeaconTypes = function (beaconTypes) {
+    if (beaconTypes.includes('sessionStart')) {
+      var result = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.remove(beaconTypes, function (type) {
+        return type !== 'sessionStart';
+      });
+
+      result.push('session_start');
+      return result;
+    }
+
+    if (beaconTypes.includes('httpRequest')) {
+      var result = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.remove(beaconTypes, function (type) {
+        return type !== 'httpRequest';
+      });
+
+      result.push('http_request');
+      return result;
+    }
+
+    if (beaconTypes.includes('viewChange')) {
+      var result = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.remove(beaconTypes, function (type) {
+        return type !== 'viewChange';
+      });
+
+      result.push('view_change');
+      return result;
+    }
+
+    return beaconTypes;
+  };
+
+  DataSourceMobileApp.prototype.transformAggregations = function (aggregations) {
+    return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(aggregations, function (a) {
+      return {
+        key: a,
+        label: a
+      };
+    });
+  };
+
+  DataSourceMobileApp.prototype.fetchAnalyzeMetricsForMobileapp = function (target, timeFilter) {
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_0__["getWindowSize"])(timeFilter);
+    var tagFilters = [{
+      name: 'mobileBeacon.mobileApp.name',
+      operator: 'EQUALS',
+      value: target.entity.key
+    }];
+
+    lodash__WEBPACK_IMPORTED_MODULE_4___default.a.forEach(target.filters, function (filter) {
+      if (filter.isValid) {
+        tagFilters.push(Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_1__["createTagFilter"])(filter));
+      }
+    });
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_6__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    var metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation.key ? target.aggregation.key : 'SUM',
+      granularity: target.timeInterval.key
+    };
+    var group = {
+      groupbyTag: target.group.key
+    };
+
+    if (target.group.type === 'KEY_VALUE_PAIR' && target.groupbyTagSecondLevelKey) {
+      group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
+    }
+
+    var data = {
+      group: group,
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_0__["atLeastGranularity"])(windowSize, metric.granularity)
+      },
+      tagFilters: tagFilters,
+      type: target.entityType.key,
+      metrics: [metric]
+    };
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_2__["postRequest"])(this.instanaOptions, '/api/mobile-app-monitoring/analyze/beacon-groups?fillTimeSeries=true', data, false, 5);
+  };
+
+  DataSourceMobileApp.prototype.buildAnalyzeMobileAppLabel = function (target, item, key, index) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.replace(label, '$label', item.name);
+      label = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.replace(label, '$mobileapp', target.entity.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.replace(label, '$type', target.entityType.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.replace(label, '$metric', target.metric.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.replace(label, '$key', key);
+      label = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.replace(label, '$index', '' + index + 1);
+      label = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? item.name + ' (' + target.entity.label + ')' + ' - ' + key + ' - ' + target.timeShift : item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+  };
+
+  return DataSourceMobileApp;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_Service.ts":
+/*!*******************************************!*\
+  !*** ./datasources/DataSource_Service.ts ***!
+  \*******************************************/
+/*! exports provided: DataSourceService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceService", function() { return DataSourceService; });
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+
+
+
+
+
+
+
+
+var DataSourceService =
+/** @class */
+function () {
+  function DataSourceService(options) {
+    this.instanaOptions = options;
+    this.servicesCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  }
+
+  DataSourceService.prototype.getServicesOfApplication = function (target, timeFilter) {
+    var applicationId = '';
+
+    if (target.entity && target.entity.key) {
+      applicationId = target.entity.key;
+    }
+
+    var key = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getTimeKey"])(timeFilter) + applicationId + target.applicationBoundaryScope;
+    var services = this.servicesCache.get(key);
+
+    if (services) {
+      return services;
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var page = 1;
+    var pageSize = 200;
+    services = this.paginateServices([], applicationId, windowSize, timeFilter.to, target.applicationBoundaryScope, page, pageSize, _GlobalVariables__WEBPACK_IMPORTED_MODULE_5__["PAGINATION_LIMIT"]).then(function (response) {
+      var allResults = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.flattenDeep(lodash__WEBPACK_IMPORTED_MODULE_1___default.a.map(response, function (pageSet) {
+        return pageSet.items;
+      }));
+
+      return lodash__WEBPACK_IMPORTED_MODULE_1___default.a.orderBy(lodash__WEBPACK_IMPORTED_MODULE_1___default.a.compact(allResults).map(function (entry) {
+        return {
+          key: entry.id,
+          label: entry.label
+        };
+      }), [function (service) {
+        return service.label.toLowerCase();
+      }], ['asc']);
+    });
+    this.servicesCache.put(key, services, 600000);
+    return services;
+  };
+
+  DataSourceService.prototype.paginateServices = function (results, applicationId, windowSize, to, applicationBoundaryScope, page, pageSize, pageLimit) {
+    var _this = this;
+
+    if (page > pageLimit) {
+      return results;
+    }
+
+    var queryParameters = 'windowSize=' + windowSize + '&to=' + to + '&page=' + page + '&pageSize=' + pageSize;
+
+    if (applicationBoundaryScope === 'ALL' || applicationBoundaryScope === 'INBOUND') {
+      queryParameters += '&applicationBoundaryScope=' + applicationBoundaryScope;
+    }
+
+    var url = '/api/application-monitoring/applications;id=' + (applicationId ? applicationId : '') + '/services?' + queryParameters;
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, url).then(function (response) {
+      results.push(response.data);
+
+      if (page * pageSize < response.data.totalHits) {
+        page++;
+        return _this.paginateServices(results, applicationId, windowSize, to, applicationBoundaryScope, page, pageSize, pageLimit);
+      } else {
+        return results;
+      }
+    });
+  };
+
+  DataSourceService.prototype.fetchServiceMetrics = function (target, timeFilter) {
+    // avoid invalid calls
+    if (!target || !target.metric || !target.metric.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_6__["emptyResultData"])(target.refId));
+    }
+
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_4__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    var metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+      granularity: target.timeInterval.key
+    };
+    var data = {
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["atLeastGranularity"])(windowSize, metric.granularity)
+      },
+      metrics: [metric]
+    };
+
+    if (target.entity && target.entity.key) {
+      data['applicationId'] = target.entity.key; // only set applicationBoundaryScope when an application is selected
+
+      data['applicationBoundaryScope'] = target.applicationBoundaryScope;
+    }
+
+    if (target.service && target.service.key) {
+      data['serviceId'] = target.service.key;
+    }
+
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, '/api/application-monitoring/metrics/services?fillTimeSeries=true', data);
+  };
+
+  DataSourceService.prototype.buildServiceMetricLabel = function (target, item, key, index) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$label', item.service.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$service', target.service.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$application', target.entity.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$metric', target.metric.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$key', key);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$index', index + 1 + '');
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    if (target.service.key === null) {
+      return target.timeShift ? item.service.label + ' - ' + key + ' - ' + target.timeShift : item.service.label + ' - ' + key;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? item.service.label + ' (' + target.service.label + ')' + ' - ' + key + ' - ' + target.timeShift : item.service.label + ' (' + target.service.label + ')' + ' - ' + key;
+  };
+
+  return DataSourceService;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_Slo.ts":
+/*!***************************************!*\
+  !*** ./datasources/DataSource_Slo.ts ***!
+  \***************************************/
+/*! exports provided: DataSourceSlo */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceSlo", function() { return DataSourceSlo; });
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+
+var DataSourceSlo =
+/** @class */
+function () {
+  function DataSourceSlo(options) {
+    this.instanaOptions = options;
+    this.sliReportsCache = new _cache__WEBPACK_IMPORTED_MODULE_3__["default"]();
+  }
+
+  DataSourceSlo.prototype.getConfiguredSLIs = function () {
+    var sliReports = this.sliReportsCache.get('sliReports');
+
+    if (sliReports) {
+      return sliReports;
+    }
+
+    sliReports = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(this.instanaOptions, '/api/settings/sli').then(function (response) {
+      return lodash__WEBPACK_IMPORTED_MODULE_4___default.a.map(response.data, function (r) {
+        return {
+          key: r.id,
+          label: r.sliName
+        };
+      });
+    });
+    this.sliReportsCache.put('sliReports', sliReports);
+    return sliReports;
+  };
+
+  DataSourceSlo.prototype.runQuery = function (target, timeFilter) {
+    var _this = this; //avoid involid calls
+
+
+    if (!target || !target.sloReport || !target.sloReport.key || !target.sloSpecific || !target.sloSpecific.key || !target.sloValue) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["emptyResultData"])(target.refId));
+    }
+
+    var endpoint = '/api/sli/report/' + target.sloReport.key + '?from=' + timeFilter.from + '&to=' + timeFilter.to + '&slo=' + target.sloValue;
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(this.instanaOptions, endpoint).then(function (response) {
+      return _this.extractSpecificValueFromSLI(target, response.data, timeFilter);
+    });
+  };
+
+  DataSourceSlo.prototype.extractSpecificValueFromSLI = function (target, sliResult, timeFilter) {
+    if (target.sloSpecific.key === 'SLI') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.sloSpecific.label, target.refId, this.buildResultArray(sliResult.sli, timeFilter.to))];
+    } else if (target.sloSpecific.key === 'Remaining Error Budget') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.sloSpecific.label, target.refId, this.buildResultArray(sliResult.errorBudgetRemaining, timeFilter.to))];
+    } else if (target.sloSpecific.key === 'Timeseries') {
+      return this.buildViolationDistributionTimeSeries(target, sliResult.violationDistribution, timeFilter);
+    }
+
+    return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["emptyResultData"])(target.refId)];
+  };
+
+  DataSourceSlo.prototype.buildResultArray = function (result, timestamp) {
+    return [[result, timestamp]];
+  };
+
+  DataSourceSlo.prototype.buildViolationDistributionTimeSeries = function (target, series, timeFilter) {
+    if (!series) {
+      // Handle the case where series is undefined or null
+      return [];
+    }
+
+    var greens = [];
+    var reds = [];
+    var greys = [];
+    var granularity = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter) / Object.keys(series).length;
+
+    lodash__WEBPACK_IMPORTED_MODULE_4___default.a.forEach(series, function (value, index) {
+      if (value === 1) {
+        greens.push([1, timeFilter.from + index * granularity]);
+      } else if (value === 0) {
+        greys.push([1, timeFilter.from + index * granularity]);
+      } else if (value === -1) {
+        reds.push([1, timeFilter.from + index * granularity]);
+      }
+    });
+
+    var result = [];
+    result.push(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])('No violation', target.refId, greens));
+    result.push(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])('Violation', target.refId, reds));
+    result.push(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])('No data', target.refId, greys));
+    return result;
+  };
+
+  return DataSourceSlo;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_Slo2.ts":
+/*!****************************************!*\
+  !*** ./datasources/DataSource_Slo2.ts ***!
+  \****************************************/
+/*! exports provided: DataSourceSlo2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceSlo2", function() { return DataSourceSlo2; });
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+
+
+
+
+
+
+var DataSourceSlo2 =
+/** @class */
+function () {
+  function DataSourceSlo2(options) {
+    this.instanaOptions = options;
+    this.sloReportsCache = new _cache__WEBPACK_IMPORTED_MODULE_1__["default"]();
+  }
+
+  DataSourceSlo2.prototype.getSLOConfigurations = function () {
+    var sloReports = this.sloReportsCache.get('sloReports');
+
+    if (sloReports) {
+      return sloReports;
+    }
+
+    sloReports = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, '/api/settings/slo').then(function (response) {
+      return lodash__WEBPACK_IMPORTED_MODULE_2___default.a.map(response.data.items, function (r) {
+        return {
+          key: r.id,
+          label: r.name
+        };
+      });
+    });
+    this.sloReportsCache.put('sloReports', sloReports);
+    return sloReports;
+  };
+
+  DataSourceSlo2.prototype.runQuery = function (target, timeFilter) {
+    var _this = this; // avoid invalid calls
+
+
+    if (!target || !target.slo2Report || !target.slo2Report.key || !target.slo2Specific || !target.slo2Specific.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["emptyResultData"])(target.refId));
+    }
+
+    var endpoint = '/api/slo/report/' + target.slo2Report.key + '?from=' + Math.floor(timeFilter.from / 6000) * 6000 + '&to=' + Math.floor(timeFilter.to / 6000) * 6000;
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, endpoint).then(function (response) {
+      return _this.extractSpecificValueFromSLI(target, response.data, timeFilter);
+    });
+  };
+
+  DataSourceSlo2.prototype.extractSpecificValueFromSLI = function (target, sloResult, timeFilter) {
+    if (target.slo2Specific.key === 'Status') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.slo2Specific.label, target.refId, this.buildResultArray(sloResult.sli, timeFilter.to))];
+    } else if (target.slo2Specific.key === 'Service Level Target') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.slo2Specific.label, target.refId, this.buildResultArray(sloResult.slo, timeFilter.to))];
+    } else if (target.slo2Specific.key === 'Total Error Budget') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.slo2Specific.label, target.refId, this.buildResultArray(sloResult.totalErrorBudget, timeFilter.to))];
+    } else if (target.slo2Specific.key === 'Remaining Error Budget') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.slo2Specific.label, target.refId, this.buildResultArray(sloResult.errorBudgetRemaining, timeFilter.to))];
+    } else if (target.slo2Specific.key === 'Spended Error Budget') {
+      return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(target.slo2Specific.label, target.refId, this.buildResultArray(sloResult.errorBudgetSpent, timeFilter.to))];
+    } else if (target.slo2Specific.key === 'Timeseries') {
+      return this.buildViolationDistributionTimeSeries(target, sloResult.violationDistribution, timeFilter);
+    } else if (target.slo2Specific.key === 'Error Chart') {
+      return this.buildChart('Error budget spent', target, sloResult.errorChart, timeFilter);
+    } else if (target.slo2Specific.key === 'Error Accumulation Chart') {
+      return this.buildChart('Error Accumulation', target, sloResult.errorAccumulationChart, timeFilter);
+    } else if (target.slo2Specific.key === 'Error Budget Remain Chart') {
+      return this.buildChart('Error Budget Remain Chart', target, sloResult.errorBudgetRemainChart, timeFilter);
+    }
+
+    return [Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["emptyResultData"])(target.refId)];
+  };
+
+  DataSourceSlo2.prototype.buildResultArray = function (result, timestamp) {
+    return [[result, timestamp]];
+  };
+
+  DataSourceSlo2.prototype.buildViolationDistributionTimeSeries = function (target, series, timeFilter) {
+    var greens = [];
+    var reds = [];
+    var greys = [];
+    var granularity = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_4__["getWindowSize"])(timeFilter) / Object.keys(series).length;
+    var startTS = Math.floor(timeFilter.from / granularity) * granularity;
+
+    lodash__WEBPACK_IMPORTED_MODULE_2___default.a.forEach(series, function (value, index) {
+      if (value === 1) {
+        greens.push([1, startTS + index * granularity]);
+      } else if (value === 0) {
+        greys.push([1, startTS + index * granularity]);
+      } else if (value === -1) {
+        reds.push([1, startTS + index * granularity]);
+      }
+    });
+
+    var result = [];
+    result.push(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])('No violation', target.refId, greens));
+    result.push(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])('Violation', target.refId, reds));
+    result.push(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])('No data', target.refId, greys));
+    return result;
+  };
+
+  DataSourceSlo2.prototype.buildChart = function (name, target, series, timeFilter) {
+    var greens = [];
+    var granularity = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_4__["getWindowSize"])(timeFilter) / Object.keys(series).length;
+    var startTS = Math.floor(timeFilter.from / granularity) * granularity;
+
+    lodash__WEBPACK_IMPORTED_MODULE_2___default.a.forEach(series, function (value, index) {
+      greens.push([value, startTS + index * granularity]);
+    });
+
+    var result = [];
+    result.push(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_0__["buildTimeSeries"])(name, target.refId, greens));
+    return result;
+  };
+
+  return DataSourceSlo2;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_SyntheticMonitoring.ts":
+/*!*******************************************************!*\
+  !*** ./datasources/DataSource_SyntheticMonitoring.ts ***!
+  \*******************************************************/
+/*! exports provided: DataSourceSyntheticMonitoring */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceSyntheticMonitoring", function() { return DataSourceSyntheticMonitoring; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var util_time_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! util/time_util */ "./util/time_util.ts");
+/* harmony import */ var util_target_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! util/target_util */ "./util/target_util.ts");
+/* harmony import */ var util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+
+
+
+
+
+
+
+var DataSourceSyntheticMonitoring =
+/** @class */
+function () {
+  function DataSourceSyntheticMonitoring(options) {
+    this.instanaOptions = options;
+    this.SyntheticMonitoringCache = new _cache__WEBPACK_IMPORTED_MODULE_2__["default"]();
+    this.miscCache = new _cache__WEBPACK_IMPORTED_MODULE_2__["default"]();
+  }
+
+  DataSourceSyntheticMonitoring.prototype.runQuery = function (target, timeFilter) {
+    var _a, _b, _c, _d;
+
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+      var resolvedTestId;
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_e) {
+        switch (_e.label) {
+          case 0:
+            if (!((_a = target === null || target === void 0 ? void 0 : target.metric) === null || _a === void 0 ? void 0 : _a.key) && ((_b = target.testType) === null || _b === void 0 ? void 0 : _b.value) === 'metric') {
+              console.warn('Missing required metric field for test type = metric:', target);
+              return [2
+              /*return*/
+              , Promise.resolve(Object(util_target_util__WEBPACK_IMPORTED_MODULE_4__["emptyResultData"])(target.refId))];
+            }
+
+            if (!((_c = target === null || target === void 0 ? void 0 : target.entity) === null || _c === void 0 ? void 0 : _c.value)) {
+              console.warn('Missing test selection (entity)', target);
+              return [2
+              /*return*/
+              , Promise.resolve(Object(util_target_util__WEBPACK_IMPORTED_MODULE_4__["emptyResultData"])(target.refId))];
+            }
+
+            if (!(!target.testId || target.testId === target.entity.value)) return [3
+            /*break*/
+            , 2];
+            return [4
+            /*yield*/
+            , this.getTestIdByName(target.entity.value)];
+
+          case 1:
+            resolvedTestId = _e.sent();
+
+            if (resolvedTestId) {
+              target.testId = resolvedTestId;
+            } else {
+              console.warn('Could not resolve test ID for test name:', target.entity.value); // If we can't resolve, try using the value as-is (might be a direct test ID)
+            }
+
+            _e.label = 2;
+
+          case 2:
+            if (((_d = target.testType) === null || _d === void 0 ? void 0 : _d.value) === 'metric') {
+              return [2
+              /*return*/
+              , this.fetchMetricsForSyntheticMonitoring(target, timeFilter).then(function (response) {
+                var _a;
+
+                var result = [];
+
+                if (!((_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.testResult)) {
+                  console.warn('Invalid or empty results data:', response);
+                  return Object(util_target_util__WEBPACK_IMPORTED_MODULE_4__["emptyResultData"])(target.refId);
+                }
+
+                response.data.testResult.forEach(function (item) {
+                  var _a, _b, _c;
+
+                  var testName = (_a = item.testName) !== null && _a !== void 0 ? _a : 'UnknownTest';
+                  var location = (_c = (_b = item.locationId) === null || _b === void 0 ? void 0 : _b[0]) !== null && _c !== void 0 ? _c : 'UnknownLocation';
+
+                  if (Array.isArray(item.metrics)) {
+                    item.metrics.forEach(function (metricObj) {
+                      var metricName = Object.keys(metricObj)[0];
+                      var metricValue = metricObj[metricName];
+                      var datapoints = [[metricValue, Date.now()]];
+                      result.push({
+                        target: testName + " (" + location + ") - " + metricName,
+                        datapoints: datapoints,
+                        refId: target.refId,
+                        key: target.stableHash
+                      });
+                    });
+                  }
+                });
+                return result;
+              })];
+            }
+
+            return [2
+            /*return*/
+            , this.fetchResultsForSyntheticMonitoring(target, timeFilter).then(function (response) {
+              var _a;
+
+              if (!((_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.items) || !Array.isArray(response.data.items)) {
+                console.warn('Invalid or empty results data:', response);
+                return Object(util_target_util__WEBPACK_IMPORTED_MODULE_4__["emptyResultData"])(target.refId);
+              }
+
+              var aggregatedMetrics = {};
+              var testName = 'UnknownTest';
+              var locationLabel = 'UnknownLocation';
+              response.data.items.forEach(function (item) {
+                var _a, _b, _c, _d, _e;
+
+                var props = (_a = item.testResultCommonProperties) !== null && _a !== void 0 ? _a : {};
+                testName = (_b = props.testName) !== null && _b !== void 0 ? _b : testName;
+                locationLabel = (_d = (_c = props.locationDisplayLabel) !== null && _c !== void 0 ? _c : props.locationId) !== null && _d !== void 0 ? _d : locationLabel;
+                var metrics = (_e = item.metrics) !== null && _e !== void 0 ? _e : {};
+                Object.entries(metrics).forEach(function (_a) {
+                  var _b;
+
+                  var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(_a, 2),
+                      metricName = _c[0],
+                      dataPoints = _c[1];
+
+                  var points = Array.isArray(dataPoints) ? dataPoints.filter(function (entry) {
+                    return Array.isArray(entry) && entry.length === 2 && typeof entry[0] === 'number' && typeof entry[1] === 'number';
+                  }) : [];
+
+                  if (!aggregatedMetrics[metricName]) {
+                    aggregatedMetrics[metricName] = [];
+                  }
+
+                  (_b = aggregatedMetrics[metricName]).push.apply(_b, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spreadArray"])([], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(points), false));
+                });
+              });
+              var result = Object.entries(aggregatedMetrics).map(function (_a) {
+                var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(_a, 2),
+                    metricName = _b[0],
+                    datapoints = _b[1];
+
+                return {
+                  target: testName + " (" + locationLabel + ") - " + metricName,
+                  datapoints: datapoints.map(function (_a) {
+                    var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(_a, 2),
+                        ts = _b[0],
+                        val = _b[1];
+
+                    return [val, ts];
+                  }),
+                  refId: target.refId,
+                  key: target.stableHash
+                };
+              });
+              return result;
+            })];
+        }
+      });
+    });
+  };
+
+  DataSourceSyntheticMonitoring.prototype.getSyntheticMonitoringtests = function () {
+    var tests = this.miscCache.get('SyntheticMonitoringtests');
+
+    if (tests) {
+      return tests;
+    }
+
+    tests = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(this.instanaOptions, '/api/synthetics/settings/tests').then(function (response) {
+      return response.data.map(function (entry) {
+        return {
+          key: entry.label,
+          label: entry.label,
+          testId: entry.id
+        };
+      });
+    });
+    this.miscCache.put('SyntheticMonitoringtests', tests);
+    return tests;
+  };
+
+  DataSourceSyntheticMonitoring.prototype.getTestIdByName = function (testName) {
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, Promise, function () {
+      var tests, matchingTest, error_1;
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            _a.trys.push([0, 2,, 3]);
+
+            return [4
+            /*yield*/
+            , this.getSyntheticMonitoringtests()];
+
+          case 1:
+            tests = _a.sent();
+            matchingTest = tests.find(function (test) {
+              return test.label === testName || test.key === testName;
+            });
+            return [2
+            /*return*/
+            , matchingTest ? matchingTest.testId : null];
+
+          case 2:
+            error_1 = _a.sent();
+            console.error('Error finding test ID for test name:', testName, error_1);
+            return [2
+            /*return*/
+            , null];
+
+          case 3:
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
+
+  DataSourceSyntheticMonitoring.prototype.getSyntheticMonitoringMetricsCatalog = function () {
+    var catalog = this.miscCache.get('SyntheticMonitoringMetricsCatalog');
+
+    if (catalog) {
+      return catalog;
+    }
+
+    catalog = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(this.instanaOptions, '/api/synthetics/catalog/metrics').then(function (response) {
+      return response.data.map(function (entry) {
+        return {
+          key: entry.metricId,
+          label: entry.label,
+          aggregations: entry.aggregations.map(function (agg) {
+            return {
+              key: agg,
+              label: agg
+            };
+          }),
+          formatter: entry.formatter
+        };
+      });
+    });
+    this.miscCache.put('SyntheticMonitoringMetricsCatalog', catalog);
+    return catalog;
+  };
+
+  DataSourceSyntheticMonitoring.prototype.fetchMetricsForSyntheticMonitoring = function (target, timeFilter) {
+    var _a, _b, _c;
+
+    var testId = target.testId;
+    var windowSize = Object(util_time_util__WEBPACK_IMPORTED_MODULE_3__["getWindowSize"])(timeFilter);
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    var metric = {
+      metric: (_a = target === null || target === void 0 ? void 0 : target.metric) === null || _a === void 0 ? void 0 : _a.key,
+      aggregation: ((_b = target === null || target === void 0 ? void 0 : target.aggregation) === null || _b === void 0 ? void 0 : _b.key) || 'SUM',
+      granularity: (_c = target === null || target === void 0 ? void 0 : target.timeInterval) === null || _c === void 0 ? void 0 : _c.key
+    };
+    var tagFilterExpression = {
+      type: 'EXPRESSION',
+      elements: [{
+        name: 'synthetic.testId',
+        operator: 'EQUALS',
+        value: testId
+      }],
+      logicalOperator: 'AND'
+    };
+    var data = {
+      metrics: [metric],
+      tagFilterExpression: tagFilterExpression,
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(util_time_util__WEBPACK_IMPORTED_MODULE_3__["atLeastGranularity"])(windowSize, metric.granularity)
+      }
+    };
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["postRequest"])(this.instanaOptions, '/api/synthetics/results', data);
+  };
+
+  DataSourceSyntheticMonitoring.prototype.fetchResultsForSyntheticMonitoring = function (target, timeFilter) {
+    var _a, _b;
+
+    var testId = target.testId;
+    var windowSize = Object(util_time_util__WEBPACK_IMPORTED_MODULE_3__["getWindowSize"])(timeFilter);
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_5__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    var tagFilterExpression = {
+      type: 'EXPRESSION',
+      elements: [{
+        name: 'synthetic.testId',
+        operator: 'EQUALS',
+        value: testId
+      }],
+      logicalOperator: 'AND'
+    };
+    var granularity = (_a = target === null || target === void 0 ? void 0 : target.timeInterval) === null || _a === void 0 ? void 0 : _a.key;
+    var data = {
+      syntheticMetrics: [(_b = target === null || target === void 0 ? void 0 : target.metric) === null || _b === void 0 ? void 0 : _b.key],
+      tagFilterExpression: tagFilterExpression,
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(util_time_util__WEBPACK_IMPORTED_MODULE_3__["atLeastGranularity"])(windowSize, granularity)
+      }
+    };
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_1__["postRequest"])(this.instanaOptions, '/api/synthetics/results/list', data);
+  };
+
+  return DataSourceSyntheticMonitoring;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/DataSource_Website.ts":
+/*!*******************************************!*\
+  !*** ./datasources/DataSource_Website.ts ***!
+  \*******************************************/
+/*! exports provided: DataSourceWebsite */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceWebsite", function() { return DataSourceWebsite; });
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var _util_analyze_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/analyze_util */ "./util/analyze_util.ts");
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _util_queryInterval_check__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util/queryInterval_check */ "./util/queryInterval_check.ts");
+
+
+
+
+
+
+
+
+
+var DataSourceWebsite =
+/** @class */
+function () {
+  function DataSourceWebsite(options) {
+    this.instanaOptions = options;
+    this.websitesCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    this.miscCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  }
+
+  DataSourceWebsite.prototype.runQuery = function (target, timeFilter) {
+    var _this = this;
+
+    if (Object(_util_queryInterval_check__WEBPACK_IMPORTED_MODULE_7__["isInvalidQueryInterval"])(timeFilter.windowSize, Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["hoursToMs"])(this.instanaOptions.queryinterval_limit_website_metrics))) {
+      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_website_metrics + ' hours');
+    } // avoid invalid calls
+
+
+    if (!target || !target.metric || !target.metric.key || !target.group || !target.group.key || !target.entity || !target.entity.key) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_6__["emptyResultData"])(target.refId));
+    }
+
+    return this.fetchAnalyzeMetricsForWebsite(target, timeFilter).then(function (response) {
+      return Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_5__["readItemMetrics"])(target, response, _this.buildAnalyzeWebsiteLabel);
+    });
+  };
+
+  DataSourceWebsite.prototype.getWebsites = function (timeFilter) {
+    var key = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getTimeKey"])(timeFilter);
+    var websites = this.websitesCache.get(key);
+
+    if (websites) {
+      return websites;
+    }
+
+    websites = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, '/api/website-monitoring/config').then(function (websitesResponse) {
+      return websitesResponse.data.map(function (website) {
+        return {
+          key: website.name,
+          label: website.name
+        };
+      });
+    });
+    this.websitesCache.put(key, websites, 600000);
+    return websites;
+  };
+
+  DataSourceWebsite.prototype.getWebsiteTags = function () {
+    var websiteTags = this.miscCache.get('websiteTags');
+
+    if (websiteTags) {
+      return websiteTags;
+    }
+
+    websiteTags = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, '/api/website-monitoring/catalog/tags').then(function (tagsResponse) {
+      return tagsResponse.data.map(function (entry) {
+        return {
+          key: entry.name,
+          label: entry.name,
+          type: entry.type
+        };
+      });
+    });
+    this.miscCache.put('websiteTags', websiteTags);
+    return websiteTags;
+  };
+
+  DataSourceWebsite.prototype.getWebsiteMetricsCatalog = function () {
+    var _this = this;
+
+    var websiteCatalog = this.miscCache.get('websiteCatalog');
+
+    if (websiteCatalog) {
+      return websiteCatalog;
+    }
+
+    websiteCatalog = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, '/api/website-monitoring/catalog/metrics').then(function (catalogResponse) {
+      return catalogResponse.data.map(function (entry) {
+        return {
+          key: entry.metricId,
+          label: entry.label,
+          aggregations: entry.aggregations ? _this.transformAggregations(entry.aggregations.sort()) : [],
+          beaconTypes: entry.beaconTypes ? _this.transformBeaconTypes(entry.beaconTypes) : ['pageLoad', 'resourceLoad', 'httpRequest', 'error', 'custom', 'pageChange']
+        };
+      });
+    });
+    this.miscCache.put('websiteCatalog', websiteCatalog);
+    return websiteCatalog;
+  };
+
+  DataSourceWebsite.prototype.transformBeaconTypes = function (beaconTypes) {
+    if (beaconTypes.includes('pageChange')) {
+      var result = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.remove(beaconTypes, function (type) {
+        return type !== 'pageChange';
+      });
+
+      result.push('page_change');
+      return result;
+    }
+
+    return beaconTypes;
+  };
+
+  DataSourceWebsite.prototype.transformAggregations = function (aggregations) {
+    return lodash__WEBPACK_IMPORTED_MODULE_1___default.a.map(aggregations, function (a) {
+      return {
+        key: a,
+        label: a
+      };
+    });
+  };
+
+  DataSourceWebsite.prototype.fetchAnalyzeMetricsForWebsite = function (target, timeFilter) {
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    var tagFilters = [{
+      name: 'beacon.website.name',
+      operator: 'EQUALS',
+      value: target.entity.key
+    }];
+
+    lodash__WEBPACK_IMPORTED_MODULE_1___default.a.forEach(target.filters, function (filter) {
+      if (filter.isValid) {
+        tagFilters.push(Object(_util_analyze_util__WEBPACK_IMPORTED_MODULE_5__["createTagFilter"])(filter));
+      }
+    });
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_4__["getDefaultChartGranularity"])(windowSize);
+    } // Determine the aggregation to use
+
+
+    var aggregation = 'SUM';
+
+    if (target.aggregation && target.aggregation.key) {
+      aggregation = target.aggregation.key;
+    } else if (target.metric && target.metric.aggregations && target.metric.aggregations.length > 0) {
+      // Use the first supported aggregation from the metric's catalog
+      aggregation = target.metric.aggregations[0].key || target.metric.aggregations[0];
+    }
+
+    var metric = {
+      metric: target.metric.key,
+      aggregation: aggregation,
+      granularity: target.timeInterval.key
+    };
+    var group = {
+      groupbyTag: target.group.key
+    };
+
+    if (target.group.type === 'KEY_VALUE_PAIR' && target.groupbyTagSecondLevelKey) {
+      group['groupbyTagSecondLevelKey'] = target.groupbyTagSecondLevelKey;
+    }
+
+    var data = {
+      group: group,
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["atLeastGranularity"])(windowSize, metric.granularity)
+      },
+      tagFilters: tagFilters,
+      type: target.entityType.key,
+      metrics: [metric]
+    };
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, '/api/website-monitoring/analyze/beacon-groups?fillTimeSeries=true', data, false, 5);
+  };
+
+  DataSourceWebsite.prototype.buildAnalyzeWebsiteLabel = function (target, item, key, index) {
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$label', item.name);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$website', target.entity.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$type', target.entityType.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$metric', target.metric.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$key', key);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$index', '' + index + 1);
+      label = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? item.name + ' (' + target.entity.label + ')' + ' - ' + key + ' - ' + target.timeShift : item.name + ' (' + target.entity.label + ')' + ' - ' + key;
+  };
+
+  return DataSourceWebsite;
+}();
+
+
+
+/***/ }),
+
+/***/ "./datasources/Datasource_Infrastructure.ts":
+/*!**************************************************!*\
+  !*** ./datasources/Datasource_Infrastructure.ts ***!
+  \**************************************************/
+/*! exports provided: DataSourceInfrastructure */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSourceInfrastructure", function() { return DataSourceInfrastructure; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+/* harmony import */ var _util_time_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/time_util */ "./util/time_util.ts");
+/* harmony import */ var _util_request_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/request_handler */ "./util/request_handler.ts");
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _util_target_util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/target_util */ "./util/target_util.ts");
+/* harmony import */ var _util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util/rollup_granularity_util */ "./util/rollup_granularity_util.ts");
+/* harmony import */ var _util_queryInterval_check__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../util/queryInterval_check */ "./util/queryInterval_check.ts");
+/* harmony import */ var _lists_max_metrics__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../lists/max_metrics */ "./lists/max_metrics.ts");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+
+
+
+
+
+
+
+
+
+
+
+var DataSourceInfrastructure =
+/** @class */
+function () {
+  function DataSourceInfrastructure(options, templateSrv) {
+    this.timeToLiveSnapshotInfoCache = 4000000; // set to 1,11 hour
+
+    this.instanaOptions = options;
+    this.templateSrv = templateSrv;
+    this.snapshotCache = new _cache__WEBPACK_IMPORTED_MODULE_4__["default"]();
+    this.snapshotInfoCache = new _cache__WEBPACK_IMPORTED_MODULE_4__["default"]();
+    this.catalogCache = new _cache__WEBPACK_IMPORTED_MODULE_4__["default"]();
+    this.typeCache = new _cache__WEBPACK_IMPORTED_MODULE_4__["default"]();
+    this.miscCache = new _cache__WEBPACK_IMPORTED_MODULE_4__["default"]();
+  }
+
+  DataSourceInfrastructure.prototype.runQuery = function (target, timeFilter) {
+    var _this = this;
+
+    var _a; // do not try to execute to big queries
+
+
+    if (Object(_util_queryInterval_check__WEBPACK_IMPORTED_MODULE_8__["isInvalidQueryInterval"])(timeFilter.windowSize, Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["hoursToMs"])(this.instanaOptions.queryinterval_limit_infra))) {
+      throw new Error('Limit for maximum selectable windowsize exceeded, max is: ' + this.instanaOptions.queryinterval_limit_infra + ' hours');
+    }
+
+    if (target.tagFilterExpression || target.metricCategory.key === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"] && target.metric.key && target.group.key && ((_a = target.entity) === null || _a === void 0 ? void 0 : _a.key)) {
+      return this.fetchAnalyzeEntities(target, timeFilter);
+    } // do not try to retrieve data without selected metric
+
+
+    if ((!target.metric || !target.metric.key) && !target.showAllMetrics && !target.freeTextMetrics) {
+      return Promise.resolve(Object(_util_target_util__WEBPACK_IMPORTED_MODULE_6__["emptyResultData"])(target.refId));
+    } // for every target, fetch snapshots in the selected timeframe that satisfy the lucene query.
+
+
+    return this.fetchSnapshotsForTarget(target, timeFilter).then(function (snapshots) {
+      if (target.showAllMetrics) {
+        // only available for custom metrics
+        return _this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, target.allMetrics);
+      } else if (target.freeTextMetrics) {
+        // only available for custom metrics
+        var metrics = _this.extractMetricsFromText(target.freeTextMetrics);
+
+        return _this.fetchMultipleMetricsForSnapshots(target, snapshots, timeFilter, metrics);
+      } else {
+        return _this.fetchMetricsForSnapshots(target, snapshots, timeFilter, target.metric);
+      }
+    });
+  };
+
+  DataSourceInfrastructure.prototype.extractMetricsFromText = function (freeText) {
+    var metricsString = freeText.replace(/\s/g, '').split(',');
+    var metrics = [];
+
+    lodash__WEBPACK_IMPORTED_MODULE_5___default.a.each(metricsString, function (metricString) {
+      return metrics.push(JSON.parse('{ "key": "' + metricString + '"}'));
+    });
+
+    if (metrics.length > 4) {
+      metrics = metrics.slice(0, 4); // API supports up to 4 metrics at once
+    }
+
+    return metrics;
+  };
+
+  DataSourceInfrastructure.prototype.fetchMultipleMetricsForSnapshots = function (target, snapshots, timeFilter, metrics) {
+    var _this = this;
+
+    var resultPromises = [];
+
+    lodash__WEBPACK_IMPORTED_MODULE_5___default.a.forEach(metrics, function (metric) {
+      resultPromises.push(_this.fetchMetricsForSnapshots(target, snapshots, timeFilter, metric));
+    });
+
+    return Promise.all(resultPromises).then(function (allResults) {
+      var allMetrics = [];
+      allResults.forEach(function (result) {
+        return result.forEach(function (s) {
+          return allMetrics.push(s);
+        });
+      });
+      return allMetrics;
+    });
+  };
+
+  DataSourceInfrastructure.prototype.fetchMetricsForSnapshots = function (target, snapshots, timeFilter, metric) {
+    var _this = this;
+
+    var maxValues = [];
+    var batchSize = 30; // API limit
+
+    var snapshotBatches = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.chunk(snapshots, batchSize);
+
+    var batchPromises = snapshotBatches.map(function (batch, batchIndex) {
+      return _this.fetchMetricsForSnapshot(target, batch.map(function (s) {
+        return s.snapshotId;
+      }), timeFilter, metric).then(function (response) {
+        if (!response.data) {
+          return [];
+        }
+
+        var timeseries = _this.readTimeSeries(response.data.items, target.aggregation, timeFilter);
+
+        return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.flatten(response.data.items.map(function (item, index) {
+          return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.map(item.metrics, function (value, key) {
+            var snapshot = batch[index];
+            snapshot.response.pid = snapshot.pid;
+            snapshot.response.name = snapshot.name;
+
+            var label = _this.buildLabel(snapshot.response, snapshot.response.entityId.host, target, batchIndex * batchSize + index, metric);
+
+            var result = {
+              target: label,
+              datapoints: lodash__WEBPACK_IMPORTED_MODULE_5___default.a.map(value, function (metric) {
+                return [metric[1], metric[0]];
+              }),
+              refId: target.refId,
+              key: target.stableHash
+            };
+
+            if (target.displayMaxMetricValue) {
+              var maxValue = _this.getMaxMetricValue(target.metric, snapshots);
+
+              maxValues.push(_this.buildMaxMetricTarget(target, timeseries, maxValue, label));
+              result.datapoints = _this.convertRelativeToAbsolute(result.datapoints, maxValue);
+            }
+
+            return result;
+          });
+        }));
+      });
+    }); // Execute all batch requests and flatten results
+
+    return Promise.all(batchPromises).then(function (allResults) {
+      return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.flatten(allResults);
+    });
+  };
+
+  DataSourceInfrastructure.prototype.getMaxMetricValue = function (metric, snapshot) {
+    var maxMetrics = _lists_max_metrics__WEBPACK_IMPORTED_MODULE_9__["default"];
+    return snapshot.response.data.data[lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(maxMetrics, function (m) {
+      return m.key === metric.key;
+    }).value];
+  };
+
+  DataSourceInfrastructure.prototype.buildMaxMetricTarget = function (target, timeseries, maxValue, resultLabel) {
+    var datapoints = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.map(timeseries, function (series) {
+      return [maxValue, series.timestamp];
+    });
+
+    var maxLabel = this.convertMetricNameToMaxLabel(target.metric);
+    return {
+      target: resultLabel + ' ' + maxLabel,
+      datapoints: datapoints,
+      refId: target.refId,
+      key: target.stableHash + maxLabel
+    };
+  };
+
+  DataSourceInfrastructure.prototype.convertMetricNameToMaxLabel = function (metric) {
+    var maxMetrics = _lists_max_metrics__WEBPACK_IMPORTED_MODULE_9__["default"];
+    return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.find(maxMetrics, function (m) {
+      return m.key === metric.key;
+    }).label;
+  };
+
+  DataSourceInfrastructure.prototype.convertRelativeToAbsolute = function (datapoints, maxValue) {
+    return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.map(datapoints, function (datapoint) {
+      if (datapoint[0]) {
+        return [datapoint[0] * maxValue, datapoint[1]];
+      }
+
+      return [null, datapoint[1]];
+    });
+  };
+
+  DataSourceInfrastructure.prototype.getEntityTypes = function () {
+    var entityTypes = this.typeCache.get('entityTypes');
+
+    if (entityTypes) {
+      return entityTypes;
+    }
+
+    entityTypes = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, '/api/infrastructure-monitoring/catalog/plugins').then(function (typesResponse) {
+      var result = typesResponse.data.map(function (entry) {
+        return {
+          key: entry.plugin,
+          label: entry.label
+        };
+      });
+      result.push({
+        key: 'regionEntity',
+        label: 'Region'
+      });
+      return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.sortBy(result, 'label');
+    });
+    this.typeCache.put('entityTypes', entityTypes);
+    return entityTypes;
+  };
+
+  DataSourceInfrastructure.prototype.getInfrastructureEntities = function (plugin) {
+    var cacheKey = "infrastructureEntities_" + (plugin || 'all');
+    var entities = this.miscCache.get(cacheKey);
+
+    if (entities) {
+      return entities;
+    }
+
+    var params = new URLSearchParams();
+
+    if (plugin) {
+      params.append('plugin', plugin);
+    }
+
+    params.append('size', '100');
+    params.append('windowSize', '300000');
+    params.append('to', Date.now().toString());
+    params.append('offline', this.instanaOptions.showOffline ? 'true' : 'false');
+    var url = "/api/infrastructure-monitoring/snapshots?" + params.toString();
+    entities = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, url).then(function (snapshotsResponse) {
+      if (!snapshotsResponse.data || !snapshotsResponse.data.items) {
+        return [];
+      }
+
+      var result = snapshotsResponse.data.items.map(function (snapshot) {
+        return {
+          key: snapshot.snapshotId,
+          label: snapshot.label,
+          value: snapshot.snapshotId
+        };
+      });
+      return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.sortBy(result, 'label');
+    });
+    this.miscCache.put(cacheKey, entities, 300000);
+    return entities;
+  };
+
+  DataSourceInfrastructure.prototype.fetchTypesForTarget = function (query, timeFilter) {
+    var fetchSnapshotTypesUrl = "/api/snapshots/types" + ("?q=" + encodeURIComponent(query.entityQuery)) + ("&from=" + timeFilter.from) + ("&to=" + timeFilter.to) + (this.instanaOptions.showOffline ? "" : "&time=" + timeFilter.to);
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, fetchSnapshotTypesUrl);
+  };
+
+  DataSourceInfrastructure.prototype.fetchAvailableMetricsForEntityType = function (target, timeFilter) {
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_7__["getDefaultChartGranularity"])(windowSize);
+    var data = {
+      tagFilterExpression: {
+        type: 'EXPRESSION',
+        logicalOperator: 'AND',
+        elements: []
+      },
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["atLeastGranularity"])(windowSize, target.timeInterval.key)
+      },
+      query: '',
+      type: target.entity.key
+    };
+    var metricFortarget = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, '/api/infrastructure-monitoring/analyze/metrics', data).then(function (metricResponse) {
+      var result = [];
+      metricResponse.data.metrics.map(function (metric) {
+        return result.push({
+          key: metric.id,
+          label: metric.label,
+          description: metric.description,
+          aggregations: [{
+            key: 'MAX',
+            label: 'MAX'
+          }, {
+            key: 'MEAN',
+            label: 'MEAN'
+          }, {
+            key: 'MIN',
+            label: 'MIN'
+          }, {
+            key: 'P25',
+            label: 'P25'
+          }, {
+            key: 'P50',
+            label: 'P50'
+          }, {
+            key: 'P75',
+            label: 'P75'
+          }, {
+            key: 'P90',
+            label: 'P90'
+          }, {
+            key: 'P95',
+            label: 'P95'
+          }, {
+            key: 'P98',
+            label: 'P98'
+          }, {
+            key: 'P99',
+            label: 'P99'
+          }]
+        });
+      });
+      return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.sortBy(result, 'label');
+    });
+    return metricFortarget;
+  };
+
+  DataSourceInfrastructure.prototype.resolveVariablesInObject = function (obj) {
+    var _this = this;
+
+    if (!obj || !this.templateSrv) {
+      return obj;
+    }
+
+    if (Array.isArray(obj)) {
+      return obj.map(function (item) {
+        return _this.resolveVariablesInObject(item);
+      });
+    }
+
+    if (_typeof(obj) === 'object') {
+      var resolved = {};
+
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          resolved[key] = this.resolveVariablesInObject(obj[key]);
+        }
+      }
+
+      return resolved;
+    }
+
+    if (typeof obj === 'string' && obj.includes('$')) {
+      return this.templateSrv.replace(obj);
+    }
+
+    return obj;
+  };
+
+  DataSourceInfrastructure.prototype.fetchAnalyzeEntities = function (target, timeFilter) {
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+
+    if (!target.timeInterval) {
+      target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_7__["getDefaultChartGranularity"])(windowSize);
+    }
+
+    if (target.timeInterval.key < 60000) {
+      target.timeInterval.key = 60000;
+    }
+
+    var metric = {
+      metric: target.metric.key,
+      aggregation: target.aggregation && target.aggregation.key ? target.aggregation.key : 'SUM',
+      granularity: target.timeInterval.key,
+      crossSeriesAggregation: 'DISTINCT_COUNT'
+    };
+    var tagFilterExpression;
+
+    if (target.tagFilterExpression) {
+      if (_typeof(target.tagFilterExpression) === 'object') {
+        tagFilterExpression = target.tagFilterExpression;
+      } else if (typeof target.tagFilterExpression === 'string') {
+        try {
+          var resolvedString = this.templateSrv ? this.templateSrv.replace(target.tagFilterExpression) : target.tagFilterExpression;
+          resolvedString = resolvedString.replace(/\u00A0/g, ' ');
+          resolvedString = resolvedString.trim();
+          tagFilterExpression = JSON.parse(resolvedString);
+        } catch (e) {
+          console.error('Failed to parse tagFilterExpression:', e);
+          console.error('Problematic string was:', target.tagFilterExpression);
+          tagFilterExpression = {
+            elements: [],
+            type: 'EXPRESSION',
+            logicalOperator: 'AND'
+          };
+        }
+      }
+    } else if (target.filters && target.filters.length !== 0) {
+      tagFilterExpression = target.filters;
+    } else {
+      tagFilterExpression = {
+        elements: [],
+        type: 'EXPRESSION',
+        logicalOperator: 'AND'
+      };
+    }
+
+    tagFilterExpression = this.resolveVariablesInObject(tagFilterExpression);
+    var payload = {
+      tagFilterExpression: tagFilterExpression,
+      pagination: {
+        retrievalSize: 200
+      },
+      groupBy: [target.groupbyTagSecondLevelKey],
+      type: target.entity.key,
+      metrics: [metric],
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["atLeastGranularity"])(windowSize, metric.granularity)
+      }
+    };
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, '/api/infrastructure-monitoring/analyze/entity-groups', payload).then(function (res) {
+      var result = [];
+
+      if (!res.data && res.errors.length >= 1) {
+        throw new Error(res.errors[0].message || res.errors[0]);
+      }
+
+      res.data.items.forEach(function (entity) {
+        for (var metric in entity.metrics) {
+          result.push({
+            target: entity.tags[target.groupbyTagSecondLevelKey] + ' - ' + metric,
+            datapoints: entity.metrics[metric] ? entity.metrics[metric].map(function (datapoint) {
+              return [datapoint[1], datapoint[0]];
+            }) : [],
+            refId: target.refId,
+            key: target.stableHash
+          });
+        }
+      });
+      return result;
+    });
+  };
+
+  DataSourceInfrastructure.prototype.getMetricsCatalog = function (plugin, metricCategory) {
+    var resolvedPluginKey = plugin.key;
+
+    if (this.templateSrv && typeof resolvedPluginKey === 'string' && resolvedPluginKey.includes('$')) {
+      resolvedPluginKey = this.templateSrv.replace(resolvedPluginKey);
+    }
+
+    var key = resolvedPluginKey + '|' + metricCategory;
+    var metrics = this.catalogCache.get(key);
+
+    if (metrics) {
+      return metrics;
+    }
+
+    var filter = metricCategory === _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["CUSTOM_METRICS"] ? 'custom' : 'builtin';
+    metrics = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, "/api/infrastructure-monitoring/catalog/metrics/" + resolvedPluginKey + "?filter=" + filter).then(function (catalogResponse) {
+      return catalogResponse.data.map(function (entry) {
+        return {
+          key: entry.metricId,
+          label: entry.label,
+          description: entry.metricId,
+          aggregations: [{
+            key: 'MEAN',
+            label: 'MEAN'
+          }, {
+            key: 'SUM',
+            label: 'SUM'
+          }],
+          entityType: entry.pluginId
+        };
+      });
+    });
+    this.catalogCache.put(key, metrics);
+    return metrics;
+  };
+
+  DataSourceInfrastructure.prototype.fetchSnapshotsForTarget = function (target, timeFilter) {
+    var _a;
+
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+      var windowSize, selectedSnapshotId, fetchSnapshotsUrl, payload, query, key, snapshots, fetchSnapshotContextsUrl;
+
+      var _this = this;
+
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_b) {
+        windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+        target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_7__["getDefaultChartGranularity"])(windowSize);
+        selectedSnapshotId = (_a = target.selectedEntity) === null || _a === void 0 ? void 0 : _a.key;
+
+        if (selectedSnapshotId && target.metricCategory.key !== _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["INFRASTRUCTURE_ANALYZE"]) {
+          fetchSnapshotsUrl = "/api/infrastructure-monitoring/snapshots";
+          payload = {
+            snapshotIds: [selectedSnapshotId],
+            timeFrame: {
+              to: timeFilter.to,
+              windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["atLeastGranularity"])(windowSize, target.timeInterval.key)
+            }
+          };
+          return [2
+          /*return*/
+          , Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, fetchSnapshotsUrl, payload).then(function (snapshotsResponse) {
+            if (!snapshotsResponse.data || !snapshotsResponse.data.items) {
+              return [];
+            }
+
+            return snapshotsResponse.data.items.map(function (snapshot) {
+              return {
+                snapshotId: snapshot.snapshotId,
+                host: snapshot.host,
+                pid: lodash__WEBPACK_IMPORTED_MODULE_5___default.a.get(snapshot, ['data', 'pid'], ''),
+                name: lodash__WEBPACK_IMPORTED_MODULE_5___default.a.get(snapshot, ['data', 'name'], ''),
+                response: _this.reduceSnapshot(snapshot)
+              };
+            });
+          })];
+        }
+
+        query = this.buildQuery(target);
+        key = this.buildSnapshotCacheKey(query, timeFilter);
+        snapshots = this.snapshotCache.get(key);
+
+        if (snapshots) {
+          return [2
+          /*return*/
+          , snapshots];
+        }
+
+        fetchSnapshotContextsUrl = "/api/infrastructure-monitoring/snapshots" + ("?plugin=" + target.entityType.key) + "&size=100" + ("&windowSize=" + Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["atLeastGranularity"])(windowSize, target.timeInterval.key)) + ("&to=" + timeFilter.to) + ("&offline=" + this.instanaOptions.showOffline);
+        snapshots = Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["getRequest"])(this.instanaOptions, fetchSnapshotContextsUrl).then(function (contextsResponse) {
+          var snapshotIds = contextsResponse.data.items.map(function (_a) {
+            var snapshotId = _a.snapshotId;
+            return snapshotId;
+          });
+
+          if (snapshotIds.length === 0) {
+            return [];
+          }
+
+          var fetchSnapshotsUrl = "/api/infrastructure-monitoring/snapshots";
+          var payload = {
+            snapshotIds: snapshotIds,
+            timeFrame: {
+              to: timeFilter.to,
+              windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["atLeastGranularity"])(windowSize, target.timeInterval.key)
+            }
+          };
+          return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(_this.instanaOptions, fetchSnapshotsUrl, payload).then(function (snapshotsResponse) {
+            return snapshotsResponse.data.items.map(function (snapshot) {
+              return {
+                snapshotId: snapshot.snapshotId,
+                host: snapshot.host,
+                pid: lodash__WEBPACK_IMPORTED_MODULE_5___default.a.get(snapshot, ['data', 'pid'], ''),
+                name: lodash__WEBPACK_IMPORTED_MODULE_5___default.a.get(snapshot, ['data', 'name'], ''),
+                response: _this.reduceSnapshot(snapshot)
+              };
+            });
+          });
+        }).then(function (response) {
+          return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.compact(response);
+        });
+        this.snapshotCache.put(key, snapshots);
+        return [2
+        /*return*/
+        , snapshots];
+      });
+    });
+  };
+
+  DataSourceInfrastructure.prototype.buildQuery = function (target) {
+    if (("" + target.entityQuery).includes('entity.pluginId:') || ("" + target.entityQuery).includes('entity.selfType:')) {
+      return encodeURIComponent("" + target.entityQuery);
+    } else {
+      return encodeURIComponent(target.entityQuery + " AND entity.pluginId:" + target.entityType.key);
+    }
+  };
+
+  DataSourceInfrastructure.prototype.buildSnapshotCacheKey = function (query, timeFilter) {
+    return query + _GlobalVariables__WEBPACK_IMPORTED_MODULE_1__["SEPARATOR"] + Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getTimeKey"])(timeFilter);
+  };
+
+  DataSourceInfrastructure.prototype.reduceSnapshot = function (snapshotResponse) {
+    snapshotResponse.data = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.pick(snapshotResponse.data, ['id', 'label', 'plugin', 'data']);
+    return snapshotResponse;
+  };
+
+  DataSourceInfrastructure.prototype.readTimeSeries = function (values, aggregation, timeFilter) {
+    if (aggregation && aggregation.key === 'SUM') {
+      return this.correctMeanToSum(values, timeFilter);
+    }
+
+    return values;
+  };
+
+  DataSourceInfrastructure.prototype.correctMeanToSum = function (values, timeFilter) {
+    var secondMultiplier = parseInt(Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_7__["getDefaultMetricRollupDuration"])(timeFilter).key, 10) / 1000;
+    return lodash__WEBPACK_IMPORTED_MODULE_5___default.a.map(values, function (value) {
+      return {
+        value: value.value ? value.value * secondMultiplier : null,
+        timestamp: value.timestamp
+      };
+    });
+  };
+
+  DataSourceInfrastructure.prototype.fetchMetricsForSnapshot = function (target, snapshotIds, timeFilter, metric) {
+    var windowSize = Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["getWindowSize"])(timeFilter);
+    target.timeInterval = Object(_util_rollup_granularity_util__WEBPACK_IMPORTED_MODULE_7__["getDefaultChartGranularity"])(windowSize);
+    var metricKey = metric.key || metric.value;
+    var data = {
+      metrics: [metricKey],
+      query: target.entityQuery,
+      plugin: target.entityType.key,
+      rollup: target.timeInterval.key,
+      snapshotIds: snapshotIds,
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize: Object(_util_time_util__WEBPACK_IMPORTED_MODULE_2__["atLeastGranularity"])(windowSize, target.timeInterval.key)
+      }
+    };
+    return Object(_util_request_handler__WEBPACK_IMPORTED_MODULE_3__["postRequest"])(this.instanaOptions, '/api/infrastructure-monitoring/metrics' + ("?offline=" + this.instanaOptions.showOffline), data);
+  };
+
+  DataSourceInfrastructure.prototype.getHostSuffix = function (host) {
+    if (host) {
+      return ' (on host "' + host + '")';
+    }
+
+    return '';
+  };
+
+  DataSourceInfrastructure.prototype.buildLabel = function (snapshotResponse, host, target, index, metric) {
+    var _a;
+
+    if (target.labelFormat) {
+      var label = target.labelFormat;
+      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$label', snapshotResponse.label);
+      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$plugin', snapshotResponse.plugin); // not documented
+
+      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$snapshot', snapshotResponse.snapshotId); // not documented
+
+      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$host', host ? host : 'unknown');
+      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$pid', snapshotResponse.pid);
+      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$type', (_a = target.entityType.label) !== null && _a !== void 0 ? _a : '');
+      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$name', snapshotResponse.name);
+      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$service', lodash__WEBPACK_IMPORTED_MODULE_5___default.a.get(snapshotResponse, ['data', 'service_name'], ''));
+
+      if (target.freeTextMetrics) {
+        label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$metric', metric.key);
+      } else {
+        label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$metric', lodash__WEBPACK_IMPORTED_MODULE_5___default.a.get(target, ['metric', 'key'], 'n/a'));
+      }
+
+      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$index', index + 1);
+      label = lodash__WEBPACK_IMPORTED_MODULE_5___default.a.replace(label, '$timeShift', target.timeShift);
+      return label;
+    }
+
+    return target.timeShift && target.timeShiftIsValid ? snapshotResponse.label + this.getHostSuffix(host) + ' - ' + target.timeShift : snapshotResponse.label + this.getHostSuffix(host);
+  };
+
+  return DataSourceInfrastructure;
+}();
+
+
+
+/***/ }),
+
+/***/ "./lists/aggregation_function.ts":
+/*!***************************************!*\
+  !*** ./lists/aggregation_function.ts ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  label: 'SUM'
+}, {
+  label: 'MEAN'
+}, {
+  label: 'MIN'
+}, {
+  label: 'MAX'
+}]);
+
+/***/ }),
+
+/***/ "./lists/apply_call_to_entities.ts":
+/*!*****************************************!*\
+  !*** ./lists/apply_call_to_entities.ts ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (['DESTINATION', 'SOURCE']);
+
+/***/ }),
+
+/***/ "./lists/beacon_types_mobile_app.ts":
+/*!******************************************!*\
+  !*** ./lists/beacon_types_mobile_app.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  key: 'session_start',
+  label: 'Session Starts'
+}, {
+  key: 'view_change',
+  label: 'View Transitions'
+}, {
+  key: 'crash',
+  label: 'Crashes'
+}, {
+  key: 'http_request',
+  label: 'HTTP Requests'
+}, {
+  key: 'custom',
+  label: 'Custom Events'
+}]);
+
+/***/ }),
+
+/***/ "./lists/beacon_types_website.ts":
+/*!***************************************!*\
+  !*** ./lists/beacon_types_website.ts ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  key: 'pageLoad',
+  label: 'Page Loads'
+}, {
+  key: 'page_change',
+  label: 'Page Transitions'
+}, {
+  key: 'resourceLoad',
+  label: 'Resources'
+}, {
+  key: 'httpRequest',
+  label: 'HTTP Requests'
+}, {
+  key: 'error',
+  label: 'Errors'
+}, {
+  key: 'custom',
+  label: 'Custom Events'
+}]);
+
+/***/ }),
+
+/***/ "./lists/default_metric_catalog.ts":
+/*!*****************************************!*\
+  !*** ./lists/default_metric_catalog.ts ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  key: 'calls',
+  label: 'Call count',
+  description: 'calls',
+  aggregations: [{
+    key: 'SUM',
+    label: 'SUM'
+  }]
+}, {
+  key: 'latency',
+  label: 'Call latency',
+  description: 'latency',
+  aggregations: [{
+    key: 'MAX',
+    label: 'MAX'
+  }, {
+    key: 'MEAN',
+    label: 'MEAN'
+  }, {
+    key: 'MIN',
+    label: 'MIN'
+  }, {
+    key: 'P25',
+    label: 'P25'
+  }, {
+    key: 'P50',
+    label: 'P50'
+  }, {
+    key: 'P75',
+    label: 'P75'
+  }, {
+    key: 'P90',
+    label: 'P90'
+  }, {
+    key: 'P95',
+    label: 'P95'
+  }, {
+    key: 'P98',
+    label: 'P98'
+  }, {
+    key: 'P99',
+    label: 'P99'
+  }]
+}, {
+  key: 'errors',
+  label: 'Error rate',
+  description: 'errors',
+  aggregations: [{
+    key: 'MEAN',
+    label: 'MEAN'
+  }]
+}, {
+  key: 'services',
+  label: 'Service Count',
+  description: 'services',
+  aggregations: [{
+    key: 'DISTINCT_COUNT',
+    label: 'DISTINCT_COUNT'
+  }]
+}]);
+
+/***/ }),
+
+/***/ "./lists/granularities.ts":
+/*!********************************!*\
+  !*** ./lists/granularities.ts ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// accoring to metrics/BaseGranularity.java
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  value: 1,
+  label: '1s'
+}, {
+  value: 5,
+  label: '5s'
+}, {
+  value: 10,
+  label: '10s'
+}, {
+  value: 60,
+  label: '1min'
+}, {
+  value: 60 * 5,
+  label: '5min'
+}, {
+  value: 60 * 10,
+  label: '10min'
+}, {
+  value: 60 * 30,
+  label: '30min'
+}, {
+  value: 60 * 60,
+  label: '1h'
+}, {
+  value: 60 * 60 * 4,
+  label: '4h'
+}, {
+  value: 60 * 60 * 6,
+  label: '6h'
+}, {
+  value: 60 * 60 * 8,
+  label: '8h'
+}, {
+  value: 60 * 60 * 12,
+  label: '12h'
+}, {
+  value: 60 * 60 * 24,
+  label: '1d'
+}, {
+  value: 60 * 60 * 24 * 5,
+  label: '5d'
+}, {
+  value: 60 * 60 * 24 * 10,
+  label: '10d'
+}]);
+
+/***/ }),
+
+/***/ "./lists/max_metrics.ts":
+/*!******************************!*\
+  !*** ./lists/max_metrics.ts ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  key: 'cpu.used',
+  value: 'cpu.count',
+  label: 'cpu.max' // label that shall be shown as target in graph
+
+}, {
+  key: 'memory.used',
+  value: 'memory.total',
+  label: 'memory.max'
+}, {
+  key: 'openFiles.used',
+  value: 'openFiles.max',
+  label: 'openFiles.max'
+}]);
+
+/***/ }),
+
+/***/ "./lists/metric_categories.ts":
+/*!************************************!*\
+  !*** ./lists/metric_categories.ts ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/**
+ * Do not remove the commented stuff.
+ */
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  label: 'Infrastructure built-in metrics',
+  key: 0
+}, {
+  label: 'Infrastructure custom metrics',
+  key: 1
+}, {
+  label: 'Infrastructure Analyze',
+  key: 8
+}, {
+  // replaces Application metrics(4) & Service metrics(5) & Endpoint metrics(6)
+  label: 'Application/service/endpoint metrics',
+  key: 4
+}, {
+  label: 'Analyze application calls',
+  key: 2
+}, {
+  label: 'Analyze website',
+  key: 3
+}, {
+  label: 'Analyze mobile app',
+  key: 9
+}, {
+  label: 'Service Level Objectives (Beta)',
+  key: 10
+}, {
+  label: 'Service Level Objectives Widgets',
+  key: 7
+}, {
+  label: 'Synthetic monitoring',
+  key: 11
+}]);
+
+/***/ }),
+
+/***/ "./lists/operators.ts":
+/*!****************************!*\
+  !*** ./lists/operators.ts ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([// STRING
+{
+  key: 'EQUALS',
+  label: 'equals',
+  type: 'STRING'
+}, {
+  key: 'NOT_EQUAL',
+  label: 'does not equal',
+  type: 'STRING'
+}, {
+  key: 'CONTAINS',
+  label: 'contains',
+  type: 'STRING'
+}, {
+  key: 'NOT_CONTAIN',
+  label: 'does not contain',
+  type: 'STRING'
+}, {
+  key: 'NOT_EMPTY',
+  label: 'is present',
+  type: 'STRING'
+}, {
+  key: 'IS_EMPTY',
+  label: 'is not present',
+  type: 'STRING'
+}, {
+  key: 'STARTS_WITH',
+  label: 'starts with',
+  type: 'STRING'
+}, {
+  key: 'ENDS_WITH',
+  label: 'ends with',
+  type: 'STRING'
+}, {
+  key: 'NOT_STARTS_WITH',
+  label: 'does not start with',
+  type: 'STRING'
+}, {
+  key: 'NOT_ENDS_WITH',
+  label: 'does not end with',
+  type: 'STRING'
+}, // NUMBER
+{
+  key: 'EQUALS',
+  label: '=',
+  type: 'NUMBER'
+}, {
+  key: 'NOT_EQUAL',
+  label: '!=',
+  type: 'NUMBER'
+}, {
+  key: 'LESS_THAN',
+  label: '<',
+  type: 'NUMBER'
+}, {
+  key: 'GREATER_THAN',
+  label: '>',
+  type: 'NUMBER'
+}, {
+  key: 'IS_EMPTY',
+  label: 'is empty',
+  type: 'NUMBER'
+}, {
+  key: 'NOT_EMPTY',
+  label: 'is not empty',
+  type: 'NUMBER'
+}, {
+  key: 'LESS_OR_EQUAL_THAN',
+  label: 'less or equal than',
+  type: 'NUMBER'
+}, {
+  key: 'GREATER_OR_EQUAL_THAN',
+  label: 'greater or equal than',
+  type: 'NUMBER'
+}, // BOOLEAN
+{
+  key: 'EQUALS',
+  label: 'is',
+  type: 'BOOLEAN'
+}, // KEY_VALUE_PAIR
+{
+  key: 'EQUALS',
+  label: 'equals',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'NOT_EQUAL',
+  label: 'does not equal',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'CONTAINS',
+  label: 'contains',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'NOT_CONTAIN',
+  label: 'does not contain',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'NOT_EMPTY',
+  label: 'is present',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'IS_EMPTY',
+  label: 'is not present',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'STARTS_WITH',
+  label: 'starts with',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'ENDS_WITH',
+  label: 'ends with',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'IS_BLANK',
+  label: 'is blank',
+  type: 'KEY_VALUE_PAIR'
+}, {
+  key: 'NOT_BLANK',
+  label: 'is not blank',
+  type: 'KEY_VALUE_PAIR'
+}, // STRING_SET
+{
+  key: 'EQUALS',
+  label: 'equals',
+  type: 'STRING_SET'
+}, {
+  key: 'NOT_EQUAL',
+  label: 'does not equal',
+  type: 'STRING_SET'
+}, {
+  key: 'CONTAINS',
+  label: 'contains',
+  type: 'STRING_SET'
+}, {
+  key: 'NOT_CONTAIN',
+  label: 'does not contain',
+  type: 'STRING_SET'
+}, {
+  key: 'NOT_EMPTY',
+  label: 'is present',
+  type: 'STRING_SET'
+}, {
+  key: 'IS_EMPTY',
+  label: 'is not present',
+  type: 'STRING_SET'
+}]);
+
+/***/ }),
+
+/***/ "./lists/rollups.ts":
+/*!**************************!*\
+  !*** ./lists/rollups.ts ***!
+  \**************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  availableFor: 1000 * 60 * 60 * 24,
+  rollup: 1000,
+  label: '1s'
+}, {
+  availableFor: 1000 * 60 * 60 * 24,
+  rollup: 1000 * 5,
+  label: '5s'
+}, {
+  availableFor: 1000 * 60 * 60 * 24 * 31,
+  rollup: 1000 * 60,
+  label: '1min'
+}, {
+  availableFor: 1000 * 60 * 60 * 24 * 31 * 3,
+  rollup: 1000 * 60 * 5,
+  label: '5min'
+}, {
+  availableFor: 1000 * 60 * 60 * 24 * 31 * 12,
+  rollup: 1000 * 60 * 60,
+  label: '1h'
+}]);
+
+/***/ }),
+
+/***/ "./lists/slo2_specifics.ts":
+/*!*********************************!*\
+  !*** ./lists/slo2_specifics.ts ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  key: 'Status',
+  label: 'Status'
+}, {
+  key: 'Service Level Target',
+  label: 'Service Level Target'
+}, {
+  key: 'Total Error Budget',
+  label: 'Total Error Budget'
+}, {
+  key: 'Remaining Error Budget',
+  label: 'Remaining Error Budget'
+}, {
+  key: 'Spended Error Budget',
+  label: 'Spended Error Budget'
+}, {
+  key: 'Timeseries',
+  label: 'Violation Distribution'
+}, {
+  key: 'Error Chart',
+  label: 'Error Chart'
+}, {
+  key: 'Error Accumulation Chart',
+  label: 'Error Accumulation Chart'
+}, {
+  key: 'Error Budget Remain Chart',
+  label: 'Error Budget remain Chart'
+}]);
+
+/***/ }),
+
+/***/ "./lists/slo_specifics.ts":
+/*!********************************!*\
+  !*** ./lists/slo_specifics.ts ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  key: 'SLI',
+  label: 'SLI'
+}, {
+  key: 'Remaining Error Budget',
+  label: 'Remaining Error Budget'
+}, {
+  key: 'Timeseries',
+  label: 'Timeseries'
+}]);
+
+/***/ }),
+
+/***/ "./migration.ts":
+/*!**********************!*\
+  !*** ./migration.ts ***!
+  \**********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _lists_metric_categories__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lists/metric_categories */ "./lists/metric_categories.ts");
+/* harmony import */ var GlobalVariables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! GlobalVariables */ "./GlobalVariables.ts");
+// can be removed once mixpanel shows no old plugins around
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function (target) {
+  // 1.3.1 towards 2.0.0
+  if (target.entityType && typeof target.entityType === 'string') {
+    target.entityType = {
+      key: target.entityType,
+      label: target.entityType
+    };
+  } // 2.3.1 towards 2.4.0
+
+
+  if (target.filter && target.filter !== '') {
+    if (!target.customFilters) {
+      target.customFilters = [];
+      target.customFilters.push({
+        value: target.filter
+      });
+    }
+  } // 2.4.2 towards 2.4.3
+
+
+  if (target.timeInterval) {
+    if (target.timeInterval.value) {
+      target.timeInterval = {
+        key: target.timeInterval.value,
+        label: target.timeInterval.label
+      };
+    } else if (target.timeInterval.rollup) {
+      target.timeInterval = {
+        key: target.timeInterval.rollup,
+        label: target.timeInterval.label
+      };
+    }
+  } //2.4.4 towards 2.5.0
+
+
+  if (target.metricCategory === '5') {
+    //old service metric view
+    target.metricCategory = '4';
+    target.service = {}; //because target.service does not exist yet.
+
+    target.service.key = target.entity.key;
+    target.service.label = target.entity.label;
+
+    if (target.selectedApplication && target.selectedApplication.key) {
+      target.entity.key = target.selectedApplication.key;
+      target.entity.label = target.selectedApplication.label;
+    } else {
+      target.entity.key = null;
+      target.entity.label = 'Test';
+    }
+  } //2.4.4 towards 2.5.0
+
+
+  if (target.metricCategory === '6') {
+    //old endpoint metric view
+    target.metricCategory = '4';
+    target.endpoint = {}; //because target.endpoint does not exist yet.
+
+    target.endpoint.key = target.entity.key;
+
+    if (target.selectedApplication && target.selectedApplication.key) {
+      target.entity.key = target.selectedApplication.key;
+      target.entity.label = target.selectedApplication.label;
+    } else {
+      target.entity.key = null;
+      target.entity.label = 'Test';
+    }
+  } //2.7.3 towards 3.0 (Angular to React Migration)
+
+
+  if (target.aggregation && typeof target.aggregation === 'string') {
+    target.aggregation ? target.aggregation = {
+      key: target.aggregation,
+      label: target.aggregation
+    } : target.aggregation = {};
+    target.aggregationFunction ? target.aggregationFunction = {
+      key: target.aggregationFunction.label,
+      label: target.aggregationFunction.label
+    } : target.aggregationFunction = {};
+  }
+
+  if (target.customFilters && target.customFilters.length > 0 && target.customFilters[0].value) {
+    target.customFilters = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.map(target.customFilters, function (cf) {
+      return cf.value;
+    });
+  }
+
+  if (target.metricCategory.key !== GlobalVariables__WEBPACK_IMPORTED_MODULE_2__["INFRASTRUCTURE_ANALYZE"] && target.filters && target.filters.length > 0 && !target.filters[0].tag.key && !target.filters[0].tag.label) {
+    lodash__WEBPACK_IMPORTED_MODULE_0___default.a.forEach(target.filters, function (filter) {
+      filter.tag.label = filter.tag.key;
+    });
+  }
+
+  if (target.group && target.group.key && !target.group.label) {
+    target.group.label = target.group.key;
+  }
+
+  if (target.metricCategory && typeof target.metricCategory === 'string') {
+    target.metricCategory = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.find(_lists_metric_categories__WEBPACK_IMPORTED_MODULE_1__["default"], function (category) {
+      return category.key === parseInt(target.metricCategory, 10);
+    });
+  } //3.0.1 towards 3.1.0
+
+
+  if (target.callToEntity && target.callToEntity.key) {
+    target.callToEntity = target.callToEntity.key;
+  }
+
+  if (target.applicationCallToEntity && target.applicationCallToEntity.key) {
+    target.applicationCallToEntity = target.applicationCallToEntity.key;
+  }
+
+  if (target.filters && target.filters.length > 0) {
+    target.filters.forEach(function (filter) {
+      if (filter.entity && filter.entity.key) {
+        filter.entity = filter.entity.key;
+      }
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./module.ts":
+/*!*******************!*\
+  !*** ./module.ts ***!
+  \*******************/
+/*! exports provided: plugin */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "plugin", function() { return plugin; });
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @grafana/data */ "@grafana/data");
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_grafana_data__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _datasources_DataSource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./datasources/DataSource */ "./datasources/DataSource.ts");
+/* harmony import */ var _components_ConfigEditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/ConfigEditor */ "./components/ConfigEditor.tsx");
+/* harmony import */ var _components_QueryEditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/QueryEditor */ "./components/QueryEditor.tsx");
+
+
+
+
+var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["DataSourcePlugin"](_datasources_DataSource__WEBPACK_IMPORTED_MODULE_1__["DataSource"]).setConfigEditor(_components_ConfigEditor__WEBPACK_IMPORTED_MODULE_2__["ConfigEditor"]).setQueryEditor(_components_QueryEditor__WEBPACK_IMPORTED_MODULE_3__["QueryEditor"]);
+
+/***/ }),
+
+/***/ "./util/aggregation_util.ts":
+/*!**********************************!*\
+  !*** ./util/aggregation_util.ts ***!
+  \**********************************/
+/*! exports provided: aggregateTarget */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aggregateTarget", function() { return aggregateTarget; });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+
+function aggregateTarget(data, target) {
+  var targetLabel = buildAggregationLabel(target);
+  data = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.filter(data, function (d) {
+    return d.target !== targetLabel;
+  }); // filter out any previously calculated aggregations
+
+  var concatedTargetData = concatTargetData(data);
+
+  var dataGroupedByTimestamp = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.groupBy(concatedTargetData, function (d) {
+    return d[1];
+  });
+
+  var aggregatedData = aggregateDataOfTimestamp(dataGroupedByTimestamp, target.aggregationFunction.label);
+  aggregatedData = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.sortBy(aggregatedData, [function (datapoint) {
+    return datapoint[1];
+  }]);
+  return buildResult(aggregatedData, target.refId, targetLabel);
+}
+
+function concatTargetData(data) {
+  var result = [];
+
+  lodash__WEBPACK_IMPORTED_MODULE_0___default.a.each(data, function (entry) {
+    result = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.concat(result, entry.datapoints);
+  });
+
+  return result;
+}
+
+function aggregateDataOfTimestamp(dataGroupedByTimestamp, aggregationLabel) {
+  var result = [];
+
+  lodash__WEBPACK_IMPORTED_MODULE_0___default.a.each(dataGroupedByTimestamp, function (timestampData, timestamp) {
+    var valuesOfTimestamp = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.map(timestampData, function (datapoint) {
+      return datapoint[0];
+    });
+
+    var aggregatedValue = aggregate(aggregationLabel, valuesOfTimestamp);
+    result.push([aggregatedValue, parseInt(timestamp, 10)]);
+  });
+
+  return result;
+}
+
+function aggregate(aggregation, data) {
+  if (aggregation.toLowerCase() === 'sum') {
+    return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.sum(data);
+  } else if (aggregation.toLowerCase() === 'mean') {
+    return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.mean(data);
+  } else if (aggregation.toLowerCase() === 'min') {
+    return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.min(data);
+  } else if (aggregation.toLowerCase() === 'max') {
+    return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.max(data);
+  } else {
+    //apply not aggregation
+    return data;
+  }
+}
+
+function buildResult(aggregatedData, refId, target) {
+  return {
+    datapoints: aggregatedData,
+    refId: refId,
+    target: target
+  };
+}
+
+function buildAggregationLabel(target) {
+  if (target.showAllMetrics) {
+    if (target.allMetrics.length > 1) {
+      if (target.customFilters && target.customFilters.length > 0) {
+        var label_1 = '';
+
+        lodash__WEBPACK_IMPORTED_MODULE_0___default.a.each(target.customFilters, function (filter, index) {
+          label_1 += filter;
+
+          if (index !== target.customFilters.length - 1) {
+            label_1 += '.';
+          }
+        });
+
+        label_1 = label_1 + ' (' + target.aggregationFunction.label + ')';
+        return label_1;
+      } else {
+        return target.aggregationFunction.label;
+      }
+    } else {
+      return target.allMetrics[0].key + ' (' + target.aggregationFunction.label + ')';
+    }
+  } else {
+    return target.metric.key + ' (' + target.aggregationFunction.label + ')';
+  }
+}
+
+/***/ }),
+
+/***/ "./util/analyze_util.ts":
+/*!******************************!*\
+  !*** ./util/analyze_util.ts ***!
+  \******************************/
+/*! exports provided: createTagFilter, readItemMetrics */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createTagFilter", function() { return createTagFilter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "readItemMetrics", function() { return readItemMetrics; });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+
+function createTagFilter(filter) {
+  var tagFilter = {
+    name: filter.tag.key,
+    operator: filter.operator.key,
+    value: filter.stringValue
+  };
+
+  if ('NUMBER' === filter.tag.type) {
+    if (filter.numberValue !== null) {
+      tagFilter.value = filter.numberValue;
+    }
+  } else if ('BOOLEAN' === filter.tag.type) {
+    tagFilter.value = filter.booleanValue;
+  }
+
+  return tagFilter;
+}
+function readItemMetrics(target, response, getLabel) {
+  if (!response.data) {
+    return response;
+  } // as we map two times we need to flatten the result
+
+
+  return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.flatten(response.data.items.map(function (item, index) {
+    return lodash__WEBPACK_IMPORTED_MODULE_0___default.a.map(item.metrics, function (value, key) {
+      return {
+        target: getLabel(target, item, key, index),
+        datapoints: lodash__WEBPACK_IMPORTED_MODULE_0___default.a.map(value, function (metric) {
+          return [metric[1], metric[0]];
+        }),
+        refId: target.refId,
+        key: target.stableHash
+      };
+    });
+  }));
+}
+
+/***/ }),
+
+/***/ "./util/delta_util.ts":
+/*!****************************!*\
+  !*** ./util/delta_util.ts ***!
+  \****************************/
+/*! exports provided: generateStableHash, hasIntersection, appendData, getDeltaRequestTimestamp */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateStableHash", function() { return generateStableHash; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hasIntersection", function() { return hasIntersection; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "appendData", function() { return appendData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDeltaRequestTimestamp", function() { return getDeltaRequestTimestamp; });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+
+var omitLabels = ['refId', 'pluginId', 'showWarningCantShowAllResults', 'timeShiftIsValid', 'useFreeTextMetrics', 'showGroupBySecondLevel', 'canShowAllMetrics', 'timeFilter', 'stableHash'];
+function generateStableHash(obj) {
+  var pseudoHash = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.omit(obj, omitLabels);
+
+  pseudoHash = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.mapValues(pseudoHash, function (value) {
+    // to reduce overhead of interface Selectable
+    if (value != null && _typeof(value) === 'object' && 'key' in value) {
+      value = value.key;
+    }
+
+    return value;
+  });
+  return JSON.stringify(pseudoHash);
+}
+/* Check if two time filters are overlapping.
+
+Return true when:
+a)
+  from |-------------------| to (t2)
+              from |--------------------| to (t1)
+b)
+  from |-------------------| to (t2)
+  from |-------------------| to (t1)
+c)
+  from |-------------------| to (t2)
+              from |-------| to (t1)
+
+Returns false when:
+d)
+  from |-------------------| to (t2)
+                      from |-------| to (t1)
+e)
+  from |-------------------| to (t2)
+       from |--------| to (t1)
+f)
+     from |-------------------| to (t2)
+from |----------------------------------------| to (t1)
+g)
+                from |-------------------| to (t2)
+  from |--------------------| to (t1)
+h)
+                from |-------------------| to (t2)
+  from |-------------| to (t1)
+i)
+                from |-------------------| to (t2)
+  from |--------| to (t1)
+j)
+  from |-------------------| to (t2)
+                        from |----------| to (t1)
+k)
+  from |-------------------| to (t2)
+  from |----------| to (t1)
+*/
+
+function hasIntersection(t1, t2) {
+  return t1.from < t2.to && t1.from >= t2.from && t1.to >= t2.to;
+}
+/*
+  Appends new found items to already existing data in cache.
+  Also removes old data accordingly (e.g. if 4 new datapoints were added,
+  the corresponding oldest four datapoints are removed).
+*/
+
+function appendData(newDeltaData, cachedData) {
+  lodash__WEBPACK_IMPORTED_MODULE_0___default.a.each(newDeltaData, function (deltaData) {
+    var matchingCachedDataIndex = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.findIndex(cachedData, function (o) {
+      return o.key === deltaData.key && o.target === deltaData.target;
+    });
+
+    if (cachedData[matchingCachedDataIndex] && deltaData.datapoints) {
+      // const size = matchingCachedData.datapoints.length;
+      var datapoints = deltaData.datapoints.concat(cachedData[matchingCachedDataIndex].datapoints);
+      datapoints = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.sortedUniqBy(datapoints.sort(function (a, b) {
+        return a[1] - b[1];
+      }), function (a) {
+        return a[1];
+      });
+      cachedData[matchingCachedDataIndex].datapoints = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.takeRight(datapoints, 800);
+      cachedData[matchingCachedDataIndex].target = deltaData.target;
+    } else {
+      cachedData.push(deltaData);
+    }
+  });
+
+  return cachedData;
+}
+function getDeltaRequestTimestamp(series, fromDefault, timeInterval) {
+  // we do not apply any delta for requests that contain a one second granularity (application requests)
+  if (timeInterval.key === '1') {
+    return fromDefault;
+  } // the found series can have multiple results, it's ok just to use the first one
+  // because data is written in batches and we know that once there is a datapoint
+  // for a series, the other series' datapoints are up-to-date as well.
+
+
+  var length = series[0].datapoints.length;
+
+  if (length < 2) {
+    return fromDefault;
+  }
+
+  var penultimate = length - 2;
+  return series[0].datapoints[penultimate][1];
+}
+
+/***/ }),
+
+/***/ "./util/instana_version.ts":
+/*!*********************************!*\
+  !*** ./util/instana_version.ts ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getVersion; });
+/* harmony import */ var _cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../cache */ "./cache.ts");
+/* harmony import */ var _request_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./request_handler */ "./util/request_handler.ts");
+
+
+var versionCache = new _cache__WEBPACK_IMPORTED_MODULE_0__["default"]();
+/*
+  Get version of current Instana backend and cache it for 10 minutes.
+  This should be the ONLY way to retrieve any information about the Instana backend version.
+ */
+
+function getVersion(options) {
+  var cachedVersion = versionCache.get('version');
+
+  if (cachedVersion) {
+    return Promise.resolve(cachedVersion);
+  }
+
+  return Object(_request_handler__WEBPACK_IMPORTED_MODULE_1__["getRequest"])(options, '/api/instana/version').then(function (result) {
+    if (result.data && result.data.imageTag) {
+      var majorVersion = parseInt(result.data.imageTag.split('.', 2)[1], 10) || null;
+
+      if (majorVersion) {
+        versionCache.put(options.url, majorVersion, 600000);
+      }
+
+      return majorVersion;
+    }
+
+    return null;
+  }, function (error) {
+    return null;
+  });
+}
+
+/***/ }),
+
+/***/ "./util/proxy_check.ts":
+/*!*****************************!*\
+  !*** ./util/proxy_check.ts ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+ // check grafana version (5.3+)
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  var version = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.get(window, ['grafanaBootData', 'settings', 'buildInfo', 'version'], '3.0.0');
+
+  var versions = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.split(version, '.', 2).map(function (v) {
+    return parseInt(v, 10);
+  });
+
+  return version[0] >= 6 || versions[0] >= 5 && versions[1] >= 3;
+});
+
+/***/ }),
+
+/***/ "./util/queryInterval_check.ts":
+/*!*************************************!*\
+  !*** ./util/queryInterval_check.ts ***!
+  \*************************************/
+/*! exports provided: isInvalidQueryInterval */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isInvalidQueryInterval", function() { return isInvalidQueryInterval; });
+/**
+ * Util method to validate query intervals which are too big.
+ *
+ * @param windowSize in ms
+ * @param queryIntervalLimit in ms
+ */
+function isInvalidQueryInterval(windowSize, queryIntervalLimit) {
+  if (queryIntervalLimit) {
+    if (queryIntervalLimit > 0) {
+      return windowSize > queryIntervalLimit;
+    }
+
+    return false;
+  }
+
+  return false;
+}
+
+/***/ }),
+
+/***/ "./util/request_handler.ts":
+/*!*********************************!*\
+  !*** ./util/request_handler.ts ***!
+  \*********************************/
+/*! exports provided: getRequest, postRequest, instanaUrl */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRequest", function() { return getRequest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "postRequest", function() { return postRequest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "instanaUrl", function() { return instanaUrl; });
+/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @grafana/runtime */ "@grafana/runtime");
+/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_grafana_runtime__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var getRequest = function getRequest(options, endpoint, swallowError, maxRetries) {
+  if (swallowError === void 0) {
+    swallowError = false;
+  }
+
+  if (maxRetries === void 0) {
+    maxRetries = 1;
+  }
+
+  var request = {
+    method: 'GET',
+    url: options.url + endpoint
+  };
+  return doRequest(options, request, swallowError, maxRetries);
+};
+var postRequest = function postRequest(options, endpoint, data, swallowError, maxRetries) {
+  if (swallowError === void 0) {
+    swallowError = false;
+  }
+
+  if (maxRetries === void 0) {
+    maxRetries = 0;
+  }
+
+  var request = {
+    method: 'POST',
+    url: options.url + endpoint,
+    data: data
+  };
+  return doRequest(options, request, swallowError, maxRetries);
+};
+
+function doRequest(options, request, swallowError, maxRetries) {
+  return Object(_grafana_runtime__WEBPACK_IMPORTED_MODULE_0__["getBackendSrv"])().datasourceRequest(request)["catch"](function (error) {
+    var _a, _b;
+
+    if (error.status === 429) {
+      // if the error was caused by a concurrent execution limit, we will retry
+      if (maxRetries > 0 && ((_a = error.data) === null || _a === void 0 ? void 0 : _a.errors) && error.data.errors[0] && error.data.errors[0].includes('concurrent')) {
+        var backoff_1 = maxRetries >= 4 ? 10000 : (4 - maxRetries) * 20000; // something between 10 and 60 seconds
+
+        return new Promise(function (resolve) {
+          return setTimeout(resolve, backoff_1);
+        }).then(function () {
+          return doRequest(options, request, swallowError, maxRetries - 1);
+        });
+      }
+
+      throw new Error('API limit is reached.');
+      return;
+    }
+
+    if (swallowError && (error.status >= 400 || error.status < 500)) {
+      console.log(error);
+      return;
+    }
+
+    if (maxRetries > 0 && error.status >= 500) {
+      return doRequest(options, request, swallowError, maxRetries - 1);
+    } // in order to display a reasonable error message text inside ui
+
+
+    if (!error.statusText && ((_b = error.data) === null || _b === void 0 ? void 0 : _b.errors) && error.data.errors[0]) {
+      throw new Error(error.data.errors[0]);
+    }
+
+    throw error;
+  });
+}
+
+function instanaUrl(instanceSettings) {
+  if (instanceSettings.jsonData.useProxy) {
+    return lodash__WEBPACK_IMPORTED_MODULE_1___default.a.trimEnd(instanceSettings.url, '/ ') + '/instana'; // to match proxy route in plugin.json
+  } else {
+    return lodash__WEBPACK_IMPORTED_MODULE_1___default.a.trimEnd(instanceSettings.jsonData.url, '/ ');
+  }
+}
+
+/***/ }),
+
+/***/ "./util/rollup_granularity_util.ts":
+/*!*****************************************!*\
+  !*** ./util/rollup_granularity_util.ts ***!
+  \*****************************************/
+/*! exports provided: getDefaultChartGranularity, getPossibleGranularities, getDefaultMetricRollupDuration, getPossibleRollups */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDefaultChartGranularity", function() { return getDefaultChartGranularity; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPossibleGranularities", function() { return getPossibleGranularities; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDefaultMetricRollupDuration", function() { return getDefaultMetricRollupDuration; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPossibleRollups", function() { return getPossibleRollups; });
+/* harmony import */ var _lists_granularities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lists/granularities */ "./lists/granularities.ts");
+/* harmony import */ var _time_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./time_util */ "./util/time_util.ts");
+/* harmony import */ var _lists_rollups__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../lists/rollups */ "./lists/rollups.ts");
+
+
+
+var MAX_DATAPOINTS_ANALYZE = 600;
+var MAX_DATAPOINTS_INFRASTRUCTURE = 800;
+var UI_DATAPOINTS_ANALYZE = 80;
+
+function currentTime() {
+  return Date.now();
+}
+
+function getDefaultChartGranularity(windowSize) {
+  return getPossibleGranularities(windowSize, UI_DATAPOINTS_ANALYZE)[0];
+}
+function getPossibleGranularities(windowSize, maxValues) {
+  if (maxValues === void 0) {
+    maxValues = MAX_DATAPOINTS_ANALYZE;
+  }
+
+  var possibleGranularities = _lists_granularities__WEBPACK_IMPORTED_MODULE_0__["default"].filter(function (granularity) {
+    return windowSize / 1000 / granularity.value <= maxValues && granularity.value * 1000 <= windowSize;
+  }); // window sizes of this length and up have a granularity of at least 1h
+
+  if (windowSize > 48000001) {
+    possibleGranularities = possibleGranularities.filter(function (granularity) {
+      return granularity.value >= 3600;
+    });
+  }
+
+  if (windowSize >= 1800000) {
+    possibleGranularities = possibleGranularities.filter(function (granularity) {
+      return granularity.value >= 60;
+    });
+  }
+
+  if (possibleGranularities.length > 0) {
+    return possibleGranularities.map(function (granularity) {
+      return {
+        key: granularity.value.toString(),
+        label: granularity.label
+      };
+    });
+  }
+
+  return [{
+    key: _lists_granularities__WEBPACK_IMPORTED_MODULE_0__["default"][_lists_granularities__WEBPACK_IMPORTED_MODULE_0__["default"].length - 1].value.toString(),
+    label: _lists_granularities__WEBPACK_IMPORTED_MODULE_0__["default"][_lists_granularities__WEBPACK_IMPORTED_MODULE_0__["default"].length - 1].label
+  }];
+}
+function getDefaultMetricRollupDuration(timeFilter) {
+  return getPossibleRollups(timeFilter)[0];
+}
+function getPossibleRollups(timeFilter) {
+  // Ignoring time differences for now since small time differences
+  // can be accepted. This time is only used to calculate the rollup.
+  var now = currentTime();
+  var windowSize = Object(_time_util__WEBPACK_IMPORTED_MODULE_1__["getWindowSize"])(timeFilter);
+  var possibleRollups = _lists_rollups__WEBPACK_IMPORTED_MODULE_2__["default"].filter(function (rollupDefinition) {
+    return timeFilter.from >= now - rollupDefinition.availableFor;
+  }).filter(function (rollUp) {
+    return windowSize >= rollUp.rollup && windowSize / rollUp.rollup <= MAX_DATAPOINTS_INFRASTRUCTURE;
+  });
+
+  if (possibleRollups.length > 0) {
+    return possibleRollups.map(function (rollup) {
+      return {
+        key: rollup.rollup.toString(),
+        label: rollup.label
+      };
+    });
+  }
+
+  return [{
+    key: _lists_rollups__WEBPACK_IMPORTED_MODULE_2__["default"][_lists_rollups__WEBPACK_IMPORTED_MODULE_2__["default"].length - 1].rollup.toString(),
+    label: _lists_rollups__WEBPACK_IMPORTED_MODULE_2__["default"][_lists_rollups__WEBPACK_IMPORTED_MODULE_2__["default"].length - 1].label
+  }];
+}
+
+/***/ }),
+
+/***/ "./util/target_util.ts":
+/*!*****************************!*\
+  !*** ./util/target_util.ts ***!
+  \*****************************/
+/*! exports provided: emptyResultData, buildTimeSeries */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "emptyResultData", function() { return emptyResultData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "buildTimeSeries", function() { return buildTimeSeries; });
+function emptyResultData(refId) {
+  return {
+    target: refId,
+    datapoints: []
+  };
+}
+function buildTimeSeries(label, refId, datapoints) {
+  return {
+    target: label,
+    refId: refId,
+    datapoints: datapoints
+  };
+}
+
+/***/ }),
+
+/***/ "./util/time_util.ts":
+/*!***************************!*\
+  !*** ./util/time_util.ts ***!
+  \***************************/
+/*! exports provided: readTime, getWindowSize, getTimeKey, hoursToMs, atLeastGranularity */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "readTime", function() { return readTime; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getWindowSize", function() { return getWindowSize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTimeKey", function() { return getTimeKey; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hoursToMs", function() { return hoursToMs; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "atLeastGranularity", function() { return atLeastGranularity; });
+/* harmony import */ var _GlobalVariables__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../GlobalVariables */ "./GlobalVariables.ts");
+
+function readTime(time) {
+  var from = new Date(time.from.valueOf()).getTime();
+  var to = new Date(time.to.valueOf()).getTime();
+  return {
+    from: from,
+    to: to,
+    windowSize: to - from
+  };
+}
+function getWindowSize(timeFilter) {
+  return timeFilter.to - timeFilter.from;
+}
+function getTimeKey(timeFilter) {
+  // time might be part of a cache key as this can cause different results
+  return msToMin(timeFilter.from) + _GlobalVariables__WEBPACK_IMPORTED_MODULE_0__["SEPARATOR"] + msToMin(timeFilter.to);
+}
+
+function msToMin(time) {
+  return time / 60000; // Avoid rounding to retain precision
+}
+
+function hoursToMs(hours) {
+  if (hours > 0) {
+    return hours * 60 * 60 * 1000; // Direct conversion without rounding
+  }
+
+  return 0;
+}
+function atLeastGranularity(windowSize, granularity) {
+  // Ensure windowSize is not smaller than granularity
+  var granularityInMs = granularity * 1000;
+  return windowSize >= granularityInMs ? windowSize : granularityInMs;
+}
+
+/***/ }),
+
+/***/ "@emotion/css":
+/*!*******************************!*\
+  !*** external "@emotion/css" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__emotion_css__;
+
+/***/ }),
+
+/***/ "@grafana/data":
+/*!********************************!*\
+  !*** external "@grafana/data" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_data__;
+
+/***/ }),
+
+/***/ "@grafana/runtime":
+/*!***********************************!*\
+  !*** external "@grafana/runtime" ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_runtime__;
+
+/***/ }),
+
+/***/ "@grafana/ui":
+/*!******************************!*\
+  !*** external "@grafana/ui" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_ui__;
+
+/***/ }),
+
+/***/ "lodash":
+/*!*************************!*\
+  !*** external "lodash" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_lodash__;
+
+/***/ }),
+
+/***/ "react":
+/*!************************!*\
+  !*** external "react" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_react__;
+
+/***/ })
+
+/******/ })});;
 //# sourceMappingURL=module.js.map
