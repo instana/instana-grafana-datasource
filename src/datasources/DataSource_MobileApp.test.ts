@@ -1,19 +1,19 @@
-import * as RequestHandler from '../util/request_handler';
-
 import { buildInstanaOptions, buildTimeFilter } from '../util/test_util';
-
 import { DataSourceMobileApp } from './DataSource_MobileApp';
 import TimeFilter from '../types/time_filter';
 import _ from 'lodash';
+
+jest.mock('../util/request_handler');
+import * as RequestHandler from '../util/request_handler';
 
 const options = buildInstanaOptions();
 
 describe('Given a mobileapp datasource', () => {
   const dataSourceMobileApp: DataSourceMobileApp = new DataSourceMobileApp(options);
-  let getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
+  const getRequestSpy = RequestHandler.getRequest as jest.MockedFunction<typeof RequestHandler.getRequest>;
 
-  afterEach(() => {
-    getRequestSpy.mockReset();
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('when fetching mobileapp tags', () => {

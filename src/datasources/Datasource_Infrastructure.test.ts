@@ -1,7 +1,6 @@
 import { buildInstanaOptions, buildTestTarget, buildTimeFilter } from '../util/test_util';
 import { DataSourceInfrastructure } from './Datasource_Infrastructure';
 import { BUILT_IN_METRICS, CUSTOM_METRICS } from '../GlobalVariables';
-import * as RequestHandler from '../util/request_handler';
 import { atLeastGranularity, getWindowSize } from 'util/time_util';
 import { InstanaOptions } from '../types/instana_options';
 import { InstanaQuery } from '../types/instana_query';
@@ -10,10 +9,20 @@ import TimeFilter from '../types/time_filter';
 import Cache from '../cache';
 import _ from 'lodash';
 
+jest.mock('../util/request_handler');
+import * as RequestHandler from '../util/request_handler';
+
 const options = buildInstanaOptions();
 const axios = require('axios');
+const getRequestSpy = RequestHandler.getRequest as jest.MockedFunction<typeof RequestHandler.getRequest>;
+const postRequestSpy = RequestHandler.postRequest as jest.MockedFunction<typeof RequestHandler.postRequest>;
+
 beforeAll(() => {
   axios.defaults.adapter = require('axios/lib/adapters/http');
+});
+
+beforeEach(() => {
+  jest.clearAllMocks();
 });
 
 describe('Given an infrastructure datasource', () => {
@@ -53,11 +62,8 @@ describe('Given an infrastructure datasource', () => {
   });
 
   describe('when fetching entity types', () => {
-    let pluginsSpy: any;
-
     afterEach(() => {
       resetDataSource();
-      pluginsSpy.mockReset();
     });
 
     it('should return entity types in correct format', async () => {
@@ -65,8 +71,7 @@ describe('Given an infrastructure datasource', () => {
         { plugin: 'plugin1', label: 'Plugin 1' },
         { plugin: 'plugin2', label: 'Plugin 2' },
       ];
-      pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
-      pluginsSpy.mockResolvedValue({ data: types });
+      getRequestSpy.mockResolvedValue({ data: types });
 
       const result = await dataSourceInfrastructure.getEntityTypes();
 
@@ -81,23 +86,22 @@ describe('Given an infrastructure datasource', () => {
         { plugin: 'plugin1', label: 'Plugin 1' },
         { plugin: 'plugin2', label: 'Plugin 2' },
       ];
-      pluginsSpy = jest.spyOn(RequestHandler, 'getRequest');
-      pluginsSpy.mockResolvedValue({ data: types });
+      getRequestSpy.mockResolvedValue({ data: types });
 
       await dataSourceInfrastructure.getEntityTypes();
       await dataSourceInfrastructure.getEntityTypes();
 
-      expect(pluginsSpy).toHaveBeenCalledTimes(1);
+      expect(getRequestSpy).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('when fetching metrics catalog', function () {
     let plugin: SelectableValue = { key: 'jvmRuntimePlatform', label: 'java' };
-    let catalogSpy: any;
+    
 
     afterEach(() => {
       resetDataSource();
-      catalogSpy.mockReset();
+      
     });
 
     it('should return builtin metrics in the correct format', async () => {
@@ -106,8 +110,8 @@ describe('Given an infrastructure datasource', () => {
         { label: 'Plugin 1', metricId: 'metricId1', pluginId: 'pluginId1' },
         { label: 'Plugin 2', metricId: 'metricId2', pluginId: 'pluginId2' },
       ];
-      catalogSpy = jest.spyOn(RequestHandler, 'getRequest');
-      catalogSpy.mockResolvedValue({ data: catalog });
+      // Using mocked getRequestSpy
+      getRequestSpy.mockResolvedValue({ data: catalog });
 
       const result = await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
       result.forEach((entry) => {
@@ -122,8 +126,8 @@ describe('Given an infrastructure datasource', () => {
         { label: 'Plugin 1', metricId: 'metricId1', pluginId: 'pluginId1' },
         { label: 'Plugin 2', metricId: 'metricId2', pluginId: 'pluginId2' },
       ];
-      catalogSpy = jest.spyOn(RequestHandler, 'getRequest');
-      catalogSpy.mockResolvedValue({ data: catalog });
+      // Using mocked getRequestSpy
+      getRequestSpy.mockResolvedValue({ data: catalog });
 
       const result = await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
       result.forEach((entry) => {
@@ -138,20 +142,29 @@ describe('Given an infrastructure datasource', () => {
         { label: 'Plugin 1', metricId: 'metricId1', pluginId: 'pluginId1' },
         { label: 'Plugin 2', metricId: 'metricId2', pluginId: 'pluginId2' },
       ];
-      catalogSpy = jest.spyOn(RequestHandler, 'getRequest');
-      catalogSpy.mockResolvedValue({ data: types });
+      // Using mocked getRequestSpy
+      getRequestSpy.mockResolvedValue({ data: types });
 
       await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
       await dataSourceInfrastructure.getMetricsCatalog(plugin, metricCategory);
 
-      expect(catalogSpy).toHaveBeenCalledTimes(1);
+      expect(getRequestSpy).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('when fetching snapshots for target', () => {
-    let contextSpy: any = jest.spyOn(RequestHandler, 'getRequest');
-    let postSpy: any = jest.spyOn(RequestHandler, 'postRequest');
+    
+    
     const timeFilter: TimeFilter = buildTimeFilter();
+
+    beforeEach(() => {
+      // Using mocked getRequestSpy
+      // Using mocked postRequestSpy
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
     const target: InstanaQuery = buildTestTarget();
     const windowSize = getWindowSize(timeFilter);
     target.entityType = { key: 'someKey' };
@@ -176,13 +189,13 @@ describe('Given an infrastructure datasource', () => {
     };
 
     beforeEach(() => {
-      contextSpy.mockReset();
-      postSpy.mockReset();
+      getRequestSpy.mockReset();
+      postRequestSpy.mockReset();
 
-      contextSpy = jest.spyOn(RequestHandler, 'getRequest');
-      postSpy = jest.spyOn(RequestHandler, 'postRequest');
+      // Using mocked getRequestSpy
+      // Using mocked postRequestSpy
 
-      contextSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
+      getRequestSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
         if (
           endpoint ===
           `/api/infrastructure-monitoring/snapshots?plugin=${target.entityType.key}` +
@@ -195,7 +208,7 @@ describe('Given an infrastructure datasource', () => {
         throw new Error('Unexpected call URL: ' + endpoint);
       });
 
-      postSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string, payload: any) => {
+      postRequestSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string, payload: any) => {
         if (endpoint === `/api/infrastructure-monitoring/snapshots` && payload.snapshotIds) {
           return Promise.resolve(snapshotsResponse);
         }
@@ -226,8 +239,8 @@ describe('Given an infrastructure datasource', () => {
       target.entityQuery = 'daljeet';
       await dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
       await dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
-      expect(contextSpy).toHaveBeenCalledTimes(1);
-      expect(postSpy).toHaveBeenCalledTimes(1);
+      expect(getRequestSpy).toHaveBeenCalledTimes(1);
+      expect(postRequestSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should use selectedEntity snapshot id for builtin/custom metrics', async () => {
@@ -237,8 +250,8 @@ describe('Given an infrastructure datasource', () => {
 
       const results = await dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
 
-      expect(contextSpy).not.toHaveBeenCalled();
-      expect(postSpy).toHaveBeenCalledWith(
+      expect(getRequestSpy).not.toHaveBeenCalled();
+      expect(postRequestSpy).toHaveBeenCalledWith(
         dataSourceInfrastructure.instanaOptions,
         '/api/infrastructure-monitoring/snapshots',
         {
@@ -262,9 +275,9 @@ describe('Given an infrastructure datasource', () => {
 
       await dataSourceInfrastructure.fetchSnapshotsForTarget(target, timeFilter);
 
-      expect(contextSpy).toHaveBeenCalledTimes(1);
-      expect(postSpy).toHaveBeenCalledTimes(1);
-      expect(postSpy).not.toHaveBeenCalledWith(
+      expect(getRequestSpy).toHaveBeenCalledTimes(1);
+      expect(postRequestSpy).toHaveBeenCalledTimes(1);
+      expect(postRequestSpy).not.toHaveBeenCalledWith(
         dataSourceInfrastructure.instanaOptions,
         '/api/infrastructure-monitoring/snapshots',
         expect.objectContaining({
@@ -275,8 +288,9 @@ describe('Given an infrastructure datasource', () => {
   });
 
   describe('when fetching metrics for snapshots', () => {
-    let metricSpy: any = jest.spyOn(RequestHandler, 'postRequest');
+    
     const timeFilter: TimeFilter = buildTimeFilter();
+
     const target: InstanaQuery = buildTestTarget();
     const metricA = { status: 200, data: { label: 'label for A' } };
     const metricB = { status: 200, data: { label: 'label for B' } };
@@ -297,9 +311,7 @@ describe('Given an infrastructure datasource', () => {
       ],
     };
     beforeEach(() => {
-      metricSpy.mockReset();
-      metricSpy = jest.spyOn(RequestHandler, 'postRequest');
-      metricSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
+      postRequestSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string, payload: any) => {
         if (
           endpoint ===
           '/api/infrastructure-monitoring/metrics?offline=' + dataSourceInfrastructure.instanaOptions.showOffline
@@ -314,7 +326,7 @@ describe('Given an infrastructure datasource', () => {
         dataSourceInfrastructure.instanaOptions,
         '/api/infrastructure-monitoring/metrics?offline=' + dataSourceInfrastructure.instanaOptions.showOffline,
         () => {
-          expect(metricSpy).toHaveBeenCalledTimes(1);
+          expect(postRequestSpy).toHaveBeenCalledTimes(1);
           const windowSize = getWindowSize(timeFilter);
           const expecteddata = {
             metrics: [metricA],
@@ -339,8 +351,9 @@ describe('Given an infrastructure datasource', () => {
   });
 
   describe('when fetching entities for infrastructure analyze', () => {
-    let metricSpy: any = jest.spyOn(RequestHandler, 'postRequest');
+    
     const timeFilter: TimeFilter = buildTimeFilter();
+
     const target: InstanaQuery = buildTestTarget();
     const response = {
       status: 200,
@@ -366,9 +379,7 @@ describe('Given an infrastructure datasource', () => {
     };
 
     beforeEach(() => {
-      metricSpy.mockReset();
-      metricSpy = jest.spyOn(RequestHandler, 'postRequest');
-      metricSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
+      postRequestSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string, payload: any) => {
         if (endpoint === '/api/infrastructure-monitoring/analyze/entity-groups') {
           return Promise.resolve(response);
         }
@@ -377,7 +388,7 @@ describe('Given an infrastructure datasource', () => {
     });
 
     it('should call postRequest with the correct parameters', async () => {
-      expect(metricSpy).toHaveBeenCalledTimes(0);
+      expect(postRequestSpy).toHaveBeenCalledTimes(0);
 
       const windowSize = getWindowSize(timeFilter);
       let tagFilters: any[] = [];

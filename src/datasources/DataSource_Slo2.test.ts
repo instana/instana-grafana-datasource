@@ -2,14 +2,16 @@ import TimeFilter from '../types/time_filter';
 import { buildInstanaOptions, buildTestTarget } from '../util/test_util';
 import { DataSourceSlo2 } from './DataSource_Slo2';
 import { InstanaOptions } from '../types/instana_options';
-import * as RequestHandler from '../util/request_handler';
 import { InstanaQuery } from '../types/instana_query';
+
+jest.mock('../util/request_handler');
+import * as RequestHandler from '../util/request_handler';
 
 const options: InstanaOptions = buildInstanaOptions();
 
 describe('Given an slo datasource', () => {
   const dataSourceSlo2: DataSourceSlo2 = new DataSourceSlo2(options);
-  let getRequestSpy: any;
+  const getRequestSpy = RequestHandler.getRequest as jest.MockedFunction<typeof RequestHandler.getRequest>;
   const timeFilter: TimeFilter = {
     to: 1716374766000,
     from: 1716353172000,
@@ -172,16 +174,18 @@ describe('Given an slo datasource', () => {
       },
     };
 
-    getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
-    getRequestSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
-      switch (endpoint) {
-        case '/api/datasources/proxy/uid/fdlrkcgk8td6oa/instana/api/settings/slo':
-          return Promise.resolve(definedSlo);
-        case '/api/slo/report/SLOY2KDCFExTvmsLyf4W067JQ?from=1716353172000&to=1716374766000':
-          return Promise.resolve(sloReportResponse);
-        default:
-          throw new Error('Unexpected call URL: ' + endpoint);
-      }
+    beforeEach(() => {
+      jest.clearAllMocks();
+      getRequestSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
+        switch (endpoint) {
+          case '/api/datasources/proxy/uid/fdlrkcgk8td6oa/instana/api/settings/slo':
+            return Promise.resolve(definedSlo);
+          case '/api/slo/report/SLOY2KDCFExTvmsLyf4W067JQ?from=1716353172000&to=1716374766000':
+            return Promise.resolve(sloReportResponse);
+          default:
+            throw new Error('Unexpected call URL: ' + endpoint);
+        }
+      });
     });
 
     it('should return only one value for sli', () => {

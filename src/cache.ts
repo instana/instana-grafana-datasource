@@ -21,7 +21,7 @@ export default class Cache<T> {
   }
 
   get(key: string): T {
-    var item = this.store[key];
+    let item = this.store[key];
     if (item && !(item.expiry && item.expiry > Date.now())) {
       this.del(key);
       item = undefined;

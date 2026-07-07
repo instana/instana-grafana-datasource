@@ -7,5 +7,5 @@ npm-debug.log
 .idea
 *.swp
 results.txt
-.prettierrc.js
-jest.config.js
+dist
+.eslintcache

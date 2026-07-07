@@ -442,9 +442,9 @@ describe('Given a delta', () => {
  * Return testdata with random values (sometimes null) and a decreasing timestamp.
  */
 function generateTestData(amountOfTimeseries: number, numberOfEntries: number) {
-  var data = [];
+  let data = [];
   for (let i = 1; i <= amountOfTimeseries; i++) {
-    var timeseries = [];
+    let timeseries = [];
     for (let j = 1; j <= numberOfEntries; j++) {
       timeseries.unshift([getRandomValue(), 10900000 - j * 100000]);
     }
