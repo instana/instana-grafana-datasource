@@ -2,14 +2,16 @@ import TimeFilter from '../types/time_filter';
 import { buildInstanaOptions, buildTestTarget } from '../util/test_util';
 import { DataSourceSlo } from './DataSource_Slo';
 import { InstanaOptions } from '../types/instana_options';
-import * as RequestHandler from '../util/request_handler';
 import { InstanaQuery } from '../types/instana_query';
+
+jest.mock('../util/request_handler');
+import * as RequestHandler from '../util/request_handler';
 
 const options: InstanaOptions = buildInstanaOptions();
 
 describe('Given an sli datasource', () => {
   const dataSourceSlo: DataSourceSlo = new DataSourceSlo(options);
-  let getRequestSpy: any;
+  const getRequestSpy = RequestHandler.getRequest as jest.MockedFunction<typeof RequestHandler.getRequest>;
   const timeFilter: TimeFilter = {
     to: 1516472658604,
     from: 1516451043603,
@@ -169,16 +171,18 @@ describe('Given an sli datasource', () => {
       },
     };
 
-    getRequestSpy = jest.spyOn(RequestHandler, 'getRequest');
-    getRequestSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
-      switch (endpoint) {
-        case '/api/datasources/proxy/1/instana/api/settings/sli':
-          return Promise.resolve(definedSli);
-        case '/api/sli/report/2?from=1516451043603&to=1516472658604&slo=0.8':
-          return Promise.resolve(sliReportResponse);
-        default:
-          throw new Error('Unexpected call URL: ' + endpoint);
-      }
+    beforeEach(() => {
+      jest.clearAllMocks();
+      getRequestSpy.mockImplementation((instanaOptions: InstanaOptions, endpoint: string) => {
+        switch (endpoint) {
+          case '/api/datasources/proxy/1/instana/api/settings/sli':
+            return Promise.resolve(definedSli);
+          case '/api/sli/report/2?from=1516451043603&to=1516472658604&slo=0.8':
+            return Promise.resolve(sliReportResponse);
+          default:
+            throw new Error('Unexpected call URL: ' + endpoint);
+        }
+      });
     });
 
     it('should return only one value for sli', () => {

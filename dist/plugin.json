@@ -1,63 +1,78 @@
 {
-  "type": "datasource",
-  "name": "Instana",
-  "id": "instana-datasource",
-  "metrics": true,
-  "annotations": false,
-  "alerting": false,
-  "logs": false,
-  "info": {
-    "description": "Grafana datasource plugin for Instana: Automatic Infrastructure and Application Monitoring",
-    "author": {
-      "name": "Instana, Inc.",
-      "url": "https://www.instana.com"
+    "type": "datasource",
+    "name": "Instana",
+    "id": "instana-datasource",
+    "metrics": true,
+    "annotations": false,
+    "alerting": false,
+    "logs": false,
+    "info": {
+        "description": "Grafana datasource plugin for Instana: Automatic Infrastructure and Application Monitoring",
+        "author": {
+            "name": "Instana, Inc.",
+            "url": "https://www.instana.com"
+        },
+        "logos": {
+            "small": "img/stan.png",
+            "large": "img/stan.png"
+        },
+        "links": [
+            {
+                "name": "Docs",
+                "url": "https://www.ibm.com/docs/en/obi/current?topic=apis-grafana"
+            },
+            {
+                "name": "Homepage",
+                "url": "https://www.instana.com"
+            },
+            {
+                "name": "GitHub",
+                "url": "https://github.com/instana/instana-grafana-datasource"
+            },
+            {
+                "name": "Apache License 2.0",
+                "url": "https://github.com/instana/instana-grafana-datasource/blob/master/LICENSE"
+            }
+        ],
+        "keywords": [
+            "instana",
+            "apm",
+            "application",
+            "performance",
+            "monitoring",
+            "metrics",
+            "tracing"
+        ],
+        "screenshots": [
+            {
+                "name": "query",
+                "path": "img/query.png"
+            },
+            {
+                "name": "slo",
+                "path": "img/slo.png"
+            }
+        ],
+        "version": "5.1.0",
+        "updated": "2026-06-19"
     },
-    "logos": {
-      "small": "img/stan.png",
-      "large": "img/stan.png"
-    },
-    "links": [
-      {
-        "name": "Docs",
-        "url": "https://www.ibm.com/docs/en/obi/current?topic=apis-grafana"
-      },
-      {
-        "name": "Homepage",
-        "url": "https://www.instana.com"
-      },
-      {
-        "name": "GitHub",
-        "url": "https://github.com/instana/instana-grafana-datasource"
-      },
-      {
-        "name": "Apache License 2.0",
-        "url": "https://github.com/instana/instana-grafana-datasource/blob/master/LICENSE"
-      }
-    ],
-    "keywords": ["instana", "apm", "application", "performance", "monitoring", "metrics", "tracing"],
-    "screenshots": [
-      {"name": "query", "path": "img/query.png"},
-      {"name": "slo", "path": "img/slo.png"}
-    ],
-    "version": "5.1.0",
-    "updated": "2026-06-19"
-  },
-  "routes": [
-    {
-      "path": "instana",
-      "method": "*",
-      "url": "{{.JsonData.url}}",
-      "headers": [
+    "routes": [
         {
-          "name": "Authorization",
-          "content": "apiToken {{.SecureJsonData.apiToken}}"
+            "path": "instana",
+            "method": "*",
+            "url": "{{.JsonData.url}}",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "content": "apiToken {{.SecureJsonData.apiToken}}"
+                }
+            ]
         }
-      ]
-    }
-  ],
-  "dependencies": {
-    "grafanaVersion": "7.0.x",
-    "grafanaDependency": ">=7.0.0",
-    "plugins": []
-  }
+    ],
+    "dependencies": {
+        "grafanaVersion": "7.0.x",
+        "grafanaDependency": ">=7.0.0",
+        "plugins": []
+    },
+    "buildMode": "development"
 }

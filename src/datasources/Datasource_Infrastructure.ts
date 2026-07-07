@@ -406,7 +406,7 @@ export class DataSourceInfrastructure {
         }
 
         res.data.items.forEach((entity: any) => {
-          for (var metric in entity.metrics) {
+          for (let metric in entity.metrics) {
             result.push({
               target: entity.tags[target.groupbyTagSecondLevelKey] + ' - ' + metric,
               datapoints: entity.metrics[metric]
