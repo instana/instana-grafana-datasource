@@ -13,13 +13,8 @@ jest.mock('../util/request_handler');
 import * as RequestHandler from '../util/request_handler';
 
 const options = buildInstanaOptions();
-const axios = require('axios');
 const getRequestSpy = RequestHandler.getRequest as jest.MockedFunction<typeof RequestHandler.getRequest>;
 const postRequestSpy = RequestHandler.postRequest as jest.MockedFunction<typeof RequestHandler.postRequest>;
-
-beforeAll(() => {
-  axios.defaults.adapter = require('axios/lib/adapters/http');
-});
 
 beforeEach(() => {
   jest.clearAllMocks();

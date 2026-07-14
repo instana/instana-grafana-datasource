@@ -24,11 +24,11 @@
   "devDependencies": {
     "@eslint/compat": "^2.1.0",
     "@eslint/eslintrc": "^3.3.5",
-    "@grafana/data": "latest",
+    "@grafana/data": "^13.1.0",
     "@grafana/eslint-config": "^10.0.0",
-    "@grafana/runtime": "latest",
+    "@grafana/runtime": "^13.1.0",
     "@grafana/tsconfig": "^2.0.0",
-    "@grafana/ui": "latest",
+    "@grafana/ui": "^13.1.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@stylistic/eslint-plugin-ts": "^4.4.1",
     "@swc/core": "^1.9.3",
@@ -40,8 +40,8 @@
     "@types/node": "^22.10.2",
     "@typescript-eslint/eslint-plugin": "^8.62.1",
     "@typescript-eslint/parser": "^8.62.1",
-    "axios": "^0.25.0",
-    "copy-webpack-plugin": "^12.0.2",
+    "axios": "^1.12.0",
+    "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.2",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^10.1.8",
@@ -74,9 +74,20 @@
   "dependencies": {
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
-    "lodash": "^4.17.21"
+    "lodash": "^4.18.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "resolutions": {
-    "flatted": "^3.3.1"
+    "@babel/traverse": "^7.29.7",
+    "braces": "^3.0.3",
+    "dompurify": "^3.4.11",
+    "flatted": "^3.3.1",
+    "js-cookie": "^3.0.7",
+    "json5": "^2.2.3",
+    "minimatch": "^3.1.2",
+    "picomatch": "^4.0.5",
+    "semver": "^7.8.5",
+    "serialize-javascript": "^7.0.5"
   }
 }
