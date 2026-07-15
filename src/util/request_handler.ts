@@ -1,5 +1,4 @@
-import { getBackendSrv } from '@grafana/runtime';
-import { BackendSrvRequest } from '@grafana/runtime/services/backendSrv';
+import { getBackendSrv, BackendSrvRequest } from '@grafana/runtime';
 import { InstanaOptions } from '../types/instana_options';
 import { DataSourceInstanceSettings } from '@grafana/data';
 import _ from 'lodash';

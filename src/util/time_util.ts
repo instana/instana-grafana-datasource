@@ -1,4 +1,4 @@
-import { TimeRange } from '@grafana/data/types/time';
+import { TimeRange } from '@grafana/data';
 import TimeFilter from '../types/time_filter';
 import { SEPARATOR } from '../GlobalVariables';
 

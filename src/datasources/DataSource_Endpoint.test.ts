@@ -8,10 +8,6 @@ const options = buildInstanaOptions();
 const dataSourceEndpoint: DataSourceEndpoint = new DataSourceEndpoint(options);
 const timeFilter: TimeFilter = buildTimeFilter();
 
-beforeAll(() => {
-  axios.defaults.adapter = require('axios/lib/adapters/http');
-});
-
 jest.mock('axios', () => ({
   get: jest.fn((url) => {
     if (url.includes('endpoints')) {

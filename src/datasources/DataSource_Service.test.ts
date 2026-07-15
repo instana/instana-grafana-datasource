@@ -10,10 +10,6 @@ const timeFilter: TimeFilter = buildTimeFilter();
 jest.mock('axios');
 const axios = require('axios');
 
-beforeAll(() => {
-  axios.defaults.adapter = require('axios/lib/adapters/http');
-});
-
 describe('Given an application datasource', () => {
   it('should return services', () => {
     // Mock the response for the services API call
