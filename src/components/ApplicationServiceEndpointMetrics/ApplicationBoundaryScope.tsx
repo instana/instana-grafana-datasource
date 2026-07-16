@@ -1,52 +1,51 @@
 import { Tooltip, useTheme } from '@grafana/ui';
 import React, { useState } from 'react';
-import { css } from '@emotion/css';
 
 const INBOUND = 'INBOUND';
 const ALL = 'ALL';
 
-const dropdown = {
+const dropdown: React.CSSProperties = {
   position: 'relative',
   background: 'transparent',
   width: '32px',
   height: '32px',
   marginRight: '4px',
-} as React.CSSProperties;
+};
 
 const iconSize = 30;
 
-const dropdownListStyle = css`
-  transition: max-height 0.2s ease-out;
-  max-height: 0;
-  overflow: hidden;
-  z-index: 2;
-  position: absolute;
-`;
+const dropdownListStyle: React.CSSProperties = {
+  transition: 'max-height 0.2s ease-out',
+  maxHeight: 0,
+  overflow: 'hidden',
+  zIndex: 2,
+  position: 'absolute',
+};
 
-const dropdownListActiveStyle = css`
-  overflow: hidden;
-  z-index: 2;
-  max-height: 1000px;
-  opacity: 1;
-  position: absolute;
-`;
+const dropdownListActiveStyle: React.CSSProperties = {
+  overflow: 'hidden',
+  zIndex: 2,
+  maxHeight: '1000px',
+  opacity: 1,
+  position: 'absolute',
+};
 
-const iconTextContainerStyle = css`
-  display: inline-flex;
-`;
+const iconTextContainerStyle: React.CSSProperties = {
+  display: 'inline-flex',
+};
 
-const iconStyleClass = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+const iconStyleClass: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
 
-const iconTextStyleClass = css`
-  padding: 7px;
-`;
+const iconTextStyleClass: React.CSSProperties = {
+  padding: '7px',
+};
 
 const inboundIcon = (
-  <svg className={iconStyleClass} height={iconSize} width={iconSize}>
+  <svg style={iconStyleClass} height={iconSize} width={iconSize}>
     <path
       transform="translate(3, 5)"
       fill="#33a2e5"
@@ -56,7 +55,7 @@ const inboundIcon = (
 );
 
 const allIcon = (
-  <svg className={iconStyleClass} height={iconSize} width={iconSize}>
+  <svg style={iconStyleClass} height={iconSize} width={iconSize}>
     <path
       transform="translate(3, 5)"
       fill="#33a2e5"
@@ -111,15 +110,15 @@ export default function ApplicationBoundaryScope(props: any) {
         </Tooltip>
       </div>
 
-      <ul className={active ? dropdownListActiveStyle : dropdownListStyle}>
+      <ul style={active ? dropdownListActiveStyle : dropdownListStyle}>
         <li onClick={() => handleClick(INBOUND)} key={INBOUND} style={dropdown__list__item}>
-          <div className={iconTextContainerStyle}>
-            {inboundIcon} <span className={iconTextStyleClass}>{INBOUND}</span>
+          <div style={iconTextContainerStyle}>
+            {inboundIcon} <span style={iconTextStyleClass}>{INBOUND}</span>
           </div>
         </li>
         <li onClick={() => handleClick(ALL)} key={ALL} style={dropdown__list__item}>
-          <div className={iconTextContainerStyle}>
-            {allIcon} <span className={iconTextStyleClass}>{ALL}</span>
+          <div style={iconTextContainerStyle}>
+            {allIcon} <span style={iconTextStyleClass}>{ALL}</span>
           </div>
         </li>
       </ul>
