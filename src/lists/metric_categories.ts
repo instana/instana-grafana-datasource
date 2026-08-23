@@ -43,4 +43,8 @@ export default [
     label: 'Synthetic monitoring',
     key: 11,
   },
+  {
+    label: 'Instana Events',
+    key: 12,
+  },
 ];

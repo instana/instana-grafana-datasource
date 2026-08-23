@@ -6,6 +6,7 @@ import {
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   INFRASTRUCTURE_ANALYZE,
+  INSTANA_EVENTS,
   SLO_INFORMATION,
   SLO2_INFORMATION,
   SYNTHETIC_MONITORING,
@@ -39,6 +40,7 @@ import { DataSourceSlo } from './DataSource_Slo';
 import { DataSourceSlo2 } from './DataSource_Slo2';
 import { DataSourceWebsite } from './DataSource_Website';
 import { DataSourceSyntheticMonitoring } from './DataSource_SyntheticMonitoring';
+import { DataSourceEvents } from './DataSource_Events';
 import { InstanaOptions } from '../types/instana_options';
 import { InstanaQuery } from '../types/instana_query';
 import MetricCategories from '../lists/metric_categories';
@@ -63,6 +65,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   dataSourceSlo: DataSourceSlo;
   dataSourceSlo2: DataSourceSlo2;
   dataSourceSyntheticMonitoring: DataSourceSyntheticMonitoring;
+  dataSourceEvents: DataSourceEvents;
   timeFilter!: TimeFilter;
   availableGranularities: SelectableValue[];
   availableRollups: SelectableValue[];
@@ -86,6 +89,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     this.dataSourceService = new DataSourceService(instanceSettings.jsonData);
     this.dataSourceEndpoint = new DataSourceEndpoint(instanceSettings.jsonData);
     this.dataSourceSyntheticMonitoring = new DataSourceSyntheticMonitoring(instanceSettings.jsonData);
+    this.dataSourceEvents = new DataSourceEvents(instanceSettings.jsonData);
 
     this.resultCache = new Cache<any>();
   }
@@ -362,6 +366,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
           return this.dataSourceSyntheticMonitoring.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTarget(target, data);
           });
+        } else if (category === INSTANA_EVENTS) {
+          return this.dataSourceEvents.runQuery(target, targetTimeFilter).then((data: any) => {
+            return this.buildTarget(target, [data]);
+          });
         } else if (category === INFRASTRUCTURE_ANALYZE) {
           return this.dataSourceInfrastructure.runQuery(target, targetTimeFilter).then((data: any) => {
             return this.buildTarget(target, data);
@@ -461,7 +469,8 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       if (
         target.metricCategory.key === SLO_INFORMATION ||
         target.metricCategory.key === SLO2_INFORMATION ||
-        target.metricCategory.key === INFRASTRUCTURE_ANALYZE
+        target.metricCategory.key === INFRASTRUCTURE_ANALYZE ||
+        target.metricCategory.key === INSTANA_EVENTS
       ) {
         return false;
       }

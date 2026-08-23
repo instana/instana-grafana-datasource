@@ -6,6 +6,7 @@ import {
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   INFRASTRUCTURE_ANALYZE,
+  INSTANA_EVENTS,
   SLO_INFORMATION,
   SLO2_INFORMATION,
   SYNTHETIC_MONITORING,
@@ -32,6 +33,7 @@ import { SloInformation } from './SLOInformation/SloInformation';
 import { Slo2Information } from './SLOInformation/Slo2Information';
 import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import { SyntheticMonitoring } from './SyntheticMonitoring/SyntheticMonitoring';
+import { InstanaEvents } from './Events/InstanaEvents';
 import _ from 'lodash';
 import metricCategories from '../lists/metric_categories';
 import migrate from '../migration';
@@ -673,16 +675,27 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key !== SLO_INFORMATION && query.metricCategory.key !== SLO2_INFORMATION && (
-          <Metric
+        {query.metricCategory.key === INSTANA_EVENTS && (
+          <InstanaEvents
             query={query}
-            onChange={this.props.onChange}
             onRunQuery={this.props.onRunQuery}
-            updateMetrics={this.updateMetrics}
-            availableMetrics={this.state.availableMetrics}
+            onChange={this.props.onChange}
             datasource={this.props.datasource}
           />
         )}
+
+        {query.metricCategory.key !== SLO_INFORMATION &&
+          query.metricCategory.key !== SLO2_INFORMATION &&
+          query.metricCategory.key !== INSTANA_EVENTS && (
+            <Metric
+              query={query}
+              onChange={this.props.onChange}
+              onRunQuery={this.props.onRunQuery}
+              updateMetrics={this.updateMetrics}
+              availableMetrics={this.state.availableMetrics}
+              datasource={this.props.datasource}
+            />
+          )}
 
         {query.metricCategory.key === CUSTOM_METRICS && (
           <MetricFilter
