@@ -42,7 +42,9 @@ export class DataSourceEvents {
     if (target.excludeTriggeredBefore) {
       parts.push('excludeTriggeredBefore=true');
     }
-    parts.push('includeMetadata=true');
+    if (target.includeMetadata) {
+      parts.push('includeMetadata=true');
+    }
 
     try {
       const response = await getRequest(this.instanaOptions, `/api/events?${parts.join('&')}`);

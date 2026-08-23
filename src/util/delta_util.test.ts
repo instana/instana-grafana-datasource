@@ -376,6 +376,7 @@ describe('Given a delta', () => {
           eventTypeFilters: [],
           filterEventUpdates: false,
           excludeTriggeredBefore: false,
+          includeMetadata: false,
         })
       );
     });
