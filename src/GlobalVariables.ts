@@ -18,6 +18,7 @@ export const ANALYZE_MOBILE_APP_METRICS = 9;
 export const SLO2_INFORMATION = 10;
 export const SYNTHETIC_MONITORING = 11;
 export const TRACES_AND_CALLS = 12;
+export const INSTANA_EVENTS = 13;
 
 /* DROPDOWN DEFAULTS */
 export const ALL_APPLICATIONS = '-- No Application Filter --';

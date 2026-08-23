@@ -373,6 +373,10 @@ describe('Given a delta', () => {
           tracesOffset: 0,
           tracesIncludeInternal: false,
           tracesIncludeSynthetic: false,
+          eventTypeFilters: [],
+          filterEventUpdates: false,
+          excludeTriggeredBefore: false,
+          includeMetadata: false,
         })
       );
     });
