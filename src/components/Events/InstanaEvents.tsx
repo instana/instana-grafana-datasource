@@ -48,13 +48,6 @@ export class InstanaEvents extends React.Component<Props> {
     onRunQuery();
   };
 
-  onIncludeMetadataChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
-    const { query, onChange, onRunQuery } = this.props;
-    query.includeMetadata = e.currentTarget.checked;
-    onChange(query);
-    onRunQuery();
-  };
-
   render() {
     const { query } = this.props;
 
@@ -85,7 +78,9 @@ export class InstanaEvents extends React.Component<Props> {
           <FormSwitch
             queryKeyword
             label={'Filter Event Updates'}
-            tooltip={'Only return events with state changes within the selected timeframe.'}
+            tooltip={
+              'Filter the results to only show events with state changes within the timeframe.'
+            }
             value={query.filterEventUpdates ?? false}
             onChange={this.onFilterEventUpdatesChange}
           />
@@ -93,18 +88,12 @@ export class InstanaEvents extends React.Component<Props> {
             queryKeyword
             label={'Exclude Triggered Before'}
             tooltip={
-              'Exclude events whose start time falls before the selected timeframe, ' +
-              'including events with state changes within it.'
+              'Exclude events that have been triggered before the timeframe. ' +
+              'This also filters out events with state changes within the timeframe ' +
+              'if the events\' start times begin before the timeframe.'
             }
             value={query.excludeTriggeredBefore ?? false}
             onChange={this.onExcludeTriggeredBeforeChange}
-          />
-          <FormSwitch
-            queryKeyword
-            label={'Include Metadata'}
-            tooltip={'Include additional event metadata in the response.'}
-            value={query.includeMetadata ?? false}
-            onChange={this.onIncludeMetadataChange}
           />
         </div>
       </div>

@@ -96,7 +96,6 @@ export function buildTestTarget(): InstanaQuery {
     eventTypeFilters: [],
     filterEventUpdates: false,
     excludeTriggeredBefore: false,
-    includeMetadata: false,
   };
 }
 
