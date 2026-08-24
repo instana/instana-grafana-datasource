@@ -54,5 +54,4 @@ export interface InstanaQuery extends DataQuery {
   eventTypeFilters: string[];
   filterEventUpdates: boolean;
   excludeTriggeredBefore: boolean;
-  includeMetadata: boolean;
 }
