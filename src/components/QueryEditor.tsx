@@ -9,6 +9,7 @@ import {
   SLO_INFORMATION,
   SLO2_INFORMATION,
   SYNTHETIC_MONITORING,
+  TRACES_AND_CALLS,
 } from '../GlobalVariables';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import React, { PureComponent } from 'react';
@@ -32,6 +33,7 @@ import { SloInformation } from './SLOInformation/SloInformation';
 import { Slo2Information } from './SLOInformation/Slo2Information';
 import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import { SyntheticMonitoring } from './SyntheticMonitoring/SyntheticMonitoring';
+import { TracesAndCalls } from './TracesAndCalls/TracesAndCalls';
 import _ from 'lodash';
 import metricCategories from '../lists/metric_categories';
 import migrate from '../migration';
@@ -673,7 +675,22 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        {query.metricCategory.key !== SLO_INFORMATION && query.metricCategory.key !== SLO2_INFORMATION && (
+        {query.metricCategory.key === TRACES_AND_CALLS && (
+          <TracesAndCalls
+            query={query}
+            onRunQuery={this.props.onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
+            groups={this.state.groups}
+            updateGroups={this.updateGroups}
+            datasource={this.props.datasource}
+            range={this.props.range}
+          />
+        )}
+
+        {query.metricCategory.key !== SLO_INFORMATION &&
+          query.metricCategory.key !== SLO2_INFORMATION &&
+          query.metricCategory.key !== TRACES_AND_CALLS && (
           <Metric
             query={query}
             onChange={this.props.onChange}

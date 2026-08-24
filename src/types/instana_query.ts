@@ -45,4 +45,9 @@ export interface InstanaQuery extends DataQuery {
   showAdvancedSettings: boolean;
   tagFilterExpression: string;
   testId: string;
+  tracesAndCallsQueryMode: SelectableValue;
+  selectedTrace: SelectableValue;
+  selectedCall: SelectableValue;
+  tracesRetrievalSize: number;
+  tracesOffset: number;
 }
