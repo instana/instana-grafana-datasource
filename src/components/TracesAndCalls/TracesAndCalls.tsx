@@ -1,14 +1,15 @@
 import React from 'react';
 
+import {
+  TRACES_CALLS_MODE_TRACES,
+  TRACES_CALLS_MODE_CALL_DETAIL,
+} from '../../datasources/DataSource_TracesAndCalls';
 import { DataSource } from '../../datasources/DataSource';
 import { InstanaQuery } from '../../types/instana_query';
 import FormSelect from '../FormField/FormSelect';
-import FormSwitch from '../FormField/FormSwitch';
-import FormTextArea from '../FormField/FormTextArea';
 import { SelectableValue } from '@grafana/data';
 import TimeFilter from '../../types/time_filter';
 import { readTime } from '../../util/time_util';
-import _ from 'lodash';
 
 interface Props {
   query: InstanaQuery;
@@ -22,14 +23,26 @@ interface Props {
 }
 
 interface State {
-  traces: SelectableValue[];
-  calls: SelectableValue[];
+  traces: SelectableValue[];    // options for the Trace dropdown
+  calls: SelectableValue[];     // options for the Call dropdown (populated after trace selection)
   tracesLoading: boolean;
   callsLoading: boolean;
-  tagFilterExpressionText: string;
 }
 
 const PLEASE_SPECIFY: SelectableValue = { key: '', label: 'Please specify', value: '' };
+
+const QUERY_MODE_OPTIONS: SelectableValue[] = [
+  {
+    key: TRACES_CALLS_MODE_TRACES,
+    label: 'Trace detail',
+    description: 'Select a trace — shows all spans inside it as a table.',
+  },
+  {
+    key: TRACES_CALLS_MODE_CALL_DETAIL,
+    label: 'Call / Span detail',
+    description: 'Select a trace, then a span — shows full metadata for that span as a table.',
+  },
+];
 
 let isUnmounting = false;
 
@@ -41,7 +54,6 @@ export class TracesAndCalls extends React.Component<Props, State> {
       calls: [],
       tracesLoading: false,
       callsLoading: false,
-      tagFilterExpressionText: props.query.tagFilterExpression || '',
     };
   }
 
@@ -49,26 +61,18 @@ export class TracesAndCalls extends React.Component<Props, State> {
     const { query, onChange } = this.props;
     isUnmounting = false;
 
-    if (query.tracesIncludeInternal === undefined) {
-      query.tracesIncludeInternal = false;
+    // Default mode on first load
+    if (!query.tracesAndCallsQueryMode?.key) {
+      query.tracesAndCallsQueryMode = QUERY_MODE_OPTIONS[0];
+      onChange(query);
     }
-    if (query.tracesIncludeSynthetic === undefined) {
-      query.tracesIncludeSynthetic = false;
-    }
-    if (!query.tagFilterExpression) {
-      query.tagFilterExpression = '';
-    }
-    onChange(query);
 
+    // Traces & Calls does not use the shared Metric / Group-by row
     this.props.updateMetrics([]);
     this.props.updateGroups([]);
 
-    if (this.hasValidTagFilter()) {
-      this.loadTraces();
-      if (query.selectedTrace?.key) {
-        this.loadCalls(String(query.selectedTrace.key));
-      }
-    }
+    // Populate the trace dropdown immediately
+    this.loadTraces();
   }
 
   componentWillUnmount() {
@@ -81,40 +85,10 @@ export class TracesAndCalls extends React.Component<Props, State> {
       : this.props.datasource.getTimeFilter();
   }
 
-  parsedTagFilter(): any {
-    const raw = (this.props.query.tagFilterExpression || '').trim();
-    if (!raw) {
-      return null;
-    }
-    try {
-      return JSON.parse(raw);
-    } catch {
-      return null;
-    }
-  }
-
-  hasValidTagFilter(): boolean {
-    const raw = (this.props.query.tagFilterExpression || '').trim();
-    return raw.length > 0 && this.parsedTagFilter() !== null;
-  }
-
   loadTraces() {
-    const { query } = this.props;
-
-    if (!this.hasValidTagFilter()) {
-      this.setState({ traces: [], tracesLoading: false });
-      return;
-    }
-
     this.setState({ tracesLoading: true });
-
     this.props.datasource.dataSourceTracesAndCalls
-      .fetchTracesForDropdown(
-        this.getTimeFilter(),
-        query.tracesIncludeInternal ?? false,
-        query.tracesIncludeSynthetic ?? false,
-        this.parsedTagFilter()
-      )
+      .fetchTracesForDropdown(this.getTimeFilter())
       .then((traces: SelectableValue[]) => {
         if (!isUnmounting) {
           this.setState({ traces, tracesLoading: false });
@@ -143,15 +117,30 @@ export class TracesAndCalls extends React.Component<Props, State> {
       });
   }
 
+  onModeChange = (mode: SelectableValue) => {
+    const { query, onChange, onRunQuery } = this.props;
+    query.tracesAndCallsQueryMode = mode;
+    // Reset selections when switching mode
+    query.selectedTrace = PLEASE_SPECIFY;
+    query.selectedCall  = PLEASE_SPECIFY;
+    onChange(query);
+    this.setState({ calls: [] });
+    onRunQuery();
+  };
+
   onTraceChange = (trace: SelectableValue) => {
     const { query, onChange, onRunQuery } = this.props;
     query.selectedTrace = trace;
-    query.selectedCall = PLEASE_SPECIFY;
+    query.selectedCall  = PLEASE_SPECIFY;
     onChange(query);
     this.setState({ calls: [] });
 
-    if (trace?.key) {
-      this.loadCalls(String(trace.key));
+    const mode = query.tracesAndCallsQueryMode?.key || TRACES_CALLS_MODE_TRACES;
+    const traceId = trace?.key;
+
+    // In call-detail mode, load the call dropdown after a trace is picked
+    if (mode === TRACES_CALLS_MODE_CALL_DETAIL && traceId) {
+      this.loadCalls(String(traceId));
     }
 
     onRunQuery();
@@ -164,95 +153,40 @@ export class TracesAndCalls extends React.Component<Props, State> {
     onRunQuery();
   };
 
-  onIncludeInternalChange = () => {
-    const { query, onChange } = this.props;
-    query.tracesIncludeInternal = !query.tracesIncludeInternal;
-    onChange(query);
-    this.loadTraces();
-  };
-
-  onIncludeSyntheticChange = () => {
-    const { query, onChange } = this.props;
-    query.tracesIncludeSynthetic = !query.tracesIncludeSynthetic;
-    onChange(query);
-    this.loadTraces();
-  };
-
-  debouncedLoadTraces = _.debounce(() => this.loadTraces(), 600);
-
-  onTagFilterExpressionChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
-    const { query, onChange } = this.props;
-    const value = event.currentTarget.value;
-    this.setState({ tagFilterExpressionText: value });
-    query.tagFilterExpression = value;
-    query.selectedTrace = {};
-    query.selectedCall = {};
-    onChange(query);
-    this.debouncedLoadTraces();
-  };
-
   render() {
     const { query } = this.props;
-    const { traces, calls, tracesLoading, callsLoading, tagFilterExpressionText } = this.state;
+    const { traces, calls, tracesLoading, callsLoading } = this.state;
 
-    const raw = tagFilterExpressionText.trim();
-    const tagFilterInvalid = raw.length > 0 && this.parsedTagFilter() === null;
-    const tagFilterMissing = raw.length === 0;
+    const mode = query.tracesAndCallsQueryMode?.key || TRACES_CALLS_MODE_TRACES;
+    const modeValue = QUERY_MODE_OPTIONS.find((o) => o.key === mode) || QUERY_MODE_OPTIONS[0];
 
+    // Normalise selectedTrace so the Select shows the right label
     const traceValue = query.selectedTrace?.key
       ? traces.find((t) => t.key === query.selectedTrace.key) ?? query.selectedTrace
       : PLEASE_SPECIFY;
 
+    // Normalise selectedCall
     const callValue = query.selectedCall?.key
       ? calls.find((c) => c.key === query.selectedCall.key) ?? query.selectedCall
       : PLEASE_SPECIFY;
 
     const traceOptions = [PLEASE_SPECIFY, ...traces];
-    const callOptions = [PLEASE_SPECIFY, ...calls];
-
-    let traceNoOptionsMessage: string;
-    if (tracesLoading) {
-      traceNoOptionsMessage = 'Loading traces…';
-    } else if (tagFilterMissing) {
-      traceNoOptionsMessage = 'Enter a tag filter expression above to search for traces';
-    } else if (tagFilterInvalid) {
-      traceNoOptionsMessage = 'Fix the tag filter expression JSON above to search for traces';
-    } else {
-      traceNoOptionsMessage = 'No traces found for the given filter';
-    }
+    const callOptions  = [PLEASE_SPECIFY, ...calls];
 
     return (
       <div>
         <div className={'gf-form'}>
-          <FormSwitch
-            queryKeyword
-            label={'Include internal'}
-            tooltip={'When enabled, internal traces are included in the result (includeInternal: true).'}
-            value={query.tracesIncludeInternal ?? false}
-            onChange={this.onIncludeInternalChange}
-          />
-          <FormSwitch
-            queryKeyword
-            label={'Include synthetic'}
-            tooltip={'When enabled, synthetic traces are included in the result (includeSynthetic: true).'}
-            value={query.tracesIncludeSynthetic ?? false}
-            onChange={this.onIncludeSyntheticChange}
-          />
-        </div>
-
-        <div className={'gf-form'}>
-          <FormTextArea
+          <FormSelect
             queryKeyword
             inputWidth={0}
-            label={'Tag filter expression *'}
-            invalid={tagFilterInvalid}
+            label={'Query mode'}
             tooltip={
-              'Required. Enter a tagFilterExpression JSON object — traces will only be loaded once a valid expression is provided.\n' +
-              'Example: {"type":"EXPRESSION","logicalOperator":"AND","elements":[{"type":"TAG_FILTER","name":"service.name","operator":"EQUALS","entity":"DESTINATION","value":"my-service"}]}'
+              'Trace detail: pick a trace → see all its spans in a table.\n' +
+              'Call / Span detail: pick a trace, then a span → see full metadata.'
             }
-            placeholder={'{"type":"EXPRESSION","logicalOperator":"AND","elements":[{"type":"TAG_FILTER","name":"service.name","operator":"EQUALS","entity":"DESTINATION","value":"..."}]}'}
-            value={tagFilterExpressionText}
-            onChange={this.onTagFilterExpressionChange}
+            value={modeValue}
+            options={QUERY_MODE_OPTIONS}
+            onChange={this.onModeChange}
           />
         </div>
 
@@ -262,37 +196,44 @@ export class TracesAndCalls extends React.Component<Props, State> {
             inputWidth={0}
             label={'Trace'}
             tooltip={
-              'Select a trace matching the tag filter above.\n' +
+              'Select a trace from the current time range.\n' +
               'Label shows:  service  →  endpoint  (duration ms).\n' +
-              'Selecting a trace shows its span table below.'
+              'API: GET /api/application-monitoring/analyze/traces'
             }
             value={traceValue}
             options={traceOptions}
             onChange={this.onTraceChange}
-            noOptionsMessage={traceNoOptionsMessage}
+            noOptionsMessage={tracesLoading ? 'Loading traces…' : 'No traces found in time range'}
             placeholder={'Select a trace…'}
           />
         </div>
 
-        {query.selectedTrace?.key && (
+        {mode === TRACES_CALLS_MODE_CALL_DETAIL && (
           <div className={'gf-form'}>
             <FormSelect
               queryKeyword
               inputWidth={0}
               label={'Call / Span'}
               tooltip={
-                'Optionally select a span to see its full metadata.\n' +
-                'Leave as "Please specify" to stay in trace-detail view.\n' +
-                'Selecting a span switches the panel to call-detail view.'
+                'Select a span from within the chosen trace.\n' +
+                'Label shows:  span name  (service).\n' +
+                'API: GET /api/application-monitoring/v2/analyze/traces/{id}'
               }
               value={callValue}
               options={callOptions}
               onChange={this.onCallChange}
-              noOptionsMessage={callsLoading ? 'Loading spans…' : 'No spans found'}
-              placeholder={'Select a span (optional)…'}
+              noOptionsMessage={
+                !query.selectedTrace?.key
+                  ? 'Select a trace first'
+                  : callsLoading
+                  ? 'Loading spans…'
+                  : 'No spans found'
+              }
+              placeholder={'Select a span…'}
             />
           </div>
         )}
+
       </div>
     );
   }

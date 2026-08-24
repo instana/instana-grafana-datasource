@@ -36,6 +36,7 @@ import { WebsiteMetrics } from './Analyze/WebsiteMetrics';
 import { SyntheticMonitoring } from './SyntheticMonitoring/SyntheticMonitoring';
 import { TracesAndCalls } from './TracesAndCalls/TracesAndCalls';
 import { InstanaEvents } from './Events/InstanaEvents';
+import { TracesAndCalls } from './TracesAndCalls/TracesAndCalls';
 import _ from 'lodash';
 import metricCategories from '../lists/metric_categories';
 import migrate from '../migration';
@@ -696,6 +697,19 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
             onRunQuery={this.props.onRunQuery}
             onChange={this.props.onChange}
             datasource={this.props.datasource}
+          />
+        )}
+
+        {query.metricCategory.key === TRACES_AND_CALLS && (
+          <TracesAndCalls
+            query={query}
+            onRunQuery={this.props.onRunQuery}
+            onChange={this.props.onChange}
+            updateMetrics={this.updateMetrics}
+            groups={this.state.groups}
+            updateGroups={this.updateGroups}
+            datasource={this.props.datasource}
+            range={this.props.range}
           />
         )}
 

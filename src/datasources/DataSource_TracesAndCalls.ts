@@ -7,6 +7,9 @@ import { getRequest, postRequest } from '../util/request_handler';
 import { InstanaQuery } from '../types/instana_query';
 import { emptyResultData } from '../util/target_util';
 
+export const TRACES_CALLS_MODE_TRACES      = 'traces';
+export const TRACES_CALLS_MODE_CALL_DETAIL = 'call-detail';
+
 export class DataSourceTracesAndCalls {
   instanaOptions: InstanaOptions;
   miscCache: Cache<any>;
@@ -17,52 +20,41 @@ export class DataSourceTracesAndCalls {
   }
 
   runQuery(target: InstanaQuery, timeFilter: TimeFilter): Promise<any> {
-    if (!target.selectedTrace?.key) {
+    const mode = target.tracesAndCallsQueryMode?.key || TRACES_CALLS_MODE_TRACES;
+    const traceId = target.selectedTrace?.key;
+
+    if (!traceId) {
       return Promise.resolve(emptyResultData(target.refId));
     }
 
-    if (target.selectedCall?.key) {
+    if (mode === TRACES_CALLS_MODE_CALL_DETAIL) {
       return this.runCallDetailQuery(target);
     }
     return this.runTracesQuery(target);
   }
 
-  fetchTracesForDropdown(
-    timeFilter: TimeFilter,
-    includeInternal = false,
-    includeSynthetic = false,
-    tagFilterExpression: any = null
-  ): Promise<SelectableValue[]> {
-    const PAGE_SIZE = 200; // API maximum
+  fetchTracesForDropdown(timeFilter: TimeFilter, pageSize = 50): Promise<SelectableValue[]> {
     const windowSize = getWindowSize(timeFilter);
-
-    const buildBody = (ingestionTime?: number): any => {
-      const pagination: any = { retrievalSize: PAGE_SIZE };
-      if (ingestionTime != null) {
-        pagination.ingestionTime = ingestionTime;
-      }
-
-      const body: any = {
-        timeFrame: { to: timeFilter.to, windowSize },
-        includeInternal,
-        includeSynthetic,
-        pagination,
-      };
-
-      if (tagFilterExpression) {
-        body.tagFilterExpression = tagFilterExpression;
-      }
-
-      return body;
+    const body = {
+      timeFrame: {
+        to: timeFilter.to,
+        windowSize,
+      },
+      pagination: {
+        retrievalSize: pageSize,
+        offset: 0,
+      },
     };
 
-    const mapItems = (items: any[]): SelectableValue[] =>
-      items.map((item: any) => {
-        const trace = item.trace ?? {};
-        const traceId = trace.id ?? '';
-        const service = trace.service?.label ?? '';
+    return postRequest(this.instanaOptions, '/api/application-monitoring/analyze/traces', body).then((response: any) => {
+      const items: any[] = response?.data?.items ?? [];
+
+      return items.map((item: any) => {
+        const trace    = item.trace ?? {};
+        const traceId  = trace.id ?? '';
+        const service  = trace.service?.label ?? '';
         const endpoint = trace.endpoint?.label ?? trace.endpoint ?? '';
-        const opName = trace.label ?? '';
+        const opName   = trace.label ?? '';
         const duration = trace.duration != null ? ` (${trace.duration} ms)` : '';
 
         const routePart = endpoint || opName;
@@ -71,36 +63,14 @@ export class DataSourceTracesAndCalls {
           : service || routePart || traceId;
 
         return {
-          key: traceId,
+          key:      traceId,
           label,
-          value: traceId,
+          value:    traceId,
           traceData: trace,
+          cursor:   item.cursor,
         };
       });
-
-    const fetchPage = (accumulated: SelectableValue[], ingestionTime?: number): Promise<SelectableValue[]> => {
-      return postRequest(
-        this.instanaOptions,
-        '/api/application-monitoring/analyze/traces',
-        buildBody(ingestionTime)
-      ).then((response: any) => {
-        const data = response?.data ?? {};
-        const items: any[] = data.items ?? [];
-        const page = mapItems(items);
-        const all = [...accumulated, ...page];
-
-        if (items.length === PAGE_SIZE) {
-          const nextIngestionTime: number = data.pagination?.ingestionTime;
-          if (nextIngestionTime != null) {
-            return fetchPage(all, nextIngestionTime);
-          }
-        }
-
-        return all;
-      });
-    };
-
-    return fetchPage([]);
+    });
   }
 
   fetchCallsForDropdown(traceId: string): Promise<SelectableValue[]> {
@@ -111,15 +81,15 @@ export class DataSourceTracesAndCalls {
     ).then((response: any) => {
       const items: any[] = response?.data?.items ?? [];
       return items.map((span: any) => {
-        const spanId = span.id ?? '';
-        const name = span.name ?? '';
+        const spanId  = span.id ?? '';
+        const name    = span.name ?? '';
         const service = span.destination?.service?.label ?? '';
-        const label = service ? `${name}  (${service})` : name;
+        const label   = service ? `${name}  (${service})` : name;
 
         return {
-          key: spanId,
+          key:      spanId,
           label,
-          value: spanId,
+          value:    spanId,
           spanData: span,
         };
       });
@@ -157,17 +127,17 @@ export class DataSourceTracesAndCalls {
       refId: target.refId,
       name: 'trace_' + traceId,
       fields: [
-        { name: 'callId', type: FieldType.string },
-        { name: 'parentId', type: FieldType.string },
-        { name: 'traceId', type: FieldType.string },
-        { name: 'timestamp', type: FieldType.time },
-        { name: 'duration (ms)', type: FieldType.number },
-        { name: 'name', type: FieldType.string },
-        { name: 'service', type: FieldType.string },
-        { name: 'endpoint', type: FieldType.string },
-        { name: 'endpointType', type: FieldType.string },
-        { name: 'errorCount', type: FieldType.number },
-        { name: 'error', type: FieldType.boolean },
+        { name: 'callId',        type: FieldType.string  },
+        { name: 'parentId',      type: FieldType.string  },
+        { name: 'traceId',       type: FieldType.string  },
+        { name: 'timestamp',     type: FieldType.time    },
+        { name: 'duration (ms)', type: FieldType.number  },
+        { name: 'name',          type: FieldType.string  },
+        { name: 'service',       type: FieldType.string  },
+        { name: 'endpoint',      type: FieldType.string  },
+        { name: 'endpointType',  type: FieldType.string  },
+        { name: 'errorCount',    type: FieldType.number  },
+        { name: 'error',         type: FieldType.boolean },
       ],
     });
 
@@ -175,16 +145,16 @@ export class DataSourceTracesAndCalls {
     items.forEach((span: any) => {
       const dest = span.destination ?? {};
       frame.appendRow([
-        span.id ?? '',
-        span.parentId ?? '',
+        span.id               ?? '',
+        span.parentId         ?? '',
         traceId,
-        span.timestamp ?? null,
-        span.duration ?? null,
-        span.name ?? '',
-        dest.service?.label ?? '',
-        dest.endpoint?.label ?? '',
-        dest.endpoint?.type ?? '',
-        span.errorCount ?? 0,
+        span.timestamp        ?? null,
+        span.duration         ?? null,
+        span.name             ?? '',
+        dest.service?.label   ?? '',
+        dest.endpoint?.label  ?? '',
+        dest.endpoint?.type   ?? '',
+        span.errorCount       ?? 0,
         (span.errorCount ?? 0) > 0,
       ]);
     });
@@ -194,7 +164,7 @@ export class DataSourceTracesAndCalls {
 
   runCallDetailQuery(target: InstanaQuery): Promise<any> {
     const traceId = target.selectedTrace?.key;
-    const callId = target.selectedCall?.key;
+    const callId  = target.selectedCall?.key;
 
     if (!traceId || !callId) {
       return Promise.resolve(emptyResultData(target.refId));
@@ -218,7 +188,7 @@ export class DataSourceTracesAndCalls {
       name: 'call_detail_' + callId,
       fields: [
         { name: 'Property', type: FieldType.string },
-        { name: 'Value', type: FieldType.string },
+        { name: 'Value',    type: FieldType.string },
       ],
     });
 
@@ -235,20 +205,20 @@ export class DataSourceTracesAndCalls {
       }
     };
 
-    append('Call ID', data.id);
-    append('Operation', data.label);
-    append('Start Time', data.start);
+    append('Call ID',       data.id);
+    append('Operation',     data.label);
+    append('Start Time',    data.start);
     append('Duration (ms)', data.duration);
-    append('Error Count', data.errorCount);
+    append('Error Count',   data.errorCount);
 
     const src = data.source ?? {};
-    append('Source Service', src.service?.label);
-    append('Source Endpoint', src.endpoint?.label);
+    append('Source Service',       src.service?.label);
+    append('Source Endpoint',      src.endpoint?.label);
     append('Source Endpoint Type', src.endpoint?.type);
 
     const dest = data.destination ?? {};
-    append('Destination Service', dest.service?.label);
-    append('Destination Endpoint', dest.endpoint?.label);
+    append('Destination Service',       dest.service?.label);
+    append('Destination Endpoint',      dest.endpoint?.label);
     append('Destination Endpoint Type', dest.endpoint?.type);
 
     const apps: any[] = dest.applications ?? [];
@@ -257,16 +227,16 @@ export class DataSourceTracesAndCalls {
     }
 
     const phys = dest.physicalContext ?? {};
-    append('Host', phys.host?.label);
+    append('Host',      phys.host?.label);
     append('Container', phys.container?.label);
-    append('Process', phys.process?.label);
+    append('Process',   phys.process?.label);
 
     const spans: any[] = data.spans ?? [];
     spans.forEach((span: any, i: number) => {
       const prefix = spans.length === 1 ? 'Span' : `Span [${i}]`;
-      append(`${prefix} — Name`, span.name);
-      append(`${prefix} — Kind`, span.kind);
-      append(`${prefix} — Duration`, span.duration);
+      append(`${prefix} — Name`,        span.name);
+      append(`${prefix} — Kind`,        span.kind);
+      append(`${prefix} — Duration`,    span.duration);
       append(`${prefix} — Error Count`, span.errorCount);
 
       const spanData = span.data ?? {};
