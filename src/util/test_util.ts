@@ -87,6 +87,9 @@ export function buildTestTarget(): InstanaQuery {
     showAdvancedSettings: false,
     tagFilterExpression: '',
     testId: '',
+    eventTypeFilters: [],
+    filterEventUpdates: false,
+    excludeTriggeredBefore: false,
   };
 }
 
