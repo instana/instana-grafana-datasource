@@ -93,6 +93,7 @@ export function buildTestTarget(): InstanaQuery {
     tracesOffset: 0,
     tracesIncludeInternal: false,
     tracesIncludeSynthetic: false,
+    tracesTagFilters: [],
     eventTypeFilters: [],
     filterEventUpdates: false,
     excludeTriggeredBefore: false,

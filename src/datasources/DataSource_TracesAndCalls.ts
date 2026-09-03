@@ -6,9 +6,7 @@ import { getWindowSize } from '../util/time_util';
 import { getRequest, postRequest } from '../util/request_handler';
 import { InstanaQuery } from '../types/instana_query';
 import { emptyResultData } from '../util/target_util';
-
-export const TRACES_CALLS_MODE_TRACES      = 'traces';
-export const TRACES_CALLS_MODE_CALL_DETAIL = 'call-detail';
+import getVersion from '../util/instana_version';
 
 export class DataSourceTracesAndCalls {
   instanaOptions: InstanaOptions;
@@ -19,37 +17,103 @@ export class DataSourceTracesAndCalls {
     this.miscCache = new Cache<any>();
   }
 
-  runQuery(target: InstanaQuery, timeFilter: TimeFilter): Promise<any> {
-    const mode = target.tracesAndCallsQueryMode?.key || TRACES_CALLS_MODE_TRACES;
-    const traceId = target.selectedTrace?.key;
+  /** Fetches the application-monitoring tag catalog for traces filtering.
+   *  Uses the same catalog endpoint as ApplicationCallsMetrics group-by tags,
+   *  but scoped to TRACES data source. Results are cached for the session.
+   */
+  getTracesTags(timeFilter: TimeFilter): Promise<SelectableValue[]> {
+    const cached = this.miscCache.get('tracesTags');
+    if (cached) {
+      return cached;
+    }
 
-    if (!traceId) {
+    const promise = getVersion(this.instanaOptions).then((version: number) => {
+      const request =
+        version >= 191
+          ? getRequest(
+              this.instanaOptions,
+              '/api/application-monitoring/catalog?dataSource=CALLS&useCase=FILTERING&from=' + timeFilter.from
+            )
+          : getRequest(this.instanaOptions, '/api/application-monitoring/catalog/tags');
+
+      return request.then((response: any) => {
+        const entries: any[] = version >= 191 ? response?.data?.tags ?? [] : response?.data ?? [];
+        return entries.map((entry: any) => ({
+          key:                  entry.name,
+          label:                entry.name,
+          value:                entry.name,
+          type:                 entry.type,
+          canApplyToSource:     entry.canApplyToSource ?? true,
+          canApplyToDestination: entry.canApplyToDestination ?? true,
+        }));
+      });
+    });
+
+    this.miscCache.put('tracesTags', promise);
+    return promise;
+  }
+
+  runQuery(target: InstanaQuery, timeFilter: TimeFilter): Promise<any> {
+    if (!target.selectedTrace?.key) {
       return Promise.resolve(emptyResultData(target.refId));
     }
 
-    if (mode === TRACES_CALLS_MODE_CALL_DETAIL) {
+    if (target.selectedCall?.key) {
       return this.runCallDetailQuery(target);
     }
     return this.runTracesQuery(target);
   }
 
-  fetchTracesForDropdown(timeFilter: TimeFilter, pageSize = 50): Promise<SelectableValue[]> {
+  /**
+   * Fetches ALL traces matching the given filters by paginating automatically.
+   * The API maximum per request is 200 records. When the response signals
+   * canLoadMore=true the last item's cursor is used as ingestionTime for the
+   * next request, repeating until no more pages remain.
+   * The returned array is a flat list of all collected SelectableValue items.
+   */
+  fetchTracesForDropdown(
+    timeFilter: TimeFilter,
+    includeInternal = false,
+    includeSynthetic = false,
+    tagFilters: Array<{ name: string; operator: string; entity: string; value: string }> = []
+  ): Promise<SelectableValue[]> {
+    const PAGE_SIZE = 200; // API maximum
     const windowSize = getWindowSize(timeFilter);
-    const body = {
-      timeFrame: {
-        to: timeFilter.to,
-        windowSize,
-      },
-      pagination: {
-        retrievalSize: pageSize,
-        offset: 0,
-      },
+
+    const buildBody = (ingestionTime?: number): any => {
+      const pagination: any = { retrievalSize: PAGE_SIZE };
+      // ingestionTime is the cursor from the previous page's last item.
+      // offset is intentionally omitted (we always start from the cursor).
+      if (ingestionTime != null) {
+        pagination.ingestionTime = ingestionTime;
+      }
+
+      const body: any = {
+        timeFrame: { to: timeFilter.to, windowSize },
+        includeInternal,
+        includeSynthetic,
+        pagination,
+      };
+
+      if (tagFilters.length > 0) {
+        body.tagFilterExpression = {
+          type: 'EXPRESSION',
+          logicalOperator: 'AND',
+          elements: tagFilters.map((f) => ({
+            type: 'TAG_FILTER',
+            name: f.name,
+            operator: f.operator,
+            entity: f.entity || 'DESTINATION',
+            value: f.value,
+          })),
+        };
+      }
+
+      return body;
     };
 
-    return postRequest(this.instanaOptions, '/api/application-monitoring/analyze/traces', body).then((response: any) => {
-      const items: any[] = response?.data?.items ?? [];
-
-      return items.map((item: any) => {
+    const mapItems = (items: any[]): SelectableValue[] =>
+      items.map((item: any) => {
         const trace    = item.trace ?? {};
         const traceId  = trace.id ?? '';
         const service  = trace.service?.label ?? '';
@@ -63,14 +127,45 @@ export class DataSourceTracesAndCalls {
           : service || routePart || traceId;
 
         return {
-          key:      traceId,
+          key:       traceId,
           label,
-          value:    traceId,
+          value:     traceId,
           traceData: trace,
-          cursor:   item.cursor,
         };
       });
-    });
+
+    // Recursive accumulator.
+    // Continue fetching the next page when the current page is full
+    // (items.length === PAGE_SIZE), which means more data may exist.
+    // Stop when the page is not full — that means we have reached the end.
+    // The ingestionTime cursor for the next page is taken from the response's
+    // own pagination.ingestionTime field (a plain Long).
+    const fetchPage = (accumulated: SelectableValue[], ingestionTime?: number): Promise<SelectableValue[]> => {
+      return postRequest(
+        this.instanaOptions,
+        '/api/application-monitoring/analyze/traces',
+        buildBody(ingestionTime)
+      ).then((response: any) => {
+        const data  = response?.data ?? {};
+        const items: any[] = data.items ?? [];
+        const page  = mapItems(items);
+        const all   = [...accumulated, ...page];
+
+        // If the page came back full (== PAGE_SIZE), there may be more data —
+        // fetch the next page using the cursor from the response pagination.
+        if (items.length === PAGE_SIZE) {
+          const nextIngestionTime: number = data.pagination?.ingestionTime;
+          if (nextIngestionTime != null) {
+            return fetchPage(all, nextIngestionTime);
+          }
+        }
+
+        // Page is not full (< PAGE_SIZE) — we have all the data.
+        return all;
+      });
+    };
+
+    return fetchPage([]);
   }
 
   fetchCallsForDropdown(traceId: string): Promise<SelectableValue[]> {
