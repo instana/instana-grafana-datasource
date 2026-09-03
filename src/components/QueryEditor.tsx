@@ -725,7 +725,9 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           />
         )}
 
-        <AdvancedSettings query={query} onRunQuery={this.props.onRunQuery} onChange={this.props.onChange} />
+        {query.metricCategory.key !== TRACES_AND_CALLS && (
+          <AdvancedSettings query={query} onRunQuery={this.props.onRunQuery} onChange={this.props.onChange} />
+        )}
 
         <Badge text={'5.1.0'} color={'blue'} />
       </div>

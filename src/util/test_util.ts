@@ -87,6 +87,13 @@ export function buildTestTarget(): InstanaQuery {
     showAdvancedSettings: false,
     tagFilterExpression: '',
     testId: '',
+    selectedTrace: {},
+    selectedCall: {},
+    tracesRetrievalSize: 0,
+    tracesOffset: 0,
+    tracesIncludeInternal: false,
+    tracesIncludeSynthetic: false,
+    tracesTagFilters: [],
   };
 }
 
