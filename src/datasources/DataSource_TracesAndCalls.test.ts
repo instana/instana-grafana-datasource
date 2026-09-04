@@ -1,10 +1,8 @@
 import { buildInstanaOptions, buildTestTarget, buildTimeFilter } from '../util/test_util';
 import { DataSourceTracesAndCalls } from './DataSource_TracesAndCalls';
 import { emptyResultData } from '../util/target_util';
-import { SelectableValue } from '@grafana/data';
 import TimeFilter from '../types/time_filter';
 import Cache from '../cache';
-import _ from 'lodash';
 
 jest.mock('../util/request_handler');
 import * as RequestHandler from '../util/request_handler';
@@ -14,12 +12,12 @@ const options = buildInstanaOptions();
 describe('Given a TracesAndCalls datasource', () => {
   let datasource: DataSourceTracesAndCalls;
   let timeFilter: TimeFilter;
-  const getRequestSpy  = RequestHandler.getRequest  as jest.MockedFunction<typeof RequestHandler.getRequest>;
+  const getRequestSpy = RequestHandler.getRequest as jest.MockedFunction<typeof RequestHandler.getRequest>;
   const postRequestSpy = RequestHandler.postRequest as jest.MockedFunction<typeof RequestHandler.postRequest>;
 
   beforeEach(() => {
-    datasource  = new DataSourceTracesAndCalls(options);
-    timeFilter  = buildTimeFilter();
+    datasource = new DataSourceTracesAndCalls(options);
+    timeFilter = buildTimeFilter();
     jest.clearAllMocks();
   });
 
@@ -27,13 +25,11 @@ describe('Given a TracesAndCalls datasource', () => {
     datasource.miscCache = new Cache<any>();
   });
 
-  // ── runQuery ───────────────────────────────────────────────────────────────
-
   describe('runQuery', () => {
     it('should return empty result when no trace is selected', () => {
       const target = buildTestTarget();
       target.selectedTrace = {};
-      target.selectedCall  = {};
+      target.selectedCall = {};
 
       return datasource.runQuery(target, timeFilter).then((result: any) => {
         expect(result).toEqual(emptyResultData('A'));
@@ -43,7 +39,7 @@ describe('Given a TracesAndCalls datasource', () => {
     it('should call runTracesQuery when a trace is selected but no call', () => {
       const target = buildTestTarget();
       target.selectedTrace = { key: 'trace-001', value: 'trace-001' };
-      target.selectedCall  = {};
+      target.selectedCall = {};
 
       getRequestSpy.mockResolvedValue({ data: { items: [] } });
       const spy = jest.spyOn(datasource, 'runTracesQuery');
@@ -56,7 +52,7 @@ describe('Given a TracesAndCalls datasource', () => {
     it('should call runCallDetailQuery when both trace and call are selected', () => {
       const target = buildTestTarget();
       target.selectedTrace = { key: 'trace-001', value: 'trace-001' };
-      target.selectedCall  = { key: 'call-001',  value: 'call-001'  };
+      target.selectedCall = { key: 'call-001', value: 'call-001' };
 
       getRequestSpy.mockResolvedValue({ data: {} });
       const spy = jest.spyOn(datasource, 'runCallDetailQuery');
@@ -66,67 +62,6 @@ describe('Given a TracesAndCalls datasource', () => {
       });
     });
   });
-
-  // ── getTracesTags ──────────────────────────────────────────────────────────
-
-  describe('getTracesTags', () => {
-    it('should return tags as selectable values with correct shape', () => {
-      getRequestSpy.mockResolvedValue({
-        data: [
-          {
-            name: 'service.name',
-            type: 'STRING',
-            canApplyToSource: true,
-            canApplyToDestination: true,
-          },
-          {
-            name: 'endpoint.name',
-            type: 'STRING',
-            canApplyToSource: false,
-            canApplyToDestination: true,
-          },
-        ],
-      });
-
-      return datasource.getTracesTags(timeFilter).then((tags: SelectableValue[]) => {
-        expect(tags).toHaveLength(2);
-        _.map(tags, (tag) => {
-          expect(tag).toHaveProperty('key');
-          expect(tag).toHaveProperty('label');
-          expect(tag).toHaveProperty('value');
-          expect(tag).toHaveProperty('type');
-          expect(tag).toHaveProperty('canApplyToSource');
-          expect(tag).toHaveProperty('canApplyToDestination');
-        });
-      });
-    });
-
-    it('should cache tags and not re-fetch on second call', () => {
-      getRequestSpy.mockResolvedValue({
-        data: [{ name: 'service.name', type: 'STRING' }],
-      });
-
-      return datasource.getTracesTags(timeFilter).then(() => {
-        return datasource.getTracesTags(timeFilter).then(() => {
-          // version check (1) + catalog fetch (1) = 2 calls total, not 4
-          expect(getRequestSpy).toHaveBeenCalledTimes(2);
-        });
-      });
-    });
-
-    it('should default canApplyToSource and canApplyToDestination to true when absent', () => {
-      getRequestSpy.mockResolvedValue({
-        data: [{ name: 'call.type', type: 'STRING' }],
-      });
-
-      return datasource.getTracesTags(timeFilter).then((tags: SelectableValue[]) => {
-        expect(tags[0].canApplyToSource).toBe(true);
-        expect(tags[0].canApplyToDestination).toBe(true);
-      });
-    });
-  });
-
-  // ── fetchTracesForDropdown ─────────────────────────────────────────────────
 
   describe('fetchTracesForDropdown', () => {
     it('should return traces as selectable values with key, label and value', () => {
@@ -169,28 +104,25 @@ describe('Given a TracesAndCalls datasource', () => {
       });
     });
 
-    it('should send tagFilterExpression when tagFilters are provided', () => {
+    it('should send tagFilterExpression object directly when provided', () => {
       postRequestSpy.mockResolvedValue({ data: { items: [], pagination: {} } });
 
-      const tagFilters = [
-        { name: 'service.name', operator: 'EQUALS', entity: 'DESTINATION', value: 'myService' },
-      ];
+      const expr = {
+        type: 'EXPRESSION',
+        logicalOperator: 'AND',
+        elements: [
+          { type: 'TAG_FILTER', name: 'service.name', operator: 'EQUALS', entity: 'DESTINATION', value: 'myService' },
+        ],
+      };
 
-      return datasource.fetchTracesForDropdown(timeFilter, false, false, tagFilters).then(() => {
+      return datasource.fetchTracesForDropdown(timeFilter, false, false, expr).then(() => {
         const body: any = postRequestSpy.mock.calls[0][2];
         expect(body).toHaveProperty('tagFilterExpression');
-        expect(body.tagFilterExpression.elements).toHaveLength(1);
-        expect(body.tagFilterExpression.elements[0]).toMatchObject({
-          type:     'TAG_FILTER',
-          name:     'service.name',
-          operator: 'EQUALS',
-          entity:   'DESTINATION',
-          value:    'myService',
-        });
+        expect(body.tagFilterExpression).toEqual(expr);
       });
     });
 
-    it('should NOT send tagFilterExpression when tagFilters are empty', () => {
+    it('should NOT send tagFilterExpression when none is provided', () => {
       postRequestSpy.mockResolvedValue({ data: { items: [], pagination: {} } });
 
       return datasource.fetchTracesForDropdown(timeFilter).then(() => {
@@ -251,7 +183,6 @@ describe('Given a TracesAndCalls datasource', () => {
       return datasource.fetchTracesForDropdown(timeFilter).then((traces) => {
         expect(postRequestSpy).toHaveBeenCalledTimes(2);
         expect(traces).toHaveLength(201);
-        // Second call must carry the ingestionTime cursor
         const secondBody: any = postRequestSpy.mock.calls[1][2];
         expect(secondBody.pagination.ingestionTime).toBe(1725519793);
         expect(secondBody.pagination).not.toHaveProperty('offset');
@@ -280,8 +211,6 @@ describe('Given a TracesAndCalls datasource', () => {
       });
     });
   });
-
-  // ── fetchCallsForDropdown ──────────────────────────────────────────────────
 
   describe('fetchCallsForDropdown', () => {
     it('should return spans as selectable values with key, label and value', () => {
@@ -326,8 +255,6 @@ describe('Given a TracesAndCalls datasource', () => {
     });
   });
 
-  // ── buildTraceDetailFrame ──────────────────────────────────────────────────
-
   describe('buildTraceDetailFrame', () => {
     it('should return a frame with all expected fields', () => {
       const target = buildTestTarget();
@@ -343,7 +270,7 @@ describe('Given a TracesAndCalls datasource', () => {
             name: 'HTTP GET',
             errorCount: 0,
             destination: {
-              service:  { label: 'svc' },
+              service: { label: 'svc' },
               endpoint: { label: 'GET /', type: 'HTTP' },
             },
           },
@@ -383,8 +310,6 @@ describe('Given a TracesAndCalls datasource', () => {
     });
   });
 
-  // ── buildCallDetailFrame ───────────────────────────────────────────────────
-
   describe('buildCallDetailFrame', () => {
     it('should return a two-column Property/Value frame', () => {
       const target = buildTestTarget();
@@ -396,7 +321,7 @@ describe('Given a TracesAndCalls datasource', () => {
         start: 1000,
         duration: 42,
         errorCount: 0,
-        source:      { service: { label: 'srcSvc' }, endpoint: { label: 'src-ep', type: 'HTTP' } },
+        source: { service: { label: 'srcSvc' }, endpoint: { label: 'src-ep', type: 'HTTP' } },
         destination: { service: { label: 'dstSvc' }, endpoint: { label: 'dst-ep', type: 'HTTP' }, applications: [] },
         spans: [],
       };
@@ -420,19 +345,19 @@ describe('Given a TracesAndCalls datasource', () => {
 
       const data = {
         id: 'call-001',
-        label: 'Unspecified',   // should be omitted
-        start: null,            // should be omitted
-        duration: 0,            // 0 is meaningful → included
-        errorCount: undefined,  // should be omitted
+        label: 'Unspecified',
+        start: null,
+        duration: 0,
+        errorCount: undefined,
         source: {}, destination: {}, spans: [],
       };
 
       const frame = datasource.buildCallDetailFrame(target, data);
       const props: string[] = frame.fields[0].values.toArray();
-      expect(props).not.toContain('Operation');   // label was 'Unspecified'
-      expect(props).not.toContain('Start Time');  // null
-      expect(props).not.toContain('Error Count'); // undefined
-      expect(props).toContain('Duration (ms)');   // 0 is meaningful
+      expect(props).not.toContain('Operation');
+      expect(props).not.toContain('Start Time');
+      expect(props).not.toContain('Error Count');
+      expect(props).toContain('Duration (ms)');
     });
 
     it('should include span data fields', () => {
