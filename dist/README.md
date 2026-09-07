@@ -487,6 +487,8 @@ Example:
 
 **Note:** Use the **Table** visualization for the **Traces & calls** category.
 
+![Traces & Calls graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/screenshots/v5.2.0/Traces&Calls.gif)
+
 ### Instana Events
 
 To view Events data, select **Instana Events** from the **Category** dropdown. By default, all available events are displayed.
@@ -504,6 +506,8 @@ You can filter the events using the following options:
 The results are displayed in the **Table** visualization based on the selected filters.
 
 **Note:** Use the **Table** visualization when querying the **Instana Events** category.
+
+![Event graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/screenshots/v5.2.0/Events.gif)
 
 ### Singlestat visualization
 
