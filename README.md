@@ -439,6 +439,72 @@ Once a metric is selected, the Aggregation dropdown will be populated with avail
 If your selection matches, the returned dataset will include metrics or result details that can be visualized in the dashboard like the example below.
 
 ![synthetic plot graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/synthetic_monitoring.gif)
+
+### Traces & Calls
+
+To retrieve **Traces & Calls** data, select **Traces & calls** from the **Category** dropdown.
+
+The **Tag filter expression** field is mandatory. Once a valid tag filter expression is entered, the available traces are populated in the **Trace** dropdown. Select a trace to view its details in the **Table** visualization.
+
+The following additional filter options are available:
+
+* **Include internal** – When enabled, internal traces are included in the results.
+* **Include synthetic** – When enabled, synthetic traces are included in the results.
+* **Call / Span** – Allows you to select a specific span from the selected trace.
+
+  * **Please specify** – Keeps the panel in the trace-detail view.
+  * **Select a span** – Switches the panel to the call-detail view and displays the selected span's full metadata.
+
+#### Tag Filter Expression
+
+The **Tag filter expression** must contain an array of filter objects. You can get the `tagFilterExpression` from the **JSON tree** under the **API query** session of the Instana Infrastructure Analytics dashboard.
+
+Example:
+
+```json
+{
+  "type": "EXPRESSION",
+  "logicalOperator": "AND",
+  "elements": [
+    {
+      "type": "TAG_FILTER",
+      "name": "application.name",
+      "operator": "EQUALS",
+      "entity": "DESTINATION",
+      "value": "example-application"
+    },
+    {
+      "type": "TAG_FILTER",
+      "name": "call.type",
+      "operator": "EQUALS",
+      "entity": "NOT_APPLICABLE",
+      "value": "HTTP"
+    }
+  ]
+}
+```
+
+
+**Note:** Use the **Table** visualization for the **Traces & calls** category.
+
+### Instana Events
+
+To view Events data, select **Instana Events** from the **Category** dropdown. By default, all available events are displayed.
+
+You can filter the events using the following options:
+
+* **Event Type Filter** – Filters events by type:
+
+  * **Incidents**
+  * **Issues**
+  * **Changes**
+* **Filter Event Updates** – Displays only events that have state changes within the selected timeframe.
+* **Exclude Triggered Before** – Excludes events that were triggered before the selected timeframe. Events that started before the timeframe are also excluded, even if they have state changes within the timeframe.
+
+The results are displayed in the **Table** visualization based on the selected filters.
+
+**Note:** Use the **Table** visualization when querying the **Instana Events** category.
+
 ### Singlestat visualization
 
 While using the "Singlestat" visualization an additional metric aggregation is selectable.
