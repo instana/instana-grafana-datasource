@@ -43,8 +43,6 @@ import { DataSourceWebsite } from './DataSource_Website';
 import { DataSourceSyntheticMonitoring } from './DataSource_SyntheticMonitoring';
 import { DataSourceTracesAndCalls } from './DataSource_TracesAndCalls';
 import { DataSourceEvents } from './DataSource_Events';
-import { DataSourceTracesAndCalls } from './DataSource_TracesAndCalls';
-import { DataSourceEvents } from './DataSource_Events';
 import { InstanaOptions } from '../types/instana_options';
 import { InstanaQuery } from '../types/instana_query';
 import MetricCategories from '../lists/metric_categories';
@@ -71,8 +69,6 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   dataSourceSyntheticMonitoring: DataSourceSyntheticMonitoring;
   dataSourceTracesAndCalls: DataSourceTracesAndCalls;
   dataSourceEvents: DataSourceEvents;
-  dataSourceTracesAndCalls: DataSourceTracesAndCalls;
-  dataSourceEvents: DataSourceEvents;
   timeFilter!: TimeFilter;
   availableGranularities: SelectableValue[];
   availableRollups: SelectableValue[];
@@ -96,8 +92,6 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     this.dataSourceService = new DataSourceService(instanceSettings.jsonData);
     this.dataSourceEndpoint = new DataSourceEndpoint(instanceSettings.jsonData);
     this.dataSourceSyntheticMonitoring = new DataSourceSyntheticMonitoring(instanceSettings.jsonData);
-    this.dataSourceTracesAndCalls = new DataSourceTracesAndCalls(instanceSettings.jsonData);
-    this.dataSourceEvents = new DataSourceEvents(instanceSettings.jsonData);
     this.dataSourceTracesAndCalls = new DataSourceTracesAndCalls(instanceSettings.jsonData);
     this.dataSourceEvents = new DataSourceEvents(instanceSettings.jsonData);
 
