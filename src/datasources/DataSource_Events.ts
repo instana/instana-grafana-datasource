@@ -6,9 +6,9 @@ import { InstanaQuery } from 'types/instana_query';
 import TimeFilter from 'types/time_filter';
 
 export const INSTANA_EVENT_TYPES: SelectableValue[] = [
-  { key: 'INCIDENT', label: 'Incident' },
-  { key: 'ISSUE', label: 'Issue' },
-  { key: 'CHANGE', label: 'Change' },
+  { key: 'INCIDENT', label: 'Incidents' },
+  { key: 'ISSUE', label: 'Issues' },
+  { key: 'CHANGE', label: 'Changes' },
 ];
 
 export class DataSourceEvents {
