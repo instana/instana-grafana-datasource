@@ -51,4 +51,7 @@ export interface InstanaQuery extends DataQuery {
   tracesOffset: number;
   tracesIncludeInternal: boolean;
   tracesIncludeSynthetic: boolean;
+  eventTypeFilters: string[];
+  filterEventUpdates: boolean;
+  excludeTriggeredBefore: boolean;
 }

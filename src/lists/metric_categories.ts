@@ -47,4 +47,8 @@ export default [
     label: 'Traces & Calls',
     key: 12,
   },
+  {
+    label: 'Instana Events',
+    key: 13,
+  },
 ];
