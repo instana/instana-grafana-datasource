@@ -9,6 +9,7 @@ import {
   SLO_INFORMATION,
   SLO2_INFORMATION,
   SYNTHETIC_MONITORING,
+  TRACES_AND_CALLS,
 } from '../GlobalVariables';
 import {
   DataQueryRequest,
@@ -39,6 +40,7 @@ import { DataSourceSlo } from './DataSource_Slo';
 import { DataSourceSlo2 } from './DataSource_Slo2';
 import { DataSourceWebsite } from './DataSource_Website';
 import { DataSourceSyntheticMonitoring } from './DataSource_SyntheticMonitoring';
+import { DataSourceTracesAndCalls } from './DataSource_TracesAndCalls';
 import { InstanaOptions } from '../types/instana_options';
 import { InstanaQuery } from '../types/instana_query';
 import MetricCategories from '../lists/metric_categories';
@@ -63,6 +65,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
   dataSourceSlo: DataSourceSlo;
   dataSourceSlo2: DataSourceSlo2;
   dataSourceSyntheticMonitoring: DataSourceSyntheticMonitoring;
+  dataSourceTracesAndCalls: DataSourceTracesAndCalls;
   timeFilter!: TimeFilter;
   availableGranularities: SelectableValue[];
   availableRollups: SelectableValue[];
@@ -86,6 +89,7 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     this.dataSourceService = new DataSourceService(instanceSettings.jsonData);
     this.dataSourceEndpoint = new DataSourceEndpoint(instanceSettings.jsonData);
     this.dataSourceSyntheticMonitoring = new DataSourceSyntheticMonitoring(instanceSettings.jsonData);
+    this.dataSourceTracesAndCalls = new DataSourceTracesAndCalls(instanceSettings.jsonData);
 
     this.resultCache = new Cache<any>();
   }
@@ -296,6 +300,18 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
       interpolated.sloValue = this.replaceVariables(interpolated.sloValue, scopedVars);
     }
 
+    const selectedTraceKey = interpolated.selectedTrace?.key;
+    if (selectedTraceKey && this.isVariable(selectedTraceKey)) {
+      const interpolatedValue = this.replaceVariables(selectedTraceKey, scopedVars);
+      interpolated.selectedTrace = { key: interpolatedValue, label: interpolatedValue, value: interpolatedValue };
+    }
+
+    const selectedCallKey = interpolated.selectedCall?.key;
+    if (selectedCallKey && this.isVariable(selectedCallKey)) {
+      const interpolatedValue = this.replaceVariables(selectedCallKey, scopedVars);
+      interpolated.selectedCall = { key: interpolatedValue, label: interpolatedValue, value: interpolatedValue };
+    }
+
     const testTypeValue = interpolated.testType?.value;
     if (testTypeValue && this.isVariable(testTypeValue)) {
       const interpolatedValue = this.replaceVariables(testTypeValue, scopedVars);
@@ -386,6 +402,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
           return this.getApplicationServiceEndpointMetrics(target, targetTimeFilter).then((data: any) => {
             return this.buildTargetWithAppendedDataResult(target, targetTimeFilter, data);
           });
+        } else if (category === TRACES_AND_CALLS) {
+          return this.dataSourceTracesAndCalls.runQuery(target, targetTimeFilter).then((frame: any) => {
+            return { data: [frame], target, _isDataFrame: true };
+          });
         }
 
         return Promise.resolve(emptyResultData(target.refId));
@@ -393,6 +413,10 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
     ).then((targetData) => {
       let result: any = [];
       _.each(targetData, (targetAndData) => {
+        if (targetAndData._isDataFrame) {
+          result.push(targetAndData.data);
+          return;
+        }
         // Flatten the list as Grafana expects a list of targets with corresponding datapoints.
         let resultData: any = _.compact(_.flatten(targetAndData.data)); // Also remove empty data items
         this.cacheResultIfNecessary(_.cloneDeep(resultData), targetAndData.target); // clone to store results without timeshift re-calculation
