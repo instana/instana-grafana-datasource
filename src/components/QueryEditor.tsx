@@ -741,7 +741,7 @@ export class QueryEditor extends PureComponent<Props, QueryState> {
           <AdvancedSettings query={query} onRunQuery={this.props.onRunQuery} onChange={this.props.onChange} />
         )}
 
-        <Badge text={'5.1.0'} color={'blue'} />
+        <Badge text={'5.2.0'} color={'blue'} />
       </div>
     );
   }
