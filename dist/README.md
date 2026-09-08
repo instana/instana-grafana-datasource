@@ -487,7 +487,7 @@ Example:
 
 **Note:** Use the **Table** visualization for the **Traces & calls** category.
 
-![Traces & Calls graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/screenshots/v5.2.0/Traces&Calls.gif)
+![Traces & Calls graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/master/screenshots/v5.2.0/Traces&Calls.gif)
 
 ### Instana Events
 
@@ -507,7 +507,7 @@ The results are displayed in the **Table** visualization based on the selected f
 
 **Note:** Use the **Table** visualization when querying the **Instana Events** category.
 
-![Event graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/screenshots/v5.2.0/Events.gif)
+![Event graph](https://raw.githubusercontent.com/instana/instana-grafana-datasource/screenshots/master/v5.2.0/Events.gif)
 
 ### Singlestat visualization
 
