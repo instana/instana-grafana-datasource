@@ -1,7 +1,11 @@
 # Changelog
 
+## 5.2.0 - 2026-09-08
+- New Feature: Added Instana Events query support as a new metric category.
+- New Feature: Added Traces & Calls support as a new metric category.
+
 ## 5.1.0 - 2026-06-19
-- New Feature: Added Grafana Template Variables support
+- New Feature: Added Grafana Template Variables support.
   - Comprehensive documentation in VARIABLES.md
 
 ## 5.0.0 - 2025-06-12
