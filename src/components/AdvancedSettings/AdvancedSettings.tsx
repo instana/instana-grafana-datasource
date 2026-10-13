@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 
 import {
+  ANALYZE_APPLICATION_METRICS,
   BUILT_IN_METRICS,
   CUSTOM_METRICS,
   INFRASTRUCTURE_ANALYZE,
@@ -150,6 +151,24 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
     return legendFormatTooltips[query.metricCategory.key];
   }
 
+  onCallsIncludeInternalChange = (event: React.SyntheticEvent<HTMLInputElement> | undefined) => {
+    if (event && event.currentTarget) {
+      const { query, onChange, onRunQuery } = this.props;
+      query.callsIncludeInternal = event.currentTarget.checked;
+      onChange(query);
+      onRunQuery();
+    }
+  };
+
+  onCallsIncludeSyntheticChange = (event: React.SyntheticEvent<HTMLInputElement> | undefined) => {
+    if (event && event.currentTarget) {
+      const { query, onChange, onRunQuery } = this.props;
+      query.callsIncludeSynthetic = event.currentTarget.checked;
+      onChange(query);
+      onRunQuery();
+    }
+  };
+
   onShowAdvancedSettingsChange = (event: React.SyntheticEvent<HTMLInputElement> | undefined) => {
     if (event && event.currentTarget) {
       const { query, onChange } = this.props;
@@ -204,6 +223,27 @@ export default class AdvancedSettings extends React.Component<Props, AdvancedSet
               invalid={!query.timeShiftIsValid}
               placeholder={'1h'}
               onChange={(event) => this.onTimeShiftChange(event)}
+            />
+          </div>
+
+          <div className={'gf-form'} hidden={category !== ANALYZE_APPLICATION_METRICS}>
+            <FormSwitch
+              queryKeyword
+              label={'Include internal'}
+              tooltip={'When enabled, internal calls are included in the result (includeInternal: true).'}
+              value={query.callsIncludeInternal ?? false}
+              onChange={(e) => this.onCallsIncludeInternalChange(e)}
+            />
+            <FormSwitch
+              queryKeyword
+              label={'Include synthetic'}
+              tooltip={
+                'When enabled, the includeSynthetic: true flag is sent with the request. ' +
+                'If a "Call is synthetic" filter is also present, this toggle takes precedence over ' +
+                'the flag that filter would have set — the filter itself is still applied to the results.'
+              }
+              value={query.callsIncludeSynthetic ?? false}
+              onChange={(e) => this.onCallsIncludeSyntheticChange(e)}
             />
           </div>
 
