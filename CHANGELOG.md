@@ -3,6 +3,7 @@
 ## 5.2.0 - 2026-09-08
 - New Feature: Added Instana Events query support as a new metric category.
 - New Feature: Added Traces & Calls support as a new metric category.
+- Fix: Fixed an issue in Infrastructure Analyze where queries returned entity count instead of actual metric values.
 
 ## 5.1.0 - 2026-06-19
 - New Feature: Added Grafana Template Variables support.
