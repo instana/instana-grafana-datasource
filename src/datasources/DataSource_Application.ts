@@ -224,6 +224,10 @@ export class DataSourceApplication {
             includeSynthetic = filter.booleanValue;
           }
         });
+        // An explicit advanced setting takes precedence over the legacy 'call.is_synthetic' filter
+        if (target.callsIncludeSynthetic !== undefined) {
+          includeSynthetic = target.callsIncludeSynthetic;
+        }
 
         const data: any = {
           group: group,
@@ -239,6 +243,10 @@ export class DataSourceApplication {
             elements: tagFilters,
           },
         };
+
+        if (target.callsIncludeInternal !== undefined) {
+          data['includeInternal'] = target.callsIncludeInternal;
+        }
 
         return postRequest(
           this.instanaOptions,
