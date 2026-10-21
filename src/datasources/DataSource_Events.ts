@@ -53,8 +53,7 @@ export class DataSourceEvents {
       }
 
       return this.toDataFrame(events, target.refId);
-    } catch (error) {
-      console.error('Error fetching Instana events:', error);
+    } catch {
       return this.emptyDataFrame(target.refId);
     }
   }

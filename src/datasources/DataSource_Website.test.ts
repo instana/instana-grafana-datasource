@@ -87,7 +87,7 @@ describe('Given a website datasource', () => {
 
       return dataSourceWebsite.getWebsites(timeFilter).then(() => {
         return dataSourceWebsite.getWebsites(timeFilter).then((result) => {
-          expect(getRequestSpy).toBeCalledTimes(1);
+          expect(getRequestSpy).toHaveBeenCalledTimes(1);
           _.map(result, (website) => {
             expect(website).toHaveProperty('key');
             expect(website).toHaveProperty('label');

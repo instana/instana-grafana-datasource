@@ -6,7 +6,7 @@
  */
 
 import rspack, { type Configuration } from '@rspack/core';
-import ESLintPlugin from 'eslint-webpack-plugin';
+import DiagnosticsPlugin from 'diagnostics-webpack-plugin';
 import { TsCheckerRspackPlugin } from 'ts-checker-rspack-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
@@ -118,6 +118,11 @@ const config = async (env): Promise<Configuration> => {
       minimize: Boolean(env.production),
       minimizer: [
         new TerserPlugin({
+          extractComments: {
+            banner: false,
+            filename: 'LICENSE.txt',
+          },
+
           terserOptions: {
             format: {
               comments: (_, { type, value }) => type === 'comment2' && value.trim().startsWith('[create-plugin]'),
@@ -179,7 +184,7 @@ const config = async (env): Promise<Configuration> => {
         },
       ]),
       new SubresourceIntegrityPlugin({
-        hashFuncNames: ["sha256"],
+        hashFuncNames: ['sha256'],
       }),
       ...(env.development
         ? [
@@ -191,9 +196,9 @@ const config = async (env): Promise<Configuration> => {
               },
               typescript: { configFile: path.join(process.cwd(), 'tsconfig.json') },
             }),
-            new ESLintPlugin({
-              extensions: ['.ts', '.tsx'],
-              lintDirtyModulesOnly: Boolean(env.development), // don't lint on start, only lint changed files
+            new DiagnosticsPlugin({
+              checks: [{ use: 'eslint', extensions: ['ts', 'tsx'] }],
+              lintOnStart: false, // don't lint on start, only lint changed files
             }),
           ]
         : []),
