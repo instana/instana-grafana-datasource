@@ -87,7 +87,7 @@ describe('Given a mobileapp datasource', () => {
 
       return dataSourceMobileApp.getMobileapp(timeFilter).then(() => {
         return dataSourceMobileApp.getMobileapp(timeFilter).then((result) => {
-          expect(getRequestSpy).toBeCalledTimes(1);
+          expect(getRequestSpy).toHaveBeenCalledTimes(1);
           _.map(result, (mobileapp) => {
             expect(mobileapp).toHaveProperty('key');
             expect(mobileapp).toHaveProperty('label');

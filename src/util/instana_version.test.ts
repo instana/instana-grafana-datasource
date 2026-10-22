@@ -29,7 +29,7 @@ describe('when retrieving the version of instana', () => {
     //verify version cached
     getVersion(options).then((version: any) => {
       expect(version).toBeInstanceOf(Number);
-      expect(getRequestSpy).toBeCalledTimes(1);
+      expect(getRequestSpy).toHaveBeenCalledTimes(1);
     });
   });
 });
