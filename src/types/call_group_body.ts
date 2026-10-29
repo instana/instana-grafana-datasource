@@ -36,6 +36,8 @@ export interface CallGroupBody {
   timeFrame: TimeFrame;
   metrics: Metric[];
   tagFilters?: TagFilter[];
+  includeInternal?: boolean;
+  includeSynthetic?: boolean;
   order?: Order;
   pagination?: Pagination;
 }
