@@ -164,6 +164,9 @@ describe('Given an infrastructure datasource', () => {
     const windowSize = getWindowSize(timeFilter);
     target.entityType = { key: 'someKey' };
     target.entityQuery = 'java';
+    // selected rollup of 1min (key is in ms, requests use seconds)
+    target.timeInterval = { key: '60000', label: '1min' };
+    const rollupInSeconds = 60;
 
     const snapshotA = { snapshotId: 'A', host: 'Stans-Macbook-Pro', label: 'label for A' };
     const snapshotB = { snapshotId: 'B', host: '', label: 'label for B' };
@@ -195,7 +198,7 @@ describe('Given an infrastructure datasource', () => {
           endpoint ===
           `/api/infrastructure-monitoring/snapshots?plugin=${target.entityType.key}` +
             `&size=100` +
-            `&windowSize=${atLeastGranularity(windowSize, target.timeInterval.key)}` +
+            `&windowSize=${atLeastGranularity(windowSize, rollupInSeconds)}` +
             `&to=${timeFilter.to}&offline=${instanaOptions.showOffline}`
         ) {
           return Promise.resolve(contexts);
@@ -253,7 +256,7 @@ describe('Given an infrastructure datasource', () => {
           snapshotIds: ['snapshot-123'],
           timeFrame: {
             to: timeFilter.to,
-            windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
+            windowSize: atLeastGranularity(windowSize, rollupInSeconds),
           },
         }
       );
@@ -406,7 +409,7 @@ describe('Given an infrastructure datasource', () => {
         metrics: [metric],
         timeFrame: {
           to: timeFilter.to,
-          windowSize: atLeastGranularity(windowSize, metric.granularity),
+          windowSize: atLeastGranularity(windowSize, metric.granularity / 1000),
         },
       };
 

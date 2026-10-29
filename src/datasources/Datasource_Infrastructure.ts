@@ -392,7 +392,8 @@ export class DataSourceInfrastructure {
       metrics: [metric],
       timeFrame: {
         to: timeFilter.to,
-        windowSize: atLeastGranularity(windowSize, metric.granularity),
+        // granularity is in ms here, atLeastGranularity expects seconds
+        windowSize: atLeastGranularity(windowSize, metric.granularity / 1000),
       },
     };
 
@@ -457,9 +458,23 @@ export class DataSourceInfrastructure {
     return metrics;
   }
 
+  /**
+   * Returns the rollup in seconds for built-in/custom infrastructure metrics.
+   * The rollup selected in the query editor (in ms) is honoured, so the resolution does not silently
+   * change when the user zooms in/out. Only if no valid rollup is selected, an automatic one is derived
+   * from the window size.
+   */
+  getRollupInSeconds(target: InstanaQuery, windowSize: number): number {
+    const selectedRollupMs = parseInt(target.timeInterval?.key, 10);
+    if (Number.isFinite(selectedRollupMs) && selectedRollupMs >= 1000) {
+      return selectedRollupMs / 1000;
+    }
+    return parseInt(getDefaultChartGranularity(windowSize).key, 10);
+  }
+
   async fetchSnapshotsForTarget(target: InstanaQuery, timeFilter: TimeFilter) {
     const windowSize = getWindowSize(timeFilter);
-    target.timeInterval = getDefaultChartGranularity(windowSize);
+    const rollup = this.getRollupInSeconds(target, windowSize);
 
     const selectedSnapshotId = target.selectedEntity?.key;
     if (selectedSnapshotId && target.metricCategory.key !== INFRASTRUCTURE_ANALYZE) {
@@ -468,7 +483,7 @@ export class DataSourceInfrastructure {
         snapshotIds: [selectedSnapshotId],
         timeFrame: {
           to: timeFilter.to,
-          windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
+          windowSize: atLeastGranularity(windowSize, rollup),
         },
       };
 
@@ -499,7 +514,7 @@ export class DataSourceInfrastructure {
       `/api/infrastructure-monitoring/snapshots` +
       `?plugin=${target.entityType.key}` +
       `&size=100` +
-      `&windowSize=${atLeastGranularity(windowSize, target.timeInterval.key)}` +
+      `&windowSize=${atLeastGranularity(windowSize, rollup)}` +
       `&to=${timeFilter.to}` +
       `&offline=${this.instanaOptions.showOffline}`;
 
@@ -516,7 +531,7 @@ export class DataSourceInfrastructure {
           snapshotIds,
           timeFrame: {
             to: timeFilter.to,
-            windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
+            windowSize: atLeastGranularity(windowSize, rollup),
           },
         };
 
@@ -572,7 +587,7 @@ export class DataSourceInfrastructure {
 
   fetchMetricsForSnapshot(target: InstanaQuery, snapshotIds: string[], timeFilter: TimeFilter, metric: any) {
     const windowSize = getWindowSize(timeFilter);
-    target.timeInterval = getDefaultChartGranularity(windowSize);
+    const rollup = this.getRollupInSeconds(target, windowSize);
 
     const metricKey = metric.key || metric.value;
 
@@ -580,11 +595,11 @@ export class DataSourceInfrastructure {
       metrics: [metricKey],
       query: target.entityQuery,
       plugin: target.entityType.key,
-      rollup: target.timeInterval.key,
+      rollup,
       snapshotIds,
       timeFrame: {
         to: timeFilter.to,
-        windowSize: atLeastGranularity(windowSize, target.timeInterval.key),
+        windowSize: atLeastGranularity(windowSize, rollup),
       },
     };
 
