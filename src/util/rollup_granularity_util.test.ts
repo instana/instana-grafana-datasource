@@ -538,4 +538,62 @@ describe('Given a timeInterval', () => {
       expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
     });
   });
+  describe('zoom consistency — rollup should always match the current window size', () => {
+    it('should use a coarser rollup after zooming out from 1h to 6h', () => {
+      // Zoomed-in: 1h window → default rollup is 5s
+      const narrowWindowSize = 3600000; // 1h
+      const narrowTimeFilter: TimeFilter = {
+        from: Date.now() - narrowWindowSize,
+        to: Date.now(),
+        windowSize: narrowWindowSize,
+      };
+      const narrowDefault = getDefaultMetricRollupDuration(narrowTimeFilter);
+      expect(narrowDefault.key).toEqual('5000'); // 5s
+
+      // Zoomed-out: 6h window → default rollup is 1min, NOT 5s
+      const wideWindowSize = 21600000; // 6h
+      const wideTimeFilter: TimeFilter = {
+        from: Date.now() - wideWindowSize,
+        to: Date.now(),
+        windowSize: wideWindowSize,
+      };
+      const wideDefault = getDefaultMetricRollupDuration(wideTimeFilter);
+      expect(wideDefault.key).toEqual('60000'); // 1min — coarser than the 5s that was valid for 1h
+      expect(Number(wideDefault.key)).toBeGreaterThan(Number(narrowDefault.key));
+    });
+
+    it('should use a coarser rollup after zooming out from 6h to 24h', () => {
+      const narrowWindowSize = 21600000; // 6h
+      const narrowTimeFilter: TimeFilter = {
+        from: Date.now() - narrowWindowSize,
+        to: Date.now(),
+        windowSize: narrowWindowSize,
+      };
+      const narrowDefault = getDefaultMetricRollupDuration(narrowTimeFilter);
+      expect(narrowDefault.key).toEqual('60000'); // 1min
+
+      const wideWindowSize = 86400000; // 24h
+      const wideTimeFilter: TimeFilter = {
+        from: Date.now() - wideWindowSize,
+        to: Date.now(),
+        windowSize: wideWindowSize,
+      };
+      const wideDefault = getDefaultMetricRollupDuration(wideTimeFilter);
+      expect(wideDefault.key).toEqual('300000'); // 5min — coarser than 1min
+      expect(Number(wideDefault.key)).toBeGreaterThan(Number(narrowDefault.key));
+    });
+
+    it('should use a finer granularity after zooming in from 6h to 1h', () => {
+      // Zoomed-out: 6h window → default granularity is 5min
+      const wideWindowSize = 21600000; // 6h
+      const wideDefault = getDefaultChartGranularity(wideWindowSize);
+      expect(wideDefault.key).toEqual('300'); // 5min
+
+      // Zoomed-in: 1h window → default granularity is 1min, NOT 5min
+      const narrowWindowSize = 3600000; // 1h
+      const narrowDefault = getDefaultChartGranularity(narrowWindowSize);
+      expect(narrowDefault.key).toEqual('60'); // 1min — finer than 5min
+      expect(Number(narrowDefault.key)).toBeLessThan(Number(wideDefault.key));
+    });
+  });
 });

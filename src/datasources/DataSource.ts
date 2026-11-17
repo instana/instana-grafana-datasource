@@ -343,6 +343,11 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
           return { data: [], target: target };
         }
 
+        // Capture whether the timeInterval was set via a template variable before interpolation,
+        // so we can preserve the user's explicit variable-driven choice after interpolation.
+        const originalTimeIntervalKey = target.timeInterval?.key || target.timeInterval?.value;
+        const timeIntervalIsVariable = this.isVariable(originalTimeIntervalKey);
+
         // Interpolate variables in the target
         target = this.interpolateVariables(target, scopedVars);
 
@@ -354,7 +359,15 @@ export class DataSource extends DataSourceApi<InstanaQuery, InstanaOptions> {
         }
 
         this.setPossibleTimeIntervals(target);
-        if (!this.availableTimeIntervals.find((i) => i.key === target.timeInterval.key)) {
+        if (timeIntervalIsVariable) {
+          // Variable-driven rollup: only override when the resolved value is not in the available list
+          if (!this.availableTimeIntervals.find((i) => i.key === target.timeInterval.key)) {
+            target.timeInterval = this.getDefaultTimeInterval(target);
+          }
+        } else {
+          // Auto-selected or manually chosen rollup: always recalculate to the default that matches the
+          // current window size. This ensures consistency when zooming in or out — a wider window never
+          // keeps a fine-grained rollup that was appropriate for a previously narrower view.
           target.timeInterval = this.getDefaultTimeInterval(target);
         }
 
